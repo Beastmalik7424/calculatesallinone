@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="CalculatesAll is a free online utility hub with a standard calculator, Tasbih counter, unit converter, stopwatch, Zakat, profit and loss, BMI, age and discount calculators.">
+  <meta name="theme-color" content="#f8fafc">
+  <meta name="color-scheme" content="light dark">
+  <meta name="application-name" content="CalculatesAll">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CalculatesAll">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CalculatesAll – Free Online Calculators & Utility Hub">
+  <meta property="og:description" content="Free calculators and everyday utility tools including calculator, unit converter, stopwatch, Zakat, BMI, age, profit & loss and discount tools.">
+  <meta property="og:image" content="og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CalculatesAll – Free Online Calculators & Utility Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CalculatesAll – Free Online Calculators & Utility Hub">
+  <meta name="twitter:description" content="Free online calculators and utility tools.">
+  <meta name="twitter:image" content="og-image.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>CalculatesAll – Free Online Calculators & Utility Hub</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AE%3C/text%3E%3C/svg%3E">
+  <style>
+    :root{
+      /* Premium Soft Light Theme (Default) */
+      --bg-gradient:linear-gradient(160deg,#f8fafc 0%,#f1f5f9 40%,#e2e8f0 100%);
+      --card-bg:rgba(255,255,255,0.92);
+      --card-border:rgba(15,23,42,0.08);
+      --text-main:#0f172a;
+      --text-sub:#64748b;
+      --primary:#3b82f6;
+      --primary-hover:#2563eb;
+      --accent:#0ea5e9;
+      --sidebar-bg:rgba(255,255,255,0.85);
+      --input-bg:rgba(248,250,252,0.95);
+      --danger:#ef4444;
+      --success:#22c55e;
+      --shadow:0 10px 30px -5px rgba(15,23,42,0.08), 0 4px 12px -2px rgba(15,23,42,0.04);
+      --transition:.22s cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="dark"]{
+      --bg-gradient:linear-gradient(145deg,#0f172a 0%,#1e1b4b 45%,#311042 100%);
+      --card-bg:rgba(255,255,255,.08);
+      --card-border:rgba(255,255,255,.12);
+      --text-main:#f8fafc;
+      --text-sub:#94a3b8;
+      --primary:#6366f1;
+      --primary-hover:#4f46e5;
+      --accent:#38bdf8;
+      --sidebar-bg:rgba(15,23,42,.9);
+      --input-bg:rgba(0,0,0,.35);
+      --danger:#ef4444;
+      --success:#22c55e;
+      --shadow:0 20px 40px rgba(0,0,0,.35);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg-gradient);background-attachment:fixed;color:var(--text-main);min-height:100dvh;display:flex;flex-direction:column;line-height:1.5;-webkit-font-smoothing:antialiased;transition:background .35s ease,color .35s ease}
+    body.modal-open{overflow:hidden}
+    [dir="rtl"] body{font-family:"Segoe UI",Tahoma,Arial,sans-serif}
+    button,input,select{font:inherit}
+    button{touch-action:manipulation}
+    button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(59,130,246,.45);outline-offset:2px}
+    header{background:var(--sidebar-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:14px max(20px,env(safe-area-inset-right)) 14px max(20px,env(safe-area-inset-left));border-bottom:1px solid var(--card-border);display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+    .logo-area{display:flex;align-items:center;gap:12px;min-width:0}.logo-badge{background:var(--primary);color:#fff;font-weight:800;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.15rem;box-shadow:0 4px 14px rgba(59,130,246,.25);flex-shrink:0}.site-title{min-width:0}.site-title h1{font-size:1.25rem;font-weight:700;letter-spacing:-.02em}.site-title p{font-size:.75rem;color:var(--text-sub);margin-top:1px}
+    .top-controls{display:flex;gap:10px;align-items:center}.top-controls select,.top-controls button{padding:8px 12px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text-main);font-size:.875rem;font-weight:600;cursor:pointer;outline:none;transition:var(--transition)}.top-controls select:hover,.top-controls button:hover{border-color:var(--primary)}
+    .main-container{display:flex;flex:1;position:relative;min-height:0}aside{width:270px;flex-shrink:0;background:var(--sidebar-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:18px 14px;border-right:1px solid var(--card-border);overflow-y:auto} [dir="rtl"] aside{border-right:none;border-left:1px solid var(--card-border)}
+    aside h3{font-size:.7rem;text-transform:uppercase;letter-spacing:1.4px;margin-bottom:12px;color:var(--accent);padding-left:8px;font-weight:700}[dir="rtl"] aside h3{padding-left:0;padding-right:8px}
+    .calc-menu{list-style:none;display:flex;flex-direction:column;gap:4px}.calc-menu button{width:100%;text-align:start;padding:11px 12px;background:transparent;border:1px solid transparent;border-radius:11px;color:var(--text-main);font-size:.9rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:10px;transition:var(--transition)}.calc-menu button:hover{background:rgba(59,130,246,.08)}.calc-menu button.active{background:var(--primary);color:#fff;box-shadow:0 4px 16px rgba(59,130,246,.25)}
+    .content-area{flex:1;padding:28px 20px;display:flex;justify-content:center;align-items:flex-start;overflow-y:auto}.calc-card{background:var(--card-bg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:28px;border-radius:20px;border:1px solid var(--card-border);width:100%;max-width:520px;box-shadow:var(--shadow);display:none}.calc-card.active{display:block;animation:cardIn .28s cubic-bezier(.4,0,.2,1)}@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .calc-card h2{margin-bottom:18px;font-size:1.3rem;font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:8px;letter-spacing:-.02em}.calc-display{width:100%;min-height:78px;background:var(--input-bg);border:1px solid var(--card-border);border-radius:14px;text-align:end;padding:14px 16px;font-size:clamp(1.55rem,7vw,2.1rem);font-weight:700;color:var(--text-main);margin-bottom:16px;font-variant-numeric:tabular-nums;overflow-x:auto;white-space:nowrap;display:flex;align-items:center;justify-content:flex-end}
+    .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.calc-grid button{padding:17px 0;font-size:1.25rem;border-radius:12px;border:1px solid var(--card-border);background:rgba(59,130,246,.04);color:var(--text-main);cursor:pointer;font-weight:600;transition:var(--transition);user-select:none;min-height:58px}.calc-grid button:hover{background:rgba(59,130,246,.1);transform:translateY(-1px)}.calc-grid button:active{transform:scale(.97)}.calc-grid button.op{background:var(--primary);color:#fff;border-color:transparent}.calc-grid button.op:hover{background:var(--primary-hover)}
+    .form-group{margin-bottom:14px}.form-group label{display:block;margin-bottom:5px;font-size:.85rem;font-weight:600;color:var(--text-sub)}.form-group input,.form-group select{width:100%;padding:12px 14px;border-radius:11px;border:1px solid var(--card-border);background:var(--input-bg);color:var(--text-main);font-size:1rem;outline:none;transition:var(--transition);min-height:46px}.form-group input::placeholder{color:var(--text-sub);opacity:.75}.form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.18)}
+    .action-btn{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:11px;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:6px;transition:var(--transition);min-height:46px}.action-btn:hover{background:var(--primary-hover)}.action-btn.secondary{background:#64748b}.action-btn.secondary:hover{background:#475569}.action-btn.danger{background:var(--danger)}.action-btn.danger:hover{background:#dc2626}
+    .result-box{margin-top:16px;padding:14px;background:var(--input-bg);border-radius:12px;border:1px solid var(--card-border);font-weight:600;text-align:center;font-size:1.05rem;color:var(--accent);line-height:1.55;overflow-wrap:anywhere}.result-box.hidden{display:none}.result-box.error{color:#b91c1c;border-color:rgba(239,68,68,.4)}[data-theme="dark"] .result-box.error{color:#fca5a5;border-color:rgba(239,68,68,.45)}
+    .tasbih-display{font-size:4.2rem;text-align:center;margin:12px 0 16px;font-weight:800;color:var(--accent);text-shadow:0 0 20px rgba(56,189,248,.25);font-variant-numeric:tabular-nums}.tasbih-btn{width:100%;height:96px;font-size:1.5rem;border-radius:16px;background:var(--primary);color:#fff;border:none;cursor:pointer;font-weight:700;margin-bottom:12px;box-shadow:0 8px 24px rgba(59,130,246,.22);transition:var(--transition);user-select:none}.tasbih-btn:active{transform:scale(.985)}.btn-group{display:flex;gap:10px}.btn-group .action-btn{margin-top:0;flex:1}
+    .timer-display{font-size:clamp(2.2rem,10vw,3rem);text-align:center;margin:18px 0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;white-space:nowrap}.disclaimer{font-size:.75rem;color:var(--text-sub);margin-top:10px;line-height:1.5}.menu-toggle{display:none;background:var(--card-bg);border:1px solid var(--card-border);color:var(--text-main);padding:8px 12px;border-radius:10px;font-size:1.1rem;cursor:pointer}
+    .status-live{min-height:1.2em;margin-top:8px;font-size:.8rem;color:var(--text-sub);text-align:center}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:820px){.main-container{flex-direction:column}aside{width:100%;border-right:none;border-left:none;border-bottom:1px solid var(--card-border);max-height:0;overflow:hidden;padding-top:0;padding-bottom:0;transition:max-height .3s ease,padding .3s ease}aside.open{max-height:460px;padding:14px;overflow-y:auto}.menu-toggle{display:block}.content-area{padding:20px 16px}.calc-card{padding:22px 18px;max-width:560px}}
+    @media(max-width:520px){header{padding-left:12px;padding-right:12px}.site-title p{display:none}.site-title h1{font-size:1.05rem}.logo-badge{width:38px;height:38px;border-radius:10px}.top-controls{gap:6px}.top-controls select,.top-controls button{padding:8px 9px}.calc-grid{gap:7px}.calc-grid button{min-height:54px;padding:14px 0}.btn-group{gap:7px}.timer-display{font-size:2rem}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo-area"><div class="logo-badge" aria-hidden="true">CA</div><div class="site-title"><h1>CalculatesAll</h1><p data-i18n="tagline">All-in-One Utility Hub</p></div></div>
+  <div class="top-controls"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button><select id="langSelector" aria-label="Select language"><option value="en">English</option><option value="ur">اردو</option><option value="ar">العربية</option></select><button id="themeBtn" type="button" aria-label="Toggle theme">🌙 Dark</button></div>
+</header>
+<div class="main-container">
+<aside id="sidebar" aria-label="Tools menu"><h3 data-i18n="menu">Calculators & Tools</h3><ul class="calc-menu" role="list">
+<li><button type="button" class="active" data-tool="standard" aria-current="page">🧮 <span data-i18n="std">Standard Calculator</span></button></li>
+<li><button type="button" data-tool="tasbih">📿 <span data-i18n="tasbih">Tasbih Counter</span></button></li>
+<li><button type="button" data-tool="converter">⚖️ <span data-i18n="conv">Unit Converter</span></button></li>
+<li><button type="button" data-tool="stopwatch">⏱️ <span data-i18n="sw">Stopwatch</span></button></li>
+<li><button type="button" data-tool="zakat">🌙 <span data-i18n="zakat">Zakat Calculator</span></button></li>
+<li><button type="button" data-tool="profit">📈 <span data-i18n="profit">Profit & Loss</span></button></li>
+<li><button type="button" data-tool="bmi">❤ <span data-i18n="bmi">BMI Calculator</span></button></li>
+<li><button type="button" data-tool="age">📅 <span data-i18n="age">Age Calculator</span></button></li>
+<li><button type="button" data-tool="discount">🏷️ <span data-i18n="disc">Discount Calculator</span></button></li>
+</ul></aside>
+<main class="content-area">
+<section id="standard" class="calc-card active" aria-labelledby="std-title"><h2 id="std-title" data-i18n="std">Standard Calculator</h2><div class="calc-display" id="display" role="status" aria-live="polite" aria-label="Calculator display">0</div><div class="calc-grid" role="group" aria-label="Calculator keypad">
+<button type="button" class="op" data-action="clear">C</button><button type="button" class="op" data-action="clearEntry" data-i18n="ce" aria-label="Clear entry">CE</button><button type="button" class="op" data-action="back" aria-label="Backspace">⌫</button><button type="button" class="op" data-action="percent">%</button><button type="button" class="op" data-op="/">÷</button>
+<button type="button" data-num="7">7</button><button type="button" data-num="8">8</button><button type="button" data-num="9">9</button><button type="button" class="op" data-op="*">×</button>
+<button type="button" data-num="4">4</button><button type="button" data-num="5">5</button><button type="button" data-num="6">6</button><button type="button" class="op" data-op="-">−</button>
+<button type="button" data-num="1">1</button><button type="button" data-num="2">2</button><button type="button" data-num="3">3</button><button type="button" class="op" data-op="+">+</button>
+<button type="button" data-num="00">00</button><button type="button" data-num="0">0</button><button type="button" data-num=".">.</button><button type="button" class="op" data-action="equals">=</button>
+</div><div id="calcStatus" class="status-live" aria-live="polite"></div></section>
+<section id="tasbih" class="calc-card" aria-labelledby="tasbih-title"><h2 id="tasbih-title" data-i18n="tasbih">Tasbih Counter</h2><div class="form-group"><label for="tasbihPreset" data-i18n="target">Target / Preset</label><select id="tasbihPreset"><option value="33">33</option><option value="100">100</option><option value="1000">1000</option><option value="0" data-i18n="unlimited">Unlimited</option></select></div><div class="tasbih-display" id="tasbihVal" aria-live="polite">0</div><button type="button" class="tasbih-btn" id="tasbihCountBtn" data-i18n="count">COUNT · سبحان الله</button><div class="btn-group"><button type="button" class="action-btn secondary" id="tasbihResetBtn" data-i18n="reset">Reset</button></div><div id="tasbihStatus" class="status-live" aria-live="polite"></div></section>
+<section id="converter" class="calc-card" aria-labelledby="conv-title"><h2 id="conv-title" data-i18n="conv">Unit Converter</h2><div class="form-group"><label for="convCategory" data-i18n="category">Category</label><select id="convCategory"><option value="weight" data-i18n="weight">Weight / Mass</option><option value="length" data-i18n="length">Length / Distance</option><option value="temp" data-i18n="temp">Temperature</option></select></div><div class="form-group"><label for="convVal" data-i18n="value">Value</label><input type="number" id="convVal" placeholder="0" inputmode="decimal" step="any"></div><div class="form-group"><label for="convFrom" data-i18n="from">From</label><select id="convFrom"></select></div><div class="form-group"><label for="convTo" data-i18n="to">To</label><select id="convTo"></select></div><div id="convResult" class="result-box" aria-live="polite" data-i18n="resultHere">Result will appear here</div></section>
+<section id="stopwatch" class="calc-card" aria-labelledby="sw-title"><h2 id="sw-title" data-i18n="sw">Stopwatch</h2><div class="timer-display" id="swDisplay" aria-live="off">00:00:00.00</div><div class="btn-group"><button type="button" class="action-btn" id="swStart" data-i18n="start">Start</button><button type="button" class="action-btn danger" id="swStop" data-i18n="stop">Stop</button><button type="button" class="action-btn secondary" id="swReset" data-i18n="reset">Reset</button></div></section>
+<section id="zakat" class="calc-card" aria-labelledby="zakat-title"><h2 id="zakat-title" data-i18n="zakat">Zakat Calculator</h2><div class="form-group"><label for="zakatAssets" data-i18n="totalWealth">Total Wealth / Assets</label><input type="number" id="zakatAssets" placeholder="0" min="0" step="any" inputmode="decimal"></div><button type="button" class="action-btn" id="zakatBtn" data-i18n="calcZakat">Calculate Zakat (2.5%)</button><div id="zakatResult" class="result-box hidden" aria-live="polite"></div><p class="disclaimer" data-i18n="zakatNote">Simplified calculation. For accurate Zakat consult a qualified scholar (Nisab, gold/silver rates, debts, etc.).</p></section>
+<section id="profit" class="calc-card" aria-labelledby="profit-title"><h2 id="profit-title" data-i18n="profit">Profit & Loss</h2><div class="form-group"><label for="costPrice" data-i18n="costPrice">Cost Price</label><input type="number" id="costPrice" placeholder="0" min="0" step="any" inputmode="decimal"></div><div class="form-group"><label for="sellingPrice" data-i18n="sellingPrice">Selling Price</label><input type="number" id="sellingPrice" placeholder="0" min="0" step="any" inputmode="decimal"></div><button type="button" class="action-btn" id="profitBtn" data-i18n="calculate">Calculate</button><div id="profitResult" class="result-box hidden" aria-live="polite"></div></section>
+<section id="bmi" class="calc-card" aria-labelledby="bmi-title"><h2 id="bmi-title" data-i18n="bmi">BMI Calculator</h2><div class="form-group"><label for="bmiWeight" data-i18n="weightKg">Weight (kg)</label><input type="number" id="bmiWeight" placeholder="70" min="1" step="0.1" inputmode="decimal"></div><div class="form-group"><label for="bmiHeight" data-i18n="heightCm">Height (cm)</label><input type="number" id="bmiHeight" placeholder="170" min="1" step="0.1" inputmode="decimal"></div><button type="button" class="action-btn" id="bmiBtn" data-i18n="calculate">Calculate</button><div id="bmiResult" class="result-box hidden" aria-live="polite"></div><p class="disclaimer" data-i18n="bmiNote">BMI is a screening measure, not a diagnosis.</p></section>
+<section id="age" class="calc-card" aria-labelledby="age-title"><h2 id="age-title" data-i18n="age">Age Calculator</h2><div class="form-group"><label for="birthDate" data-i18n="dob">Date of Birth</label><input type="date" id="birthDate"></div><button type="button" class="action-btn" id="ageBtn" data-i18n="calculateAge">Calculate Age</button><div id="ageResult" class="result-box hidden" aria-live="polite"></div></section>
+<section id="discount" class="calc-card" aria-labelledby="disc-title"><h2 id="disc-title" data-i18n="disc">Discount Calculator</h2><div class="form-group"><label for="discPrice" data-i18n="originalPrice">Original Price</label><input type="number" id="discPrice" placeholder="0" min="0" step="any" inputmode="decimal"></div><div class="form-group"><label for="discPct" data-i18n="discountPct">Discount (%)</label><input type="number" id="discPct" placeholder="10" min="0" max="100" step="any" inputmode="decimal"></div><button type="button" class="action-btn" id="discBtn" data-i18n="calculateDiscount">Calculate Discount</button><div id="discResult" class="result-box hidden" aria-live="polite"></div></section>
+</main></div>
+<script>
+(() => {
+  'use strict';
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const root = document.documentElement;
+  const safeGet = (k,d=null) => { try { const v=localStorage.getItem(k); return v===null?d:v; } catch { return d; } };
+  const safeSet = (k,v) => { try { localStorage.setItem(k,v); } catch {} };
+  const translations = {
+    en:{tagline:'All-in-One Utility Hub',menu:'Calculators & Tools',std:'Standard Calculator',tasbih:'Tasbih Counter',conv:'Unit Converter',sw:'Stopwatch',zakat:'Zakat Calculator',profit:'Profit & Loss',bmi:'BMI Calculator',age:'Age Calculator',disc:'Discount Calculator',target:'Target / Preset',count:'COUNT · سبحان الله',reset:'Reset',category:'Category',value:'Value',from:'From',to:'To',resultHere:'Result will appear here',start:'Start',stop:'Stop',totalWealth:'Total Wealth / Assets',calcZakat:'Calculate Zakat (2.5%)',zakatNote:'Simplified calculation. For accurate Zakat consult a qualified scholar (Nisab, gold/silver rates, debts, etc.).',costPrice:'Cost Price',sellingPrice:'Selling Price',calculate:'Calculate',calculateAge:'Calculate Age',calculateDiscount:'Calculate Discount',weightKg:'Weight (kg)',heightCm:'Height (cm)',dob:'Date of Birth',originalPrice:'Original Price',discountPct:'Discount (%)',unlimited:'Unlimited',weight:'Weight / Mass',length:'Length / Distance',temp:'Temperature',bmiNote:'BMI is a screening measure, not a diagnosis.',error:'Please enter valid values.',divisionByZero:'Cannot divide by zero.',invalidExpression:'Invalid expression.',targetReached:'Target reached: {n}',zakatResult:'Payable Zakat: {n}',profit:'Profit & Loss',breakEven:'No Profit, No Loss (Break Even)',profitResult:'Profit: +{n} ({p}%)',lossResult:'Loss: -{n} ({p}%)',bmiResult:'BMI: {b} ({c})',underweight:'Underweight',normal:'Normal',overweight:'Overweight',obese:'Obese',ageResult:'Age: {y} Years, {m} Months, {d} Days',discountResult:'Final Price: {f} (Savings: {s})',converterResult:'{v} {from} = {r} {to}',timerHours:'Stopwatch: {h}:{m}:{s}.{cs}',invalidDate:'Please enter a valid date of birth.'},
+    ur:{tagline:'تمام کیلکولیٹرز ایک جگہ',menu:'کیلکولیٹر اور ٹولز',std:'عام کیلکولیٹر',tasbih:'تسبیح کاؤنٹر',conv:'یونٹ کنورٹر',sw:'سٹاپ واچ',zakat:'زکوٰۃ کیلکولیٹر',profit:'نفع و نقصان',bmi:'بی ایم آئی کیلکولیٹر',age:'عمر کا کیلکولیٹر',disc:'ڈسکاؤنٹ کیلکولیٹر',target:'ٹارگٹ / تعداد',count:'شمار کریں · سبحان الله',reset:'ری سیٹ',category:'قسم',value:'قدر',from:'سے',to:'میں',resultHere:'نتیجہ یہاں ظاہر ہوگا',start:'شروع کریں',stop:'روکیں',totalWealth:'کل اثاثے / رقم',calcZakat:'زکوٰۃ معلوم کریں (2.5%)',zakatNote:'یہ بنیادی حساب ہے۔ مکمل زکوٰۃ کے لیے نصاب، قرض اور دیگر متعلقہ امور کے بارے میں مستند عالم سے رجوع کریں۔',costPrice:'خریداری قیمت',sellingPrice:'فروخت قیمت',calculate:'حساب کریں',calculateAge:'عمر معلوم کریں',calculateDiscount:'ڈسکاؤنٹ معلوم کریں',weightKg:'وزن (کلوگرام)',heightCm:'قد (سینٹی میٹر)',dob:'تاریخ پیدائش',originalPrice:'اصل قیمت',discountPct:'رعایت (%)',unlimited:'لامحدود',weight:'وزن',length:'لمبائی / فاصلہ',temp:'درجہ حرارت',bmiNote:'BMI ایک اسکریننگ پیمانہ ہے، تشخیص نہیں۔',error:'درست اعداد درج کریں۔',divisionByZero:'صفر سے تقسیم ممکن نہیں۔',invalidExpression:'غلط حسابی عبارت۔',targetReached:'ٹارگٹ مکمل: {n}',zakatResult:'واجب زکوٰۃ: {n}',breakEven:'نہ نفع نہ نقصان',profitResult:'نفع: +{n} ({p}%)',lossResult:'نقصان: -{n} ({p}%)',bmiResult:'BMI: {b} ({c})',underweight:'کم وزن',normal:'معمول',overweight:'زیادہ وزن',obese:'موٹاپا',ageResult:'عمر: {y} سال، {m} ماہ، {d} دن',discountResult:'حتمی قیمت: {f} (بچت: {s})',converterResult:'{v} {from} = {r} {to}',timerHours:'سٹاپ واچ: {h}:{m}:{s}.{cs}',invalidDate:'درست تاریخ پیدائش درج کریں۔'},
+    ar:{tagline:'مركز الحسابات الشامل',menu:'الحاسبات والأدوات',std:'حاسبة قياسية',tasbih:'عداد التسبيح',conv:'محول الوحدات',sw:'ساعة إيقاف',zakat:'حاسبة الزكاة',profit:'الربح والخسارة',bmi:'حاسبة كتلة الجسم',age:'حاسبة العمر',disc:'حاسبة الخصم',target:'الهدف',count:'تسبيح · سبحان الله',reset:'إعادة ضبط',category:'الفئة',value:'القيمة',from:'من',to:'إلى',resultHere:'ستظهر النتيجة هنا',start:'بدء',stop:'إيقاف',totalWealth:'إجمالي الثروة',calcZakat:'حساب الزكاة (2.5%)',zakatNote:'حساب مبسط. للحساب الدقيق للزكاة راجع أهل العلم بشأن النصاب والديون وغير ذلك.',costPrice:'سعر التكلفة',sellingPrice:'سعر البيع',calculate:'احسب',calculateAge:'احسب العمر',calculateDiscount:'احسب الخصم',weightKg:'الوزن (كجم)',heightCm:'الطول (سم)',dob:'تاريخ الميلاد',originalPrice:'السعر الأصلي',discountPct:'الخصم (%)',unlimited:'غير محدود',weight:'الوزن',length:'الطول / المسافة',temp:'درجة الحرارة',bmiNote:'مؤشر كتلة الجسم مقياس للفحص وليس تشخيصاً.',error:'يرجى إدخال قيم صحيحة.',divisionByZero:'لا يمكن القسمة على صفر.',invalidExpression:'تعبير حسابي غير صالح.',targetReached:'تم بلوغ الهدف: {n}',zakatResult:'الزكاة المستحقة: {n}',breakEven:'لا ربح ولا خسارة',profitResult:'الربح: +{n} ({p}%)',lossResult:'الخسارة: -{n} ({p}%)',bmiResult:'BMI: {b} ({c})',underweight:'نقص الوزن',normal:'طبيعي',overweight:'زيادة الوزن',obese:'سمنة',ageResult:'العمر: {y} سنة، {m} شهر، {d} يوم',discountResult:'السعر النهائي: {f} (التوفير: {s})',converterResult:'{v} {from} = {r} {to}',timerHours:'ساعة الإيقاف: {h}:{m}:{s}.{cs}',invalidDate:'يرجى إدخال تاريخ ميلاد صحيح.'}
+  };
+  let lang = safeGet('ca-lang','en'); if(!translations[lang]) lang='en';
+  const t=(k,vars={}) => Object.keys(vars).reduce((s,x)=>s.replaceAll('{'+x+'}',String(vars[x])),translations[lang][k] ?? translations.en[k] ?? k);
+  const number = n => Number(n).toLocaleString(lang==='en'?'en-US':lang, {maximumFractionDigits:2});
+  const showResult=(el,msg,error=false)=>{el.classList.remove('hidden');el.classList.toggle('error',error);el.textContent=msg;};
+  const hideResult=el=>{el.classList.add('hidden');el.classList.remove('error');el.textContent='';};
+
+  function applyLanguage(newLang){
+    lang=translations[newLang]?newLang:'en'; safeSet('ca-lang',lang); root.lang=lang; root.dir=(lang==='ur'||lang==='ar')?'rtl':'ltr';
+    $$('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(translations[lang][key]) el.textContent=translations[lang][key];});
+    $('#langSelector').value=lang; document.title='CalculatesAll – '+(lang==='en'?'Free Online Calculators & Utility Hub':lang==='ur'?'مفت آن لائن کیلکولیٹرز اور ٹولز':'حاسبات وأدوات مجانية عبر الإنترنت');
+    refreshConverterLabels(); updateThemeButton();
+  }
+  function updateThemeButton(){const dark=root.dataset.theme==='dark';$('#themeBtn').textContent=dark?'☀️ Light':'🌙 Dark';$('#themeBtn').setAttribute('aria-label',dark?'Switch to light theme':'Switch to dark theme');document.querySelector('meta[name="theme-color"]').setAttribute('content',dark?'#0f172a':'#f8fafc');}
+  root.dataset.theme=safeGet('ca-theme','light')==='dark'?'dark':'light';
+  $('#themeBtn').addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';safeSet('ca-theme',root.dataset.theme);updateThemeButton();});
+  $('#langSelector').addEventListener('change',e=>applyLanguage(e.target.value));
+  updateThemeButton();
+
+  const menuBtns=$$('.calc-menu button'),cards=$$('.calc-card'),sidebar=$('#sidebar'),menuToggle=$('#menuToggle');
+  function selectTool(id){const target=document.getElementById(id);if(!target)return;menuBtns.forEach(b=>{const active=b.dataset.tool===id;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});cards.forEach(c=>c.classList.toggle('active',c===target));if(innerWidth<=820){sidebar.classList.remove('open');menuToggle.setAttribute('aria-expanded','false');}target.scrollIntoView({behavior:'smooth',block:'start'});}
+  menuBtns.forEach(btn=>btn.addEventListener('click',()=>selectTool(btn.dataset.tool)));
+  menuToggle.addEventListener('click',()=>{const open=sidebar.classList.toggle('open');menuToggle.setAttribute('aria-expanded',String(open));});
+
+  // Safe arithmetic parser: no safe expression evaluation, no Function(), only numbers and + - * / parentheses.
+  function tokenize(expr){const s=expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/\s+/g,'');const out=[];let i=0;while(i<s.length){if(/[0-9.]/.test(s[i])){let j=i,dots=0;while(j<s.length&&/[0-9.]/.test(s[j])){if(s[j]==='.')dots++;j++;}if(dots>1||s[j-1]==='.')throw Error('invalid');out.push({type:'num',v:Number(s.slice(i,j))});i=j;}else if('+-*/()'.includes(s[i])){out.push({type:s[i]});i++;}else throw Error('invalid');}return out;}
+  function evaluate(expr){const tok=tokenize(expr);let p=0;const peek=()=>tok[p]?.type;
+    function primary(){if(peek()==='-'){p++;return -primary();}if(peek()==='+'){p++;return primary();}if(peek()==='('){p++;const v=add();if(peek()!==')')throw Error('invalid');p++;return v;}if(peek()==='num')return tok[p++].v;throw Error('invalid');}
+    function mul(){let v=primary();while(peek()==='*'||peek()==='/'){const op=tok[p++].type,b=primary();if(op==='/'&&b===0)throw Error('zero');v=op==='*'?v*b:v/b;}return v;}
+    function add(){let v=mul();while(peek()==='+'||peek()==='-'){const op=tok[p++].type,b=mul();v=op==='+'?v+b:v-b;}return v;}
+    if(!tok.length)throw Error('invalid');const v=add();if(p!==tok.length||!Number.isFinite(v))throw Error('invalid');return v;
+  }
+  const display=$('#display'),calcStatus=$('#calcStatus');
+  let expr='0',justEvaluated=false;
+  function renderCalc(){display.textContent=expr;}
+  function calcError(e){expr='Error';calcStatus.textContent=e==='zero'?t('divisionByZero'):t('invalidExpression');}
+  function appendNum(n){
+    if(expr==='Error'||justEvaluated){expr=n==='.'?'0.':n;justEvaluated=false;return;}
+    if(n==='.'){const part=expr.split(/[+\-*/() ]/).pop();if(part.includes('.'))return;if(part==='')expr+='0';}
+    if(n==='00'&&expr==='0')return;
+    if(expr==='0'&&n!=='.')expr=n;else expr+=n;
+    calcStatus.textContent='';
+  }
+  function appendOp(op){
+    if(expr==='Error')expr='0';justEvaluated=false;
+    const compact=expr.replace(/\s+/g,'');
+    if(/[+\-*/]$/.test(compact))expr=expr.replace(/\s*[+\-*/]\s*$/,' '+op+' ');
+    else expr+=' '+op+' ';
+    calcStatus.textContent='';
+  }
+  function clearEntry(){
+    if(expr==='Error'||justEvaluated){expr='0';justEvaluated=false;calcStatus.textContent='';return;}
+    const trimmed=expr.trim();
+    const match=trimmed.match(/(\d*\.?\d+)(?:[eE][+\-]?\d+)?$/);
+    if(match){const before=trimmed.slice(0,match.index).trimEnd();expr=before?before+' 0':'0';}
+    else if(/[+\-*/]$/.test(trimmed))expr=trimmed.slice(0,-1).trim()||'0';
+    else expr='0';
+  }
+  $$('#standard button').forEach(btn=>btn.addEventListener('click',()=>{
+    const a=btn.dataset.action,n=btn.dataset.num,o=btn.dataset.op;
+    if(n!==undefined)appendNum(n);
+    else if(o!==undefined)appendOp(o);
+    else if(a==='clear'){expr='0';justEvaluated=false;calcStatus.textContent='';}
+    else if(a==='clearEntry'){clearEntry();}
+    else if(a==='back'){if(expr==='Error'||justEvaluated){expr='0';justEvaluated=false;}else expr=expr.trim().slice(0,-1).trimEnd()||'0';}
+    else if(a==='percent'){try{const v=evaluate(expr);expr=String(v/100);justEvaluated=true;calcStatus.textContent='';}catch(e){calcError(e.message);}}
+    else if(a==='equals'){try{expr=String(evaluate(expr));justEvaluated=true;calcStatus.textContent='';}catch(e){calcError(e.message);}}
+    renderCalc();
+  }));
+  document.addEventListener('keydown',e=>{if(!$('#standard').classList.contains('active'))return;if(/^[0-9.]$/.test(e.key)){appendNum(e.key);renderCalc();}else if(['+','-','*','/'].includes(e.key)){appendOp(e.key);renderCalc();}else if(e.key==='Enter'||e.key==='='){try{expr=String(evaluate(expr));justEvaluated=true;calcStatus.textContent='';}catch(x){calcError(x.message);}renderCalc();}else if(e.key==='Escape'){expr='0';justEvaluated=false;calcStatus.textContent='';renderCalc();}else if(e.key==='Backspace'){expr=expr.trim().slice(0,-1).trimEnd()||'0';renderCalc();}});
+
+  let count=Math.max(0,parseInt(safeGet('ca-tasbih','0'),10)||0);const tasbihVal=$('#tasbihVal'),preset=$('#tasbihPreset'),tasbihStatus=$('#tasbihStatus');preset.value=safeGet('ca-target','33');tasbihVal.textContent=count;
+  preset.addEventListener('change',()=>safeSet('ca-target',preset.value));
+  $('#tasbihCountBtn').addEventListener('click',()=>{count++;safeSet('ca-tasbih',count);tasbihVal.textContent=count;const target=Number(preset.value);if(target>0&&count===target){if(navigator.vibrate)navigator.vibrate(200);tasbihStatus.textContent=t('targetReached',{n:target});}else tasbihStatus.textContent='';});
+  $('#tasbihResetBtn').addEventListener('click',()=>{count=0;safeSet('ca-tasbih','0');tasbihVal.textContent='0';tasbihStatus.textContent='';});
+
+  const units={weight:{kg:'Kilograms (kg)',lbs:'Pounds (lbs)',g:'Grams (g)'},length:{m:'Meters (m)',ft:'Feet (ft)',km:'Kilometers (km)',mi:'Miles (mi)'},temp:{c:'Celsius (°C)',f:'Fahrenheit (°F)'}};
+  const unitLabels={kg:'kg',lbs:'lb',g:'g',m:'m',ft:'ft',km:'km',mi:'mi',c:'°C',f:'°F'};const convCat=$('#convCategory'),convFrom=$('#convFrom'),convTo=$('#convTo'),convVal=$('#convVal'),convResult=$('#convResult');
+  function refreshConverterLabels(){const cat=convCat.value;[convFrom,convTo].forEach((sel,i)=>{const old=sel.value;sel.innerHTML='';Object.entries(units[cat]).forEach(([k,v])=>sel.add(new Option(v,k)));if([...sel.options].some(o=>o.value===old))sel.value=old;else if(i===1&&sel.options.length>1)sel.selectedIndex=1;});convert();}
+  function convert(){const val=Number(convVal.value);if(convVal.value.trim()===''||!Number.isFinite(val)){convResult.textContent=t('resultHere');return;}const cat=convCat.value,from=convFrom.value,to=convTo.value;let r=val;if(cat==='weight'){const kg={kg:val,lbs:val/2.2046226218,g:val/1000}[from];r={kg:kg,lbs:kg*2.2046226218,g:kg*1000}[to];}else if(cat==='length'){const m={m:val,ft:val/3.280839895,km:val*1000,mi:val*1609.344}[from];r={m:m,ft:m*3.280839895,km:m/1000,mi:m/1609.344}[to];}else{const c=from==='c'?val:(val-32)*5/9;r=to==='c'?c:c*9/5+32;}convResult.textContent=t('converterResult',{v:number(val),from:unitLabels[from],r:number(r),to:unitLabels[to]});}
+  convCat.addEventListener('change',refreshConverterLabels);[convVal,convFrom,convTo].forEach(el=>el.addEventListener('input',convert));refreshConverterLabels();
+
+  let swFrame=null,swElapsed=0,swStartedAt=0,swRunning=false;const swDisplay=$('#swDisplay');
+  function formatTime(ms){ms=Math.max(0,ms);const h=Math.floor(ms/3600000),m=Math.floor(ms/60000)%60,s=Math.floor(ms/1000)%60,cs=Math.floor(ms/10)%100;return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(cs).padStart(2,'0')}`;}
+  function tick(){if(!swRunning)return;swElapsed=performance.now()-swStartedAt;swDisplay.textContent=formatTime(swElapsed);swFrame=requestAnimationFrame(tick);}
+  $('#swStart').addEventListener('click',()=>{if(swRunning)return;swRunning=true;swStartedAt=performance.now()-swElapsed;tick();});
+  $('#swStop').addEventListener('click',()=>{if(!swRunning)return;swElapsed=performance.now()-swStartedAt;swRunning=false;if(swFrame!==null)cancelAnimationFrame(swFrame);swFrame=null;swDisplay.textContent=formatTime(swElapsed);});
+  $('#swReset').addEventListener('click',()=>{swRunning=false;if(swFrame!==null)cancelAnimationFrame(swFrame);swFrame=null;swElapsed=0;swStartedAt=0;swDisplay.textContent='00:00:00.00';});
+  document.addEventListener('visibilitychange',()=>{if(swRunning){swElapsed=performance.now()-swStartedAt;swDisplay.textContent=formatTime(swElapsed);}});
+
+  $('#zakatBtn').addEventListener('click',()=>{const raw=$('#zakatAssets').value,assets=Number(raw),box=$('#zakatResult');if(raw.trim()===''||!Number.isFinite(assets)||assets<0){showResult(box,t('error'),true);return;}showResult(box,t('zakatResult',{n:number(assets*.025)}));});
+  $('#profitBtn').addEventListener('click',()=>{const a=$('#costPrice').value,b=$('#sellingPrice').value,cp=Number(a),sp=Number(b),box=$('#profitResult');if(a.trim()===''||b.trim()===''||!Number.isFinite(cp)||!Number.isFinite(sp)||cp<0||sp<0){showResult(box,t('error'),true);return;}const diff=sp-cp,p=cp>0?Math.abs(diff)/cp*100:0;if(diff>0)showResult(box,t('profitResult',{n:number(diff),p:number(p)}));else if(diff<0)showResult(box,t('lossResult',{n:number(Math.abs(diff)),p:number(p)}));else showResult(box,t('breakEven'));});
+  $('#bmiBtn').addEventListener('click',()=>{const w=Number($('#bmiWeight').value),h=Number($('#bmiHeight').value)/100,box=$('#bmiResult');if(!Number.isFinite(w)||!Number.isFinite(h)||w<=0||h<=0){showResult(box,t('error'),true);return;}const bmi=w/(h*h),cat=bmi<18.5?'underweight':bmi<25?'normal':bmi<30?'overweight':'obese';showResult(box,t('bmiResult',{b:bmi.toFixed(1),c:t(cat)}));});
+  function parseDateInput(s){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s);if(!m)return null;const d=new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));return d.getFullYear()===+m[1]&&d.getMonth()===+m[2]-1&&d.getDate()===+m[3]?d:null;}
+  $('#ageBtn').addEventListener('click',()=>{const raw=$('#birthDate').value,dob=parseDateInput(raw),box=$('#ageResult');if(!dob){showResult(box,t('invalidDate'),true);return;}const today=new Date();today.setHours(0,0,0,0);if(dob>today){showResult(box,t('invalidDate'),true);return;}let y=today.getFullYear()-dob.getFullYear(),m=today.getMonth()-dob.getMonth(),d=today.getDate()-dob.getDate();if(d<0){m--;d+=new Date(today.getFullYear(),today.getMonth(),0).getDate();}if(m<0){y--;m+=12;}showResult(box,t('ageResult',{y,m,d}));});
+  $('#discBtn').addEventListener('click',()=>{const a=$('#discPrice').value,b=$('#discPct').value,price=Number(a),pct=Number(b),box=$('#discResult');if(a.trim()===''||b.trim()===''||!Number.isFinite(price)||!Number.isFinite(pct)||price<0||pct<0||pct>100){showResult(box,t('error'),true);return;}const savings=price*pct/100;showResult(box,t('discountResult',{f:number(price-savings),s:number(savings)}));});
+  const today=new Date();$('#birthDate').max=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  applyLanguage(lang);
+
+  // Installable/offline PWA registration. Service workers require HTTPS or localhost.
+  if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+    });
+  }
+})();
+</script>
+</body>
+</html>
