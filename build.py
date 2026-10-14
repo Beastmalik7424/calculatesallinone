@@ -1273,34 +1273,34 @@ def main():
         else:
             entries.append((path, []))
     static_pages = [
-        ("/about", "About CalculatesAll", "About CalculatesAll, its free tools and how they are built.", "About CalculatesAll", [
+        ("/about/", "About CalculatesAll", "About CalculatesAll, its free tools and how they are built.", "About CalculatesAll", [
             "CalculatesAll is a collection of free online calculators and everyday utility tools.",
             "Calculations run in your browser. The tools do not store your entries on our server.",
             "Religious and health tools state their limits on the page. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
         ]),
-        ("/privacy", "Privacy Policy | CalculatesAll", "How CalculatesAll handles data, local storage and advertising.", "Privacy Policy", [
+        ("/privacy/", "Privacy Policy | CalculatesAll", "How CalculatesAll handles data, local storage and advertising.", "Privacy Policy", [
             "Calculator inputs are processed in your browser. We do not send them to our server.",
             "The tasbih counter and the stopwatch do not send data anywhere. The tasbih counter keeps its count in local storage on your device. You can clear this from your browser settings.",
             "CalculatesAll does not run its own analytics or accounts. If the site owner enables advertising, Google and its partners may use cookies to show ads. For visitors in the European Economic Area and the United Kingdom, consent for personalized ads is collected through a Google certified consent message configured in the Google AdSense account. Until that message is configured, personalized ads are not shown to those visitors.",
             "Google's use of data is described at policies.google.com. Contact " + CONTACT_EMAIL + " with privacy questions.",
         ]),
-        ("/methodology", "How Our Calculations Work | CalculatesAll", "The formulas, data sources and limits behind each CalculatesAll tool.", "How Our Calculations Work", [
+        ("/methodology/", "How Our Calculations Work | CalculatesAll", "The formulas, data sources and limits behind each CalculatesAll tool.", "How Our Calculations Work", [
             "Each tool uses a published formula. Zakat uses the silver Nisab of 612.36 grams. BMI uses the standard formula with WHO adult categories. Profit, discount, age and unit conversions use standard arithmetic and fixed conversion factors.",
             "Every tool page states its assumptions and limits. When a rule depends on a school of law or a clinical judgement, the page says so and points to a qualified professional.",
             "If you find a formula error, email " + CONTACT_EMAIL + " with the tool name and the inputs. We correct confirmed errors and show the update date on the tool page.",
         ]),
-        ("/editorial-policy", "Editorial Policy | CalculatesAll", "How CalculatesAll writes, checks and updates its tool guides.", "Editorial Policy", [
+        ("/editorial-policy/", "Editorial Policy | CalculatesAll", "How CalculatesAll writes, checks and updates its tool guides.", "Editorial Policy", [
             "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Numbers in worked examples are checked with a calculation before publication.",
             "Religious and health content is labelled as a general guide. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
             "Each guide shows a last updated date. Sources are named where they are used, and we do not publish claims that we cannot support with a named source.",
         ]),
-        ("/terms", "Terms of Use | CalculatesAll", "The terms for using the free calculators and information on CalculatesAll.", "Terms of Use", TERMS_PARAS),
-        ("/contact", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
+        ("/terms/", "Terms of Use | CalculatesAll", "The terms for using the free calculators and information on CalculatesAll.", "Terms of Use", TERMS_PARAS),
+        ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
             "For corrections, feedback or questions about a tool, email " + CONTACT_EMAIL + ".",
         ]),
     ]
     for path, title, desc, h1, paras in static_pages:
-        paras = paras + TRUST_EXTRA.get(path, []) + {"/contact": CONTACT_EXTRA, "/about": ABOUT_EXTRA}.get(path, [])
+        paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA, "/about/": ABOUT_EXTRA}.get(path, [])
         static_page(path, title, desc, h1, paras)
         entries.append((path, []))
     not_found()
