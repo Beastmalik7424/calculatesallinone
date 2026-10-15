@@ -1,4 +1,3 @@
-google-site-verification: google2e764d068684499b.html
 {
   "framework": null,
   "buildCommand": "npm install && npm run build",
