@@ -693,8 +693,10 @@ def write_ads_txt():
         raise SystemExit("ADSENSE_CLIENT must be a real-format ID like ca-pub-1234567890123456")
     pub = "pub-" + client[len("ca-pub-"):]
     with open(ads_path, "w", encoding="utf-8") as f:
-        f.write("google.com, " + pub + ", DIRECT, f08c47fec0942fa0\\n")
+        f.write("google.com, " + pub + ", DIRECT, f08c47fec0942fa0\n")
     return True
+
+
 def write_review_sheet():
     import csv
     os.makedirs("review", exist_ok=True)
