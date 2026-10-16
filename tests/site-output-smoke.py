@@ -21,12 +21,22 @@ for url in urls:
     page = output_for_url(url)
     assert page.is_file(), f"Sitemap URL has no generated HTML: {url} -> {page}"
     html = page.read_text(encoding="utf-8")
-    assert re.search(r"<title>[^<]+</title>", html), f"Missing title: {url}"
-    assert re.search(r'<meta name="description" content="[^"]+"', html), f"Missing description: {url}"
+    title_match = re.search(r"<title>([^<]+)</title>", html)
+    desc_match = re.search(r'<meta name="description" content="([^"]+)"', html)
+    assert title_match, f"Missing title: {url}"
+    assert desc_match, f"Missing description: {url}"
+    titles[url] = title_match.group(1)
+    descriptions[url] = desc_match.group(1)
+    assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
 
+assert len(titles.values()) == len(set(titles.values())), "Duplicate page titles found: " + repr(titles)
+assert len(descriptions.values()) == len(set(descriptions.values())), "Duplicate meta descriptions found: " + repr(descriptions)
+
 sitemap_urls = set(urls)
+titles = {}
+descriptions = {}
 generated = set()
 for page in ROOT.rglob("index.html"):
     rel = page.parent.relative_to(ROOT).as_posix()
@@ -59,6 +69,13 @@ for page in ROOT.rglob("index.html"):
             elif path != "/" and not path.endswith("/"):
                 broken.append((str(page), href + " (page URL missing trailing slash)"))
 assert not broken, "Broken or non-canonical internal hrefs found: " + repr(broken[:20])
+
+# Verify local image/script asset references resolve in the generated output.
+for page in ROOT.rglob("index.html"):
+    html = page.read_text(encoding="utf-8")
+    for src in re.findall(r'src="(/assets/[^"]+)"', html):
+        target = ROOT / urlparse(src).path.lstrip("/")
+        assert target.is_file(), f"Broken local asset reference in {page}: {src}"
 
 for required in ("/marketplaces/", "/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"
