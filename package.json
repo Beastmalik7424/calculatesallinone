@@ -7,6 +7,6 @@
     "build": "npm run build:css && python3 build.py"
   },
   "devDependencies": {
-    "tailwindcss": "3.4.17"
+    "tailwindcss": "3.4.19"
   }
 }
