@@ -833,38 +833,60 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     )
 
 
-def lang_links(lang, s):
+def lang_links(lang, s, current_path=None):
+    # Calculator language links preserve the current tool and only show
+    # locales for which an equivalent translated page exists.
+    import re
+    match = re.fullmatch(r"/(?:ur/)?([^/]+)/", current_path or "")
+    if match and match.group(1) in {t["slug"] for t in TOOLS}:
+        slug = match.group(1)
+        if slug not in URDU:
+            return ""
+        choices = [
+            ("en", "English", "/" + slug + "/"),
+            ("ur", "اردو", "/ur/" + slug + "/"),
+        ]
+        items = ""
+        for code, name, href in choices:
+            if code == lang:
+                continue
+            items += ('<li><a class="' + LINK + ' min-h-[44px] inline-flex items-center rounded-full px-3 py-1 bg-white/80 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700" hreflang="' + code
+                      + '" href="' + href + '">' + name + "</a></li>")
+        return ('<nav aria-label="' + s["lang"] + '" class="mt-3"><ul class="flex flex-wrap gap-x-3 gap-y-2 text-sm">'
+                + items + "</ul></nav>")
+
     items = ""
     for l in LANGS:
         if l["code"] == lang:
             continue
-        items += ('<li><a class="' + LINK + ' min-h-[44px] inline-flex items-center" hreflang="' + l["code"]
+        items += ('<li><a class="' + LINK + ' min-h-[44px] inline-flex items-center rounded-full px-3 py-1 bg-white/80 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700" hreflang="' + l["code"]
                   + '" href="' + l["path"] + '">' + l["name"] + "</a></li>")
-    return ('<nav aria-label="' + s["lang"] + '" class="mt-2"><ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm">'
+    return ('<nav aria-label="' + s["lang"] + '" class="mt-3"><ul class="flex flex-wrap gap-x-3 gap-y-2 text-sm">'
             + items + "</ul></nav>")
 
 
-def shell(main_html, lang="en"):
+def shell(main_html, lang="en", current_path=None):
     s = shell_strings(lang)
     home = "/" if lang == "en" else "/" + lang + "/"
+    main_width = "max-w-6xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
     return (
-        '<body class="min-h-screen bg-gradient-to-br from-indigo-100 via-sky-50 to-fuchsia-100 dark:from-stone-950 dark:via-stone-900 dark:to-indigo-950 text-stone-900 dark:text-stone-100 antialiased">\n'
+        '<body class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased">\n'
         '<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">'
-        '<div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-fuchsia-300/40 blur-3xl"></div>'
-        '<div class="absolute top-1/3 -right-24 h-80 w-80 rounded-full bg-sky-300/40 blur-3xl"></div>'
-        '<div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-emerald-300/30 blur-3xl"></div></div>\n'
+        '<div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-violet-300/30 blur-3xl"></div>'
+        '<div class="absolute top-1/3 -right-24 h-80 w-80 rounded-full bg-sky-300/35 blur-3xl"></div>'
+        '<div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-teal-300/30 blur-3xl"></div></div>\n'
         '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
-        '<div class="h-1.5 bg-gradient-to-r from-fuchsia-500 via-sky-500 to-emerald-500"></div>'
+        '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
         '<nav class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4" aria-label="Main">'
-        '<a href="' + home + '" class="font-extrabold text-xl bg-gradient-to-r from-fuchsia-600 via-indigo-600 to-sky-600 bg-clip-text text-transparent min-h-[44px] inline-flex items-center">CalculatesAll</a>'
+        '<a href="' + home + '" class="font-extrabold text-xl bg-gradient-to-r from-teal-600 via-sky-600 to-indigo-600 bg-clip-text text-transparent min-h-[44px] inline-flex items-center">CalculatesAll</a>'
         '<div class="flex items-center gap-3">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
         '<details class="relative"><summary class="cursor-pointer text-base min-h-[44px] inline-flex items-center px-2">' + s["menu"] + '</summary>'
         '<ul class="absolute right-0 mt-2 w-64 bg-white border border-stone-300 rounded-lg p-3 space-y-2 text-base shadow-lg z-10">'
         + nav_items("ur" if lang == "ur" else "en")
         + '</ul></details></div></nav></header>\n'
-        '<main id="main" class="max-w-3xl mx-auto px-5 py-10">' + main_html + '</main>\n'
+        '<main id="main" class="' + main_width + ' mx-auto px-5 py-10">' + main_html + '</main>\n'
         '<footer class="mt-12 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-t border-stone-200 dark:border-stone-700">'
         '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'
         '<div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">'
@@ -879,7 +901,7 @@ def shell(main_html, lang="en"):
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/marketplaces/">Marketplace guide</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">Affiliate disclosure</a>'
         '</nav></div>'
-        + lang_links(lang, s) +
+        + lang_links(lang, s, current_path) +
         '</div></footer>\n'
         '<script src="/assets/app.js" defer></script>\n'
         '</body>\n</html>\n'
@@ -908,7 +930,7 @@ def home_lang_page(code):
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
          "logo": SITE_URL + "/assets/favicon.svg"},
     ]
-    write(path, head(u["title"], u["desc"], path, schema, lang=code, alternates=home_alts_all()) + shell(body, lang=code))
+    write(path, head(u["title"], u["desc"], path, schema, lang=code, alternates=home_alts_all()) + shell(body, lang=code, current_path=path))
     return path
 
 
@@ -993,7 +1015,7 @@ def tool_page(t):
     rs = reviewer_schema(t["slug"])
     if rs:
         schema.append(rs)
-    write(path, canon_override(head(title, desc, path, schema, alternates=alternates) + shell(body), path))
+    write(path, canon_override(head(title, desc, path, schema, alternates=alternates) + shell(body, current_path=path), path))
     return path
 
 
@@ -1024,7 +1046,7 @@ def urdu_tool_page(t):
         + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">انگریزی ورژن</a></p>'
     )
     alternates = [("en", "/" + t["slug"] + "/"), ("ur", path), ("x-default", "/" + t["slug"] + "/")]
-    write(path, canon_override(head(u["title"], u["description"], path, schema, lang="ur", alternates=alternates) + shell(body, lang="ur"), path))
+    write(path, canon_override(head(u["title"], u["description"], path, schema, lang="ur", alternates=alternates) + shell(body, lang="ur", current_path=path), path))
     return path
 
 
@@ -1092,7 +1114,7 @@ def home_page(lang="en"):
         '<p class="mt-4 text-lg text-stone-900 dark:text-stone-100">' + lead + '</p>'
         '<ul class="mt-10 grid gap-4">' + cards + "</ul>" + home_extra_html(lang)
     )
-    write(path, head(title, desc, path, schema, lang=lang, alternates=alternates) + shell(body, lang=lang))
+    write(path, head(title, desc, path, schema, lang=lang, alternates=alternates) + shell(body, lang=lang, current_path=path))
     return path
 
 
@@ -1181,13 +1203,18 @@ def home_app_page(lang):
             '<div class="rounded-3xl bg-white/95 dark:bg-stone-900/95 p-4 sm:p-6">'
             '<section aria-label="Calculator">' + CALC_UI + "</section></div></div>")
     body = (
-        '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent dark:from-fuchsia-300 dark:to-sky-300 mt-2">' + h1 + "</h1>"
-        '<p class="mt-3 text-lg text-stone-800 dark:text-stone-200">' + lead + "</p>"
-        '<div class="mt-6">' + hero + "</div>"
+        '<section class="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-sky-950 to-teal-900 p-6 sm:p-10 shadow-2xl ring-1 ring-white/20">'
+        '<div aria-hidden="true" class="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-sky-400/20 blur-3xl"></div>'
+        '<div aria-hidden="true" class="pointer-events-none absolute -bottom-16 -left-10 h-48 w-48 rounded-full bg-teal-300/20 blur-3xl"></div>'
+        '<p class="relative inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs sm:text-sm font-bold tracking-wide text-teal-100">FREE TOOLS · PRIVATE BY DESIGN · NO SIGN-UP</p>'
+        '<h1 class="relative mt-5 text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-white">' + h1 + "</h1>"
+        '<p class="relative mt-4 max-w-3xl text-lg sm:text-xl leading-relaxed text-sky-50/95">' + lead + "</p>"
+        '</section>'
+        '<div class="mt-8 sm:mt-10">' + hero + "</div>"
         '<ul class="mt-6 grid grid-cols-3 gap-3">' + trust + "</ul>"
-        + '<ol class="mt-6 grid gap-3 sm:grid-cols-3">' + "".join('<li class="rounded-xl bg-white/90 dark:bg-stone-900/90 p-4 shadow ring-1 ring-stone-200 dark:ring-stone-700 text-base text-stone-900 dark:text-stone-100"><span class="block text-sm font-bold text-indigo-700 dark:text-indigo-300">' + n + "</span>" + t + "</li>" for n, t in STEPS[lang]) + "</ol>"
+        + '<ol class="mt-6 grid gap-3 sm:grid-cols-3">' + "".join('<li class="rounded-2xl bg-white/85 dark:bg-slate-900/85 backdrop-blur p-4 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 text-base text-slate-800 dark:text-slate-100"><span class="block text-sm font-bold text-teal-700 dark:text-teal-300">' + n + "</span>" + t + "</li>" for n, t in STEPS[lang]) + "</ol>"
         '<h2 class="' + H2 + '">' + more_h + "</h2>"
-        '<ul class="mt-4 grid grid-cols-2 gap-4">' + tiles + "</ul>"
+        '<ul class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">' + tiles + "</ul>"
         + cats
         + home_extra_html(lang)
     )
@@ -1199,7 +1226,7 @@ def home_app_page(lang):
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
          "logo": SITE_URL + "/assets/favicon.svg"},
     ]
-    write(path, head(title, desc, path, schema, lang=lang, alternates=home_alts_all()) + shell(body, lang=lang))
+    write(path, head(title, desc, path, schema, lang=lang, alternates=home_alts_all()) + shell(body, lang=lang, current_path=path))
 
 
 def not_found():

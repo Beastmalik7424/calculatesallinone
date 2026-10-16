@@ -8,5 +8,8 @@
   },
   "devDependencies": {
     "tailwindcss": "3.4.19"
+  },
+  "overrides": {
+    "braces": "npm:@zklogic/braces@3.0.7"
   }
 }

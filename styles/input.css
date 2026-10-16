@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Accessible finishing touches shared by generated pages. */
+@layer base {
+  html { scroll-behavior: smooth; }
+  html.dark { color-scheme: dark; }
+  body { background-attachment: fixed; }
+  ::selection { background: rgba(13, 148, 136, 0.22); }
+  a, button, summary { -webkit-tap-highlight-color: transparent; }
+  :focus-visible { outline-color: #0f766e; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
