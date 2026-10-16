@@ -84,4 +84,9 @@ marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="ut
 assert "Advertising is currently disabled" in privacy_html, "Privacy page must explain disabled ads and conditional ads.txt"
 assert "deliberately does not create an ads.txt file" in marketplace_html, "Marketplace guide must explain why ads.txt can return 404"
 
+# Google Search Console ownership HTML must be present in the deployed output.
+verification_file = ROOT / "google2e764d068684499b.html"
+assert verification_file.is_file(), "Google Search Console verification file missing from Vercel output"
+assert verification_file.read_text(encoding="utf-8").strip() == "google-site-verification: google2e764d068684499b.html", "Google Search Console verification file content mismatch"
+
 print(f"PASS: {len(urls)} unique sitemap URLs, every generated page indexable, canonicalized, and internally linked.")
