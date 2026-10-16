@@ -2,7 +2,7 @@ name: Build and smoke test
 
 on:
   push:
-    branches: ["main", "fix/language-label-audit", "fix/encoding-ads-seo-audit"]
+    branches: ["main", "fix/language-label-audit", "fix/encoding-ads-seo-audit", "fix/input-validation-audit"]
   pull_request:
     branches: ["main"]
 
@@ -27,6 +27,8 @@ jobs:
         run: node --check static/app.js
       - name: Test calculator behavior
         run: node tests/calculator-smoke.cjs
+      - name: Test input validation
+        run: node tests/input-validation-smoke.cjs
       - name: Check Python syntax
         run: python -m py_compile build.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
       - name: Build the site
