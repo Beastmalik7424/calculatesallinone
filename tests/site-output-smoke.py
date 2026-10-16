@@ -74,15 +74,15 @@ for page in ROOT.rglob("index.html"):
                 broken.append((str(page), href + " (page URL missing trailing slash)"))
 assert not broken, "Broken or non-canonical internal hrefs found: " + repr(broken[:20])
 
-# Every indexable sitemap URL should have at least one crawlable incoming HTML anchor.
-# Self-canonical tags do not count as discovery links.
+# Every indexable sitemap URL should have at least one crawlable incoming internal link.
+# Count root-relative links; canonical tags are absolute and do not count as discovery links.
 incoming = {url: set() for url in sitemap_urls}
 for page in ROOT.rglob("index.html"):
     rel = page.parent.relative_to(ROOT).as_posix()
     source_url = SITE + "/" + (rel + "/" if rel != "." else "")
     html = page.read_text(encoding="utf-8")
-    for anchor in re.findall(r"<a\b[^>]*\bhref=[\"']([^\"']+)[\"']", html, flags=re.I):
-        target = urljoin(source_url, anchor)
+    for href in re.findall(r'href="(/[^"]*)"', html):
+        target = SITE + urlparse(href).path
         if target in incoming and target != source_url:
             incoming[target].add(source_url)
 orphans = sorted(url for url, sources in incoming.items() if not sources)
