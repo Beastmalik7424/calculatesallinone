@@ -2,7 +2,7 @@ import json
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urlparse
 
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
