@@ -828,7 +828,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         '<meta name="google-site-verification" content="DnTlrPscc56w3Xe-QHyaXhObsePjw4y_G-5i5qQl_wY">\n'
         '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261017-home-layout">\n'
         + ld + ads + "</head>\n"
     )
 
