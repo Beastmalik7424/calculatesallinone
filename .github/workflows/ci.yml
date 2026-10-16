@@ -51,3 +51,7 @@ jobs:
           test ! -e public/ads.txt
           if grep -Eq 'Ø|Ù|Ã|âŒ|âˆ|Â©' public/ur/index.html; then echo 'Mojibake found in Urdu home page'; exit 1; fi
           if grep -Eq 'âŒ«|Ã·|Ã—|âˆ’' public/index.html; then echo 'Corrupted calculator symbols found'; exit 1; fi
+      - name: Verify sitemap coverage and internal links
+        run: python tests/site-output-smoke.py
+      - name: Test safe monetization configuration
+        run: python tests/monetization-smoke.py
