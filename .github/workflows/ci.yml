@@ -23,6 +23,8 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: npm ci
+      - name: Test hardened braces dependency
+        run: node tests/braces-hardening-smoke.cjs
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=moderate
       - name: Check JavaScript syntax
