@@ -1125,8 +1125,8 @@ CAT_PILL = {
     "worship": "bg-teal-100 text-teal-900 dark:bg-teal-900/60 dark:text-teal-100",
 }
 TRUST = {
-    "en": ["ðŸ†“ Free", "ðŸ”’ Private", "âš¡ Fast"],
-    "ur": ["ðŸ†“ Ù…ÙØª", "ðŸ”’ Ù…Ø­ÙÙˆØ¸", "âš¡ ØªÛŒØ²"],
+    "en": ["🆓 Free", "🔒 Private", "⚡ Fast"],
+    "ur": ["🆓 مفت", "🔒 محفوظ", "⚡ تیز"],
 }
 TRUST_CLASS = [
     "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/60 dark:text-emerald-100",
