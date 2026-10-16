@@ -104,7 +104,11 @@ vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert vercel_config.get("cleanUrls") is False, "Vercel cleanUrls must stay disabled so the Google ownership HTML file is served at its exact URL"
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
-assert "Advertising is currently disabled" in privacy_html, "Privacy page must explain disabled ads and conditional ads.txt"
+assert "Advertising is disabled by default" in privacy_html, "Privacy page must state that ads are disabled by default"
+assert "ADSENSE_CONSENT_READY=true" in privacy_html, "Privacy page must disclose the consent-readiness safeguard"
+assert "Google-certified consent management platform" in privacy_html, "Privacy page must describe the CMP requirement"
+assert "cookie identifiers" in privacy_html and "web beacons" in privacy_html and "IP addresses" in privacy_html, "Privacy page must disclose relevant advertising technologies/data"
+assert "https://policies.google.com/technologies/partner-sites" in privacy_html, "Privacy page must link Google's data-use disclosure"
 assert "deliberately does not create an ads.txt file" in marketplace_html, "Marketplace guide must explain why ads.txt can return 404"
 
 # Google Search Console ownership HTML must be present in the deployed output.
