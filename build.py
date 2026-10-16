@@ -790,7 +790,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     ld = ""
     for s in schema:
         ld += '<script type="application/ld+json">' + json.dumps(s, ensure_ascii=False) + "</script>\n"
-    og_image = SITE_URL + "/assets/og-image.png"
+    og_image = SITE_URL + "/assets/og-image.svg"
     dir_attr = ' dir="rtl"' if lang in RTL_LANGS else ' dir="ltr"'
     locale = LANG_LOCALE.get(lang, "en_US")
     theme_script = (
@@ -815,8 +815,6 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         '<meta property="og:description" content="' + desc + '">\n'
         '<meta property="og:url" content="' + url + '">\n'
         '<meta property="og:image" content="' + og_image + '">\n'
-        '<meta property="og:image:width" content="1200">\n'
-        '<meta property="og:image:height" content="630">\n'
         '<meta name="twitter:card" content="summary_large_image">\n'
         '<meta name="twitter:title" content="' + title + '">\n'
         '<meta name="twitter:description" content="' + desc + '">\n'
@@ -938,10 +936,8 @@ def faq_html(items):
 
 
 def canon_override(doc, path):
-    if path == "/standard-calculator/":
-        return doc.replace('<link rel="canonical" href="' + SITE_URL + path + '">', '<link rel="canonical" href="' + SITE_URL + '/">')
-    if path == "/ur/standard-calculator/":
-        return doc.replace('<link rel="canonical" href="' + SITE_URL + path + '">', '<link rel="canonical" href="' + SITE_URL + '/ur/">')
+    # Each calculator page contains its own explanatory content and should
+    # self-canonicalize. Do not point the standard calculator at the home page.
     return doc
 
 
@@ -1234,24 +1230,22 @@ def og_and_favicon():
                '<text x="32" y="42" font-size="30" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-weight="bold">CA</text></svg>')
     with open(os.path.join(assets, "favicon.svg"), "w", encoding="utf-8") as f:
         f.write(favicon)
-    try:
-        from PIL import Image, ImageDraw, ImageFont
-    except ImportError:
-        print("Pillow not installed. og-image.png was not generated.")
-        return
-    img = Image.new("RGB", (1200, 630), (12, 74, 110))
-    draw = ImageDraw.Draw(img)
-    try:
-        big = ImageFont.truetype("DejaVuSans-Bold.ttf", 84)
-        small = ImageFont.truetype("DejaVuSans.ttf", 40)
-    except OSError:
-        big = ImageFont.load_default(size=84)
-        small = ImageFont.load_default(size=40)
-    draw.text((80, 210), "CalculatesAll", font=big, fill=(255, 255, 255))
-    draw.text((80, 330), "Free calculators for money, health, dates and units", font=small, fill=(224, 242, 254))
-    draw.text((80, 400), "Zakat | BMI | Profit and Loss | Age | Discount | Converter", font=small, fill=(186, 230, 253))
-    img.save(os.path.join(assets, "og-image.png"), "PNG", optimize=True)
-
+    # Always generate a social preview without optional native dependencies.
+    # SVG includes its intrinsic 1200x630 dimensions and avoids a dead og:image URL.
+    og = """<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0c4a6e"/><stop offset="0.55" stop-color="#312e81"/><stop offset="1" stop-color="#065f46"/></linearGradient><linearGradient id="line" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#e879f9"/><stop offset="0.5" stop-color="#38bdf8"/><stop offset="1" stop-color="#34d399"/></linearGradient></defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<circle cx="1040" cy="100" r="210" fill="#38bdf8" opacity=".10"/><circle cx="1080" cy="560" r="250" fill="#34d399" opacity=".12"/>
+<rect x="70" y="70" width="1060" height="490" rx="34" fill="#ffffff" opacity=".06" stroke="#ffffff" stroke-opacity=".18"/>
+<rect x="105" y="110" width="12" height="390" rx="6" fill="url(#line)"/>
+<text x="155" y="245" font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="700" fill="#ffffff">CalculatesAll</text>
+<text x="158" y="315" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#e0f2fe">Free online calculators for everyday decisions</text>
+<text x="158" y="390" font-family="Arial, Helvetica, sans-serif" font-size="27" fill="#d1fae5">Zakat  ·  BMI  ·  Profit &amp; Loss  ·  Age  ·  Discount</text>
+<text x="158" y="445" font-family="Arial, Helvetica, sans-serif" font-size="27" fill="#d1fae5">Unit Converter  ·  Standard Calculator  ·  More</text>
+<text x="158" y="510" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#bae6fd">Fast • Free • Browser-based</text>
+</svg>"""
+    with open(os.path.join(assets, "og-image.svg"), "w", encoding="utf-8") as f:
+        f.write(og)
 
 def main():
     if os.path.exists(OUT):
@@ -1308,7 +1302,6 @@ def main():
         entries.append((path, []))
     not_found()
     og_and_favicon()
-    entries = [e for e in entries if 'standard-calculator' not in e[0]]
     sitemap(entries)
     robots()
     shutil.copytree(STATIC, os.path.join(OUT, "assets"), dirs_exist_ok=True)
