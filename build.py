@@ -15,6 +15,9 @@ from datetime import date
 SITE_URL = os.environ.get("SITE_URL", "https://calculateallinone.vercel.app").rstrip("/")
 ADSENSE_CLIENT = os.environ.get("ADSENSE_CLIENT", "").strip()
 ADSENSE_SLOT = os.environ.get("ADSENSE_SLOT", "").strip()
+# Explicitly fail closed until the publisher confirms account-side consent setup.
+# This flag is a safeguard, not an automated check of AdSense/CMP account settings.
+ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lower() == "true"
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
@@ -733,8 +736,9 @@ def write_review_sheet():
 
 
 def ad_slot():
-    # Ad units require both a real approved publisher ID and a real ad-unit slot ID.
-    if not ADSENSE_CLIENT or not ADSENSE_SLOT:
+    # Fail closed until valid IDs and account-side consent setup are confirmed.
+    # ADSENSE_CONSENT_READY is a manual deployment safeguard, not CMP verification.
+    if not ADSENSE_CLIENT or not ADSENSE_SLOT or not ADSENSE_CONSENT_READY:
         return ""
     return ('<div class="my-10 min-h-[100px]" aria-label="Advertisement">'
             '<ins class="adsbygoogle" style="display:block" data-ad-client="' + ADSENSE_CLIENT + '" '
@@ -792,7 +796,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         for code, href in alternates:
             alt += '<link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '">\n'
     ads = ""
-    if ADSENSE_CLIENT and ADSENSE_SLOT:
+    if ADSENSE_CLIENT and ADSENSE_SLOT and ADSENSE_CONSENT_READY:
         ads = ('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
                + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>\n')
     ld = ""
@@ -1470,8 +1474,9 @@ def main():
         ("/privacy/", "Privacy Policy | CalculatesAll", "How CalculatesAll handles data, local storage and advertising.", "Privacy Policy", [
             "Calculator inputs are processed in your browser. We do not send them to our server.",
             "The tasbih counter and the stopwatch do not send data anywhere. The tasbih counter keeps its count in local storage on your device. You can clear this from your browser settings.",
-            "CalculatesAll does not run its own analytics or accounts. If the site owner enables advertising, Google and its partners may use cookies to show ads. For visitors in the European Economic Area and the United Kingdom, consent for personalized ads is collected through a Google certified consent message configured in the Google AdSense account. Until that message is configured, personalized ads are not shown to those visitors.",
-            "Advertising is currently disabled unless a real AdSense publisher ID and ad-unit slot are configured. We do not publish placeholder publisher IDs. If no real publisher ID has been configured, /ads.txt may return a not-found response by design.",
+            "CalculatesAll does not run its own analytics or user accounts. Advertising is disabled by default. If Google ads are enabled in the future, Google and its advertising partners may collect or receive information such as IP addresses, cookie identifiers and browsing activity, and may place or read cookies or use web beacons and similar technologies. Read <a href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>How Google uses information from sites or apps that use its services</a> and the <a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer'>Google Privacy Policy</a>.",
+            "For personalized ads to users in the EEA, UK or Switzerland, publishers must configure a Google-certified consent management platform (CMP) integrated with the IAB Transparency and Consent Framework where required. Applicable consent and privacy requirements must be reviewed before enabling ads. See <a href='https://support.google.com/adsense/answer/13554116' target='_blank' rel='noopener noreferrer'>Google's consent requirements</a>. The site cannot independently verify account-side CMP settings.",
+            "No Google ads are served unless a real publisher ID, ad-unit slot and the explicit ADSENSE_CONSENT_READY=true deployment setting are present. Set that flag only after the relevant AdSense account-side consent configuration has been set up and tested. It is a safeguard, not proof of compliance. Placeholder publisher IDs are never used. If no publisher ID is configured, /ads.txt is intentionally not generated.",
             "If approved affiliate links are added in the future, a marketplace may use cookies or similar tracking to attribute qualifying purchases. Any active affiliate relationship will be disclosed on the affiliate-disclosure page and near the relevant link.",
             "Google's use of data is described at policies.google.com. Contact " + CONTACT_EMAIL + " with privacy questions.",
         ]),
