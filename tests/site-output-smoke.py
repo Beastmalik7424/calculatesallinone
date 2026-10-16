@@ -81,7 +81,7 @@ for page in ROOT.rglob("index.html"):
     rel = page.parent.relative_to(ROOT).as_posix()
     source_url = SITE + "/" + (rel + "/" if rel != "." else "")
     html = page.read_text(encoding="utf-8")
-    for anchor in re.findall(r"<a\\b[^>]*\\bhref=[\"']([^\"']+)[\"']", html, flags=re.I):
+    for anchor in re.findall(r"<a\b[^>]*\bhref=[\"']([^\"']+)[\"']", html, flags=re.I):
         target = urljoin(source_url, anchor)
         if target in incoming and target != source_url:
             incoming[target].add(source_url)
