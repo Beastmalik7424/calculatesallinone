@@ -1105,14 +1105,14 @@ TILE_GRAD = {
     "tasbih-counter": "bg-gradient-to-br from-green-700 to-emerald-800",
 }
 TILE_ICON = {
-    "zakat-calculator": "ðŸ¤²",
-    "bmi-calculator": "âš–ï¸",
-    "profit-loss-calculator": "ðŸ“ˆ",
-    "discount-calculator": "ðŸ·ï¸",
-    "age-calculator": "ðŸŽ‚",
-    "unit-converter": "ðŸ“",
-    "stopwatch": "â±ï¸",
-    "tasbih-counter": "ðŸ“¿",
+    "zakat-calculator": "🤲",
+    "bmi-calculator": "⚖️",
+    "profit-loss-calculator": "📈",
+    "discount-calculator": "🏷️",
+    "age-calculator": "🎂",
+    "unit-converter": "📐",
+    "stopwatch": "⏱️",
+    "tasbih-counter": "📿",
 }
 TILE_BASE = ("rounded-2xl p-4 min-h-[104px] flex flex-col items-center justify-center gap-1 text-center "
              "text-white text-xl font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 transition "
@@ -1125,8 +1125,8 @@ CAT_PILL = {
     "worship": "bg-teal-100 text-teal-900 dark:bg-teal-900/60 dark:text-teal-100",
 }
 TRUST = {
-    "en": ["ðŸ†“ Free", "ðŸ”’ Private", "âš¡ Fast"],
-    "ur": ["ðŸ†“ Ù…ÙØª", "ðŸ”’ Ù…Ø­ÙÙˆØ¸", "âš¡ ØªÛŒØ²"],
+    "en": ["🆓 Free", "🔒 Private", "⚡ Fast"],
+    "ur": ["🆓 مفت", "🔒 محفوظ", "⚡ تیز"],
 }
 TRUST_CLASS = [
     "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/60 dark:text-emerald-100",
