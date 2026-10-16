@@ -1342,7 +1342,7 @@ def og_and_favicon():
     for y in range(height):
         raw.append(0)
         raw.extend(pixels[y * stride:(y + 1) * stride])
-    png = (b"\\x89PNG\\r\\n\\x1a\\n"
+    png = (b"\x89PNG\r\n\x1a\n"
            + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
            + chunk(b"IDAT", zlib.compress(bytes(raw), 9))
            + chunk(b"IEND", b""))
