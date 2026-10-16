@@ -13,6 +13,7 @@ from datetime import date
 
 SITE_URL = os.environ.get("SITE_URL", "https://calculateallinone.vercel.app").rstrip("/")
 ADSENSE_CLIENT = os.environ.get("ADSENSE_CLIENT", "").strip()
+ADSENSE_SLOT = os.environ.get("ADSENSE_SLOT", "").strip()
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
 LAST_REVIEWED = "2026-10-08"  # change only when a guide, formula or policy text really changes
 OUT = "public"
@@ -688,7 +689,7 @@ def write_ads_txt():
     if not pub.startswith("pub-") or not pub[4:].isdigit():
         raise SystemExit("ADSENSE_CLIENT must look like ca-pub-1234567890123456")
     with open(ads_path, "w", encoding="utf-8") as f:
-        f.write("google.com, " + pub + ", DIRECT, f08c47fec0942fa0\\n")
+        f.write("google.com, " + pub + ", DIRECT, f08c47fec0942fa0\n")
     return True
 
 def write_review_sheet():
@@ -726,11 +727,12 @@ def write_review_sheet():
 
 
 def ad_slot():
-    if not ADSENSE_CLIENT:
+    # Ad units require both a real approved publisher ID and a real ad-unit slot ID.
+    if not ADSENSE_CLIENT or not ADSENSE_SLOT:
         return ""
     return ('<div class="my-10 min-h-[100px]" aria-label="Advertisement">'
             '<ins class="adsbygoogle" style="display:block" data-ad-client="' + ADSENSE_CLIENT + '" '
-            'data-ad-format="auto" data-full-width-responsive="true"></ins></div>')
+            'data-ad-slot="' + ADSENSE_SLOT + '" data-ad-format="auto" data-full-width-responsive="true"></ins></div>')
 
 
 def nav_items(lang="en"):
@@ -784,7 +786,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         for code, href in alternates:
             alt += '<link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '">\n'
     ads = ""
-    if ADSENSE_CLIENT:
+    if ADSENSE_CLIENT and ADSENSE_SLOT:
         ads = ('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
                + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>\n')
     ld = ""
@@ -872,6 +874,8 @@ def shell(main_html, lang="en"):
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/methodology">' + s["methodology"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/editorial-policy">' + s["editorial"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/terms">' + s["terms"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/marketplaces/">Marketplace guide</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">Affiliate disclosure</a>'
         '</nav></div>'
         + lang_links(lang, s) +
         '</div></footer>\n'
@@ -1402,6 +1406,20 @@ def main():
             "Each guide shows a last updated date. Sources are named where they are used, and we do not publish claims that we cannot support with a named source.",
         ]),
         ("/terms/", "Terms of Use | CalculatesAll", "The terms for using the free calculators and information on CalculatesAll.", "Terms of Use", TERMS_PARAS),
+        ("/marketplaces/", "Marketplace and Monetization Guide | CalculatesAll", "Official marketplace resources for distributing digital downloads and exploring compliant website monetization.", "Marketplace and Monetization Guide", [
+            "This page is a setup guide, not a claim that CalculatesAll products are already listed on these marketplaces. Each marketplace requires its own account, product listing, payout setup and policy review.",
+            'For digital downloads, read <a class="underline text-sky-800" href="https://www.etsy.com/ca/seller-handbook/article/47330319230" target="_blank" rel="noopener noreferrer">Etsy’s official digital-download guide</a>. For selling downloadable products directly, review <a class="underline text-sky-800" href="https://gumroad.com/features" target="_blank" rel="noopener noreferrer">Gumroad’s creator features</a>.',
+            'For a retail marketplace, review <a class="underline text-sky-800" href="https://www.daraz.pk/sell/" target="_blank" rel="noopener noreferrer">Daraz seller registration</a>. For product referral commissions, see <a class="underline text-sky-800" href="https://affiliate-program.amazon.com/" target="_blank" rel="noopener noreferrer">Amazon Associates</a>, <a class="underline text-sky-800" href="https://partnernetwork.ebay.com/" target="_blank" rel="noopener noreferrer">eBay Partner Network</a> and <a class="underline text-sky-800" href="https://www.etsy.com/ca/legal/affiliates/" target="_blank" rel="noopener noreferrer">Etsy’s affiliate programme</a>. Acceptance, geographic eligibility and payout rules vary by programme.',
+            "Do not describe a normal marketplace link as an affiliate link. Commission tracking is only active after approval and after the correct tracking link or ID is supplied. No marketplace listing or affiliate account is created by this website build.",
+            "The calculators remain free to use. Any future paid download should be an original, clearly described product such as a spreadsheet, printable worksheet or source-code package, not a claim that the online calculator itself has been uploaded to a marketplace.",
+        ]),
+        ("/affiliate-disclosure/", "Affiliate Disclosure | CalculatesAll", "How affiliate links and commissions will be disclosed on CalculatesAll.", "Affiliate Disclosure", [
+            "At the time this page was generated, no active marketplace affiliate IDs or tracking links were configured on CalculatesAll. The ordinary official links on the marketplace guide do not earn a commission merely because they are present.",
+            "If affiliate links are added later, they will be clearly identified near the relevant link. CalculatesAll may earn a commission from qualifying purchases without increasing the buyer’s price, subject to the relevant programme’s rules.",
+            "Affiliate relationships do not change calculator formulas or the result shown by a tool. We will not invent ratings, prices, endorsements or product availability.",
+            "Amazon Associates participants must use the disclosure required by Amazon, including the statement: ‘As an Amazon Associate I earn from qualifying purchases.’ This statement must only be used if the site is actually accepted into the Amazon Associates programme.",
+            'Questions about this disclosure can be sent to <a class="underline text-sky-800" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
+        ]),
         ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
             "For corrections, feedback or questions about a tool, email " + CONTACT_EMAIL + ".",
         ]),
