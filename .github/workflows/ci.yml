@@ -52,6 +52,9 @@ jobs:
           test -s public/assets/og-image.svg
           grep -q '/standard-calculator/' public/sitemap.xml
           grep -q 'href="https://calculateallinone.vercel.app/standard-calculator/"' public/standard-calculator/index.html
+          grep -q 'href="/ur/zakat-calculator/"' public/zakat-calculator/index.html
+          grep -q 'href="/zakat-calculator/"' public/ur/zakat-calculator/index.html
+          grep -q 'PRIVATE BY DESIGN' public/index.html
           test ! -e public/ads.txt
           if grep -Eq 'Ø|Ù|Ã|âŒ|âˆ|Â©' public/ur/index.html; then echo 'Mojibake found in Urdu home page'; exit 1; fi
           if grep -Eq 'âŒ«|Ã·|Ã—|âˆ’' public/index.html; then echo 'Corrupted calculator symbols found'; exit 1; fi
