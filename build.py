@@ -1,3 +1,4 @@
+import html
 import json
 import os
 import shutil
@@ -1260,7 +1261,8 @@ def sitemap(entries):
         links = ""
         for code, href in alts:
             links += '    <xhtml:link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '"/>\n'
-        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n    <lastmod>" + LAST_REVIEWED + "</lastmod>\n" + links + "  </url>\n")
+        # Omit lastmod unless it accurately reflects this URL's content update.
+        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + links + "  </url>\n")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
            + items + "</urlset>\n")
@@ -1500,7 +1502,7 @@ def main():
             'Questions about this disclosure can be sent to <a class="underline text-sky-800" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
         ]),
         ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
-            "For corrections, feedback or questions about a tool, email " + CONTACT_EMAIL + ".",
+            'For corrections, feedback or questions about a tool, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
         ]),
     ]
     for path, title, desc, h1, paras in static_pages:
