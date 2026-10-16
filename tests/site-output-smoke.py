@@ -116,4 +116,44 @@ verification_file = ROOT / "google2e764d068684499b.html"
 assert verification_file.is_file(), "Google Search Console verification file missing from Vercel output"
 assert verification_file.read_text(encoding="utf-8").strip() == "google-site-verification: google2e764d068684499b.html", "Google Search Console verification file content mismatch"
 
-print(f"PASS: {len(urls)} unique sitemap URLs, every generated page indexable, canonicalized, and internally linked.")
+
+# Per-page structured-data and language audit.
+# Parse every JSON-LD block rather than only checking that a script tag exists.
+for url in urls:
+    page = output_for_url(url)
+    html = page.read_text(encoding="utf-8")
+    lang_match = re.search(r'<html lang="([^"]+)"', html)
+    assert lang_match, f"Missing document language: {url}"
+    page_lang = lang_match.group(1)
+    jsonld_blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
+    assert jsonld_blocks, f"Missing JSON-LD structured data: {url}"
+    parsed_schemas = []
+    for block in jsonld_blocks:
+        try:
+            parsed_schemas.append(json.loads(block))
+        except json.JSONDecodeError as exc:
+            raise AssertionError(f"Invalid JSON-LD on {url}: {exc}") from exc
+    for item in parsed_schemas:
+        if item.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
+            assert item.get("inLanguage") == page_lang, (
+                f"Schema language mismatch on {url}: HTML={page_lang}, schema={item.get('inLanguage')}"
+            )
+    if url.endswith("/ur/"):
+        websites = [x for x in parsed_schemas if x.get("@type") == "WebSite"]
+        apps = [x for x in parsed_schemas if x.get("@type") == "WebApplication"]
+        assert websites and websites[0].get("url") == url, "Urdu homepage WebSite schema URL must match its canonical URL"
+        assert apps and apps[0].get("url") == url, "Urdu homepage WebApplication schema URL must match its canonical URL"
+    if "/ur/" in url and url.rstrip("/").split("/")[-1] in {
+        "zakat-calculator", "bmi-calculator", "profit-loss-calculator", "discount-calculator",
+        "age-calculator", "unit-converter", "standard-calculator", "tasbih-counter", "stopwatch"
+    }:
+        assert any(x.get("@type") == "BreadcrumbList" for x in parsed_schemas), (
+            f"Urdu calculator page missing BreadcrumbList schema: {url}"
+        )
+        assert 'aria-label="صفحہ کی ترتیب"' in html, f"Urdu calculator page missing visible breadcrumb: {url}"
+
+# Keep the browser-side calculator implementation free from dynamic code execution.
+app_js = (ROOT / "assets" / "app.js").read_text(encoding="utf-8")
+assert "eval(" not in app_js and "new Function" not in app_js, "Dynamic code execution found in app.js"
+
+print(f"PASS: {len(urls)} unique sitemap URLs, indexability, canonical URLs, internal links, valid JSON-LD, language metadata, and translated breadcrumbs.")
