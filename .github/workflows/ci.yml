@@ -2,7 +2,7 @@ name: Build and smoke test
 
 on:
   push:
-    branches: ["main", "fix/language-label-audit", "fix/encoding-ads-seo-audit", "fix/input-validation-audit", "fix/social-image-png"]
+    branches: ["main", "fix/**"]
   pull_request:
     branches: ["main"]
 
