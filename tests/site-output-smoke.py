@@ -60,5 +60,9 @@ assert not broken, "Broken internal hrefs found: " + repr(broken[:20])
 
 for required in ("/marketplaces/", "/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"
+privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
+marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
+assert "Advertising is currently disabled" in privacy_html, "Privacy page must explain disabled ads and conditional ads.txt"
+assert "deliberately does not create an ads.txt file" in marketplace_html, "Marketplace guide must explain why ads.txt can return 404"
 
 print(f"PASS: {len(urls)} unique sitemap URLs, every generated page indexable, canonicalized, and internally linked.")
