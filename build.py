@@ -790,7 +790,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     ld = ""
     for s in schema:
         ld += '<script type="application/ld+json">' + json.dumps(s, ensure_ascii=False) + "</script>\n"
-    og_image = SITE_URL + "/assets/og-image.svg"
+    og_image = SITE_URL + "/assets/og-image.png"
     dir_attr = ' dir="rtl"' if lang in RTL_LANGS else ' dir="ltr"'
     locale = LANG_LOCALE.get(lang, "en_US")
     theme_script = (
@@ -815,6 +815,8 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         '<meta property="og:description" content="' + desc + '">\n'
         '<meta property="og:url" content="' + url + '">\n'
         '<meta property="og:image" content="' + og_image + '">\n'
+        '<meta property="og:image:width" content="1200">\n'
+        '<meta property="og:image:height" content="630">\n'
         '<meta name="twitter:card" content="summary_large_image">\n'
         '<meta name="twitter:title" content="' + title + '">\n'
         '<meta name="twitter:description" content="' + desc + '">\n'
@@ -1223,6 +1225,9 @@ def robots():
 
 
 def og_and_favicon():
+    import struct
+    import zlib
+
     assets = os.path.join(OUT, "assets")
     os.makedirs(assets, exist_ok=True)
     favicon = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
@@ -1230,22 +1235,127 @@ def og_and_favicon():
                '<text x="32" y="42" font-size="30" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-weight="bold">CA</text></svg>')
     with open(os.path.join(assets, "favicon.svg"), "w", encoding="utf-8") as f:
         f.write(favicon)
-    # Always generate a social preview without optional native dependencies.
-    # SVG includes its intrinsic 1200x630 dimensions and avoids a dead og:image URL.
-    og = """<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0c4a6e"/><stop offset="0.55" stop-color="#312e81"/><stop offset="1" stop-color="#065f46"/></linearGradient><linearGradient id="line" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#e879f9"/><stop offset="0.5" stop-color="#38bdf8"/><stop offset="1" stop-color="#34d399"/></linearGradient></defs>
-<rect width="1200" height="630" fill="url(#bg)"/>
-<circle cx="1040" cy="100" r="210" fill="#38bdf8" opacity=".10"/><circle cx="1080" cy="560" r="250" fill="#34d399" opacity=".12"/>
-<rect x="70" y="70" width="1060" height="490" rx="34" fill="#ffffff" opacity=".06" stroke="#ffffff" stroke-opacity=".18"/>
-<rect x="105" y="110" width="12" height="390" rx="6" fill="url(#line)"/>
-<text x="155" y="245" font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="700" fill="#ffffff">CalculatesAll</text>
-<text x="158" y="315" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#e0f2fe">Free online calculators for everyday decisions</text>
-<text x="158" y="390" font-family="Arial, Helvetica, sans-serif" font-size="27" fill="#d1fae5">Zakat  ·  BMI  ·  Profit &amp; Loss  ·  Age  ·  Discount</text>
-<text x="158" y="445" font-family="Arial, Helvetica, sans-serif" font-size="27" fill="#d1fae5">Unit Converter  ·  Standard Calculator  ·  More</text>
-<text x="158" y="510" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#bae6fd">Fast • Free • Browser-based</text>
-</svg>"""
+
+    # Generate a real 1200x630 PNG with Python's standard library only.
+    # This avoids optional Pillow dependencies and works on a clean Vercel build.
+    width, height = 1200, 630
+    pixels = bytearray(width * height * 3)
+    top, middle, bottom = (12, 74, 110), (49, 46, 129), (6, 95, 70)
+    for y in range(height):
+        if y < height // 2:
+            t = y / (height // 2)
+            a, b = top, middle
+        else:
+            t = (y - height // 2) / (height - height // 2)
+            a, b = middle, bottom
+        row_color = tuple(round(a[i] + (b[i] - a[i]) * t) for i in range(3))
+        start = y * width * 3
+        for x in range(width):
+            shift = int(5 * x / width)
+            idx = start + x * 3
+            pixels[idx] = min(255, row_color[0] + shift)
+            pixels[idx + 1] = min(255, row_color[1] + shift)
+            pixels[idx + 2] = min(255, row_color[2] + shift)
+
+    def rect(x1, y1, x2, y2, color, outline=False):
+        for y in range(max(0, y1), min(height, y2)):
+            for x in range(max(0, x1), min(width, x2)):
+                if outline and x not in (x1, x2 - 1) and y not in (y1, y2 - 1):
+                    continue
+                idx = (y * width + x) * 3
+                pixels[idx:idx + 3] = bytes(color)
+
+    font = {
+        "A": ("01110","10001","10001","11111","10001","10001","10001"),
+        "B": ("11110","10001","10001","11110","10001","10001","11110"),
+        "C": ("01111","10000","10000","10000","10000","10000","01111"),
+        "D": ("11110","10001","10001","10001","10001","10001","11110"),
+        "E": ("11111","10000","10000","11110","10000","10000","11111"),
+        "F": ("11111","10000","10000","11110","10000","10000","10000"),
+        "G": ("01111","10000","10000","10111","10001","10001","01111"),
+        "H": ("10001","10001","10001","11111","10001","10001","10001"),
+        "I": ("11111","00100","00100","00100","00100","00100","11111"),
+        "J": ("00111","00010","00010","00010","10010","10010","01100"),
+        "K": ("10001","10010","10100","11000","10100","10010","10001"),
+        "L": ("10000","10000","10000","10000","10000","10000","11111"),
+        "M": ("10001","11011","10101","10101","10001","10001","10001"),
+        "N": ("10001","11001","10101","10011","10001","10001","10001"),
+        "O": ("01110","10001","10001","10001","10001","10001","01110"),
+        "P": ("11110","10001","10001","11110","10000","10000","10000"),
+        "Q": ("01110","10001","10001","10001","10101","10010","01101"),
+        "R": ("11110","10001","10001","11110","10100","10010","10001"),
+        "S": ("01111","10000","10000","01110","00001","00001","11110"),
+        "T": ("11111","00100","00100","00100","00100","00100","00100"),
+        "U": ("10001","10001","10001","10001","10001","10001","01110"),
+        "V": ("10001","10001","10001","10001","10001","01010","00100"),
+        "W": ("10001","10001","10001","10101","10101","10101","01010"),
+        "X": ("10001","10001","01010","00100","01010","10001","10001"),
+        "Y": ("10001","10001","01010","00100","00100","00100","00100"),
+        "Z": ("11111","00001","00010","00100","01000","10000","11111"),
+        "0": ("01110","10001","10011","10101","11001","10001","01110"),
+        "1": ("00100","01100","00100","00100","00100","00100","01110"),
+        "2": ("01110","10001","00001","00010","00100","01000","11111"),
+        "3": ("11110","00001","00001","01110","00001","00001","11110"),
+        "4": ("00010","00110","01010","10010","11111","00010","00010"),
+        "5": ("11111","10000","10000","11110","00001","00001","11110"),
+        "6": ("01110","10000","10000","11110","10001","10001","01110"),
+        "7": ("11111","00001","00010","00100","01000","01000","01000"),
+        "8": ("01110","10001","10001","01110","10001","10001","01110"),
+        "9": ("01110","10001","10001","01111","00001","00001","01110"),
+        "&": ("01100","10010","10100","01000","10101","10010","01101"),
+        "|": ("00100","00100","00100","00100","00100","00100","00100"),
+        "-": ("00000","00000","00000","11111","00000","00000","00000"),
+        ".": ("00000","00000","00000","00000","00000","00110","00110"),
+        ":": ("00000","00110","00110","00000","00110","00110","00000"),
+    }
+
+    def draw_text(x, y, text, scale, color):
+        cursor = x
+        for char in text.upper():
+            if char == " ":
+                cursor += 3 * scale
+                continue
+            pattern = font.get(char)
+            if pattern:
+                for py, line in enumerate(pattern):
+                    for px, bit in enumerate(line):
+                        if bit == "1":
+                            rect(cursor + px * scale, y + py * scale,
+                                 cursor + (px + 1) * scale, y + (py + 1) * scale, color)
+            cursor += 6 * scale
+
+    rect(70, 70, 1130, 560, (255, 255, 255), outline=True)
+    rect(105, 110, 117, 500, (56, 189, 248))
+    rect(117, 110, 121, 500, (52, 211, 153))
+    draw_text(155, 185, "CALCULATESALL", 11, (255, 255, 255))
+    draw_text(158, 305, "FREE ONLINE CALCULATORS", 5, (224, 242, 254))
+    draw_text(158, 380, "ZAKAT | BMI | PROFIT & LOSS | AGE | DISCOUNT", 3, (209, 250, 229))
+    draw_text(158, 430, "UNIT CONVERTER | STANDARD CALCULATOR", 3, (209, 250, 229))
+    draw_text(158, 490, "FAST - FREE - BROWSER BASED", 2, (186, 230, 253))
+
+    def chunk(kind, data):
+        return (struct.pack(">I", len(data)) + kind + data
+                + struct.pack(">I", zlib.crc32(kind + data) & 0xffffffff))
+
+    raw = bytearray()
+    stride = width * 3
+    for y in range(height):
+        raw.append(0)
+        raw.extend(pixels[y * stride:(y + 1) * stride])
+    png = (b"\x89PNG\r\n\x1a\n"
+           + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+           + chunk(b"IDAT", zlib.compress(bytes(raw), 9))
+           + chunk(b"IEND", b""))
+    with open(os.path.join(assets, "og-image.png"), "wb") as f:
+        f.write(png)
+
+    # Keep an SVG copy for browsers that prefer vector previews.
+    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">'
+           '<rect width="1200" height="630" fill="#0c4a6e"/>'
+           '<text x="80" y="250" font-family="Arial, sans-serif" font-size="82" font-weight="700" fill="#ffffff">CalculatesAll</text>'
+           '<text x="80" y="330" font-family="Arial, sans-serif" font-size="36" fill="#e0f2fe">Free online calculators</text></svg>')
     with open(os.path.join(assets, "og-image.svg"), "w", encoding="utf-8") as f:
-        f.write(og)
+        f.write(svg)
 
 def main():
     if os.path.exists(OUT):
