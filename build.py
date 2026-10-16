@@ -868,7 +868,7 @@ def lang_links(lang, s, current_path=None):
 def shell(main_html, lang="en", current_path=None):
     s = shell_strings(lang)
     home = "/" if lang == "en" else "/" + lang + "/"
-    main_width = "max-w-6xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
+    main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
     return (
         '<body class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased">\n'
         '<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">'
@@ -879,7 +879,7 @@ def shell(main_html, lang="en", current_path=None):
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
         '<nav class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4" aria-label="Main">'
-        '<a href="' + home + '" class="font-extrabold text-xl bg-gradient-to-r from-teal-600 via-sky-600 to-indigo-600 bg-clip-text text-transparent min-h-[44px] inline-flex items-center">CalculatesAll</a>'
+        '<a href="' + home + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll</a>'
         '<div class="flex items-center gap-3">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
         '<details class="relative"><summary class="cursor-pointer text-base min-h-[44px] inline-flex items-center px-2">' + s["menu"] + '</summary>'
@@ -1201,18 +1201,22 @@ def home_app_page(lang):
         cats = '<nav aria-label="Categories" class="mt-8"><ul class="flex flex-wrap gap-3">' + cats + "</ul></nav>"
     hero = ('<section aria-label="Calculator" class="mx-auto w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900">' + CALC_UI + "</section>")
     body = (
-        '<section class="mx-auto max-w-4xl text-center">'
+        '<section class="mx-auto max-w-5xl text-center">'
         '<p class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-sm font-semibold text-sky-800 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">FREE TOOLS · PRIVATE BY DESIGN · NO SIGN-UP</p>'
-        '<h1 class="mt-5 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl dark:text-white">' + h1 + "</h1>"
-        '<p class="mx-auto mt-3 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg dark:text-slate-300">' + lead + "</p>"
+        '<h1 class="mt-5 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl dark:text-white">' + h1 + "</h1>"
+        '<p class="mx-auto mt-3 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg dark:text-slate-300">' + lead + "</p>"
         '</section>'
-        '<div class="mt-7 sm:mt-9">' + hero + "</div>"
-        '<ul class="mx-auto mt-5 grid max-w-3xl grid-cols-3 gap-2 sm:gap-3">' + "".join('<li class="rounded-xl border border-slate-200 bg-white px-2 py-3 text-center text-sm font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">' + label + "</li>" for label in TRUST[lang]) + "</ul>"
-        + '<h2 class="mt-10 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">' + more_h + "</h2>"
-        + '<p class="mt-2 text-base text-slate-600 dark:text-slate-300">' + ("Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔") + "</p>"
-        + '<ul class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">' + tiles + "</ul>"
+        '<div class="mt-7 grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] xl:gap-8">'
+        '<div class="flex flex-col gap-4">' + hero
+        + '<ul class="grid grid-cols-3 gap-2 sm:gap-3">' + "".join('<li class="rounded-xl border border-slate-200 bg-white px-2 py-3 text-center text-sm font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">' + label + "</li>" for label in TRUST[lang]) + "</ul></div>"
+        + '<aside class="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900/90">'
+        + '<div class="flex items-center justify-between gap-3"><h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">' + more_h + "</h2>"
+        + '<span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-200">FREE</span></div>'
+        + '<p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">' + ("Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔") + "</p>"
+        + '<ul class="mt-5 grid grid-cols-2 gap-3">' + tiles + "</ul></aside></div>"
         + cats
-        + home_extra_html(lang)
+        + '<section class="mt-10 rounded-2xl border border-slate-200 bg-white/80 p-5 sm:p-7 dark:border-slate-700 dark:bg-slate-900/80">'
+        + home_extra_html(lang) + "</section>"
     )
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
