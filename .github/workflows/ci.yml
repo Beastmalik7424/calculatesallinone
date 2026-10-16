@@ -25,6 +25,8 @@ jobs:
         run: npm ci
       - name: Check JavaScript syntax
         run: node --check static/app.js
+      - name: Test calculator behavior
+        run: node tests/calculator-smoke.cjs
       - name: Check Python syntax
         run: python -m py_compile build.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
       - name: Build the site
