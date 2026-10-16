@@ -4,6 +4,7 @@
   var MSG = {
     en: {
       zakatNoPrice: "Net zakatable wealth is {net}. Enter the silver price per gram to check Nisab. No Zakat amount is shown until Nisab is verified.",
+      zakatInput: "Enter zero or a positive value for each amount and silver price.",
       zakatBelow: "Net wealth {net} is below Nisab of {nisab}. Zakat is not due on this wealth.",
       zakatHawl: "Net wealth {net} is above Nisab of {nisab}. Zakat is due only after one full lunar year (hawl). Tick the lunar year box when that period is complete.",
       zakatDue: "Zakat payable at 2.5 percent: {amount}. Confirm the calculation and rules with a qualified scholar before you pay.",
@@ -26,6 +27,7 @@
       discInput: "Enter a price of zero or more and a discount from 0 to 100 percent.",
       discResult: "You save {saved}. Final price: {final}. Tax is not included.",
       convEnter: "Enter a numeric value.",
+      convAbsoluteZero: "Temperature cannot be below absolute zero (-273.15 °C).",
       convKelvin: "Kelvin cannot be below zero, which is absolute zero.",
       convNeg: "A {cat} cannot be negative.",
       convResult: "{v} {from} equals {out} {to}.",
@@ -46,6 +48,7 @@
     },
     ur: {
       zakatNoPrice: "خالص قابلِ زکوٰۃ مال {net} ہے۔ نصاب چیک کرنے کے لیے چاندی کی فی گرام قیمت لکھیں۔ نصاب کی تصدیق تک زکوٰۃ کی رقم نہیں دکھائی جائے گی۔",
+      zakatInput: "تمام رقوم صفر یا اس سے زیادہ درج کریں۔",
       zakatBelow: "خالص مال {net} نصاب {nisab} سے کم ہے۔ اس مال پر زکوٰۃ واجب نہیں۔",
       zakatHawl: "خالص مال {net} نصاب {nisab} سے زیادہ ہے۔ زکوٰۃ قمری سال مکمل ہونے کے بعد واجب ہوگی۔ مدت پوری ہونے پر قمری سال والا خانہ نشان زد کریں۔",
       zakatDue: "2.5 فیصد زکوٰۃ واجب الادا: {amount}۔ ادائیگی سے پہلے حساب اور اصولوں کی تصدیق کسی مستند عالم سے کریں۔",
@@ -68,6 +71,7 @@
       discInput: "قیمت صفر یا اس سے زیادہ اور ڈسکاؤنٹ 0 سے 100 فیصد کے درمیان لکھیں۔",
       discResult: "آپ کی بچت {saved}۔ آخری قیمت: {final}۔ ٹیکس شامل نہیں ہے۔",
       convEnter: "عددی قدر لکھیں۔",
+      convAbsoluteZero: "درجہ حرارت مطلق صفر (-273.15 °C) سے کم نہیں ہو سکتا۔",
       convKelvin: "کیلون صفر سے کم نہیں ہو سکتا، کیونکہ یہ مطلق صفر ہے۔",
       convNeg: "{cat} منفی نہیں ہو سکتی۔",
       convResult: "{v} {from} برابر ہے {out} {to} کے۔",
@@ -136,6 +140,17 @@
     var assetIds = ["z-cash", "z-gold", "z-silver", "z-stock", "z-recv"]
     form.addEventListener("submit", function (e) {
       e.preventDefault()
+      var allIds = assetIds.concat(["z-debts", "z-silverprice"])
+      var hasInvalidAmount = allIds.some(function (id) {
+        var el = $(id)
+        if (!el || el.value === "") return false
+        var value = Number(el.value)
+        return !isFinite(value) || value < 0
+      })
+      if (hasInvalidAmount) {
+        say("zakat-result", t("zakatInput"))
+        return
+      }
       var assets = 0
       assetIds.forEach(function (id) {
         assets += num(id) || 0
@@ -326,11 +341,12 @@
         return
       }
       if (cat === "temp") {
-        if (from === "K" && v < 0) {
-          say("conv-result", t("convKelvin"))
+        var celsius = toCelsius(v, from)
+        if (celsius < -273.1500001) {
+          say("conv-result", t("convAbsoluteZero"))
           return
         }
-        var converted = fromCelsius(toCelsius(v, from), to)
+        var converted = fromCelsius(celsius, to)
         say("conv-result", t("convResult", { v: fmt(v), from: unitName(from), out: converted.toFixed(2), to: unitName(to) }))
         return
       }
