@@ -45,8 +45,8 @@ assert f"Sitemap: {SITE}/sitemap.xml" in robots
 broken = []
 for page in ROOT.rglob("index.html"):
     html = page.read_text(encoding="utf-8")
-    for href in re.findall(r'href="(/[^"#?]*)"', html):
-        path = href.split("?", 1)[0]
+    for href in re.findall(r'href="(/[^"]*)"', html):
+        path = urlparse(href).path
         if path.startswith("/assets/"):
             target = ROOT / path.lstrip("/")
             if not target.is_file():
@@ -56,7 +56,9 @@ for page in ROOT.rglob("index.html"):
             target = ROOT / normalized / "index.html" if normalized else ROOT / "index.html"
             if not target.is_file():
                 broken.append((str(page), href))
-assert not broken, "Broken internal hrefs found: " + repr(broken[:20])
+            elif path != "/" and not path.endswith("/"):
+                broken.append((str(page), href + " (page URL missing trailing slash)"))
+assert not broken, "Broken or non-canonical internal hrefs found: " + repr(broken[:20])
 
 for required in ("/marketplaces/", "/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"

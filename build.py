@@ -1363,6 +1363,36 @@ def og_and_favicon():
     with open(os.path.join(assets, "og-image.svg"), "w", encoding="utf-8") as f:
         f.write(svg)
 
+def normalize_internal_page_links():
+    """Use canonical trailing-slash URLs for links to generated pages."""
+    import re
+    from urllib.parse import urlsplit
+
+    def normalize(match):
+        quote, raw = match.group(1), match.group(2)
+        parsed = urlsplit(raw)
+        path = parsed.path
+        if not path.startswith("/") or path == "/" or path.endswith("/"):
+            return match.group(0)
+        target = os.path.join(OUT, path.lstrip("/"), "index.html")
+        if not os.path.isfile(target):
+            return match.group(0)
+        suffix = raw[len(path):]
+        return "href=" + quote + path + "/" + suffix + quote
+
+    for root, _, files in os.walk(OUT):
+        for filename in files:
+            if not filename.endswith(".html"):
+                continue
+            path = os.path.join(root, filename)
+            with open(path, encoding="utf-8") as source:
+                html = source.read()
+            normalized = re.sub(r'href=(["\'])(/[^"\']*)\1', normalize, html)
+            if normalized != html:
+                with open(path, "w", encoding="utf-8") as target:
+                    target.write(normalized)
+
+
 def main():
     if os.path.exists(OUT):
         shutil.rmtree(OUT)
@@ -1434,6 +1464,7 @@ def main():
         static_page(path, title, desc, h1, paras)
         entries.append((path, []))
     not_found()
+    normalize_internal_page_links()
     og_and_favicon()
     sitemap(entries)
     robots()
