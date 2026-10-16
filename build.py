@@ -1199,24 +1199,38 @@ def home_app_page(lang):
             cats += ('<li><a class="rounded-full px-4 py-2 text-sm font-semibold min-h-[44px] inline-flex items-center '
                      + CAT_PILL[c["slug"]] + '" href="/' + c["slug"] + '/">' + c["name"] + "</a></li>")
         cats = '<nav aria-label="Categories" class="mt-8"><ul class="flex flex-wrap gap-3">' + cats + "</ul></nav>"
-    hero = ('<section aria-label="Calculator" class="mx-auto w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900">' + CALC_UI + "</section>")
+    side_title = "Designed for quick answers" if not urdu else "فوری جواب کے لیے آسان ڈیزائن"
+    side_desc = "Clear buttons, readable results, and useful everyday tools in one place." if not urdu else "آسان بٹن، واضح نتائج اور روزمرہ کے مفید ٹولز ایک جگہ۔"
+    calc_title = "Quick calculator" if not urdu else "فوری کیلکولیٹر"
+    tool_intro = "Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
+    free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
+    hero = ('<section aria-label="Calculator" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span><span class="ca-home-live-dot" aria-hidden="true"></span></div>' + CALC_UI + "</section>")
     body = (
-        '<section class="mx-auto max-w-5xl text-center">'
-        '<p class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-sm font-semibold text-sky-800 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">FREE TOOLS · PRIVATE BY DESIGN · NO SIGN-UP</p>'
-        '<h1 class="mt-5 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl dark:text-white">' + h1 + "</h1>"
-        '<p class="mx-auto mt-3 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg dark:text-slate-300">' + lead + "</p>"
-        '</section>'
-        '<div class="mt-7 grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] xl:gap-8">'
-        '<div class="flex flex-col gap-4">' + hero
-        + '<ul class="grid grid-cols-3 gap-2 sm:gap-3">' + "".join('<li class="rounded-xl border border-slate-200 bg-white px-2 py-3 text-center text-sm font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">' + label + "</li>" for label in TRUST[lang]) + "</ul></div>"
-        + '<aside class="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900/90">'
-        + '<div class="flex items-center justify-between gap-3"><h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">' + more_h + "</h2>"
-        + '<span class="rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-200">FREE</span></div>'
-        + '<p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">' + ("Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔") + "</p>"
-        + '<ul class="mt-5 grid grid-cols-2 gap-3">' + tiles + "</ul></aside></div>"
+        '<div class="ca-home-wrap">'
+        '<div class="ca-home-header">'
+        '<p class="ca-home-badge">' + free_label + '</p>'
+        '<h1>' + h1 + '</h1>'
+        '<p class="ca-home-lead">' + lead + '</p>'
+        '</div>'
+        '<div class="ca-home-layout">'
+        '<aside class="ca-home-side ca-home-side-left">'
+        '<span class="ca-home-side-icon" aria-hidden="true">✦</span>'
+        '<p class="ca-home-side-eyebrow">CALCULATE WITH CONFIDENCE</p>'
+        '<h2>' + side_title + '</h2>'
+        '<p class="ca-home-side-copy">' + side_desc + '</p>'
+        '<ul class="ca-home-benefits">'
+        + ''.join('<li><span aria-hidden="true">✓</span>' + label + '</li>' for label in TRUST[lang])
+        + '</ul><div class="ca-home-orbit" aria-hidden="true"><span>＋</span><span>÷</span><span>×</span><span>％</span></div>'
+        '</aside>'
+        + hero
+        + '<aside class="ca-home-tools">'
+        + '<div class="ca-home-tools-heading"><div><p class="ca-home-side-eyebrow">ONE PLACE, MANY ANSWERS</p><h2>' + more_h + '</h2></div><span class="ca-home-free">FREE</span></div>'
+        + '<p class="ca-home-tools-copy">' + tool_intro + '</p>'
+        + '<ul class="ca-home-tool-grid">' + tiles + '</ul></aside>'
+        '</div>'
         + cats
-        + '<section class="mt-10 rounded-2xl border border-slate-200 bg-white/80 p-5 sm:p-7 dark:border-slate-700 dark:bg-slate-900/80">'
-        + home_extra_html(lang) + "</section>"
+        + '<section class="ca-home-extra">' + home_extra_html(lang) + '</section>'
+        '</div>'
     )
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
