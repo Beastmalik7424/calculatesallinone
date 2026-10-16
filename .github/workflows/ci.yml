@@ -1,0 +1,40 @@
+name: Build and smoke test
+
+on:
+  push:
+    branches: ["main", "fix/language-label-audit"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: npm ci
+      - name: Check JavaScript syntax
+        run: node --check static/app.js
+      - name: Check Python syntax
+        run: python -m py_compile build.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
+      - name: Build the site
+        run: npm run build
+      - name: Smoke-test generated pages
+        run: |
+          test -s public/index.html
+          test -s public/ur/index.html
+          test -s public/sitemap.xml
+          test -s public/robots.txt
+          grep -q 'Standard Calculator' public/index.html
+          grep -q 'Free' public/index.html
+          grep -q 'محفوظ' public/ur/index.html
