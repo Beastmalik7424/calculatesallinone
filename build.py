@@ -14,6 +14,8 @@ from datetime import date
 SITE_URL = os.environ.get("SITE_URL", "https://calculateallinone.vercel.app").rstrip("/")
 ADSENSE_CLIENT = os.environ.get("ADSENSE_CLIENT", "").strip()
 ADSENSE_SLOT = os.environ.get("ADSENSE_SLOT", "").strip()
+if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
+    raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
 LAST_REVIEWED = "2026-10-08"  # change only when a guide, formula or policy text really changes
 OUT = "public"
@@ -1393,6 +1395,7 @@ def main():
             "Calculator inputs are processed in your browser. We do not send them to our server.",
             "The tasbih counter and the stopwatch do not send data anywhere. The tasbih counter keeps its count in local storage on your device. You can clear this from your browser settings.",
             "CalculatesAll does not run its own analytics or accounts. If the site owner enables advertising, Google and its partners may use cookies to show ads. For visitors in the European Economic Area and the United Kingdom, consent for personalized ads is collected through a Google certified consent message configured in the Google AdSense account. Until that message is configured, personalized ads are not shown to those visitors.",
+            "If approved affiliate links are added in the future, a marketplace may use cookies or similar tracking to attribute qualifying purchases. Any active affiliate relationship will be disclosed on the affiliate-disclosure page and near the relevant link.",
             "Google's use of data is described at policies.google.com. Contact " + CONTACT_EMAIL + " with privacy questions.",
         ]),
         ("/methodology/", "How Our Calculations Work | CalculatesAll", "The formulas, data sources and limits behind each CalculatesAll tool.", "How Our Calculations Work", [
