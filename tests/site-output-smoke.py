@@ -8,6 +8,8 @@ SITE = "https://calculateallinone.vercel.app"
 xml = ET.parse(ROOT / "sitemap.xml").getroot()
 ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.find("sm:loc", ns).text for node in xml.findall("sm:url", ns)]
+titles = {}
+descriptions = {}
 assert urls, "Sitemap has no URLs"
 assert len(urls) == len(set(urls)), "Duplicate URLs found in sitemap"
 
@@ -35,8 +37,6 @@ assert len(titles.values()) == len(set(titles.values())), "Duplicate page titles
 assert len(descriptions.values()) == len(set(descriptions.values())), "Duplicate meta descriptions found: " + repr(descriptions)
 
 sitemap_urls = set(urls)
-titles = {}
-descriptions = {}
 generated = set()
 for page in ROOT.rglob("index.html"):
     rel = page.parent.relative_to(ROOT).as_posix()
