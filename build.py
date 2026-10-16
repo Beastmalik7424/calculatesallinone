@@ -1199,22 +1199,18 @@ def home_app_page(lang):
             cats += ('<li><a class="rounded-full px-4 py-2 text-sm font-semibold min-h-[44px] inline-flex items-center '
                      + CAT_PILL[c["slug"]] + '" href="/' + c["slug"] + '/">' + c["name"] + "</a></li>")
         cats = '<nav aria-label="Categories" class="mt-8"><ul class="flex flex-wrap gap-3">' + cats + "</ul></nav>"
-    hero = ('<div class="rounded-3xl p-[3px] bg-gradient-to-r from-fuchsia-500 via-sky-500 to-emerald-500 shadow-2xl">'
-            '<div class="rounded-3xl bg-white/95 dark:bg-stone-900/95 p-4 sm:p-6">'
-            '<section aria-label="Calculator">' + CALC_UI + "</section></div></div>")
+    hero = ('<section aria-label="Calculator" class="mx-auto w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 dark:border-slate-700 dark:bg-slate-900">' + CALC_UI + "</section>")
     body = (
-        '<section class="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-sky-950 to-teal-900 p-6 sm:p-10 shadow-2xl ring-1 ring-white/20">'
-        '<div aria-hidden="true" class="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-sky-400/20 blur-3xl"></div>'
-        '<div aria-hidden="true" class="pointer-events-none absolute -bottom-16 -left-10 h-48 w-48 rounded-full bg-teal-300/20 blur-3xl"></div>'
-        '<p class="relative inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs sm:text-sm font-bold tracking-wide text-teal-100">FREE TOOLS · PRIVATE BY DESIGN · NO SIGN-UP</p>'
-        '<h1 class="relative mt-5 text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-white">' + h1 + "</h1>"
-        '<p class="relative mt-4 max-w-3xl text-lg sm:text-xl leading-relaxed text-sky-50/95">' + lead + "</p>"
+        '<section class="mx-auto max-w-4xl text-center">'
+        '<p class="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-sm font-semibold text-sky-800 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">FREE TOOLS · PRIVATE BY DESIGN · NO SIGN-UP</p>'
+        '<h1 class="mt-5 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl dark:text-white">' + h1 + "</h1>"
+        '<p class="mx-auto mt-3 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg dark:text-slate-300">' + lead + "</p>"
         '</section>'
-        '<div class="mt-8 sm:mt-10">' + hero + "</div>"
-        '<ul class="mt-6 grid grid-cols-3 gap-3">' + trust + "</ul>"
-        + '<ol class="mt-6 grid gap-3 sm:grid-cols-3">' + "".join('<li class="rounded-2xl bg-white/85 dark:bg-slate-900/85 backdrop-blur p-4 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 text-base text-slate-800 dark:text-slate-100"><span class="block text-sm font-bold text-teal-700 dark:text-teal-300">' + n + "</span>" + t + "</li>" for n, t in STEPS[lang]) + "</ol>"
-        '<h2 class="' + H2 + '">' + more_h + "</h2>"
-        '<ul class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">' + tiles + "</ul>"
+        '<div class="mt-7 sm:mt-9">' + hero + "</div>"
+        '<ul class="mx-auto mt-5 grid max-w-3xl grid-cols-3 gap-2 sm:gap-3">' + "".join('<li class="rounded-xl border border-slate-200 bg-white px-2 py-3 text-center text-sm font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">' + label + "</li>" for label in TRUST[lang]) + "</ul>"
+        + '<h2 class="mt-10 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">' + more_h + "</h2>"
+        + '<p class="mt-2 text-base text-slate-600 dark:text-slate-300">' + ("Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔") + "</p>"
+        + '<ul class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">' + tiles + "</ul>"
         + cats
         + home_extra_html(lang)
     )
