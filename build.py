@@ -801,6 +801,10 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
                + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>\n')
     ld = ""
     for s in schema:
+        # Add page language only to schema types that support inLanguage.
+        # This keeps structured data consistent with the actual HTML language.
+        if s.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
+            s.setdefault("inLanguage", lang)
         ld += '<script type="application/ld+json">' + json.dumps(s, ensure_ascii=False) + "</script>\n"
     og_image = SITE_URL + "/assets/og-image.png"
     dir_attr = ' dir="rtl"' if lang in RTL_LANGS else ' dir="ltr"'
@@ -1035,17 +1039,26 @@ def urdu_tool_page(t):
     for en, ur in u["labels"]:
         ui = ui.replace(">" + en + "<", ">" + ur + "<")
         ui = ui.replace('"' + en + '"', '"' + ur + '"')
+    cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": u["name"], "url": url,
          "description": u["description"], "inLanguage": "ur", "applicationCategory": t["app"],
          "operatingSystem": "Any", "browserRequirements": "Requires JavaScript",
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}},
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "inLanguage": "ur", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "صفحہ اول", "item": SITE_URL + "/ur/"},
+            {"@type": "ListItem", "position": 2, "name": cat["name"], "item": SITE_URL + "/" + cat["slug"] + "/"},
+            {"@type": "ListItem", "position": 3, "name": u["name"], "item": url}]},
     ]
     how = ""
     for p in u["how"]:
         how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
     body = (
+        '<nav aria-label="صفحہ کی ترتیب" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
+        '<li><a class="' + LINK + '" href="/ur/">صفحہ اول</a></li><li aria-hidden="true">/</li>'
+        '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li><li aria-hidden="true">/</li>'
+        '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
         '<section class="mt-8" aria-label="کیلکولیٹر">' + ui + '</section>'
@@ -1241,8 +1254,8 @@ def home_app_page(lang):
         '</div>'
     )
     schema = [
-        {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
-        {"@context": "https://schema.org", "@type": "WebApplication", "name": "Standard Calculator", "url": SITE_URL + "/",
+        {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": lang},
+        {"@context": "https://schema.org", "@type": "WebApplication", "name": "Standard Calculator", "url": SITE_URL + path,
          "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript",
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
