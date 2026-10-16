@@ -10,6 +10,7 @@
     "tailwindcss": "3.4.19"
   },
   "overrides": {
-    "braces": "npm:@zklogic/braces@3.0.7"
+    "braces": "npm:@zklogic/braces@3.0.7",
+    "postcss-selector-parser": "7.1.6"
   }
 }
