@@ -353,7 +353,7 @@ TOOLS = [
                 "Enter 2 + 3 × 4. Multiplication happens first: 3 × 4 is 12, then 2 + 12 is 14.",
             ]),
             ("Limits", [
-                "Parentheses are not supported in this version. Enter the calculation in the order of operations instead.",
+                "Parentheses are supported. Use the ( and ) buttons to group calculations. The calculator follows standard operator precedence, with multiplication and division before addition and subtraction.",
             ]),
         ],
         "faq": [
