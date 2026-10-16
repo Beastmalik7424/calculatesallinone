@@ -79,6 +79,8 @@ for page in ROOT.rglob("index.html"):
 
 for required in ("/marketplaces/", "/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"
+vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
+assert vercel_config.get("cleanUrls") is False, "Vercel cleanUrls must stay disabled so the Google ownership HTML file is served at its exact URL"
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
 assert "Advertising is currently disabled" in privacy_html, "Privacy page must explain disabled ads and conditional ads.txt"
