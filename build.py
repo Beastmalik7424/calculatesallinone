@@ -584,7 +584,7 @@ EXTRA = {
     "standard-calculator": {
         "quick": "Multiplication and division run before addition and subtraction. The percent key divides the last number by 100.",
         "faq": [
-            ("Does this calculator handle parentheses?", "Not in this version. Calculate the inner part first, then enter the result."),
+            ("Does this calculator handle parentheses?", "Yes. Use the ( and ) buttons to group calculations. Multiplication and division run before addition and subtraction."),
         ],
     },
     "tasbih-counter": {
@@ -1306,7 +1306,7 @@ def main():
     robots()
     shutil.copytree(STATIC, os.path.join(OUT, "assets"), dirs_exist_ok=True)
     configured = write_ads_txt()
-    print("ads.txt " + ("set from ADSENSE_CLIENT" if configured else "still placeholder (set ADSENSE_CLIENT)"))
+    print("ads.txt " + ("configured from ADSENSE_CLIENT" if configured else "not generated until a real ADSENSE_CLIENT is configured"))
     print("translation review rows: " + str(write_review_sheet()))
     verify_csp_hashes()
     print("Built " + str(len(entries)) + " indexable URLs into " + OUT + "/")
