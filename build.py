@@ -1203,13 +1203,18 @@ def home_app_page(lang):
             '<div class="rounded-3xl bg-white/95 dark:bg-stone-900/95 p-4 sm:p-6">'
             '<section aria-label="Calculator">' + CALC_UI + "</section></div></div>")
     body = (
-        '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-teal-700 via-sky-700 to-indigo-700 bg-clip-text text-transparent dark:from-teal-300 dark:to-sky-300 mt-2">' + h1 + "</h1>"
-        '<p class="mt-3 text-lg text-stone-800 dark:text-stone-200">' + lead + "</p>"
-        '<div class="mt-6">' + hero + "</div>"
+        '<section class="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-sky-950 to-teal-900 p-6 sm:p-10 shadow-2xl ring-1 ring-white/20">'
+        '<div aria-hidden="true" class="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-sky-400/20 blur-3xl"></div>'
+        '<div aria-hidden="true" class="pointer-events-none absolute -bottom-16 -left-10 h-48 w-48 rounded-full bg-teal-300/20 blur-3xl"></div>'
+        '<p class="relative inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs sm:text-sm font-bold tracking-wide text-teal-100">FREE TOOLS · PRIVATE BY DESIGN · NO SIGN-UP</p>'
+        '<h1 class="relative mt-5 text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-white">' + h1 + "</h1>"
+        '<p class="relative mt-4 max-w-3xl text-lg sm:text-xl leading-relaxed text-sky-50/95">' + lead + "</p>"
+        '</section>'
+        '<div class="mt-8 sm:mt-10">' + hero + "</div>"
         '<ul class="mt-6 grid grid-cols-3 gap-3">' + trust + "</ul>"
-        + '<ol class="mt-6 grid gap-3 sm:grid-cols-3">' + "".join('<li class="rounded-xl bg-white/90 dark:bg-stone-900/90 p-4 shadow ring-1 ring-stone-200 dark:ring-stone-700 text-base text-stone-900 dark:text-stone-100"><span class="block text-sm font-bold text-indigo-700 dark:text-indigo-300">' + n + "</span>" + t + "</li>" for n, t in STEPS[lang]) + "</ol>"
+        + '<ol class="mt-6 grid gap-3 sm:grid-cols-3">' + "".join('<li class="rounded-2xl bg-white/85 dark:bg-slate-900/85 backdrop-blur p-4 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 text-base text-slate-800 dark:text-slate-100"><span class="block text-sm font-bold text-teal-700 dark:text-teal-300">' + n + "</span>" + t + "</li>" for n, t in STEPS[lang]) + "</ol>"
         '<h2 class="' + H2 + '">' + more_h + "</h2>"
-        '<ul class="mt-4 grid grid-cols-2 gap-4">' + tiles + "</ul>"
+        '<ul class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">' + tiles + "</ul>"
         + cats
         + home_extra_html(lang)
     )
@@ -1221,7 +1226,7 @@ def home_app_page(lang):
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
          "logo": SITE_URL + "/assets/favicon.svg"},
     ]
-    write(path, head(title, desc, path, schema, lang=lang, alternates=home_alts_all()) + shell(body, lang=lang))
+    write(path, head(title, desc, path, schema, lang=lang, alternates=home_alts_all()) + shell(body, lang=lang, current_path=path))
 
 
 def not_found():
