@@ -22,7 +22,7 @@ OUT = "public"
 STATIC = "static"
 
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
-I = "w-full rounded-lg border border-stone-400 dark:border-stone-500 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
+I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 B = "bg-gradient-to-r from-sky-700 to-indigo-700 hover:from-sky-800 hover:to-indigo-800 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 S = "border border-stone-500 dark:border-stone-400 text-stone-900 dark:text-stone-100 text-base font-medium px-5 py-3 rounded-lg min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 R = "mt-6 rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5 text-base leading-relaxed min-h-[3rem]"
@@ -681,19 +681,20 @@ def reviewer_schema(slug):
 def write_ads_txt():
     # Do not publish a fake publisher ID. Google AdSense supplies the real ID
     # after account approval; until then, no ads.txt file should be generated.
+    import re
+
     client = os.environ.get("ADSENSE_CLIENT", "").strip()
     ads_path = os.path.join(OUT, "ads.txt")
     if not client:
         if os.path.exists(ads_path):
             os.remove(ads_path)
         return False
-    pub = client.replace("ca-pub-", "pub-")
-    if not pub.startswith("pub-") or not pub[4:].isdigit():
-        raise SystemExit("ADSENSE_CLIENT must look like ca-pub-1234567890123456")
+    if not re.fullmatch(r"ca-pub-\d{16}", client):
+        raise SystemExit("ADSENSE_CLIENT must be a real-format ID like ca-pub-1234567890123456")
+    pub = "pub-" + client[len("ca-pub-"):]
     with open(ads_path, "w", encoding="utf-8") as f:
-        f.write("google.com, " + pub + ", DIRECT, f08c47fec0942fa0\n")
+        f.write("google.com, " + pub + ", DIRECT, f08c47fec0942fa0\\n")
     return True
-
 def write_review_sheet():
     import csv
     os.makedirs("review", exist_ok=True)
