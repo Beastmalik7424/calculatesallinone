@@ -69,7 +69,7 @@ TERMS_PARAS = [
     "The content, design and code of this site belong to CalculatesAll unless stated otherwise. You may share a link to any page. Please do not copy large parts of the guides or present our tools as your own.",
     "Advertising may appear on some pages. Advertisers and their partners follow their own policies. Read the privacy page for how cookies and advertising data are handled.",
     "We do not accept liability for loss caused by reliance on a result, to the extent the law allows. Nothing in these terms limits any right you have under the law where you live.",
-    "We may update these terms. The date at the top of this page shows when they were last changed. Continuing to use the site after a change means you accept the updated terms.",
+    "We may update these terms from time to time. The current version is published on this page. Check this page again before relying on the terms.",
     "For questions about these terms, contact us using the address on the contact page.",
 ]
 
