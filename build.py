@@ -322,17 +322,17 @@ TOOLS = [
             '<output id="calc-display" class="block text-right text-3xl font-semibold bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl px-4 py-5 min-h-[4rem] break-all" aria-live="polite">0</output>'
             '<div id="calc-pad" class="grid grid-cols-4 gap-3 mt-4">'
             '<button class="@S@" data-key="C">C</button>'
-            '<button class="@S@" data-key="BS" aria-label="Delete last character">âŒ«</button>'
+            '<button class="@S@" data-key="BS" aria-label="Delete last character">⌫</button>'
             '<button class="@S@" data-key="%">%</button>'
-            '<button class="@S@" data-key="/" aria-label="Divide">Ã·</button>'
+            '<button class="@S@" data-key="/" aria-label="Divide">÷</button>'
             '<button class="@S@" data-key="7">7</button>'
             '<button class="@S@" data-key="8">8</button>'
             '<button class="@S@" data-key="9">9</button>'
-            '<button class="@S@" data-key="*" aria-label="Multiply">Ã—</button>'
+            '<button class="@S@" data-key="*" aria-label="Multiply">×</button>'
             '<button class="@S@" data-key="4">4</button>'
             '<button class="@S@" data-key="5">5</button>'
             '<button class="@S@" data-key="6">6</button>'
-            '<button class="@S@" data-key="-" aria-label="Subtract">âˆ’</button>'
+            '<button class="@S@" data-key="-" aria-label="Subtract">−</button>'
             '<button class="@S@" data-key="1">1</button>'
             '<button class="@S@" data-key="2">2</button>'
             '<button class="@S@" data-key="3">3</button>'
@@ -350,10 +350,10 @@ TOOLS = [
                 "A minus sign at the start of an expression makes the first number negative, for example -5 + 3 equals -2.",
             ]),
             ("Worked example", [
-                "Enter 2 + 3 Ã— 4. Multiplication happens first: 3 Ã— 4 is 12, then 2 + 12 is 14.",
+                "Enter 2 + 3 × 4. Multiplication happens first: 3 × 4 is 12, then 2 + 12 is 14.",
             ]),
             ("Limits", [
-                "Parentheses are not supported in this version. Enter the calculation in the order of operations instead.",
+                "Parentheses are supported. Use the ( and ) buttons to group calculations. The calculator follows standard operator precedence, with multiplication and division before addition and subtraction.",
             ]),
         ],
         "faq": [
@@ -474,67 +474,67 @@ CATEGORIES = [
 
 URDU = {
     "zakat-calculator": {
-        "name": "Ø²Ú©ÙˆÙ°Ûƒ Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±",
-        "title": "Ù†ØµØ§Ø¨ Ú†ÛŒÚ© Ú©Û’ Ø³Ø§ØªÚ¾ Ø²Ú©ÙˆÙ°Ûƒ Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø± | CalculatesAll",
-        "description": "Ú†Ø§Ù†Ø¯ÛŒ Ú©Û’ Ù†ØµØ§Ø¨ Ú©Û’ Ø³Ø§ØªÚ¾ Ø®Ø§Ù„Øµ Ù…Ø§Ù„ Ù¾Ø± 2.5 ÙÛŒØµØ¯ Ø²Ú©ÙˆÙ°Ûƒ Ú©Ø§ Ø­Ø³Ø§Ø¨ Ú©Ø±ÛŒÚº Ø§ÙˆØ± Ù‚Ù…Ø±ÛŒ Ø³Ø§Ù„ Ù…Ú©Ù…Ù„ ÛÙˆÙ†Û’ Ú©ÛŒ ØªØµØ¯ÛŒÙ‚ Ú©Ø±ÛŒÚºÛ”",
-        "h1": "Ù†ØµØ§Ø¨ Ú†ÛŒÚ© Ú©Û’ Ø³Ø§ØªÚ¾ Ø²Ú©ÙˆÙ°Ûƒ Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±",
-        "lead": "Ø§Ù¾Ù†ÛŒ Ø¨Ú†Øª Ø§ÙˆØ± Ø§Ø«Ø§Ø«Û’ Ø¯Ø±Ø¬ Ú©Ø±ÛŒÚºØŒ Ù¾Ú¾Ø± Ú†Ø§Ù†Ø¯ÛŒ Ú©ÛŒ ÙÛŒ Ú¯Ø±Ø§Ù… Ù‚ÛŒÙ…Øª Ù„Ú©Ú¾ÛŒÚºÛ” Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø± Ù¾ÛÙ„Û’ Ù†ØµØ§Ø¨ Ú†ÛŒÚ© Ú©Ø±ØªØ§ ÛÛ’ Ø§ÙˆØ± Ø²Ú©ÙˆÙ°Ûƒ Ú©ÛŒ Ø±Ù‚Ù… Ø§Ø³ÛŒ ÙˆÙ‚Øª Ø¯Ú©Ú¾Ø§ØªØ§ ÛÛ’ Ø¬Ø¨ Ù†ØµØ§Ø¨ Ø§ÙˆØ± Ù‚Ù…Ø±ÛŒ Ø³Ø§Ù„ Ú©ÛŒ Ø´Ø±Ø· Ù¾ÙˆØ±ÛŒ ÛÙˆÛ”",
+        "name": "زکوٰۃ کیلکولیٹر",
+        "title": "نصاب چیک کے ساتھ زکوٰۃ کیلکولیٹر | CalculatesAll",
+        "description": "چاندی کے نصاب کے ساتھ خالص مال پر 2.5 فیصد زکوٰۃ کا حساب کریں اور قمری سال مکمل ہونے کی تصدیق کریں۔",
+        "h1": "نصاب چیک کے ساتھ زکوٰۃ کیلکولیٹر",
+        "lead": "اپنی بچت اور اثاثے درج کریں، پھر چاندی کی فی گرام قیمت لکھیں۔ کیلکولیٹر پہلے نصاب چیک کرتا ہے اور زکوٰۃ کی رقم اسی وقت دکھاتا ہے جب نصاب اور قمری سال کی شرط پوری ہو۔",
         "labels": [
-            ("Cash and bank savings", "Ù†Ù‚Ø¯ Ø§ÙˆØ± Ø¨ÛŒÙ†Ú© Ù…ÛŒÚº Ø¨Ú†Øª"),
-            ("Gold value (in your currency)", "Ø³ÙˆÙ†Û’ Ú©ÛŒ Ù‚ÛŒÙ…Øª (Ø¢Ù¾ Ú©ÛŒ Ú©Ø±Ù†Ø³ÛŒ Ù…ÛŒÚº)"),
-            ("Silver value (in your currency)", "Ú†Ø§Ù†Ø¯ÛŒ Ú©ÛŒ Ù‚ÛŒÙ…Øª (Ø¢Ù¾ Ú©ÛŒ Ú©Ø±Ù†Ø³ÛŒ Ù…ÛŒÚº)"),
-            ("Business goods for sale (market value)", "ÙØ±ÙˆØ®Øª Ú©Û’ Ù„ÛŒÛ’ Ú©Ø§Ø±ÙˆØ¨Ø§Ø±ÛŒ Ø³Ø§Ù…Ø§Ù† (Ø¨Ø§Ø²Ø§Ø±ÛŒ Ù‚ÛŒÙ…Øª)"),
-            ("Money owed to you that you expect to receive", "Ø¢Ù¾ Ú©Ùˆ ÙˆØ§Ø¬Ø¨ Ø§Ù„Ø§Ø¯Ø§ Ø±Ù‚Ù… Ø¬Ùˆ Ø¢Ù¾ Ú©Ùˆ Ù…Ù„Ù†Û’ Ú©ÛŒ Ø§Ù…ÛŒØ¯ ÛÛ’"),
-            ("Debts due now (subtracted from wealth)", "Ø§Ø¨Ú¾ÛŒ ÙˆØ§Ø¬Ø¨ Ø§Ù„Ø§Ø¯Ø§ Ù‚Ø±Ø¶ (Ù…Ø§Ù„ Ø³Û’ Ù…Ù†ÛØ§ ÛÙˆÚ¯Ø§)"),
-            ("Silver price per gram today (in your currency)", "Ø¢Ø¬ Ú†Ø§Ù†Ø¯ÛŒ Ú©ÛŒ ÙÛŒ Ú¯Ø±Ø§Ù… Ù‚ÛŒÙ…Øª (Ø¢Ù¾ Ú©ÛŒ Ú©Ø±Ù†Ø³ÛŒ Ù…ÛŒÚº)"),
-            ("This wealth has been held for one full lunar year (hawl)", "ÛŒÛ Ù…Ø§Ù„ Ø§ÛŒÚ© Ù…Ú©Ù…Ù„ Ù‚Ù…Ø±ÛŒ Ø³Ø§Ù„ (Ø­ÙˆÙ„) ØªÚ© Ø±Ú©Ú¾Ø§ Ú¯ÛŒØ§ ÛÛ’"),
-            ("Calculate Zakat", "Ø²Ú©ÙˆÙ°Ûƒ Ú©Ø§ Ø­Ø³Ø§Ø¨ Ú©Ø±ÛŒÚº"),
-            ("Required to check Nisab. Without it, no Zakat amount is shown.", "Ù†ØµØ§Ø¨ Ú†ÛŒÚ© Ú©Ø±Ù†Û’ Ú©Û’ Ù„ÛŒÛ’ Ø¶Ø±ÙˆØ±ÛŒ ÛÛ’Û” Ø§Ø³ Ú©Û’ Ø¨ØºÛŒØ± Ø²Ú©ÙˆÙ°Ûƒ Ú©ÛŒ Ø±Ù‚Ù… Ù†ÛÛŒÚº Ø¯Ú©Ú¾Ø§Ø¦ÛŒ Ø¬Ø§Ø¦Û’ Ú¯ÛŒÛ”"),
+            ("Cash and bank savings", "نقد اور بینک میں بچت"),
+            ("Gold value (in your currency)", "سونے کی قیمت (آپ کی کرنسی میں)"),
+            ("Silver value (in your currency)", "چاندی کی قیمت (آپ کی کرنسی میں)"),
+            ("Business goods for sale (market value)", "فروخت کے لیے کاروباری سامان (بازاری قیمت)"),
+            ("Money owed to you that you expect to receive", "آپ کو واجب الادا رقم جو آپ کو ملنے کی امید ہے"),
+            ("Debts due now (subtracted from wealth)", "ابھی واجب الادا قرض (مال سے منہا ہوگا)"),
+            ("Silver price per gram today (in your currency)", "آج چاندی کی فی گرام قیمت (آپ کی کرنسی میں)"),
+            ("This wealth has been held for one full lunar year (hawl)", "یہ مال ایک مکمل قمری سال (حول) تک رکھا گیا ہے"),
+            ("Calculate Zakat", "زکوٰۃ کا حساب کریں"),
+            ("Required to check Nisab. Without it, no Zakat amount is shown.", "نصاب چیک کرنے کے لیے ضروری ہے۔ اس کے بغیر زکوٰۃ کی رقم نہیں دکھائی جائے گی۔"),
         ],
-        "how_heading": "Ø­Ø³Ø§Ø¨ Ú©Ø§ Ø·Ø±ÛŒÙ‚Û",
-        "faq_heading": "Ø³ÙˆØ§Ù„Ø§Øª",
+        "how_heading": "حساب کا طریقہ",
+        "faq_heading": "سوالات",
         "how": [
-            "Ø²Ú©ÙˆÙ°Ûƒ Ø®Ø§Ù„Øµ Ù‚Ø§Ø¨Ù„Ù Ø²Ú©ÙˆÙ°Ûƒ Ù…Ø§Ù„ Ú©Ø§ 2.5 ÙÛŒØµØ¯ ÛÛ’Û” ÛŒÛ Ø§Ø³ ÙˆÙ‚Øª ÙˆØ§Ø¬Ø¨ ÛÙˆØªÛŒ ÛÛ’ Ø¬Ø¨ Ù…Ø§Ù„ Ù†ØµØ§Ø¨ Ú©Û’ Ø¨Ø±Ø§Ø¨Ø± ÛŒØ§ Ø§Ø³ Ø³Û’ Ø²ÛŒØ§Ø¯Û ÛÙˆ Ø§ÙˆØ± Ø§ÛŒÚ© Ù…Ú©Ù…Ù„ Ù‚Ù…Ø±ÛŒ Ø³Ø§Ù„ ØªÚ© Ø±Ú©Ú¾Ø§ Ú¯ÛŒØ§ ÛÙˆÛ”",
-            "Ù¾ÛÙ„Û’ Ù†Ù‚Ø¯ØŒ Ø¨ÛŒÙ†Ú© Ø¨Ú†ØªØŒ Ø³ÙˆÙ†Ø§ØŒ Ú†Ø§Ù†Ø¯ÛŒØŒ ÙØ±ÙˆØ®Øª Ú©Û’ Ø³Ø§Ù…Ø§Ù† Ø§ÙˆØ± ÙˆØµÙˆÙ„ ÛÙˆÙ†Û’ ÙˆØ§Ù„ÛŒ Ø±Ù‚Ù… Ú©Ùˆ Ø¬Ù…Ø¹ Ú©Ø±ÛŒÚºÛ” Ù¾Ú¾Ø± Ø§Ø¨Ú¾ÛŒ ÙˆØ§Ø¬Ø¨ Ø§Ù„Ø§Ø¯Ø§ Ù‚Ø±Ø¶ Ù…Ù†ÛØ§ Ú©Ø±ÛŒÚºÛ”",
-            "Ú†Ø§Ù†Ø¯ÛŒ Ú©Ø§ Ù†ØµØ§Ø¨ 612.36 Ú¯Ø±Ø§Ù… ÛÛ’Û” Ø§Ø³ Ú©Ùˆ ÙÛŒ Ú¯Ø±Ø§Ù… Ù‚ÛŒÙ…Øª Ø³Û’ Ø¶Ø±Ø¨ Ø¯ÛŒÚºÛ” Ø§Ú¯Ø± Ø®Ø§Ù„Øµ Ù…Ø§Ù„ Ù†ØµØ§Ø¨ Ø³Û’ Ú©Ù… ÛÙˆ ØªÙˆ Ø²Ú©ÙˆÙ°Ûƒ ÙˆØ§Ø¬Ø¨ Ù†ÛÛŒÚºÛ”",
-            "Ù…Ø«Ø§Ù„: Ù†Ù‚Ø¯ 1,000,000 ÛÛ’ Ø§ÙˆØ± Ù‚Ø±Ø¶ 100,000 ÛÛ’ ØªÙˆ Ø®Ø§Ù„Øµ Ù…Ø§Ù„ 900,000 ÛÙˆÚ¯Ø§Û” Ú†Ø§Ù†Ø¯ÛŒ 1,000 ÙÛŒ Ú¯Ø±Ø§Ù… ÛÙˆ ØªÙˆ Ù†ØµØ§Ø¨ 612,360 ÛÙˆÚ¯Ø§Û” Ù‚Ù…Ø±ÛŒ Ø³Ø§Ù„ Ù…Ú©Ù…Ù„ ÛÙˆÙ†Û’ Ù¾Ø± Ø²Ú©ÙˆÙ°Ûƒ 900,000 Ú©Ø§ 2.5 ÙÛŒØµØ¯ØŒ ÛŒØ¹Ù†ÛŒ 22,500 ÛÙˆÚ¯ÛŒÛ”",
-            "Ø²ÛŒÙˆØ±Ø§ØªØŒ Ú©Ø±Ø§ÛŒÛ’ Ú©ÛŒ Ø¬Ø§Ø¦ÛŒØ¯Ø§Ø¯ Ø§ÙˆØ± Ù‚Ø±Ø¶ Ú©Û’ Ø¨Ø¹Ø¶ Ù…Ø¹Ø§Ù…Ù„Ø§Øª Ù…ÛŒÚº ÙÙ‚ÛØ§Ø¡ Ú©ÛŒ Ø¢Ø±Ø§Ø¡ Ù…Ø®ØªÙ„Ù ÛÛŒÚºÛ” Ø§Ø¯Ø§Ø¦ÛŒÚ¯ÛŒ Ø³Û’ Ù¾ÛÙ„Û’ Ú©Ø³ÛŒ Ù…Ø³ØªÙ†Ø¯ Ø¹Ø§Ù„Ù… Ø³Û’ ØªØµØ¯ÛŒÙ‚ Ú©Ø±ÛŒÚºÛ”",
+            "زکوٰۃ خالص قابلِ زکوٰۃ مال کا 2.5 فیصد ہے۔ یہ اس وقت واجب ہوتی ہے جب مال نصاب کے برابر یا اس سے زیادہ ہو اور ایک مکمل قمری سال تک رکھا گیا ہو۔",
+            "پہلے نقد، بینک بچت، سونا، چاندی، فروخت کے سامان اور وصول ہونے والی رقم کو جمع کریں۔ پھر ابھی واجب الادا قرض منہا کریں۔",
+            "چاندی کا نصاب 612.36 گرام ہے۔ اس کو فی گرام قیمت سے ضرب دیں۔ اگر خالص مال نصاب سے کم ہو تو زکوٰۃ واجب نہیں۔",
+            "مثال: نقد 1,000,000 ہے اور قرض 100,000 ہے تو خالص مال 900,000 ہوگا۔ چاندی 1,000 فی گرام ہو تو نصاب 612,360 ہوگا۔ قمری سال مکمل ہونے پر زکوٰۃ 900,000 کا 2.5 فیصد، یعنی 22,500 ہوگی۔",
+            "زیورات، کرایے کی جائیداد اور قرض کے بعض معاملات میں فقہاء کی آراء مختلف ہیں۔ ادائیگی سے پہلے کسی مستند عالم سے تصدیق کریں۔",
         ],
         "faq": [
-            ("Ú†Ø§Ù†Ø¯ÛŒ Ú©Ø§ Ù†ØµØ§Ø¨ Ú©ÛŒØ§ ÛÛ’ØŸ", "Ø§Ø³ ØµÙØ­Û’ Ù¾Ø± Ù†ØµØ§Ø¨ 612.36 Ú¯Ø±Ø§Ù… Ú†Ø§Ù†Ø¯ÛŒ ÛÛ’Û” Ø§Ø³ Ú©ÛŒ Ø±Ù‚Ù…ÛŒ Ù‚ÛŒÙ…Øª Ø¢Ù¾ Ú©ÛŒ Ø¯Ø±Ø¬ Ú©Ø±Ø¯Û Ú†Ø§Ù†Ø¯ÛŒ Ú©ÛŒ Ù‚ÛŒÙ…Øª Ù¾Ø± ÛÛ’Û”"),
-            ("Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø± Ø±Ù‚Ù… Ú©ÛŒÙˆÚº Ù†ÛÛŒÚº Ø¯Ú©Ú¾Ø§ØªØ§ØŸ", "Ù†ØµØ§Ø¨ Ú†ÛŒÚ© Ú©Ø±Ù†Û’ Ú©Û’ Ù„ÛŒÛ’ Ú†Ø§Ù†Ø¯ÛŒ Ú©ÛŒ Ù‚ÛŒÙ…Øª Ø§ÙˆØ± Ù‚Ù…Ø±ÛŒ Ø³Ø§Ù„ Ú©ÛŒ ØªØµØ¯ÛŒÙ‚ Ø¯ÙˆÙ†ÙˆÚº Ø¶Ø±ÙˆØ±ÛŒ ÛÛŒÚºÛ”"),
-            ("Ú©ÛŒØ§ ÛŒÛ Ø´Ø±Ø¹ÛŒ ÙØªÙˆÛŒÙ° ÛÛ’ØŸ", "Ù†ÛÛŒÚºÛ” ÛŒÛ Ø­Ø³Ø§Ø¨ Ú©Ø§ Ø§ÛŒÚ© Ø¢Ù„Û ÛÛ’Û” Ø§Ù¾Ù†Û’ Ù…Ø¹Ø§Ù…Ù„Û’ Ú©Û’ ÙØªÙˆÛ’ Ú©Û’ Ù„ÛŒÛ’ Ú©Ø³ÛŒ Ù…Ø³ØªÙ†Ø¯ Ø¹Ø§Ù„Ù… Ø³Û’ Ø±Ø¬ÙˆØ¹ Ú©Ø±ÛŒÚºÛ”"),
+            ("چاندی کا نصاب کیا ہے؟", "اس صفحے پر نصاب 612.36 گرام چاندی ہے۔ اس کی رقمی قیمت آپ کی درج کردہ چاندی کی قیمت پر ہے۔"),
+            ("کیلکولیٹر رقم کیوں نہیں دکھاتا؟", "نصاب چیک کرنے کے لیے چاندی کی قیمت اور قمری سال کی تصدیق دونوں ضروری ہیں۔"),
+            ("کیا یہ شرعی فتویٰ ہے؟", "نہیں۔ یہ حساب کا ایک آلہ ہے۔ اپنے معاملے کے فتوے کے لیے کسی مستند عالم سے رجوع کریں۔"),
         ],
     },
     "bmi-calculator": {
-        "name": "BMI Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±",
-        "title": "Ø¨Ø§Ù„ØºÙˆÚº Ú©Û’ Ù„ÛŒÛ’ BMI Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø± | CalculatesAll",
-        "description": "Ù…ÛŒÙ¹Ø±Ú© ÛŒØ§ Ø§Ù…Ù¾ÛŒØ±ÛŒÙ„ Ø§Ú©Ø§Ø¦ÛŒÙˆÚº Ù…ÛŒÚº Ø¨Ø§Ù„ØºÙˆÚº Ú©Ø§ Ø¨Ø§ÚˆÛŒ Ù…Ø§Ø³ Ø§Ù†ÚˆÛŒÚ©Ø³ Ù†Ú©Ø§Ù„ÛŒÚº Ø§ÙˆØ± WHO Ú©ÛŒ ÙˆØ²Ù† Ú©ÛŒ Ø¯Ø±Ø¬Û Ø¨Ù†Ø¯ÛŒ Ø¯ÛŒÚ©Ú¾ÛŒÚºÛ”",
-        "h1": "Ø¨Ø§Ù„ØºÙˆÚº Ú©Û’ Ù„ÛŒÛ’ BMI Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±",
-        "lead": "Ù…ÛŒÙ¹Ø±Ú© ÛŒØ§ Ø§Ù…Ù¾ÛŒØ±ÛŒÙ„ Ø§Ú©Ø§Ø¦ÛŒÙˆÚº Ù…ÛŒÚº Ø§Ù¾Ù†Ø§ Ø¨Ø§ÚˆÛŒ Ù…Ø§Ø³ Ø§Ù†ÚˆÛŒÚ©Ø³ Ù†Ú©Ø§Ù„ÛŒÚºÛ” BMI Ø¨Ø§Ù„ØºÙˆÚº Ú©Û’ Ù„ÛŒÛ’ Ø§ÛŒÚ© Ø§Ø³Ú©Ø±ÛŒÙ†Ù†Ú¯ Ù¾ÛŒÙ…Ø§Ù†Û ÛÛ’ØŒ ØªØ´Ø®ÛŒØµ Ù†ÛÛŒÚºÛ”",
+        "name": "BMI کیلکولیٹر",
+        "title": "بالغوں کے لیے BMI کیلکولیٹر | CalculatesAll",
+        "description": "میٹرک یا امپیریل اکائیوں میں بالغوں کا باڈی ماس انڈیکس نکالیں اور WHO کی وزن کی درجہ بندی دیکھیں۔",
+        "h1": "بالغوں کے لیے BMI کیلکولیٹر",
+        "lead": "میٹرک یا امپیریل اکائیوں میں اپنا باڈی ماس انڈیکس نکالیں۔ BMI بالغوں کے لیے ایک اسکریننگ پیمانہ ہے، تشخیص نہیں۔",
         "labels": [
-            ("Metric (kg and cm)", "Ù…ÛŒÙ¹Ø±Ú© (Ú©Ù„Ùˆ Ú¯Ø±Ø§Ù… Ø§ÙˆØ± Ø³ÛŒÙ†Ù¹ÛŒ Ù…ÛŒÙ¹Ø±)"),
-            ("Imperial (lb and ft/in)", "Ø§Ù…Ù¾ÛŒØ±ÛŒÙ„ (Ù¾Ø§Ø¤Ù†Úˆ Ø§ÙˆØ± ÙÙ¹/Ø§Ù†Ú†)"),
-            ("Weight (kg)", "ÙˆØ²Ù† (Ú©Ù„Ùˆ Ú¯Ø±Ø§Ù…)"),
-            ("Height (cm)", "Ù‚Ø¯ (Ø³ÛŒÙ†Ù¹ÛŒ Ù…ÛŒÙ¹Ø±)"),
-            ("Weight (lb)", "ÙˆØ²Ù† (Ù¾Ø§Ø¤Ù†Úˆ)"),
-            ("Height (ft)", "Ù‚Ø¯ (ÙÙ¹)"),
-            ("Height (in, 0 to 11.9)", "Ù‚Ø¯ (Ø§Ù†Ú†ØŒ 0 Ø³Û’ 11.9)"),
-            ("Calculate BMI", "BMI Ú©Ø§ Ø­Ø³Ø§Ø¨ Ú©Ø±ÛŒÚº"),
-            ("Units", "Ø§Ú©Ø§Ø¦ÛŒØ§Úº"),
+            ("Metric (kg and cm)", "میٹرک (کلو گرام اور سینٹی میٹر)"),
+            ("Imperial (lb and ft/in)", "امپیریل (پاؤنڈ اور فٹ/انچ)"),
+            ("Weight (kg)", "وزن (کلو گرام)"),
+            ("Height (cm)", "قد (سینٹی میٹر)"),
+            ("Weight (lb)", "وزن (پاؤنڈ)"),
+            ("Height (ft)", "قد (فٹ)"),
+            ("Height (in, 0 to 11.9)", "قد (انچ، 0 سے 11.9)"),
+            ("Calculate BMI", "BMI کا حساب کریں"),
+            ("Units", "اکائیاں"),
         ],
-        "how_heading": "ÙØ§Ø±Ù…ÙˆÙ„Ø§ Ø§ÙˆØ± Ø¯Ø±Ø¬Û Ø¨Ù†Ø¯ÛŒ",
-        "faq_heading": "Ø³ÙˆØ§Ù„Ø§Øª",
+        "how_heading": "فارمولا اور درجہ بندی",
+        "faq_heading": "سوالات",
         "how": [
-            "Ù…ÛŒÙ¹Ø±Ú© ÙØ§Ø±Ù…ÙˆÙ„Ø§: BMI = ÙˆØ²Ù† (Ú©Ù„Ùˆ Ú¯Ø±Ø§Ù…) Ã· Ù‚Ø¯ (Ù…ÛŒÙ¹Ø±)Â²Û”",
-            "Ø§Ù…Ù¾ÛŒØ±ÛŒÙ„ ÙØ§Ø±Ù…ÙˆÙ„Ø§: BMI = 703 Ã— ÙˆØ²Ù† (Ù¾Ø§Ø¤Ù†Úˆ) Ã· Ù‚Ø¯ (Ø§Ù†Ú†)Â²Û”",
-            "WHO Ú©Û’ Ù…Ø·Ø§Ø¨Ù‚ Ø¨Ø§Ù„ØºÙˆÚº Ú©Û’ Ù„ÛŒÛ’: 18.5 Ø³Û’ Ú©Ù… Ú©Ù… ÙˆØ²Ù†ØŒ 18.5 Ø³Û’ 24.9 Ù…Ø¹Ù…ÙˆÙ„ Ú©Ø§ ÙˆØ²Ù†ØŒ 25.0 Ø³Û’ 29.9 Ø²ÛŒØ§Ø¯Û ÙˆØ²Ù†ØŒ Ø§ÙˆØ± 30.0 ÛŒØ§ Ø²ÛŒØ§Ø¯Û Ù…ÙˆÙ¹Ø§Ù¾Û’ Ú©ÛŒ Ø­Ø¯Û”",
-            "Ù…Ø«Ø§Ù„: 70 Ú©Ù„Ùˆ Ú¯Ø±Ø§Ù… Ø§ÙˆØ± 175 Ø³ÛŒÙ†Ù¹ÛŒ Ù…ÛŒÙ¹Ø± Ù‚Ø¯ Ù¾Ø± BMI ØªÙ‚Ø±ÛŒØ¨Ø§Ù‹ 22.9 ÛÛ’ØŒ Ø¬Ùˆ Ù…Ø¹Ù…ÙˆÙ„ Ú©Û’ ÙˆØ²Ù† Ú©ÛŒ Ø­Ø¯ Ù…ÛŒÚº ÛÛ’Û”",
-            "Ø¨Ú†ÙˆÚº Ø§ÙˆØ± Ù†ÙˆØ¬ÙˆØ§Ù†ÙˆÚº Ú©Û’ Ù„ÛŒÛ’ Ø¹Ù…Ø± Ø§ÙˆØ± Ø¬Ù†Ø³ Ú©Û’ Ù…Ø·Ø§Ø¨Ù‚ percentile Ú†Ø§Ø±Ù¹ Ø§Ø³ØªØ¹Ù…Ø§Ù„ ÛÙˆØªÛ’ ÛÛŒÚºÛ” BMI Ø¬Ø³Ù…Ø§Ù†ÛŒ Ú†Ø±Ø¨ÛŒ Ú©ÛŒ Ø¨Ø±Ø§ÛÙ Ø±Ø§Ø³Øª Ù¾ÛŒÙ…Ø§Ø¦Ø´ Ù†ÛÛŒÚºÛ”",
+            "میٹرک فارمولا: BMI = وزن (کلو گرام) ÷ قد (میٹر)²۔",
+            "امپیریل فارمولا: BMI = 703 × وزن (پاؤنڈ) ÷ قد (انچ)²۔",
+            "WHO کے مطابق بالغوں کے لیے: 18.5 سے کم کم وزن، 18.5 سے 24.9 معمول کا وزن، 25.0 سے 29.9 زیادہ وزن، اور 30.0 یا زیادہ موٹاپے کی حد۔",
+            "مثال: 70 کلو گرام اور 175 سینٹی میٹر قد پر BMI تقریباً 22.9 ہے، جو معمول کے وزن کی حد میں ہے۔",
+            "بچوں اور نوجوانوں کے لیے عمر اور جنس کے مطابق percentile چارٹ استعمال ہوتے ہیں۔ BMI جسمانی چربی کی براہِ راست پیمائش نہیں۔",
         ],
         "faq": [
-            ("Ú©ÛŒØ§ ÛŒÛ Ø¨Ú†ÙˆÚº Ú©Û’ Ù„ÛŒÛ’ ÛÛ’ØŸ", "Ù†ÛÛŒÚºÛ” ÛŒÛ ØµÙØ­Û Ø¨Ø§Ù„ØºÙˆÚº Ú©Û’ Ù„ÛŒÛ’ ÛÛ’Û” Ø¨Ú†ÙˆÚº Ú©Û’ Ù„ÛŒÛ’ percentile Ú†Ø§Ø±Ù¹ Ø§Ø³ØªØ¹Ù…Ø§Ù„ Ú©Ø±ÛŒÚºÛ”"),
-            ("Ú©ÛŒØ§ BMI ØªØ´Ø®ÛŒØµ ÛÛ’ØŸ", "Ù†ÛÛŒÚºÛ” ÛŒÛ Ø§ÛŒÚ© Ø§Ø³Ú©Ø±ÛŒÙ†Ù†Ú¯ Ù¾ÛŒÙ…Ø§Ù†Û ÛÛ’Û” Ù†ØªÛŒØ¬Û Ú©Ø³ÛŒ ÚˆØ§Ú©Ù¹Ø± ÛŒØ§ Ù…Ø¹Ø§Ù„Ø¬ Ø³Û’ Ø¶Ø±ÙˆØ± ÚˆØ³Ú©Ø³ Ú©Ø±ÛŒÚºÛ”"),
+            ("کیا یہ بچوں کے لیے ہے؟", "نہیں۔ یہ صفحہ بالغوں کے لیے ہے۔ بچوں کے لیے percentile چارٹ استعمال کریں۔"),
+            ("کیا BMI تشخیص ہے؟", "نہیں۔ یہ ایک اسکریننگ پیمانہ ہے۔ نتیجہ کسی ڈاکٹر یا معالج سے ضرور ڈسکس کریں۔"),
         ],
     },
 }
@@ -584,7 +584,7 @@ EXTRA = {
     "standard-calculator": {
         "quick": "Multiplication and division run before addition and subtraction. The percent key divides the last number by 100.",
         "faq": [
-            ("Does this calculator handle parentheses?", "Not in this version. Calculate the inner part first, then enter the result."),
+            ("Does this calculator handle parentheses?", "Yes. Use the ( and ) buttons to group calculations. Multiplication and division run before addition and subtraction."),
         ],
     },
     "tasbih-counter": {
@@ -614,19 +614,19 @@ CALC_UI = (
     '<button class="' + SPECIAL + '" data-key="C">C</button>'
     '<button class="' + DIGIT + '" data-key="(" aria-label="Open parenthesis">(</button>'
     '<button class="' + DIGIT + '" data-key=")" aria-label="Close parenthesis">)</button>'
-    '<button class="' + SPECIAL + '" data-key="BS" aria-label="Delete last character">âŒ«</button>'
+    '<button class="' + SPECIAL + '" data-key="BS" aria-label="Delete last character">⌫</button>'
     '<button class="' + DIGIT + '" data-key="7">7</button>'
     '<button class="' + DIGIT + '" data-key="8">8</button>'
     '<button class="' + DIGIT + '" data-key="9">9</button>'
-    '<button class="' + OPS + '" data-key="/" aria-label="Divide">Ã·</button>'
+    '<button class="' + OPS + '" data-key="/" aria-label="Divide">÷</button>'
     '<button class="' + DIGIT + '" data-key="4">4</button>'
     '<button class="' + DIGIT + '" data-key="5">5</button>'
     '<button class="' + DIGIT + '" data-key="6">6</button>'
-    '<button class="' + OPS + '" data-key="*" aria-label="Multiply">Ã—</button>'
+    '<button class="' + OPS + '" data-key="*" aria-label="Multiply">×</button>'
     '<button class="' + DIGIT + '" data-key="1">1</button>'
     '<button class="' + DIGIT + '" data-key="2">2</button>'
     '<button class="' + DIGIT + '" data-key="3">3</button>'
-    '<button class="' + OPS + '" data-key="-" aria-label="Subtract">âˆ’</button>'
+    '<button class="' + OPS + '" data-key="-" aria-label="Subtract">−</button>'
     '<button class="' + DIGIT + '" data-key="00">00</button>'
     '<button class="' + DIGIT + '" data-key="0">0</button>'
     '<button class="' + DIGIT + '" data-key=".">.</button>'
@@ -648,7 +648,7 @@ def home_extra_html(lang):
     out = '<h2 class="' + H2 + '">' + block["heading"] + "</h2>"
     for p in block["paragraphs"]:
         out += '<p class="' + P + '">' + p + "</p>"
-    heading = "Ø³ÙˆØ§Ù„Ø§Øª" if lang == "ur" else "Questions"
+    heading = "سوالات" if lang == "ur" else "Questions"
     out += '<h2 class="' + H2 + '">' + heading + '</h2><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     return out
 
@@ -676,17 +676,20 @@ def reviewer_schema(slug):
 
 
 def write_ads_txt():
+    # Do not publish a fake publisher ID. Google AdSense supplies the real ID
+    # after account approval; until then, no ads.txt file should be generated.
     client = os.environ.get("ADSENSE_CLIENT", "").strip()
-    line = "google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0"
-    if client:
-        pub = client.replace("ca-pub-", "pub-")
-        if not pub.startswith("pub-") or not pub[4:].isdigit():
-            raise SystemExit("ADSENSE_CLIENT must look like ca-pub-1234567890123456")
-        line = "google.com, " + pub + ", DIRECT, f08c47fec0942fa0"
-    with open(os.path.join(OUT, "ads.txt"), "w", encoding="utf-8") as f:
-        f.write(line + "\n")
-    return bool(client)
-
+    ads_path = os.path.join(OUT, "ads.txt")
+    if not client:
+        if os.path.exists(ads_path):
+            os.remove(ads_path)
+        return False
+    pub = client.replace("ca-pub-", "pub-")
+    if not pub.startswith("pub-") or not pub[4:].isdigit():
+        raise SystemExit("ADSENSE_CLIENT must look like ca-pub-1234567890123456")
+    with open(ads_path, "w", encoding="utf-8") as f:
+        f.write("google.com, " + pub + ", DIRECT, f08c47fec0942fa0\\n")
+    return True
 
 def write_review_sheet():
     import csv
@@ -749,12 +752,12 @@ def nav_items(lang="en"):
 LANG_LOCALE = {"en": "en_US", "ur": "ur_PK", "ar": "ar_AR", "hi": "hi_IN", "es": "es_ES", "fr": "fr_FR"}
 RTL_LANGS = ("ur", "ar")
 SHELL_EN = {"menu": "All tools", "skip": "Skip to content", "about": "About", "privacy": "Privacy", "contact": "Contact",
-            "methodology": "Methodology", "editorial": "Editorial policy", "tag": "Â© CalculatesAll. Free tools that run in your browser.",
+            "methodology": "Methodology", "editorial": "Editorial policy", "tag": "© CalculatesAll. Free tools that run in your browser.",
             "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use"}
-SHELL_UR = {"menu": "ØªÙ…Ø§Ù… Ù¹ÙˆÙ„Ø²", "skip": "Ù…Ø±Ú©Ø²ÛŒ Ù…ÙˆØ§Ø¯ Ù¾Ø± Ø¬Ø§Ø¦ÛŒÚº", "about": "ÛÙ…Ø§Ø±Û’ Ø¨Ø§Ø±Û’ Ù…ÛŒÚº", "privacy": "Ø±Ø§Ø²Ø¯Ø§Ø±ÛŒ", "contact": "Ø±Ø§Ø¨Ø·Û",
-            "methodology": "Ø·Ø±ÛŒÙ‚Û Ú©Ø§Ø±", "editorial": "Ø§Ø¯Ø§Ø±ØªÛŒ Ù¾Ø§Ù„ÛŒØ³ÛŒ", "tag": "Â© CalculatesAllÛ” Ù…ÙØª Ù¹ÙˆÙ„Ø² Ø¬Ùˆ Ø¢Ù¾ Ú©Û’ Ø¨Ø±Ø§Ø¤Ø²Ø± Ù…ÛŒÚº Ú†Ù„ØªÛ’ ÛÛŒÚºÛ”",
-            "theme": "ÚˆØ§Ø±Ú© Ù…ÙˆÚˆ", "lang": "Ø²Ø¨Ø§Ù†ÛŒÚº", "terms": "Ø´Ø±Ø§Ø¦Ø· Ø§Ø³ØªØ¹Ù…Ø§Ù„"}
-THEME_LABEL = {"ar": "Ø§Ù„ÙˆØ¶Ø¹ Ø§Ù„Ø¯Ø§ÙƒÙ†", "hi": "à¤¡à¤¾à¤°à¥à¤• à¤®à¥‹à¤¡", "es": "Modo oscuro", "fr": "Mode sombre"}
+SHELL_UR = {"menu": "تمام ٹولز", "skip": "مرکزی مواد پر جائیں", "about": "ہمارے بارے میں", "privacy": "رازداری", "contact": "رابطہ",
+            "methodology": "طریقہ کار", "editorial": "ادارتی پالیسی", "tag": "© CalculatesAll۔ مفت ٹولز جو آپ کے براؤزر میں چلتے ہیں۔",
+            "theme": "ڈارک موڈ", "lang": "زبانیں", "terms": "شرائط استعمال"}
+THEME_LABEL = {"ar": "الوضع الداكن", "hi": "डार्क मोड", "es": "Modo oscuro", "fr": "Mode sombre"}
 
 
 def shell_strings(lang):
@@ -765,7 +768,7 @@ def shell_strings(lang):
     merged = dict(SHELL_EN)
     merged.update(UI[lang])
     merged["theme"] = THEME_LABEL[lang]
-    merged["lang"] = {"ar": "Ø§Ù„Ù„ØºØ§Øª", "hi": "à¤­à¤¾à¤·à¤¾à¤à¤", "es": "Idiomas", "fr": "Langues"}[lang]
+    merged["lang"] = {"ar": "اللغات", "hi": "भाषाएँ", "es": "Idiomas", "fr": "Langues"}[lang]
     return merged
 
 
@@ -787,7 +790,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     ld = ""
     for s in schema:
         ld += '<script type="application/ld+json">' + json.dumps(s, ensure_ascii=False) + "</script>\n"
-    og_image = SITE_URL + "/assets/og-image.png"
+    og_image = SITE_URL + "/assets/og-image.svg"
     dir_attr = ' dir="rtl"' if lang in RTL_LANGS else ' dir="ltr"'
     locale = LANG_LOCALE.get(lang, "en_US")
     theme_script = (
@@ -812,8 +815,6 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         '<meta property="og:description" content="' + desc + '">\n'
         '<meta property="og:url" content="' + url + '">\n'
         '<meta property="og:image" content="' + og_image + '">\n'
-        '<meta property="og:image:width" content="1200">\n'
-        '<meta property="og:image:height" content="630">\n'
         '<meta name="twitter:card" content="summary_large_image">\n'
         '<meta name="twitter:title" content="' + title + '">\n'
         '<meta name="twitter:description" content="' + desc + '">\n'
@@ -935,10 +936,8 @@ def faq_html(items):
 
 
 def canon_override(doc, path):
-    if path == "/standard-calculator/":
-        return doc.replace('<link rel="canonical" href="' + SITE_URL + path + '">', '<link rel="canonical" href="' + SITE_URL + '/">')
-    if path == "/ur/standard-calculator/":
-        return doc.replace('<link rel="canonical" href="' + SITE_URL + path + '">', '<link rel="canonical" href="' + SITE_URL + '/ur/">')
+    # Each calculator page contains its own explanatory content and should
+    # self-canonicalize. Do not point the standard calculator at the home page.
     return doc
 
 
@@ -1011,10 +1010,10 @@ def urdu_tool_page(t):
     body = (
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
-        '<section class="mt-8" aria-label="Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±">' + ui + '</section>'
+        '<section class="mt-8" aria-label="کیلکولیٹر">' + ui + '</section>'
         '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
-        + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">Ø§Ù†Ú¯Ø±ÛŒØ²ÛŒ ÙˆØ±Ú˜Ù†</a></p>'
+        + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">انگریزی ورژن</a></p>'
     )
     alternates = [("en", "/" + t["slug"] + "/"), ("ur", path), ("x-default", "/" + t["slug"] + "/")]
     write(path, canon_override(head(u["title"], u["description"], path, schema, lang="ur", alternates=alternates) + shell(body, lang="ur"), path))
@@ -1053,10 +1052,10 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
 def home_page(lang="en"):
     if lang == "ur":
         path = "/ur/"
-        title = "CalculatesAll | Ù…ÙØª Ø¢Ù† Ù„Ø§Ø¦Ù† Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±Ø² Ø§ÙˆØ± Ù¹ÙˆÙ„Ø²"
-        desc = "Ø²Ú©ÙˆÙ°ÛƒØŒ BMIØŒ Ù…Ù†Ø§ÙØ¹ Ùˆ Ù†Ù‚ØµØ§Ù†ØŒ Ø¹Ù…Ø±ØŒ ÚˆØ³Ú©Ø§Ø¤Ù†Ù¹ØŒ ÛŒÙˆÙ†Ù¹ Ú©Ù†ÙˆØ±Ú˜Ù†ØŒ Ù…Ø¹ÛŒØ§Ø±ÛŒ Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±ØŒ ØªØ³Ø¨ÛŒØ­ Ú©Ø§Ø¤Ù†Ù¹Ø± Ø§ÙˆØ± Ø§Ø³Ù¹Ø§Ù¾ ÙˆØ§Ú† Ú©Û’ Ù…ÙØª Ù¹ÙˆÙ„Ø²Û”"
-        h1 = "Ù…ÙØª Ø¢Ù† Ù„Ø§Ø¦Ù† Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±Ø² Ø§ÙˆØ± ÛŒÙˆÙ¹ÛŒÙ„ÛŒÙ¹ÛŒ Ù¹ÙˆÙ„Ø²"
-        lead = "CalculatesAll Ù…ÛŒÚº Ù¾ÛŒØ³ÙˆÚºØŒ ØµØ­ØªØŒ ØªØ§Ø±ÛŒØ®ÙˆÚºØŒ Ø§Ú©Ø§Ø¦ÛŒÙˆÚº Ø§ÙˆØ± Ø±ÙˆØ²Ù…Ø±Û Ø§Ø³ØªØ¹Ù…Ø§Ù„ Ú©Û’ Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±Ø² ÛÛŒÚºÛ” ÛØ± Ù¹ÙˆÙ„ Ø¢Ù¾ Ú©Û’ Ø¨Ø±Ø§Ø¤Ø²Ø± Ù…ÛŒÚº Ú†Ù„ØªØ§ ÛÛ’ Ø§ÙˆØ± Ø¢Ù¾ Ú©ÛŒ Ø¯Ø±Ø¬ Ú©Ø±Ø¯Û Ù…Ø¹Ù„ÙˆÙ…Ø§Øª ÛÙ…Ø§Ø±Û’ Ø³Ø±ÙˆØ± Ù¾Ø± Ù†ÛÛŒÚº Ø¨Ú¾ÛŒØ¬ÛŒ Ø¬Ø§ØªÛŒÚºÛ”"
+        title = "CalculatesAll | مفت آن لائن کیلکولیٹرز اور ٹولز"
+        desc = "زکوٰۃ، BMI، منافع و نقصان، عمر، ڈسکاؤنٹ، یونٹ کنورژن، معیاری کیلکولیٹر، تسبیح کاؤنٹر اور اسٹاپ واچ کے مفت ٹولز۔"
+        h1 = "مفت آن لائن کیلکولیٹرز اور یوٹیلیٹی ٹولز"
+        lead = "CalculatesAll میں پیسوں، صحت، تاریخوں، اکائیوں اور روزمرہ استعمال کے کیلکولیٹرز ہیں۔ ہر ٹول آپ کے براؤزر میں چلتا ہے اور آپ کی درج کردہ معلومات ہمارے سرور پر نہیں بھیجی جاتیں۔"
         cards = ""
         for t in TOOLS:
             if t["slug"] in URDU:
@@ -1091,7 +1090,7 @@ def home_page(lang="en"):
 
 STEPS = {
     "en": [("Step 1", "Type your numbers on the calculator."), ("Step 2", "Tap = to see the answer."), ("Step 3", "Tap any coloured button to open another tool.")],
-    "ur": [("Ù¾ÛÙ„Ø§ Ù‚Ø¯Ù…", "Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø± Ù¾Ø± Ø§Ù¾Ù†Û’ Ù†Ù…Ø¨Ø± Ù„Ú©Ú¾ÛŒÚºÛ”"), ("Ø¯ÙˆØ³Ø±Ø§ Ù‚Ø¯Ù…", "Ø¬ÙˆØ§Ø¨ Ø¯ÛŒÚ©Ú¾Ù†Û’ Ú©Û’ Ù„ÛŒÛ’ = Ø¯Ø¨Ø§Ø¦ÛŒÚºÛ”"), ("ØªÛŒØ³Ø±Ø§ Ù‚Ø¯Ù…", "Ú©Ø³ÛŒ Ø¯ÙˆØ³Ø±Û’ Ù¹ÙˆÙ„ Ú©Û’ Ù„ÛŒÛ’ Ú©ÙˆØ¦ÛŒ Ø±Ù†Ú¯ÛŒÙ† Ø¨Ù¹Ù† Ø¯Ø¨Ø§Ø¦ÛŒÚºÛ”")],
+    "ur": [("پہلا قدم", "کیلکولیٹر پر اپنے نمبر لکھیں۔"), ("دوسرا قدم", "جواب دیکھنے کے لیے = دبائیں۔"), ("تیسرا قدم", "کسی دوسرے ٹول کے لیے کوئی رنگین بٹن دبائیں۔")],
 }
 
 TILE_GRAD = {
@@ -1139,11 +1138,11 @@ def home_app_page(lang):
     urdu = lang == "ur"
     path = "/ur/" if urdu else "/"
     if urdu:
-        title = "Ù…Ø¹ÛŒØ§Ø±ÛŒ Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø± | CalculatesAll"
-        desc = "Ù…ÙØª Ø¢Ù† Ù„Ø§Ø¦Ù† Ù…Ø¹ÛŒØ§Ø±ÛŒ Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±Û” Ø±Ù†Ú¯ÛŒÙ† Ø¨Ù¹Ù†ÙˆÚº Ø³Û’ Ø²Ú©ÙˆÙ°ÛƒØŒ BMIØŒ Ù…Ù†Ø§ÙØ¹ØŒ Ø¹Ù…Ø±ØŒ ÚˆØ³Ú©Ø§Ø¤Ù†Ù¹ Ø§ÙˆØ± ÛŒÙˆÙ†Ù¹ Ú©Ù†ÙˆØ±Ù¹Ø± Ú©Ú¾ÙˆÙ„ÛŒÚºÛ”"
-        h1 = "Ù…Ø¹ÛŒØ§Ø±ÛŒ Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø±"
-        lead = "ÛŒÛ Ø§ÛŒÚ© Ø³Ø§Ø¯Û Ú©ÛŒÙ„Ú©ÙˆÙ„ÛŒÙ¹Ø± ÛÛ’Û” Ø¯ÙˆØ³Ø±Ø§ Ù¹ÙˆÙ„ Ú©Ú¾ÙˆÙ„Ù†Û’ Ú©Û’ Ù„ÛŒÛ’ Ù†ÛŒÚ†Û’ Ú©Ø§ Ú©ÙˆØ¦ÛŒ Ø±Ù†Ú¯ÛŒÙ† Ø¨Ù¹Ù† Ø¯Ø¨Ø§Ø¦ÛŒÚºÛ”"
-        more_h = "Ø¯ÙˆØ³Ø±Û’ Ù¹ÙˆÙ„Ø²"
+        title = "معیاری کیلکولیٹر | CalculatesAll"
+        desc = "مفت آن لائن معیاری کیلکولیٹر۔ رنگین بٹنوں سے زکوٰۃ، BMI، منافع، عمر، ڈسکاؤنٹ اور یونٹ کنورٹر کھولیں۔"
+        h1 = "معیاری کیلکولیٹر"
+        lead = "یہ ایک سادہ کیلکولیٹر ہے۔ دوسرا ٹول کھولنے کے لیے نیچے کا کوئی رنگین بٹن دبائیں۔"
+        more_h = "دوسرے ٹولز"
     else:
         title = "Standard Calculator | Free Online Calculators | CalculatesAll"
         desc = "Free online standard calculator. Open Zakat, BMI, profit and loss, age, discount, unit converter and more with one tap."
@@ -1231,24 +1230,22 @@ def og_and_favicon():
                '<text x="32" y="42" font-size="30" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-weight="bold">CA</text></svg>')
     with open(os.path.join(assets, "favicon.svg"), "w", encoding="utf-8") as f:
         f.write(favicon)
-    try:
-        from PIL import Image, ImageDraw, ImageFont
-    except ImportError:
-        print("Pillow not installed. og-image.png was not generated.")
-        return
-    img = Image.new("RGB", (1200, 630), (12, 74, 110))
-    draw = ImageDraw.Draw(img)
-    try:
-        big = ImageFont.truetype("DejaVuSans-Bold.ttf", 84)
-        small = ImageFont.truetype("DejaVuSans.ttf", 40)
-    except OSError:
-        big = ImageFont.load_default(size=84)
-        small = ImageFont.load_default(size=40)
-    draw.text((80, 210), "CalculatesAll", font=big, fill=(255, 255, 255))
-    draw.text((80, 330), "Free calculators for money, health, dates and units", font=small, fill=(224, 242, 254))
-    draw.text((80, 400), "Zakat | BMI | Profit and Loss | Age | Discount | Converter", font=small, fill=(186, 230, 253))
-    img.save(os.path.join(assets, "og-image.png"), "PNG", optimize=True)
-
+    # Always generate a social preview without optional native dependencies.
+    # SVG includes its intrinsic 1200x630 dimensions and avoids a dead og:image URL.
+    og = """<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0c4a6e"/><stop offset="0.55" stop-color="#312e81"/><stop offset="1" stop-color="#065f46"/></linearGradient><linearGradient id="line" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#e879f9"/><stop offset="0.5" stop-color="#38bdf8"/><stop offset="1" stop-color="#34d399"/></linearGradient></defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<circle cx="1040" cy="100" r="210" fill="#38bdf8" opacity=".10"/><circle cx="1080" cy="560" r="250" fill="#34d399" opacity=".12"/>
+<rect x="70" y="70" width="1060" height="490" rx="34" fill="#ffffff" opacity=".06" stroke="#ffffff" stroke-opacity=".18"/>
+<rect x="105" y="110" width="12" height="390" rx="6" fill="url(#line)"/>
+<text x="155" y="245" font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="700" fill="#ffffff">CalculatesAll</text>
+<text x="158" y="315" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#e0f2fe">Free online calculators for everyday decisions</text>
+<text x="158" y="390" font-family="Arial, Helvetica, sans-serif" font-size="27" fill="#d1fae5">Zakat  ·  BMI  ·  Profit &amp; Loss  ·  Age  ·  Discount</text>
+<text x="158" y="445" font-family="Arial, Helvetica, sans-serif" font-size="27" fill="#d1fae5">Unit Converter  ·  Standard Calculator  ·  More</text>
+<text x="158" y="510" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#bae6fd">Fast • Free • Browser-based</text>
+</svg>"""
+    with open(os.path.join(assets, "og-image.svg"), "w", encoding="utf-8") as f:
+        f.write(og)
 
 def main():
     if os.path.exists(OUT):
@@ -1305,12 +1302,11 @@ def main():
         entries.append((path, []))
     not_found()
     og_and_favicon()
-    entries = [e for e in entries if 'standard-calculator' not in e[0]]
     sitemap(entries)
     robots()
     shutil.copytree(STATIC, os.path.join(OUT, "assets"), dirs_exist_ok=True)
     configured = write_ads_txt()
-    print("ads.txt " + ("set from ADSENSE_CLIENT" if configured else "still placeholder (set ADSENSE_CLIENT)"))
+    print("ads.txt " + ("configured from ADSENSE_CLIENT" if configured else "not generated until a real ADSENSE_CLIENT is configured"))
     print("translation review rows: " + str(write_review_sheet()))
     verify_csp_hashes()
     print("Built " + str(len(entries)) + " indexable URLs into " + OUT + "/")

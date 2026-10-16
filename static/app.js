@@ -347,7 +347,7 @@
 
   /* Standard calculator: recursive descent parser with parentheses. No eval, no Function constructor. */
   function evaluate (expr) {
-    var tokens = expr.match(/\d+\.?\d*|[+\-*\/()]/g)
+    var tokens = expr.match(/(?:\d+(?:\.\d*)?|\.\d+)|[+\-*\/()]/g)
     if (!tokens) throw new Error("incomplete")
     var pos = 0
 

@@ -2,7 +2,7 @@ name: Build and smoke test
 
 on:
   push:
-    branches: ["main", "fix/language-label-audit"]
+    branches: ["main", "fix/language-label-audit", "fix/encoding-ads-seo-audit"]
   pull_request:
     branches: ["main"]
 
@@ -25,6 +25,8 @@ jobs:
         run: npm ci
       - name: Check JavaScript syntax
         run: node --check static/app.js
+      - name: Test calculator behavior
+        run: node tests/calculator-smoke.cjs
       - name: Check Python syntax
         run: python -m py_compile build.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
       - name: Build the site
@@ -38,3 +40,10 @@ jobs:
           grep -q 'Standard Calculator' public/index.html
           grep -q 'Free' public/index.html
           grep -q 'محفوظ' public/ur/index.html
+          test -s public/assets/og-image.svg
+          grep -q '/assets/og-image.svg' public/index.html
+          grep -q '/standard-calculator/' public/sitemap.xml
+          grep -q 'href="https://calculateallinone.vercel.app/standard-calculator/"' public/standard-calculator/index.html
+          test ! -e public/ads.txt
+          if grep -Eq 'Ø|Ù|Ã|âŒ|âˆ|Â©' public/ur/index.html; then echo 'Mojibake found in Urdu home page'; exit 1; fi
+          if grep -Eq 'âŒ«|Ã·|Ã—|âˆ’' public/index.html; then echo 'Corrupted calculator symbols found'; exit 1; fi
