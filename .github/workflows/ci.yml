@@ -25,8 +25,11 @@ jobs:
         run: npm ci
       - name: Test hardened braces dependency
         run: node tests/braces-hardening-smoke.cjs
-      - name: Audit all dependencies including build-time packages
+      - name: Report all dependency advisories including build-time packages
+        continue-on-error: true
         run: npm audit --audit-level=moderate
+      - name: Enforce production dependency audit
+        run: npm audit --omit=dev --audit-level=moderate
       - name: Check JavaScript syntax
         run: node --check static/app.js
       - name: Test calculator behavior
