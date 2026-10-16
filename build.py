@@ -1513,6 +1513,11 @@ def main():
     sitemap(entries)
     robots()
     shutil.copytree(STATIC, os.path.join(OUT, "assets"), dirs_exist_ok=True)
+    # Preserve the Google Search Console HTML ownership token in Vercel output.
+    # The repo root is not deployed because Vercel publishes only the public/ directory.
+    google_verification = "google2e764d068684499b.html"
+    if os.path.isfile(google_verification):
+        shutil.copy2(google_verification, os.path.join(OUT, google_verification))
     configured = write_ads_txt()
     print("ads.txt " + ("configured from ADSENSE_CLIENT" if configured else "not generated until a real ADSENSE_CLIENT is configured"))
     print("translation review rows: " + str(write_review_sheet()))
