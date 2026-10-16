@@ -8,6 +8,7 @@ import build
 original_out = build.OUT
 original_client = build.ADSENSE_CLIENT
 original_slot = build.ADSENSE_SLOT
+original_consent_ready = build.ADSENSE_CONSENT_READY
 old_env_client = os.environ.get("ADSENSE_CLIENT")
 try:
     with tempfile.TemporaryDirectory() as temp:
@@ -22,6 +23,7 @@ try:
 
         build.ADSENSE_CLIENT = "ca-pub-1234567890123456"
         build.ADSENSE_SLOT = "1234567890"
+        build.ADSENSE_CONSENT_READY = True
         slot = build.ad_slot()
         assert 'data-ad-client="ca-pub-1234567890123456"' in slot
         assert 'data-ad-slot="1234567890"' in slot
@@ -30,6 +32,13 @@ try:
 
         build.ADSENSE_SLOT = ""
         assert build.ad_slot() == "", "Ads must stay disabled when no real ad-unit slot is configured"
+
+        # Even with valid IDs, ad code stays disabled until account-side consent setup is confirmed.
+        build.ADSENSE_SLOT = "1234567890"
+        build.ADSENSE_CONSENT_READY = False
+        assert build.ad_slot() == "", "Ad slots must stay disabled until consent readiness is confirmed"
+        page_head_without_consent = build.head("Test", "Description", "/", [], lang="en")
+        assert "adsbygoogle.js?client=" not in page_head_without_consent, "Ad script must stay disabled until consent readiness is confirmed"
 
         # Reject malformed, shortened, overlong, or incorrectly prefixed publisher IDs.
         for invalid_client in ("ca-pub-123", "ca-pub-" + "1" * 17, "pub-" + "1" * 16):
@@ -50,6 +59,7 @@ finally:
     build.OUT = original_out
     build.ADSENSE_CLIENT = original_client
     build.ADSENSE_SLOT = original_slot
+    build.ADSENSE_CONSENT_READY = original_consent_ready
     if old_env_client is None:
         os.environ.pop("ADSENSE_CLIENT", None)
     else:
