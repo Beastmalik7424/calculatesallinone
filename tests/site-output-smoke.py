@@ -2,7 +2,7 @@ import json
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
@@ -13,6 +13,9 @@ titles = {}
 descriptions = {}
 assert urls, "Sitemap has no URLs"
 assert len(urls) == len(set(urls)), "Duplicate URLs found in sitemap"
+assert all(node.find("sm:lastmod", ns) is None for node in xml.findall("sm:url", ns)), (
+    "Do not emit a shared hard-coded lastmod date; only add lastmod when it accurately reflects each URL's content update."
+)
 
 def output_for_url(url):
     parsed = urlparse(url)
@@ -70,6 +73,23 @@ for page in ROOT.rglob("index.html"):
             elif path != "/" and not path.endswith("/"):
                 broken.append((str(page), href + " (page URL missing trailing slash)"))
 assert not broken, "Broken or non-canonical internal hrefs found: " + repr(broken[:20])
+
+# Every indexable sitemap URL should have at least one crawlable incoming HTML anchor.
+# Self-canonical tags do not count as discovery links.
+incoming = {url: set() for url in sitemap_urls}
+for page in ROOT.rglob("index.html"):
+    rel = page.parent.relative_to(ROOT).as_posix()
+    source_url = SITE + "/" + (rel + "/" if rel != "." else "")
+    html = page.read_text(encoding="utf-8")
+    for anchor in re.findall(r"<a\\b[^>]*\\bhref=[\"']([^\"']+)[\"']", html, flags=re.I):
+        target = urljoin(source_url, anchor)
+        if target in incoming and target != source_url:
+            incoming[target].add(source_url)
+orphans = sorted(url for url, sources in incoming.items() if not sources)
+assert not orphans, "Sitemap URLs without an incoming crawlable internal link: " + repr(orphans)
+
+contact_html = (ROOT / "contact" / "index.html").read_text(encoding="utf-8")
+assert 'href="mailto:' in contact_html, "Contact email must be a clickable mailto link"
 
 # Verify local image/script asset references resolve in the generated output.
 for page in ROOT.rglob("index.html"):
