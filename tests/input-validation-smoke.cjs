@@ -34,7 +34,8 @@ const document = {
   documentElement: { lang: "en", classList: { contains: () => false } },
   addEventListener(type, fn) { if (type === "DOMContentLoaded") handlers.ready = fn; },
   getElementById(id) { return elements[id] || null; },
-  querySelectorAll() { return []; }
+  querySelectorAll() { return []; },
+  createElement(tag) { return { tag, value: "", textContent: "" }; }
 };
 const context = {
   document, window: {}, console, isFinite, Number, String, Math, Date,
