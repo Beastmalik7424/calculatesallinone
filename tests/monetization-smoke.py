@@ -31,6 +31,18 @@ try:
         build.ADSENSE_SLOT = ""
         assert build.ad_slot() == "", "Ads must stay disabled when no real ad-unit slot is configured"
 
+        # Reject malformed, shortened, overlong, or incorrectly prefixed publisher IDs.
+        for invalid_client in ("ca-pub-123", "ca-pub-" + "1" * 17, "pub-" + "1" * 16):
+            ads_file.unlink(missing_ok=True)
+            os.environ["ADSENSE_CLIENT"] = invalid_client
+            try:
+                build.write_ads_txt()
+            except SystemExit:
+                pass
+            else:
+                raise AssertionError("Malformed AdSense publisher ID was accepted: " + invalid_client)
+            assert not ads_file.exists(), "Invalid publisher ID must never create ads.txt"
+
         os.environ.pop("ADSENSE_CLIENT", None)
         assert build.write_ads_txt() is False
         assert not ads_file.exists(), "ads.txt should not be published without a real publisher ID"
