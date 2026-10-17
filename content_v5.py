@@ -1,7 +1,6 @@
 """Editorial content for CalculatesAll. Edit text here, then run npm run build."""
 
 REVIEW_STATUS = {
-    "zakat-calculator": "Method stated on this page. Subject expert review by a qualified scholar is pending.",
     "bmi-calculator": "Formula and WHO categories checked against the stated method. Clinical review is pending.",
     "profit-loss-calculator": "Formulas checked against the stated method.",
     "discount-calculator": "Formulas checked against the stated method.",
