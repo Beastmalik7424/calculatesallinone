@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build:css": "tailwindcss -c tailwind.config.js -i styles/input.css -o static/site.css --minify",
-    "build": "npm run build:css && python3 build.py"
+    "build": "npm run build:css && python3 build.py && python3 tests/site-output-smoke.py"
   },
   "devDependencies": {
     "tailwindcss": "3.4.19"
