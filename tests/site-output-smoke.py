@@ -222,8 +222,51 @@ assert "background-color:#0f172a!important" in site_css, "Equals button backgrou
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
 assert "/assets/site.css?v=20261017-mobile-contrast-fix" in homepage_html, "Stylesheet cache-buster must change with the contrast fix"
 
-# Keep the browser-side calculator implementation free from dynamic code execution.
+# Every dynamic calculator message, unit label, category label, and theme label
+# must be translated for all supported languages, not silently fall back to English.
+# This checks source coverage at build time; browser tests separately verify rendered output.
 app_js = (ROOT / "assets" / "app.js").read_text(encoding="utf-8")
+required_message_keys = (
+    "zakatNoPrice", "zakatInput", "zakatBelow", "zakatHawl", "zakatDue",
+    "bmiInput", "bmiInputImp", "bmiResult", "bmiUnder", "bmiNormal",
+    "bmiOver", "bmiObese", "profitEnter", "profitWord", "lossWord",
+    "profitNA", "profitPct", "ageEnter", "ageFuture", "ageCheck",
+    "ageResult", "discInput", "discResult", "convEnter",
+    "convAbsoluteZero", "convKelvin", "convNeg", "convResult",
+    "calcError", "calcDiv", "calcSqrtNegative", "calcNeedValue",
+    "tasbihNone", "tasbihReached", "tasbihLeft", "themeDark", "themeLight",
+    "numeric", "units", "cats"
+)
+locale_order = ("en", "ur", "ar", "hi", "es", "fr")
+locale_blocks = {}
+for index, locale in enumerate(locale_order):
+    start = app_js.find("    " + locale + ": {")
+    assert start >= 0, f"Missing calculator message dictionary for locale {locale}"
+    end = min(
+        (position for next_locale in locale_order[index + 1:]
+         if (position := app_js.find("    " + next_locale + ": {", start + 1)) >= 0),
+        default=app_js.find("\n  }\n\n  var UNITS", start)
+    )
+    assert end > start, f"Could not isolate calculator message dictionary for locale {locale}"
+    locale_blocks[locale] = app_js[start:end]
+    for key in required_message_keys:
+        assert re.search(r"\b" + re.escape(key) + r"\s*:", locale_blocks[locale]), (
+            f"Locale {locale} is missing calculator message key: {key}"
+        )
+    for key in ("kg", "g", "lb", "oz", "m", "cm", "km", "ft", "in", "mi", "C", "F", "K"):
+        assert re.search(r"\b" + re.escape(key) + r"\s*:", locale_blocks[locale]), (
+            f"Locale {locale} is missing unit label: {key}"
+        )
+    for key in ("weight", "length", "temp"):
+        assert re.search(r"\b" + key + r"\s*:", locale_blocks[locale]), (
+            f"Locale {locale} is missing converter category label: {key}"
+        )
+assert 'var code = (document.documentElement.lang || "en").toLowerCase().split("-")[0]' in app_js, (
+    "Calculator message selection must support language tags such as es-ES and fr-FR."
+)
+assert "Object.prototype.hasOwnProperty.call(MSG, code) ? code : \"en\"" in app_js, (
+    "Unknown languages must safely fall back to English."
+)
 assert "eval(" not in app_js and "new Function" not in app_js, "Dynamic code execution found in app.js"
 
 print(f"PASS: {len(urls)} unique sitemap URLs, indexability, canonical URLs, internal links, valid JSON-LD, language metadata, and translated breadcrumbs.")
