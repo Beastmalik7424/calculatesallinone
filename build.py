@@ -1283,8 +1283,10 @@ def sitemap(entries):
         links = ""
         for code, href in alts:
             links += '    <xhtml:link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '"/>\n'
-        # Omit lastmod unless it accurately reflects this URL's content update.
-        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + links + "  </url>\n")
+        lastmod = ""
+        if path in LASTMOD:
+            lastmod = "    <lastmod>" + LASTMOD[path] + "</lastmod>\n"
+        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + lastmod + links + "  </url>\n")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
            + items + "</urlset>\n")
