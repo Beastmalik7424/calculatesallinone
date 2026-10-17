@@ -155,6 +155,9 @@ assert verification_file.read_text(encoding="utf-8").strip() == "google-site-ver
 for english_text in ("CALCULATE WITH CONFIDENCE", "ONE PLACE, MANY ANSWERS", "Marketplace guide", "Affiliate disclosure", 'aria-label="Open parenthesis"', 'aria-label="Divide"', 'aria-label="Square root"'):
     assert english_text not in ur_home_html, "English UI text remains on Urdu homepage: " + english_text
 
+# Load the Urdu calculator output before checking its shared navigation and footer.
+urdu_standard_html = (ROOT / "ur" / "standard-calculator" / "index.html").read_text(encoding="utf-8")
+
 # Urdu calculator breadcrumbs and shared navigation/footer must use Urdu labels.
 for english_text in ("Math and Converters", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
     assert english_text not in urdu_standard_html, "English shared UI text remains on Urdu calculator: " + english_text
@@ -166,7 +169,6 @@ assert "Subject expert review by a qualified scholar is pending." not in zakat_h
 )
 
 # Urdu calculator UI controls must not retain English accessible labels.
-urdu_standard_html = (ROOT / "ur" / "standard-calculator" / "index.html").read_text(encoding="utf-8")
 for english_label in ("Open parenthesis", "Close parenthesis", "Delete last character", "Divide", "Multiply", "Subtract", "Add", "Square root"):
     assert 'aria-label="' + english_label + '"' not in urdu_standard_html, (
         "English calculator accessibility label remains on Urdu page: " + english_label
