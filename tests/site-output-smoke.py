@@ -155,7 +155,7 @@ assert "deliberately does not create an ads.txt file" in marketplace_html, "Mark
 ads_path = ROOT / "ads.txt"
 ads_client = os.environ.get("ADSENSE_CLIENT", "").strip()
 if ads_client:
-    assert re.fullmatch(r"ca-pub-\\d{16}", ads_client), "ADSENSE_CLIENT must be a real-format AdSense publisher ID"
+    assert re.fullmatch(r"ca-pub-\d{16}", ads_client), "ADSENSE_CLIENT must be a real-format AdSense publisher ID"
     expected_ads_line = "google.com, " + ads_client.removeprefix("ca-") + ", DIRECT, f08c47fec0942fa0"
     assert ads_path.is_file(), "Configured AdSense publisher ID requires a generated ads.txt"
     assert ads_path.read_text(encoding="utf-8").strip() == expected_ads_line, "ads.txt must match the configured publisher ID exactly"
