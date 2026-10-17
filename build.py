@@ -770,10 +770,10 @@ LANG_LOCALE = {"en": "en_US", "ur": "ur_PK", "ar": "ar_AR", "hi": "hi_IN", "es":
 RTL_LANGS = ("ur", "ar")
 SHELL_EN = {"menu": "All tools", "skip": "Skip to content", "about": "About", "privacy": "Privacy", "contact": "Contact",
             "methodology": "Methodology", "editorial": "Editorial policy", "tag": "© CalculatesAll. Free tools that run in your browser.",
-            "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use"}
+            "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Affiliate disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE"
 SHELL_UR = {"menu": "تمام ٹولز", "skip": "مرکزی مواد پر جائیں", "about": "ہمارے بارے میں", "privacy": "رازداری", "contact": "رابطہ",
             "methodology": "طریقہ کار", "editorial": "ادارتی پالیسی", "tag": "© CalculatesAll۔ مفت ٹولز جو آپ کے براؤزر میں چلتے ہیں۔",
-            "theme": "ڈارک موڈ", "lang": "زبانیں", "terms": "شرائط استعمال"}
+            "theme": "ڈارک موڈ", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت"
 THEME_LABEL = {"ar": "الوضع الداكن", "hi": "डार्क मोड", "es": "Modo oscuro", "fr": "Mode sombre"}
 
 
@@ -895,7 +895,7 @@ def shell(main_html, lang="en", current_path=None):
         '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
-        '<nav class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4" aria-label="Main">'
+        '<nav class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4" aria-label="' + s["main"] + '">'
         '<a href="' + home + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll</a>'
         '<div class="flex items-center gap-3">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
@@ -908,15 +908,15 @@ def shell(main_html, lang="en", current_path=None):
         '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'
         '<div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">'
         '<p>' + s["tag"] + '</p>'
-        '<nav class="flex flex-wrap gap-5" aria-label="Footer">'
+        '<nav class="flex flex-wrap gap-5" aria-label="' + s["footer"] + '">'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/about">' + s["about"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/privacy">' + s["privacy"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/contact">' + s["contact"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/methodology">' + s["methodology"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/editorial-policy">' + s["editorial"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/terms">' + s["terms"] + '</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/marketplaces/">Marketplace guide</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">Affiliate disclosure</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/marketplaces/">' + s["marketplace"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">' + s["affiliate"] + '</a>'
         '</nav></div>'
         + lang_links(lang, s, current_path) +
         '</div></footer>\n'
@@ -1001,7 +1001,7 @@ def tool_page(t):
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}},
         {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
-            {"@type": "ListItem", "position": 2, "name": cat["name"], "item": SITE_URL + "/" + cat["slug"] + "/"},
+            {"@type": "ListItem", "position": 2, "name": cat_ur, "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": t["name"], "item": url}]},
     ]
     related = ""
@@ -1045,6 +1045,7 @@ def urdu_tool_page(t):
         ui = ui.replace(">" + en + "<", ">" + ur + "<")
         ui = ui.replace('"' + en + '"', '"' + ur + '"')
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
+    cat_ur = {"money": "پیسہ اور کاروبار", "health": "صحت", "time": "تاریخ اور وقت", "math": "ریاضی اور اکائیاں", "worship": "عبادت اور روزمرہ"}[cat["slug"]]
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": u["name"], "url": url,
          "description": u["description"], "inLanguage": "ur", "applicationCategory": t["app"],
@@ -1062,7 +1063,7 @@ def urdu_tool_page(t):
     body = (
         '<nav aria-label="صفحہ کی ترتیب" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/ur/">صفحہ اول</a></li><li aria-hidden="true">/</li>'
-        '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li><li aria-hidden="true">/</li>'
+        '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat_ur + '</a></li><li aria-hidden="true">/</li>'
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
@@ -1230,7 +1231,11 @@ def home_app_page(lang):
     calc_title = "Quick calculator" if not urdu else "فوری کیلکولیٹر"
     tool_intro = "Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
     free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
-    hero = ('<section aria-label="Calculator" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span><span class="ca-home-live-dot" aria-hidden="true"></span></div>' + CALC_UI + "</section>")
+    hero_ui = CALC_UI
+    if urdu:
+        for en, ur in URDU["standard-calculator"]["labels"]:
+            hero_ui = hero_ui.replace('aria-label="' + en + '"', 'aria-label="' + ur + '"')
+    hero = ('<section aria-label="' + ("کیلکولیٹر" if urdu else "Calculator") + '" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span><span class="ca-home-live-dot" aria-hidden="true"></span></div>' + hero_ui + "</section>")
     body = (
         '<div class="ca-home-wrap">'
         '<div class="ca-home-header">'
@@ -1241,7 +1246,7 @@ def home_app_page(lang):
         '<div class="ca-home-layout">'
         '<aside class="ca-home-side ca-home-side-left">'
         '<span class="ca-home-side-icon" aria-hidden="true">✦</span>'
-        '<p class="ca-home-side-eyebrow">CALCULATE WITH CONFIDENCE</p>'
+        '<p class="ca-home-side-eyebrow">' + s["confidence"] + '</p>'
         '<h2>' + side_title + '</h2>'
         '<p class="ca-home-side-copy">' + side_desc + '</p>'
         '<ul class="ca-home-benefits">'
@@ -1250,7 +1255,7 @@ def home_app_page(lang):
         '</aside>'
         + hero
         + '<aside class="ca-home-tools">'
-        + '<div class="ca-home-tools-heading"><div><p class="ca-home-side-eyebrow">ONE PLACE, MANY ANSWERS</p><h2>' + more_h + '</h2></div><span class="ca-home-free">FREE</span></div>'
+        + '<div class="ca-home-tools-heading"><div><p class="ca-home-side-eyebrow">' + s["many"] + '</p><h2>' + more_h + '</h2></div><span class="ca-home-free">' + s["free"] + '</span></div>'
         + '<p class="ca-home-tools-copy">' + tool_intro + '</p>'
         + '<ul class="ca-home-tool-grid">' + tiles + '</ul></aside>'
         '</div>'
