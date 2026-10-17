@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -143,7 +144,37 @@ assert "ADSENSE_CONSENT_READY=true" in privacy_html, "Privacy page must disclose
 assert "Google-certified consent management platform" in privacy_html, "Privacy page must describe the CMP requirement"
 assert "cookie identifiers" in privacy_html and "web beacons" in privacy_html and "IP addresses" in privacy_html, "Privacy page must disclose relevant advertising technologies/data"
 assert "https://policies.google.com/technologies/partner-sites" in privacy_html, "Privacy page must link Google's data-use disclosure"
+assert "https://policies.google.com/privacy" in privacy_html, "Privacy page must link Google's privacy policy"
+assert "https://adssettings.google.com/" in privacy_html, "Privacy page must link Google's personalized-ad settings"
+assert "https://optout.aboutads.info/" in privacy_html, "Privacy page must link an industry advertising opt-out resource"
+assert "Third-party vendors, including Google, may use cookies" in privacy_html, "Privacy page must explain third-party advertising cookies"
+assert "Available opt-out choices may not disable all advertising" in privacy_html, "Privacy page must not overpromise the effect of opt-out choices"
 assert "deliberately does not create an ads.txt file" in marketplace_html, "Marketplace guide must explain why ads.txt can return 404"
+
+# ads.txt must never contain a fabricated publisher ID or an entry unrelated to the configured account.
+ads_path = ROOT / "ads.txt"
+ads_client = os.environ.get("ADSENSE_CLIENT", "").strip()
+if ads_client:
+    assert re.fullmatch(r"ca-pub-\d{16}", ads_client), "ADSENSE_CLIENT must be a real-format AdSense publisher ID"
+    expected_ads_line = "google.com, " + ads_client.removeprefix("ca-") + ", DIRECT, f08c47fec0942fa0"
+    assert ads_path.is_file(), "Configured AdSense publisher ID requires a generated ads.txt"
+    assert ads_path.read_text(encoding="utf-8").strip() == expected_ads_line, "ads.txt must match the configured publisher ID exactly"
+else:
+    assert not ads_path.exists(), "Do not generate ads.txt without the real AdSense publisher ID"
+
+# Ad code must remain fail-closed unless all required deployment settings are present.
+ads_slot = os.environ.get("ADSENSE_SLOT", "").strip()
+consent_ready = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lower() == "true"
+ads_enabled = bool(ads_client and ads_slot.isdigit() and consent_ready)
+all_generated_html = "\n".join(
+    page.read_text(encoding="utf-8") for page in ROOT.rglob("index.html")
+)
+ads_script = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="
+if ads_enabled:
+    assert ads_script + ads_client in all_generated_html, "Configured ads must load the matching publisher script"
+else:
+    assert ads_script not in all_generated_html, "Ad script must not load until publisher ID, slot and consent readiness are configured"
+    assert 'class="adsbygoogle"' not in all_generated_html, "Ad slots must not render while monetization is disabled"
 
 # Google Search Console ownership HTML must be present in the deployed output.
 verification_file = ROOT / "google2e764d068684499b.html"
