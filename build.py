@@ -758,10 +758,13 @@ def nav_items(lang="en"):
                 continue
             name = URDU[t["slug"]]["name"]
             href = "/ur/" + t["slug"]
+        elif lang in UI:
+            name = UI[lang].get("tools", {}).get(t["slug"], t["name"])
+            href = "/" + t["slug"]
         else:
             name = t["name"]
             href = "/" + t["slug"]
-        items += '<li><a class="' + LINK + '" href="' + href + '">' + name + "</a></li>"
+        items += '<li><a class="' + LINK + '" href="' + href + '"' + (' hreflang="en"' if lang not in ("en", "ur") else "") + '>' + name + "</a></li>"
     return items
 
 
