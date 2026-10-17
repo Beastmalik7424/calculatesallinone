@@ -38,6 +38,13 @@ UI = {
             "math": "حساب حسابي عادي وتحويل الوزن والطول ودرجة الحرارة.",
             "worship": "عداد تسبيح يحفظ العدد على هذا الجهاز فقط.",
         },
+        "tools": {
+            "zakat-calculator": "حاسبة الزكاة", "bmi-calculator": "حاسبة مؤشر كتلة الجسم",
+            "profit-loss-calculator": "حاسبة الربح والخسارة", "discount-calculator": "حاسبة الخصم",
+            "age-calculator": "حاسبة العمر", "unit-converter": "محول الوحدات",
+            "standard-calculator": "الحاسبة العادية", "tasbih-counter": "عداد التسبيح", "stopwatch": "ساعة إيقاف",
+        },
+        },
     },
     "hi": {
         "menu": "सभी टूल", "skip": "मुख्य सामग्री पर जाएँ", "about": "हमारे बारे में", "privacy": "गोपनीयता",
@@ -66,6 +73,13 @@ UI = {
             "time": "उम्र को वर्ष, महीनों और दिनों में निकालें, और ब्राउज़र स्टॉपवॉच।",
             "math": "सामान्य गणित और वज़न, लंबाई और तापमान का परिवर्तन।",
             "worship": "तसबीह काउंटर जो गिनती केवल इसी डिवाइस पर रखता है।",
+        },
+        "tools": {
+            "zakat-calculator": "ज़कात कैलकुलेटर", "bmi-calculator": "BMI कैलकुलेटर",
+            "profit-loss-calculator": "लाभ और हानि कैलकुलेटर", "discount-calculator": "छूट कैलकुलेटर",
+            "age-calculator": "आयु कैलकुलेटर", "unit-converter": "इकाई कनवर्टर",
+            "standard-calculator": "मानक कैलकुलेटर", "tasbih-counter": "तसबीह काउंटर", "stopwatch": "स्टॉपवॉच",
+        },
         },
     },
     "es": {
@@ -96,6 +110,13 @@ UI = {
             "math": "Operaciones aritméticas y conversión de peso, longitud y temperatura.",
             "worship": "Contador de tasbih que guarda la cuenta solo en este dispositivo.",
         },
+        "tools": {
+            "zakat-calculator": "Calculadora de Zakat", "bmi-calculator": "Calculadora de IMC",
+            "profit-loss-calculator": "Calculadora de pérdidas y ganancias", "discount-calculator": "Calculadora de descuentos",
+            "age-calculator": "Calculadora de edad", "unit-converter": "Conversor de unidades",
+            "standard-calculator": "Calculadora estándar", "tasbih-counter": "Contador de tasbih", "stopwatch": "Cronómetro en línea",
+        },
+        },
     },
     "fr": {
         "menu": "Tous les outils", "skip": "Aller au contenu", "about": "À propos", "privacy": "Confidentialité",
@@ -124,6 +145,13 @@ UI = {
             "time": "Calcul de l'âge en années, mois et jours, et chronomètre dans le navigateur.",
             "math": "Calcul arithmétique et conversion de poids, de longueur et de température.",
             "worship": "Compteur de tasbih qui garde le total uniquement sur cet appareil.",
+        },
+        "tools": {
+            "zakat-calculator": "Calculatrice de Zakat", "bmi-calculator": "Calculatrice d’IMC",
+            "profit-loss-calculator": "Calculatrice de bénéfices et pertes", "discount-calculator": "Calculatrice de remise",
+            "age-calculator": "Calculatrice d’âge", "unit-converter": "Convertisseur d’unités",
+            "standard-calculator": "Calculatrice standard", "tasbih-counter": "Compteur de tasbih", "stopwatch": "Chronomètre en ligne",
+        },
         },
     },
 }
