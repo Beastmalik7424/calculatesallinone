@@ -1196,10 +1196,10 @@ def home_app_page(lang):
         lead = "یہ ایک سادہ کیلکولیٹر ہے۔ دوسرا ٹول کھولنے کے لیے نیچے کا کوئی رنگین بٹن دبائیں۔"
         more_h = "دوسرے ٹولز"
     else:
-        title = "Standard Calculator | Free Online Calculators | CalculatesAll"
-        desc = "Free online standard calculator. Open Zakat, BMI, profit and loss, age, discount, unit converter and more with one tap."
-        h1 = "Standard Calculator"
-        lead = "A simple calculator for everyday sums. To open another tool, tap one of the colourful buttons below."
+        title = "CalculatesAll | Free Online Calculators and Utility Tools"
+        desc = "Free online calculators for money, health, dates, units and daily tasks, including Zakat, BMI, profit and loss, age, discounts and unit conversion."
+        h1 = "Free Online Calculators and Utility Tools"
+        lead = "Calculate everyday values with free browser-based tools for money, health, dates and unit conversions. Your entries are processed in your browser."
         more_h = "More free tools"
     trust = ""
     for i, label in enumerate(TRUST[lang]):
