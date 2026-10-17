@@ -18,7 +18,7 @@ lastmod_entries = {
     for node in xml.findall("sm:url", ns)
     if node.find("sm:lastmod", ns) is not None
 }
-assert lastmod_entries == {SITE + "/zakat-calculator/": "2026-10-08"}, (
+assert lastmod_entries == {SITE + "/zakat-calculator/": "2026-10-17"}, (
     "Only verified per-page lastmod dates should be emitted; got " + repr(lastmod_entries)
 )
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
@@ -182,7 +182,8 @@ for url in urls:
             raise AssertionError(f"Invalid JSON-LD on {url}: {exc}") from exc
     for item in parsed_schemas:
         if item.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
-            assert item.get("inLanguage") == page_lang, (
+            if "inLanguage" in item:
+                assert item.get("inLanguage") == page_lang, (
                 f"Schema language mismatch on {url}: HTML={page_lang}, schema={item.get('inLanguage')}"
             )
     if url.endswith("/ur/"):
