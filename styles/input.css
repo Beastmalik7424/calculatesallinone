@@ -138,20 +138,20 @@
 #main.max-w-3xl #calc-pad button[data-key="*"],
 #main.max-w-3xl #calc-pad button[data-key="-"],
 #main.max-w-3xl #calc-pad button[data-key="+"] {
-  background-color: #0f766e;
-  color: #ffffff;
-  border-color: #0f766e;
+  background-color: #0f766e !important;
+  color: #ffffff !important;
+  border-color: #0f766e !important;
 }
 #main.max-w-3xl #calc-pad button[data-key="="] {
-  background-color: #0f172a;
-  color: #ffffff;
-  border-color: #0f172a;
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
 }
 #main.max-w-3xl #calc-pad button[data-key="/"]:hover,
 #main.max-w-3xl #calc-pad button[data-key="*"]:hover,
 #main.max-w-3xl #calc-pad button[data-key="-"]:hover,
 #main.max-w-3xl #calc-pad button[data-key="+"]:hover {
-  background-color: #115e59;
+  background-color: #115e59 !important;
 }
 #main.max-w-3xl #calc-pad button:focus-visible {
   outline: 3px solid #0f766e;
