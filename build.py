@@ -1001,7 +1001,7 @@ def tool_page(t):
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}},
         {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
-            {"@type": "ListItem", "position": 2, "name": cat_ur, "item": SITE_URL + "/" + cat["slug"] + "/"},
+            {"@type": "ListItem", "position": 2, "name": cat["name"], "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": t["name"], "item": url}]},
     ]
     related = ""
@@ -1053,7 +1053,7 @@ def urdu_tool_page(t):
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}},
         {"@context": "https://schema.org", "@type": "BreadcrumbList", "inLanguage": "ur", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "صفحہ اول", "item": SITE_URL + "/ur/"},
-            {"@type": "ListItem", "position": 2, "name": cat["name"], "item": SITE_URL + "/" + cat["slug"] + "/"},
+            {"@type": "ListItem", "position": 2, "name": cat_ur, "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": u["name"], "item": url}]},
     ]
     how = ""
