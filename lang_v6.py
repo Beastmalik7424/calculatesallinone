@@ -13,6 +13,8 @@ UI = {
     "ar": {
         "menu": "كل الأدوات", "skip": "انتقل إلى المحتوى", "about": "من نحن", "privacy": "الخصوصية",
         "contact": "اتصل بنا", "methodology": "المنهجية", "editorial": "سياسة التحرير",
+        "terms": "شروط الاستخدام", "marketplace": "دليل منصات البيع", "affiliate": "إفصاح الروابط التابعة",
+        "main": "القائمة الرئيسية", "footer": "تذييل الصفحة",
         "tag": "© CalculatesAll. أدوات مجانية تعمل في متصفحك.",
         "faq": "أسئلة شائعة", "more": "المزيد في",
         "h1": "حاسبات إلكترونية مجانية وأدوات مفيدة",
@@ -40,6 +42,8 @@ UI = {
     "hi": {
         "menu": "सभी टूल", "skip": "मुख्य सामग्री पर जाएँ", "about": "हमारे बारे में", "privacy": "गोपनीयता",
         "contact": "संपर्क", "methodology": "गणना का तरीका", "editorial": "संपादकीय नीति",
+        "terms": "उपयोग की शर्तें", "marketplace": "मार्केटप्लेस गाइड", "affiliate": "एफिलिएट प्रकटीकरण",
+        "main": "मुख्य नेविगेशन", "footer": "पाद लेख",
         "tag": "© CalculatesAll. आपके ब्राउज़र में चलने वाले मुफ़्त टूल।",
         "faq": "अक्सर पूछे जाने वाले प्रश्न", "more": "इसी श्रेणी में और",
         "h1": "मुफ़्त ऑनलाइन कैलकुलेटर और उपयोगी टूल",
@@ -67,6 +71,8 @@ UI = {
     "es": {
         "menu": "Todas las herramientas", "skip": "Ir al contenido", "about": "Acerca de", "privacy": "Privacidad",
         "contact": "Contacto", "methodology": "Metodología", "editorial": "Política editorial",
+        "terms": "Términos de uso", "marketplace": "Guía de plataformas", "affiliate": "Divulgación de afiliación",
+        "main": "Navegación principal", "footer": "Pie de página",
         "tag": "© CalculatesAll. Herramientas gratuitas que funcionan en tu navegador.",
         "faq": "Preguntas frecuentes", "more": "Más en",
         "h1": "Calculadoras online gratuitas y herramientas útiles",
@@ -94,6 +100,8 @@ UI = {
     "fr": {
         "menu": "Tous les outils", "skip": "Aller au contenu", "about": "À propos", "privacy": "Confidentialité",
         "contact": "Contact", "methodology": "Méthodologie", "editorial": "Politique éditoriale",
+        "terms": "Conditions d’utilisation", "marketplace": "Guide des plateformes", "affiliate": "Divulgation d’affiliation",
+        "main": "Navigation principale", "footer": "Pied de page",
         "tag": "© CalculatesAll. Outils gratuits qui fonctionnent dans votre navigateur.",
         "faq": "Questions fréquentes", "more": "Plus dans",
         "h1": "Calculatrices en ligne gratuites et outils utiles",
