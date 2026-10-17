@@ -770,10 +770,10 @@ LANG_LOCALE = {"en": "en_US", "ur": "ur_PK", "ar": "ar_AR", "hi": "hi_IN", "es":
 RTL_LANGS = ("ur", "ar")
 SHELL_EN = {"menu": "All tools", "skip": "Skip to content", "about": "About", "privacy": "Privacy", "contact": "Contact",
             "methodology": "Methodology", "editorial": "Editorial policy", "tag": "© CalculatesAll. Free tools that run in your browser.",
-            "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Affiliate disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE"
+            "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Affiliate disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE"}
 SHELL_UR = {"menu": "تمام ٹولز", "skip": "مرکزی مواد پر جائیں", "about": "ہمارے بارے میں", "privacy": "رازداری", "contact": "رابطہ",
             "methodology": "طریقہ کار", "editorial": "ادارتی پالیسی", "tag": "© CalculatesAll۔ مفت ٹولز جو آپ کے براؤزر میں چلتے ہیں۔",
-            "theme": "ڈارک موڈ", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت"
+            "theme": "ڈارک موڈ", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت"}
 THEME_LABEL = {"ar": "الوضع الداكن", "hi": "डार्क मोड", "es": "Modo oscuro", "fr": "Mode sombre"}
 
 
