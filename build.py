@@ -22,6 +22,10 @@ if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
 LAST_REVIEWED = "2026-10-08"  # change only when a guide, formula or policy text really changes
+# Har page ki asal update date. Sirf wahi pages likhein jin ka content badla ho.
+LASTMOD = {
+    "/zakat-calculator/": "2026-10-08",
+}
 OUT = "public"
 STATIC = "static"
 
