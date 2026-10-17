@@ -33,6 +33,8 @@
       convResult: "{v} {from} equals {out} {to}.",
       calcError: "Error",
       calcDiv: "Cannot divide by zero",
+      calcSqrtNegative: "Square root of a negative number is not a real number.",
+      calcNeedValue: "Enter a number or expression first.",
       tasbihNone: "No target set.",
       tasbihReached: "Target of {goal} reached. Press Reset to start again.",
       tasbihLeft: "{left} to go for a target of {goal}.",
@@ -77,6 +79,8 @@
       convResult: "{v} {from} برابر ہے {out} {to} کے۔",
       calcError: "خرابی",
       calcDiv: "صفر سے تقسیم نہیں ہو سکتی",
+      calcSqrtNegative: "منفی عدد کا مربع جذر حقیقی عدد نہیں ہوتا۔",
+      calcNeedValue: "پہلے کوئی عدد یا حساب درج کریں۔",
       tasbihNone: "کوئی ہدف مقرر نہیں۔",
       tasbihReached: "ہدف {goal} پورا ہو گیا۔ دوبارہ شروع کرنے کے لیے ری سیٹ دبائیں۔",
       tasbihLeft: "ہدف {goal} کے لیے {left} باقی۔",
@@ -439,6 +443,25 @@
       } else if (key === "BS") {
         expr = expr.slice(0, -1)
         render(expr)
+      } else if (key === "sqrt") {
+        if (expr.trim() === "") {
+          expr = ""
+          display.textContent = t("calcNeedValue")
+          return
+        }
+        try {
+          var radicand = evaluate(expr)
+          if (radicand < 0) {
+            expr = ""
+            display.textContent = t("calcSqrtNegative")
+            return
+          }
+          expr = String(Math.round(Math.sqrt(radicand) * 1e10) / 1e10)
+          render(expr)
+        } catch (err) {
+          expr = ""
+          display.textContent = err.message === "divzero" ? t("calcDiv") : t("calcError")
+        }
       } else if (key === "%") {
         expr = expr.replace(/(\d+\.?\d*)$/, function (m) { return String(Number(m) / 100) })
         render(expr)

@@ -609,14 +609,14 @@ EXTRA = {
 }
 
 
-DIGIT = "bg-white dark:bg-stone-800 border border-stone-300 dark:border-stone-600 text-stone-900 dark:text-stone-100 text-xl font-semibold rounded-xl min-h-[56px] shadow-sm hover:bg-stone-100 dark:hover:bg-stone-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
-OPS = "bg-gradient-to-br from-fuchsia-600 to-indigo-700 text-white text-xl font-bold rounded-xl min-h-[56px] shadow-md hover:from-fuchsia-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
-SPECIAL = "bg-gradient-to-br from-amber-700 to-orange-800 text-white text-lg font-bold rounded-xl min-h-[56px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
-EQUALS = "bg-gradient-to-br from-emerald-700 to-teal-800 text-white text-2xl font-bold rounded-xl min-h-[56px] shadow-lg col-span-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
+DIGIT = "bg-white dark:bg-stone-800 border border-slate-200 dark:border-stone-600 text-slate-900 dark:text-stone-100 text-2xl font-semibold rounded-xl min-h-[64px] shadow-sm hover:bg-teal-50 dark:hover:bg-stone-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+OPS = "bg-teal-700 hover:bg-teal-800 dark:bg-teal-700 dark:hover:bg-teal-600 text-white text-2xl font-bold rounded-xl min-h-[64px] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+SPECIAL = "bg-slate-100 hover:bg-teal-50 dark:bg-stone-700 dark:hover:bg-stone-600 border border-slate-200 dark:border-stone-600 text-slate-900 dark:text-stone-100 text-xl font-bold rounded-xl min-h-[64px] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+EQUALS = "bg-slate-900 hover:bg-slate-800 dark:bg-teal-700 dark:hover:bg-teal-600 text-white text-2xl font-bold rounded-xl min-h-[64px] shadow-md col-span-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
 
 CALC_UI = (
-    '<div class="max-w-sm mx-auto">'
-    '<output id="calc-display" class="block text-right text-3xl font-bold bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-600 rounded-2xl px-4 py-5 min-h-[4rem] break-all text-stone-900 dark:text-stone-100" aria-live="polite">0</output>'
+    '<div class="max-w-md mx-auto">'
+    '<output id="calc-display" class="block text-right text-4xl font-bold bg-white dark:bg-stone-950 border border-slate-200 dark:border-stone-600 rounded-2xl px-5 py-6 min-h-[5rem] break-all text-slate-900 dark:text-stone-100 shadow-inner" aria-live="polite">0</output>'
     '<div id="calc-pad" class="grid grid-cols-4 gap-3 mt-4">'
     '<button class="' + SPECIAL + '" data-key="C">C</button>'
     '<button class="' + DIGIT + '" data-key="(" aria-label="Open parenthesis">(</button>'
@@ -638,6 +638,7 @@ CALC_UI = (
     '<button class="' + DIGIT + '" data-key="0">0</button>'
     '<button class="' + DIGIT + '" data-key=".">.</button>'
     '<button class="' + OPS + '" data-key="+" aria-label="Add">+</button>'
+    '<button class="' + SPECIAL + '" data-key="sqrt" aria-label="Square root">√</button>'
     '<button class="' + SPECIAL + '" data-key="%">%</button>'
     '<button class="' + EQUALS + '" data-key="=">=</button>'
     '</div></div>'

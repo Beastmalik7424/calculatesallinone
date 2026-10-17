@@ -46,4 +46,14 @@ assert.equal(enter([".", "5"]), "0.5", "leading decimal must be parsed as a frac
 assert.equal(enter(["2", "+", "3", "*", "4"]), "14", "multiplication must precede addition");
 assert.equal(enter(["2", "*", "(", "3", "+", "4", ")"]), "14", "parentheses must group expressions");
 assert.equal(enter(["1", "/", "0"]), "Cannot divide by zero", "division by zero must show a safe error");
-console.log("Calculator behavior tests passed: decimals, precedence, parentheses, divide-by-zero.");
+assert.equal(enter(["9", "sqrt"]), "3", "square root of a perfect square must calculate correctly");
+assert.equal(enter(["2", "+", "7", "sqrt"]), "3", "square root applies to the current expression");
+press("C");
+press("-");
+press("9");
+press("sqrt");
+assert.equal(elements["calc-display"].textContent, "Square root of a negative number is not a real number.", "negative square root must show a clear error");
+press("C");
+press("sqrt");
+assert.equal(elements["calc-display"].textContent, "Enter a number or expression first.", "square root without input must show a clear prompt");
+console.log("Calculator behavior tests passed: decimals, precedence, parentheses, divide-by-zero, square root and invalid root inputs.");
