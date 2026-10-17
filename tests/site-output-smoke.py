@@ -162,6 +162,20 @@ if ads_client:
 else:
     assert not ads_path.exists(), "Do not generate ads.txt without the real AdSense publisher ID"
 
+# Ad code must remain fail-closed unless all required deployment settings are present.
+ads_slot = os.environ.get("ADSENSE_SLOT", "").strip()
+consent_ready = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lower() == "true"
+ads_enabled = bool(ads_client and ads_slot.isdigit() and consent_ready)
+all_generated_html = "\\n".join(
+    page.read_text(encoding="utf-8") for page in ROOT.rglob("index.html")
+)
+ads_script = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="
+if ads_enabled:
+    assert ads_script + ads_client in all_generated_html, "Configured ads must load the matching publisher script"
+else:
+    assert ads_script not in all_generated_html, "Ad script must not load until publisher ID, slot and consent readiness are configured"
+    assert "class=\\"adsbygoogle\\"" not in all_generated_html, "Ad slots must not render while monetization is disabled"
+
 # Google Search Console ownership HTML must be present in the deployed output.
 verification_file = ROOT / "google2e764d068684499b.html"
 assert verification_file.is_file(), "Google Search Console verification file missing from Vercel output"
