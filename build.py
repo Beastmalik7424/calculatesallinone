@@ -24,7 +24,7 @@ CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").st
 LAST_REVIEWED = "2026-10-08"  # change only when a guide, formula or policy text really changes
 # Har page ki asal update date. Sirf wahi pages likhein jin ka content badla ho.
 LASTMOD = {
-    "/zakat-calculator/": "2026-10-08",
+    "/zakat-calculator/": "2026-10-17",
 }
 OUT = "public"
 STATIC = "static"
