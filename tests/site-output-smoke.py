@@ -200,6 +200,36 @@ urdu_standard_html = (ROOT / "ur" / "standard-calculator" / "index.html").read_t
 for english_text in ("Math and Converters", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
     assert english_text not in urdu_standard_html, "English shared UI text remains on Urdu calculator: " + english_text
 
+# Shared navigation and footer must be localized on every translated homepage.
+localized_home_checks = {
+    "ar": {
+        "terms": "شروط الاستخدام", "marketplace": "دليل منصات البيع",
+        "affiliate": "إفصاح الروابط التابعة", "main": 'aria-label="القائمة الرئيسية"',
+        "footer": 'aria-label="تذييل الصفحة"',
+    },
+    "hi": {
+        "terms": "उपयोग की शर्तें", "marketplace": "मार्केटप्लेस गाइड",
+        "affiliate": "एफिलिएट प्रकटीकरण", "main": 'aria-label="मुख्य नेविगेशन"',
+        "footer": 'aria-label="पाद लेख"',
+    },
+    "es": {
+        "terms": "Términos de uso", "marketplace": "Guía de plataformas",
+        "affiliate": "Divulgación de afiliación", "main": 'aria-label="Navegación principal"',
+        "footer": 'aria-label="Pie de página"',
+    },
+    "fr": {
+        "terms": "Conditions d’utilisation", "marketplace": "Guide des plateformes",
+        "affiliate": "Divulgation d’affiliation", "main": 'aria-label="Navigation principale"',
+        "footer": 'aria-label="Pied de page"',
+    },
+}
+for locale, expected in localized_home_checks.items():
+    localized_html = output_for_url(SITE + "/" + locale + "/").read_text(encoding="utf-8")
+    for key, expected_text in expected.items():
+        assert expected_text in localized_html, f"Missing localized {key} label on /{locale}/"
+    for english_text in ("All tools", "Terms of use", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
+        assert english_text not in localized_html, f"English shared UI text remains on /{locale}/: {english_text}"
+
 # The Zakat page must not show an unfinished expert-review note when no reviewer is listed.
 zakat_html = (ROOT / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
 assert "Subject expert review by a qualified scholar is pending." not in zakat_html, (
