@@ -230,6 +230,25 @@ for locale, expected in localized_home_checks.items():
     for english_text in ("All tools", "Terms of use", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
         assert english_text not in localized_html, f"English shared UI text remains on /{locale}/: {english_text}"
 
+# Tool-menu labels on translated homepages must not fall back to English.
+localized_tool_labels = {
+    "ar": ("حاسبة الزكاة", "حاسبة مؤشر كتلة الجسم", "حاسبة العمر"),
+    "hi": ("ज़कात कैलकुलेटर", "BMI कैलकुलेटर", "आयु कैलकुलेटर"),
+    "es": ("Calculadora de Zakat", "Calculadora de IMC", "Calculadora de edad"),
+    "fr": ("Calculatrice de Zakat", "Calculatrice d’IMC", "Calculatrice d’âge"),
+}
+english_tool_labels = (
+    "Zakat Calculator", "BMI Calculator", "Profit and Loss Calculator",
+    "Discount Calculator", "Age Calculator", "Unit Converter",
+    "Standard Calculator", "Tasbih Counter", "Online Stopwatch",
+)
+for locale, labels in localized_tool_labels.items():
+    localized_html = output_for_url(SITE + "/" + locale + "/").read_text(encoding="utf-8")
+    for label in labels:
+        assert ">" + label + "</a>" in localized_html, f"Missing localized tool label on /{locale}/: {label}"
+    for label in english_tool_labels:
+        assert ">" + label + "</a>" not in localized_html, f"English tool label remains in /{locale}/ menu: {label}"
+
 # The Zakat page must not show an unfinished expert-review note when no reviewer is listed.
 zakat_html = (ROOT / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
 assert "Subject expert review by a qualified scholar is pending." not in zakat_html, (
