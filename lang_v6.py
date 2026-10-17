@@ -44,7 +44,6 @@ UI = {
             "age-calculator": "حاسبة العمر", "unit-converter": "محول الوحدات",
             "standard-calculator": "الحاسبة العادية", "tasbih-counter": "عداد التسبيح", "stopwatch": "ساعة إيقاف",
         },
-        },
     },
     "hi": {
         "menu": "सभी टूल", "skip": "मुख्य सामग्री पर जाएँ", "about": "हमारे बारे में", "privacy": "गोपनीयता",
@@ -79,7 +78,6 @@ UI = {
             "profit-loss-calculator": "लाभ और हानि कैलकुलेटर", "discount-calculator": "छूट कैलकुलेटर",
             "age-calculator": "आयु कैलकुलेटर", "unit-converter": "इकाई कनवर्टर",
             "standard-calculator": "मानक कैलकुलेटर", "tasbih-counter": "तसबीह काउंटर", "stopwatch": "स्टॉपवॉच",
-        },
         },
     },
     "es": {
@@ -116,7 +114,6 @@ UI = {
             "age-calculator": "Calculadora de edad", "unit-converter": "Conversor de unidades",
             "standard-calculator": "Calculadora estándar", "tasbih-counter": "Contador de tasbih", "stopwatch": "Cronómetro en línea",
         },
-        },
     },
     "fr": {
         "menu": "Tous les outils", "skip": "Aller au contenu", "about": "À propos", "privacy": "Confidentialité",
@@ -151,7 +148,6 @@ UI = {
             "profit-loss-calculator": "Calculatrice de bénéfices et pertes", "discount-calculator": "Calculatrice de remise",
             "age-calculator": "Calculatrice d’âge", "unit-converter": "Convertisseur d’unités",
             "standard-calculator": "Calculatrice standard", "tasbih-counter": "Compteur de tasbih", "stopwatch": "Chronomètre en ligne",
-        },
         },
     },
 }
