@@ -151,6 +151,14 @@ assert verification_file.is_file(), "Google Search Console verification file mis
 assert verification_file.read_text(encoding="utf-8").strip() == "google-site-verification: google2e764d068684499b.html", "Google Search Console verification file content mismatch"
 
 
+# Urdu homepage visible UI must not leak English marketing labels or calculator aria labels.
+for english_text in ("CALCULATE WITH CONFIDENCE", "ONE PLACE, MANY ANSWERS", "Marketplace guide", "Affiliate disclosure", 'aria-label="Open parenthesis"', 'aria-label="Divide"', 'aria-label="Square root"'):
+    assert english_text not in ur_home_html, "English UI text remains on Urdu homepage: " + english_text
+
+# Urdu calculator breadcrumbs and shared navigation/footer must use Urdu labels.
+for english_text in ("Math and Converters", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
+    assert english_text not in urdu_standard_html, "English shared UI text remains on Urdu calculator: " + english_text
+
 # The Zakat page must not show an unfinished expert-review note when no reviewer is listed.
 zakat_html = (ROOT / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
 assert "Subject expert review by a qualified scholar is pending." not in zakat_html, (
