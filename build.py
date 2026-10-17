@@ -1193,6 +1193,7 @@ TRUST_CLASS = [
 
 def home_app_page(lang):
     urdu = lang == "ur"
+    s = shell_strings(lang)
     path = "/ur/" if urdu else "/"
     if urdu:
         title = "CalculatesAll | مفت آن لائن کیلکولیٹرز اور یوٹیلیٹی ٹولز"
