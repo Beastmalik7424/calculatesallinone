@@ -185,6 +185,10 @@ for selector in (
     '#main.max-w-3xl #calc-pad button[data-key="="]',
 ):
     assert selector in site_css, f"Missing calculator contrast selector in built CSS: {selector}"
+assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
+assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
+homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
+assert "/assets/site.css?v=20261017-mobile-contrast-fix" in homepage_html, "Stylesheet cache-buster must change with the contrast fix"
 
 # Keep the browser-side calculator implementation free from dynamic code execution.
 app_js = (ROOT / "assets" / "app.js").read_text(encoding="utf-8")
