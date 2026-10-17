@@ -904,7 +904,7 @@ def shell(main_html, lang="en", current_path=None):
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
         '<details class="relative"><summary class="cursor-pointer text-base min-h-[44px] inline-flex items-center px-2">' + s["menu"] + '</summary>'
         '<ul class="absolute right-0 mt-2 w-64 bg-white border border-stone-300 rounded-lg p-3 space-y-2 text-base shadow-lg z-10">'
-        + nav_items("ur" if lang == "ur" else "en")
+        + nav_items(lang)
         + '</ul></details></div></nav></header>\n'
         '<main id="main" class="' + main_width + ' mx-auto px-5 py-10">' + main_html + '</main>\n'
         '<footer class="mt-12 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-t border-stone-200 dark:border-stone-700">'
