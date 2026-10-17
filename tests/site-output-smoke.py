@@ -40,6 +40,18 @@ for url in urls:
 assert len(titles.values()) == len(set(titles.values())), "Duplicate page titles found: " + repr(titles)
 assert len(descriptions.values()) == len(set(descriptions.values())), "Duplicate meta descriptions found: " + repr(descriptions)
 
+# The root URL is the site homepage, not a duplicate Standard Calculator landing page.
+home_url = SITE + "/"
+assert titles[home_url].startswith("CalculatesAll |"), (
+    "Homepage title must identify the site and its broad purpose, not a single calculator: " + titles[home_url]
+)
+assert "Standard Calculator" not in titles[home_url], (
+    "Homepage title incorrectly targets the Standard Calculator page."
+)
+assert descriptions[home_url].startswith("Free online calculators for"), (
+    "Homepage description should describe the site's main calculator/tool categories."
+)
+
 sitemap_urls = set(urls)
 generated = set()
 for page in ROOT.rglob("index.html"):
