@@ -132,3 +132,28 @@
 @media (prefers-reduced-motion: reduce) {
   .ca-home-tool-grid a, .ca-home-calculator #calc-pad button { transition: none; }
 }
+
+/* Explicit contrast for calculator operators on the dedicated calculator page. */
+#main.max-w-3xl #calc-pad button[data-key="/"],
+#main.max-w-3xl #calc-pad button[data-key="*"],
+#main.max-w-3xl #calc-pad button[data-key="-"],
+#main.max-w-3xl #calc-pad button[data-key="+"] {
+  background-color: #0f766e;
+  color: #ffffff;
+  border-color: #0f766e;
+}
+#main.max-w-3xl #calc-pad button[data-key="="] {
+  background-color: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+#main.max-w-3xl #calc-pad button[data-key="/"]:hover,
+#main.max-w-3xl #calc-pad button[data-key="*"]:hover,
+#main.max-w-3xl #calc-pad button[data-key="-"]:hover,
+#main.max-w-3xl #calc-pad button[data-key="+"]:hover {
+  background-color: #115e59;
+}
+#main.max-w-3xl #calc-pad button:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+}
