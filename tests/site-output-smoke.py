@@ -13,8 +13,16 @@ titles = {}
 descriptions = {}
 assert urls, "Sitemap has no URLs"
 assert len(urls) == len(set(urls)), "Duplicate URLs found in sitemap"
-assert all(node.find("sm:lastmod", ns) is None for node in xml.findall("sm:url", ns)), (
-    "Do not emit a shared hard-coded lastmod date; only add lastmod when it accurately reflects each URL's content update."
+lastmod_entries = {
+    node.find("sm:loc", ns).text: node.find("sm:lastmod", ns).text
+    for node in xml.findall("sm:url", ns)
+    if node.find("sm:lastmod", ns) is not None
+}
+assert lastmod_entries == {SITE + "/zakat-calculator/": "2026-10-08"}, (
+    "Only verified per-page lastmod dates should be emitted; got " + repr(lastmod_entries)
+)
+assert all(re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", value) for value in lastmod_entries.values()), (
+    "Sitemap lastmod values must use YYYY-MM-DD format."
 )
 
 def output_for_url(url):
