@@ -44,7 +44,7 @@ def field(fid, label, step="0.01", hint=""):
     if hint:
         h = '<p class="text-sm text-stone-700 dark:text-stone-300 mt-1">' + hint + "</p>"
     return ('<div><label class="@L@" for="' + fid + '">' + label + '</label>'
-            '<input id="' + fid + '" class="@I@" type="number" min="0" step="' + step + '" inputmode="decimal">' + h + "</div>")
+            '<input id="' + fid + '" name="' + fid + '" class="@I@" type="number" min="0" step="' + step + '" inputmode="decimal">' + h + "</div>")
 
 
 def check(fid, label):
@@ -122,7 +122,7 @@ TOOLS = [
         "ui": (
             '<form id="bmi-form" class="space-y-5" novalidate>'
             '<div><label class="@L@" for="bmi-unit">Units</label>'
-            '<select id="bmi-unit" class="@I@"><option value="metric">Metric (kg and cm)</option><option value="imperial">Imperial (lb and ft/in)</option></select></div>'
+            '<select id="bmi-unit" name="bmi-unit" class="@I@"><option value="metric">Metric (kg and cm)</option><option value="imperial">Imperial (lb and ft/in)</option></select></div>'
             '<div id="bmi-metric" class="grid sm:grid-cols-2 gap-4">'
             + field("b-kg", "Weight (kg)", step="0.1")
             + field("b-cm", "Height (cm)", step="0.1")
@@ -255,7 +255,7 @@ TOOLS = [
         "ui": (
             '<form id="age-form" class="space-y-5" novalidate>'
             '<div><label class="@L@" for="a-dob">Date of birth</label>'
-            '<input id="a-dob" type="date" class="@I@"></div>'
+            '<input id="a-dob" name="dob" type="date" class="@I@"></div>'
             '<button type="submit" class="@B@">Calculate Age</button></form>'
             + result("age-result")
         ),
