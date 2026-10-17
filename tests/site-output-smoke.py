@@ -52,6 +52,20 @@ assert descriptions[home_url].startswith("Free online calculators for"), (
     "Homepage description should describe the site's main calculator/tool categories."
 )
 
+# The Urdu root is a localized site homepage, not a standard-calculator landing page.
+urdu_home_url = SITE + "/ur/"
+assert titles[urdu_home_url].startswith("CalculatesAll |"), (
+    "Urdu homepage title must identify the site and its broad purpose: " + titles[urdu_home_url]
+)
+assert "معیاری کیلکولیٹر" not in titles[urdu_home_url], (
+    "Urdu homepage title incorrectly targets only the standard calculator."
+)
+ur_home_html = output_for_url(urdu_home_url).read_text(encoding="utf-8")
+ur_home_h1 = re.search(r"<h1[^>]*>(.*?)</h1>", ur_home_html, re.S)
+assert ur_home_h1 and "مفت آن لائن کیلکولیٹرز" in ur_home_h1.group(1), (
+    "Urdu homepage H1 must describe the calculator collection."
+)
+
 sitemap_urls = set(urls)
 generated = set()
 for page in ROOT.rglob("index.html"):
@@ -163,6 +177,14 @@ for url in urls:
             f"Urdu calculator page missing BreadcrumbList schema: {url}"
         )
         assert 'aria-label="صفحہ کی ترتیب"' in html, f"Urdu calculator page missing visible breadcrumb: {url}"
+
+# Verify explicit contrast styles for operation buttons survive the production CSS build.
+site_css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
+for selector in (
+    '#main.max-w-3xl #calc-pad button[data-key="/"]',
+    '#main.max-w-3xl #calc-pad button[data-key="="]',
+):
+    assert selector in site_css, f"Missing calculator contrast selector in built CSS: {selector}"
 
 # Keep the browser-side calculator implementation free from dynamic code execution.
 app_js = (ROOT / "assets" / "app.js").read_text(encoding="utf-8")
