@@ -21,7 +21,7 @@ lastmod_entries = {
 assert lastmod_entries == {SITE + "/zakat-calculator/": "2026-10-08"}, (
     "Only verified per-page lastmod dates should be emitted; got " + repr(lastmod_entries)
 )
-assert all(re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", value) for value in lastmod_entries.values()), (
+assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
 
