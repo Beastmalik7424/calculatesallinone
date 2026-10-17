@@ -46,6 +46,13 @@ for url in urls:
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
 
+# Important calculator controls need stable form names for native form semantics and progressive fallback.
+age_html = output_for_url(SITE + "/age-calculator/").read_text(encoding="utf-8")
+assert 'id="a-dob" name="dob" type="date"' in age_html, "Age input must expose a stable form name"
+bmi_html = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
+for control_name in ("bmi-unit", "b-kg", "b-cm", "b-lb", "b-ft", "b-in"):
+    assert 'name="' + control_name + '"' in bmi_html, f"BMI control missing form name: {control_name}"
+
 assert len(titles.values()) == len(set(titles.values())), "Duplicate page titles found: " + repr(titles)
 assert len(descriptions.values()) == len(set(descriptions.values())), "Duplicate meta descriptions found: " + repr(descriptions)
 
