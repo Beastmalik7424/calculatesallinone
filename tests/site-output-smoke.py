@@ -245,20 +245,20 @@ for index, locale in enumerate(locale_order):
     end = min(
         (position for next_locale in locale_order[index + 1:]
          if (position := app_js.find("    " + next_locale + ": {", start + 1)) >= 0),
-        default=app_js.find("\\n  }\\n\\n  var UNITS", start)
+        default=app_js.find("\n  }\n\n  var UNITS", start)
     )
     assert end > start, f"Could not isolate calculator message dictionary for locale {locale}"
     locale_blocks[locale] = app_js[start:end]
     for key in required_message_keys:
-        assert re.search(r"\\b" + re.escape(key) + r"\\s*:", locale_blocks[locale]), (
+        assert re.search(r"\b" + re.escape(key) + r"\s*:", locale_blocks[locale]), (
             f"Locale {locale} is missing calculator message key: {key}"
         )
     for key in ("kg", "g", "lb", "oz", "m", "cm", "km", "ft", "in", "mi", "C", "F", "K"):
-        assert re.search(r"\\b" + re.escape(key) + r"\\s*:", locale_blocks[locale]), (
+        assert re.search(r"\b" + re.escape(key) + r"\s*:", locale_blocks[locale]), (
             f"Locale {locale} is missing unit label: {key}"
         )
     for key in ("weight", "length", "temp"):
-        assert re.search(r"\\b" + key + r"\\s*:", locale_blocks[locale]), (
+        assert re.search(r"\b" + key + r"\s*:", locale_blocks[locale]), (
             f"Locale {locale} is missing converter category label: {key}"
         )
 assert 'var code = (document.documentElement.lang || "en").toLowerCase().split("-")[0]' in app_js, (
