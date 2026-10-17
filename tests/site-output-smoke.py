@@ -151,6 +151,19 @@ assert verification_file.is_file(), "Google Search Console verification file mis
 assert verification_file.read_text(encoding="utf-8").strip() == "google-site-verification: google2e764d068684499b.html", "Google Search Console verification file content mismatch"
 
 
+# The Zakat page must not show an unfinished expert-review note when no reviewer is listed.
+zakat_html = (ROOT / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
+assert "Subject expert review by a qualified scholar is pending." not in zakat_html, (
+    "Do not expose the unfinished Zakat expert-review note to visitors."
+)
+
+# Urdu calculator UI controls must not retain English accessible labels.
+urdu_standard_html = (ROOT / "ur" / "standard-calculator" / "index.html").read_text(encoding="utf-8")
+for english_label in ("Open parenthesis", "Close parenthesis", "Delete last character", "Divide", "Multiply", "Subtract", "Add", "Square root"):
+    assert 'aria-label="' + english_label + '"' not in urdu_standard_html, (
+        "English calculator accessibility label remains on Urdu page: " + english_label
+    )
+
 # Per-page structured-data and language audit.
 # Parse every JSON-LD block rather than only checking that a script tag exists.
 for url in urls:
