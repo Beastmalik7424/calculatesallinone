@@ -3,7 +3,6 @@
   "buildCommand": "npm ci && npm run build",
   "outputDirectory": "public",
   "cleanUrls": false,
-  "trailingSlash": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -50,6 +49,50 @@
           "value": "public, max-age=3600"
         }
       ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "^/contact$",
+      "headers": {
+        "Location": "/contact/"
+      },
+      "status": 301
+    },
+    {
+      "src": "^/editorial-policy$",
+      "headers": {
+        "Location": "/editorial-policy/"
+      },
+      "status": 301
+    },
+    {
+      "src": "^/methodology$",
+      "headers": {
+        "Location": "/methodology/"
+      },
+      "status": 301
+    },
+    {
+      "src": "^/privacy$",
+      "headers": {
+        "Location": "/privacy/"
+      },
+      "status": 301
+    },
+    {
+      "src": "^/terms$",
+      "headers": {
+        "Location": "/terms/"
+      },
+      "status": 301
+    },
+    {
+      "src": "^/(?!.*\\.[^/]+$)(.*[^/])$",
+      "headers": {
+        "Location": "/$1/"
+      },
+      "status": 308
     }
   ]
 }
