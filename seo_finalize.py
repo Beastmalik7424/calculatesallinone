@@ -92,7 +92,7 @@ def main():
         raise SystemExit("No generated HTML pages found")
     paths = {page_path(f): f for f in files}
     noindex = set()
-    # First pass: apply the 150-word unique-introduction rule to the named hubs.
+    # Keep category hubs indexable only when they have an explanatory structure and crawlable tool links.
     for path in sorted(HUB_PATHS):
         file = paths.get(path)
         if not file:
