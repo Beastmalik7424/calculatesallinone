@@ -1017,8 +1017,8 @@ ANSWER_BLOCKS = {
         "ur": 'ایک بین الاقوامی پاؤنڈ بالکل 0.45359237 کلوگرام کے برابر ہے۔ ماخذ: <a class="' + LINK + '" href="https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9" target="_blank" rel="noopener noreferrer">NIST کی اکائیوں کی تبدیلی کی جدول</a>۔'
     },
     "standard-calculator": {
-        "en": 'Using the usual order of operations, 2 + 3 × 4 equals 14 because multiplication is evaluated before addition. Source: <a class="' + LINK + '" href="https://www.khanacademy.org/math/arithmetic/arith-review-multiply-divide/arith-review-order-of-operations/a/order-of-operations" target="_blank" rel="noopener noreferrer">Khan Academy order of operations</a>.',
-        "ur": 'عام ترتیبِ عملیات کے مطابق 2 + 3 × 4 کا جواب 14 ہے، کیونکہ جمع سے پہلے ضرب کی جاتی ہے۔ ماخذ: <a class="' + LINK + '" href="https://www.khanacademy.org/math/arithmetic/arith-review-multiply-divide/arith-review-order-of-operations/a/order-of-operations" target="_blank" rel="noopener noreferrer">Khan Academy کی ترتیبِ عملیات</a>۔'
+        "en": 'Using the usual order of operations, 2 + 3 × 4 equals 14 because multiplication is evaluated before addition. Source: <a class="' + LINK + '" href="https://www.khanacademy.org/math/arithmetic/arith-review-negative-numbers/arith-review-order-of-operations/a/order-of-operations-review" target="_blank" rel="noopener noreferrer">Khan Academy order of operations</a>.',
+        "ur": 'عام ترتیبِ عملیات کے مطابق 2 + 3 × 4 کا جواب 14 ہے، کیونکہ جمع سے پہلے ضرب کی جاتی ہے۔ ماخذ: <a class="' + LINK + '" href="https://www.khanacademy.org/math/arithmetic/arith-review-negative-numbers/arith-review-order-of-operations/a/order-of-operations-review" target="_blank" rel="noopener noreferrer">Khan Academy کی ترتیبِ عملیات</a>۔'
     },
     "tasbih-counter": {
         "en": 'Each tap adds one count, so 33 deliberate taps produce a displayed count of 33 if the counter starts at zero. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll tool methodology</a>.',
