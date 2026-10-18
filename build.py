@@ -475,11 +475,11 @@ HUB_CONTENT = {
 }
 
 CATEGORIES = [
-    {"slug": "money", "name": "Money and Business", "desc": "Zakat, profit and loss, and discount calculators for everyday money decisions."},
-    {"slug": "health", "name": "Health", "desc": "Adult body mass index calculation with WHO weight categories."},
-    {"slug": "time", "name": "Date and Time", "desc": "Exact age in years, months and days, and a browser stopwatch."},
-    {"slug": "math", "name": "Math and Converters", "desc": "Standard arithmetic and unit conversion for weight, length and temperature."},
-    {"slug": "worship", "name": "Worship and Daily Use", "desc": "A tasbih counter that saves your count on this device."},
+    {"slug": "money", "name": "Money and Business", "desc": "Money calculators for Zakat, profit and loss, and discounts, with worked examples and clear limits for everyday decisions."},
+    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI in metric or imperial units, review WHO weight categories, and understand what the screening result cannot tell you."},
+    {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, and use a browser stopwatch for everyday timing with clear notes about date and timing limits."},
+    {"slug": "math", "name": "Math and Converters", "desc": "Use a standard calculator and convert weight, length and temperature with validation for invalid or physically impossible values."},
+    {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
 ]
 
 URDU = {
