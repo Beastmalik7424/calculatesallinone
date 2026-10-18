@@ -31,10 +31,23 @@ def output_for_url(url):
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 
+# Category hubs are indexable when their explanatory sections and tool links are present.
+for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
+    assert SITE + hub in sitemap_urls, f"Substantive category hub should be indexable: {hub}"
+
+# Localized homepages remain noindex until their translated tool journeys receive competent review.
+for locale_home in ("/ar/", "/hi/", "/es/", "/fr/", "/ur/"):
+    locale_file = ROOT / locale_home.strip("/") / "index.html"
+    assert locale_file.is_file(), f"Localized homepage missing: {locale_home}"
+    locale_html = locale_file.read_text(encoding="utf-8")
+    assert 'name="robots" content="noindex, follow"' in locale_html, f"Unreviewed localized homepage must stay noindex: {locale_home}"
+    assert SITE + locale_home not in sitemap_urls, f"Unreviewed localized homepage must not be in sitemap: {locale_home}"
+
 for url in urls:
     page = output_for_url(url)
     assert page.is_file(), f"Sitemap URL has no generated HTML: {url} -> {page}"
     html = page.read_text(encoding="utf-8")
+    assert "Last reviewed: 2026-10-18" not in html and "آخری جائزہ: 2026-10-18" not in html, f"Unverified blanket review date remains: {url}"
     title_match = re.search(r"<title>([^<]+)</title>", html)
     desc_match = re.search(r'<meta name="description" content="([^"]+)"', html)
     assert title_match, f"Missing title: {url}"
