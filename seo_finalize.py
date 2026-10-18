@@ -8,8 +8,20 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
-REVIEW_DATE = "2026-10-18"
-HUB_PATHS = {"/ar/", "/es/", "/fr/", "/hi/", "/ur/", "/money/", "/health/", "/math/", "/time/", "/worship/"}
+HUB_PATHS = {"/money/", "/health/", "/math/", "/time/", "/worship/"}
+# These homepage translations are not yet confirmed by a competent native-language reviewer.
+# Keep them accessible to visitors but out of search results until the translated journey is checked.
+UNREVIEWED_LOCALE_HOMES = {"/ar/", "/hi/", "/es/", "/fr/", "/ur/"}
+DESCRIPTION_FALLBACKS = {
+    "/about/": "Learn what CalculatesAll offers, how its free calculators work, and the principles behind clear formulas, examples and stated limitations.",
+    "/privacy/": "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.",
+    "/contact/": "Contact CalculatesAll to report a calculator issue, suggest an improvement or ask about the site's content and privacy practices.",
+    "/methodology/": "See the formulas, conversion factors, worked examples and limitations used by CalculatesAll's calculators and reference tools.",
+    "/editorial-policy/": "Learn how CalculatesAll researches, checks, updates and corrects its calculator guides, formulas and reference information.",
+    "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
+    "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
+    "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
+}
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
 def page_path(file):
@@ -49,7 +61,7 @@ def git_date(path):
             return value, None
     except (OSError, subprocess.CalledProcessError):
         pass
-    return datetime.date.today().isoformat(), src
+    return None, src
 
 def normalize_meta(raw, path, lang):
     title_match = re.search(r"<title>(.*?)</title>", raw, re.S)
@@ -63,16 +75,13 @@ def normalize_meta(raw, path, lang):
         if len(title) > 59:
             suffix = " | CalculatesAll"
             title = title[:59-len(suffix)].rstrip(" |") + suffix
+    if len(desc) < 70:
+        desc = DESCRIPTION_FALLBACKS.get(path, desc)
     if len(desc) > 160:
-        desc = desc[:157].rsplit(" ", 1)[0].rstrip(" ,.;:") + "..."
-    if len(desc) < 120:
-        tail = " فارمولا، مثال اور حدود دیکھ کر نتیجے کو سمجھیں۔" if lang == "ur" else " Review the formula, worked example and limits before relying on the result."
-        separator = "" if desc.endswith(("۔", ".", "!", "?")) else "."
-        desc = desc + separator + " " + tail.lstrip()
-    if len(desc) < 120:
-        desc = (desc + (" طریقہ اور مثال دیکھیں۔" if lang == "ur" else " Check the stated method and example."))[:160]
-    if len(desc) > 160:
-        desc = desc[:157].rsplit(" ", 1)[0].rstrip(" ,.;:") + "..."
+        shortened = desc[:157].rsplit(" ", 1)[0].rstrip(" ,.;:")
+        desc = shortened + "..."
+    if len(desc) < 70 or len(desc) > 160:
+        raise SystemExit("Meta description needs a useful, page-specific 70-160 character description: " + path + " (" + str(len(desc)) + ")")
     raw = re.sub(r"<title>.*?</title>", "<title>" + html.escape(title, quote=False) + "</title>", raw, count=1, flags=re.S)
     raw = re.sub(r'<meta name="description" content="[^"]*"', '<meta name="description" content="' + html.escape(desc, quote=True) + '"', raw, count=1)
     return raw, title, desc
@@ -91,11 +100,14 @@ def main():
         raw = file.read_text(encoding="utf-8")
         main_match = re.search(r"<main[^>]*>(.*?)</main>", raw, re.S)
         main_html = main_match.group(1) if main_match else ""
-        before_tool_list = re.split(r"<ul[^>]*>", main_html, maxsplit=1, flags=re.I)[0]
-        prose_words = word_count(before_tool_list)
-        has_tool_links = bool(re.search(r'<a[^>]+href="/(?:[a-z]{2}/)?[a-z0-9-]+/"', main_html))
-        if prose_words < 150 or not has_tool_links:
+        has_tool_links = bool(re.search(r'<a[^>]+href="/(?:[a-z]{2}/)?[a-z0-9-]+/?"', main_html))
+        # Category hubs have their own intro, tool directory, several explanatory sections and FAQs.
+        # Validate this structure rather than imposing a word-count threshold Google does not publish.
+        guide_headings = len(re.findall(r"<h2\\b", main_html, re.I))
+        explanatory_paragraphs = len(re.findall(r"<p\\b", main_html, re.I))
+        if guide_headings < 4 or explanatory_paragraphs < 6 or not has_tool_links:
             noindex.add(path)
+    noindex.update(UNREVIEWED_LOCALE_HOMES)
     # Preserve any intentional noindex pages, including 404.
     for path, file in paths.items():
         raw = file.read_text(encoding="utf-8")
@@ -139,7 +151,11 @@ def main():
             schemas.append(web_page)
         web_page["name"] = title
         web_page["url"] = canonical
-        web_page["dateModified"] = REVIEW_DATE
+        source_modified, source_date_fallback = git_date(path)
+        if source_modified and not source_date_fallback:
+            web_page["dateModified"] = source_modified
+        else:
+            web_page.pop("dateModified", None)
         web_page["inLanguage"] = lang
         faq_items = []
         faq_pattern = r"<details[^>]*>\s*<summary[^>]*>(.*?)</summary>\s*<p[^>]*>(.*?)</p>\s*</details>"
@@ -180,18 +196,19 @@ def main():
         node = ET.SubElement(urlset, "{http://www.sitemaps.org/schemas/sitemap/0.9}url")
         ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}loc").text = canonical
         lastmod, fallback = git_date(path)
-        ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod").text = lastmod
+        if lastmod:
+            ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod").text = lastmod
         if fallback:
-            fallbacks.append(path + " uses build date because git log returned no date for " + fallback)
+            fallbacks.append(path + " omits lastmod/dateModified because git log returned no source date for " + fallback)
         for code, href in re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', raw):
             if href in indexable_urls:
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})
     ET.indent(urlset, space="  ")
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(urlset, encoding="unicode") + "\n", encoding="utf-8")
     (ROOT / "robots.txt").write_text("User-agent: *\nAllow: /\nDisallow: /404\n\nSitemap: " + SITE + "/sitemap.xml\n", encoding="utf-8")
-    report = ["SEO build report", "Review date: " + REVIEW_DATE, "Indexable pages: " + str(len(indexable)),
+    report = ["SEO build report", "Freshness metadata: source-derived only; no blanket review date", "Indexable pages: " + str(len(indexable)),
               "Noindex pages: " + str(len(noindex_list)), "Sitemap URLs: " + str(len(indexable)),
-              "Titles: unique and under 60 characters", "Descriptions: unique and 120-160 characters",
+              "Titles: unique and under 60 characters", "Descriptions: unique, page-specific and 70-160 characters",
               "JSON-LD: parsed and serialized as valid JSON", "Hub decisions:"]
     report.extend("  " + p + ": " + ("noindex" if p in noindex else "indexable") for p in sorted(HUB_PATHS))
     report.append("Lastmod fallbacks:")
