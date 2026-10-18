@@ -1122,7 +1122,7 @@ def urdu_tool_page(t):
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
-        + answer_block(t["slug"], "ur")
+        + ("" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur"))
         + '<section class="mt-8" aria-label="کیلکولیٹر">' + ui + '</section>'
         '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
