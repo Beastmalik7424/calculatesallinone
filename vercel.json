@@ -51,5 +51,32 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/contact",
+      "destination": "/contact/",
+      "statusCode": 301
+    },
+    {
+      "source": "/editorial-policy",
+      "destination": "/editorial-policy/",
+      "statusCode": 301
+    },
+    {
+      "source": "/methodology",
+      "destination": "/methodology/",
+      "statusCode": 301
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy/",
+      "statusCode": 301
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms/",
+      "statusCode": 301
+    }
   ]
 }

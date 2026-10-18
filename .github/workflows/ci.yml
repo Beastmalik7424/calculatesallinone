@@ -60,8 +60,8 @@ jobs:
           if grep -Eq 'âŒ«|Ã·|Ã—|âˆ’' public/index.html; then echo 'Corrupted calculator symbols found'; exit 1; fi
       - name: Verify sitemap coverage and internal links
         run: python tests/site-output-smoke.py
-      - name: Validate permanent trailing-slash redirects (301 or 308)
-        run: bash tests/redirect-contract.sh
+      - name: Validate explicit HTTP 301 redirect configuration
+        run: python tests/vercel-redirect-config-smoke.py
       - name: Lighthouse SEO audit on built pages
         run: |
           python3 -m http.server 4173 --directory public >/tmp/calculateall-http.log 2>&1 &
