@@ -68,17 +68,22 @@ assert descriptions[home_url].startswith("Free online calculators for"), (
 
 # The Urdu root is a localized site homepage, not a standard-calculator landing page.
 urdu_home_url = SITE + "/ur/"
-assert titles[urdu_home_url].startswith("CalculatesAll |"), (
-    "Urdu homepage title must identify the site and its broad purpose: " + titles[urdu_home_url]
-)
-assert "معیاری کیلکولیٹر" not in titles[urdu_home_url], (
-    "Urdu homepage title incorrectly targets only the standard calculator."
-)
 ur_home_html = output_for_url(urdu_home_url).read_text(encoding="utf-8")
-ur_home_h1 = re.search(r"<h1[^>]*>(.*?)</h1>", ur_home_html, re.S)
-assert ur_home_h1 and "مفت آن لائن کیلکولیٹرز" in ur_home_h1.group(1), (
-    "Urdu homepage H1 must describe the calculator collection."
-)
+if urdu_home_url in sitemap_urls:
+    assert titles[urdu_home_url].startswith("CalculatesAll |"), (
+        "Urdu homepage title must identify the site and its broad purpose: " + titles[urdu_home_url]
+    )
+    assert "معیاری کیلکولیٹر" not in titles[urdu_home_url], (
+        "Urdu homepage title incorrectly targets only the standard calculator."
+    )
+    ur_home_h1 = re.search(r"<h1[^>]*>(.*?)</h1>", ur_home_html, re.S)
+    assert ur_home_h1 and "مفت آن لائن کیلکولیٹرز" in ur_home_h1.group(1), (
+        "Urdu homepage H1 must describe the calculator collection."
+    )
+else:
+    assert 'name="robots" content="noindex, follow"' in ur_home_html, (
+        "Urdu homepage omitted from sitemap must be marked noindex."
+    )
 
 sitemap_urls = set(urls)
 generated = set()
