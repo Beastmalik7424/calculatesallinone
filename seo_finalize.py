@@ -71,7 +71,8 @@ def normalize_meta(raw, path, lang):
         desc = desc + separator + " " + tail.lstrip()
     if len(desc) < 120:
         desc = (desc + (" طریقہ اور مثال دیکھیں۔" if lang == "ur" else " Check the stated method and example."))[:160]
-    desc = desc[:160]
+    if len(desc) > 160:
+        desc = desc[:157].rsplit(" ", 1)[0].rstrip(" ,.;:") + "..."
     raw = re.sub(r"<title>.*?</title>", "<title>" + html.escape(title, quote=False) + "</title>", raw, count=1, flags=re.S)
     raw = re.sub(r'<meta name="description" content="[^"]*"', '<meta name="description" content="' + html.escape(desc, quote=True) + '"', raw, count=1)
     return raw, title, desc
@@ -109,7 +110,7 @@ def main():
         def keep_alternate(match):
             href = match.group(2)
             return "" if any(href == SITE + excluded for excluded in noindex) else match.group(0)
-        raw = re.sub(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"\\s*/?>', keep_alternate, raw)
+        raw = re.sub(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"\s*/?>', keep_alternate, raw)
         robot_value = "noindex, follow" if path in noindex else "index, follow"
         raw = re.sub(r'<meta name="robots" content="[^"]*"', '<meta name="robots" content="' + robot_value + '"', raw, count=1)
         if path in noindex:
