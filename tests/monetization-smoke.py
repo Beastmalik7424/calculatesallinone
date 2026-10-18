@@ -38,7 +38,8 @@ try:
         build.ADSENSE_CONSENT_READY = False
         assert build.ad_slot() == "", "Ad slots must stay disabled until consent readiness is confirmed"
         page_head_without_consent = build.head("Test", "Description", "/", [], lang="en")
-        assert "adsbygoogle.js?client=" not in page_head_without_consent, "Ad script must stay disabled until consent readiness is confirmed"
+        assert "adsbygoogle.js?client=ca-pub-1234567890123456" in page_head_without_consent, "Publisher verification snippet must remain available while ad slots are disabled"
+        assert build.ad_slot() == "", "Ad slots must stay disabled until consent readiness is confirmed"
 
         # Reject malformed, shortened, overlong, or incorrectly prefixed publisher IDs.
         for invalid_client in ("ca-pub-123", "ca-pub-" + "1" * 17, "pub-" + "1" * 16):
