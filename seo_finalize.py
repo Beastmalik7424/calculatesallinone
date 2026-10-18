@@ -169,7 +169,7 @@ def main():
     noindex_list = sorted(noindex)
     Path("indexable.txt").write_text("\n".join(indexable) + "\n", encoding="utf-8")
     Path("noindex.txt").write_text("\n".join(noindex_list) + ("\n" if noindex_list else ""), encoding="utf-8")
-    Path("urls.txt").write_text("\n".join(indexable) + "\n", encoding="utf-8")
+    Path("urls.txt").write_text("\n".join(SITE + path for path in indexable) + "\n", encoding="utf-8")
     Path("no-slash.txt").write_text("\n".join(NO_SLASH_PATHS) + "\n", encoding="utf-8")
     indexable_urls = {SITE + path for path in indexable}
     urlset = ET.Element("urlset", {"xmlns":"http://www.sitemaps.org/schemas/sitemap/0.9","xmlns:xhtml":"http://www.w3.org/1999/xhtml"})
