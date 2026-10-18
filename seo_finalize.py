@@ -22,6 +22,14 @@ DESCRIPTION_FALLBACKS = {
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
 }
+URDU_DESCRIPTION_FALLBACKS = {
+    "/ur/age-calculator/": "تاریخ پیدائش سے عمر سال، مہینوں اور دنوں میں معلوم کریں، کل دن دیکھیں، اور تاریخ کے حساب کی حدود سمجھیں۔",
+    "/ur/profit-loss-calculator/": "قیمت خرید اور فروخت درج کرکے منافع یا نقصان اور اس کا فیصد معلوم کریں، پھر فارمولا اور مثال دیکھیں۔",
+    "/ur/discount-calculator/": "اصل قیمت اور رعایت کا فیصد درج کرکے بچت اور آخری قیمت معلوم کریں، ساتھ ہی حساب کا طریقہ اور مثال دیکھیں۔",
+    "/ur/standard-calculator/": "براؤزر میں جمع، تفریق، ضرب، تقسیم، فیصد اور قوسین کے ساتھ حساب کریں اور حساب کے اصول سمجھیں۔",
+    "/ur/stopwatch/": "براؤزر میں وقت شروع، روکیں اور دوبارہ صفر کریں، اور مختصر وقت کی پیمائش میں ممکنہ فرق سمجھیں۔",
+    "/ur/tasbih-counter/": "ذکر کی گنتی کے لیے ہدف مقرر کریں، باقی تعداد دیکھیں اور گنتی کو اسی ڈیوائس پر محفوظ رکھیں۔",
+}
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
 def page_path(file):
@@ -83,7 +91,7 @@ def normalize_meta(raw, path, lang):
             suffix = " | CalculatesAll"
             title = title[:59-len(suffix)].rstrip(" |") + suffix
     if len(desc) < 70:
-        desc = DESCRIPTION_FALLBACKS.get(path, desc)
+        desc = DESCRIPTION_FALLBACKS.get(path, URDU_DESCRIPTION_FALLBACKS.get(path, desc))
     if len(desc) > 160:
         shortened = desc[:157].rsplit(" ", 1)[0].rstrip(" ,.;:")
         desc = shortened + "..."
