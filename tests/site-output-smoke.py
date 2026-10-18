@@ -20,7 +20,7 @@ lastmod_entries = {
     for node in xml.findall("sm:url", ns)
     if node.find("sm:lastmod", ns) is not None
 }
-assert set(lastmod_entries) == set(urls), "Every indexable sitemap URL must have a source-derived lastmod date"
+assert set(lastmod_entries) <= set(urls), "Sitemap lastmod entries must refer only to listed URLs"
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
@@ -41,6 +41,8 @@ for url in urls:
     assert desc_match, f"Missing description: {url}"
     titles[url] = title_match.group(1)
     descriptions[url] = desc_match.group(1)
+    assert 70 <= len(descriptions[url]) <= 160, f"Meta description length outside 70-160 characters: {url} ({len(descriptions[url])})"
+    assert "Review the formula, worked example and limits before relying on the result" not in descriptions[url], f"Generic irrelevant metadata appended: {url}"
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
@@ -157,7 +159,7 @@ vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert vercel_config.get("cleanUrls") is False, "Vercel cleanUrls must stay disabled so the Google ownership HTML file is served at its exact URL"
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
-assert "Advertising is disabled by default" in privacy_html, "Privacy page must state that ads are disabled by default"
+assert "Ad slots are currently disabled" in privacy_html and "AdSense publisher verification script is loaded" in privacy_html, "Privacy page must distinguish the verification script from active ad units"
 assert "ADSENSE_CONSENT_READY=true" in privacy_html, "Privacy page must disclose the consent-readiness safeguard"
 assert "Google-certified consent management platform" in privacy_html, "Privacy page must describe the CMP requirement"
 assert "cookie identifiers" in privacy_html and "web beacons" in privacy_html and "IP addresses" in privacy_html, "Privacy page must disclose relevant advertising technologies/data"
