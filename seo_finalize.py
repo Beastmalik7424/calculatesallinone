@@ -106,6 +106,10 @@ def main():
         raw = file.read_text(encoding="utf-8")
         canonical = SITE + path
         raw = re.sub(r'<link rel="canonical" href="[^"]*">', '<link rel="canonical" href="' + canonical + '">', raw, count=1)
+        def keep_alternate(match):
+            href = match.group(2)
+            return "" if any(href == SITE + excluded for excluded in noindex) else match.group(0)
+        raw = re.sub(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"\\s*/?>', keep_alternate, raw)
         robot_value = "noindex, follow" if path in noindex else "index, follow"
         raw = re.sub(r'<meta name="robots" content="[^"]*"', '<meta name="robots" content="' + robot_value + '"', raw, count=1)
         if path in noindex:
