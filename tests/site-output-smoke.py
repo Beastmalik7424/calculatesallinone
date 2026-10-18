@@ -10,6 +10,7 @@ SITE = "https://calculateallinone.vercel.app"
 xml = ET.parse(ROOT / "sitemap.xml").getroot()
 ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.find("sm:loc", ns).text for node in xml.findall("sm:url", ns)]
+sitemap_urls = set(urls)
 titles = {}
 descriptions = {}
 assert urls, "Sitemap has no URLs"
