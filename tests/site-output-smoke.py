@@ -19,9 +19,7 @@ lastmod_entries = {
     for node in xml.findall("sm:url", ns)
     if node.find("sm:lastmod", ns) is not None
 }
-assert lastmod_entries == {SITE + "/zakat-calculator/": "2026-10-17"}, (
-    "Only verified per-page lastmod dates should be emitted; got " + repr(lastmod_entries)
-)
+assert set(lastmod_entries) == set(urls), "Every indexable sitemap URL must have a source-derived lastmod date"
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
@@ -88,10 +86,17 @@ for page in ROOT.rglob("index.html"):
     rel = page.parent.relative_to(ROOT).as_posix()
     path = "/" + (rel + "/" if rel != "." else "")
     generated.add(SITE + path)
-assert generated == sitemap_urls, (
-    "Sitemap/page mismatch. Missing from sitemap: " + repr(sorted(generated - sitemap_urls)) +
-    "; URLs without generated pages: " + repr(sorted(sitemap_urls - generated))
+indexable_paths = [line.strip() for line in Path("indexable.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+noindex_paths = [line.strip() for line in Path("noindex.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+assert {SITE + path for path in indexable_paths} == sitemap_urls, "indexable.txt must exactly match sitemap URLs"
+assert not ({SITE + path for path in noindex_paths} & sitemap_urls), "noindex URLs must not appear in sitemap"
+assert {SITE + path for path in indexable_paths + noindex_paths} == generated, (
+    "Manifest/page mismatch. Missing manifests: " + repr(sorted(generated - {SITE + path for path in indexable_paths + noindex_paths})) +
+    "; unexpected manifest URLs: " + repr(sorted({SITE + path for path in indexable_paths + noindex_paths} - generated))
 )
+for path in noindex_paths:
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    assert 'name="robots" content="noindex, follow"' in page_html, "noindex manifest page lacks robots tag: " + path
 
 robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
 assert "User-agent: *" in robots and "Allow: /" in robots

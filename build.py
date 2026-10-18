@@ -912,12 +912,12 @@ def shell(main_html, lang="en", current_path=None):
         '<div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">'
         '<p>' + s["tag"] + '</p>'
         '<nav class="flex flex-wrap gap-5" aria-label="' + s["footer"] + '">'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/about">' + s["about"] + '</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/privacy">' + s["privacy"] + '</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/contact">' + s["contact"] + '</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/methodology">' + s["methodology"] + '</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/editorial-policy">' + s["editorial"] + '</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/terms">' + s["terms"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/about/">' + s["about"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/privacy/">' + s["privacy"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/contact/">' + s["contact"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/methodology/">' + s["methodology"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/editorial-policy/">' + s["editorial"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/terms/">' + s["terms"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/marketplaces/">' + s["marketplace"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">' + s["affiliate"] + '</a>'
         '</nav></div>'
@@ -991,6 +991,53 @@ def canon_override(doc, path):
     return doc
 
 
+ANSWER_BLOCKS = {
+    "zakat-calculator": {
+        "en": 'This calculator uses the silver Nisab standard of 612.36 grams and applies 2.5% to eligible net wealth when the required conditions are met. Nisab standards differ, so this page names the silver standard it uses. Source: <a class="' + LINK + '" href="https://islamicrelief.org.au/our-work/islamic-giving/nisab/" target="_blank" rel="noopener noreferrer">Islamic Relief Australia Nisab guidance</a>.',
+        "ur": 'یہ کیلکولیٹر چاندی کے 612.36 گرام نصاب اور اہل خالص مال پر 2.5٪ شرح استعمال کرتا ہے۔ نصاب کے معیار مختلف ہو سکتے ہیں، اس لیے یہاں چاندی کا معیار واضح کیا گیا ہے۔ ماخذ: <a class="' + LINK + '" href="https://islamicrelief.org.au/our-work/islamic-giving/nisab/" target="_blank" rel="noopener noreferrer">اسلامک ریلیف آسٹریلیا کی نصاب رہنمائی</a>۔'
+    },
+    "bmi-calculator": {
+        "en": 'For adults, the CDC classifies a BMI from 25.0 to less than 30.0 as overweight; BMI is a screening measure, not a diagnosis. Source: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC adult BMI categories</a>.',
+        "ur": 'بالغ افراد میں CDC کے مطابق BMI کی 25.0 سے 30.0 سے کم حد کو زائد وزن کہا جاتا ہے؛ BMI صرف ابتدائی جانچ ہے، تشخیص نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC کی بالغوں کے لیے BMI درجہ بندی</a>۔'
+    },
+    "profit-loss-calculator": {
+        "en": 'If an item costs 1,000 and sells for 1,200, the difference is 200 before other business expenses. This is the basic cost-price comparison used by this calculator. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
+        "ur": 'اگر کسی چیز کی قیمت خرید 1,000 اور فروخت 1,200 ہو تو دوسرے کاروباری اخراجات سے پہلے فرق 200 ہے۔ یہ اسی کیلکولیٹر کا بنیادی تقابل ہے۔ ماخذ: <a class="' + LINK + '" href="/methodology/">CalculatesAll کا حسابی طریقۂ کار</a>۔'
+    },
+    "discount-calculator": {
+        "en": 'A 20% discount on a price of 1,000 saves 200 and leaves a final price of 800 before tax or extra charges. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
+        "ur": '1,000 کی قیمت پر 20٪ رعایت سے 200 کی بچت ہوتی ہے اور ٹیکس یا اضافی فیس سے پہلے آخری قیمت 800 رہتی ہے۔ ماخذ: <a class="' + LINK + '" href="/methodology/">CalculatesAll کا حسابی طریقۂ کار</a>۔'
+    },
+    "age-calculator": {
+        "en": 'A leap year has 366 calendar days, which is one reason age should be calculated from calendar dates rather than by dividing days by 365. Source: <a class="' + LINK + '" href="https://www.timeanddate.com/date/leapyear.html" target="_blank" rel="noopener noreferrer">timeanddate leap-year explanation</a>.',
+        "ur": 'لیپ سال میں 366 دن ہوتے ہیں، اس لیے عمر کو صرف کل دنوں کو 365 پر تقسیم کر کے نکالنا درست نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.timeanddate.com/date/leapyear.html" target="_blank" rel="noopener noreferrer">لیپ سال کی وضاحت</a>۔'
+    },
+    "unit-converter": {
+        "en": 'One international avoirdupois pound equals exactly 0.45359237 kilograms. Source: <a class="' + LINK + '" href="https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9" target="_blank" rel="noopener noreferrer">NIST conversion factors</a>.',
+        "ur": 'ایک بین الاقوامی پاؤنڈ بالکل 0.45359237 کلوگرام کے برابر ہے۔ ماخذ: <a class="' + LINK + '" href="https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9" target="_blank" rel="noopener noreferrer">NIST کی اکائیوں کی تبدیلی کی جدول</a>۔'
+    },
+    "standard-calculator": {
+        "en": 'Using the usual order of operations, 2 + 3 × 4 equals 14 because multiplication is evaluated before addition. Source: <a class="' + LINK + '" href="https://www.khanacademy.org/math/arithmetic/arith-review-multiply-divide/arith-review-order-of-operations/a/order-of-operations" target="_blank" rel="noopener noreferrer">Khan Academy order of operations</a>.',
+        "ur": 'عام ترتیبِ عملیات کے مطابق 2 + 3 × 4 کا جواب 14 ہے، کیونکہ جمع سے پہلے ضرب کی جاتی ہے۔ ماخذ: <a class="' + LINK + '" href="https://www.khanacademy.org/math/arithmetic/arith-review-multiply-divide/arith-review-order-of-operations/a/order-of-operations" target="_blank" rel="noopener noreferrer">Khan Academy کی ترتیبِ عملیات</a>۔'
+    },
+    "tasbih-counter": {
+        "en": 'Each tap adds one count, so 33 deliberate taps produce a displayed count of 33 if the counter starts at zero. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll tool methodology</a>.',
+        "ur": 'ہر دبانے سے گنتی میں ایک کا اضافہ ہوتا ہے، اس لیے صفر سے شروع کر کے 33 بار دبانے پر گنتی 33 ہو گی۔ ماخذ: <a class="' + LINK + '" href="/methodology/">CalculatesAll کا طریقۂ کار</a>۔'
+    },
+    "stopwatch": {
+        "en": 'One second contains 1,000 milliseconds, the unit commonly used for sub-second timing displays. Source: <a class="' + LINK + '" href="https://www.nist.gov/pml/owm/metric-si/si-units" target="_blank" rel="noopener noreferrer">NIST SI units</a>.',
+        "ur": 'ایک سیکنڈ میں 1,000 ملی سیکنڈ ہوتے ہیں، جو ایک سیکنڈ سے کم وقت دکھانے کے لیے استعمال ہوتے ہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.nist.gov/pml/owm/metric-si/si-units" target="_blank" rel="noopener noreferrer">NIST کی SI اکائیاں</a>۔'
+    }
+}
+
+def answer_block(slug, lang="en"):
+    text = ANSWER_BLOCKS.get(slug, {}).get(lang)
+    if not text:
+        return ""
+    label = "ماخذ پر مبنی وضاحت" if lang == "ur" else "Evidence-based note"
+    return '<p class="mt-5 rounded-xl border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-950 p-4 text-base leading-relaxed"><strong>' + label + '.</strong> ' + text + '</p>'
+
+
 def tool_page(t):
     path = "/" + t["slug"] + "/"
     url = SITE_URL + path
@@ -1008,9 +1055,10 @@ def tool_page(t):
             {"@type": "ListItem", "position": 3, "name": t["name"], "item": url}]},
     ]
     related = ""
-    for other in TOOLS:
-        if other["slug"] != t["slug"] and other["category"] == t["category"]:
-            related += '<li><a class="' + LINK + '" href="/' + other["slug"] + '">' + other["name"] + "</a></li>"
+    related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
+    related_tools += [other for other in TOOLS if other["slug"] != t["slug"] and other not in related_tools]
+    for other in related_tools[:2]:
+        related += '<li><a class="' + LINK + '" href="/' + other["slug"] + '/">' + other["name"] + "</a></li>"
     alternates = None
     if t["slug"] in URDU:
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
@@ -1022,11 +1070,15 @@ def tool_page(t):
         '<li aria-current="page">' + t["name"] + "</li></ol></nav>"
         '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
+        + answer_block(t["slug"], "en")
         '<section class="mt-8 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">' + t["ui"] + '</section>'
         + ad_slot()
-        + '<p class="mt-8 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Quick answer.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
+        + '<h2 class="' + H2 + '">How it is calculated</h2>'
+        + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
+        + '<h2 class="' + H2 + '">Rules and limits</h2>'
         + guide_html(t["guide"])
-        + '<h2 class="' + H2 + '">Questions</h2><div class="mt-3">' + faq_html(t["faq"] + EXTRA[t["slug"]]["faq"]) + "</div>"
+        + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(t["faq"] + EXTRA[t["slug"]]["faq"]) + "</div>"
+        + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + t["sources"] + '</p>'
         + updated
         + review_box(t["slug"])
         + '<section class="mt-12"><h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100">More in ' + cat["name"] + '</h2>'
@@ -1070,6 +1122,7 @@ def urdu_tool_page(t):
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
+        + answer_block(t["slug"], "ur")
         '<section class="mt-8" aria-label="کیلکولیٹر">' + ui + '</section>'
         '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
