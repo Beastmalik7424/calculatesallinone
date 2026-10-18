@@ -793,7 +793,7 @@ def shell_strings(lang):
 
 
 def home_alts_all():
-    return [(l["code"], l["path"]) for l in LANGS] + [("x-default", "/")]
+    return [("en", "/")] + [(l["code"], l["path"]) for l in LANGS] + [("ur", "/ur/"), ("x-default", "/")]
 
 
 def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
@@ -1139,7 +1139,7 @@ def category_page(c):
     for t in TOOLS:
         if t["category"] == c["slug"]:
             items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
-                      '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + t["slug"] + '">' + t["name"] + "</a>"
+                      '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + t["slug"] + '/">' + t["name"] + "</a>"
                       '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + t["description"] + "</p></li>")
     title = c["name"] + " | CalculatesAll"
     schema = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": c["name"], "url": SITE_URL + path}]
