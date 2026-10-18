@@ -103,8 +103,8 @@ def main():
         has_tool_links = bool(re.search(r'<a[^>]+href="/(?:[a-z]{2}/)?[a-z0-9-]+/?"', main_html))
         # Category hubs have their own intro, tool directory, several explanatory sections and FAQs.
         # Validate this structure rather than imposing a word-count threshold Google does not publish.
-        guide_headings = len(re.findall(r"<h2\\b", main_html, re.I))
-        explanatory_paragraphs = len(re.findall(r"<p\\b", main_html, re.I))
+        guide_headings = len(re.findall(r"<h2\b", main_html, re.I))
+        explanatory_paragraphs = len(re.findall(r"<p\b", main_html, re.I))
         if guide_headings < 4 or explanatory_paragraphs < 6 or not has_tool_links:
             noindex.add(path)
     noindex.update(UNREVIEWED_LOCALE_HOMES)
