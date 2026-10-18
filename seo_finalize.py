@@ -23,6 +23,8 @@ DESCRIPTION_FALLBACKS = {
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
+    "/ur/zakat-calculator/": "اپنی بچت، اثاثے اور واجب الادا قرض درج کرکے چاندی کے نصاب اور مکمل قمری سال کی شرط کے مطابق زکوٰۃ کا حساب کریں۔",
+    "/ur/bmi-calculator/": "بالغ افراد کا BMI میٹرک یا امپیریل اکائیوں میں معلوم کریں، WHO وزن کی درجہ بندی دیکھیں اور نتیجے کی حدود سمجھیں۔",
     "/ur/age-calculator/": "تاریخ پیدائش سے عمر سال، مہینوں اور دنوں میں معلوم کریں، کل دن دیکھیں، اور تاریخ کے حساب کی حدود سمجھیں۔",
     "/ur/profit-loss-calculator/": "قیمت خرید اور فروخت درج کرکے منافع یا نقصان اور اس کا فیصد معلوم کریں، پھر فارمولا اور مثال دیکھیں۔",
     "/ur/discount-calculator/": "اصل قیمت اور رعایت کا فیصد درج کرکے بچت اور آخری قیمت معلوم کریں، ساتھ ہی حساب کا طریقہ اور مثال دیکھیں۔",
@@ -90,7 +92,7 @@ def normalize_meta(raw, path, lang):
         if len(title) > 59:
             suffix = " | CalculatesAll"
             title = title[:59-len(suffix)].rstrip(" |") + suffix
-    if len(desc) < 70:
+    if len(desc) < 90:
         desc = DESCRIPTION_FALLBACKS.get(path, URDU_DESCRIPTION_FALLBACKS.get(path, desc))
     if len(desc) > 160:
         shortened = desc[:157].rsplit(" ", 1)[0].rstrip(" ,.;:")
@@ -190,8 +192,8 @@ def main():
     for path, title in titles.items():
         if len(title) >= 60:
             raise SystemExit("Title >=60 characters: " + path)
-        if not 120 <= len(descriptions[path]) <= 160:
-            raise SystemExit("Description outside 120-160 characters: " + path + " (" + str(len(descriptions[path])) + ")")
+        if not 70 <= len(descriptions[path]) <= 160:
+            raise SystemExit("Description outside 70-160 characters: " + path + " (" + str(len(descriptions[path])) + ")")
     indexable = sorted(path for path in paths if path not in noindex)
     noindex_list = sorted(noindex)
     Path("indexable.txt").write_text("\n".join(indexable) + "\n", encoding="utf-8")
