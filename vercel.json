@@ -3,7 +3,6 @@
   "buildCommand": "npm ci && npm run build",
   "outputDirectory": "public",
   "cleanUrls": false,
-  "trailingSlash": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -87,6 +86,13 @@
         "Location": "/terms/"
       },
       "status": 301
+    },
+    {
+      "src": "^/(?!.*\\.[^/]+$)(.*[^/])$",
+      "headers": {
+        "Location": "/$1/"
+      },
+      "status": 308
     }
   ]
 }
