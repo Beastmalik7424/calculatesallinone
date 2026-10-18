@@ -13,7 +13,7 @@ REVIEWERS = json.load(open(REVIEWERS_PATH, encoding="utf-8")) if os.path.exists(
 from datetime import date
 
 SITE_URL = os.environ.get("SITE_URL", "https://calculateallinone.vercel.app").rstrip("/")
-ADSENSE_CLIENT = os.environ.get("ADSENSE_CLIENT", "").strip()
+ADSENSE_CLIENT = os.environ.get("ADSENSE_CLIENT", "ca-pub-9453966537556063").strip()
 ADSENSE_SLOT = os.environ.get("ADSENSE_SLOT", "").strip()
 # Explicitly fail closed until the publisher confirms account-side consent setup.
 # This flag is a safeguard, not an automated check of AdSense/CMP account settings.
@@ -804,7 +804,9 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         for code, href in alternates:
             alt += '<link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '">\n'
     ads = ""
-    if ADSENSE_CLIENT and ADSENSE_SLOT and ADSENSE_CONSENT_READY:
+    # Load the publisher verification snippet on every generated page.
+    # Actual ad slots remain disabled until slot ID and consent setup are confirmed.
+    if ADSENSE_CLIENT:
         ads = ('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
                + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>\n')
     ld = ""
