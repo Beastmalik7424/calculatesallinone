@@ -54,6 +54,7 @@ try:
             assert not ads_file.exists(), "Invalid publisher ID must never create ads.txt"
 
         os.environ.pop("ADSENSE_CLIENT", None)
+        build.ADSENSE_CLIENT = ""
         assert build.write_ads_txt() is False
         assert not ads_file.exists(), "ads.txt should not be published without a real publisher ID"
 finally:
