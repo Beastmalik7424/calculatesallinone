@@ -67,7 +67,8 @@ def normalize_meta(raw, path, lang):
         desc = desc[:157].rsplit(" ", 1)[0].rstrip(" ,.;:") + "..."
     if len(desc) < 120:
         tail = " فارمولا، مثال اور حدود دیکھ کر نتیجے کو سمجھیں۔" if lang == "ur" else " Review the formula, worked example and limits before relying on the result."
-        desc = desc.rstrip(" .،") + tail[:max(0, 160-len(desc))]
+        separator = "" if desc.endswith(("۔", ".", "!", "?")) else "."
+        desc = desc + separator + " " + tail.lstrip()
     if len(desc) < 120:
         desc = (desc + (" طریقہ اور مثال دیکھیں۔" if lang == "ur" else " Check the stated method and example."))[:160]
     desc = desc[:160]
