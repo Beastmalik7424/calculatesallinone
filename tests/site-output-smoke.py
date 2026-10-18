@@ -300,7 +300,7 @@ for url in urls:
     assert "FAQPage" not in schema_types, f"FAQPage rich-result markup is prohibited: {url}"
     web_pages = [item for item in parsed_schemas if item.get("@type") == "WebPage"]
     assert web_pages, f"Indexable page missing WebPage JSON-LD: {url}"
-    review_match = re.search(r"(?:Last reviewed|آخری جائزہ):\\s*([0-9]{4}-[0-9]{2}-[0-9]{2})", html)
+    review_match = re.search(r"(?:Last reviewed|آخری جائزہ):\s*([0-9]{4}-[0-9]{2}-[0-9]{2})", html)
     assert review_match, f"Missing visible source-derived Last reviewed date: {url}"
     assert web_pages[0].get("dateModified") == review_match.group(1), (
         f"WebPage dateModified must match visible Last reviewed on {url}"
