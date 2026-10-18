@@ -94,6 +94,14 @@ for page in ROOT.rglob("index.html"):
     generated.add(SITE + path)
 indexable_paths = [line.strip() for line in Path("indexable.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
 noindex_paths = [line.strip() for line in Path("noindex.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+url_manifest = [line.strip() for line in Path("urls.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+assert url_manifest == indexable_paths, "urls.txt must contain the same path-only entries as indexable.txt"
+assert {"/ur/", "/health/", "/money/", "/math/", "/time/", "/worship/"}.issubset(set(indexable_paths)), (
+    "Hubs meeting the full visible-text and direct-tool-link rule must be indexable."
+)
+assert {"/ar/", "/es/", "/fr/", "/hi/"}.issubset(set(noindex_paths)), (
+    "Localized hubs without direct tool links must remain noindex."
+)
 assert {SITE + path for path in indexable_paths} == sitemap_urls, "indexable.txt must exactly match sitemap URLs"
 assert not ({SITE + path for path in noindex_paths} & sitemap_urls), "noindex URLs must not appear in sitemap"
 assert {SITE + path for path in indexable_paths + noindex_paths} == generated, (
@@ -288,12 +296,28 @@ for url in urls:
             parsed_schemas.append(json.loads(block))
         except json.JSONDecodeError as exc:
             raise AssertionError(f"Invalid JSON-LD on {url}: {exc}") from exc
+    schema_types = {item.get("@type") for item in parsed_schemas}
+    assert "FAQPage" not in schema_types, f"FAQPage rich-result markup is prohibited: {url}"
+    web_pages = [item for item in parsed_schemas if item.get("@type") == "WebPage"]
+    assert web_pages, f"Indexable page missing WebPage JSON-LD: {url}"
+    review_match = re.search(r"(?:Last reviewed|آخری جائزہ):\\s*([0-9]{4}-[0-9]{2}-[0-9]{2})", html)
+    assert review_match, f"Missing visible source-derived Last reviewed date: {url}"
+    assert web_pages[0].get("dateModified") == review_match.group(1), (
+        f"WebPage dateModified must match visible Last reviewed on {url}"
+    )
     for item in parsed_schemas:
         if item.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
             if "inLanguage" in item:
                 assert item.get("inLanguage") == page_lang, (
                 f"Schema language mismatch on {url}: HTML={page_lang}, schema={item.get('inLanguage')}"
             )
+    if url == home_url:
+        assert "Organization" in schema_types, "Homepage must include Organization JSON-LD."
+    if url in (home_url, urdu_home_url):
+        alternates = dict(re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', html))
+        assert alternates.get("en") == home_url, f"English homepage hreflang missing or incorrect: {url}"
+        assert alternates.get("ur") == urdu_home_url, f"Urdu homepage hreflang missing or incorrect: {url}"
+        assert alternates.get("x-default") == home_url, f"x-default must point to English homepage: {url}"
     if url.endswith("/ur/"):
         websites = [x for x in parsed_schemas if x.get("@type") == "WebSite"]
         apps = [x for x in parsed_schemas if x.get("@type") == "WebApplication"]
