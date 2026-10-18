@@ -133,12 +133,8 @@ def main():
         raw, title, desc = normalize_meta(raw, path, lang)
         titles[path] = title
         descriptions[path] = desc
-        label = "آخری جائزہ" if lang == "ur" else "Last reviewed"
-        review_html = '<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">' + label + ': ' + REVIEW_DATE + '</p>'
-        # Replace the old tool-page update stamp with a consistent visible review date.
-        raw = re.sub(r'<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: [0-9]{4}-[0-9]{2}-[0-9]{2}\. .*?</p>', review_html, raw, count=1, flags=re.S)
-        if ("Last reviewed: " + REVIEW_DATE) not in raw and ("آخری جائزہ: " + REVIEW_DATE) not in raw:
-            raw = raw.replace("</main>", review_html + "</main>", 1)
+        # Remove legacy blanket review/update stamps. Never claim a page was reviewed unless that review occurred.
+        raw = re.sub(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', "", raw, count=1, flags=re.S)
         schemas = []
         for match in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', raw, re.S):
             try:
