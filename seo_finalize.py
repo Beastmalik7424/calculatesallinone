@@ -118,11 +118,11 @@ def main():
         label = "آخری جائزہ" if lang == "ur" else "Last reviewed"
         review_html = '<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">' + label + ': ' + REVIEW_DATE + '</p>'
         # Replace the old tool-page update stamp with a consistent visible review date.
-        raw = re.sub(r'<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: [0-9]{4}-[0-9]{2}-[0-9]{2}\\. .*?</p>', review_html, raw, count=1, flags=re.S)
+        raw = re.sub(r'<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: [0-9]{4}-[0-9]{2}-[0-9]{2}\. .*?</p>', review_html, raw, count=1, flags=re.S)
         if ("Last reviewed: " + REVIEW_DATE) not in raw and ("آخری جائزہ: " + REVIEW_DATE) not in raw:
             raw = raw.replace("</main>", review_html + "</main>", 1)
         schemas = []
-        for match in re.finditer(r'<script type="application/ld\\+json">(.*?)</script>', raw, re.S):
+        for match in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', raw, re.S):
             try:
                 schemas.append(json.loads(match.group(1)))
             except json.JSONDecodeError as exc:
@@ -136,10 +136,7 @@ def main():
         web_page["dateModified"] = REVIEW_DATE
         web_page["inLanguage"] = lang
         faq_items = []
-        faq_pattern = r"<details[^>]*>[ 	
-]*<summary[^>]*>(.*?)</summary>[ 	
-]*<p[^>]*>(.*?)</p>[ 	
-]*</details>"
+        faq_pattern = r"<details[^>]*>\s*<summary[^>]*>(.*?)</summary>\s*<p[^>]*>(.*?)</p>\s*</details>"
         for q, a in re.findall(faq_pattern, raw, re.S|re.I):
             q_text = " ".join(strip_tags(q).split())
             a_text = " ".join(strip_tags(a).split())
@@ -148,8 +145,7 @@ def main():
         if faq_items:
             schemas = [s for s in schemas if s.get("@type") != "FAQPage"]
             schemas.append({"@context":"https://schema.org","@type":"FAQPage","mainEntity":faq_items})
-        raw = re.sub(r'<script type="application/ld\\+json">.*?</script>[ 	
-]*', "", raw, flags=re.S)
+        raw = re.sub(r'<script type="application/ld\+json">.*?</script>[ \t\r\n]*', "", raw, flags=re.S)
         schema_html = "".join('<script type="application/ld+json">' + json.dumps(s, ensure_ascii=False, separators=(",", ":")) + '</script>\n' for s in schemas)
         raw = raw.replace("</head>", schema_html + "</head>", 1)
         file.write_text(raw, encoding="utf-8")
