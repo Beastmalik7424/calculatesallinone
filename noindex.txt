@@ -1,0 +1,10 @@
+/ar/
+/es/
+/fr/
+/health/
+/hi/
+/math/
+/money/
+/time/
+/ur/
+/worship/

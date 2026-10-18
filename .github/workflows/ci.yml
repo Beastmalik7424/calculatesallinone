@@ -60,5 +60,19 @@ jobs:
           if grep -Eq 'âŒ«|Ã·|Ã—|âˆ’' public/index.html; then echo 'Corrupted calculator symbols found'; exit 1; fi
       - name: Verify sitemap coverage and internal links
         run: python tests/site-output-smoke.py
+      - name: Validate permanent trailing-slash redirects (301 or 308)
+        run: bash tests/redirect-contract.sh
+      - name: Lighthouse SEO audit on built pages
+        run: |
+          python3 -m http.server 4173 --directory public >/tmp/calculateall-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=seo --output=json --output-path=/tmp/lighthouse-home.json
+          npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/bmi-calculator/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=seo --output=json --output-path=/tmp/lighthouse-bmi.json
+          npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/zakat-calculator/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=seo --output=json --output-path=/tmp/lighthouse-zakat.json
+          node -e 'const fs=require("node:fs"); for (const name of ["home","bmi","zakat"]) { const r=JSON.parse(fs.readFileSync("/tmp/lighthouse-"+name+".json","utf8")); const score=r.categories.seo.score; console.log("Lighthouse SEO "+name+": "+Math.round(score*100)+"/100"); if (score !== 1) process.exitCode=1; }'
       - name: Test safe monetization configuration
         run: python tests/monetization-smoke.py

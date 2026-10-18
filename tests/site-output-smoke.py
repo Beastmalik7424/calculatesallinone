@@ -10,6 +10,7 @@ SITE = "https://calculateallinone.vercel.app"
 xml = ET.parse(ROOT / "sitemap.xml").getroot()
 ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.find("sm:loc", ns).text for node in xml.findall("sm:url", ns)]
+sitemap_urls = set(urls)
 titles = {}
 descriptions = {}
 assert urls, "Sitemap has no URLs"
@@ -19,9 +20,7 @@ lastmod_entries = {
     for node in xml.findall("sm:url", ns)
     if node.find("sm:lastmod", ns) is not None
 }
-assert lastmod_entries == {SITE + "/zakat-calculator/": "2026-10-17"}, (
-    "Only verified per-page lastmod dates should be emitted; got " + repr(lastmod_entries)
-)
+assert set(lastmod_entries) == set(urls), "Every indexable sitemap URL must have a source-derived lastmod date"
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
@@ -70,17 +69,22 @@ assert descriptions[home_url].startswith("Free online calculators for"), (
 
 # The Urdu root is a localized site homepage, not a standard-calculator landing page.
 urdu_home_url = SITE + "/ur/"
-assert titles[urdu_home_url].startswith("CalculatesAll |"), (
-    "Urdu homepage title must identify the site and its broad purpose: " + titles[urdu_home_url]
-)
-assert "معیاری کیلکولیٹر" not in titles[urdu_home_url], (
-    "Urdu homepage title incorrectly targets only the standard calculator."
-)
 ur_home_html = output_for_url(urdu_home_url).read_text(encoding="utf-8")
-ur_home_h1 = re.search(r"<h1[^>]*>(.*?)</h1>", ur_home_html, re.S)
-assert ur_home_h1 and "مفت آن لائن کیلکولیٹرز" in ur_home_h1.group(1), (
-    "Urdu homepage H1 must describe the calculator collection."
-)
+if urdu_home_url in sitemap_urls:
+    assert titles[urdu_home_url].startswith("CalculatesAll |"), (
+        "Urdu homepage title must identify the site and its broad purpose: " + titles[urdu_home_url]
+    )
+    assert "معیاری کیلکولیٹر" not in titles[urdu_home_url], (
+        "Urdu homepage title incorrectly targets only the standard calculator."
+    )
+    ur_home_h1 = re.search(r"<h1[^>]*>(.*?)</h1>", ur_home_html, re.S)
+    assert ur_home_h1 and "مفت آن لائن کیلکولیٹرز" in ur_home_h1.group(1), (
+        "Urdu homepage H1 must describe the calculator collection."
+    )
+else:
+    assert 'name="robots" content="noindex, follow"' in ur_home_html, (
+        "Urdu homepage omitted from sitemap must be marked noindex."
+    )
 
 sitemap_urls = set(urls)
 generated = set()
@@ -88,10 +92,17 @@ for page in ROOT.rglob("index.html"):
     rel = page.parent.relative_to(ROOT).as_posix()
     path = "/" + (rel + "/" if rel != "." else "")
     generated.add(SITE + path)
-assert generated == sitemap_urls, (
-    "Sitemap/page mismatch. Missing from sitemap: " + repr(sorted(generated - sitemap_urls)) +
-    "; URLs without generated pages: " + repr(sorted(sitemap_urls - generated))
+indexable_paths = [line.strip() for line in Path("indexable.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+noindex_paths = [line.strip() for line in Path("noindex.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+assert {SITE + path for path in indexable_paths} == sitemap_urls, "indexable.txt must exactly match sitemap URLs"
+assert not ({SITE + path for path in noindex_paths} & sitemap_urls), "noindex URLs must not appear in sitemap"
+assert {SITE + path for path in indexable_paths + noindex_paths} == generated, (
+    "Manifest/page mismatch. Missing manifests: " + repr(sorted(generated - {SITE + path for path in indexable_paths + noindex_paths})) +
+    "; unexpected manifest URLs: " + repr(sorted({SITE + path for path in indexable_paths + noindex_paths} - generated))
 )
+for path in noindex_paths:
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    assert 'name="robots" content="noindex, follow"' in page_html, "noindex manifest page lacks robots tag: " + path
 
 robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
 assert "User-agent: *" in robots and "Allow: /" in robots

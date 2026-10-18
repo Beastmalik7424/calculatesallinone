@@ -1,0 +1,5 @@
+/contact
+/editorial-policy
+/methodology
+/privacy
+/terms
