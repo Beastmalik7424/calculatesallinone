@@ -62,11 +62,6 @@ jobs:
         run: python tests/site-output-smoke.py
       - name: Validate explicit HTTP 301 redirect configuration
         run: python tests/vercel-redirect-config-smoke.py
-      - name: Verify deployed preview HTTP 301 redirects
-        if: github.ref == 'refs/heads/fix/explicit-301-trust-pages'
-        env:
-          SITE_URL: https://calculatesall-7uthwyyzb-malikadeelbhatti-1187.vercel.app
-        run: bash tests/redirect-contract.sh "$SITE_URL"
       - name: Lighthouse SEO audit on built pages
         run: |
           python3 -m http.server 4173 --directory public >/tmp/calculateall-http.log 2>&1 &

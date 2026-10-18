@@ -52,31 +52,41 @@
       ]
     }
   ],
-  "redirects": [
+  "routes": [
     {
-      "source": "/contact",
-      "destination": "/contact/",
-      "statusCode": 301
+      "src": "^/contact$",
+      "headers": {
+        "Location": "/contact/"
+      },
+      "status": 301
     },
     {
-      "source": "/editorial-policy",
-      "destination": "/editorial-policy/",
-      "statusCode": 301
+      "src": "^/editorial-policy$",
+      "headers": {
+        "Location": "/editorial-policy/"
+      },
+      "status": 301
     },
     {
-      "source": "/methodology",
-      "destination": "/methodology/",
-      "statusCode": 301
+      "src": "^/methodology$",
+      "headers": {
+        "Location": "/methodology/"
+      },
+      "status": 301
     },
     {
-      "source": "/privacy",
-      "destination": "/privacy/",
-      "statusCode": 301
+      "src": "^/privacy$",
+      "headers": {
+        "Location": "/privacy/"
+      },
+      "status": 301
     },
     {
-      "source": "/terms",
-      "destination": "/terms/",
-      "statusCode": 301
+      "src": "^/terms$",
+      "headers": {
+        "Location": "/terms/"
+      },
+      "status": 301
     }
   ]
 }
