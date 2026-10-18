@@ -188,10 +188,11 @@ all_generated_html = "\n".join(
     page.read_text(encoding="utf-8") for page in ROOT.rglob("index.html")
 )
 ads_script = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="
+verification_client = ads_client or "ca-pub-9453966537556063"
+assert ads_script + verification_client in all_generated_html, "AdSense publisher verification snippet must be present"
 if ads_enabled:
     assert ads_script + ads_client in all_generated_html, "Configured ads must load the matching publisher script"
 else:
-    assert ads_script not in all_generated_html, "Ad script must not load until publisher ID, slot and consent readiness are configured"
     assert 'class="adsbygoogle"' not in all_generated_html, "Ad slots must not render while monetization is disabled"
 
 # Google Search Console ownership HTML must be present in the deployed output.
