@@ -40,28 +40,35 @@ def strip_tags(value):
 def word_count(value):
     return len(strip_tags(value).split())
 
-def source_file(path):
+def source_files(path):
     if path in ("/ar/", "/hi/", "/es/", "/fr/"):
-        return "lang_v6.py"
-    if path == "/ur/" or path.startswith("/ur/"):
-        return "urdu_v5.py"
-    if path in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
-        return "content_v13.py"
-    if path in ("/",):
-        return "build.py"
+        return ["lang_v6.py", "build.py"]
+    if path == "/ur/":
+        return ["urdu_v5.py", "build.py", "content_v13.py", "content_v5.py"]
+    if path.startswith("/ur/"):
+        return ["urdu_v5.py", "build.py", "content_v5.py"]
+    if path in HUB_PATHS:
+        return ["content_v13.py", "build.py"]
+    if path == "/":
+        return ["build.py", "lang_v6.py"]
     if path in ("/about/", "/privacy/", "/methodology/", "/editorial-policy/", "/terms/", "/contact/", "/marketplaces/", "/affiliate-disclosure/"):
-        return "content_v13.py"
-    return "content_v5.py"
+        return ["build.py", "content_v13.py"]
+    return ["build.py", "content_v5.py"]
+
 
 def git_date(path):
-    src = source_file(path)
+    sources = source_files(path)
     try:
-        value = subprocess.check_output(["git", "log", "-1", "--format=%cs", "--", src], text=True, stderr=subprocess.DEVNULL).strip()
+        value = subprocess.check_output(
+            ["git", "log", "-1", "--format=%cs", "--", *sources],
+            text=True,
+            stderr=subprocess.DEVNULL
+        ).strip()
         if re.fullmatch("[0-9]{4}-[0-9]{2}-[0-9]{2}", value):
             return value, None
     except (OSError, subprocess.CalledProcessError):
         pass
-    return None, src
+    return None, ", ".join(sources)
 
 def normalize_meta(raw, path, lang):
     title_match = re.search(r"<title>(.*?)</title>", raw, re.S)
@@ -207,7 +214,7 @@ def main():
               "Titles: unique and under 60 characters", "Descriptions: unique, page-specific and 70-160 characters",
               "JSON-LD: parsed and serialized as valid JSON", "Hub decisions:"]
     report.extend("  " + p + ": " + ("noindex" if p in noindex else "indexable") for p in sorted(HUB_PATHS))
-    report.append("Lastmod fallbacks:")
+    report.append("Pages without source dates:")
     report.extend("  " + item for item in fallbacks)
     Path("seo-build-report.txt").write_text("\n".join(report) + "\n", encoding="utf-8")
     print("\n".join(report))
