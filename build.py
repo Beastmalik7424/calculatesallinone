@@ -21,7 +21,6 @@ ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lowe
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
-LAST_REVIEWED = "2026-10-08"  # change only when a guide, formula or policy text really changes
 # Har page ki asal update date. Sirf wahi pages likhein jin ka content badla ho.
 LASTMOD = {
     "/zakat-calculator/": "2026-10-17",
@@ -1064,7 +1063,8 @@ def tool_page(t):
     alternates = None
     if t["slug"] in URDU:
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
-    updated = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + LAST_REVIEWED + ". " + t["sources"] + "</p>"
+    updated_date = LASTMOD.get(path)
+    updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + ". " + t["sources"] + "</p>") if updated_date else ""
     body = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
@@ -1550,12 +1550,12 @@ def main():
         else:
             entries.append((path, []))
     static_pages = [
-        ("/about/", "About CalculatesAll", "About CalculatesAll, its free tools and how they are built.", "About CalculatesAll", [
+        ("/about/", "About CalculatesAll", "Learn what CalculatesAll offers, how its free calculators work, and the principles behind clear formulas, examples and stated limitations.", "About CalculatesAll", [
             "CalculatesAll is a collection of free online calculators and everyday utility tools.",
             "Calculations run in your browser. The tools do not store your entries on our server.",
             "Religious and health tools state their limits on the page. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
         ]),
-        ("/privacy/", "Privacy Policy | CalculatesAll", "How CalculatesAll handles data, local storage and advertising.", "Privacy Policy", [
+        ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "Calculator inputs are processed in your browser. We do not send them to our server.",
             "The tasbih counter and the stopwatch do not send data anywhere. The tasbih counter keeps its count in local storage on your device. You can clear this from your browser settings.",
             "CalculatesAll does not run its own analytics or user accounts. Advertising is disabled by default. If Google ads are enabled, Google and other third-party vendors may use cookies, web beacons, IP addresses, cookie identifiers and browsing activity to serve, measure or personalize ads. Third-party vendors, including Google, may use cookies to serve ads based on a user's prior visits to this website or other websites. Read <a href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>How Google uses information from sites or apps that use its services</a> and the <a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer'>Google Privacy Policy</a>. You can review or change Google's personalized advertising settings at <a href='https://adssettings.google.com/' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>, and learn about industry opt-out choices at <a href='https://optout.aboutads.info/' target='_blank' rel='noopener noreferrer'>YourAdChoices</a>. Available opt-out choices may not disable all advertising; they may affect personalization only.",
@@ -1564,17 +1564,17 @@ def main():
             "If approved affiliate links are added in the future, a marketplace may use cookies or similar tracking to attribute qualifying purchases. Any active affiliate relationship will be disclosed on the affiliate-disclosure page and near the relevant link.",
             "Google's use of data is described at policies.google.com. Contact " + CONTACT_EMAIL + " with privacy questions.",
         ]),
-        ("/methodology/", "How Our Calculations Work | CalculatesAll", "The formulas, data sources and limits behind each CalculatesAll tool.", "How Our Calculations Work", [
+        ("/methodology/", "How Our Calculations Work | CalculatesAll", "See the formulas, conversion factors, worked examples and limitations used by CalculatesAll calculators and reference tools.", "How Our Calculations Work", [
             "Each tool uses a published formula. Zakat uses the silver Nisab of 612.36 grams. BMI uses the standard formula with WHO adult categories. Profit, discount, age and unit conversions use standard arithmetic and fixed conversion factors.",
             "Every tool page states its assumptions and limits. When a rule depends on a school of law or a clinical judgement, the page says so and points to a qualified professional.",
             "If you find a formula error, email " + CONTACT_EMAIL + " with the tool name and the inputs. We correct confirmed errors and show the update date on the tool page.",
         ]),
-        ("/editorial-policy/", "Editorial Policy | CalculatesAll", "How CalculatesAll writes, checks and updates its tool guides.", "Editorial Policy", [
+        ("/editorial-policy/", "Editorial Policy | CalculatesAll", "Learn how CalculatesAll researches, checks, updates and corrects its calculator guides, formulas and reference information.", "Editorial Policy", [
             "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Numbers in worked examples are checked with a calculation before publication.",
             "Religious and health content is labelled as a general guide. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
-            "Each guide shows a last updated date. Sources are named where they are used, and we do not publish claims that we cannot support with a named source.",
+            "A last-updated date is shown only when a substantive page update is tracked. We name sources where they support a claim, and we correct confirmed errors when reported or discovered. We do not label a page as independently reviewed unless that review has taken place.",
         ]),
-        ("/terms/", "Terms of Use | CalculatesAll", "The terms for using the free calculators and information on CalculatesAll.", "Terms of Use", TERMS_PARAS),
+        ("/terms/", "Terms of Use | CalculatesAll", "Read the terms for using CalculatesAll free calculators, including accuracy limits, professional-advice disclaimers and permitted use.", "Terms of Use", TERMS_PARAS),
         ("/marketplaces/", "Marketplace and Monetization Guide | CalculatesAll", "Official marketplace resources for distributing digital downloads and exploring compliant website monetization.", "Marketplace and Monetization Guide", [
             "This page is a setup guide, not a claim that CalculatesAll products are already listed on these marketplaces. Each marketplace requires its own account, product listing, payout setup and policy review.",
             'For digital downloads, read <a class="underline text-sky-800" href="https://www.etsy.com/ca/seller-handbook/article/47330319230" target="_blank" rel="noopener noreferrer">Etsy’s official digital-download guide</a>. For selling downloadable products directly, review <a class="underline text-sky-800" href="https://gumroad.com/features" target="_blank" rel="noopener noreferrer">Gumroad’s creator features</a>.',
