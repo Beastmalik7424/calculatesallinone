@@ -167,11 +167,11 @@ assert "https://adssettings.google.com/" in privacy_html, "Privacy page must lin
 assert "https://optout.aboutads.info/" in privacy_html, "Privacy page must link an industry advertising opt-out resource"
 assert "Third-party vendors, including Google, may use cookies" in privacy_html, "Privacy page must explain third-party advertising cookies"
 assert "Available opt-out choices may not disable all advertising" in privacy_html, "Privacy page must not overpromise the effect of opt-out choices"
-assert "deliberately does not create an ads.txt file" in marketplace_html, "Marketplace guide must explain why ads.txt can return 404"
+assert "publishes the matching ads.txt entry" in marketplace_html, "Marketplace guide must accurately describe the configured ads.txt entry"
 
 # ads.txt must never contain a fabricated publisher ID or an entry unrelated to the configured account.
 ads_path = ROOT / "ads.txt"
-ads_client = os.environ.get("ADSENSE_CLIENT", "").strip()
+ads_client = os.environ.get("ADSENSE_CLIENT", "ca-pub-9453966537556063").strip()
 if ads_client:
     assert re.fullmatch(r"ca-pub-\d{16}", ads_client), "ADSENSE_CLIENT must be a real-format AdSense publisher ID"
     expected_ads_line = "google.com, " + ads_client.removeprefix("ca-") + ", DIRECT, f08c47fec0942fa0"
