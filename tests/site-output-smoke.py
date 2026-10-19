@@ -24,6 +24,9 @@ assert set(lastmod_entries) <= set(urls), "Sitemap lastmod entries must refer on
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
+assert not lastmod_entries, (
+    "Do not emit sitemap lastmod until trustworthy page-specific update dates are available."
+)
 
 def output_for_url(url):
     parsed = urlparse(url)
@@ -56,6 +59,10 @@ for url in urls:
     descriptions[url] = desc_match.group(1)
     assert 70 <= len(descriptions[url]) <= 160, f"Meta description length outside 70-160 characters: {url} ({len(descriptions[url])})"
     assert "Review the formula, worked example and limits before relying on the result" not in descriptions[url], f"Generic irrelevant metadata appended: {url}"
+    if url == SITE + "/profit-loss-calculator/":
+        assert title_match.group(1) == "Profit and Loss Calculator | CalculatesAll", (
+            "Profit and Loss title must be complete and descriptive."
+        )
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
@@ -305,6 +312,10 @@ for url in urls:
         except json.JSONDecodeError as exc:
             raise AssertionError(f"Invalid JSON-LD on {url}: {exc}") from exc
     for item in parsed_schemas:
+        if item.get("@type") == "WebPage":
+            assert "dateModified" not in item, (
+                f"Do not publish unverified dateModified on {url}."
+            )
         if item.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
             if "inLanguage" in item:
                 assert item.get("inLanguage") == page_lang, (
