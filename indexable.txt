@@ -6,14 +6,18 @@
 /contact/
 /discount-calculator/
 /editorial-policy/
+/health/
 /marketplaces/
+/math/
 /methodology/
+/money/
 /privacy/
 /profit-loss-calculator/
 /standard-calculator/
 /stopwatch/
 /tasbih-counter/
 /terms/
+/time/
 /unit-converter/
 /ur/age-calculator/
 /ur/bmi-calculator/
@@ -24,4 +28,5 @@
 /ur/tasbih-counter/
 /ur/unit-converter/
 /ur/zakat-calculator/
+/worship/
 /zakat-calculator/
