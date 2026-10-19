@@ -2,7 +2,6 @@ import datetime
 import html
 import json
 import re
-import subprocess
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -50,42 +49,15 @@ def strip_tags(value):
 def word_count(value):
     return len(strip_tags(value).split())
 
-def source_files(path):
-    if path in ("/ar/", "/hi/", "/es/", "/fr/"):
-        return ["lang_v6.py", "build.py"]
-    if path == "/ur/":
-        return ["urdu_v5.py", "build.py", "content_v13.py", "content_v5.py"]
-    if path.startswith("/ur/"):
-        return ["urdu_v5.py", "build.py", "content_v5.py"]
-    if path in HUB_PATHS:
-        return ["content_v13.py", "build.py"]
-    if path == "/":
-        return ["build.py", "lang_v6.py"]
-    if path in ("/about/", "/privacy/", "/methodology/", "/editorial-policy/", "/terms/", "/contact/", "/marketplaces/", "/affiliate-disclosure/"):
-        return ["build.py", "content_v13.py"]
-    return ["build.py", "content_v5.py"]
-
-
-def git_date(path):
-    sources = source_files(path)
-    try:
-        value = subprocess.check_output(
-            ["git", "log", "-1", "--format=%cs", "--", *sources],
-            text=True,
-            stderr=subprocess.DEVNULL
-        ).strip()
-        if re.fullmatch("[0-9]{4}-[0-9]{2}-[0-9]{2}", value):
-            return value, None
-    except (OSError, subprocess.CalledProcessError):
-        pass
-    return None, ", ".join(sources)
-
 def normalize_meta(raw, path, lang):
     title_match = re.search(r"<title>(.*?)</title>", raw, re.S)
     desc_match = re.search(r'<meta name="description" content="([^"]*)"', raw)
     if not title_match or not desc_match:
         raise SystemExit("Missing title/description: " + path)
     title = html.unescape(title_match.group(1).strip())
+    # Repair the known malformed title explicitly rather than truncating it into a fragment.
+    if path == "/profit-loss-calculator/":
+        title = "Profit and Loss Calculator | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
     if len(title) > 59:
         title = re.sub(r" \\| Free Online Tool \\| CalculatesAll$", " | CalculatesAll", title)
@@ -164,11 +136,8 @@ def main():
             schemas.append(web_page)
         web_page["name"] = title
         web_page["url"] = canonical
-        source_modified, source_date_fallback = git_date(path)
-        if source_modified and not source_date_fallback:
-            web_page["dateModified"] = source_modified
-        else:
-            web_page.pop("dateModified", None)
+        # Shared source-file commit dates do not prove when this individual page was reviewed.
+        web_page.pop("dateModified", None)
         web_page["inLanguage"] = lang
         faq_items = []
         faq_pattern = r"<details[^>]*>\s*<summary[^>]*>(.*?)</summary>\s*<p[^>]*>(.*?)</p>\s*</details>"
@@ -202,30 +171,23 @@ def main():
     Path("no-slash.txt").write_text("\n".join(NO_SLASH_PATHS) + "\n", encoding="utf-8")
     indexable_urls = {SITE + path for path in indexable}
     urlset = ET.Element("urlset", {"xmlns":"http://www.sitemaps.org/schemas/sitemap/0.9","xmlns:xhtml":"http://www.w3.org/1999/xhtml"})
-    fallbacks = []
     for path in indexable:
         raw = paths[path].read_text(encoding="utf-8")
         canonical = SITE + path
         node = ET.SubElement(urlset, "{http://www.sitemaps.org/schemas/sitemap/0.9}url")
         ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}loc").text = canonical
-        lastmod, fallback = git_date(path)
-        if lastmod:
-            ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod").text = lastmod
-        if fallback:
-            fallbacks.append(path + " omits lastmod/dateModified because git log returned no source date for " + fallback)
+        # Omit lastmod until a reliable, page-specific content-change date is available.
         for code, href in re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', raw):
             if href in indexable_urls:
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})
     ET.indent(urlset, space="  ")
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(urlset, encoding="unicode") + "\n", encoding="utf-8")
     (ROOT / "robots.txt").write_text("User-agent: *\nAllow: /\nDisallow: /404\n\nSitemap: " + SITE + "/sitemap.xml\n", encoding="utf-8")
-    report = ["SEO build report", "Freshness metadata: source-derived only; no blanket review date", "Indexable pages: " + str(len(indexable)),
+    report = ["SEO build report", "Freshness metadata: lastmod/dateModified omitted because reliable page-specific dates are unavailable", "Indexable pages: " + str(len(indexable)),
               "Noindex pages: " + str(len(noindex_list)), "Sitemap URLs: " + str(len(indexable)),
               "Titles: unique and under 60 characters", "Descriptions: unique, page-specific and 70-160 characters",
               "JSON-LD: parsed and serialized as valid JSON", "Hub decisions:"]
     report.extend("  " + p + ": " + ("noindex" if p in noindex else "indexable") for p in sorted(HUB_PATHS))
-    report.append("Pages without source dates:")
-    report.extend("  " + item for item in fallbacks)
     Path("seo-build-report.txt").write_text("\n".join(report) + "\n", encoding="utf-8")
     print("\n".join(report))
 

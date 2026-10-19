@@ -55,7 +55,7 @@ jobs:
           grep -q 'href="/ur/zakat-calculator/"' public/zakat-calculator/index.html
           grep -q 'href="/zakat-calculator/"' public/ur/zakat-calculator/index.html
           grep -q 'PRIVATE BY DESIGN' public/index.html
-          test ! -e public/ads.txt
+          python -c "import os,pathlib; client=os.environ.get('ADSENSE_CLIENT','ca-pub-9453966537556063').strip(); expected='google.com, '+client.removeprefix('ca-')+', DIRECT, f08c47fec0942fa0'; assert pathlib.Path('public/ads.txt').read_text(encoding='utf-8').strip() == expected, 'ads.txt must match the configured publisher ID'"
           if grep -Eq 'Ø|Ù|Ã|âŒ|âˆ|Â©' public/ur/index.html; then echo 'Mojibake found in Urdu home page'; exit 1; fi
           if grep -Eq 'âŒ«|Ã·|Ã—|âˆ’' public/index.html; then echo 'Corrupted calculator symbols found'; exit 1; fi
       - name: Verify sitemap coverage and internal links
