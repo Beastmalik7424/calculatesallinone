@@ -24,7 +24,7 @@ function element(id, value = "") {
 [
   "zakat-form","z-cash","z-gold","z-silver","z-stock","z-recv","z-debts","z-silverprice","z-hawl","zakat-result",
   "bmi-form","bmi-unit","bmi-height-cm","bmi-height-ftin","bmi-metric","bmi-imperial",
-  "b-kg","b-kg-error","b-cm","b-cm-error","b-lb","b-ft","b-ft-error","b-in","b-in-error","bmi-result",
+  "b-kg","b-kg-error","b-lb","b-lb-error","bmi-weight-kg","bmi-weight-lb","bmi-weight-kg-group","bmi-weight-lb-group","b-cm","b-cm-error","b-ft","b-ft-error","b-in","b-in-error","bmi-result",
   "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
   "conv-form","u-cat","u-val","u-from","u-to","conv-result","t-count","t-target","t-progress","t-tap","t-reset",
   "sw-display","sw-start","sw-stop","sw-reset"
@@ -33,6 +33,8 @@ elements["u-cat"].value = "weight";
 elements["bmi-unit"].value = "metric";
 elements["bmi-height-cm"].checked = true;
 elements["bmi-height-ftin"].checked = false;
+elements["bmi-weight-kg"].checked = true;
+elements["bmi-weight-lb"].checked = false;
 const storage = new Map();
 let clock = 0;
 const NativeDate = Date;
@@ -71,10 +73,11 @@ assert.match(elements["zakat-result"].textContent, /lunar year/i);
 elements["z-hawl"].checked = true; submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /2\.5 percent.*25/i);
 
-// BMI: strict kg + cm/ft-in flow, category boundaries, invalid input and hidden fields.
+// BMI: kg/lb weight units, cm/ft-in height, category boundaries, invalid input and hidden fields.
 assert.equal(elements["b-cm"].disabled, false);
 assert.equal(elements["b-ft"].disabled, true);
 assert.equal(elements["b-in"].disabled, true);
+assert.equal(elements["b-lb"].disabled, true);
 setValues({"b-kg":70,"b-cm":170,"b-ft":"5abc","b-in":"12"});
 assert.equal(submit("bmi-form"), true, "form submit must prevent browser navigation/reload");
 assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i);
@@ -96,6 +99,23 @@ assert.equal(elements["b-ft"].disabled, false);
 assert.equal(elements["b-in"].disabled, false);
 setValues({"b-kg":70,"b-ft":5,"b-in":7}); submit("bmi-form");
 assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i);
+elements["bmi-weight-lb"].checked = true;
+elements["bmi-weight-kg"].checked = false;
+elements["bmi-weight-lb"]._handlers.change();
+assert.equal(elements["bmi-result"].textContent, "", "changing weight unit clears result");
+assert.equal(elements["b-kg"].disabled, true);
+assert.equal(elements["b-lb"].disabled, false);
+setValues({"b-lb":154.324,"b-ft":5,"b-in":7}); submit("bmi-form");
+assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i, "pounds input should calculate equivalent BMI");
+setValues({"b-lb":"5abc","b-ft":5,"b-in":7}); submit("bmi-form");
+assert.notEqual(elements["b-lb-error"].textContent, "", "malformed pounds input must be rejected");
+setValues({"b-lb":154.324,"b-ft":5,"b-in":7}); submit("bmi-form");
+assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i);
+elements["bmi-weight-kg"].checked = true;
+elements["bmi-weight-lb"].checked = false;
+elements["bmi-weight-kg"]._handlers.change();
+assert.equal(elements["b-lb"].disabled, true);
+assert.equal(elements["b-kg"].disabled, false);
 setValues({"b-kg":90,"b-ft":6,"b-in":0}); submit("bmi-form");
 assert.match(elements["bmi-result"].textContent, /26\.9.*overweight/i);
 setValues({"b-kg":70,"b-ft":5,"b-in":11.99}); submit("bmi-form");

@@ -11,6 +11,7 @@
       bmiInput: "Enter a weight from 2 to 500 kg and a height from 50 to 300 cm.",
       bmiInputImp: "Enter a weight from 4 to 1100 lb, a height of 1 to 9 ft, and inches from 0 to 11.9.",
       bmiWeightError: "Enter a weight from 20 to 300 kg using digits and an optional decimal point.",
+      bmiWeightLbError: "Enter a weight from 44.1 to 661.3 lb using digits and an optional decimal point.",
       bmiCmError: "Enter a height from 50 to 260 cm using digits and an optional decimal point.",
       bmiFtError: "Enter a whole number of feet from 1 to 8.",
       bmiInError: "Enter inches from 0 to 11.99 using digits and an optional decimal point.",
@@ -64,6 +65,7 @@
       bmiInput: "وزن 2 سے 500 کلو گرام اور قد 50 سے 300 سینٹی میٹر کے درمیان لکھیں۔",
       bmiInputImp: "وزن 4 سے 1100 پاؤنڈ، قد 1 سے 9 فٹ، اور انچ 0 سے 11.9 کے درمیان لکھیں۔",
       bmiWeightError: "وزن 20 سے 300 کلوگرام کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
+      bmiWeightLbError: "وزن 44.1 سے 661.3 پاؤنڈ کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
       bmiCmError: "قد 50 سے 260 سینٹی میٹر کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
       bmiFtError: "فٹ کی مکمل عددی قدر 1 سے 8 کے درمیان درج کریں۔",
       bmiInError: "انچ 0 سے 11.99 کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
@@ -367,14 +369,21 @@
     if (!form) return
     var heightCmRadio = $("bmi-height-cm")
     var heightFtInRadio = $("bmi-height-ftin")
-    if (heightCmRadio && heightFtInRadio) {
+    var weightKgRadio = $("bmi-weight-kg")
+    var weightLbRadio = $("bmi-weight-lb")
+    if (heightCmRadio && heightFtInRadio && weightKgRadio && weightLbRadio) {
       var metricGroup = $("bmi-metric")
       var imperialGroup = $("bmi-imperial")
+      var kgGroup = $("bmi-weight-kg-group")
+      var lbGroup = $("bmi-weight-lb-group")
+      var kgInput = $("b-kg")
+      var lbInput = $("b-lb")
       var cmInput = $("b-cm")
       var ftInput = $("b-ft")
       var inInput = $("b-in")
       var fields = [
         ["b-kg", "b-kg-error", "bmiWeightError", 20, 300, false],
+        ["b-lb", "b-lb-error", "bmiWeightLbError", 44.1, 661.3, false],
         ["b-cm", "b-cm-error", "bmiCmError", 50, 260, false],
         ["b-ft", "b-ft-error", "bmiFtError", 1, 8, true],
         ["b-in", "b-in-error", "bmiInError", 0, 11.99, false]
@@ -387,6 +396,21 @@
       }
       function clearErrors() { fields.forEach(clearError) }
       function clearResult() { say("bmi-result", "") }
+      function toggleWeightUnit() {
+        var kilograms = weightKgRadio.checked
+        if (kgGroup) {
+          kgGroup.classList.toggle("!hidden", !kilograms)
+          kgGroup.setAttribute("aria-hidden", String(!kilograms))
+        }
+        if (lbGroup) {
+          lbGroup.classList.toggle("!hidden", kilograms)
+          lbGroup.setAttribute("aria-hidden", String(kilograms))
+        }
+        if (kgInput) kgInput.disabled = !kilograms
+        if (lbInput) lbInput.disabled = kilograms
+        clearErrors()
+        clearResult()
+      }
       function toggleHeightUnit() {
         var metric = heightCmRadio.checked
         if (metricGroup) {
@@ -423,6 +447,8 @@
       }
       heightCmRadio.addEventListener("change", toggleHeightUnit)
       heightFtInRadio.addEventListener("change", toggleHeightUnit)
+      weightKgRadio.addEventListener("change", toggleWeightUnit)
+      weightLbRadio.addEventListener("change", toggleWeightUnit)
       fields.forEach(function (field) {
         var input = $(field[0])
         if (input) input.addEventListener("input", function () {
@@ -430,17 +456,24 @@
           clearResult()
         })
       })
+      toggleWeightUnit()
       toggleHeightUnit()
       form.addEventListener("submit", function (e) {
         e.preventDefault()
         clearErrors()
-        var kg = readField(fields[0])
+        var kg = null
+        if (weightKgRadio.checked) {
+          kg = readField(fields[0])
+        } else {
+          var pounds = readField(fields[1])
+          if (pounds !== null) kg = pounds * 0.45359237
+        }
         var heightCm = null
         if (heightCmRadio.checked) {
-          heightCm = readField(fields[1])
+          heightCm = readField(fields[2])
         } else {
-          var ft = readField(fields[2])
-          var inches = readField(fields[3])
+          var ft = readField(fields[3])
+          var inches = readField(fields[4])
           if (ft !== null && inches !== null) heightCm = (ft * 12 + inches) * 2.54
         }
         if (kg === null || heightCm === null || !isFinite(heightCm) || heightCm <= 0) {

@@ -71,20 +71,20 @@ for url in urls:
 age_html = output_for_url(SITE + "/age-calculator/").read_text(encoding="utf-8")
 assert 'id="a-dob" name="dob" type="date"' in age_html, "Age input must expose a stable form name"
 bmi_html = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
-for control_name in ("bmi-height-unit", "b-kg", "b-cm", "b-ft", "b-in"):
+for control_name in ("bmi-height-unit", "bmi-weight-unit", "b-kg", "b-lb", "b-cm", "b-ft", "b-in"):
     assert 'name="' + control_name + '"' in bmi_html, f"BMI control missing form name: {control_name}"
 assert 'id="bmi-height-cm"' in bmi_html and 'id="bmi-height-ftin"' in bmi_html, "BMI height mode radios are required"
 assert 'id="b-kg-error"' in bmi_html and 'aria-describedby="b-cm-error"' in bmi_html, "BMI fields need associated error messages"
 assert 'id="b-ft" name="b-ft"' in bmi_html and 'type="text" inputmode="numeric" pattern="[0-9]+"' in bmi_html, "Feet input must preserve raw text for strict validation"
 assert 'id="b-kg" name="b-kg"' in bmi_html and 'type="text" inputmode="decimal" pattern="[0-9]+([.][0-9]+)?"' in bmi_html, "Weight input must preserve raw text for strict validation"
-assert 'id="b-lb"' not in bmi_html and 'name="b-lb"' not in bmi_html, "Target BMI page must not expose pounds input"
+assert 'id="b-lb"' in bmi_html and 'id="bmi-weight-lb"' in bmi_html, "Target BMI page must offer pounds alongside kilograms"
 assert "<title>BMI Calculator for Adults | cm or ft/in | CalculatesAll</title>" in bmi_html, "BMI title must be complete and unique"
 assert "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor." in bmi_html, "English BMI disclaimer must be visible in page content"
 
 urdu_bmi_html = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
 for control_name in ("bmi-height-unit", "b-kg", "b-cm", "b-ft", "b-in"):
     assert 'name="' + control_name + '"' in urdu_bmi_html, f"Urdu BMI control missing form name: {control_name}"
-assert 'id="b-lb"' not in urdu_bmi_html and "وزن (پاؤنڈ)" not in urdu_bmi_html, "Urdu BMI page must not expose pounds input"
+assert 'id="b-lb"' in urdu_bmi_html and 'id="bmi-weight-lb"' in urdu_bmi_html, "Urdu BMI page must offer pounds alongside kilograms"
 assert "BMI ایک عمومی اسکریننگ پیمانہ ہے" in urdu_bmi_html, "Urdu BMI disclaimer is required"
 
 assert len(titles.values()) == len(set(titles.values())), "Duplicate page titles found: " + repr(titles)
