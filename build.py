@@ -718,8 +718,19 @@ def home_extra_html(lang):
     out = '<h2 class="' + H2 + '">' + block["heading"] + "</h2>"
     for p in block["paragraphs"]:
         out += '<p class="' + P + '">' + p + "</p>"
+    contact_email = html.escape(CONTACT_EMAIL, quote=True)
+    if lang == "ur":
+        contact_copy = "حساب میں ممکنہ خرابی رپورٹ کرنے کے لیے صفحے کا نام، درج کردہ اعداد اور متوقع نتیجہ شامل کرکے " + '<a class="' + LINK + '" href="mailto:' + contact_email + '">' + html.escape(CONTACT_EMAIL) + '</a>' + " پر ای میل کریں۔"
+    else:
+        contact_copy = "Found a possible calculation error? Email " + '<a class="' + LINK + '" href="mailto:' + contact_email + '">' + html.escape(CONTACT_EMAIL) + '</a>' + " with the page name, input values and expected result so the issue can be reproduced."
+    out += '<p class="' + P + '">' + contact_copy + "</p>"
     heading = "سوالات" if lang == "ur" else "Frequently asked questions: Are these calculators free, private, and reliable?"
-    out += '<h2 class="' + H2 + '">' + heading + '</h2><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
+    answer_first = (
+        "جی ہاں۔ CalculatesAll کے ٹولز مفت ہیں، حساب آپ کے براؤزر میں ہوتا ہے اور درج کردہ اعداد ہمارے سرور کو نہیں بھیجے جاتے۔ ہر کیلکولیٹر اپنا فارمولا اور حدود بتاتا ہے۔ اہم مالی، طبی یا دینی فیصلے کے لیے متعلقہ ماہر سے تصدیق کریں۔"
+        if lang == "ur" else
+        "Yes. CalculatesAll tools are free, calculations run in your browser, and calculator entries are not sent to our server. Each tool explains its formula and limits. Confirm important financial, medical or religious decisions with a qualified professional."
+    )
+    out += '<h2 class="' + H2 + '">' + heading + '</h2><p class="' + P + '">' + answer_first + '</p><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     return out
 
 
@@ -952,6 +963,7 @@ def lang_links(lang, s, current_path=None):
 def shell(main_html, lang="en", current_path=None):
     s = shell_strings(lang)
     home = "/" if lang == "en" else "/" + lang + "/"
+    brand_home_label = {"en": " home page", "ur": " ہوم پیج", "ar": " الصفحة الرئيسية", "hi": " होम पेज", "es": " página de inicio", "fr": " page d’accueil"}.get(lang, " home page")
     main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
     menu_position = "left-0 right-auto" if lang in RTL_LANGS else "right-0"
     return (
@@ -964,7 +976,7 @@ def shell(main_html, lang="en", current_path=None):
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
         '<nav class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4" aria-label="' + s["main"] + '">'
-        '<a href="' + home + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll</a>'
+        '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
         '<div class="flex items-center gap-3">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
         '<details class="relative"><summary class="cursor-pointer text-base min-h-[44px] inline-flex items-center px-2">' + s["menu"] + '</summary>'
@@ -1014,7 +1026,9 @@ def home_lang_page(code):
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": code},
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "logo": SITE_URL + "/assets/favicon.svg"},
+         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+         "logo": SITE_URL + "/assets/favicon.svg",
+         "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
     write(path, head(u["title"], u["desc"], path, schema, lang=code, alternates=home_alts_all()) + shell(body, lang=code, current_path=path))
     return path
@@ -1307,7 +1321,9 @@ def home_page(lang="en"):
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "logo": SITE_URL + "/assets/favicon.svg"},
+         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+         "logo": SITE_URL + "/assets/favicon.svg",
+         "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
     body = (
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-2">' + h1 + '</h1>'
@@ -1443,7 +1459,9 @@ def home_app_page(lang):
          "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript",
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "logo": SITE_URL + "/assets/favicon.svg"},
+         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+         "logo": SITE_URL + "/assets/favicon.svg",
+         "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
     write(path, head(title, desc, path, schema, lang=lang, alternates=home_alts_all()) + shell(body, lang=lang, current_path=path))
 

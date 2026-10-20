@@ -127,6 +127,20 @@ assert home_html.count(bing_tag) == 1 and bing_tag in head_match.group(1), (
     "Bing verification meta tag must appear exactly once inside the homepage head."
 )
 
+# Homepage organization/entity signals and descriptive brand navigation must be machine-readable.
+assert 'aria-label="CalculatesAll home page"' in home_html, "Brand link should describe its homepage destination"
+assert 'href="mailto:' in home_html, "Homepage should expose a direct correction contact"
+home_schemas = [
+    json.loads(match.group(1))
+    for match in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', home_html, re.S)
+]
+organization_schema = next((schema for schema in home_schemas if schema.get("@type") == "Organization"), None)
+assert organization_schema is not None, "Homepage Organization schema is required"
+contact_point = organization_schema.get("contactPoint", {})
+assert contact_point.get("@type") == "ContactPoint" and contact_point.get("email"), "Organization schema must expose the configured support email"
+assert contact_point.get("url") == SITE + "/contact/", "Organization schema must link to the canonical contact page"
+assert "612.36 grams" in home_html and "25.0 to 29.9" in home_html, "Homepage proof points must include the calculator method and WHO adult BMI ranges"
+
 # The Urdu root is a localized site homepage, not a standard-calculator landing page.
 urdu_home_url = SITE + "/ur/"
 ur_home_html = output_for_url(urdu_home_url).read_text(encoding="utf-8")
