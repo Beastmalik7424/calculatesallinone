@@ -174,8 +174,9 @@ TOOLS = [
         ),
         "guide": [
             ("The formula", [
-                "Metric: BMI equals weight in kilograms divided by height in meters, squared.",
-                "Imperial: BMI equals 703 multiplied by weight in pounds, divided by height in inches, squared.",
+                "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit. When kg is selected, BMI equals weight in kilograms divided by height in meters, squared.",
+                "When lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches, squared. The calculator converts feet and inches into total inches for this formula.",
+                "If you select kg with feet and inches, the calculator converts the height to centimeters and uses the metric formula. Switching weight units clears the previous result so you can recalculate with the new unit.",
             ]),
             ("Adult weight categories", [
                 "The World Health Organization uses these ranges for adults: below 18.5 is underweight, 18.5 to 24.9 is normal weight, 25.0 to 29.9 is overweight, and 30.0 or above is in the obesity range.",
