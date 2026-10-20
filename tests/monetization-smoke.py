@@ -32,13 +32,17 @@ try:
 
         build.ADSENSE_SLOT = ""
         assert build.ad_slot() == "", "Ads must stay disabled when no real ad-unit slot is configured"
+        page_head_without_slot = build.head("Test", "Description", "/", [], lang="en")
+        assert "adsbygoogle.js" not in page_head_without_slot, "Do not download AdSense JavaScript when no ad slot is configured"
+        assert '<meta name="google-adsense-account" content="ca-pub-1234567890123456">' in page_head_without_slot, "Use the lightweight AdSense meta-tag ownership verification method"
 
         # Even with valid IDs, ad code stays disabled until account-side consent setup is confirmed.
         build.ADSENSE_SLOT = "1234567890"
         build.ADSENSE_CONSENT_READY = False
         assert build.ad_slot() == "", "Ad slots must stay disabled until consent readiness is confirmed"
         page_head_without_consent = build.head("Test", "Description", "/", [], lang="en")
-        assert "adsbygoogle.js?client=ca-pub-1234567890123456" in page_head_without_consent, "Publisher verification snippet must remain available while ad slots are disabled"
+        assert "adsbygoogle.js" not in page_head_without_consent, "Do not download AdSense JavaScript before consent readiness is confirmed"
+        assert '<meta name="google-adsense-account" content="ca-pub-1234567890123456">' in page_head_without_consent, "Ownership verification must remain available without the ad library"
         assert build.ad_slot() == "", "Ad slots must stay disabled until consent readiness is confirmed"
 
         # Reject malformed, shortened, overlong, or incorrectly prefixed publisher IDs.
