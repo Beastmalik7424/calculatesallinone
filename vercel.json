@@ -53,6 +53,13 @@
   ],
   "routes": [
     {
+      "src": "^/favicon\\.ico$",
+      "headers": {
+        "Location": "/assets/favicon.svg"
+      },
+      "status": 301
+    },
+    {
       "src": "^/contact$",
       "headers": {
         "Location": "/contact/"
