@@ -852,9 +852,12 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         for code, href in alternates:
             alt += '<link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '">\n'
     ads = ""
-    # Load the publisher verification snippet on every generated page.
-    # Actual ad slots remain disabled until slot ID and consent setup are confirmed.
+    # Use AdSense's lightweight ownership meta tag while ads are disabled.
+    # Download the ad library only when a real slot and the consent gate are enabled.
+    verification = ""
     if ADSENSE_CLIENT:
+        verification = '<meta name="google-adsense-account" content="' + html.escape(ADSENSE_CLIENT, quote=True) + '">\n'
+    if ADSENSE_CLIENT and ADSENSE_SLOT and ADSENSE_CONSENT_READY:
         ads = ('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
                + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>\n')
     ld = ""
@@ -896,7 +899,8 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         '<meta name="twitter:description" content="' + desc + '">\n'
         '<meta name="twitter:image" content="' + og_image + '">\n'
         '<meta name="google-site-verification" content="DnTlrPscc56w3Xe-QHyaXhObsePjw4y_G-5i5qQl_wY">\n'
-        '<meta name="theme-color" content="#f0f9ff">\n'
+        + verification
+        + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
         + '<link rel="stylesheet" href="/assets/site.css?v=20261017-mobile-contrast-fix">\n'
         + ld + ads + "</head>\n"
@@ -1659,7 +1663,7 @@ def main():
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "Calculator inputs are processed in your browser. We do not send them to our server.",
             "The tasbih counter and the stopwatch do not send data anywhere. The tasbih counter keeps its count in local storage on your device. You can clear this from your browser settings.",
-            "CalculatesAll does not run its own analytics or user accounts. Ad slots are currently disabled. The AdSense publisher verification script is loaded in the page head, but this does not mean ad units are being served. If Google ad units are enabled, Google and other third-party vendors may use cookies, web beacons, IP addresses, cookie identifiers and browsing activity to serve, measure or personalize ads. Third-party vendors, including Google, may use cookies to serve ads based on a user's prior visits to this website or other websites. Read <a href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>How Google uses information from sites or apps that use its services</a> and the <a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer'>Google Privacy Policy</a>. You can review or change Google's personalized advertising settings at <a href='https://adssettings.google.com/' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>, and learn about industry opt-out choices at <a href='https://optout.aboutads.info/' target='_blank' rel='noopener noreferrer'>YourAdChoices</a>. Available opt-out choices may not disable all advertising; they may affect personalization only.",
+            "CalculatesAll does not run its own analytics or user accounts. Ad slots are currently disabled. When a publisher ID is configured, a lightweight AdSense ownership meta tag is present in the page head. The external AdSense JavaScript is not loaded while ad units are disabled. If Google ad units are enabled, Google and other third-party vendors may use cookies, web beacons, IP addresses, cookie identifiers and browsing activity to serve, measure or personalize ads. Third-party vendors, including Google, may use cookies to serve ads based on a user's prior visits to this website or other websites. Read <a href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>How Google uses information from sites or apps that use its services</a> and the <a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer'>Google Privacy Policy</a>. You can review or change Google's personalized advertising settings at <a href='https://adssettings.google.com/' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>, and learn about industry opt-out choices at <a href='https://optout.aboutads.info/' target='_blank' rel='noopener noreferrer'>YourAdChoices</a>. Available opt-out choices may not disable all advertising; they may affect personalization only.",
             "For personalized ads to users in the EEA, UK or Switzerland, publishers must configure a Google-certified consent management platform (CMP) integrated with the IAB Transparency and Consent Framework where required. Applicable consent and privacy requirements must be reviewed before enabling ads. See <a href='https://support.google.com/adsense/answer/13554116' target='_blank' rel='noopener noreferrer'>Google's consent requirements</a>. The site cannot independently verify account-side CMP settings.",
             "No Google ads are served unless a real publisher ID, ad-unit slot and the explicit ADSENSE_CONSENT_READY=true deployment setting are present. Set that flag only after the relevant AdSense account-side consent configuration has been set up and tested. It is a safeguard, not proof of compliance. The build publishes /ads.txt only when a valid publisher ID is configured, using the exact ID supplied by the site owner.",
             "If approved affiliate links are added in the future, a marketplace may use cookies or similar tracking to attribute qualifying purchases. Any active affiliate relationship will be disclosed on the affiliate-disclosure page and near the relevant link.",

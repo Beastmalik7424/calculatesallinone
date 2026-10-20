@@ -65,7 +65,9 @@ function submit(form) {
 }
 function setValues(values) { for (const [id, value] of Object.entries(values)) elements[id].value = String(value); }
 
-// Zakat: three materially different outcomes.
+// Zakat: reject invalid negative input before the representative outcomes.
+setValues({"z-cash":-1,"z-silverprice":1}); submit("zakat-form");
+assert.match(elements["zakat-result"].textContent, /zero or a positive value/i, "negative zakatable amounts must be rejected");
 setValues({"z-cash":500,"z-silverprice":1}); submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /below Nisab/i);
 setValues({"z-cash":1000,"z-silverprice":1}); elements["z-hawl"].checked = false; submit("zakat-form");
@@ -142,6 +144,9 @@ for (const [cost, sell, expected] of [[100,150,/Profit: 50/],[100,80,/Loss: 20/]
   assert.match(elements["pl-result"].textContent, expected);
 }
 
+setValues({"p-cost":-1,"p-sell":100}); submit("pl-form");
+assert.match(elements["pl-result"].textContent, /cost price.*zero or more/i, "negative cost must be rejected");
+
 // Age: three fixed-calendar examples and future-date rejection.
 for (const [dob, expected] of [
   ["2000-01-01",/26 years, 9 months and 17 days/],
@@ -161,6 +166,9 @@ for (const [price, pct, saved, final] of [[1000,20,"200","800"],[50,0,"0","50"],
   assert.match(elements["disc-result"].textContent, new RegExp("Final price: " + final.replace(".","\\.") + "\\."));
 }
 
+setValues({"d-price":100,"d-pct":101}); submit("disc-form");
+assert.match(elements["disc-result"].textContent, /discount from 0 to 100 percent/i, "discounts above 100 percent must be rejected");
+
 // Unit conversion: mass, length and temperature.
 for (const [cat, value, from, to, expected] of [
   ["weight",1,"kg","lb",/2\.20462/],
@@ -174,6 +182,11 @@ for (const [cat, value, from, to, expected] of [
   submit("conv-form");
   assert.match(elements["conv-result"].textContent, expected);
 }
+
+elements["u-cat"].value = "weight"; elements["u-val"].value = "-1"; elements["u-from"].value = "kg"; elements["u-to"].value = "lb"; submit("conv-form");
+assert.match(elements["conv-result"].textContent, /cannot be negative/i, "negative mass must be rejected");
+elements["u-cat"].value = "temp"; elements["u-val"].value = "-300"; elements["u-from"].value = "C"; elements["u-to"].value = "F"; submit("conv-form");
+assert.match(elements["conv-result"].textContent, /below absolute zero/i, "temperature below absolute zero must be rejected");
 
 // Tasbih: three increments, target reached, reset.
 elements["t-target"].value = "3";
