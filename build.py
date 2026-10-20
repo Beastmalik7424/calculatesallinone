@@ -846,7 +846,8 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         '<meta name="twitter:title" content="' + title + '">\n'
         '<meta name="twitter:description" content="' + desc + '">\n'
         '<meta name="twitter:image" content="' + og_image + '">\n'
-        '<meta name="google-site-verification" content="DnTlrPscc56w3Xe-QHyaXhObsePjw4y_G-5i5qQl_wY">\n'
+        '<meta name="google-site-verification" content="DnTlrPscc56w3Xe-QHyaXhObsePjw4y_G-5i5qQl_wY">\n',
+        '<meta name="msvalidate.01" content="07D62A8BA67BA474B5A13A27E6770782">\n'
         '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
         + '<link rel="stylesheet" href="/assets/site.css?v=20261017-mobile-contrast-fix">\n'
