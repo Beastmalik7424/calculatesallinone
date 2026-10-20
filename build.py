@@ -490,8 +490,9 @@ TOOLS = [
 
 HUB_CONTENT = {
     "money": {
-        "intro": "These tools cover the money questions people ask most often: how much Zakat is due, whether a sale made a profit or a loss, and how much a discount saves. Each calculation shows its formula and a worked example, so you can check the result yourself.",
+        "intro": "These tools cover common money questions: how to estimate a loan's monthly EMI and repayment interest, how much Zakat is due, whether a sale made a profit or loss, and how much a discount saves. Each calculator explains its method and assumptions, so you can check the result yourself.",
         "faq": [
+            ("What does the EMI calculator estimate?", "It estimates the monthly installment, total interest and repayment schedule from the loan amount, annual rate and term. Lender fees and contract-specific charges can change the amount quoted by a lender."),
             ("Are these tools accurate for business accounts?", "They calculate the arithmetic correctly for the inputs you give. They do not replace an accountant, and tax rules are not included."),
             ("Does the Zakat calculator give a religious ruling?", "No. It applies the silver Nisab method and shows the rules it uses. For a ruling on your situation, consult a qualified scholar."),
         ],
@@ -523,7 +524,7 @@ HUB_CONTENT = {
 }
 
 CATEGORIES = [
-    {"slug": "money", "name": "Money and Business", "desc": "Money calculators for Zakat, profit and loss, and discounts, with worked examples and clear limits for everyday decisions."},
+    {"slug": "money", "name": "Money and Business", "desc": "Money calculators for EMI, Zakat, profit and loss, and discounts, with worked examples and clear limits for everyday decisions."},
     {"slug": "health", "name": "Health", "desc": "Calculate adult BMI in metric or imperial units, review WHO weight categories, and understand what the screening result cannot tell you."},
     {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, and use a browser stopwatch for everyday timing with clear notes about date and timing limits."},
     {"slug": "math", "name": "Math and Converters", "desc": "Use a standard calculator and convert weight, length and temperature with validation for invalid or physically impossible values."},
@@ -1272,6 +1273,10 @@ def category_page(c):
             items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
                       '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + t["slug"] + '">' + t["name"] + "</a>"
                       '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + t["description"] + "</p></li>")
+    if c["slug"] == "money":
+        items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
+                  '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/emi-calculator/">EMI Calculator</a>'
+                  '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">Estimate monthly loan installments, total interest and a month-by-month repayment schedule. Lender fees and contract terms may change the final quote.</p></li>')
     title = c["name"] + " | CalculatesAll"
     schema = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": c["name"], "url": SITE_URL + path}]
     body = ('<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + c["name"] + '</h1>'
@@ -1392,9 +1397,9 @@ def home_app_page(lang):
         more_h = "دوسرے ٹولز"
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
-        desc = "Free online calculators for money, health, dates, units and daily tasks, including Zakat, BMI, profit and loss, age, discounts and unit conversion."
+        desc = "Free EMI, Zakat, BMI, profit and loss, discount, age and unit conversion calculators with clear formulas and browser-based tools."
         h1 = "Free Online Calculators and Utility Tools"
-        lead = "CalculatesAll provides free browser-based calculators for Zakat, BMI, profit and loss, discounts, age, unit conversion and everyday tasks. Enter your values to get a result, then check the formula, worked example and limitations on the relevant tool page. Calculator entries are processed in your browser."
+        lead = "CalculatesAll provides free browser-based calculators for Zakat, BMI, profit and loss, discounts, age, unit conversion and everyday tasks. Enter your values to get a result, then check the formula, worked example and limitations on the relevant tool page. Calculator entries are processed in your browser. Use the EMI calculator to estimate monthly loan payments, total interest and a month-by-month repayment schedule."
         more_h = "More free tools"
     trust = ""
     for i, label in enumerate(TRUST[lang]):
@@ -1410,6 +1415,10 @@ def home_app_page(lang):
         tiles += ('<li><a href="' + href + '" class="' + TILE_BASE + " " + TILE_GRAD[t["slug"]] + '">'
                   '<span class="text-4xl" aria-hidden="true">' + TILE_ICON[t["slug"]] + "</span>"
                   "<span>" + name + "</span></a></li>")
+    if not urdu:
+        tiles += ('<li><a href="/emi-calculator/" class="' + TILE_BASE + ' bg-gradient-to-br from-cyan-700 to-blue-800">'
+                  '<span class="text-4xl" aria-hidden="true">💳</span>'
+                  '<span>EMI Calculator</span></a></li>')
     cats = ""
     if not urdu:
         for c in CATEGORIES:
