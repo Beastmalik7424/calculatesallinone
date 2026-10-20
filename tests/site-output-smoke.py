@@ -455,4 +455,4 @@ assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-m
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
 assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
 
-assert "CalculatesAll provides free browser-based calculators for Zakat, adult BMI, profit and loss, discounts, age, unit conversions and everyday tasks." in home_html, "Homepage opening paragraph must directly identify the tools and purpose"
+assert "CalculatesAll provides free browser-based calculators for Zakat, BMI, profit and loss, discounts, age, unit conversion and everyday tasks." in home_html, "Homepage opening paragraph must directly identify the tools and purpose"
