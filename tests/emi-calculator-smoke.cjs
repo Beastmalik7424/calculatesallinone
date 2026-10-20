@@ -5,6 +5,19 @@ const vm = require("node:vm");
 // Exercise the exact calculation engine shipped in the standalone EMI page,
 // without a DOM, network, or third-party runtime.
 const html = fs.readFileSync("emi-calculator.html", "utf8");
+// Guard the standalone page metadata because it bypasses the shared page-head builder.
+assert.match(html, /<html lang="en" dir="ltr">/, "EMI page must declare its language and text direction");
+assert.match(html, /name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/, "EMI viewport must match the site safe-area behavior");
+assert.ok(html.includes('property="og:image" content="https://calculateallinone.vercel.app/assets/og-image.png"'), "EMI page must use the generated canonical social preview image");
+assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "EMI page must expose a large social preview");
+assert.equal((html.match(/"@type":"FAQPage"/g) || []).length, 1, "EMI page must contain exactly one FAQPage schema block");
+const appSchemaStart = html.indexOf('<script type="application/ld+json" id="app-schema">') + '<script type="application/ld+json" id="app-schema">'.length;
+const appSchemaEnd = html.indexOf("</script>", appSchemaStart);
+assert.ok(appSchemaStart >= 0 && appSchemaEnd > appSchemaStart, "EMI WebApplication schema must exist");
+const appSchema = JSON.parse(html.slice(appSchemaStart, appSchemaEnd));
+assert.equal(appSchema.url, "https://calculateallinone.vercel.app/emi-calculator/", "WebApplication schema URL must match canonical URL");
+assert.equal(appSchema.inLanguage, "en", "WebApplication schema language must match document language");
+
 const match = html.match(/const Engine=\(\(\)=>\{[\s\S]*?\n\}\)\(\);/);
 assert.ok(match, "EMI calculation engine must remain extractable from the standalone page");
 const sandbox = { module: { exports: {} }, Number, Math, String, Error, URLSearchParams };
