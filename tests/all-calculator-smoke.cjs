@@ -145,7 +145,7 @@ for (const [cost, sell, expected] of [[100,150,/Profit: 50/],[100,80,/Loss: 20/]
 }
 
 setValues({"p-cost":-1,"p-sell":100}); submit("pl-form");
-assert.match(elements["pl-result"].textContent, /Enter cost and selling prices/i, "negative cost must be rejected");
+assert.match(elements["pl-result"].textContent, /cost price.*zero or more/i, "negative cost must be rejected");
 
 // Age: three fixed-calendar examples and future-date rejection.
 for (const [dob, expected] of [
