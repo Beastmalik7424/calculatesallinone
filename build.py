@@ -1397,7 +1397,7 @@ def home_app_page(lang):
         more_h = "دوسرے ٹولز"
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
-        desc = "Free EMI, Zakat, BMI, profit and loss, discount, age and unit conversion calculators with clear formulas and browser-based tools."
+        desc = "Free online calculators for EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas and browser-based tools."
         h1 = "Free Online Calculators and Utility Tools"
         lead = "CalculatesAll provides free browser-based calculators for Zakat, BMI, profit and loss, discounts, age, unit conversion and everyday tasks. Enter your values to get a result, then check the formula, worked example and limitations on the relevant tool page. Calculator entries are processed in your browser. Use the EMI calculator to estimate monthly loan payments, total interest and a month-by-month repayment schedule."
         more_h = "More free tools"
