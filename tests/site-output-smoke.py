@@ -449,8 +449,10 @@ print(f"PASS: {len(urls)} unique sitemap URLs, indexability, canonical URLs, int
 # Homepage content should provide direct, qualified answers and primary-source references.
 home_html = (ROOT / "index.html").read_text(encoding="utf-8")
 assert "<h2" in home_html and "What can you calculate with these free tools?" in home_html, "Homepage must include a clear, question-formatted explanatory heading"
-assert "Are these calculators free, private, and reliable?" in home_html, "Homepage must include a question-formatted FAQ heading"
+assert "Frequently asked questions: Are these calculators free, private, and reliable?" in home_html, "Homepage must include a clear FAQ section heading"
 assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage worked example must remain present"
 assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index" in home_html, "Homepage health reference must link to WHO"
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
 assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
+
+assert "CalculatesAll provides free browser-based calculators for Zakat, BMI, profit and loss, discounts, age, unit conversion and everyday tasks." in home_html, "Homepage opening paragraph must directly identify the tools and purpose"
