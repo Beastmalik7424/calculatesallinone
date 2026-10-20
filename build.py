@@ -708,7 +708,7 @@ def home_extra_html(lang):
     out = '<h2 class="' + H2 + '">' + block["heading"] + "</h2>"
     for p in block["paragraphs"]:
         out += '<p class="' + P + '">' + p + "</p>"
-    heading = "سوالات" if lang == "ur" else "Questions"
+    heading = "سوالات" if lang == "ur" else "Are these calculators free, private, and reliable?"
     out += '<h2 class="' + H2 + '">' + heading + '</h2><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     return out
 
