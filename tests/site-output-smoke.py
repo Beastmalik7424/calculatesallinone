@@ -526,6 +526,17 @@ print(f"PASS: {len(urls)} unique sitemap URLs, indexability, canonical URLs, int
 
 # Homepage content should provide direct, qualified answers and primary-source references.
 home_html = (ROOT / "index.html").read_text(encoding="utf-8")
+tool_grid_match = re.search(r'<ul class="ca-home-tool-grid">(.*?)</ul>', home_html, re.S)
+assert tool_grid_match, "Homepage must render the primary tools grid"
+tool_grid_html = tool_grid_match.group(1)
+assert tool_grid_html.count('href="/emi-calculator/"') == 1, "Homepage tools grid must contain exactly one EMI Calculator link"
+assert "EMI Calculator" in tool_grid_html, "Homepage tools grid must visibly label the EMI Calculator"
+money_html = output_for_url(SITE + "/money/").read_text(encoding="utf-8")
+money_list_match = re.search(r'<ul class="mt-8 grid gap-4">(.*?)</ul>', money_html, re.S)
+assert money_list_match, "Money and Business hub must render its calculator list"
+money_list_html = money_list_match.group(1)
+assert money_list_html.count('href="/emi-calculator/"') == 1, "Money and Business hub must contain exactly one EMI Calculator link"
+assert "EMI Calculator" in money_list_html, "Money and Business hub must visibly label the EMI Calculator"
 assert "<h2" in home_html and "What can you calculate with these free tools?" in home_html, "Homepage must include a clear, question-formatted explanatory heading"
 assert "Frequently asked questions: Are these calculators free, private, and reliable?" in home_html, "Homepage must include a clear FAQ section heading"
 assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage worked example must remain present"
