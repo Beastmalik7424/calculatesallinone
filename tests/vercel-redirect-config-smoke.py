@@ -10,6 +10,11 @@ assert favicon.get("headers", {}).get("Location") == "/assets/favicon.svg", "Fav
 assert favicon.get("status") == 301, "Favicon compatibility redirect must be permanent"
 assert routes.index(favicon) == 0, "Favicon redirect must precede the generic trailing-slash fallback"
 print("PASS /favicon.ico -> 301 -> /assets/favicon.svg")
+urdu_emi = by_src.get(r"^/ur/emi-calculator/?$")
+assert urdu_emi is not None, "Missing fallback for the unpublished Urdu EMI route"
+assert urdu_emi.get("headers", {}).get("Location") == "/emi-calculator/", "Urdu EMI fallback must target the available English calculator"
+assert urdu_emi.get("status") == 301, "Urdu EMI fallback must be permanent"
+print("PASS /ur/emi-calculator/ -> 301 -> /emi-calculator/")
 for path in ("/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"):
     item = by_src.get("^" + path + "$")
     assert item is not None, f"Missing explicit route for {path}"
