@@ -1091,6 +1091,7 @@ BMI_GUIDE = [
         "BMI categories for adults are not suitable for children and teenagers, who need age- and sex-specific growth charts. BMI also needs special interpretation during pregnancy and may be less informative for some older adults or people with fluid retention, recent illness or changes in muscle mass.",
     ]),
     ("Using the result responsibly", [
+        "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor.",
         "Use the number as one starting point, not as a complete assessment of health. A healthcare professional may consider waist circumference, blood pressure, blood tests, medicines, family history, activity and nutrition alongside BMI.",
         "Speak with a qualified clinician if you are worried about weight changes, have symptoms, are pregnant, have a medical condition, or need advice for a child or teenager. Do not change medication, restrict food severely or start a treatment plan based on this calculator alone.",
         "The calculator accepts adult heights from 50 to 260 cm, or feet from 1 to 8 and inches from 0 to 11.99, and weights from 20 to 300 kg. These are input limits for this tool, not medical recommendations.",
@@ -1110,7 +1111,7 @@ def tool_page(t):
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     if t["slug"] == "bmi-calculator":
-        title = "BMI Calculator for Adults | kg, cm, ft and in | CalculatesAll"
+        title = "BMI Calculator for Adults | cm or ft/in | CalculatesAll"
         desc = "Calculate adult BMI using kilograms and centimetres or kilograms with feet and inches. See WHO adult BMI ranges and their limitations."
         ui = BMI_UI
         guide = BMI_GUIDE

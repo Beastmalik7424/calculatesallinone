@@ -76,6 +76,8 @@ for control_name in ("bmi-height-unit", "b-kg", "b-cm", "b-ft", "b-in"):
 assert 'id="bmi-height-cm"' in bmi_html and 'id="bmi-height-ftin"' in bmi_html, "BMI height mode radios are required"
 assert 'id="b-kg-error"' in bmi_html and 'aria-describedby="b-cm-error"' in bmi_html, "BMI fields need associated error messages"
 assert 'id="b-lb"' not in bmi_html and 'name="b-lb"' not in bmi_html, "Target BMI page must not expose pounds input"
+assert "<title>BMI Calculator for Adults | cm or ft/in | CalculatesAll</title>" in bmi_html, "BMI title must be complete and unique"
+assert "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor." in bmi_html, "English BMI disclaimer must be visible in page content"
 
 urdu_bmi_html = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
 for control_name in ("bmi-height-unit", "b-kg", "b-cm", "b-ft", "b-in"):
