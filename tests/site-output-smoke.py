@@ -14,6 +14,7 @@ sitemap_urls = set(urls)
 titles = {}
 descriptions = {}
 assert urls, "Sitemap has no URLs"
+assert SITE + "/emi-calculator/" in set(urls), "The live EMI calculator must be included in the XML sitemap"
 assert len(urls) == len(set(urls)), "Duplicate URLs found in sitemap"
 lastmod_entries = {
     node.find("sm:loc", ns).text: node.find("sm:lastmod", ns).text
@@ -161,6 +162,9 @@ for path in noindex_paths:
 robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
 assert "User-agent: *" in robots and "Allow: /" in robots
 assert f"Sitemap: {SITE}/sitemap.xml" in robots
+llms = (ROOT / "llms.txt").read_text(encoding="utf-8")
+assert llms.startswith("# CalculatesAll"), "Root llms.txt must be published as readable Markdown"
+assert SITE + "/emi-calculator/" in llms, "llms.txt should reference the EMI calculator"
 
 # Verify root-relative links point to generated pages or existing static assets.
 broken = []
