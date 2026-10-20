@@ -80,17 +80,13 @@ assert.equal(submit("bmi-form"), true, "form submit must prevent browser navigat
 assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i);
 assert.match(elements["bmi-result"].textContent, /BMI is a general screening tool/i);
 assert.equal(elements["b-ft-error"].textContent, "", "disabled hidden feet field must not be validated");
-
 for (const [kg, cm, expected, label] of [
-  [63.25,170,"21.9","normal weight"],
-  [70,170,"24.2","normal weight"],
-  [72.25,170,"25.0","overweight"],
-  [86.7,170,"30.0","obesity"]
+  [63.25,170,"21.9","normal weight"],[70,170,"24.2","normal weight"],
+  [72.25,170,"25.0","overweight"],[86.7,170,"30.0","obesity"]
 ]) {
   setValues({"b-kg":kg,"b-cm":cm}); submit("bmi-form");
   assert.match(elements["bmi-result"].textContent, new RegExp(expected.replace(".","\\.") + ".*" + label, "i"));
 }
-
 elements["bmi-height-ftin"].checked = true;
 elements["bmi-height-cm"].checked = false;
 elements["bmi-height-ftin"]._handlers.change();
@@ -98,34 +94,26 @@ assert.equal(elements["bmi-result"].textContent, "", "changing height unit clear
 assert.equal(elements["b-cm"].disabled, true);
 assert.equal(elements["b-ft"].disabled, false);
 assert.equal(elements["b-in"].disabled, false);
-setValues({"b-kg":70,"b-ft":5,"b-in":7});
-submit("bmi-form");
+setValues({"b-kg":70,"b-ft":5,"b-in":7}); submit("bmi-form");
 assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i);
-setValues({"b-kg":90,"b-ft":6,"b-in":0});
-submit("bmi-form");
+setValues({"b-kg":90,"b-ft":6,"b-in":0}); submit("bmi-form");
 assert.match(elements["bmi-result"].textContent, /26\.9.*overweight/i);
-setValues({"b-kg":70,"b-ft":5,"b-in":11.99});
-submit("bmi-form");
+setValues({"b-kg":70,"b-ft":5,"b-in":11.99}); submit("bmi-form");
 assert.match(elements["bmi-result"].textContent, /20\.9.*normal weight/i);
-
 for (const [ft, inches, expectedField] of [
   [0,5,"b-ft-error"],[9,0,"b-ft-error"],["5abc",7,"b-ft-error"],["0x5",7,"b-ft-error"],["1e1",7,"b-ft-error"],[5,12,"b-in-error"]
 ]) {
-  setValues({"b-kg":70,"b-ft":ft,"b-in":inches});
-  submit("bmi-form");
+  setValues({"b-kg":70,"b-ft":ft,"b-in":inches}); submit("bmi-form");
   assert.notEqual(elements[expectedField].textContent, "", "invalid height must show a field-specific error: " + ft + " ft " + inches + " in");
   assert.doesNotMatch(elements["bmi-result"].textContent, /NaN|Infinity/);
 }
 for (const weight of [19.9,300.1,""]) {
-  setValues({"b-kg":weight,"b-ft":5,"b-in":7});
-  submit("bmi-form");
+  setValues({"b-kg":weight,"b-ft":5,"b-in":7}); submit("bmi-form");
   assert.notEqual(elements["b-kg-error"].textContent, "", "invalid weight must show a weight-specific error");
 }
-setValues({"b-kg":70,"b-ft":"","b-in":7});
-submit("bmi-form");
+setValues({"b-kg":70,"b-ft":"","b-in":7}); submit("bmi-form");
 assert.notEqual(elements["b-ft-error"].textContent, "", "empty feet must be rejected");
-setValues({"b-kg":70,"b-ft":5,"b-in":""});
-submit("bmi-form");
+setValues({"b-kg":70,"b-ft":5,"b-in":""}); submit("bmi-form");
 assert.notEqual(elements["b-in-error"].textContent, "", "empty inches must be rejected");
 
 // Profit/loss: profit, loss and zero-cost edge case.

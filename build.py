@@ -581,6 +581,24 @@ URDU = {
         ],
         "sources": 'بالغوں کی BMI درجہ بندی کے لیے <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" rel="noopener noreferrer">عالمی ادارۂ صحت (WHO) کی موٹاپے اور زیادہ وزن سے متعلق معلومات</a> دیکھیں۔ BMI صرف اسکریننگ پیمانہ ہے اور اسے طبی سیاق میں سمجھنا چاہیے۔',
     },
+}
+
+
+EXTRA = {
+    "zakat-calculator": {
+        "quick": "Zakat is 2.5 percent of net zakatable wealth, due when that wealth is at least the Nisab (612.36 grams of silver) and has been held for one lunar year.",
+        "faq": [
+            ("Is Zakat due on my home?", "Your home that you live in is not zakatable wealth. Rental property income and goods held for sale can be zakatable, so check the rules for each asset with a scholar."),
+            ("Do I subtract debts?", "Debts due now are commonly subtracted from zakatable wealth. Whether particular long-term debts are deducted is a point scholars discuss, so confirm your case."),
+        ],
+    },
+    "bmi-calculator": {
+        "quick": "BMI equals weight in kilograms divided by height in meters squared. For adults, 18.5 to 24.9 is the WHO normal weight range.",
+        "faq": [
+            ("Is a BMI of 25 unhealthy?", "A BMI of 25 is at the start of the overweight range. It is a screening number only. Waist size, blood pressure and blood tests give a fuller picture, and a clinician can interpret them with you."),
+            ("Does BMI work for athletes?", "BMI can overstate body fat in people with high muscle mass. A clinician can use other measures for athletes."),
+        ],
+    },
     "profit-loss-calculator": {
         "quick": "Profit equals selling price minus cost price. Profit percentage equals profit divided by cost price, multiplied by 100.",
         "faq": [
