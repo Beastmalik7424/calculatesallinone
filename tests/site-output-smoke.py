@@ -386,6 +386,24 @@ for url in urls:
             raise AssertionError(f"Invalid JSON-LD on {url}: {exc}") from exc
     faq_schemas = [item for item in parsed_schemas if item.get("@type") == "FAQPage"]
     assert len(faq_schemas) <= 1, f"Duplicate FAQPage JSON-LD blocks on {url}: {len(faq_schemas)}"
+    for faq_schema in faq_schemas:
+        questions = faq_schema.get("mainEntity", [])
+        assert questions and isinstance(questions, list), f"FAQPage must contain Question entities: {url}"
+        for question in questions:
+            name = question.get("name", "")
+            answer = question.get("acceptedAnswer", {}).get("text", "")
+            assert 1 <= len(name) <= 200, f"FAQ question name is empty or suspiciously long on {url}: {len(name)}"
+            assert name.rstrip().endswith(("?", "؟")), f"FAQ question name must be a concise visible question on {url}: {name[:100]!r}"
+            assert 1 <= len(answer) <= 3000, f"FAQ answer is empty or suspiciously long on {url}: {len(answer)}"
+    if url == SITE + "/":
+        assert len(faq_schemas) == 1, "Homepage must have one FAQPage schema"
+        names = {item.get("name") for item in faq_schemas[0].get("mainEntity", [])}
+        expected = {
+            "Are the calculators free?",
+            "Do you store the numbers I enter?",
+            "Are the results accurate enough for important decisions?",
+        }
+        assert expected.issubset(names), f"Homepage FAQ schema must contain the concise visible questions: {expected - names}"
     if url.endswith("/emi-calculator/"):
         assert len(faq_schemas) == 1, "EMI page must have exactly one FAQPage schema generated from visible FAQ content"
         app_schemas = [item for item in parsed_schemas if item.get("@type") == "WebApplication"]

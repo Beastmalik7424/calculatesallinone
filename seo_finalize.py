@@ -4,6 +4,7 @@ import json
 import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
+from html.parser import HTMLParser
 
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
@@ -45,6 +46,63 @@ def strip_tags(value):
     value = re.sub(r"<ol[^>]*>.*?</ol>", " ", value, flags=re.S|re.I)
     value = re.sub(r"<details[^>]*>.*?</details>", " ", value, flags=re.S|re.I)
     return html.unescape(re.sub(r"<[^>]+>", " ", value))
+
+class FAQDetailsParser(HTMLParser):
+    """Extract FAQ text from each details block without crossing element boundaries."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack = []
+        self.items = []
+
+    def handle_starttag(self, tag, attrs):
+        tag = tag.lower()
+        if tag == "details":
+            self.stack.append({"summary": [], "answer": [], "field": None, "summary_seen": False, "answer_seen": False})
+            return
+        if not self.stack:
+            return
+        current = self.stack[-1]
+        if tag == "summary" and not current["summary_seen"]:
+            current["summary_seen"] = True
+            current["field"] = "summary"
+        elif tag == "p" and current["summary_seen"] and not current["answer_seen"]:
+            current["answer_seen"] = True
+            current["field"] = "answer"
+
+    def handle_data(self, data):
+        if self.stack and self.stack[-1]["field"]:
+            self.stack[-1][self.stack[-1]["field"]].append(data)
+
+    def handle_endtag(self, tag):
+        tag = tag.lower()
+        if not self.stack:
+            return
+        current = self.stack[-1]
+        if tag in ("summary", "p"):
+            current["field"] = None
+        elif tag == "details":
+            item = self.stack.pop()
+            question = " ".join("".join(item["summary"]).split())
+            answer = " ".join("".join(item["answer"]).split())
+            if question and answer:
+                self.items.append((question, answer))
+
+
+def extract_faq_items(raw):
+    parser = FAQDetailsParser()
+    parser.feed(raw)
+    faq_items = []
+    for question, answer in parser.items:
+        q_text = " ".join(strip_tags(question).split())
+        a_text = " ".join(strip_tags(answer).split())
+        # Reject malformed captures instead of publishing concatenated page text as a question.
+        if not q_text or not a_text or len(q_text) > 200 or len(a_text) > 3000:
+            continue
+        if not q_text.endswith(("?", "؟")):
+            continue
+        faq_items.append({"@type": "Question", "name": q_text, "acceptedAnswer": {"@type": "Answer", "text": a_text}})
+    return faq_items
+
 
 def word_count(value):
     return len(strip_tags(value).split())
@@ -144,13 +202,7 @@ def main():
         # Shared source-file commit dates do not prove when this individual page was reviewed.
         web_page.pop("dateModified", None)
         web_page["inLanguage"] = lang
-        faq_items = []
-        faq_pattern = r"<details[^>]*>\s*<summary[^>]*>(.*?)</summary>\s*<p[^>]*>(.*?)</p>\s*</details>"
-        for q, a in re.findall(faq_pattern, raw, re.S|re.I):
-            q_text = " ".join(strip_tags(q).split())
-            a_text = " ".join(strip_tags(a).split())
-            if q_text and a_text:
-                faq_items.append({"@type":"Question","name":q_text,"acceptedAnswer":{"@type":"Answer","text":a_text}})
+        faq_items = extract_faq_items(raw)
         if faq_items:
             schemas = [s for s in schemas if s.get("@type") != "FAQPage"]
             schemas.append({"@context":"https://schema.org","@type":"FAQPage","mainEntity":faq_items})
