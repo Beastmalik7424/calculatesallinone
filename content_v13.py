@@ -22,6 +22,11 @@ HUB_EXTRA = {
         ("When to see a professional", [
             "If your weight changes quickly, if you are pregnant, if you are a child or a teenager, or if you have any health concern, speak to a doctor or qualified health professional. Do not change medicines or diet based only on a calculator result.",
         ]),
+        ("How to interpret a BMI result responsibly", [
+            "Before comparing two BMI results, check that weight and height were entered in the correct units and that the same measurement method was used. A small change near a category boundary can move a rounded result into another range, so do not treat one decimal place as a precise measure of health.",
+            "BMI does not account directly for muscle mass, body composition, pregnancy, age-related changes or every individual health factor. It is useful as a screening signal when interpreted with other information, not as a target that every person must reach.",
+            "For a more complete assessment, a clinician may consider waist measurement, medical history, blood pressure, laboratory results and changes over time. This category page is general educational information, not personal medical advice. Use the adult BMI tool only for adults and discuss concerns with a qualified health professional.",
+        ]),
     ],
     "time": [
         ("How to use the date and time tools", [
@@ -33,6 +38,11 @@ HUB_EXTRA = {
         ]),
         ("Accuracy notes", [
             "The age calculator counts whole days and does not handle every local legal rule for birthdays, especially for people born on 29 February. The stopwatch reads the device clock, so very short timings may vary a little between devices.",
+        ]),
+        ("Calendar dates and elapsed time are different", [
+            "An age calculation compares calendar dates, then borrows days or months as needed to express the difference in years, months and days. The total number of days is a separate figure because months have different lengths and leap years add a day to February. For forms or legal eligibility, follow the rules of the organisation asking for the date.",
+            "A stopwatch measures elapsed time from a start point rather than counting calendar days. Use it for workouts, study sessions, cooking and everyday tasks, but not as a replacement for certified competition timing or laboratory equipment. Background tabs and device scheduling can affect the display refresh even when elapsed time is calculated from a clock.",
+            "For reliable comparisons, use the same date format and timing method each time. Check whether a task needs calendar age, total days, or elapsed seconds before choosing a tool. This avoids mixing unlike measurements and makes the result easier to explain to another person.",
         ]),
     ],
     "math": [
@@ -46,6 +56,11 @@ HUB_EXTRA = {
         ("Who uses these tools", [
             "Students check homework, shoppers compare sizes and prices from different countries, and cooks convert recipe weights and temperatures. The tools run in your browser, so your numbers stay on your device.",
         ]),
+        ("Check units, precision and assumptions", [
+            "A conversion is only useful when the starting and target units describe the same kind of measurement. Choose weight for kilograms and pounds, length for metres and miles, and temperature for Celsius, Fahrenheit or Kelvin. Do not use a length conversion to compare area or volume, because those are different dimensions.",
+            "Some conversion factors are exact by definition, while displayed results may be rounded for readability. For example, one inch is exactly 25.4 millimetres, but a converted decimal may contain more digits than you need for a recipe or school exercise. Keep extra precision during intermediate steps when accuracy matters.",
+            "For arithmetic, remember the order of operations: brackets first, multiplication and division before addition and subtraction. If an answer looks unexpected, split the expression into smaller steps and compare it with the worked example on the relevant tool page. These browser-based tools support everyday checks, not certified scientific measurements.",
+        ]),
     ],
     "worship": [
         ("How to use the tasbih counter", [
@@ -57,6 +72,11 @@ HUB_EXTRA = {
         ]),
         ("Dhikr and your own practice", [
             "Choose the dhikr and the number that suit your own practice. For questions about the wording or the number of recitations, consult a knowledgeable teacher in your community.",
+        ]),
+        ("Use a digital counter thoughtfully", [
+            "A digital tasbih counter is a practical aid for keeping track of repeated recitations, especially when you want to focus on the words rather than remember the running total. Choose a target that fits your own practice, then tap once for each completed recitation. The displayed remainder can help you see progress without mental arithmetic.",
+            "A counter records taps, not the spiritual quality or correctness of an act of worship. If you tap twice by mistake, lose count, or want to change your routine, reset the number or begin a fresh count in a way that feels appropriate to you. The tool does not prescribe a religious practice or decide which wording should be recited.",
+            "Your count is stored in local browser storage on the device. It may disappear if you clear browser data, use private browsing, change devices or switch browsers. If keeping a long-term record matters to you, write it down separately. For questions about religious wording or recommended counts, consult a trusted qualified teacher rather than treating the counter as a religious authority.",
         ]),
     ],
 }
