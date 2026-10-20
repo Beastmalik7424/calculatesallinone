@@ -60,6 +60,13 @@
       "status": 301
     },
     {
+      "src": "^/ur/emi-calculator/?$",
+      "headers": {
+        "Location": "/emi-calculator/"
+      },
+      "status": 301
+    },
+    {
       "src": "^/contact$",
       "headers": {
         "Location": "/contact/"
