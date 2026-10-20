@@ -10,6 +10,12 @@ assert favicon.get("headers", {}).get("Location") == "/assets/favicon.svg", "Fav
 assert favicon.get("status") == 301, "Favicon compatibility redirect must be permanent"
 assert routes.index(favicon) == 0, "Favicon redirect must precede the generic trailing-slash fallback"
 print("PASS /favicon.ico -> 301 -> /assets/favicon.svg")
+emi_html = next((item for item in routes if item.get("src") == "^/emi-calculator\\.html$"), None)
+assert emi_html is not None, "Missing compatibility redirect for the former EMI .html URL"
+assert emi_html.get("headers", {}).get("Location") == "/emi-calculator/", "EMI .html URL must redirect to the canonical calculator route"
+assert emi_html.get("status") == 301, "EMI .html compatibility redirect must be permanent"
+assert routes.index(emi_html) < routes.index(by_src[r"^/(?!.*\\.[^/]+$)(.*[^/])$"]), "EMI .html redirect must precede the generic route fallback"
+print("PASS /emi-calculator.html -> 301 -> /emi-calculator/")
 urdu_emi = by_src.get(r"^/ur/emi-calculator/?$")
 assert urdu_emi is not None, "Missing fallback for the unpublished Urdu EMI route"
 assert urdu_emi.get("headers", {}).get("Location") == "/emi-calculator/", "Urdu EMI fallback must target the available English calculator"
