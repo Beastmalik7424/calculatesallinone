@@ -106,6 +106,10 @@ def main():
     titles, descriptions = {}, {}
     for path, file in paths.items():
         raw = file.read_text(encoding="utf-8")
+        # Bing Webmaster Tools ownership verification belongs on the homepage only.
+        if path == "/" and not re.search(r'<meta\s+name=["\']msvalidate\.01["\']', raw, re.I):
+            verification_tag = '<meta name="msvalidate.01" content="07D62A8BA67BA474B5A13A27E6770782" />'
+            raw = re.sub(r"<head([^>]*)>", lambda match: match.group(0) + "\\n    " + verification_tag, raw, count=1, flags=re.I)
         canonical = SITE + path
         raw = re.sub(r'<link rel="canonical" href="[^"]*">', '<link rel="canonical" href="' + canonical + '">', raw, count=1)
         def keep_alternate(match):
