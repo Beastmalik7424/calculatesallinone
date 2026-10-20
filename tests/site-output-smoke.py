@@ -71,8 +71,17 @@ for url in urls:
 age_html = output_for_url(SITE + "/age-calculator/").read_text(encoding="utf-8")
 assert 'id="a-dob" name="dob" type="date"' in age_html, "Age input must expose a stable form name"
 bmi_html = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
-for control_name in ("bmi-unit", "b-kg", "b-cm", "b-lb", "b-ft", "b-in"):
+for control_name in ("bmi-height-unit", "b-kg", "b-cm", "b-ft", "b-in"):
     assert 'name="' + control_name + '"' in bmi_html, f"BMI control missing form name: {control_name}"
+assert 'id="bmi-height-cm"' in bmi_html and 'id="bmi-height-ftin"' in bmi_html, "BMI height mode radios are required"
+assert 'id="b-kg-error"' in bmi_html and 'aria-describedby="b-cm-error"' in bmi_html, "BMI fields need associated error messages"
+assert 'id="b-lb"' not in bmi_html and 'name="b-lb"' not in bmi_html, "Target BMI page must not expose pounds input"
+
+urdu_bmi_html = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
+for control_name in ("bmi-height-unit", "b-kg", "b-cm", "b-ft", "b-in"):
+    assert 'name="' + control_name + '"' in urdu_bmi_html, f"Urdu BMI control missing form name: {control_name}"
+assert 'id="b-lb"' not in urdu_bmi_html and "وزن (پاؤنڈ)" not in urdu_bmi_html, "Urdu BMI page must not expose pounds input"
+assert "BMI ایک عمومی اسکریننگ پیمانہ ہے" in urdu_bmi_html, "Urdu BMI disclaimer is required"
 
 assert len(titles.values()) == len(set(titles.values())), "Duplicate page titles found: " + repr(titles)
 assert len(descriptions.values()) == len(set(descriptions.values())), "Duplicate meta descriptions found: " + repr(descriptions)
