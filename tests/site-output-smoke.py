@@ -482,6 +482,10 @@ content_floor_pages = [
     url for url in urls
     if urlparse(url).path not in excluded_short_pages
 ]
+# Keep the Urdu homepage useful even while it remains noindex pending native-language review.
+urdu_home_for_content = SITE + "/ur/"
+if urdu_home_for_content not in content_floor_pages:
+    content_floor_pages.append(urdu_home_for_content)
 thin_pages = []
 for url in content_floor_pages:
     page_html = output_for_url(url).read_text(encoding="utf-8")
