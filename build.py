@@ -719,7 +719,12 @@ def home_extra_html(lang):
     for p in block["paragraphs"]:
         out += '<p class="' + P + '">' + p + "</p>"
     heading = "سوالات" if lang == "ur" else "Frequently asked questions: Are these calculators free, private, and reliable?"
-    out += '<h2 class="' + H2 + '">' + heading + '</h2><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
+    answer_first = (
+        "جی ہاں۔ CalculatesAll کے ٹولز مفت ہیں، حساب آپ کے براؤزر میں ہوتا ہے اور درج کردہ اعداد ہمارے سرور کو نہیں بھیجے جاتے۔ ہر کیلکولیٹر اپنا فارمولا اور حدود بتاتا ہے۔ اہم مالی، طبی یا دینی فیصلے کے لیے متعلقہ ماہر سے تصدیق کریں۔"
+        if lang == "ur" else
+        "Yes. CalculatesAll tools are free, calculations run in your browser, and calculator entries are not sent to our server. Each tool explains its formula and limits. Confirm important financial, medical or religious decisions with a qualified professional."
+    )
+    out += '<h2 class="' + H2 + '">' + heading + '</h2><p class="' + P + '">' + answer_first + '</p><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     return out
 
 
