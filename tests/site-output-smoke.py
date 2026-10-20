@@ -82,7 +82,7 @@ assert "<title>BMI Calculator for Adults | cm or ft/in | CalculatesAll</title>" 
 assert "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor." in bmi_html, "English BMI disclaimer must be visible in page content"
 
 urdu_bmi_html = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
-for control_name in ("bmi-height-unit", "b-kg", "b-cm", "b-ft", "b-in"):
+for control_name in ("bmi-height-unit", "bmi-weight-unit", "b-kg", "b-lb", "b-cm", "b-ft", "b-in"):
     assert 'name="' + control_name + '"' in urdu_bmi_html, f"Urdu BMI control missing form name: {control_name}"
 assert 'id="b-lb"' in urdu_bmi_html and 'id="bmi-weight-lb"' in urdu_bmi_html, "Urdu BMI page must offer pounds alongside kilograms"
 assert "BMI ایک عمومی اسکریننگ پیمانہ ہے" in urdu_bmi_html, "Urdu BMI disclaimer is required"
