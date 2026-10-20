@@ -835,6 +835,20 @@ def nav_items(lang="en"):
             name = t["name"]
             href = "/" + t["slug"]
         items += '<li><a class="' + LINK + '" href="' + href + '"' + (' hreflang="en"' if lang not in ("en", "ur") else "") + '>' + name + "</a></li>"
+
+    # EMI is a standalone calculator rather than an entry in TOOLS, so add it
+    # explicitly to the shared menu to keep navigation complete without
+    # changing the generated calculator-page pipeline.
+    emi_names = {
+        "en": "EMI Calculator",
+        "ur": "ای ایم آئی کیلکولیٹر",
+        "ar": "حاسبة الأقساط",
+        "hi": "ईएमआई कैलकुलेटर",
+        "es": "Calculadora de EMI",
+        "fr": "Calculateur EMI",
+    }
+    emi_name = emi_names.get(lang, "EMI Calculator")
+    items += '<li><a class="' + LINK + '" href="/emi-calculator/"' + (' hreflang="en"' if lang not in ("en", "ur") else "") + '>' + emi_name + "</a></li>"
     return items
 
 
