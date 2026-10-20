@@ -5,6 +5,7 @@ https://calculateallinone.vercel.app/age-calculator/
 https://calculateallinone.vercel.app/bmi-calculator/
 https://calculateallinone.vercel.app/contact/
 https://calculateallinone.vercel.app/discount-calculator/
+https://calculateallinone.vercel.app/emi-calculator/
 https://calculateallinone.vercel.app/editorial-policy/
 https://calculateallinone.vercel.app/health/
 https://calculateallinone.vercel.app/marketplaces/
