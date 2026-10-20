@@ -449,7 +449,7 @@ print(f"PASS: {len(urls)} unique sitemap URLs, indexability, canonical URLs, int
 # Homepage content should provide direct, qualified answers and primary-source references.
 home_html = (ROOT / "index.html").read_text(encoding="utf-8")
 assert "<h2" in home_html and "What can you calculate with these free tools?" in home_html, "Homepage must include a clear, question-formatted explanatory heading"
-assert "Frequently asked questions: are these calculators free, private, and reliable?" in home_html, "Homepage must include a clear FAQ section heading"
+assert "Frequently asked questions: Are these calculators free, private, and reliable?" in home_html, "Homepage must include a clear FAQ section heading"
 assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage worked example must remain present"
 assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index" in home_html, "Homepage health reference must link to WHO"
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
