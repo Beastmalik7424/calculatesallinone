@@ -708,7 +708,7 @@ def home_extra_html(lang):
     out = '<h2 class="' + H2 + '">' + block["heading"] + "</h2>"
     for p in block["paragraphs"]:
         out += '<p class="' + P + '">' + p + "</p>"
-    heading = "سوالات" if lang == "ur" else "Are these calculators free, private, and reliable?"
+    heading = "سوالات" if lang == "ur" else "Frequently asked questions: are these calculators free, private, and reliable?"
     out += '<h2 class="' + H2 + '">' + heading + '</h2><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     return out
 
@@ -1364,7 +1364,7 @@ def home_app_page(lang):
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for money, health, dates, units and daily tasks, including Zakat, BMI, profit and loss, age, discounts and unit conversion."
         h1 = "Free Online Calculators and Utility Tools"
-        lead = "Calculate everyday values with free browser-based tools for money, health, dates and unit conversions. Your entries are processed in your browser."
+        lead = "CalculatesAll provides free browser-based calculators for Zakat, BMI, profit and loss, discounts, age, unit conversion and everyday tasks. Enter your values to get a result, then check the formula, worked example and limitations on the relevant tool page. Calculator entries are processed in your browser."
         more_h = "More free tools"
     trust = ""
     for i, label in enumerate(TRUST[lang]):
