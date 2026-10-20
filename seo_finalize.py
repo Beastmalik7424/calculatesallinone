@@ -130,7 +130,7 @@ def main():
         raw = re.sub(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', "", raw, count=1, flags=re.S)
         schemas = []
         jsonld_script_pattern = r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>"""
-        for match in re.finditer(jsonld_script_pattern, raw, re.S | re.I)
+        for match in re.finditer(jsonld_script_pattern, raw, re.S | re.I):
             try:
                 schemas.append(json.loads(match.group(1)))
             except json.JSONDecodeError as exc:
