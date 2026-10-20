@@ -1,0 +1,22 @@
+# CalculatesAll
+
+CalculatesAll provides free browser-based calculators and utility tools. Calculator inputs are processed in the user's browser. Results are estimates where the page states assumptions or limitations.
+
+## Main pages
+
+- Homepage: https://calculateallinone.vercel.app/
+- EMI and loan repayment calculator: https://calculateallinone.vercel.app/emi-calculator/
+- Zakat calculator: https://calculateallinone.vercel.app/zakat-calculator/
+- Adult BMI calculator: https://calculateallinone.vercel.app/bmi-calculator/
+- Discount calculator: https://calculateallinone.vercel.app/discount-calculator/
+- Profit and loss calculator: https://calculateallinone.vercel.app/profit-loss-calculator/
+- Age calculator: https://calculateallinone.vercel.app/age-calculator/
+- Unit converter: https://calculateallinone.vercel.app/unit-converter/
+- Calculation methodology: https://calculateallinone.vercel.app/methodology/
+- About: https://calculateallinone.vercel.app/about/
+- Editorial policy: https://calculateallinone.vercel.app/editorial-policy/
+- Privacy policy: https://calculateallinone.vercel.app/privacy/
+
+## Usage notes
+
+The EMI calculator is a planning estimate and is not a bank offer or approval. Zakat calculations use the stated silver Nisab method and may not cover every scholarly view. BMI is a screening measure for adults, not a diagnosis. Read each tool's formula, assumptions, and limitations before relying on its result.
