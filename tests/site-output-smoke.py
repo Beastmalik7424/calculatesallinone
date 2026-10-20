@@ -35,6 +35,10 @@ def output_for_url(url):
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 
+# The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
+emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
+assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
+
 # Category hubs are indexable when their explanatory sections and tool links are present.
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
     assert SITE + hub in sitemap_urls, f"Substantive category hub should be indexable: {hub}"
