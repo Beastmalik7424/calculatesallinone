@@ -24,6 +24,9 @@ Scores use different methodologies and must not be averaged. Automated scans do 
 3. Added primary references for adult BMI (WHO) and the inch definition (NIST).
 4. Made the English homepage explanatory and FAQ H2 headings question-led without changing the calculator interface.
 5. Added output smoke-test assertions for these key content requirements.
+6. Performance re-check before this fix: PageSpeed Insights mobile 83/100 (FCP 3.2 s, LCP 3.7 s, TBT 0 ms, CLS 0.036) and desktop 94/100 (FCP 1.1 s, LCP 1.4 s, TBT 0 ms, CLS 0.031). PSI identified about 150 KiB of unused JavaScript and about 3 KiB of minification opportunity.
+7. Identified a concrete avoidable network cost: the AdSense JavaScript was loaded on every page even when no ad slots were enabled. Changed the build to use Google's supported ownership meta tag while ads are inactive, and to load the AdSense library only when a publisher ID, real slot ID and explicit consent-readiness flag are all configured.
+8. Expanded automated regression checks for this fail-closed monetization behavior and calculator edge cases (negative Zakat/profit inputs, discount over 100%, negative mass and temperature below absolute zero).
 
 Sources:
 - WHO BMI information: https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index
@@ -87,7 +90,7 @@ Sources:
 ## Current limitations / not yet verified
 
 - Search Console index status, sitemap processing state and live URL Inspection results require access to the verified property and have not been confirmed by this external audit.
-- A complete PageSpeed Insights/Lighthouse report and CrUX field-data report have not yet been collected.
-- Broken-link testing covered 29 homepage links only, not every page or external link.
-- Security headers were reviewed in repository configuration, but the live HTTP response has not yet been independently verified.
-- Full cross-browser/mobile manual testing and independent formula review remain outstanding.
+- The pre-fix PageSpeed Insights snapshot is available, but a fresh post-deployment mobile/desktop run is required to quantify the impact. CrUX field data availability and real-user Core Web Vitals have not been verified.
+- A recent homepage link audit checked 31 links and found 31 working, but this is not a complete all-page or external-link crawl.
+- A live security scan reported valid SSL, HTTPS redirection, HSTS and CSP. Its 48/100 aggregate score is primarily reduced by missing email-authentication/DNS records (SPF, DKIM, DMARC, MTA-STS, DNSSEC and CAA) on the Vercel-managed `.vercel.app` subdomain. These are not confirmed application vulnerabilities and the site owner cannot directly publish DNS records for Vercel's managed subdomain.
+- Full cross-browser/mobile manual testing, independent review of every formula, and a live browser-console sweep remain outstanding. Automated tests cover representative cases, not every possible input or device.
