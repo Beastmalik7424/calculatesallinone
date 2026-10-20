@@ -14,6 +14,7 @@ sitemap_urls = set(urls)
 titles = {}
 descriptions = {}
 assert urls, "Sitemap has no URLs"
+assert SITE + "/emi-calculator/" in set(urls), "The live EMI calculator must be included in the XML sitemap"
 assert len(urls) == len(set(urls)), "Duplicate URLs found in sitemap"
 lastmod_entries = {
     node.find("sm:loc", ns).text: node.find("sm:lastmod", ns).text
@@ -33,6 +34,10 @@ def output_for_url(url):
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
+
+# The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
+emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
+assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
 
 # Category hubs are indexable when their explanatory sections and tool links are present.
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
@@ -161,6 +166,9 @@ for path in noindex_paths:
 robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
 assert "User-agent: *" in robots and "Allow: /" in robots
 assert f"Sitemap: {SITE}/sitemap.xml" in robots
+llms = (ROOT / "llms.txt").read_text(encoding="utf-8")
+assert llms.startswith("# CalculatesAll"), "Root llms.txt must be published as readable Markdown"
+assert SITE + "/emi-calculator/" in llms, "llms.txt should reference the EMI calculator"
 
 # Verify root-relative links point to generated pages or existing static assets.
 broken = []

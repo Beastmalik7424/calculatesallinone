@@ -1703,6 +1703,7 @@ def main():
         paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA, "/about/": ABOUT_EXTRA}.get(path, [])
         static_page(path, title, desc, h1, paras)
         entries.append((path, []))
+    entries.append(("/emi-calculator/", []))
     not_found()
     normalize_internal_page_links()
     og_and_favicon()
@@ -1721,6 +1722,9 @@ def main():
     google_verification = "google2e764d068684499b.html"
     if os.path.isfile(google_verification):
         shutil.copy2(google_verification, os.path.join(OUT, google_verification))
+    llms_source = "llms.txt"
+    if os.path.isfile(llms_source):
+        shutil.copy2(llms_source, os.path.join(OUT, llms_source))
     configured = write_ads_txt()
     print("ads.txt " + ("configured from ADSENSE_CLIENT" if configured else "not generated until a real ADSENSE_CLIENT is configured"))
     print("translation review rows: " + str(write_review_sheet()))

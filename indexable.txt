@@ -5,6 +5,7 @@
 /bmi-calculator/
 /contact/
 /discount-calculator/
+/emi-calculator/
 /editorial-policy/
 /health/
 /marketplaces/
