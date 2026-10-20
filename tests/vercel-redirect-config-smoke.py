@@ -4,6 +4,17 @@ config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert "trailingSlash" not in config, "Remove Vercel auto trailingSlash redirect so explicit 301 routes can run"
 routes = config.get("routes", [])
 by_src = {item.get("src"): item for item in routes}
+favicon = by_src.get(r"^/favicon\.ico$")
+assert favicon is not None, "Missing /favicon.ico compatibility redirect"
+assert favicon.get("headers", {}).get("Location") == "/assets/favicon.svg", "Favicon redirect must target the generated SVG asset"
+assert favicon.get("status") == 301, "Favicon compatibility redirect must be permanent"
+assert routes.index(favicon) == 0, "Favicon redirect must precede the generic trailing-slash fallback"
+print("PASS /favicon.ico -> 301 -> /assets/favicon.svg")
+urdu_emi = by_src.get(r"^/ur/emi-calculator/?$")
+assert urdu_emi is not None, "Missing fallback for the unpublished Urdu EMI route"
+assert urdu_emi.get("headers", {}).get("Location") == "/emi-calculator/", "Urdu EMI fallback must target the available English calculator"
+assert urdu_emi.get("status") == 301, "Urdu EMI fallback must be permanent"
+print("PASS /ur/emi-calculator/ -> 301 -> /emi-calculator/")
 for path in ("/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"):
     item = by_src.get("^" + path + "$")
     assert item is not None, f"Missing explicit route for {path}"

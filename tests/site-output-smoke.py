@@ -1,3 +1,4 @@
+import html as html_lib
 import json
 import os
 import re
@@ -460,6 +461,51 @@ assert '<a href="/">Browse all free calculators</a>' in emi_html, "EMI page must
 for related in ("/zakat-calculator/", "/bmi-calculator/", "/discount-calculator/", "/profit-loss-calculator/", "/methodology/", "/about/"):
     assert 'href="' + related + '"' in emi_html, "EMI page is missing crawlable related link: " + related
 assert 'aria-label="Related calculators"' in emi_html, "EMI related links must be grouped in a labelled navigation region"
+
+
+# SEO/GEO content floor for indexable discovery pages. This intentionally excludes
+# legal/privacy/contact disclosures, where padding copy to hit a word target would hurt clarity.
+def visible_main_text(page_html):
+    match = re.search(r"<main\b[^>]*>(.*?)</main>", page_html, re.S | re.I)
+    assert match, "Indexable page is missing its main landmark"
+    text = re.sub(r"<(script|style)\b[^>]*>.*?</\1>", " ", match.group(1), flags=re.S | re.I)
+    text = re.sub(r"<nav\b[^>]*>.*?</nav>", " ", text, flags=re.S | re.I)
+    text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
+    text = html_lib.unescape(re.sub(r"<[^>]+>", " ", text))
+    return re.sub(r"\s+", " ", text).strip()
+
+def content_words(text):
+    return re.findall(r"[\w]+(?:['’][\w]+)?", text, flags=re.UNICODE)
+
+excluded_short_pages = {"/privacy/", "/terms/", "/contact/", "/affiliate-disclosure/"}
+content_floor_pages = [
+    url for url in urls
+    if urlparse(url).path not in excluded_short_pages
+]
+# Keep the Urdu homepage useful even while it remains noindex pending native-language review.
+urdu_home_for_content = SITE + "/ur/"
+if urdu_home_for_content not in content_floor_pages:
+    content_floor_pages.append(urdu_home_for_content)
+thin_pages = []
+for url in content_floor_pages:
+    page_html = output_for_url(url).read_text(encoding="utf-8")
+    words = content_words(visible_main_text(page_html))
+    if len(words) < 300:
+        thin_pages.append((urlparse(url).path, len(words)))
+assert not thin_pages, (
+    "Indexable SEO/GEO landing pages must contain at least 300 words of visible, page-specific main content "
+    "(excluding shared navigation/footer and legal/contact disclosures): " + repr(thin_pages)
+)
+
+# Require each SEO landing page to contain enough distinct terms to catch repeated boilerplate.
+low_unique = []
+for url in content_floor_pages:
+    page_html = output_for_url(url).read_text(encoding="utf-8")
+    words = [w.casefold() for w in content_words(visible_main_text(page_html))]
+    unique_count = len(set(words))
+    if unique_count < 90:
+        low_unique.append((urlparse(url).path, unique_count))
+assert not low_unique, "SEO/GEO landing pages appear too repetitive or thin: " + repr(low_unique)
 
 print(f"PASS: {len(urls)} unique sitemap URLs, indexability, canonical URLs, internal links, valid JSON-LD, language metadata, and translated breadcrumbs.")
 

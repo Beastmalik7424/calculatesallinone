@@ -437,6 +437,11 @@ TOOLS = [
             ("Common mistakes", [
                 "Resetting by accident. Reset clears the saved count on this device.",
             ]),
+            ("A practical counting routine", [
+                "Choose the target before starting so the progress message matches your intention. A short target can suit a brief routine, while an unlimited setting lets you count without a finish line. Tap once for each completed recitation and pause if you need to avoid accidental double taps.",
+                "The counter is a tracking aid only. It cannot confirm which words were recited, whether a tap was missed, or whether a particular number is religiously required. If the count is interrupted, use your own judgement about whether to continue or restart. The page does not prescribe devotional practice.",
+                "The saved number uses local browser storage on the current device. It is not a cloud backup, and clearing site data, using private browsing or changing devices can remove it. If you need a record over many days, keep a separate note. For questions about the wording or recommended number of recitations, consult a trusted qualified teacher.",
+            ]),
         ],
         "faq": [
             ("Is the count saved on a server?", "No. It is saved only in this browser."),
@@ -468,6 +473,11 @@ TOOLS = [
             ]),
             ("Limits", [
                 "This is suitable for everyday timing. Official sport or laboratory timing needs certified equipment.",
+            ]),
+            ("Use the stopwatch for repeatable everyday tasks", [
+                "A browser stopwatch is useful for timing a study interval, workout set, cooking step or short work session. Press Start at the beginning, Stop when the interval ends, and Reset before a new attempt. If you compare repeated sessions, use the same start and stop method so the results are more meaningful.",
+                "The display shows hundredths of a second, but that display precision is not the same as certified measurement accuracy. Browser scheduling, operating-system load and background-tab throttling can affect how often the screen refreshes. The elapsed-time calculation is based on the browser clock, yet this tool is not intended for official sporting results, laboratory experiments or legal evidence.",
+                "This page does not store a history of completed timings. Record any result you need before resetting or reloading the page. If the task requires a verified split time, calibrated hardware or a formal timing protocol, use equipment designed for that purpose instead of relying on a general-purpose browser tool.",
             ]),
         ],
         "faq": [
