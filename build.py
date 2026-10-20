@@ -718,6 +718,12 @@ def home_extra_html(lang):
     out = '<h2 class="' + H2 + '">' + block["heading"] + "</h2>"
     for p in block["paragraphs"]:
         out += '<p class="' + P + '">' + p + "</p>"
+    contact_email = html.escape(CONTACT_EMAIL, quote=True)
+    if lang == "ur":
+        contact_copy = "حساب میں ممکنہ خرابی رپورٹ کرنے کے لیے صفحے کا نام، درج کردہ اعداد اور متوقع نتیجہ شامل کرکے " + '<a class="' + LINK + '" href="mailto:' + contact_email + '">' + html.escape(CONTACT_EMAIL) + '</a>' + " پر ای میل کریں۔"
+    else:
+        contact_copy = "Found a possible calculation error? Email " + '<a class="' + LINK + '" href="mailto:' + contact_email + '">' + html.escape(CONTACT_EMAIL) + '</a>' + " with the page name, input values and expected result so the issue can be reproduced."
+    out += '<p class="' + P + '">' + contact_copy + "</p>"
     heading = "سوالات" if lang == "ur" else "Frequently asked questions: Are these calculators free, private, and reliable?"
     answer_first = (
         "جی ہاں۔ CalculatesAll کے ٹولز مفت ہیں، حساب آپ کے براؤزر میں ہوتا ہے اور درج کردہ اعداد ہمارے سرور کو نہیں بھیجے جاتے۔ ہر کیلکولیٹر اپنا فارمولا اور حدود بتاتا ہے۔ اہم مالی، طبی یا دینی فیصلے کے لیے متعلقہ ماہر سے تصدیق کریں۔"
