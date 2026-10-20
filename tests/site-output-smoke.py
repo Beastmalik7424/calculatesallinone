@@ -194,6 +194,10 @@ connect_src = re.search(r"(?:^|;)\s*connect-src\s+([^;]+)", csp_header)
 assert connect_src and all(host in connect_src.group(1).split() for host in ("https://ep1.adtrafficquality.google", "https://ep2.adtrafficquality.google")), (
     "CSP connect-src must allow only the exact Google Ad Traffic Quality endpoints observed in production."
 )
+script_src = re.search(r"(?:^|;)\s*script-src\s+([^;]+)", csp_header)
+assert script_src and "https://ep2.adtrafficquality.google" in script_src.group(1).split(), (
+    "CSP script-src must allow the exact Google Ad Traffic Quality script host observed in production."
+)
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
 assert "Ad slots are currently disabled" in privacy_html and "AdSense publisher verification script is loaded" in privacy_html, "Privacy page must distinguish the verification script from active ad units"
