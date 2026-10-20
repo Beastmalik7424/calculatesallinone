@@ -939,6 +939,7 @@ def shell(main_html, lang="en", current_path=None):
     s = shell_strings(lang)
     home = "/" if lang == "en" else "/" + lang + "/"
     main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
+    menu_position = "left-0 right-auto" if lang in RTL_LANGS else "right-0"
     return (
         '<body class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased">\n'
         '<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">'
@@ -953,7 +954,7 @@ def shell(main_html, lang="en", current_path=None):
         '<div class="flex items-center gap-3">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
         '<details class="relative"><summary class="cursor-pointer text-base min-h-[44px] inline-flex items-center px-2">' + s["menu"] + '</summary>'
-        '<ul class="absolute right-0 mt-2 w-64 bg-white border border-stone-300 rounded-lg p-3 space-y-2 text-base shadow-lg z-10">'
+        '<ul class="absolute ' + menu_position + ' mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-x-hidden break-words bg-white border border-stone-300 rounded-lg p-3 space-y-2 text-base shadow-lg z-10" style="max-width:calc(100vw - 2rem);overflow-wrap:anywhere;box-sizing:border-box">'
         + nav_items(lang)
         + '</ul></details></div></nav></header>\n'
         '<main id="main" class="' + main_width + ' mx-auto px-5 py-10">' + main_html + '</main>\n'
