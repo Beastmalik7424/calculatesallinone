@@ -964,6 +964,7 @@ def shell(main_html, lang="en", current_path=None):
         '<p>' + s["tag"] + '</p>'
         '<nav class="flex flex-wrap gap-5" aria-label="' + s["footer"] + '">'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/about/">' + s["about"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/emi-calculator/">EMI Calculator</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/privacy/">' + s["privacy"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/contact/">' + s["contact"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/methodology/">' + s["methodology"] + '</a>'
@@ -1704,6 +1705,13 @@ def main():
     sitemap(entries)
     robots()
     shutil.copytree(STATIC, os.path.join(OUT, "assets"), dirs_exist_ok=True)
+    # Publish the standalone EMI calculator through the generated-page pipeline.
+    emi_source = "emi-calculator.html"
+    if not os.path.isfile(emi_source):
+        raise SystemExit("Required emi-calculator.html source file is missing")
+    emi_output = os.path.join(OUT, "emi-calculator")
+    os.makedirs(emi_output, exist_ok=True)
+    shutil.copy2(emi_source, os.path.join(emi_output, "index.html"))
     # Preserve the Google Search Console HTML ownership token in Vercel output.
     # The repo root is not deployed because Vercel publishes only the public/ directory.
     google_verification = "google2e764d068684499b.html"
