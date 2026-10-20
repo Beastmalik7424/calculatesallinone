@@ -189,6 +189,11 @@ for required in ("/marketplaces/", "/affiliate-disclosure/", "/about/", "/privac
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"
 vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert vercel_config.get("cleanUrls") is False, "Vercel cleanUrls must stay disabled so the Google ownership HTML file is served at its exact URL"
+csp_header = next(item["value"] for item in vercel_config["headers"][0]["headers"] if item["key"] == "Content-Security-Policy")
+connect_src = re.search(r"(?:^|;)\s*connect-src\s+([^;]+)", csp_header)
+assert connect_src and all(host in connect_src.group(1).split() for host in ("https://ep1.adtrafficquality.google", "https://ep2.adtrafficquality.google")), (
+    "CSP connect-src must allow only the exact Google Ad Traffic Quality endpoints observed in production."
+)
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
 assert "Ad slots are currently disabled" in privacy_html and "AdSense publisher verification script is loaded" in privacy_html, "Privacy page must distinguish the verification script from active ad units"
