@@ -128,15 +128,19 @@ GUIDE_EXTRA = {
 
 HOME_EXTRA = {
     "en": {
-        "heading": "What you can do on CalculatesAll",
+        "heading": "What can you calculate with these free tools?",
         "paragraphs": [
-            "CalculatesAll brings together tools that people use every week. Zakat and profit calculations help with money decisions. BMI gives a screening number for adults. Age, discount and unit tools handle everyday arithmetic. The stopwatch and tasbih counter help with timing and dhikr.",
-            "Each tool shows its formula, a worked example and its limits on the tool page. This makes it easier to check a result yourself, and it tells you when a question needs a professional.",
+            "CalculatesAll brings together free browser-based tools for everyday calculations. Use the Zakat calculator to estimate net zakatable wealth after eligible debts, check a silver Nisab threshold using the price you enter, and confirm the lunar-year condition yourself. Religious rulings can differ, so review the stated method and consult a trusted qualified scholar for your circumstances.",
+            "Use the profit and loss calculator to compare selling price with cost, and the discount calculator to work out savings and a final price. For example, a 20% discount on a price of 1,000 leaves 800 before any applicable tax or fees. Your actual business profit may also depend on shipping, packaging, payment fees, tax and other costs not entered into a simple calculator.",
+            "The adult BMI calculator uses weight divided by height squared, with unit handling for metric and imperial inputs. BMI is a screening measure, not a diagnosis, and it does not directly measure body fat. Read the limitations and the World Health Organization's adult BMI information before using the result to discuss health with a clinician: <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index\">WHO body mass index information</a>.",
+            "The age calculator works with calendar dates, the unit converter applies defined conversion factors, and the stopwatch and tasbih counter support simple timing and counting tasks. For a reference example, one inch is defined as exactly 25.4 millimetres. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.nist.gov/pml/owm/si-units-length\">National Institute of Standards and Technology's length-unit reference</a> for the inch definition.",
+            "How are results checked? Each calculator page explains its method, includes a worked example where applicable, and states important limitations. The site also runs automated build checks for generated pages, metadata, sitemap consistency and key calculator behaviours. Automated tests reduce regression risk, but they do not replace independent professional review or testing on every device.",
+            "Calculations are designed to run in your browser without sending calculator entries to our server. The tasbih counter stores its count on your device. The site may load third-party advertising or other resources, which are described in the privacy policy. Avoid entering sensitive personal information into any online tool unless you understand how it handles data.",
         ],
         "faq": [
-            ("Are the calculators free?", "Yes. All tools on CalculatesAll are free to use."),
-            ("Do you store the numbers I enter?", "No. Calculations run in your browser. The tasbih counter keeps its count on your device only."),
-            ("Are the results accurate?", "The formulas are standard and each tool states its method. For rulings on religious questions or diagnoses, consult a qualified professional."),
+            ("Are the calculators free?", "Yes. The calculators and utility tools are free to use."),
+            ("Do you store the numbers I enter?", "Calculator entries are processed in your browser and are not sent to our server. The tasbih counter keeps its count on your device. See the privacy policy for third-party resources and advertising."),
+            ("Are the results accurate enough for important decisions?", "The tools use stated methods and examples, but results depend on correct inputs and each tool's limitations. Confirm financial, health or religious decisions with an appropriate qualified professional."),
         ],
     },
     "ur": {
