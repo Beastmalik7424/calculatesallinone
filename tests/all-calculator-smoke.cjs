@@ -6,8 +6,8 @@ const handlers = {};
 const elements = {};
 function element(id, value = "") {
   return elements[id] = {
-    id, value, checked: false, textContent: "", options: [], selectedIndex: 0,
-    _handlers: {}, classList: {
+    id, value, checked: false, disabled: false, textContent: "", options: [], selectedIndex: 0,
+    attributes: {}, _handlers: {}, classList: {
       _set: new Set(),
       toggle(name, force) { if (force === undefined ? !this._set.has(name) : force) this._set.add(name); else this._set.delete(name); },
       contains(name) { return this._set.has(name); }
@@ -16,18 +16,23 @@ function element(id, value = "") {
     appendChild(option) { this.options.push(option); },
     set innerHTML(value) { this.options = []; },
     get innerHTML() { return ""; },
-    setAttribute() {}
+    setAttribute(name, value) { this.attributes[name] = String(value); },
+    removeAttribute(name) { delete this.attributes[name]; },
+    getAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name) ? this.attributes[name] : null; }
   };
 }
 [
   "zakat-form","z-cash","z-gold","z-silver","z-stock","z-recv","z-debts","z-silverprice","z-hawl","zakat-result",
-  "bmi-form","bmi-unit","bmi-metric","bmi-imperial","b-kg","b-cm","b-lb","b-ft","b-in","bmi-result",
+  "bmi-form","bmi-unit","bmi-height-cm","bmi-height-ftin","bmi-metric","bmi-imperial",
+  "b-kg","b-kg-error","b-cm","b-cm-error","b-lb","b-ft","b-ft-error","b-in","b-in-error","bmi-result",
   "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
   "conv-form","u-cat","u-val","u-from","u-to","conv-result","t-count","t-target","t-progress","t-tap","t-reset",
   "sw-display","sw-start","sw-stop","sw-reset"
 ].forEach(id => element(id));
 elements["u-cat"].value = "weight";
 elements["bmi-unit"].value = "metric";
+elements["bmi-height-cm"].checked = true;
+elements["bmi-height-ftin"].checked = false;
 const storage = new Map();
 let clock = 0;
 const NativeDate = Date;
@@ -51,7 +56,11 @@ const context = {
 };
 vm.runInNewContext(fs.readFileSync("static/app.js", "utf8"), context, { filename: "static/app.js" });
 handlers.ready();
-function submit(form) { elements[form]._handlers.submit({ preventDefault() {} }); }
+function submit(form) {
+  let prevented = false;
+  elements[form]._handlers.submit({ preventDefault() { prevented = true; } });
+  return prevented;
+}
 function setValues(values) { for (const [id, value] of Object.entries(values)) elements[id].value = String(value); }
 
 // Zakat: three materially different outcomes.
@@ -62,11 +71,62 @@ assert.match(elements["zakat-result"].textContent, /lunar year/i);
 elements["z-hawl"].checked = true; submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /2\.5 percent.*25/i);
 
-// BMI: normal, overweight and obesity categories.
-for (const [kg, cm, label] of [[70,175,"normal weight"],[70,160,"overweight"],[90,170,"obesity"]]) {
+// BMI: strict kg + cm/ft-in flow, category boundaries, invalid input and hidden fields.
+assert.equal(elements["b-cm"].disabled, false);
+assert.equal(elements["b-ft"].disabled, true);
+assert.equal(elements["b-in"].disabled, true);
+setValues({"b-kg":70,"b-cm":170,"b-ft":"5abc","b-in":"12"});
+assert.equal(submit("bmi-form"), true, "form submit must prevent browser navigation/reload");
+assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i);
+assert.match(elements["bmi-result"].textContent, /BMI is a general screening tool/i);
+assert.equal(elements["b-ft-error"].textContent, "", "disabled hidden feet field must not be validated");
+
+for (const [kg, cm, expected, label] of [
+  [63.25,170,"21.9","normal weight"],
+  [70,170,"24.2","normal weight"],
+  [72.25,170,"25.0","overweight"],
+  [86.7,170,"30.0","obesity"]
+]) {
   setValues({"b-kg":kg,"b-cm":cm}); submit("bmi-form");
-  assert.match(elements["bmi-result"].textContent, new RegExp(label, "i"));
+  assert.match(elements["bmi-result"].textContent, new RegExp(expected.replace(".","\\.") + ".*" + label, "i"));
 }
+
+elements["bmi-height-ftin"].checked = true;
+elements["bmi-height-cm"].checked = false;
+elements["bmi-height-ftin"]._handlers.change();
+assert.equal(elements["bmi-result"].textContent, "", "changing height unit clears result");
+assert.equal(elements["b-cm"].disabled, true);
+assert.equal(elements["b-ft"].disabled, false);
+assert.equal(elements["b-in"].disabled, false);
+setValues({"b-kg":70,"b-ft":5,"b-in":7});
+submit("bmi-form");
+assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i);
+setValues({"b-kg":90,"b-ft":6,"b-in":0});
+submit("bmi-form");
+assert.match(elements["bmi-result"].textContent, /26\.9.*overweight/i);
+setValues({"b-kg":70,"b-ft":5,"b-in":11.99});
+submit("bmi-form");
+assert.match(elements["bmi-result"].textContent, /20\.9.*normal weight/i);
+
+for (const [ft, inches, expectedField] of [
+  [0,5,"b-ft-error"],[9,0,"b-ft-error"],["5abc",7,"b-ft-error"],["0x5",7,"b-ft-error"],["1e1",7,"b-ft-error"],[5,12,"b-in-error"]
+]) {
+  setValues({"b-kg":70,"b-ft":ft,"b-in":inches});
+  submit("bmi-form");
+  assert.notEqual(elements[expectedField].textContent, "", "invalid height must show a field-specific error: " + ft + " ft " + inches + " in");
+  assert.doesNotMatch(elements["bmi-result"].textContent, /NaN|Infinity/);
+}
+for (const weight of [19.9,300.1,""]) {
+  setValues({"b-kg":weight,"b-ft":5,"b-in":7});
+  submit("bmi-form");
+  assert.notEqual(elements["b-kg-error"].textContent, "", "invalid weight must show a weight-specific error");
+}
+setValues({"b-kg":70,"b-ft":"","b-in":7});
+submit("bmi-form");
+assert.notEqual(elements["b-ft-error"].textContent, "", "empty feet must be rejected");
+setValues({"b-kg":70,"b-ft":5,"b-in":""});
+submit("bmi-form");
+assert.notEqual(elements["b-in-error"].textContent, "", "empty inches must be rejected");
 
 // Profit/loss: profit, loss and zero-cost edge case.
 for (const [cost, sell, expected] of [[100,150,/Profit: 50/],[100,80,/Loss: 20/],[0,10,/N\/A/]]) {

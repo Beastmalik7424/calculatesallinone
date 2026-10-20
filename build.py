@@ -55,6 +55,33 @@ def result(rid):
     return '<div id="' + rid + '" class="@R@" aria-live="polite"></div>'
 
 
+BMI_UI = (
+    '<form id="bmi-form" class="space-y-5" novalidate>'
+    '<div><label class="@L@" for="b-kg">Weight (kg)</label>'
+    '<input id="b-kg" name="b-kg" class="@I@" type="number" min="20" max="300" step="any" inputmode="decimal" aria-describedby="b-kg-error">'
+    '<p id="b-kg-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div>'
+    '<fieldset class="space-y-2"><legend class="@L@">Height unit</legend>'
+    '<div class="flex flex-wrap gap-4">'
+    '<label class="flex min-h-[44px] items-center gap-2 text-base text-stone-900 dark:text-stone-100"><input id="bmi-height-cm" type="radio" name="bmi-height-unit" value="cm" checked class="h-5 w-5"><span>Centimeters (cm)</span></label>'
+    '<label class="flex min-h-[44px] items-center gap-2 text-base text-stone-900 dark:text-stone-100"><input id="bmi-height-ftin" type="radio" name="bmi-height-unit" value="ftin" class="h-5 w-5"><span>Feet and inches</span></label>'
+    '</div></fieldset>'
+    '<div id="bmi-metric" class="grid sm:grid-cols-2 gap-4">'
+    '<div><label class="@L@" for="b-cm">Height (cm)</label>'
+    '<input id="b-cm" name="b-cm" class="@I@" type="number" min="50" max="260" step="any" inputmode="decimal" aria-describedby="b-cm-error">'
+    '<p id="b-cm-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div>'
+    '</div>'
+    '<div id="bmi-imperial" class="grid sm:grid-cols-2 gap-4 !hidden" aria-hidden="true">'
+    '<div><label class="@L@" for="b-ft">Height (ft)</label>'
+    '<input id="b-ft" name="b-ft" class="@I@" type="number" min="1" max="8" step="1" inputmode="numeric" aria-describedby="b-ft-error" disabled>'
+    '<p id="b-ft-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div>'
+    '<div><label class="@L@" for="b-in">Height (in, 0 to 11.99)</label>'
+    '<input id="b-in" name="b-in" class="@I@" type="number" min="0" max="11.99" step="any" inputmode="decimal" aria-describedby="b-in-error" disabled>'
+    '<p id="b-in-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div>'
+    '</div>'
+    '<button type="submit" class="@B@">Calculate BMI</button></form>'
+    + result("bmi-result")
+)
+
 TOOLS = [
     {
         "slug": "zakat-calculator",
@@ -519,51 +546,40 @@ URDU = {
     "bmi-calculator": {
         "name": "BMI کیلکولیٹر",
         "title": "بالغوں کے لیے BMI کیلکولیٹر | CalculatesAll",
-        "description": "میٹرک یا امپیریل اکائیوں میں بالغوں کا باڈی ماس انڈیکس نکالیں اور WHO کی وزن کی درجہ بندی دیکھیں۔",
+        "description": "کلوگرام وزن اور سینٹی میٹر یا فٹ اور انچ قد سے بالغوں کا BMI نکالیں، درجہ بندی اور اس کی حدود سمجھیں۔",
         "h1": "بالغوں کے لیے BMI کیلکولیٹر",
-        "lead": "میٹرک یا امپیریل اکائیوں میں اپنا باڈی ماس انڈیکس نکالیں۔ BMI بالغوں کے لیے ایک اسکریننگ پیمانہ ہے، تشخیص نہیں۔",
+        "lead": "اپنا وزن کلوگرام میں درج کریں اور قد سینٹی میٹر یا فٹ اور انچ میں منتخب کریں۔ یہ کیلکولیٹر بالغوں کے لیے ہے۔",
         "labels": [
-            ("Metric (kg and cm)", "میٹرک (کلو گرام اور سینٹی میٹر)"),
-            ("Imperial (lb and ft/in)", "امپیریل (پاؤنڈ اور فٹ/انچ)"),
             ("Weight (kg)", "وزن (کلو گرام)"),
+            ("Height unit", "قد کی اکائی"),
+            ("Centimeters (cm)", "سینٹی میٹر (cm)"),
+            ("Feet and inches", "فٹ اور انچ"),
             ("Height (cm)", "قد (سینٹی میٹر)"),
-            ("Weight (lb)", "وزن (پاؤنڈ)"),
             ("Height (ft)", "قد (فٹ)"),
-            ("Height (in, 0 to 11.9)", "قد (انچ، 0 سے 11.9)"),
+            ("Height (in, 0 to 11.99)", "قد (انچ، 0 سے 11.99)"),
             ("Calculate BMI", "BMI کا حساب کریں"),
-            ("Units", "اکائیاں"),
         ],
-        "how_heading": "فارمولا اور درجہ بندی",
-        "faq_heading": "سوالات",
+        "how_heading": "فارمولا، درجہ بندی اور حدود",
+        "faq_heading": "عام سوالات",
         "how": [
-            "میٹرک فارمولا: BMI = وزن (کلو گرام) ÷ قد (میٹر)²۔",
-            "امپیریل فارمولا: BMI = 703 × وزن (پاؤنڈ) ÷ قد (انچ)²۔",
-            "WHO کے مطابق بالغوں کے لیے: 18.5 سے کم کم وزن، 18.5 سے 24.9 معمول کا وزن، 25.0 سے 29.9 زیادہ وزن، اور 30.0 یا زیادہ موٹاپے کی حد۔",
-            "مثال: 70 کلو گرام اور 175 سینٹی میٹر قد پر BMI تقریباً 22.9 ہے، جو معمول کے وزن کی حد میں ہے۔",
-            "بچوں اور نوجوانوں کے لیے عمر اور جنس کے مطابق percentile چارٹ استعمال ہوتے ہیں۔ BMI جسمانی چربی کی براہِ راست پیمائش نہیں۔",
+            "بالغوں کا باڈی ماس انڈیکس (BMI) نکالنے کے لیے وزن کلوگرام میں اور قد میٹر میں درکار ہوتا ہے۔ فارمولا یہ ہے: BMI = وزن (کلوگرام) ÷ قد (میٹر)²۔ اگر قد سینٹی میٹر میں ہو تو اسے 100 پر تقسیم کر کے میٹر میں تبدیل کریں۔",
+            "اگر قد فٹ اور انچ میں درج کریں تو پہلے کل انچ نکالیں: (فٹ × 12) + انچ۔ پھر کل انچ کو 2.54 سے ضرب دے کر سینٹی میٹر حاصل کریں۔ اس کیلکولیٹر میں وزن ہمیشہ کلوگرام میں درج ہوتا ہے، چاہے قد کی کوئی بھی اکائی منتخب کریں۔",
+            "بالغوں کے لیے WHO کی عام درجہ بندی میں 18.5 سے کم BMI کم وزن، 18.5 سے 25 سے کم معمول کا وزن، 25 سے 30 سے کم زیادہ وزن، اور 30 یا اس سے زیادہ موٹاپے کی حد ہے۔ یہ کیلکولیٹر پہلے BMI کو ایک اعشاری جگہ تک گول کرتا ہے، پھر اسی دکھائی گئی قدر کے مطابق درجہ منتخب کرتا ہے۔",
+            "مثال کے طور پر 70 کلوگرام وزن اور 170 سینٹی میٹر قد پر حساب 70 ÷ (1.70 × 1.70) ہے۔ نتیجہ تقریباً 24.2 بنتا ہے، جو بالغوں میں معمول کے وزن کی حد میں آتا ہے۔ اگر قد 5 فٹ 7 انچ ہو تو یہ 67 انچ یا 170.18 سینٹی میٹر بنتا ہے۔",
+            "BMI جسمانی چربی کو براہ راست نہیں ناپتا اور نہ یہ بتاتا ہے کہ چربی جسم میں کہاں موجود ہے۔ زیادہ عضلات رکھنے والے افراد کا BMI بلند ہو سکتا ہے، اس لیے ایک جیسا BMI دو افراد میں ایک جیسی جسمانی ساخت یا صحت کی نشاندہی نہیں کرتا۔",
+            "بچوں اور نوعمروں کے لیے یہ بالغوں والی درجہ بندی استعمال نہیں کرنی چاہیے۔ ان کی جانچ عمر اور جنس کے مطابق BMI-for-age گروتھ چارٹس سے کی جاتی ہے۔ حمل کے دوران بھی BMI کو خاص سیاق میں سمجھنا ضروری ہے۔ بعض بڑی عمر کے افراد یا جسم میں پانی جمع ہونے، بیماری یا عضلات کم ہونے کی صورتوں میں BMI محدود معلومات دے سکتا ہے۔",
+            "نتیجے کو صرف عمومی اسکریننگ معلومات سمجھیں، مکمل طبی جانچ نہیں۔ معالج وزن کے ساتھ کمر کا گھیر، بلڈ پریشر، خون کے ٹیسٹ، ادویات، طبی تاریخ، خوراک اور جسمانی سرگرمی بھی دیکھ سکتا ہے۔ اگر وزن تیزی سے بدلے، علامات ہوں، کوئی بیماری ہو یا آپ کو ذاتی مشورہ چاہیے تو مستند ڈاکٹر سے بات کریں۔",
+            "یہ ٹول قد کی حد سینٹی میٹر میں 50 سے 260، یا فٹ میں 1 سے 8 اور انچ میں 0 سے 11.99 قبول کرتا ہے۔ وزن کی حد 20 سے 300 کلوگرام ہے۔ یہ صرف کیلکولیٹر کی ان پٹ حدود ہیں، صحت کے لیے تجویز کردہ وزن یا قد نہیں۔",
+            "BMI ایک عمومی اسکریننگ پیمانہ ہے۔ یہ جسمانی چربی کو براہ راست نہیں ناپتا اور ڈاکٹر کے مشورے کا متبادل نہیں۔",
         ],
         "faq": [
-            ("کیا یہ بچوں کے لیے ہے؟", "نہیں۔ یہ صفحہ بالغوں کے لیے ہے۔ بچوں کے لیے percentile چارٹ استعمال کریں۔"),
-            ("کیا BMI تشخیص ہے؟", "نہیں۔ یہ ایک اسکریننگ پیمانہ ہے۔ نتیجہ کسی ڈاکٹر یا معالج سے ضرور ڈسکس کریں۔"),
+            ("کیا یہ کیلکولیٹر بچوں اور نوعمروں کے لیے ہے؟", "نہیں۔ یہ بالغوں کے BMI کی درجہ بندی استعمال کرتا ہے۔ بچوں اور نوعمروں کے لیے عمر اور جنس کے مطابق BMI-for-age گروتھ چارٹس درکار ہوتے ہیں۔"),
+            ("کیا BMI جسمانی چربی کو ناپتا ہے؟", "نہیں۔ یہ صرف قد اور وزن سے حساب ہوتا ہے۔ یہ جسمانی چربی کو براہ راست نہیں ناپتا اور نہ عضلات اور چربی میں فرق کرتا ہے۔"),
+            ("کیا BMI 25 ہونا بیماری کی تشخیص ہے؟", "نہیں۔ گول کی گئی BMI قدر 25.0 بالغوں میں زیادہ وزن کی اسکریننگ حد کا آغاز ہے، تشخیص نہیں۔"),
+            ("نتیجے کے بعد کیا کرنا چاہیے؟", "اسے عمومی معلومات سمجھیں۔ اگر وزن میں بڑی تبدیلی، علامات یا طبی مسئلہ ہو تو مستند معالج سے مشورہ کریں۔"),
+            ("حد کے قریب درجہ کیوں بدل سکتا ہے؟", "کیلکولیٹر BMI کو ایک اعشاری جگہ تک گول کر کے درجہ منتخب کرتا ہے۔ اس لیے دکھائی گئی 25.0 کی قدر زیادہ وزن کی حد میں شمار ہوتی ہے۔"),
         ],
-    },
-}
-
-
-EXTRA = {
-    "zakat-calculator": {
-        "quick": "Zakat is 2.5 percent of net zakatable wealth, due when that wealth is at least the Nisab (612.36 grams of silver) and has been held for one lunar year.",
-        "faq": [
-            ("Is Zakat due on my home?", "Your home that you live in is not zakatable wealth. Rental property income and goods held for sale can be zakatable, so check the rules for each asset with a scholar."),
-            ("Do I subtract debts?", "Debts due now are commonly subtracted from zakatable wealth. Whether particular long-term debts are deducted is a point scholars discuss, so confirm your case."),
-        ],
-    },
-    "bmi-calculator": {
-        "quick": "BMI equals weight in kilograms divided by height in meters squared. For adults, 18.5 to 24.9 is the WHO normal weight range.",
-        "faq": [
-            ("Is a BMI of 25 unhealthy?", "A BMI of 25 is at the start of the overweight range. It is a screening number only. Waist size, blood pressure and blood tests give a fuller picture, and a clinician can interpret them with you."),
-            ("Does BMI work for athletes?", "BMI can overstate body fat in people with high muscle mass. A clinician can use other measures for athletes."),
-        ],
+        "sources": 'بالغوں کی BMI درجہ بندی کے لیے <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" rel="noopener noreferrer">عالمی ادارۂ صحت (WHO) کی موٹاپے اور زیادہ وزن سے متعلق معلومات</a> دیکھیں۔ BMI صرف اسکریننگ پیمانہ ہے اور اسے طبی سیاق میں سمجھنا چاہیے۔',
     },
     "profit-loss-calculator": {
         "quick": "Profit equals selling price minus cost price. Profit percentage equals profit divided by cost price, multiplied by 100.",
@@ -1039,12 +1055,56 @@ def answer_block(slug, lang="en"):
     return '<p class="mt-5 rounded-xl border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-950 p-4 text-base leading-relaxed"><strong>' + label + '.</strong> ' + text + '</p>'
 
 
+BMI_GUIDE = [
+    ("The formula", [
+        "Adult body mass index (BMI) is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first. The result is a screening number, not a direct measurement of body fat.",
+        "For feet and inches, convert total height to centimetres with (feet × 12 + inches) × 2.54. This page accepts kilograms for weight in both height modes, so you do not need to convert pounds or use a different formula.",
+    ]),
+    ("Adult BMI categories", [
+        "For adults, the standard WHO categories are underweight below 18.5, normal weight from 18.5 to below 25, overweight from 25 to below 30, and obesity from 30 upward. This calculator rounds BMI to one decimal place before assigning the displayed category. Values near a boundary can therefore display in the next category after rounding.",
+        "These categories are population-level screening ranges. They do not determine whether an individual is healthy, and they should not be used as a personal diagnosis or treatment plan.",
+    ]),
+    ("Worked examples", [
+        "If an adult weighs 70 kg and is 170 cm tall, the calculation is 70 ÷ (1.70 × 1.70), giving a BMI of 24.2 after rounding. The displayed adult category is normal weight.",
+        "For someone who is 5 ft 7 in tall, total height is 67 inches. Converting that to centimetres gives 170.18 cm. With a weight of 70 kg, BMI is also about 24.2. Enter feet and inches separately rather than entering a decimal number such as 5.7 feet.",
+    ]),
+    ("What BMI cannot tell you", [
+        "BMI does not measure body fat directly or show where fat is stored. A person with substantial muscle mass may have a higher BMI without having the same body-fat level as another person with the same BMI. Body frame, fat distribution, health history and other measurements can change how the result should be interpreted.",
+        "BMI categories for adults are not suitable for children and teenagers, who need age- and sex-specific growth charts. BMI also needs special interpretation during pregnancy and may be less informative for some older adults or people with fluid retention, recent illness or changes in muscle mass.",
+    ]),
+    ("Using the result responsibly", [
+        "Use the number as one starting point, not as a complete assessment of health. A healthcare professional may consider waist circumference, blood pressure, blood tests, medicines, family history, activity and nutrition alongside BMI.",
+        "Speak with a qualified clinician if you are worried about weight changes, have symptoms, are pregnant, have a medical condition, or need advice for a child or teenager. Do not change medication, restrict food severely or start a treatment plan based on this calculator alone.",
+        "The calculator accepts adult heights from 50 to 260 cm, or feet from 1 to 8 and inches from 0 to 11.99, and weights from 20 to 300 kg. These are input limits for this tool, not medical recommendations.",
+    ]),
+]
+BMI_FAQ = [
+    ("Can I use this BMI calculator for children or teenagers?", "No. This calculator uses adult BMI categories. Children and teenagers need age- and sex-specific BMI-for-age growth charts interpreted in the right context."),
+    ("Does BMI measure body fat?", "No. BMI uses height and weight only. It cannot directly measure body fat or distinguish muscle from fat."),
+    ("Is a BMI of 25 a diagnosis?", "No. A rounded adult BMI of 25.0 is the start of the overweight screening category, not a diagnosis. A clinician can interpret it with other health information."),
+    ("Why does the category change near a boundary?", "This calculator rounds the calculated BMI to one decimal place before choosing a category. A displayed value of 25.0 is classified in the overweight category."),
+    ("What should I do with my result?", "Treat it as general information. Discuss concerns or major weight changes with a qualified healthcare professional, especially if you have symptoms or a medical condition."),
+]
+BMI_SOURCES = 'Adult BMI categories are based on the World Health Organization\'s classification. Read the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" rel="noopener noreferrer">WHO fact sheet on obesity and overweight</a>. BMI is a screening measure and should be interpreted in context.'
+
 def tool_page(t):
     path = "/" + t["slug"] + "/"
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
-    title = t["name"] + " | Free Online Tool | CalculatesAll"
-    desc = t["description"]
+    if t["slug"] == "bmi-calculator":
+        title = "BMI Calculator for Adults | kg, cm, ft and in | CalculatesAll"
+        desc = "Calculate adult BMI using kilograms and centimetres or kilograms with feet and inches. See WHO adult BMI ranges and their limitations."
+        ui = BMI_UI
+        guide = BMI_GUIDE
+        faqs = BMI_FAQ
+        sources = BMI_SOURCES
+    else:
+        title = t["name"] + " | Free Online Tool | CalculatesAll"
+        desc = t["description"]
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": t["name"], "url": url,
          "description": desc, "applicationCategory": t["app"], "operatingSystem": "Any",
@@ -1073,14 +1133,14 @@ def tool_page(t):
         '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
         + answer_block(t["slug"], "en")
-        + '<section class="mt-8 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">' + t["ui"] + '</section>'
+        + '<section class="mt-8 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">' + ui + '</section>'
         + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
         + '<h2 class="' + H2 + '">Rules and limits</h2>'
-        + guide_html(t["guide"])
-        + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(t["faq"] + EXTRA[t["slug"]]["faq"]) + "</div>"
-        + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + t["sources"] + '</p>'
+        + guide_html(guide)
+        + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
+        + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
         + updated
         + review_box(t["slug"])
         + '<section class="mt-12"><h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100">More in ' + cat["name"] + '</h2>'
@@ -1097,7 +1157,7 @@ def urdu_tool_page(t):
     u = URDU[t["slug"]]
     path = "/ur/" + t["slug"] + "/"
     url = SITE_URL + path
-    ui = t["ui"]
+    ui = BMI_UI if t["slug"] == "bmi-calculator" else t["ui"]
     for en, ur in u["labels"]:
         ui = ui.replace(">" + en + "<", ">" + ur + "<")
         ui = ui.replace('"' + en + '"', '"' + ur + '"')
@@ -1128,6 +1188,7 @@ def urdu_tool_page(t):
         + '<section class="mt-8" aria-label="کیلکولیٹر">' + ui + '</section>'
         '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
+        + (u.get("sources") ? '<h2 class="' + H2 + '">ماخذ</h2><p class="' + P + '">' + u["sources"] + '</p>' : "")
         + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">انگریزی ورژن</a></p>'
     )
     alternates = [("en", "/" + t["slug"] + "/"), ("ur", path), ("x-default", "/" + t["slug"] + "/")]

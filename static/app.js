@@ -10,6 +10,13 @@
       zakatDue: "Zakat payable at 2.5 percent: {amount}. Confirm the calculation and rules with a qualified scholar before you pay.",
       bmiInput: "Enter a weight from 2 to 500 kg and a height from 50 to 300 cm.",
       bmiInputImp: "Enter a weight from 4 to 1100 lb, a height of 1 to 9 ft, and inches from 0 to 11.9.",
+      bmiWeightError: "Enter a weight from 20 to 300 kg using digits and an optional decimal point.",
+      bmiCmError: "Enter a height from 50 to 260 cm using digits and an optional decimal point.",
+      bmiFtError: "Enter a whole number of feet from 1 to 8.",
+      bmiInError: "Enter inches from 0 to 11.99 using digits and an optional decimal point.",
+      bmiStrictResult: "Your BMI is {bmi}. Based on the rounded result, this is in the {label} category for adults (WHO).",
+      bmiDisclaimer: "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor.",
+      bmiCalcError: "We could not calculate a valid BMI from those values. Check your entries and try again.",
       bmiResult: "Your BMI is {bmi}, which is in the {label} range for adults (WHO). BMI is a screening measure, not a diagnosis.",
       bmiUnder: "underweight",
       bmiNormal: "normal weight",
@@ -56,6 +63,13 @@
       zakatDue: "2.5 فیصد زکوٰۃ واجب الادا: {amount}۔ ادائیگی سے پہلے حساب اور اصولوں کی تصدیق کسی مستند عالم سے کریں۔",
       bmiInput: "وزن 2 سے 500 کلو گرام اور قد 50 سے 300 سینٹی میٹر کے درمیان لکھیں۔",
       bmiInputImp: "وزن 4 سے 1100 پاؤنڈ، قد 1 سے 9 فٹ، اور انچ 0 سے 11.9 کے درمیان لکھیں۔",
+      bmiWeightError: "وزن 20 سے 300 کلوگرام کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
+      bmiCmError: "قد 50 سے 260 سینٹی میٹر کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
+      bmiFtError: "فٹ کی مکمل عددی قدر 1 سے 8 کے درمیان درج کریں۔",
+      bmiInError: "انچ 0 سے 11.99 کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
+      bmiStrictResult: "آپ کا BMI {bmi} ہے۔ گول کی گئی قدر کے مطابق یہ بالغوں میں {label} کی حد میں آتا ہے (WHO)۔",
+      bmiDisclaimer: "BMI ایک عمومی اسکریننگ پیمانہ ہے۔ یہ جسمانی چربی کو براہ راست نہیں ناپتا اور ڈاکٹر کے مشورے کا متبادل نہیں۔",
+      bmiCalcError: "ان قدروں سے درست BMI نہیں نکالا جا سکا۔ اندراجات چیک کر کے دوبارہ کوشش کریں۔",
       bmiResult: "آپ کا BMI {bmi} ہے، جو بالغوں کے لیے WHO کے مطابق {label} کی حد میں ہے۔ BMI ایک اسکریننگ پیمانہ ہے، تشخیص نہیں۔",
       bmiUnder: "کم وزن",
       bmiNormal: "معمول کا وزن",
@@ -351,8 +365,105 @@
   function initBMI () {
     var form = $("bmi-form")
     if (!form) return
+    var heightCmRadio = $("bmi-height-cm")
+    var heightFtInRadio = $("bmi-height-ftin")
+    if (heightCmRadio && heightFtInRadio) {
+      var metricGroup = $("bmi-metric")
+      var imperialGroup = $("bmi-imperial")
+      var cmInput = $("b-cm")
+      var ftInput = $("b-ft")
+      var inInput = $("b-in")
+      var fields = [
+        ["b-kg", "b-kg-error", "bmiWeightError", 20, 300, false],
+        ["b-cm", "b-cm-error", "bmiCmError", 50, 260, false],
+        ["b-ft", "b-ft-error", "bmiFtError", 1, 8, true],
+        ["b-in", "b-in-error", "bmiInError", 0, 11.99, false]
+      ]
+      function clearError(field) {
+        var input = $(field[0])
+        var error = $(field[1])
+        if (error) error.textContent = ""
+        if (input && input.removeAttribute) input.removeAttribute("aria-invalid")
+      }
+      function clearErrors() { fields.forEach(clearError) }
+      function clearResult() { say("bmi-result", "") }
+      function toggleHeightUnit() {
+        var metric = heightCmRadio.checked
+        if (metricGroup) {
+          metricGroup.classList.toggle("!hidden", !metric)
+          metricGroup.setAttribute("aria-hidden", String(!metric))
+        }
+        if (imperialGroup) {
+          imperialGroup.classList.toggle("!hidden", metric)
+          imperialGroup.setAttribute("aria-hidden", String(metric))
+        }
+        if (cmInput) cmInput.disabled = !metric
+        if (ftInput) ftInput.disabled = metric
+        if (inInput) inInput.disabled = metric
+        clearErrors()
+        clearResult()
+      }
+      function readField(field) {
+        var input = $(field[0])
+        var error = $(field[1])
+        if (!input || input.disabled) return null
+        var raw = String(input.value == null ? "" : input.value).trim()
+        var value = null
+        if (raw !== "" && /^\d+(?:\.\d+)?$/.test(raw)) value = Number(raw)
+        var invalid = value === null || !isFinite(value) || value < field[3] || value > field[4] ||
+          (field[5] && !Number.isInteger(value))
+        if (invalid) {
+          if (error) error.textContent = t(field[2])
+          if (input.setAttribute) input.setAttribute("aria-invalid", "true")
+          return null
+        }
+        if (error) error.textContent = ""
+        if (input.removeAttribute) input.removeAttribute("aria-invalid")
+        return value
+      }
+      heightCmRadio.addEventListener("change", toggleHeightUnit)
+      heightFtInRadio.addEventListener("change", toggleHeightUnit)
+      fields.forEach(function (field) {
+        var input = $(field[0])
+        if (input) input.addEventListener("input", function () {
+          clearError(field)
+          clearResult()
+        })
+      })
+      toggleHeightUnit()
+      form.addEventListener("submit", function (e) {
+        e.preventDefault()
+        clearErrors()
+        var kg = readField(fields[0])
+        var heightCm = null
+        if (heightCmRadio.checked) {
+          heightCm = readField(fields[1])
+        } else {
+          var ft = readField(fields[2])
+          var inches = readField(fields[3])
+          if (ft !== null && inches !== null) heightCm = (ft * 12 + inches) * 2.54
+        }
+        if (kg === null || heightCm === null || !isFinite(heightCm) || heightCm <= 0) {
+          clearResult()
+          return
+        }
+        var meters = heightCm / 100
+        var bmi = kg / (meters * meters)
+        if (!isFinite(bmi) || bmi <= 0) {
+          say("bmi-result", t("bmiCalcError"))
+          return
+        }
+        var roundedBMI = Number(bmi.toFixed(1))
+        var label = roundedBMI < 18.5 ? t("bmiUnder") :
+          roundedBMI < 25 ? t("bmiNormal") :
+          roundedBMI < 30 ? t("bmiOver") : t("bmiObese")
+        say("bmi-result", t("bmiStrictResult", { bmi: roundedBMI.toFixed(1), label: label }) + " " + t("bmiDisclaimer"))
+      })
+      return
+    }
+    // Legacy path for other localized pages, whose UI is unchanged.
     var unit = $("bmi-unit")
-    function toggle () {
+    function toggle() {
       var metric = unit.value === "metric"
       $("bmi-metric").classList.toggle("hidden", !metric)
       $("bmi-imperial").classList.toggle("hidden", metric)
@@ -374,7 +485,7 @@
         var lb = num("b-lb")
         var ft = num("b-ft")
         var inch = num("b-in") || 0
-        if (lb === null || ft === null || lb < 4 || lb > 1100 || ft < 1 || ft > 9 || inch < 0 || inch >= 12) {
+        if (lb === null || lb < 4 || lb > 1100 || ft === null || ft < 1 || ft > 9 || inch < 0 || inch >= 12) {
           say("bmi-result", t("bmiInputImp"))
           return
         }
