@@ -228,7 +228,7 @@ assert img_src and "https://ep1.adtrafficquality.google" in img_src.group(1).spl
 )
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
-assert "Ad slots are currently disabled" in privacy_html and "AdSense publisher verification script is loaded" in privacy_html, "Privacy page must distinguish the verification script from active ad units"
+assert "Ad slots are currently disabled" in privacy_html and "lightweight AdSense ownership meta tag is present" in privacy_html and "external AdSense JavaScript is not loaded" in privacy_html, "Privacy page must explain lightweight ownership verification and inactive ad loading"
 assert "ADSENSE_CONSENT_READY=true" in privacy_html, "Privacy page must disclose the consent-readiness safeguard"
 assert "Google-certified consent management platform" in privacy_html, "Privacy page must describe the CMP requirement"
 assert "cookie identifiers" in privacy_html and "web beacons" in privacy_html and "IP addresses" in privacy_html, "Privacy page must disclose relevant advertising technologies/data"
@@ -259,11 +259,12 @@ all_generated_html = "\n".join(
     page.read_text(encoding="utf-8") for page in ROOT.rglob("index.html")
 )
 ads_script = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client="
-verification_client = ads_client or "ca-pub-9453966537556063"
-assert ads_script + verification_client in all_generated_html, "AdSense publisher verification snippet must be present"
+if ads_client:
+    assert '<meta name="google-adsense-account" content="' + ads_client + '">' in all_generated_html, "AdSense ownership meta tag must be present for the configured publisher ID"
 if ads_enabled:
     assert ads_script + ads_client in all_generated_html, "Configured ads must load the matching publisher script"
 else:
+    assert "adsbygoogle.js" not in all_generated_html, "Do not load the external AdSense JavaScript while ads are disabled"
     assert 'class="adsbygoogle"' not in all_generated_html, "Ad slots must not render while monetization is disabled"
 
 # Google Search Console ownership HTML must be present in the deployed output.
