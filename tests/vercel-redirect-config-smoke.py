@@ -4,7 +4,7 @@ config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert "trailingSlash" not in config, "Remove Vercel auto trailingSlash redirect so explicit 301 routes can run"
 routes = config.get("routes", [])
 by_src = {item.get("src"): item for item in routes}
-favicon = by_src.get(r"^/favicon\\.ico$")
+favicon = by_src.get(r"^/favicon\.ico$")
 assert favicon is not None, "Missing /favicon.ico compatibility redirect"
 assert favicon.get("headers", {}).get("Location") == "/assets/favicon.svg", "Favicon redirect must target the generated SVG asset"
 assert favicon.get("status") == 301, "Favicon compatibility redirect must be permanent"
