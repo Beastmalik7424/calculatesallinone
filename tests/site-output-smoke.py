@@ -202,6 +202,10 @@ frame_src = re.search(r"(?:^|;)\s*frame-src\s+([^;]+)", csp_header)
 assert frame_src and "https://ep2.adtrafficquality.google" in frame_src.group(1).split(), (
     "CSP frame-src must allow the exact Google SODAR iframe host observed in production."
 )
+img_src = re.search(r"(?:^|;)\s*img-src\s+([^;]+)", csp_header)
+assert img_src and "https://ep1.adtrafficquality.google" in img_src.group(1).split(), (
+    "CSP img-src must allow the exact Google Ad Traffic Quality image host observed in production."
+)
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
 assert "Ad slots are currently disabled" in privacy_html and "AdSense publisher verification script is loaded" in privacy_html, "Privacy page must distinguish the verification script from active ad units"
