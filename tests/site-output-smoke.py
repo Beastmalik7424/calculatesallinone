@@ -466,16 +466,16 @@ assert 'aria-label="Related calculators"' in emi_html, "EMI related links must b
 # SEO/GEO content floor for indexable discovery pages. This intentionally excludes
 # legal/privacy/contact disclosures, where padding copy to hit a word target would hurt clarity.
 def visible_main_text(page_html):
-    match = re.search(r"<main\\b[^>]*>(.*?)</main>", page_html, re.S | re.I)
+    match = re.search(r"<main\b[^>]*>(.*?)</main>", page_html, re.S | re.I)
     assert match, "Indexable page is missing its main landmark"
-    text = re.sub(r"<(script|style)\\b[^>]*>.*?</\\1>", " ", match.group(1), flags=re.S | re.I)
-    text = re.sub(r"<nav\\b[^>]*>.*?</nav>", " ", text, flags=re.S | re.I)
+    text = re.sub(r"<(script|style)\b[^>]*>.*?</\1>", " ", match.group(1), flags=re.S | re.I)
+    text = re.sub(r"<nav\b[^>]*>.*?</nav>", " ", text, flags=re.S | re.I)
     text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
     text = html_lib.unescape(re.sub(r"<[^>]+>", " ", text))
-    return re.sub(r"\\s+", " ", text).strip()
+    return re.sub(r"\s+", " ", text).strip()
 
 def content_words(text):
-    return re.findall(r"[\\w]+(?:['’][\\w]+)?", text, flags=re.UNICODE)
+    return re.findall(r"[\w]+(?:['’][\w]+)?", text, flags=re.UNICODE)
 
 excluded_short_pages = {"/privacy/", "/terms/", "/contact/", "/affiliate-disclosure/"}
 content_floor_pages = [
