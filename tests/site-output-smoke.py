@@ -92,8 +92,8 @@ assert descriptions[home_url].startswith("Free online calculators for"), (
 # Bing Webmaster ownership verification must be present in the delivered homepage head.
 home_html = output_for_url(home_url).read_text(encoding="utf-8")
 bing_tag = '<meta name="msvalidate.01" content="07D62A8BA67BA474B5A13A27E6770782" />'
-head_match = re.search(r"<head\\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
-body_match = re.search(r"<body\\b", home_html, re.I)
+head_match = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
+body_match = re.search(r"<body\b", home_html, re.I)
 assert head_match and body_match and head_match.start() < body_match.start(), (
     "Homepage must have a valid head before body for Bing verification."
 )
