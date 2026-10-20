@@ -1193,8 +1193,12 @@ def urdu_tool_page(t):
     url = SITE_URL + path
     ui = BMI_UI if t["slug"] == "bmi-calculator" else t["ui"]
     for en, ur in u["labels"]:
+        # Localize labels regardless of their HTML wrapper (span, legend, button, or attribute).
         ui = ui.replace(">" + en + "<", ">" + ur + "<")
+        ui = ui.replace(">" + en + "</legend>", ">" + ur + "</legend>")
         ui = ui.replace('"' + en + '"', '"' + ur + '"')
+        if t["slug"] == "bmi-calculator":
+            ui = ui.replace(en, ur)
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     cat_ur = {"money": "پیسہ اور کاروبار", "health": "صحت", "time": "تاریخ اور وقت", "math": "ریاضی اور اکائیاں", "worship": "عبادت اور روزمرہ"}[cat["slug"]]
     schema = [
