@@ -608,7 +608,7 @@ EXTRA = {
         ],
     },
     "bmi-calculator": {
-        "quick": "BMI equals weight in kilograms divided by height in meters squared. For adults, 18.5 to 24.9 is the WHO normal weight range.",
+        "quick": "BMI uses weight in kg divided by height in metres squared when kg is selected, or 703 × weight in lb divided by height in total inches squared when lb is selected. For adults, 18.5 to 24.9 is the WHO normal weight range.",
         "faq": [
             ("Is a BMI of 25 unhealthy?", "A BMI of 25 is at the start of the overweight range. It is a screening number only. Waist size, blood pressure and blood tests give a fuller picture, and a clinician can interpret them with you."),
             ("Does BMI work for athletes?", "BMI can overstate body fat in people with high muscle mass. A clinician can use other measures for athletes."),
@@ -1090,8 +1090,8 @@ def answer_block(slug, lang="en"):
 
 BMI_GUIDE = [
     ("The formula", [
-        "Adult body mass index (BMI) is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first. The result is a screening number, not a direct measurement of body fat.",
-        "For feet and inches, convert total height to centimetres with (feet × 12 + inches) × 2.54. This page accepts kilograms for weight in both height modes, so you do not need to convert pounds or use a different formula.",
+        "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit. When kg is selected, adult BMI is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first.",
+        "For feet and inches, convert total height to centimetres with (feet × 12 + inches) × 2.54. If kg is selected, the calculator uses the metric formula. If lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches squared.",
     ]),
     ("Adult BMI categories", [
         "For adults, the standard WHO categories are underweight below 18.5, normal weight from 18.5 to below 25, overweight from 25 to below 30, and obesity from 30 upward. This calculator rounds BMI to one decimal place before assigning the displayed category. Values near a boundary can therefore display in the next category after rounding.",
@@ -1109,7 +1109,7 @@ BMI_GUIDE = [
         "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor.",
         "Use the number as one starting point, not as a complete assessment of health. A healthcare professional may consider waist circumference, blood pressure, blood tests, medicines, family history, activity and nutrition alongside BMI.",
         "Speak with a qualified clinician if you are worried about weight changes, have symptoms, are pregnant, have a medical condition, or need advice for a child or teenager. Do not change medication, restrict food severely or start a treatment plan based on this calculator alone.",
-        "The calculator accepts adult heights from 50 to 260 cm, or feet from 1 to 8 and inches from 0 to 11.99, and weights from 20 to 300 kg. These are input limits for this tool, not medical recommendations.",
+        "The calculator accepts adult heights from 50 to 260 cm, or feet from 1 to 8 and inches from 0 to 11.99. Weight input limits are 20 to 300 kg or 44.1 to 661.3 lb. These are input limits for this tool, not medical recommendations.",
     ]),
 ]
 BMI_FAQ = [
