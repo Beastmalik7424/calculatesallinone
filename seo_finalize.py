@@ -129,7 +129,8 @@ def main():
         # Remove legacy blanket review/update stamps. Never claim a page was reviewed unless that review occurred.
         raw = re.sub(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', "", raw, count=1, flags=re.S)
         schemas = []
-        for match in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', raw, re.S):
+        jsonld_script_pattern = r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>"""
+        for match in re.finditer(jsonld_script_pattern, raw, re.S | re.I):
             try:
                 schemas.append(json.loads(match.group(1)))
             except json.JSONDecodeError as exc:
@@ -153,7 +154,7 @@ def main():
         if faq_items:
             schemas = [s for s in schemas if s.get("@type") != "FAQPage"]
             schemas.append({"@context":"https://schema.org","@type":"FAQPage","mainEntity":faq_items})
-        raw = re.sub(r'<script type="application/ld\+json">.*?</script>[ \t\r\n]*', "", raw, flags=re.S)
+        raw = re.sub(jsonld_script_pattern + r"[ \t\r\n]*", "", raw, flags=re.S | re.I)
         schema_html = "".join('<script type="application/ld+json">' + json.dumps(s, ensure_ascii=False, separators=(",", ":")) + '</script>\n' for s in schemas)
         raw = raw.replace("</head>", schema_html + "</head>", 1)
         file.write_text(raw, encoding="utf-8")

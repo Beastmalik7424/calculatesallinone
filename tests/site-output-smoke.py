@@ -132,7 +132,7 @@ assert 'aria-label="CalculatesAll home page"' in home_html, "Brand link should d
 assert 'href="mailto:' in home_html, "Homepage should expose a direct correction contact"
 home_schemas = [
     json.loads(match.group(1))
-    for match in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', home_html, re.S)
+    for match in re.finditer(r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>""", home_html, re.S | re.I)
 ]
 organization_schema = next((schema for schema in home_schemas if schema.get("@type") == "Organization"), None)
 assert organization_schema is not None, "Homepage Organization schema is required"
@@ -376,7 +376,7 @@ for url in urls:
     lang_match = re.search(r'<html lang="([^"]+)"', html)
     assert lang_match, f"Missing document language: {url}"
     page_lang = lang_match.group(1)
-    jsonld_blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
+    jsonld_blocks = re.findall(r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>""", html, re.S | re.I)
     assert jsonld_blocks, f"Missing JSON-LD structured data: {url}"
     parsed_schemas = []
     for block in jsonld_blocks:
@@ -384,6 +384,14 @@ for url in urls:
             parsed_schemas.append(json.loads(block))
         except json.JSONDecodeError as exc:
             raise AssertionError(f"Invalid JSON-LD on {url}: {exc}") from exc
+    faq_schemas = [item for item in parsed_schemas if item.get("@type") == "FAQPage"]
+    assert len(faq_schemas) <= 1, f"Duplicate FAQPage JSON-LD blocks on {url}: {len(faq_schemas)}"
+    if url.endswith("/emi-calculator/"):
+        assert len(faq_schemas) == 1, "EMI page must have exactly one FAQPage schema generated from visible FAQ content"
+        app_schemas = [item for item in parsed_schemas if item.get("@type") == "WebApplication"]
+        assert len(app_schemas) == 1, "EMI page must retain exactly one WebApplication schema"
+        assert app_schemas[0].get("url") == url, "EMI WebApplication schema URL must match its canonical URL"
+        assert app_schemas[0].get("inLanguage") == page_lang, "EMI WebApplication schema language must match the HTML language"
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
             assert "dateModified" not in item, (
