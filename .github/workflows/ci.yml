@@ -117,7 +117,8 @@ jobs:
             result=$(curl -sS -o "/tmp/seo-preview/$slug.html" -D "/tmp/seo-preview/$slug.headers" -w '%{http_code}|%{redirect_url}' "$PREVIEW_BASE$path")
             printf '%s %s %s\n' "$path" "$result"
             test "$result" = "200|"
-            grep -Fq '<link rel="canonical" href="https://calculateallinone.vercel.app'"/>"$path"'"'>' "/tmp/seo-preview/$slug.html"
+            expected_canonical="<link rel=\"canonical\" href=\"https://calculateallinone.vercel.app${path}\">"
+            grep -Fq "$expected_canonical" "/tmp/seo-preview/$slug.html"
             if [[ "$path" == /ar/ || "$path" == /es/ || "$path" == /fr/ ]]; then
               grep -Eiq '<meta name="robots" content="noindex, follow"' "/tmp/seo-preview/$slug.html"
             else
