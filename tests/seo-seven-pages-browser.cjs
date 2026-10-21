@@ -1,6 +1,6 @@
 const { chromium } = require("playwright");
 
-const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\\/$/, "");
+const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, "");
 const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"];
 (async () => {
   const browser = await chromium.launch({ headless: true });
