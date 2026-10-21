@@ -16,7 +16,7 @@ Three language homepages remain noindex until a competent native-language review
 
 The production baseline had no X-Robots-Tag header on the seven pages. All seven returned HTTP 200, stayed on their requested slash URLs, and used self-referencing canonicals.
 
-The branch build and local CI checks passed. Production has not been changed or merged.
+The branch CI checks passed, PR #51 was squash-merged, and the resulting production deployment reached READY on Vercel. Post-deploy live checks confirmed the scoped metadata, canonical URLs, robots directives, structured data, sitemap entries, and footer links. Details and limitations are recorded below.
 
 ## Baseline table
 
@@ -73,14 +73,14 @@ https://github.com/Beastmalik7424/calculatesallinone/actions/runs/39681590977
 | T1 Build | PASS | GitHub Actions build completed. Existing build, calculator, input-validation, and monetization tests passed. |
 | T2 Sitemap XML | PASS | xmllint reported “sitemap XML valid”. |
 | T3 Scoped sitemap membership | PASS | Exactly these scoped indexable URLs were listed: /contact/, /discount-calculator/, /editorial-policy/, /health/. The three unreviewed language homepages were excluded. Each of the four entries has lastmod 2026-10-21. |
-| T4 Preview HTTP with no redirect | NOT PASSED | Vercel preview protection redirects anonymous requests to the Vercel login page. The authorized share URL removes its access token with a redirect. The page itself then returns HTTP 200. The exact no-redirect curl condition cannot be certified while preview protection remains enabled. |
+| T4 Preview HTTP with no redirect | PREVIEW CHECK BLOCKED; PRODUCTION HTTP 200 VERIFIED | Vercel preview protection redirects anonymous requests to authentication, and the authorized share URL uses an access-token redirect. The authenticated deployment fetch returned HTTP 200 for all seven production pages after release, but the connector does not expose the complete redirect chain, so an exact no-redirect assertion is not claimed. |
 | T5 Meta robots | PASS | Local generated HTML and authorized preview inspection showed noindex only on /ar/, /es/, and /fr/ among the seven scoped pages. |
 | T6 Canonical | PASS | All seven preview pages returned their correct canonical production slash URLs. |
 | T7 Hreflang | PASS FOR CURRENT DECISIONS | No language homepage is indexable, so no reciprocal hreflang set is required yet. Noindex language pages no longer emit hreflang tags. Recheck after any language receives native review. |
 | T8 Unique metadata | PASS | The focused test verified unique titles and descriptions across the homepage and seven scoped pages. All titles are under 60 characters and descriptions are under 160 characters. |
 | T9 Main content | PASS | Generated main-content counts: discount calculator 430 words, editorial policy 380 words, health hub 402 words. |
 | T10 Headless browser | PASS | Local headless browser: seven pages, HTTP 200, zero console or page errors. Authorized preview browser inspection: seven pages loaded, zero console or page errors. |
-| T11 Lighthouse SEO | PARTIAL | Local generated pages: contact 100/100, discount calculator 100/100, editorial policy 100/100, health 100/100. The three intentionally noindex language pages scored 66/100, with only the expected is-crawlable audit failing. Preview Lighthouse was not run because preview protection blocks the unauthenticated audit. |
+| T11 Lighthouse SEO | LOCAL BUILD PASS; PREVIEW AUDIT NOT RUN | Local generated pages: contact 100/100, discount calculator 100/100, editorial policy 100/100, health 100/100. The three intentionally noindex language pages scored 66/100, with only the expected is-crawlable audit failing. Preview Lighthouse was not run because preview protection blocks the unauthenticated audit and Vercel adds an `X-Robots-Tag: noindex` response header to protected preview URLs. Post-deploy production metadata checks passed, but a fresh Lighthouse run against production was not performed by this audit. |
 | T12 Internal links | PASS | Existing site-output-smoke.py and the focused seven-page test passed internal-link checks. |
 | T13 HTML validation | PASS | Nu HTML Checker validated the homepage and seven scoped pages with zero errors and zero warnings. |
 
@@ -103,10 +103,18 @@ That preview is protected by Vercel access controls. A temporary authorized link
 
 ## Deployment status
 
-Preview deployment: https://calculatesall-429c7tkdb-malikadeelbhatti-1187.vercel.app/
+- Pull request #51: merged.
+- Merge commit: `199a1e8899b304bc72ba00e044f5c78e4ee494f2`.
+- Vercel production deployment: READY, built from that exact commit.
+- Production URL: https://calculateallinone.vercel.app/
+- Preview URL inspected earlier: https://calculatesall-429c7tkdb-malikadeelbhatti-1187.vercel.app/ (still protected).
 
-Production: https://calculateallinone.vercel.app/
+## Post-deploy production verification
 
-The preview build is READY. Production has not been modified. Pull request #51 remains open and unmerged because the exact no-redirect preview test and preview Lighthouse test remain blocked by Vercel preview protection.
+The Vercel production deployment for commit `199a1e8899b304bc72ba00e044f5c78e4ee494f2` reached READY. Vercel's build logs showed no error/failure markers and included successful site-output, monetization, calculator, and EMI engine tests.
 
-Next required step: the owner must approve either temporarily making the preview publicly accessible for the remaining checks, with protection restored immediately afterward, or providing an approved secure CI bypass method. Do not merge until the remaining preview tests are completed.
+A fresh production fetch verified all seven scoped URLs return HTTP 200, each has exactly one H1, a self-referencing slash-form canonical, a title under 60 characters, a description under 160 characters, and no `X-Robots-Tag` response header. `/ar/`, `/es/`, and `/fr/` remain `noindex, follow` and are excluded from the sitemap. `/contact/`, `/discount-calculator/`, `/editorial-policy/`, and `/health/` remain `index, follow` and have BreadcrumbList data. The discount calculator retains WebApplication and visible-FAQ schema; the health page retains its visible FAQ schema. JSON-LD blocks parsed without errors.
+
+The live sitemap returns HTTP 200 with 33 unique URL entries, no duplicate URLs, and `lastmod` only on the four indexable scoped pages, all set to `2026-10-21`. The live robots.txt returns HTTP 200, allows crawling, and contains exactly one Sitemap directive pointing to the production sitemap. The localized footer links to the discount calculator and health hub are present.
+
+Limitations: this post-deploy fetch does not expose the complete HTTP redirect chain, so it does not certify an exact no-redirect assertion. A fresh Lighthouse run against production and the browser-agent run were not completed in this audit. Protected-preview Lighthouse is intentionally not used as a production crawlability proxy. Do not disable preview protection merely to make those preview checks pass.
