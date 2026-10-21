@@ -60,7 +60,7 @@ for path, raw in pages.items():
         check(bool(robots and (("noindex" in robots.group(1).lower()) == (expected == "noindex"))),
               path + ": robots does not match the reviewed decision")
         if expected == "noindex":
-            check(not re.search(r'<link\\s+rel=["\\']alternate["\\']\\s+hreflang=', raw, re.I),
+            check(not re.search(r'<link\s+rel=["\']alternate["\']\s+hreflang=', raw, re.I),
                   path + ": noindex language homepage must not publish hreflang alternates")
     h1_count = len(re.findall(r"<h1\b", raw, re.I))
     check(h1_count == 1, path + ": expected exactly one H1, got " + str(h1_count))
