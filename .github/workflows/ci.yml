@@ -37,6 +37,12 @@ jobs:
         run: python -m py_compile build.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
       - name: Build the site
         run: npm run build
+      - name: Validate sitemap XML with xmllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
+          xmllint --noout public/sitemap.xml
+          echo "xmllint: sitemap XML valid"
       - name: Smoke-test generated pages
         run: |
           test -s public/index.html
@@ -101,5 +107,39 @@ jobs:
             sleep 1
           done
           node tests/seo-seven-pages-browser.cjs
+      - name: Verify Vercel preview HTTP status, robots, and canonical URLs
+        env:
+          PREVIEW_BASE: https://calculatesall-git-seo-seven-pages-malikadeelbhatti-1187.vercel.app
+        run: |
+          mkdir -p /tmp/seo-preview
+          for path in /ar/ /es/ /fr/ /contact/ /discount-calculator/ /editorial-policy/ /health/; do
+            slug=$(echo "$path" | tr -cd '[:alnum:]')
+            result=$(curl -sS -o "/tmp/seo-preview/$slug.html" -D "/tmp/seo-preview/$slug.headers" -w '%{http_code}|%{redirect_url}' "$PREVIEW_BASE$path")
+            printf '%s %s %s\n' "$path" "$result"
+            test "$result" = "200|"
+            grep -Fq '<link rel="canonical" href="https://calculateallinone.vercel.app'"/>"$path"'"'>' "/tmp/seo-preview/$slug.html"
+            if [[ "$path" == /ar/ || "$path" == /es/ || "$path" == /fr/ ]]; then
+              grep -Eiq '<meta name="robots" content="noindex, follow"' "/tmp/seo-preview/$slug.html"
+            else
+              ! grep -Eiq 'noindex' "/tmp/seo-preview/$slug.html"
+              if grep -Eiq '^X-Robots-Tag:.*noindex' "/tmp/seo-preview/$slug.headers"; then
+                echo "Unexpected X-Robots-Tag noindex on $path"; exit 1
+              fi
+            fi
+          done
+          echo "Preview T4/T5/T6: PASS"
+      - name: Repeat headless browser check on Vercel preview
+        env:
+          BASE_URL: https://calculatesall-git-seo-seven-pages-malikadeelbhatti-1187.vercel.app
+        run: node tests/seo-seven-pages-browser.cjs
+      - name: Repeat Lighthouse SEO audit on Vercel preview
+        env:
+          PREVIEW_BASE: https://calculatesall-git-seo-seven-pages-malikadeelbhatti-1187.vercel.app
+        run: |
+          for path in /ar/ /es/ /fr/ /contact/ /discount-calculator/ /editorial-policy/ /health/; do
+            slug=$(echo "$path" | tr -cd '[:alnum:]')
+            npx --yes lighthouse@12.8.2 "$PREVIEW_BASE$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=seo --output=json --output-path="/tmp/lh-preview-$slug.json"
+          done
+          node -e 'const fs=require("node:fs"); const paths=["/ar/","/es/","/fr/","/contact/","/discount-calculator/","/editorial-policy/","/health/"]; let bad=0; for(const path of paths){const slug=path.replace(/[^a-z0-9]/gi,"");const r=JSON.parse(fs.readFileSync("/tmp/lh-preview-"+slug+".json","utf8"));const refs=new Set(r.categories.seo.auditRefs.map(x=>x.id));const failed=Object.entries(r.audits).filter(([id,a])=>refs.has(id)&&a.score===0).map(([id])=>id);const expectedNoindex=["/ar/","/es/","/fr/"].includes(path);const unexpected=failed.filter(id=>!(expectedNoindex&&id==="is-crawlable"));console.log(path+" preview Lighthouse SEO "+Math.round(r.categories.seo.score*100)+"/100; failed SEO audits: "+(failed.join(",")||"none"));if(unexpected.length){console.error("Unexpected preview SEO audit failures on "+path+": "+unexpected.join(","));bad=1;}} if(bad)process.exit(1); console.log("Preview Lighthouse audit: PASS; only expected is-crawlable findings are allowed on intentionally noindex language pages.");'
       - name: Test safe monetization configuration
         run: python tests/monetization-smoke.py
