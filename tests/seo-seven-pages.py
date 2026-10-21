@@ -34,9 +34,9 @@ def read(path):
     return path.read_text(encoding="utf-8")
 
 def visible_main(raw):
-    match = re.search(r"<main\\b[^>]*>(.*?)</main>", raw, re.S | re.I)
+    match = re.search(r"<main\b[^>]*>(.*?)</main>", raw, re.S | re.I)
     main = match.group(1) if match else ""
-    main = re.sub(r"<(script|style|form|nav|footer|header)\\b[^>]*>.*?</\\1>", " ", main, flags=re.S | re.I)
+    main = re.sub(r"<(script|style|form|nav|footer|header)\b[^>]*>.*?</\1>", " ", main, flags=re.S | re.I)
     return html.unescape(re.sub(r"<[^>]+>", " ", main))
 
 pages = {path: read(file) for path, file in CHECK_PAGES.items()}
@@ -45,9 +45,9 @@ for path, raw in pages.items():
     if not raw:
         continue
     title = re.search(r"<title>(.*?)</title>", raw, re.S | re.I)
-    desc = re.search(r'<meta\\s+name=["\\']description["\\']\\s+content=["\\']([^"\\']*)', raw, re.I)
-    canonical = re.search(r'<link\\s+rel=["\\']canonical["\\']\\s+href=["\\']([^"\\']+)', raw, re.I)
-    robots = re.search(r'<meta\\s+name=["\\']robots["\\']\\s+content=["\\']([^"\\']+)', raw, re.I)
+    desc = re.search(r'<meta\s+name=["\']description["\']\s+content=["\']([^"\']*)', raw, re.I)
+    canonical = re.search(r'<link\s+rel=["\']canonical["\']\s+href=["\']([^"\']+)', raw, re.I)
+    robots = re.search(r'<meta\s+name=["\']robots["\']\s+content=["\']([^"\']+)', raw, re.I)
     titles[path] = html.unescape(title.group(1).strip()) if title else ""
     descriptions[path] = html.unescape(desc.group(1).strip()) if desc else ""
     check(bool(title), path + ": missing title")
@@ -59,14 +59,14 @@ for path, raw in pages.items():
         expected = TARGETS[path]
         check(bool(robots and (("noindex" in robots.group(1).lower()) == (expected == "noindex"))),
               path + ": robots does not match the reviewed decision")
-    h1_count = len(re.findall(r"<h1\\b", raw, re.I))
+    h1_count = len(re.findall(r"<h1\b", raw, re.I))
     check(h1_count == 1, path + ": expected exactly one H1, got " + str(h1_count))
     check(len(titles[path]) < 60, path + ": title must be under 60 characters (" + str(len(titles[path])) + ")")
     check(0 < len(descriptions[path]) < 160, path + ": description must be under 160 characters")
-    check(not re.search(r"<img\\b(?![^>]*\\balt\\s*=)", raw, re.I), path + ": image missing alt attribute")
+    check(not re.search(r"<img\b(?![^>]*\balt\s*=)", raw, re.I), path + ": image missing alt attribute")
     if path in ("/contact/", "/editorial-policy/", "/health/"):
         schemas = []
-        for match in re.finditer(r'<script\\b[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>', raw, re.S | re.I):
+        for match in re.finditer(r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', raw, re.S | re.I):
             try:
                 obj = __import__("json").loads(match.group(1))
                 schemas.extend(obj if isinstance(obj, list) else [obj])
@@ -74,7 +74,7 @@ for path, raw in pages.items():
                 errors.append(path + ": invalid JSON-LD: " + str(exc))
         check(any(obj.get("@type") == "BreadcrumbList" for obj in schemas), path + ": missing BreadcrumbList")
     if path in ("/discount-calculator/", "/editorial-policy/", "/health/"):
-        words = re.findall(r"\\b[\\w’'-]+\\b", visible_main(raw), re.UNICODE)
+        words = re.findall(r"\b[\w’'-]+\b", visible_main(raw), re.UNICODE)
         minimum = 300 if path == "/discount-calculator/" else 150
         print("WORDCOUNT", path, len(words))
         check(len(words) >= minimum, path + ": main-content word count below " + str(minimum) + " (" + str(len(words)) + ")")
@@ -84,7 +84,7 @@ check(len(set(descriptions.values())) == len(descriptions), "duplicate descripti
 
 home = pages.get("/", "")
 for path in TARGETS:
-    check(bool(re.search(r'href=["\\']' + re.escape(path) + r'["\\']', home)),
+    check(bool(re.search(r'href=["\']' + re.escape(path) + r'["\']', home)),
           "homepage is missing direct internal link to " + path)
 
 sitemap_path = ROOT / "sitemap.xml"
@@ -99,7 +99,7 @@ try:
         if decision == "index":
             node = next((n for n in root.findall("sm:url", ns) if n.findtext("sm:loc", namespaces=ns) == url), None)
             lastmod = node.findtext("sm:lastmod", namespaces=ns) if node is not None else None
-            check(bool(lastmod and re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", lastmod)),
+            check(bool(lastmod and re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod)),
                   "missing valid lastmod for " + url)
     for url in locs:
         check(url.endswith("/"), "sitemap URL lacks trailing slash: " + str(url))
@@ -117,7 +117,7 @@ check("Disallow: /" not in robots_txt, "robots.txt blocks the whole site")
 
 # Internal links from the homepage and seven target pages must resolve to a generated page or asset.
 for source_path, raw in pages.items():
-    for href in re.findall(r'\\bhref=["\\']([^"\\']+)["\\']', raw, re.I):
+    for href in re.findall(r'\bhref=["\']([^"\']+)["\']', raw, re.I):
         if href.startswith(("http://", "https://", "mailto:", "tel:", "javascript:", "#", "data:")):
             continue
         dest = urlparse(href).path
