@@ -234,10 +234,10 @@ def main():
     indexable_urls = {SITE + path for path in indexable}
     # Dates are added only for pages substantively updated in this change.
     lastmod_by_path = {
-        "/contact/": "2026-10-22",
-        "/discount-calculator/": "2026-10-22",
-        "/editorial-policy/": "2026-10-22",
-        "/health/": "2026-10-22",
+        "/contact/": "2026-10-21",
+        "/discount-calculator/": "2026-10-21",
+        "/editorial-policy/": "2026-10-21",
+        "/health/": "2026-10-21",
     }
     urlset = ET.Element("urlset", {"xmlns":"http://www.sitemaps.org/schemas/sitemap/0.9","xmlns:xhtml":"http://www.w3.org/1999/xhtml"})
     for path in indexable:
