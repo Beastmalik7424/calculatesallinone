@@ -2,7 +2,7 @@ name: Build and smoke test
 
 on:
   push:
-    branches: ["main", "fix/**"]
+    branches: ["main", "fix/**", "seo-seven-pages"]
   pull_request:
     branches: ["main"]
 
