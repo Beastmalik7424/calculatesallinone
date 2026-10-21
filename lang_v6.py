@@ -88,7 +88,7 @@ UI = {
         "tag": "© CalculatesAll. Herramientas gratuitas que funcionan en tu navegador.",
         "faq": "Preguntas frecuentes", "more": "Más en",
         "h1": "Calculadoras online gratuitas y herramientas útiles",
-        "title": "CalculatesAll | Calculadoras y herramientas online gratuitas",
+        "title": "CalculatesAll | Calculadoras gratis en línea",
         "desc": "Calculadoras gratuitas de Zakat, IMC, pérdidas y ganancias, edad, descuentos, conversión de unidades, calculadora estándar, contador de tasbih y cronómetro.",
         "lead": "CalculatesAll reúne calculadoras de dinero, salud, fechas, unidades y uso diario. Cada herramienta funciona en tu navegador y tus datos no se envían a nuestro servidor.",
         "heading": "Qué puedes hacer en CalculatesAll",

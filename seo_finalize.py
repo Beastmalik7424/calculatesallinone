@@ -173,7 +173,12 @@ def main():
         def keep_alternate(match):
             href = match.group(2)
             return "" if any(href == SITE + excluded for excluded in noindex) else match.group(0)
-        raw = re.sub(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"\s*/?>', keep_alternate, raw)
+        alternate_pattern = r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"\s*/?>'
+        if path in noindex:
+            # A noindex language page should not advertise itself as a hreflang search landing page.
+            raw = re.sub(alternate_pattern, "", raw)
+        else:
+            raw = re.sub(alternate_pattern, keep_alternate, raw)
         robot_value = "noindex, follow" if path in noindex else "index, follow"
         raw = re.sub(r'<meta name="robots" content="[^"]*"', '<meta name="robots" content="' + robot_value + '"', raw, count=1)
         if path in noindex:
@@ -227,13 +232,21 @@ def main():
     Path("urls.txt").write_text("\n".join(SITE + path for path in indexable) + "\n", encoding="utf-8")
     Path("no-slash.txt").write_text("\n".join(NO_SLASH_PATHS) + "\n", encoding="utf-8")
     indexable_urls = {SITE + path for path in indexable}
+    # Dates are added only for pages substantively updated in this change.
+    lastmod_by_path = {
+        "/contact/": "2026-10-21",
+        "/discount-calculator/": "2026-10-21",
+        "/editorial-policy/": "2026-10-21",
+        "/health/": "2026-10-21",
+    }
     urlset = ET.Element("urlset", {"xmlns":"http://www.sitemaps.org/schemas/sitemap/0.9","xmlns:xhtml":"http://www.w3.org/1999/xhtml"})
     for path in indexable:
         raw = paths[path].read_text(encoding="utf-8")
         canonical = SITE + path
         node = ET.SubElement(urlset, "{http://www.sitemaps.org/schemas/sitemap/0.9}url")
         ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}loc").text = canonical
-        # Omit lastmod until a reliable, page-specific content-change date is available.
+        if path in lastmod_by_path:
+            ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod").text = lastmod_by_path[path]
         for code, href in re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', raw):
             if href in indexable_urls:
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})

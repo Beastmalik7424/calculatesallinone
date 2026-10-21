@@ -2,7 +2,7 @@ name: Build and smoke test
 
 on:
   push:
-    branches: ["main", "fix/**"]
+    branches: ["main", "fix/**", "seo-seven-pages"]
   pull_request:
     branches: ["main"]
 
@@ -37,6 +37,12 @@ jobs:
         run: python -m py_compile build.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
       - name: Build the site
         run: npm run build
+      - name: Validate sitemap XML with xmllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
+          xmllint --noout public/sitemap.xml
+          echo "xmllint: sitemap XML valid"
       - name: Smoke-test generated pages
         run: |
           test -s public/index.html
@@ -60,6 +66,10 @@ jobs:
           if grep -Eq 'âŒ«|Ã·|Ã—|âˆ’' public/index.html; then echo 'Corrupted calculator symbols found'; exit 1; fi
       - name: Verify sitemap coverage and internal links
         run: python tests/site-output-smoke.py
+      - name: Audit the seven scoped SEO pages
+        run: python3 tests/seo-seven-pages.py
+      - name: Validate HTML for homepage and seven scoped pages
+        run: python3 tests/validate-html.py
       - name: Validate explicit HTTP 301 redirect configuration
         run: python tests/vercel-redirect-config-smoke.py
       - name: Lighthouse SEO audit on built pages
@@ -74,5 +84,29 @@ jobs:
           npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/bmi-calculator/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=seo --output=json --output-path=/tmp/lighthouse-bmi.json
           npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/zakat-calculator/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=seo --output=json --output-path=/tmp/lighthouse-zakat.json
           node -e 'const fs=require("node:fs"); for (const name of ["home","bmi","zakat"]) { const r=JSON.parse(fs.readFileSync("/tmp/lighthouse-"+name+".json","utf8")); const score=r.categories.seo.score; console.log("Lighthouse SEO "+name+": "+Math.round(score*100)+"/100"); if (score !== 1) process.exitCode=1; }'
+      - name: Lighthouse SEO audit for seven scoped pages
+        run: |
+          python3 -m http.server 4175 --directory public >/tmp/calculateall-http-seven.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4175/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node -e 'const fs=require("node:fs"); const paths=["/ar/","/es/","/fr/","/contact/","/discount-calculator/","/editorial-policy/","/health/"]; fs.writeFileSync("/tmp/seo-seven-paths.json",JSON.stringify(paths));'
+          for path in /ar/ /es/ /fr/ /contact/ /discount-calculator/ /editorial-policy/ /health/; do
+            slug=$(echo "$path" | tr -cd '[:alnum:]')
+            npx --yes lighthouse@12.8.2 "http://127.0.0.1:4175$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --only-categories=seo --output=json --output-path="/tmp/lh-seven-$slug.json"
+          done
+          node -e 'const fs=require("node:fs"); const paths=["/ar/","/es/","/fr/","/contact/","/discount-calculator/","/editorial-policy/","/health/"]; let bad=0; for(const path of paths){const slug=path.replace(/[^a-z0-9]/gi,"");const r=JSON.parse(fs.readFileSync("/tmp/lh-seven-"+slug+".json","utf8"));const refs=new Set(r.categories.seo.auditRefs.map(x=>x.id));const failed=Object.entries(r.audits).filter(([id,a])=>refs.has(id)&&a.score===0).map(([id])=>id);const expectedNoindex=["/ar/","/es/","/fr/"].includes(path);const unexpected=failed.filter(id=>!(expectedNoindex&&id==="is-crawlable"));console.log(path+" Lighthouse SEO "+Math.round(r.categories.seo.score*100)+"/100; failed SEO audits: "+(failed.join(",")||"none"));if(unexpected.length){console.error("Unexpected failed audits on "+path+": "+unexpected.join(","));bad=1;}} if(bad)process.exit(1); console.log("Lighthouse scoped-page audit: PASS; only expected is-crawlable findings are allowed on intentionally noindex language pages.");'
+      - name: Test headless browser console on seven scoped pages
+        run: |
+          npm install --no-save --package-lock=false playwright@1.55.0
+          npx playwright install --with-deps chromium
+          python3 -m http.server 4174 --directory public >/tmp/calculateall-browser.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4174/ >/dev/null; then break; fi
+            sleep 1
+          done
+          node tests/seo-seven-pages-browser.cjs
+      # Protected Vercel previews are verified separately through the authenticated Vercel connector.
       - name: Test safe monetization configuration
         run: python tests/monetization-smoke.py
