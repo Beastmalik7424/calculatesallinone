@@ -63,8 +63,7 @@ jobs:
       - name: Audit the seven scoped SEO pages
         run: python3 tests/seo-seven-pages.py
       - name: Validate HTML for homepage and seven scoped pages
-        run: |
-          npx --yes html-validate@10.5.0 public/index.html public/ar/index.html public/es/index.html public/fr/index.html public/contact/index.html public/discount-calculator/index.html public/editorial-policy/index.html public/health/index.html
+        run: python3 tests/validate-html.py
       - name: Validate explicit HTTP 301 redirect configuration
         run: python tests/vercel-redirect-config-smoke.py
       - name: Lighthouse SEO audit on built pages
