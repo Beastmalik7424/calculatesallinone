@@ -64,7 +64,7 @@ for path, raw in pages.items():
     check(len(titles[path]) < 60, path + ": title must be under 60 characters (" + str(len(titles[path])) + ")")
     check(0 < len(descriptions[path]) < 160, path + ": description must be under 160 characters")
     check(not re.search(r"<img\b(?![^>]*\balt\s*=)", raw, re.I), path + ": image missing alt attribute")
-    if path in ("/contact/", "/editorial-policy/", "/health/"):
+    if path in ("/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"):
         schemas = []
         for match in re.finditer(r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', raw, re.S | re.I):
             try:
@@ -73,6 +73,10 @@ for path, raw in pages.items():
             except Exception as exc:
                 errors.append(path + ": invalid JSON-LD: " + str(exc))
         check(any(obj.get("@type") == "BreadcrumbList" for obj in schemas), path + ": missing BreadcrumbList")
+        if path == "/discount-calculator/":
+            check(any(obj.get("@type") == "WebApplication" for obj in schemas), path + ": missing WebApplication")
+            check(any(obj.get("@type") == "FAQPage" for obj in schemas), path + ": missing FAQPage for visible FAQs")
+            check(visible_main(raw).count("?") >= 3, path + ": expected at least three visible FAQ questions")
     if path in ("/discount-calculator/", "/editorial-policy/", "/health/"):
         words = re.findall(r"\b[\w’'-]+\b", visible_main(raw), re.UNICODE)
         minimum = 300 if path == "/discount-calculator/" else 150
