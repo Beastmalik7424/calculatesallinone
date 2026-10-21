@@ -59,6 +59,9 @@ for path, raw in pages.items():
         expected = TARGETS[path]
         check(bool(robots and (("noindex" in robots.group(1).lower()) == (expected == "noindex"))),
               path + ": robots does not match the reviewed decision")
+        if expected == "noindex":
+            check(not re.search(r'<link\\s+rel=["\\']alternate["\\']\\s+hreflang=', raw, re.I),
+                  path + ": noindex language homepage must not publish hreflang alternates")
     h1_count = len(re.findall(r"<h1\b", raw, re.I))
     check(h1_count == 1, path + ": expected exactly one H1, got " + str(h1_count))
     check(len(titles[path]) < 60, path + ": title must be under 60 characters (" + str(len(titles[path])) + ")")
@@ -117,7 +120,7 @@ except ET.ParseError as exc:
 robots_txt = read(ROOT / "robots.txt")
 sitemap_lines = [line.strip() for line in robots_txt.splitlines() if line.strip().lower().startswith("sitemap:")]
 check(sitemap_lines == ["Sitemap: " + SITE + "/sitemap.xml"], "robots.txt must have exactly one full sitemap URL")
-check("Disallow: /" not in robots_txt, "robots.txt blocks the whole site")
+check(not any(line.strip() == "Disallow: /" for line in robots_txt.splitlines()), "robots.txt blocks the whole site")
 
 # Internal links from the homepage and seven target pages must resolve to a generated page or asset.
 for source_path, raw in pages.items():
