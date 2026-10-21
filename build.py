@@ -1008,6 +1008,8 @@ def shell(main_html, lang="en", current_path=None):
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/emi-calculator/">EMI Calculator</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/privacy/">' + s["privacy"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/contact/">' + s["contact"] + '</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/discount-calculator/">Discount Calculator</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/health/">Health</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/methodology/">' + s["methodology"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/editorial-policy/">' + s["editorial"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/terms/">' + s["terms"] + '</a>'
@@ -1293,6 +1295,11 @@ def category_page(c):
                   '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">Estimate monthly loan installments, total interest and a month-by-month repayment schedule. Lender fees and contract terms may change the final quote.</p></li>')
     title = c["name"] + " | CalculatesAll"
     schema = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": c["name"], "url": SITE_URL + path}]
+    if c["slug"] == "health":
+        schema.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Health", "item": SITE_URL + "/health/"},
+        ]})
     body = ('<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + c["name"] + '</h1>'
             '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + c["desc"] + '</p>'
             '<p class="mt-4 text-base leading-relaxed text-stone-800 dark:text-stone-200">' + HUB_CONTENT[c["slug"]]["intro"] + '</p>'
@@ -1305,6 +1312,11 @@ def category_page(c):
 
 def static_page(path, title, desc, h1, paragraphs, noindex=False):
     schema = [{"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": SITE_URL + path}]
+    if path in ("/contact/", "/editorial-policy/"):
+        schema.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
+            {"@type": "ListItem", "position": 2, "name": h1, "item": SITE_URL + path},
+        ]})
     body = '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
     for p in paragraphs:
         body += '<p class="' + P + '">' + p + "</p>"
