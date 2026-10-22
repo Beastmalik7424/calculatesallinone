@@ -347,3 +347,19 @@
   .ca-calculator-engine #scientific-pad { gap: .35rem; }
   .ca-calculator-engine #scientific-pad button { min-height: 44px; border-radius: .5rem; }
 }
+
+
+/* Homepage usability fix: remove excessive top padding so the calculator starts immediately. */
+#main:has(.ca-home-wrap) {
+  padding-top: .35rem !important;
+}
+.ca-home-wrap {
+  margin-top: 0 !important;
+}
+.ca-home-header {
+  margin-top: 0 !important;
+  margin-bottom: .35rem !important;
+}
+.ca-home-header h1 {
+  margin-top: 0 !important;
+}
