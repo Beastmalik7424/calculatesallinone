@@ -451,7 +451,7 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261022-calculator-first-layout" in homepage_html, "Stylesheet cache-buster must change with the homepage positioning update"
+assert "/assets/site.css?v=20261023-standard-calculator-restore" in homepage_html, "Homepage must load the current Standard Calculator restoration stylesheet"
 
 # Every dynamic calculator message, unit label, category label, and theme label
 # must be translated for all supported languages, not silently fall back to English.
@@ -642,8 +642,9 @@ home_html = (ROOT / "index.html").read_text(encoding="utf-8")
 home_calc_pos = home_html.find('class="ca-home-calculator"')
 home_h1_pos = home_html.find("<h1")
 assert home_h1_pos >= 0 and home_calc_pos > home_h1_pos, "Homepage Standard Calculator must follow the heading"
-assert "ca-home-layout" in site_css and "grid-template-columns: minmax(0, 1fr)" in site_css, "Homepage calculator must use a single wide column"
-assert ".ca-home-side, .ca-home-tools { display: none !important; }" in site_css, "Homepage side panels must not narrow the Standard Calculator"
+site_css_compact = re.sub(r"\\s+", "", site_css)
+assert ".ca-home-layout" in site_css_compact and "grid-template-columns:minmax(0,1fr)" in site_css_compact, "Homepage calculator must use a single wide column"
+assert ".ca-home-side,.ca-home-tools{display:none!important}" in site_css_compact, "Homepage side panels must not narrow the Standard Calculator"
 assert "20261023-standard-calculator-restore" in home_html, "Homepage must load the restored calculator-first stylesheet"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
 assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
