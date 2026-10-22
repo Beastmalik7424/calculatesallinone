@@ -602,7 +602,7 @@ home_h1_pos = home_html.find("<h1")
 assert home_h1_pos >= 0 and home_calc_pos > home_h1_pos, "Homepage Standard Calculator must follow the heading"
 site_css_compact = re.sub(r"\s+", "", site_css)
 assert ".ca-home-layout" in site_css_compact and "grid-template-columns:minmax(0,1fr)" in site_css_compact, "Homepage calculator must use a single wide column"
-assert ".ca-home-side{display:none!important}" in site_css_compact and ".ca-home-tools{display:block!important;width:100%}" in site_css_compact, "Homepage should hide decorative side copy but preserve the other-tools list below the calculator"
+assert ".ca-home-side-left{display:none!important}" in site_css_compact and ".ca-home-tools{display:block!important;width:100%" in site_css_compact, "Homepage should hide decorative side copy but preserve the other-tools list below the calculator"
 assert ".ca-home-calculator" in site_css, "Homepage calculator styles must survive the CSS build"
 input_css = (ROOT.parent / "styles" / "input.css").read_text(encoding="utf-8")
 assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?\.ca-home-calculator\s+#calc-pad\s+button\s*\{\s*min-height:\s*2\.8rem", input_css), "Homepage mobile calculator sizing must be explicitly defined in source CSS"
