@@ -1344,11 +1344,7 @@ def tool_page(t):
         + ui + '</section>'
     )
     answer_note = answer_block(t["slug"], "en")
-    primary_tool_content = (
-        calculator_section + answer_note
-        if t["slug"] != "standard-calculator"
-        else answer_note + calculator_section
-    )
+    primary_tool_content = calculator_section + answer_note
     body = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
@@ -1414,11 +1410,7 @@ def urdu_tool_page(t):
         + ui + '</section>'
     )
     answer_note = "" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur")
-    primary_tool_content = (
-        calculator_section + answer_note
-        if t["slug"] != "standard-calculator"
-        else answer_note + calculator_section
-    )
+    primary_tool_content = calculator_section + answer_note
     body = (
         '<nav aria-label="صفحہ کی ترتیب" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/ur/">صفحہ اول</a></li><li aria-hidden="true">/</li>'
