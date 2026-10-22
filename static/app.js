@@ -1157,20 +1157,20 @@
       if (lifetimeEl) lifetimeEl.textContent = String(lifetime)
       var goal = activeTarget()
       if (target.value === "custom" && goal === null) {
-        targetError.textContent = "Enter a whole number from 1 to 10,000."
+        targetError.textContent = customTarget.value.trim() ? "Enter a whole number from 1 to 10,000." : ""
         progress.textContent = "Set a valid target to see progress."
         lastTargetReached = false
         return
       }
       targetError.textContent = ""
       if (goal !== null && count >= goal) {
-        progress.textContent = "Target of " + goal + " reached."
+        progress.textContent = t("tasbihReached", { goal: goal })
         if (allowVibration && !lastTargetReached && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
           try { navigator.vibrate(80) } catch (err) { /* vibration is optional */ }
         }
         lastTargetReached = true
       } else {
-        progress.textContent = goal === null ? "Set a valid target to see progress." : (goal - count) + " to go for a target of " + goal + "."
+        progress.textContent = goal === null ? "Set a valid target to see progress." : t("tasbihLeft", { left: goal - count, goal: goal })
         lastTargetReached = false
       }
     }
