@@ -7,7 +7,7 @@ REVIEW_STATUS = {
     "age-calculator": "Calendar method checked against worked examples.",
     "unit-converter": "Conversion factors checked against published definitions.",
     "standard-calculator": "Order of operations checked with test expressions.",
-    "tasbih-counter": "Behaviour checked on this device only.",
+    "tasbih-counter": "Static output and automated build checks passed; direct device interaction testing is pending.",
     "stopwatch": "Timing method checked against the browser clock.",
 }
 
