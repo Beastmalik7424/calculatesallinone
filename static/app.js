@@ -1196,10 +1196,20 @@
     var storedCount = readStored("tasbih.count")
     var storedPhrase = readStored("tasbih.phrase")
     var storedLifetime = readStored("tasbih.lifetime")
-    if (storedCount !== null && /^[0-9]+$/.test(storedCount) && Number.isSafeInteger(Number(storedCount))) count = Number(storedCount)
+    if (storedCount === null) {
+      // Migrate the previous counter key so existing visitors keep their saved count.
+      var legacyCount = readStored("tasbih-count")
+      if (legacyCount !== null && /^[0-9]+$/.test(legacyCount) && Number.isSafeInteger(Number(legacyCount))) {
+        count = Number(legacyCount)
+        writeStored("tasbih.count", count)
+      }
+    } else if (/^[0-9]+$/.test(storedCount) && Number.isSafeInteger(Number(storedCount))) {
+      count = Number(storedCount)
+    }
     if (storedPhrase !== null && ["SubhanAllah", "Alhamdulillah", "Allahu Akbar", "Astaghfirullah", "La ilaha illallah"].indexOf(storedPhrase) !== -1) phraseValue = storedPhrase
     else if (storedPhrase !== null && storedPhrase.indexOf("custom:") === 0) phraseValue = storedPhrase.slice(7)
     if (storedLifetime !== null && /^[0-9]+$/.test(storedLifetime) && Number.isSafeInteger(Number(storedLifetime))) lifetime = Number(storedLifetime)
+    else lifetime = count
     phrase.value = storedPhrase !== null && storedPhrase.indexOf("custom:") === 0 ? "custom" : phraseValue
     if (phrase.value === "custom") customPhrase.value = phraseValue
     customTargetWrap.hidden = target.value !== "custom"
