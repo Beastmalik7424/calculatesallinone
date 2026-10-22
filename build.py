@@ -681,7 +681,7 @@ EXTRA = {
         ],
     },
     "tasbih-counter": {
-        "quick": "Each tap adds one. Choose 33, 100, 1000 or unlimited as the target. The count is kept on this device only.",
+        "quick": "Each tap adds one. Choose a target of 33, 99, 100, or a custom whole number from 1 to 10,000. The count stays on this device when browser storage is available.",
         "faq": [
             ("Will my count move to another phone?", "No. The count is stored only in the browser on this device."),
         ],
