@@ -70,6 +70,12 @@ assert.equal(scientific(["Ans", "+", "3"]), "6", "Ans should use the previous re
 click("scientific-pad", "C");
 assert.equal(scientific(["log", "-", "1", ")"]), "Math domain error", "logarithm domain errors should be explained");
 click("scientific-pad", "C");
+assert.equal(scientific(["2", "+", "3"]), "5", "memory test value should calculate");
+click("scientific-pad", "M+");
+click("scientific-pad", "C");
+assert.equal(scientific(["MR"]), "5", "memory recall should restore the stored value");
+click("scientific-pad", "MC");
+click("scientific-pad", "C");
 assert.equal(scientific(["5", "!"]), "120", "factorial should evaluate");
 click("scientific-pad", "C");
 assert.equal(scientific(["1", "/", "0"]), "Cannot divide by zero", "division by zero must show a safe error");
