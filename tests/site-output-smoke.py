@@ -614,8 +614,7 @@ layout_marker = "/* Persistent homepage calculator-first layout override. Keep t
 assert layout_marker in input_css, "Calculator-first desktop layout must live in source CSS, not only the generated stylesheet"
 layout_override = input_css.split(layout_marker, 1)[1]
 assert re.search(r"#main\s+\.ca-home-layout\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*!important", layout_override), "Persistent homepage layout override must force one desktop column with higher specificity after legacy rules"
-final_grid_pos = site_css_compact.find("#main .ca-home-layout{")
-assert final_grid_pos >= 0, "Generated CSS must retain the high-specificity one-column desktop override"
+assert homepage_layout_rule_start >= 0, "Generated CSS must retain the high-specificity one-column desktop override"
 assert 'id="all-tools" class="ca-home-tools"' in home_html, "Homepage must expose a stable All Tools anchor for cross-page navigation"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
 assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
