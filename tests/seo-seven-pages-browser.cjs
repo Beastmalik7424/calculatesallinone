@@ -103,7 +103,7 @@ async function useLocalAssets(page) {
     const desktopErrors = [];
     desktop.on("console", msg => { if (msg.type() === "error") desktopErrors.push("console: " + msg.text()); });
     desktop.on("pageerror", err => desktopErrors.push("pageerror: " + err.message));
-    const homeResponse = await desktop.goto(base + "/", { waitUntil: "networkidle", timeout: 30000 });
+    const homeResponse = await desktop.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
     assert.equal(homeResponse && homeResponse.status(), 200, "homepage should return HTTP 200 on desktop");
     const homeCalculator = await desktop.locator(".ca-home-calculator .ca-calculator-engine").boundingBox();
     const homeTitle = await desktop.locator(".ca-home-header h1").boundingBox();
@@ -132,7 +132,7 @@ async function useLocalAssets(page) {
       const emiErrors = [];
       emiPage.on("console", msg => { if (msg.type() === "error") emiErrors.push("console: " + msg.text()); });
       emiPage.on("pageerror", err => emiErrors.push("pageerror: " + err.message));
-      const emiResponse = await emiPage.goto(base + "/emi-calculator/", { waitUntil: "networkidle", timeout: 30000 });
+      const emiResponse = await emiPage.goto(base + "/emi-calculator/", { waitUntil: "domcontentloaded", timeout: 30000 });
       assert.equal(emiResponse && emiResponse.status(), 200, "EMI page should return HTTP 200");
       const globalNav = emiPage.locator('nav.site-nav[aria-label="Main"]');
       const allToolsLink = globalNav.getByRole("link", { name: "All Tools" });
@@ -151,8 +151,12 @@ async function useLocalAssets(page) {
       }
       console.log("/emi-calculator/ layout/navigation passed (" + viewport.width + "px, All Tools visible, no console/page errors)");
       if (viewport.width === 390) {
-        await allToolsLink.click();
-        await emiPage.waitForLoadState("networkidle");
+        const allToolsNavigation = emiPage.waitForURL(url => {
+          const target = new URL(url);
+          return target.pathname === "/" && target.hash === "#all-tools";
+        }, { waitUntil: "domcontentloaded", timeout: 10000 });
+        await allToolsLink.click({ noWaitAfter: true });
+        await allToolsNavigation;
         assert.equal(new URL(emiPage.url()).pathname, "/", "All Tools link must return to the homepage");
         assert.equal(new URL(emiPage.url()).hash, "#all-tools", "All Tools link must jump to the homepage tools section");
         assert.equal(await emiPage.locator("#all-tools").isVisible(), true, "All Tools anchor target must be visible after navigation");
