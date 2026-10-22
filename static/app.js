@@ -771,6 +771,12 @@
     }
     function callFunction (name, args) {
       var x = args[0]
+      if (name === "root") {
+        if (args.length !== 2 || args[0] === 0) throw new Error("domain")
+        var degree = args[0], radicand = args[1]
+        if (radicand < 0 && (Math.floor(degree) !== degree || Math.abs(degree % 2) !== 1)) throw new Error("domain")
+        return requireFinite(radicand < 0 ? -Math.pow(-radicand, 1 / degree) : Math.pow(radicand, 1 / degree))
+      }
       if (name === "npr" || name === "ncr" || name === "mod") {
         if (args.length !== 2) throw new Error("domain")
         if (name === "npr") return choose(args[0], args[1], true)
@@ -1022,6 +1028,15 @@
       var btn = e.target.closest("button")
       if (!btn) return
       press(btn.getAttribute("data-key"))
+    })
+    document.addEventListener("keydown", function (e) {
+      var target = e.target || {}
+      var tag = String(target.tagName || "").toLowerCase()
+      if (tag === "input" || tag === "textarea" || tag === "select" || target.isContentEditable) return
+      if (e.key === "Enter" || e.key === "=") { press("="); e.preventDefault(); return }
+      if (e.key === "Backspace") { press("BS"); e.preventDefault(); return }
+      if (e.key === "Escape") { press("C"); e.preventDefault(); return }
+      if (/^[0-9.]$/.test(e.key) || /^[+\\-*\\/^(),!%]$/.test(e.key)) { press(e.key); e.preventDefault() }
     })
     if (modeToggle) modeToggle.addEventListener("click", function () {
       scientific = !scientific
