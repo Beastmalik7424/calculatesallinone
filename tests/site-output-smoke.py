@@ -451,7 +451,7 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261017-mobile-contrast-fix" in homepage_html, "Stylesheet cache-buster must change with the contrast fix"
+assert "/assets/site.css?v=20261022-homepage-benchmark-layout" in homepage_html, "Stylesheet cache-buster must change with the homepage positioning update"
 
 # Every dynamic calculator message, unit label, category label, and theme label
 # must be translated for all supported languages, not silently fall back to English.
