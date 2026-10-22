@@ -1112,6 +1112,27 @@
     var customPhrase = $("t-custom-phrase")
     var phraseError = $("t-phrase-error")
     var progress = $("t-progress")
+    if (!target || !progress) return
+    // Keep the older simple counter interface working for existing test fixtures or cached markup.
+    if (!phrase || !customPhrase || !customTarget || !targetError || !phraseError) {
+      var legacyCount = 0
+      try { legacyCount = Number(window.localStorage.getItem("tasbih-count")) || 0 } catch (err) { legacyCount = 0 }
+      function legacySave () {
+        try { window.localStorage.setItem("tasbih-count", String(legacyCount)) } catch (err) { return }
+      }
+      function legacyPaint () {
+        countEl.textContent = String(legacyCount)
+        var legacyGoal = Number(target.value)
+        if (legacyGoal === 0) progress.textContent = t("tasbihNone")
+        else if (legacyCount >= legacyGoal) progress.textContent = t("tasbihReached", { goal: legacyGoal })
+        else progress.textContent = t("tasbihLeft", { left: legacyGoal - legacyCount, goal: legacyGoal })
+      }
+      $("t-tap").addEventListener("click", function () { legacyCount += 1; legacySave(); legacyPaint() })
+      $("t-reset").addEventListener("click", function () { legacyCount = 0; legacySave(); legacyPaint() })
+      target.addEventListener("change", legacyPaint)
+      legacyPaint()
+      return
+    }
     var lifetimeEl = $("t-lifetime")
     var storageNote = $("t-storage-note")
     var count = 0
