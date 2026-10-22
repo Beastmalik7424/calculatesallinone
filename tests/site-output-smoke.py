@@ -605,6 +605,6 @@ assert ".ca-home-side{display:none!important}" in site_css_compact and ".ca-home
 assert ".ca-home-calculator" in site_css, "Homepage calculator styles must survive the CSS build"
 input_css = (ROOT.parent / "styles" / "input.css").read_text(encoding="utf-8")
 assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?\.ca-home-calculator\s+#calc-pad\s+button\s*\{\s*min-height:\s*2\.8rem", input_css), "Homepage mobile calculator sizing must be explicitly defined in source CSS"
-assert "20261023-standard-calculator-restore" in home_html, "Homepage must load the restored calculator-first stylesheet"
+assert "20261023-home-layout-fix" in home_html, "Homepage must load the restored calculator-first stylesheet"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
 assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
