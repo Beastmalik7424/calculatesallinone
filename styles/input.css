@@ -877,3 +877,75 @@
   display: block !important;
   width: 100%;
 }
+
+
+/* Persistent homepage calculator-first layout override. Keep this in source CSS because build:css regenerates static/site.css. */
+.ca-home-wrap {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+}
+.ca-home-header {
+  margin-bottom: 1rem;
+}
+.ca-home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  align-items: start;
+}
+.ca-home-side-left {
+  display: none !important;
+}
+.ca-home-calculator {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+.ca-home-calculator .ca-calculator-engine {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.ca-home-calculator #calc-display {
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  min-height: 5rem;
+}
+.ca-home-tools {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+}
+.ca-home-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.75rem;
+}
+@media (max-width: 639px) {
+  main#main {
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+  }
+  .ca-home-wrap {
+    padding-inline: 0;
+  }
+  .ca-home-header h1 {
+    font-size: clamp(1.65rem, 7vw, 2.25rem);
+    line-height: 1.15;
+  }
+  .ca-home-lead {
+    font-size: 1rem;
+  }
+  .ca-home-calculator .ca-calculator-engine {
+    max-width: 100%;
+  }
+  .ca-home-calculator #calc-pad {
+    gap: 0.5rem;
+  }
+  .ca-home-calculator #calc-pad button {
+    min-height: 56px;
+  }
+}
