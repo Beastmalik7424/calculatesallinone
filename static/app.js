@@ -1150,9 +1150,9 @@
       return Number.isSafeInteger(n) && n >= 1 && n <= 10000 ? n : null
     }
     function saveCount () { writeStored("tasbih.count", count); showStorageState() }
-    function savePhrase () { writeStored("tasbih.phrase", phraseValue); showStorageState() }
+    function savePhrase () { writeStored("tasbih.phrase", phrase.value === "custom" ? "custom:" + customPhrase.value.trim() : phrase.value); showStorageState() }
     function saveLifetime () { writeStored("tasbih.lifetime", lifetime); showStorageState() }
-    function paint () {
+    function paint (allowVibration) {
       countEl.textContent = String(count)
       if (lifetimeEl) lifetimeEl.textContent = String(lifetime)
       var goal = activeTarget()
@@ -1165,7 +1165,7 @@
       targetError.textContent = ""
       if (goal !== null && count >= goal) {
         progress.textContent = "Target of " + goal + " reached."
-        if (!lastTargetReached && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+        if (allowVibration && !lastTargetReached && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
           try { navigator.vibrate(80) } catch (err) { /* vibration is optional */ }
         }
         lastTargetReached = true
@@ -1191,18 +1191,19 @@
       lifetime += 1
       saveCount()
       saveLifetime()
-      paint()
+      paint(true)
     }
     var storedCount = readStored("tasbih.count")
     var storedPhrase = readStored("tasbih.phrase")
     var storedLifetime = readStored("tasbih.lifetime")
     if (storedCount !== null && /^[0-9]+$/.test(storedCount) && Number.isSafeInteger(Number(storedCount))) count = Number(storedCount)
     if (storedPhrase !== null && ["SubhanAllah", "Alhamdulillah", "Allahu Akbar", "Astaghfirullah", "La ilaha illallah"].indexOf(storedPhrase) !== -1) phraseValue = storedPhrase
+    else if (storedPhrase !== null && storedPhrase.indexOf("custom:") === 0) phraseValue = storedPhrase.slice(7)
     if (storedLifetime !== null && /^[0-9]+$/.test(storedLifetime) && Number.isSafeInteger(Number(storedLifetime))) lifetime = Number(storedLifetime)
-    phrase.value = phraseValue
+    phrase.value = storedPhrase !== null && storedPhrase.indexOf("custom:") === 0 ? "custom" : phraseValue
+    if (phrase.value === "custom") customPhrase.value = phraseValue
     customTargetWrap.hidden = target.value !== "custom"
     customPhrase.disabled = phrase.value !== "custom"
-    if (storedPhrase === "custom") phrase.value = "custom"
     phrase.addEventListener("change", function () {
       customPhrase.disabled = phrase.value !== "custom"
       if (phrase.value === "custom") customPhrase.focus()
@@ -1253,7 +1254,6 @@
         increment()
       }
     })
-    if (storedPhrase === "custom") phrase.value = "custom"
     showStorageState()
     paint()
   }
