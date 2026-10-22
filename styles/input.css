@@ -613,3 +613,52 @@
   .ca-home-tool-grid { gap: .22rem !important; }
   .ca-home-tool-grid a { min-height: 2rem !important; padding: .35rem .45rem !important; font-size: .75rem !important; }
 }
+
+
+/* Balanced laptop sizing: larger, readable keys while keeping the complete keypad above the fold. */
+@media (min-width: 901px) and (max-height: 800px) {
+  .ca-home-header h1 {
+    font-size: clamp(1.25rem, 1.6vw, 1.5rem) !important;
+  }
+  .ca-home-calculator {
+    padding: .42rem .65rem !important;
+  }
+  .ca-home-card-heading {
+    margin-bottom: .18rem !important;
+    font-size: .96rem !important;
+  }
+  .ca-home-calculator #calc-display {
+    min-height: 2.8rem !important;
+    padding: .24rem .55rem !important;
+    font-size: clamp(1.9rem, 2.7vw, 2.4rem) !important;
+    line-height: 1.05 !important;
+  }
+  .ca-home-calculator #calc-mode-toggle {
+    min-height: 1.85rem !important;
+    margin-top: .16rem !important;
+    padding: .1rem .4rem !important;
+    font-size: .84rem !important;
+  }
+  .ca-home-calculator #calc-pad {
+    gap: .18rem !important;
+    margin-top: .18rem !important;
+  }
+  .ca-home-calculator #calc-pad button {
+    min-height: clamp(1.95rem, 4.1vh, 2.25rem) !important;
+    padding: .08rem .15rem !important;
+    border-radius: .35rem !important;
+    font-size: clamp(1rem, 1.15vw, 1.2rem) !important;
+    line-height: 1.05 !important;
+  }
+  .ca-home-tools {
+    padding: .62rem !important;
+  }
+  .ca-home-tool-grid {
+    gap: .26rem !important;
+  }
+  .ca-home-tool-grid a {
+    min-height: 2.1rem !important;
+    padding: .38rem .48rem !important;
+    font-size: .78rem !important;
+  }
+}
