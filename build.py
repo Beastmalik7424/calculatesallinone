@@ -1627,7 +1627,7 @@ def home_app_page(lang):
         + '</ul><div class="ca-home-orbit" aria-hidden="true"><span>＋</span><span>÷</span><span>×</span><span>％</span></div>'
         '</aside>'
         + hero
-        + '<aside class="ca-home-tools">'
+        + '<aside id="all-tools" class="ca-home-tools">'
         + '<div class="ca-home-tools-heading"><div><p class="ca-home-side-eyebrow">' + s["many"] + '</p><h2>' + more_h + '</h2></div><span class="ca-home-free">' + s["free"] + '</span></div>'
         + '<p class="ca-home-tools-copy">' + tool_intro + '</p>'
         + '<ul class="ca-home-tool-grid">' + tiles + '</ul></aside>'
