@@ -801,9 +801,15 @@
           value = Math.acos(x); if (angleMode === "DEG") value *= 180 / Math.PI; break
         case "atan": case "arctan":
           value = Math.atan(x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "acsc": if (Math.abs(x) < 1 || x === 0) throw new Error("domain"); value = Math.asin(1 / x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "asec": if (Math.abs(x) < 1) throw new Error("domain"); value = Math.acos(1 / x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "acot": value = Math.atan2(1, x); if (angleMode === "DEG") value *= 180 / Math.PI; break
         case "sinh": value = Math.sinh(x); break
         case "cosh": value = Math.cosh(x); break
         case "tanh": value = Math.tanh(x); break
+        case "csch": if (x === 0) throw new Error("domain"); value = 1 / Math.sinh(x); break
+        case "sech": value = 1 / Math.cosh(x); break
+        case "coth": if (x === 0) throw new Error("domain"); value = 1 / Math.tanh(x); break
         case "asinh": value = Math.asinh(x); break
         case "acosh": if (x < 1) throw new Error("domain"); value = Math.acosh(x); break
         case "atanh": if (x <= -1 || x >= 1) throw new Error("domain"); value = Math.atanh(x); break
@@ -971,7 +977,7 @@
       }
       if (key === "sqrt" || key === "cbrt" || key === "sin" || key === "cos" || key === "tan" ||
           key === "asin" || key === "acos" || key === "atan" || key === "sinh" || key === "cosh" ||
-          key === "tanh" || key === "asinh" || key === "acosh" || key === "atanh" || key === "abs" ||
+          key === "tanh" || key === "csch" || key === "sech" || key === "coth" || key === "asinh" || key === "acosh" || key === "atanh" || key === "acsc" || key === "asec" || key === "acot" || key === "root" || key === "abs" ||
           key === "log" || key === "ln" || key === "exp" || key === "floor" || key === "ceil" ||
           key === "round" || key === "sec" || key === "csc" || key === "cot" || key === "nPr" ||
           key === "nCr" || key === "mod") {
