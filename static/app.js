@@ -953,6 +953,16 @@
       if (key === "MC") { memory = 0; return }
       if (key === "Ans") { expr += "ans"; render(expr); return }
       if (key === "pi" || key === "e") { expr += key; render(expr); return }
+      if ((key === "square" || key === "cube") && scientific) { expr += key === "square" ? "^2" : "^3"; render(expr); return }
+      if (key === "sqrt" && !scientific) {
+        if (expr.trim() === "") { display.textContent = t("calcNeedValue"); return }
+        try {
+          var radicand = evaluate(expr)
+          if (radicand < 0) { expr = ""; display.textContent = t("calcSqrtNegative"); return }
+          expr = format(Math.sqrt(radicand)); render(expr)
+        } catch (err) { expr = ""; display.textContent = errorText(err) }
+        return
+      }
       if (key === "sqrt" || key === "cbrt" || key === "sin" || key === "cos" || key === "tan" ||
           key === "asin" || key === "acos" || key === "atan" || key === "sinh" || key === "cosh" ||
           key === "tanh" || key === "asinh" || key === "acosh" || key === "atanh" || key === "abs" ||
