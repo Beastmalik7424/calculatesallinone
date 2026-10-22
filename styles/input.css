@@ -812,7 +812,7 @@
 }
 .ca-home-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) !important;
   gap: 1.25rem;
   align-items: start;
 }
