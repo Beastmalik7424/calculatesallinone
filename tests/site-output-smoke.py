@@ -605,7 +605,10 @@ for slug in calculator_slugs:
     tool_html = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     calc_pos = tool_html.find('<section id="tool-calculator"')
     h1_pos = tool_html.find("<h1")
-    assert calc_pos > h1_pos >= 0, f"Calculator must follow the primary heading: /{slug}/"
+    lead_pos = tool_html.find('<p class="mt-3 text-lg', h1_pos)
+    assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
+        f"Calculator must follow the heading and short lead: /{slug}/"
+    )
     main_open = re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', tool_html)
     assert main_open, f"Non-standard calculator page must use the compact calculator-first main layout: /{slug}/"
     note_pos = tool_html.find("Evidence-based note")
@@ -621,7 +624,11 @@ for slug in calculator_slugs:
         continue
     urdu_html = urdu_page.read_text(encoding="utf-8")
     calc_pos = urdu_html.find('<section id="tool-calculator"')
-    assert calc_pos >= 0, f"Urdu calculator section must have a stable test hook: /ur/{slug}/"
+    h1_pos = urdu_html.find("<h1")
+    lead_pos = urdu_html.find('<p class="mt-3 text-lg', h1_pos)
+    assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
+        f"Urdu calculator must follow the heading and short lead: /ur/{slug}/"
+    )
     assert calc_pos < urdu_html.find("<h2"), f"Urdu calculator must appear before guide content: /ur/{slug}/"
     assert re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', urdu_html), (
         f"Urdu tool page must use the compact calculator-first main layout: /ur/{slug}/"
@@ -645,6 +652,7 @@ assert home_h1_pos >= 0 and home_calc_pos > home_h1_pos, "Homepage Standard Calc
 site_css_compact = re.sub(r"\s+", "", site_css)
 assert ".ca-home-layout" in site_css_compact and "grid-template-columns:minmax(0,1fr)" in site_css_compact, "Homepage calculator must use a single wide column"
 assert ".ca-home-side{display:none!important}" in site_css_compact and ".ca-home-tools{display:block!important;width:100%}" in site_css_compact, "Homepage should hide decorative side copy but preserve the other-tools list below the calculator"
+assert "@media(max-width:640px)" in site_css_compact and ".ca-home-calculator #calc-pad button{min-height:2.8rem}" in site_css_compact, "Homepage calculator buttons must remain usable on mobile"
 assert "20261023-standard-calculator-restore" in home_html, "Homepage must load the restored calculator-first stylesheet"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
 assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
