@@ -416,31 +416,54 @@ TOOLS = [
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
         "description": "Count tasbih with preset targets. The count stays saved on this device only.",
-        "h1": "Online Tasbih Counter",
-        "lead": "Tap to count your dhikr with a 33, 100 or 1000 target, or count without a target. The count is saved on this device only.",
+        "h1": "Free Online Tasbih Counter",
+        "lead": "A free digital tasbeeh counter for daily dhikr. Choose a phrase, set a target, and keep your count on this device without downloading an app.",
         "ui": (
-            '<div class="max-w-sm mx-auto space-y-5">'
+            '<div class="max-w-lg mx-auto space-y-5" id="tasbih-app">'
+            '<div class="grid sm:grid-cols-2 gap-4">'
+            '<div><label class="@L@" for="t-phrase">Dhikr phrase</label>'
+            '<select id="t-phrase" class="@I@">'
+            '<option value="SubhanAllah">SubhanAllah</option><option value="Alhamdulillah">Alhamdulillah</option>'
+            '<option value="Allahu Akbar">Allahu Akbar</option><option value="Astaghfirullah">Astaghfirullah</option>'
+            '<option value="La ilaha illallah">La ilaha illallah</option><option value="custom">Custom phrase</option></select></div>'
+            '<div><label class="@L@" for="t-custom-phrase">Custom phrase (up to 40 characters)</label>'
+            '<input id="t-custom-phrase" class="@I@" type="text" maxlength="40" autocomplete="off" disabled aria-describedby="t-phrase-error">'
+            '<p id="t-phrase-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div></div>'
             '<div><label class="@L@" for="t-target">Target</label>'
-            '<select id="t-target" class="@I@"><option value="33">33</option><option value="100">100</option><option value="1000">1000</option><option value="0">Unlimited</option></select></div>'
-            '<output id="t-count" class="block text-center text-6xl font-semibold bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8" aria-live="polite">0</output>'
+            '<select id="t-target" class="@I@"><option value="33">33</option><option value="99">99</option><option value="100">100</option><option value="custom">Custom target</option></select></div>'
+            '<div id="t-custom-target-wrap" hidden><label class="@L@" for="t-custom-target">Custom target (1 to 10,000)</label>'
+            '<input id="t-custom-target" class="@I@" type="text" inputmode="numeric" autocomplete="off" pattern="[0-9]+" aria-describedby="t-target-error">'
+            '<p id="t-target-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div>'
+            '<output id="t-count" class="block text-center text-6xl sm:text-7xl font-semibold tabular-nums bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8" aria-live="polite">0</output>'
             '<p id="t-progress" class="text-center text-base text-stone-800 dark:text-stone-200" aria-live="polite"></p>'
-            '<div class="grid grid-cols-2 gap-3">'
-            '<button id="t-tap" class="@B@">Tap to count</button>'
-            '<button id="t-reset" class="@S@">Reset</button>'
-            '</div></div>'
+            '<p id="t-storage-note" class="text-sm text-amber-800 dark:text-amber-200" role="status" hidden>Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.</p>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300">Lifetime counted total: <output id="t-lifetime">0</output></p>'
+            '<button id="t-tap" type="button" aria-label="Count one" class="w-full min-h-[64px] @B@ text-xl">Count one</button>'
+            '<div class="grid grid-cols-2 gap-3"><button id="t-undo" type="button" class="@S@">Undo</button>'
+            '<button id="t-reset" type="button" class="@S@">Reset</button></div>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300">Keyboard: press Space or Enter to count when focus is not in a text field or control.</p>'
+            '</div>'
         ),
         "guide": [
-            ("How it works", [
-                "Each tap adds one to the count. When a target is selected, the progress line shows how many remain.",
-                "The count is stored in your browser's local storage. Clearing browser data or using another device starts a new count.",
+            ("What is tasbih?", [
+                "Tasbih is a word used for remembrance of Allah and for saying devotional phrases. People may use prayer beads, their fingers, or a digital counter to keep track. This page is a counting aid, not a religious authority, and it does not decide which phrase or number a person should choose.",
+                "The counter records button presses. It cannot verify that a phrase was recited, detect a missed count, or determine whether a practice is required. Use it in the way that fits your own practice, and ask a qualified scholar or trusted teacher about religious rulings.",
             ]),
-            ("Common mistakes", [
-                "Resetting by accident. Reset clears the saved count on this device.",
+            ("How to use this online tasbih counter", [
+                "Choose one of the five preset phrases or select Custom phrase and enter up to 40 characters. Choose a target of 33, 99, or 100, or select Custom target and enter a whole number from 1 to 10,000. The custom target field accepts digits only. A value outside the allowed range or a decimal is rejected with an error message.",
+                "Press Count one once for each count you want to record. You can also press Space or Enter when focus is not inside another control or text field. The progress message shows how many counts remain. When the selected target is reached, the page displays a message and may briefly vibrate if your device and browser support vibration.",
+                "Undo subtracts one from the current count when the count is above zero. Reset asks for confirmation before clearing the current count. The lifetime total tracks accepted count taps and is kept separately from the current session count. The phrase and current count are saved in this browser when storage is available.",
             ]),
-            ("A practical counting routine", [
-                "Choose the target before starting so the progress message matches your intention. A short target can suit a brief routine, while an unlimited setting lets you count without a finish line. Tap once for each completed recitation and pause if you need to avoid accidental double taps.",
-                "The counter is a tracking aid only. It cannot confirm which words were recited, whether a tap was missed, or whether a particular number is religiously required. If the count is interrupted, use your own judgement about whether to continue or restart. The page does not prescribe devotional practice.",
-                "The saved number uses local browser storage on the current device. It is not a cloud backup, and clearing site data, using private browsing or changing devices can remove it. If you need a record over many days, keep a separate note. For questions about the wording or recommended number of recitations, consult a trusted qualified teacher.",
+            ("Five phrases and plain meanings", [
+                "SubhanAllah is commonly translated as “Glory be to Allah.” This is a plain-language meaning, not a detailed commentary.",
+                "Alhamdulillah is commonly translated as “Praise belongs to Allah” or “All praise is due to Allah.”",
+                "Allahu Akbar is commonly translated as “Allah is greater” or “Allah is the Greatest.”",
+                "Astaghfirullah means “I seek forgiveness from Allah.”",
+                "La ilaha illallah means “There is no deity worthy of worship except Allah.” Transliteration and English wording can vary; consult a qualified teacher if you need a formal translation or pronunciation guidance.",
+            ]),
+            ("Saving, privacy, and limitations", [
+                "The counter uses local browser storage on your device. It does not need an account and does not send the count to a server. Browser privacy settings, private browsing, clearing site data, or switching devices can make saved values unavailable. If storage is blocked, the counter continues in memory and displays a note, but values may be lost when you reload or leave the page.",
+                "A target is only a personal tracking setting in this tool. The page does not claim that a specific number is required or that using a digital counter has a particular religious reward. It does not replace prayer beads, finger counting, personal judgement, or guidance from a qualified scholar. If you are unsure about the wording, pronunciation, or religious status of a practice, seek reliable scholarly guidance.",
             ]),
         ],
         "faq": [
@@ -1275,6 +1298,11 @@ def tool_page(t):
         guide = BMI_GUIDE
         faqs = BMI_FAQ
         sources = BMI_SOURCES
+    elif t["slug"] == "tasbih-counter":
+        title = "Free Online Tasbih Counter | Digital Tasbeeh Counter"
+        desc = "Free online tasbih counter for daily dhikr. Tap to count, set targets of 33, 99 or 100, and save your count on your device. No download needed."
+        ui = t["ui"]
+        guide = t["guide"]
     else:
         title = t["name"] + " | Free Online Tool | CalculatesAll"
         desc = t["description"]
