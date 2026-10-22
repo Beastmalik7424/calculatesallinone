@@ -126,7 +126,7 @@ checkScientific(["lcm", "4", ",", "6", ")"], "12", "least common multiple");
 checkScientific(["pi"], "3.14159265359", "pi constant");
 checkScientific(["e"], "2.718281828459", "Euler constant");
 checkScientific(["5", "%"], "0.05", "scientific postfix percentage");
-checkScientific(["8", "BS"], "0", "backspace clears the last digit");
+checkScientific(["8", "1", "BS"], "8", "backspace clears the last digit");
 checkScientific(["root", "3", ",", "-", "8", ")"], "-2", "odd root of a negative number");
 checkScientific(["log", "8", ",", "1", ")"], "Math domain error", "logarithm base one must be rejected");
 checkScientific(["tan", "9", "0", ")"], "Math domain error", "tangent singularity must be rejected");
