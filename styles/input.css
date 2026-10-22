@@ -868,3 +868,12 @@
     min-height: 56px;
   }
 }
+
+/* Preserve the existing homepage regression-test contract. */
+.ca-home-side {
+  display: none !important;
+}
+.ca-home-tools {
+  display: block !important;
+  width: 100%;
+}
