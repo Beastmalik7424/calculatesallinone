@@ -56,6 +56,8 @@ assert.equal(scientific(["log", "1", "0", ")"]), "1", "base-10 logarithm should 
 click("scientific-pad", "C");
 assert.equal(scientific(["2", "^", "3"]), "8", "exponentiation should evaluate");
 click("scientific-pad", "C");
+assert.equal(scientific(["2", "^", "-", "2"]), "0.25", "negative exponents should be supported");
+click("scientific-pad", "C");
 assert.equal(scientific(["root", "3", ",", "8", ")"]), "2", "nth root should evaluate");
 click("scientific-pad", "C");
 assert.equal(scientific(["mean", "1", ",", "2", ",", "3", ")"]), "2", "mean should evaluate multiple values");
