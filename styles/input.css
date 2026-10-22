@@ -888,21 +888,22 @@
 .ca-home-header {
   margin-bottom: 1rem;
 }
-.ca-home-layout {
-  display: grid;
+#main .ca-home-layout {
+  display: grid !important;
   grid-template-columns: minmax(0, 1fr) !important;
-  gap: 1.25rem;
-  max-width: 72rem;
-  margin: 0 auto;
-  align-items: start;
+  gap: 1.25rem !important;
+  max-width: 72rem !important;
+  margin: 0 auto !important;
+  align-items: start !important;
 }
-.ca-home-side-left {
+#main .ca-home-side-left {
   display: none !important;
 }
-.ca-home-calculator {
-  display: block;
-  width: 100%;
-  min-width: 0;
+#main .ca-home-calculator {
+  display: block !important;
+  grid-column: 1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
 }
 .ca-home-calculator .ca-calculator-engine {
   width: 100%;
@@ -914,10 +915,11 @@
   font-size: clamp(2.25rem, 5vw, 3.25rem);
   min-height: 5rem;
 }
-.ca-home-tools {
+#main .ca-home-tools {
   display: block !important;
-  width: 100%;
-  min-width: 0;
+  grid-column: 1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
 }
 .ca-home-tool-grid {
   display: grid;
