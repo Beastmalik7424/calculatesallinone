@@ -940,7 +940,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261017-mobile-contrast-fix">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261022-homepage-benchmark-layout">\n'
         + ld + ads + "</head>\n"
     )
 
@@ -1343,8 +1343,8 @@ def home_page(lang="en"):
         path = "/"
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for Zakat, BMI, profit and loss, age, discounts, unit conversion, a standard calculator, tasbih counter and stopwatch."
-        h1 = "Free Online Calculators and Utility Tools"
-        lead = "CalculatesAll has calculators for money, health, dates, units and daily use. Each tool runs in your browser, and your entries are not sent to our server."
+        h1 = "Free Online Standard Calculator"
+        lead = "Fast, free, and private. Tap the buttons or use your keyboard to calculate."
         cards = ""
         for c in CATEGORIES:
             cards += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
@@ -1455,7 +1455,7 @@ def home_app_page(lang):
         cats = '<nav aria-label="Categories" class="mt-8"><ul class="flex flex-wrap gap-3">' + cats + "</ul></nav>"
     side_title = "Designed for quick answers" if not urdu else "فوری جواب کے لیے آسان ڈیزائن"
     side_desc = "Clear buttons, readable results, and useful everyday tools in one place." if not urdu else "آسان بٹن، واضح نتائج اور روزمرہ کے مفید ٹولز ایک جگہ۔"
-    calc_title = "Quick calculator" if not urdu else "فوری کیلکولیٹر"
+    calc_title = "Standard Calculator" if not urdu else "معیاری کیلکولیٹر"
     tool_intro = "Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
     free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
     hero_ui = CALC_UI
