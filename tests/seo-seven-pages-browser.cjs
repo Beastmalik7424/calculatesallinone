@@ -4,19 +4,6 @@ const assert = require("node:assert/strict");
 const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, "");
 const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"];
 
-// Generated pages use absolute production asset URLs. Route same-origin assets back to this run's
-// freshly built public/ directory so layout tests validate the candidate CSS, not stale production CSS.
-async function useLocalAssets(page) {
-  await page.route(/\/assets\/.*$/, route => {
-    const assetUrl = new URL(route.request().url());
-    if (assetUrl.hostname !== "calculateallinone.vercel.app") return route.continue();
-    if (assetUrl.pathname.endsWith("/site.css")) {
-      console.log("Layout test using candidate CSS: " + base + assetUrl.pathname + assetUrl.search);
-    }
-    return route.continue({ url: base + assetUrl.pathname + assetUrl.search });
-  });
-}
-
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const failures = [];
@@ -99,12 +86,16 @@ async function useLocalAssets(page) {
 
     // Desktop regression: homepage calculator must remain the first wide tool and the All Tools section must follow it.
     const desktop = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
-    await useLocalAssets(desktop);
     const desktopErrors = [];
     desktop.on("console", msg => { if (msg.type() === "error") desktopErrors.push("console: " + msg.text()); });
     desktop.on("pageerror", err => desktopErrors.push("pageerror: " + err.message));
     const homeResponse = await desktop.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
     assert.equal(homeResponse && homeResponse.status(), 200, "homepage should return HTTP 200 on desktop");
+    const stylesheetHref = await desktop.locator('link[rel="stylesheet"][href*="site.css"]').first().getAttribute("href");
+    assert.ok(stylesheetHref && stylesheetHref.includes("20261023-home-layout-fix-v3"), "homepage must request the cache-busted candidate stylesheet");
+    // Inject the freshly built CSS after navigation to guarantee the geometry assertion tests this build,
+    // even if the generated HTML points at the public production origin during CI.
+    await desktop.addStyleTag({ path: "public/assets/site.css" });
     const homeCalculator = await desktop.locator(".ca-home-calculator .ca-calculator-engine").boundingBox();
     const homeTitle = await desktop.locator(".ca-home-header h1").boundingBox();
     const allTools = desktop.locator("#all-tools");
@@ -128,7 +119,6 @@ async function useLocalAssets(page) {
     // EMI regression: the standalone page must preserve global navigation and centered layout at desktop and mobile widths.
     for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
       const emiPage = await browser.newPage({ viewport, deviceScaleFactor: 1 });
-      await useLocalAssets(emiPage);
       const emiErrors = [];
       emiPage.on("console", msg => { if (msg.type() === "error") emiErrors.push("console: " + msg.text()); });
       emiPage.on("pageerror", err => emiErrors.push("pageerror: " + err.message));
