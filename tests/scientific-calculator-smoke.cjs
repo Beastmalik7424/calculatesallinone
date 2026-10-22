@@ -66,7 +66,7 @@ assert.equal(scientific(["nCr", "5", ",", "2", ")"]), "10", "combinations should
 click("scientific-pad", "C");
 assert.equal(scientific(["log", "8", ",", "2", ")"]), "3", "logarithm with a custom base should evaluate");
 click("scientific-pad", "C");
-assert.equal(scientific(["Ans", "+", "3"]), "5", "Ans should use the previous result");
+assert.equal(scientific(["Ans", "+", "3"]), "6", "Ans should use the previous result");
 click("scientific-pad", "C");
 assert.equal(scientific(["log", "-", "1", ")"]), "Math domain error", "logarithm domain errors should be explained");
 click("scientific-pad", "C");
