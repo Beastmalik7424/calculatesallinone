@@ -18,6 +18,11 @@ const appSchema = JSON.parse(html.slice(appSchemaStart, appSchemaEnd));
 assert.equal(appSchema.url, "https://calculateallinone.vercel.app/emi-calculator/", "WebApplication schema URL must match canonical URL");
 assert.equal(appSchema.inLanguage, "en", "WebApplication schema language must match document language");
 
+// Regression guard: the standalone EMI page must retain global site navigation and a centered, responsive calculator column.
+assert.match(html, /<nav aria-label="Main" class="site-nav">[\s\S]*?<a href="\/#all-tools">All Tools<\/a>[\s\S]*?<\/nav>/, "EMI page must expose the shared All Tools navigation link");
+assert.match(html, /<main class="emi-page-main">/, "EMI calculator must use the shared-width main content wrapper");
+assert.match(html, /\.emi-page-main\s*\{[^}]*max-width:\s*960px/s, "EMI main content must be capped to the intended centered tool width");
+
 const match = html.match(/const Engine=\(\(\)=>\{[\s\S]*?\n\}\)\(\);/);
 assert.ok(match, "EMI calculation engine must remain extractable from the standalone page");
 const sandbox = { module: { exports: {} }, Number, Math, String, Error, URLSearchParams };
