@@ -435,3 +435,83 @@
     font-size: clamp(1.2rem, 5vw, 1.5rem) !important;
   }
 }
+
+
+/* Desktop first-fold layout: keep the full standard keypad visible without scrolling. */
+@media (min-width: 901px) {
+  #main:has(.ca-home-wrap) {
+    padding: .25rem 1rem 1rem !important;
+  }
+  .ca-home-wrap {
+    width: 100% !important;
+    max-width: 100rem !important;
+    margin: 0 auto !important;
+  }
+  .ca-home-header {
+    margin: 0 auto .4rem !important;
+  }
+  .ca-home-header h1 {
+    margin: 0 !important;
+    font-size: clamp(1.4rem, 2vw, 2rem) !important;
+    line-height: 1.15 !important;
+  }
+  .ca-home-layout {
+    width: 100% !important;
+    max-width: 100rem !important;
+    grid-template-columns: minmax(0, 3fr) minmax(14rem, .8fr) !important;
+    gap: .7rem !important;
+    align-items: start !important;
+  }
+  .ca-home-calculator {
+    grid-column: 1 !important;
+    padding: .7rem 1rem !important;
+    border-radius: .85rem !important;
+  }
+  .ca-home-card-heading {
+    margin-bottom: .35rem !important;
+    font-size: 1rem !important;
+  }
+  .ca-home-calculator #calc-display {
+    min-height: 4.25rem !important;
+    padding: .45rem .8rem !important;
+    font-size: clamp(2.25rem, 3.5vw, 3.4rem) !important;
+    line-height: 1.1 !important;
+  }
+  .ca-home-calculator #calc-mode-toggle {
+    min-height: 2.65rem !important;
+    margin-top: .35rem !important;
+    font-size: 1rem !important;
+  }
+  .ca-home-calculator #calc-history:empty {
+    display: none !important;
+  }
+  .ca-home-calculator #calc-history {
+    min-height: 0 !important;
+    margin-top: .15rem !important;
+    font-size: .75rem !important;
+  }
+  .ca-home-calculator #calc-pad {
+    gap: .35rem !important;
+    margin-top: .35rem !important;
+  }
+  .ca-home-calculator #calc-pad button {
+    min-height: clamp(2.65rem, 5.2vh, 3.35rem) !important;
+    border-radius: .55rem !important;
+    font-size: clamp(1.15rem, 1.5vw, 1.5rem) !important;
+  }
+  .ca-home-tools {
+    grid-column: 2 !important;
+    padding: .75rem !important;
+  }
+  .ca-home-tools h2 {
+    font-size: 1.05rem !important;
+  }
+  .ca-home-tool-grid {
+    gap: .35rem !important;
+  }
+  .ca-home-tool-grid a {
+    min-height: 2.5rem !important;
+    padding: .5rem .6rem !important;
+    font-size: .82rem !important;
+  }
+}
