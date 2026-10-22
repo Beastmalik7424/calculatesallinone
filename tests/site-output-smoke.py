@@ -628,10 +628,11 @@ for slug in calculator_slugs:
     )
 
 # The standalone EMI tool keeps its complete form ahead of jump links and long repayment content.
-emi_html = (ROOT / "emi-calculator.html").read_text(encoding="utf-8")
+emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
 emi_calc_pos = emi_html.find('<section id="calculator"')
 emi_jump_pos = emi_html.find('<nav aria-label="Jump links">')
 emi_schedule_pos = emi_html.find('<section id="schedule"')
 assert emi_calc_pos >= 0 and emi_jump_pos > emi_calc_pos, "EMI calculator must appear before jump links"
 assert emi_schedule_pos > emi_jump_pos, "EMI jump links must remain before the long repayment schedule"
+assert "#main.ca-tool-main" in site_css and ".ca-tool-calculator" in site_css, "Calculator-first spacing rules must be present in the compiled stylesheet"
 
