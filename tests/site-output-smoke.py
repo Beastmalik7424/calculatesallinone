@@ -591,4 +591,4 @@ assert "Scientific" in titles[scientific_url], "Calculator page title must ident
 assert "scientific calculator" in descriptions[scientific_url].lower(), "Calculator meta description must describe scientific calculations"
 scientific_html = output_for_url(scientific_url).read_text(encoding="utf-8")
 assert "Scientific Mode" in scientific_html, "Scientific mode toggle must be present in generated HTML"
-assert "How to use the online standard and scientific calculator" in visible_main_text(scientific_html).lower(), "Scientific calculator guide must be visible to crawlers"
+assert "how to use the online standard and scientific calculator" in visible_main_text(scientific_html).lower(), "Scientific calculator guide must be visible to crawlers"
