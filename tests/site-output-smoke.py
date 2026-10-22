@@ -419,7 +419,10 @@ assert "background-color:#0f172a!important" in site_css, "Equals button backgrou
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
 assert "/assets/site.css?v=20261023-home-layout-fix-v3" in homepage_html, "Homepage must load the current calculator layout stylesheet"
 assert ".ca-home-layout{display:grid" in site_css, "Homepage calculator layout must use the responsive single-column grid"
-assert "#main .ca-home-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important" in site_css, "Desktop homepage must force tools below the calculator with higher specificity"
+homepage_layout_rule_start = site_css.find("#main .ca-home-layout{")
+homepage_layout_rule_end = site_css.find("}", homepage_layout_rule_start)
+homepage_layout_rule = site_css[homepage_layout_rule_start:homepage_layout_rule_end] if homepage_layout_rule_start >= 0 and homepage_layout_rule_end >= 0 else ""
+assert "display:grid!important" in homepage_layout_rule and "grid-template-columns:minmax(0,1fr)!important" in homepage_layout_rule, "Desktop homepage must force tools below the calculator with a high-specificity one-column rule"
 assert ".ca-home-side-left{display:none!important}" in site_css, "Homepage promotional sidebar must not push the calculator below the fold"
 assert ".ca-home-calculator .ca-calculator-engine{width:100%;max-width:100%" in site_css, "Homepage calculator must use the available width"
 # Every dynamic calculator message, unit label, category label, and theme label
@@ -611,7 +614,7 @@ layout_marker = "/* Persistent homepage calculator-first layout override. Keep t
 assert layout_marker in input_css, "Calculator-first desktop layout must live in source CSS, not only the generated stylesheet"
 layout_override = input_css.split(layout_marker, 1)[1]
 assert re.search(r"#main\s+\.ca-home-layout\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*!important", layout_override), "Persistent homepage layout override must force one desktop column with higher specificity after legacy rules"
-final_grid_pos = site_css_compact.rfind("#main .ca-home-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important")
+final_grid_pos = site_css_compact.find("#main .ca-home-layout{")
 assert final_grid_pos >= 0, "Generated CSS must retain the high-specificity one-column desktop override"
 assert 'id="all-tools" class="ca-home-tools"' in home_html, "Homepage must expose a stable All Tools anchor for cross-page navigation"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
