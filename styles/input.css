@@ -705,3 +705,45 @@
     transform: scale(.97) !important;
   }
 }
+
+
+/* Calculator-first positioning for tool pages, excluding the Standard Calculator. */
+#main.ca-tool-main {
+  padding-top: .75rem !important;
+}
+#main.ca-tool-main > nav[aria-label="Breadcrumb"] {
+  margin-bottom: .25rem;
+}
+#main.ca-tool-main > h1 {
+  margin-top: .45rem;
+  font-size: clamp(1.55rem, 2.6vw, 2.1rem);
+  line-height: 1.2;
+}
+#main.ca-tool-main > p.mt-3.text-lg {
+  margin-top: .35rem;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+#main.ca-tool-main .ca-tool-calculator {
+  margin-top: .75rem !important;
+  padding: clamp(.75rem, 1.5vw, 1.25rem);
+}
+#main.ca-tool-main .ca-tool-calculator input,
+#main.ca-tool-main .ca-tool-calculator select,
+#main.ca-tool-main .ca-tool-calculator button {
+  max-width: 100%;
+}
+@media (max-width: 640px) {
+  #main.ca-tool-main {
+    padding-top: .5rem !important;
+    padding-left: .85rem !important;
+    padding-right: .85rem !important;
+  }
+  #main.ca-tool-main > h1 {
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+  }
+  #main.ca-tool-main .ca-tool-calculator {
+    padding: .75rem;
+    border-radius: .85rem;
+  }
+}

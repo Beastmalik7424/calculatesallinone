@@ -451,7 +451,7 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261022-homepage-benchmark-layout" in homepage_html, "Stylesheet cache-buster must change with the homepage positioning update"
+assert "/assets/site.css?v=20261022-calculator-first-layout" in homepage_html, "Stylesheet cache-buster must change with the homepage positioning update"
 
 # Every dynamic calculator message, unit label, category label, and theme label
 # must be translated for all supported languages, not silently fall back to English.
@@ -592,3 +592,47 @@ assert "scientific calculator" in descriptions[scientific_url].lower(), "Calcula
 scientific_html = output_for_url(scientific_url).read_text(encoding="utf-8")
 assert "Scientific Mode" in scientific_html, "Scientific mode toggle must be present in generated HTML"
 assert "how to use the online standard and scientific calculator" in visible_main_text(scientific_html).lower(), "Scientific calculator guide must be visible to crawlers"
+
+
+# Calculator-first layout contract: all tool pages except the standard calculator
+# put the working tool directly after the heading/short lead, before explanatory notes.
+calculator_slugs = (
+    "zakat-calculator", "bmi-calculator", "profit-loss-calculator",
+    "discount-calculator", "age-calculator", "unit-converter",
+    "tasbih-counter", "stopwatch",
+)
+for slug in calculator_slugs:
+    tool_html = (ROOT / slug / "index.html").read_text(encoding="utf-8")
+    calc_pos = tool_html.find('<section id="tool-calculator"')
+    h1_pos = tool_html.find("<h1")
+    assert calc_pos > h1_pos >= 0, f"Calculator must follow the primary heading: /{slug}/"
+    main_open = re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', tool_html)
+    assert main_open, f"Non-standard calculator page must use the compact calculator-first main layout: /{slug}/"
+    note_pos = tool_html.find("Evidence-based note")
+    if note_pos >= 0:
+        assert calc_pos < note_pos, f"Calculator must appear before the explanatory note: /{slug}/"
+    method_pos = tool_html.find("How it is calculated")
+    assert method_pos < 0 or calc_pos < method_pos, f"Calculator must appear before guide content: /{slug}/"
+
+# Urdu tool pages follow the same positioning contract where a translated tool exists.
+for slug in calculator_slugs:
+    urdu_page = ROOT / "ur" / slug / "index.html"
+    if not urdu_page.is_file():
+        continue
+    urdu_html = urdu_page.read_text(encoding="utf-8")
+    calc_pos = urdu_html.find('<section id="tool-calculator"')
+    assert calc_pos >= 0, f"Urdu calculator section must have a stable test hook: /ur/{slug}/"
+    assert calc_pos < urdu_html.find("<h2"), f"Urdu calculator must appear before guide content: /ur/{slug}/"
+    assert re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', urdu_html), (
+        f"Urdu tool page must use the compact calculator-first main layout: /ur/{slug}/"
+    )
+
+# The standalone EMI tool keeps its complete form ahead of jump links and long repayment content.
+emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
+emi_calc_pos = emi_html.find('<section id="calculator"')
+emi_jump_pos = emi_html.find('<nav aria-label="Jump links">')
+emi_schedule_pos = emi_html.find('<section id="schedule"')
+assert emi_calc_pos >= 0 and emi_jump_pos > emi_calc_pos, "EMI calculator must appear before jump links"
+assert emi_schedule_pos > emi_jump_pos, "EMI jump links must remain before the long repayment schedule"
+assert "#main.ca-tool-main" in site_css and ".ca-tool-calculator" in site_css, "Calculator-first spacing rules must be present in the compiled stylesheet"
+

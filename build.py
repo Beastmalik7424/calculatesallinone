@@ -1057,7 +1057,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261022-homepage-benchmark-layout">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261022-calculator-first-layout">\n'
         + ld + ads + "</head>\n"
     )
 
@@ -1100,6 +1100,11 @@ def shell(main_html, lang="en", current_path=None):
     brand_home_label = {"en": " home page", "ur": " ہوم پیج", "ar": " الصفحة الرئيسية", "hi": " होम पेज", "es": " página de inicio", "fr": " page d’accueil"}.get(lang, " home page")
     main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
     menu_position = "left-0 right-auto" if lang in RTL_LANGS else "right-0"
+    tool_paths = {"/" + t["slug"] + "/" for t in TOOLS if t["slug"] != "standard-calculator"}
+    urdu_tool_paths = {"/ur/" + slug + "/" for slug in URDU if slug != "standard-calculator"}
+    main_classes = main_width + " mx-auto px-5 py-10"
+    if current_path in tool_paths | urdu_tool_paths:
+        main_classes += " ca-tool-main"
     return (
         '<body class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased">\n'
         '<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">'
@@ -1117,7 +1122,7 @@ def shell(main_html, lang="en", current_path=None):
         '<ul class="absolute ' + menu_position + ' mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-x-hidden break-words bg-white border border-stone-300 rounded-lg p-3 space-y-2 text-base shadow-lg z-10" style="max-width:calc(100vw - 2rem);overflow-wrap:anywhere;box-sizing:border-box">'
         + nav_items(lang)
         + '</ul></details></div></nav></header>\n'
-        '<main id="main" class="' + main_width + ' mx-auto px-5 py-10">' + main_html + '</main>\n'
+        '<main id="main" class="' + main_classes + '">' + main_html + '</main>\n'
         '<footer class="mt-12 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-t border-stone-200 dark:border-stone-700">'
         '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'
         '<div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">'
@@ -1332,6 +1337,18 @@ def tool_page(t):
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
     updated_date = LASTMOD.get(path)
     updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + ". " + t["sources"] + "</p>") if updated_date else ""
+    calculator_section = (
+        ('<section id="tool-calculator" class="ca-tool-calculator mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
+         if t["slug"] != "standard-calculator" else
+         '<section class="mt-8 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">')
+        + ui + '</section>'
+    )
+    answer_note = answer_block(t["slug"], "en")
+    primary_tool_content = (
+        calculator_section + answer_note
+        if t["slug"] != "standard-calculator"
+        else answer_note + calculator_section
+    )
     body = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
@@ -1339,8 +1356,7 @@ def tool_page(t):
         '<li aria-current="page">' + t["name"] + "</li></ol></nav>"
         '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
-        + answer_block(t["slug"], "en")
-        + '<section class="mt-8 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">' + ui + '</section>'
+        + primary_tool_content
         + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
@@ -1391,6 +1407,18 @@ def urdu_tool_page(t):
     for p in u["how"]:
         how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
+    calculator_section = (
+        ('<section id="tool-calculator" class="ca-tool-calculator mt-4" aria-label="کیلکولیٹر">'
+         if t["slug"] != "standard-calculator" else
+         '<section class="mt-8" aria-label="کیلکولیٹر">')
+        + ui + '</section>'
+    )
+    answer_note = "" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur")
+    primary_tool_content = (
+        calculator_section + answer_note
+        if t["slug"] != "standard-calculator"
+        else answer_note + calculator_section
+    )
     body = (
         '<nav aria-label="صفحہ کی ترتیب" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/ur/">صفحہ اول</a></li><li aria-hidden="true">/</li>'
@@ -1398,9 +1426,8 @@ def urdu_tool_page(t):
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
         '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
-        + ("" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur"))
-        + '<section class="mt-8" aria-label="کیلکولیٹر">' + ui + '</section>'
-        '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
+        + primary_tool_content
+        + '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
         + ('<h2 class="' + H2 + '">ماخذ</h2><p class="' + P + '">' + u["sources"] + '</p>' if u.get("sources") else "")
         + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">انگریزی ورژن</a></p>'
