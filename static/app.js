@@ -1042,7 +1042,7 @@
       if (e.key === "Enter" || e.key === "=") { press("="); e.preventDefault(); return }
       if (e.key === "Backspace") { press("BS"); e.preventDefault(); return }
       if (e.key === "Escape") { press("C"); e.preventDefault(); return }
-      if (/^[0-9.]$/.test(e.key) || /^[+\\-*\\/^(),!%]$/.test(e.key)) { press(e.key); e.preventDefault() }
+      if (/^[0-9.]$/.test(e.key) || "+-*/^(),!%".indexOf(e.key) !== -1) { press(e.key); e.preventDefault() }
     })
     if (modeToggle) modeToggle.addEventListener("click", function () {
       scientific = !scientific
