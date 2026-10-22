@@ -13,7 +13,7 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
       const errors = [];
       page.on("console", msg => { if (msg.type() === "error") errors.push("console: " + msg.text()); });
       page.on("pageerror", err => errors.push("pageerror: " + err.message));
-      const response = await page.goto(base + path, { waitUntil: "networkidle", timeout: 30000 });
+      const response = await page.goto(base + path, { waitUntil: "load", timeout: 30000 });
       const status = response ? response.status() : 0;
       console.log(path + " HTTP " + status + " browser_errors=" + errors.length);
       for (const error of errors) console.log("  " + error);
@@ -27,7 +27,7 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
     const calculatorErrors = [];
     page.on("console", msg => { if (msg.type() === "error") calculatorErrors.push("console: " + msg.text()); });
     page.on("pageerror", err => calculatorErrors.push("pageerror: " + err.message));
-    const response = await page.goto(base + "/standard-calculator/", { waitUntil: "networkidle", timeout: 30000 });
+    const response = await page.goto(base + "/standard-calculator/", { waitUntil: "load", timeout: 30000 });
     assert.equal(response && response.status(), 200, "calculator page should return HTTP 200");
     const display = page.locator("#calc-display");
     const key = name => page.locator('#calc-pad button[data-key="' + name + '"]');
