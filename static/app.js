@@ -43,6 +43,9 @@
       calcDiv: "Cannot divide by zero",
       calcSqrtNegative: "Square root of a negative number is not a real number.",
       calcNeedValue: "Enter a number or expression first.",
+      calcScientificMode: "Scientific Mode",
+      calcStandardMode: "Standard Mode",
+      calcDomainError: "Math domain error",
       tasbihNone: "No target set.",
       tasbihReached: "Target of {goal} reached. Press Reset to start again.",
       tasbihLeft: "{left} to go for a target of {goal}.",
@@ -97,6 +100,9 @@
       calcDiv: "صفر سے تقسیم نہیں ہو سکتی",
       calcSqrtNegative: "منفی عدد کا مربع جذر حقیقی عدد نہیں ہوتا۔",
       calcNeedValue: "پہلے کوئی عدد یا حساب درج کریں۔",
+      calcScientificMode: "سائنسی کیلکولیٹر",
+      calcStandardMode: "معیاری کیلکولیٹر",
+      calcDomainError: "ریاضی کی حد سے باہر قدر",
       tasbihNone: "کوئی ہدف مقرر نہیں۔",
       tasbihReached: "ہدف {goal} پورا ہو گیا۔ دوبارہ شروع کرنے کے لیے ری سیٹ دبائیں۔",
       tasbihLeft: "ہدف {goal} کے لیے {left} باقی۔",
@@ -920,7 +926,7 @@
     var history = []
     if (sciPad) sciPad.hidden = true
     if (modeToggle) {
-      modeToggle.textContent = "Scientific Mode"
+      modeToggle.textContent = t("calcScientificMode")
       modeToggle.setAttribute("aria-pressed", "false")
     }
     function format (value) {
@@ -933,7 +939,7 @@
     }
     function errorText (err) {
       if (err.message === "divzero") return t("calcDiv")
-      if (err.message === "domain") return "Math domain error"
+      if (err.message === "domain") return t("calcDomainError")
       if (err.message === "incomplete") return t("calcError")
       return t("calcError")
     }
@@ -1050,7 +1056,7 @@
       render("")
       if (sciPad) sciPad.hidden = !scientific
       pad.hidden = scientific
-      modeToggle.textContent = scientific ? "Standard Mode" : "Scientific Mode"
+      modeToggle.textContent = scientific ? t("calcStandardMode") : t("calcScientificMode")
       modeToggle.setAttribute("aria-pressed", scientific ? "true" : "false")
       var angleBtn = $("calc-angle-toggle")
       if (angleBtn) angleBtn.textContent = angleMode
