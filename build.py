@@ -360,11 +360,11 @@ TOOLS = [
     {
         "slug": "standard-calculator",
         "category": "math",
-        "name": "Standard Calculator",
+        "name": "Standard & Scientific Calculator",
         "app": "UtilitiesApplication",
-        "description": "Use a standard calculator for addition, subtraction, multiplication, division and percentages in your browser.",
-        "h1": "Online Standard Calculator",
-        "lead": "A simple calculator for everyday arithmetic. Calculations run in your browser and are not sent to a server.",
+        "description": "Free online standard and scientific calculator for arithmetic, trigonometry, roots, powers, logarithms, factorials and DEG/RAD angle modes.",
+        "h1": "Online Standard and Scientific Calculator",
+        "lead": "Use standard arithmetic or switch to Scientific Mode for trigonometry, powers, roots, logarithms and statistics. Calculations run in your browser.",
         "ui": (
             '<div class="max-w-sm mx-auto">'
             '<output id="calc-display" class="block text-right text-3xl font-semibold bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl px-4 py-5 min-h-[4rem] break-all" aria-live="polite">0</output>'
