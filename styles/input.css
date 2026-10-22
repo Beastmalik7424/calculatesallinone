@@ -768,9 +768,11 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: .5rem;
-  max-width: 54rem;
+  width: 100%;
+  max-width: 72rem;
 }
-.ca-home-side, .ca-home-tools { display: none !important; }
+.ca-home-side { display: none !important; }
+.ca-home-tools { display: block !important; width: 100%; }
 .ca-home-calculator { padding: clamp(.65rem, 1.4vw, 1rem); border-radius: 1rem; }
 .ca-home-card-heading { margin-bottom: .45rem; }
 .ca-home-calculator #calc-display {
