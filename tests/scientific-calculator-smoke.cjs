@@ -58,6 +58,14 @@ assert.equal(scientific(["2", "^", "3"]), "8", "exponentiation should evaluate")
 click("scientific-pad", "C");
 assert.equal(scientific(["root", "3", ",", "8", ")"]), "2", "nth root should evaluate");
 click("scientific-pad", "C");
+assert.equal(scientific(["mean", "1", ",", "2", ",", "3", ")"]), "2", "mean should evaluate multiple values");
+click("scientific-pad", "C");
+assert.equal(scientific(["stdevp", "2", ",", "4", ")"]), "1", "population standard deviation should evaluate");
+click("scientific-pad", "C");
+assert.equal(scientific(["nCr", "5", ",", "2", ")"]), "10", "combinations should evaluate");
+click("scientific-pad", "C");
+assert.equal(scientific(["log", "8", ",", "2", ")"]), "3", "logarithm with a custom base should evaluate");
+click("scientific-pad", "C");
 assert.equal(scientific(["Ans", "+", "3"]), "5", "Ans should use the previous result");
 click("scientific-pad", "C");
 assert.equal(scientific(["log", "-", "1", ")"]), "Math domain error", "logarithm domain errors should be explained");
