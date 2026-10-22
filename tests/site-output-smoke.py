@@ -636,3 +636,14 @@ assert emi_calc_pos >= 0 and emi_jump_pos > emi_calc_pos, "EMI calculator must a
 assert emi_schedule_pos > emi_jump_pos, "EMI jump links must remain before the long repayment schedule"
 assert "#main.ca-tool-main" in site_css and ".ca-tool-calculator" in site_css, "Calculator-first spacing rules must be present in the compiled stylesheet"
 
+
+# Guard the homepage Standard Calculator against layout regressions.
+home_html = (ROOT / "index.html").read_text(encoding="utf-8")
+home_calc_pos = home_html.find('class="ca-home-calculator"')
+home_h1_pos = home_html.find("<h1")
+assert home_h1_pos >= 0 and home_calc_pos > home_h1_pos, "Homepage Standard Calculator must follow the heading"
+assert "ca-home-layout" in site_css and "grid-template-columns: minmax(0, 1fr)" in site_css, "Homepage calculator must use a single wide column"
+assert ".ca-home-side, .ca-home-tools { display: none !important; }" in site_css, "Homepage side panels must not narrow the Standard Calculator"
+assert "20261023-standard-calculator-restore" in home_html, "Homepage must load the restored calculator-first stylesheet"
+standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
+assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
