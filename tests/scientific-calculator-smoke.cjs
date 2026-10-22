@@ -21,7 +21,7 @@ el("scientific-pad");
 el("calc-mode-toggle");
 const document = {
   documentElement: { lang: "en", classList: { contains: () => false, toggle() {} } },
-  addEventListener(type, fn) { if (type === "DOMContentLoaded") handlers.ready = fn; },
+  addEventListener(type, fn) { if (type === "DOMContentLoaded") handlers.ready = fn; else if (type === "keydown") handlers.keydown = fn; },
   getElementById(id) { return elements[id] || null; },
   querySelectorAll() { return []; }
 };
@@ -76,4 +76,15 @@ assert.equal(scientific(["1", "/", "0"]), "Cannot divide by zero", "division by 
 handlers["calc-mode-toggle:click"]();
 assert.equal(elements["scientific-pad"].hidden, true, "scientific keypad should be hidden in standard mode");
 assert.equal(elements["calc-mode-toggle"].textContent, "Scientific Mode", "toggle label should offer scientific mode");
+function keydown(key, tagName = "BODY") {
+  let prevented = false;
+  handlers.keydown({ key, target: { tagName }, preventDefault() { prevented = true; } });
+  return prevented;
+}
+assert.equal(keydown("2"), true, "keyboard digits should be accepted");
+assert.equal(keydown("+"), true, "keyboard operators should be accepted");
+assert.equal(keydown("2"), true, "second keyboard digit should be accepted");
+assert.equal(keydown("Enter"), true, "Enter should calculate");
+assert.equal(elements["calc-display"].textContent, "4", "keyboard expression should calculate correctly");
+assert.equal(keydown("9", "INPUT"), false, "calculator keyboard handler must not intercept form inputs");
 console.log("Scientific calculator tests passed.");
