@@ -4,7 +4,7 @@ Status: **Scholarly review required before treating religious wording as approve
 
 Each religious statement below is marked for review. The page presents these as plain-language translations and general explanations, not as a fatwa or a claim about religious reward.
 
-- [SCHOLARLY REVIEW] “Tasbih is a word used for remembrance of Allah and for saying devotional phrases.” Confirm the wording and scope.
+- [SCHOLARLY REVIEW] “Tasbih is a word used for remembrance of Allah and devotional phrases.” Confirm the wording and scope.
 - [SCHOLARLY REVIEW] “SubhanAllah is commonly translated as ‘Glory be to Allah.’” Confirm transliteration and translation.
 - [SCHOLARLY REVIEW] “Alhamdulillah is commonly translated as ‘Praise belongs to Allah’ or ‘All praise is due to Allah.’” Confirm translation alternatives.
 - [SCHOLARLY REVIEW] “Allahu Akbar is commonly translated as ‘Allah is greater’ or ‘Allah is the Greatest.’” Confirm translation and context.
