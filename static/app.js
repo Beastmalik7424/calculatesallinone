@@ -1052,6 +1052,7 @@
         }
         return
       }
+      if (scientific && key === "-" && /[+*\/^]$/.test(expr)) { expr += key; render(expr); return }
       if (/^[+\-*\/^]$/.test(key)) {
         if (expr === "" && key !== "-") return
         if (/[+\-*\/^]$/.test(expr) && expr.length > 1) expr = expr.slice(0, -1)
