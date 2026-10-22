@@ -5,7 +5,6 @@ import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import urlparse
-
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
 xml = ET.parse(ROOT / "sitemap.xml").getroot()
@@ -36,21 +35,17 @@ assert lastmod_entries == expected_lastmod_entries, (
     "Only the four scoped pages with verified content/template updates may carry lastmod dates. "
     f"Expected {expected_lastmod_entries!r}, got {lastmod_entries!r}"
 )
-
 def output_for_url(url):
     parsed = urlparse(url)
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
-
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
 assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
-
 # Category hubs are indexable when their explanatory sections and tool links are present.
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
     assert SITE + hub in sitemap_urls, f"Substantive category hub should be indexable: {hub}"
-
 # Localized homepages remain noindex until their translated tool journeys receive competent review.
 for locale_home in ("/ar/", "/hi/", "/es/", "/fr/", "/ur/"):
     locale_file = ROOT / locale_home.strip("/") / "index.html"
@@ -58,7 +53,6 @@ for locale_home in ("/ar/", "/hi/", "/es/", "/fr/", "/ur/"):
     locale_html = locale_file.read_text(encoding="utf-8")
     assert 'name="robots" content="noindex, follow"' in locale_html, f"Unreviewed localized homepage must stay noindex: {locale_home}"
     assert SITE + locale_home not in sitemap_urls, f"Unreviewed localized homepage must not be in sitemap: {locale_home}"
-
 for url in urls:
     page = output_for_url(url)
     assert page.is_file(), f"Sitemap URL has no generated HTML: {url} -> {page}"
@@ -79,7 +73,6 @@ for url in urls:
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
-
 # Important calculator controls need stable form names for native form semantics and progressive fallback.
 age_html = output_for_url(SITE + "/age-calculator/").read_text(encoding="utf-8")
 assert 'id="a-dob" name="dob" type="date"' in age_html, "Age input must expose a stable form name"
@@ -94,22 +87,18 @@ assert 'id="b-lb"' in bmi_html and 'id="bmi-weight-lb"' in bmi_html, "Target BMI
 assert "<title>BMI Calculator for Adults | cm or ft/in | CalculatesAll</title>" in bmi_html, "BMI title must be complete and unique"
 assert "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor." in bmi_html, "English BMI disclaimer must be visible in page content"
 assert "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit." in bmi_html, "English BMI guide must document independent weight units"
-
 urdu_bmi_html = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
 for control_name in ("bmi-height-unit", "bmi-weight-unit", "b-kg", "b-lb", "b-cm", "b-ft", "b-in"):
     assert 'name="' + control_name + '"' in urdu_bmi_html, f"Urdu BMI control missing form name: {control_name}"
 assert 'id="b-lb"' in urdu_bmi_html and 'id="bmi-weight-lb"' in urdu_bmi_html, "Urdu BMI page must offer pounds alongside kilograms"
 assert "BMI ایک عمومی اسکریننگ پیمانہ ہے" in urdu_bmi_html, "Urdu BMI disclaimer is required"
-
 # RTL dropdown must anchor to the left edge and stay within viewport bounds.
 assert 'class="absolute left-0 right-auto mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-x-hidden break-words' in urdu_bmi_html, "Urdu RTL tools menu must use left anchoring and bounded width"
 assert 'style="max-width:calc(100vw - 2rem);overflow-wrap:anywhere;box-sizing:border-box"' in urdu_bmi_html, "Urdu tools menu must prevent viewport overflow"
 english_menu_html = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
 assert 'class="absolute right-0 mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-x-hidden break-words' in english_menu_html, "English tools menu must retain right anchoring and bounded width"
-
 assert len(titles.values()) == len(set(titles.values())), "Duplicate page titles found: " + repr(titles)
 assert len(descriptions.values()) == len(set(descriptions.values())), "Duplicate meta descriptions found: " + repr(descriptions)
-
 # The root URL is the site homepage, not a duplicate Standard Calculator landing page.
 home_url = SITE + "/"
 assert titles[home_url].startswith("CalculatesAll |"), (
@@ -121,7 +110,6 @@ assert "Standard Calculator" not in titles[home_url], (
 assert descriptions[home_url].startswith("Free online calculators for"), (
     "Homepage description should describe the site's main calculator/tool categories."
 )
-
 # Bing Webmaster ownership verification must be present in the delivered homepage head.
 home_html = output_for_url(home_url).read_text(encoding="utf-8")
 bing_tag = '<meta name="msvalidate.01" content="07D62A8BA67BA474B5A13A27E6770782" />'
@@ -133,7 +121,6 @@ assert head_match and body_match and head_match.start() < body_match.start(), (
 assert home_html.count(bing_tag) == 1 and bing_tag in head_match.group(1), (
     "Bing verification meta tag must appear exactly once inside the homepage head."
 )
-
 # Homepage organization/entity signals and descriptive brand navigation must be machine-readable.
 assert 'aria-label="CalculatesAll home page"' in home_html, "Brand link should describe its homepage destination"
 assert 'href="mailto:' in home_html, "Homepage should expose a direct correction contact"
@@ -147,7 +134,6 @@ contact_point = organization_schema.get("contactPoint", {})
 assert contact_point.get("@type") == "ContactPoint" and contact_point.get("email"), "Organization schema must expose the configured support email"
 assert contact_point.get("url") == SITE + "/contact/", "Organization schema must link to the canonical contact page"
 assert "612.36 grams" in home_html and "25.0 to 29.9" in home_html, "Homepage proof points must include the calculator method and WHO adult BMI ranges"
-
 # The Urdu root is a localized site homepage, not a standard-calculator landing page.
 urdu_home_url = SITE + "/ur/"
 ur_home_html = output_for_url(urdu_home_url).read_text(encoding="utf-8")
@@ -166,7 +152,6 @@ else:
     assert 'name="robots" content="noindex, follow"' in ur_home_html, (
         "Urdu homepage omitted from sitemap must be marked noindex."
     )
-
 sitemap_urls = set(urls)
 generated = set()
 for page in ROOT.rglob("index.html"):
@@ -184,14 +169,12 @@ assert {SITE + path for path in indexable_paths + noindex_paths} == generated, (
 for path in noindex_paths:
     page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
     assert 'name="robots" content="noindex, follow"' in page_html, "noindex manifest page lacks robots tag: " + path
-
 robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
 assert "User-agent: *" in robots and "Allow: /" in robots
 assert f"Sitemap: {SITE}/sitemap.xml" in robots
 llms = (ROOT / "llms.txt").read_text(encoding="utf-8")
 assert llms.startswith("# CalculatesAll"), "Root llms.txt must be published as readable Markdown"
 assert SITE + "/emi-calculator/" in llms, "llms.txt should reference the EMI calculator"
-
 # Verify root-relative links point to generated pages or existing static assets.
 broken = []
 for page in ROOT.rglob("index.html"):
@@ -210,7 +193,6 @@ for page in ROOT.rglob("index.html"):
             elif path != "/" and not path.endswith("/"):
                 broken.append((str(page), href + " (page URL missing trailing slash)"))
 assert not broken, "Broken or non-canonical internal hrefs found: " + repr(broken[:20])
-
 # Every indexable sitemap URL should have at least one crawlable incoming internal link.
 # Count root-relative links; canonical tags are absolute and do not count as discovery links.
 incoming = {url: set() for url in sitemap_urls}
@@ -224,17 +206,14 @@ for page in ROOT.rglob("index.html"):
             incoming[target].add(source_url)
 orphans = sorted(url for url, sources in incoming.items() if not sources)
 assert not orphans, "Sitemap URLs without an incoming crawlable internal link: " + repr(orphans)
-
 contact_html = (ROOT / "contact" / "index.html").read_text(encoding="utf-8")
 assert 'href="mailto:' in contact_html, "Contact email must be a clickable mailto link"
-
 # Verify local image/script asset references resolve in the generated output.
 for page in ROOT.rglob("index.html"):
     html = page.read_text(encoding="utf-8")
     for src in re.findall(r'src="(/assets/[^"]+)"', html):
         target = ROOT / urlparse(src).path.lstrip("/")
         assert target.is_file(), f"Broken local asset reference in {page}: {src}"
-
 for required in ("/marketplaces/", "/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"
 vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
@@ -269,7 +248,6 @@ assert "https://optout.aboutads.info/" in privacy_html, "Privacy page must link 
 assert "Third-party vendors, including Google, may use cookies" in privacy_html, "Privacy page must explain third-party advertising cookies"
 assert "Available opt-out choices may not disable all advertising" in privacy_html, "Privacy page must not overpromise the effect of opt-out choices"
 assert "publishes the matching ads.txt entry" in marketplace_html, "Marketplace guide must accurately describe the configured ads.txt entry"
-
 # ads.txt must never contain a fabricated publisher ID or an entry unrelated to the configured account.
 ads_path = ROOT / "ads.txt"
 ads_client = os.environ.get("ADSENSE_CLIENT", "ca-pub-9453966537556063").strip()
@@ -280,7 +258,6 @@ if ads_client:
     assert ads_path.read_text(encoding="utf-8").strip() == expected_ads_line, "ads.txt must match the configured publisher ID exactly"
 else:
     assert not ads_path.exists(), "Do not generate ads.txt without the real AdSense publisher ID"
-
 # Ad code must remain fail-closed unless all required deployment settings are present.
 ads_slot = os.environ.get("ADSENSE_SLOT", "").strip()
 consent_ready = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lower() == "true"
@@ -296,24 +273,18 @@ if ads_enabled:
 else:
     assert "adsbygoogle.js" not in all_generated_html, "Do not load the external AdSense JavaScript while ads are disabled"
     assert 'class="adsbygoogle"' not in all_generated_html, "Ad slots must not render while monetization is disabled"
-
 # Google Search Console ownership HTML must be present in the deployed output.
 verification_file = ROOT / "google2e764d068684499b.html"
 assert verification_file.is_file(), "Google Search Console verification file missing from Vercel output"
 assert verification_file.read_text(encoding="utf-8").strip() == "google-site-verification: google2e764d068684499b.html", "Google Search Console verification file content mismatch"
-
-
 # Urdu homepage visible UI must not leak English marketing labels or calculator aria labels.
 for english_text in ("CALCULATE WITH CONFIDENCE", "ONE PLACE, MANY ANSWERS", "Marketplace guide", "Affiliate disclosure", 'aria-label="Open parenthesis"', 'aria-label="Divide"', 'aria-label="Square root"'):
     assert english_text not in ur_home_html, "English UI text remains on Urdu homepage: " + english_text
-
 # Load the Urdu calculator output before checking its shared navigation and footer.
 urdu_standard_html = (ROOT / "ur" / "standard-calculator" / "index.html").read_text(encoding="utf-8")
-
 # Urdu calculator breadcrumbs and shared navigation/footer must use Urdu labels.
 for english_text in ("Math and Converters", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
     assert english_text not in urdu_standard_html, "English shared UI text remains on Urdu calculator: " + english_text
-
 # Shared navigation and footer must be localized on every translated homepage.
 localized_home_checks = {
     "ar": {
@@ -343,7 +314,6 @@ for locale, expected in localized_home_checks.items():
         assert expected_text in localized_html, f"Missing localized {key} label on /{locale}/"
     for english_text in ("All tools", "Terms of use", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
         assert english_text not in localized_html, f"English shared UI text remains on /{locale}/: {english_text}"
-
 # Tool-menu labels on translated homepages must not fall back to English.
 localized_tool_labels = {
     "ar": ("حاسبة الزكاة", "حاسبة مؤشر كتلة الجسم", "حاسبة العمر"),
@@ -362,19 +332,16 @@ for locale, labels in localized_tool_labels.items():
         assert ">" + label + "</a>" in localized_html, f"Missing localized tool label on /{locale}/: {label}"
     for label in english_tool_labels:
         assert ">" + label + "</a>" not in localized_html, f"English tool label remains in /{locale}/ menu: {label}"
-
 # The Zakat page must not show an unfinished expert-review note when no reviewer is listed.
 zakat_html = (ROOT / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
 assert "Subject expert review by a qualified scholar is pending." not in zakat_html, (
     "Do not expose the unfinished Zakat expert-review note to visitors."
 )
-
 # Urdu calculator UI controls must not retain English accessible labels.
 for english_label in ("Open parenthesis", "Close parenthesis", "Delete last character", "Divide", "Multiply", "Subtract", "Add", "Square root"):
     assert 'aria-label="' + english_label + '"' not in urdu_standard_html, (
         "English calculator accessibility label remains on Urdu page: " + english_label
     )
-
 # Per-page structured-data and language audit.
 # Parse every JSON-LD block rather than only checking that a script tag exists.
 for url in urls:
@@ -440,7 +407,6 @@ for url in urls:
             f"Urdu calculator page missing BreadcrumbList schema: {url}"
         )
         assert 'aria-label="صفحہ کی ترتیب"' in html, f"Urdu calculator page missing visible breadcrumb: {url}"
-
 # Verify explicit contrast styles for operation buttons survive the production CSS build.
 site_css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 for selector in (
@@ -452,7 +418,6 @@ assert "background-color:#0f766e!important" in site_css, "Operator button backgr
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
 assert "/assets/site.css?v=20261023-standard-calculator-restore" in homepage_html, "Homepage must load the current Standard Calculator restoration stylesheet"
-
 # Every dynamic calculator message, unit label, category label, and theme label
 # must be translated for all supported languages, not silently fall back to English.
 # This checks source coverage at build time; browser tests separately verify rendered output.
@@ -499,8 +464,6 @@ assert "Object.prototype.hasOwnProperty.call(MSG, code) ? code : \"en\"" in app_
     "Unknown languages must safely fall back to English."
 )
 assert "eval(" not in app_js and "new Function" not in app_js, "Dynamic code execution found in app.js"
-
-
 # The standalone EMI page must be discoverable through the main site and related calculators.
 emi_html = (ROOT / "emi-calculator" / "index.html").read_text(encoding="utf-8")
 assert '<link rel="canonical" href="https://calculateallinone.vercel.app/emi-calculator/">' in emi_html, "EMI canonical must use the slash URL"
@@ -508,8 +471,6 @@ assert '<a href="/">Browse all free calculators</a>' in emi_html, "EMI page must
 for related in ("/zakat-calculator/", "/bmi-calculator/", "/discount-calculator/", "/profit-loss-calculator/", "/methodology/", "/about/"):
     assert 'href="' + related + '"' in emi_html, "EMI page is missing crawlable related link: " + related
 assert 'aria-label="Related calculators"' in emi_html, "EMI related links must be grouped in a labelled navigation region"
-
-
 # SEO/GEO content floor for indexable discovery pages. This intentionally excludes
 # legal/privacy/contact disclosures, where padding copy to hit a word target would hurt clarity.
 def visible_main_text(page_html):
@@ -520,10 +481,8 @@ def visible_main_text(page_html):
     text = re.sub(r"<!--.*?-->", " ", text, flags=re.S)
     text = html_lib.unescape(re.sub(r"<[^>]+>", " ", text))
     return re.sub(r"\s+", " ", text).strip()
-
 def content_words(text):
     return re.findall(r"[\w]+(?:['’][\w]+)?", text, flags=re.UNICODE)
-
 excluded_short_pages = {"/privacy/", "/terms/", "/contact/", "/affiliate-disclosure/"}
 content_floor_pages = [
     url for url in urls
@@ -543,7 +502,6 @@ assert not thin_pages, (
     "Indexable SEO/GEO landing pages must contain at least 300 words of visible, page-specific main content "
     "(excluding shared navigation/footer and legal/contact disclosures): " + repr(thin_pages)
 )
-
 # Require each SEO landing page to contain enough distinct terms to catch repeated boilerplate.
 low_unique = []
 for url in content_floor_pages:
@@ -553,10 +511,7 @@ for url in content_floor_pages:
     if unique_count < 90:
         low_unique.append((urlparse(url).path, unique_count))
 assert not low_unique, "SEO/GEO landing pages appear too repetitive or thin: " + repr(low_unique)
-
 print(f"PASS: {len(urls)} unique sitemap URLs, indexability, canonical URLs, internal links, valid JSON-LD, language metadata, and translated breadcrumbs.")
-
-
 # Homepage content should provide direct, qualified answers and primary-source references.
 home_html = (ROOT / "index.html").read_text(encoding="utf-8")
 tool_grid_match = re.search(r'<ul class="ca-home-tool-grid">(.*?)</ul>', home_html, re.S)
@@ -581,10 +536,8 @@ assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage w
 assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index" in home_html, "Homepage health reference must link to WHO"
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
 assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
-
 assert "<h1>Free Online Standard Calculator</h1>" in home_html, "Homepage H1 must identify the primary calculator"
 assert "Fast, free, and private. Tap the buttons or use your keyboard to calculate." in home_html, "Homepage opening paragraph must be concise and action-oriented"
-
 # The standard calculator landing page now explicitly describes its scientific mode.
 scientific_url = SITE + "/standard-calculator/"
 assert "Scientific" in titles[scientific_url], "Calculator page title must identify the scientific mode"
@@ -592,8 +545,6 @@ assert "scientific calculator" in descriptions[scientific_url].lower(), "Calcula
 scientific_html = output_for_url(scientific_url).read_text(encoding="utf-8")
 assert "Scientific Mode" in scientific_html, "Scientific mode toggle must be present in generated HTML"
 assert "how to use the online standard and scientific calculator" in visible_main_text(scientific_html).lower(), "Scientific calculator guide must be visible to crawlers"
-
-
 # Calculator-first layout contract: all tool pages except the standard calculator
 # put the working tool directly after the heading/short lead, before explanatory notes.
 calculator_slugs = (
@@ -616,7 +567,6 @@ for slug in calculator_slugs:
         assert calc_pos < note_pos, f"Calculator must appear before the explanatory note: /{slug}/"
     method_pos = tool_html.find("How it is calculated")
     assert method_pos < 0 or calc_pos < method_pos, f"Calculator must appear before guide content: /{slug}/"
-
 # Urdu tool pages follow the same positioning contract where a translated tool exists.
 for slug in calculator_slugs:
     urdu_page = ROOT / "ur" / slug / "index.html"
@@ -633,7 +583,6 @@ for slug in calculator_slugs:
     assert re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', urdu_html), (
         f"Urdu tool page must use the compact calculator-first main layout: /ur/{slug}/"
     )
-
 # The standalone EMI tool keeps its complete form ahead of jump links and long repayment content.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
 emi_calc_pos = emi_html.find('<section id="calculator"')
@@ -642,8 +591,6 @@ emi_schedule_pos = emi_html.find('<section id="schedule"')
 assert emi_calc_pos >= 0 and emi_jump_pos > emi_calc_pos, "EMI calculator must appear before jump links"
 assert emi_schedule_pos > emi_jump_pos, "EMI jump links must remain before the long repayment schedule"
 assert "#main.ca-tool-main" in site_css and ".ca-tool-calculator" in site_css, "Calculator-first spacing rules must be present in the compiled stylesheet"
-
-
 # Guard the homepage Standard Calculator against layout regressions.
 home_html = (ROOT / "index.html").read_text(encoding="utf-8")
 home_calc_pos = home_html.find('class="ca-home-calculator"')
@@ -652,10 +599,9 @@ assert home_h1_pos >= 0 and home_calc_pos > home_h1_pos, "Homepage Standard Calc
 site_css_compact = re.sub(r"\s+", "", site_css)
 assert ".ca-home-layout" in site_css_compact and "grid-template-columns:minmax(0,1fr)" in site_css_compact, "Homepage calculator must use a single wide column"
 assert ".ca-home-side{display:none!important}" in site_css_compact and ".ca-home-tools{display:block!important;width:100%}" in site_css_compact, "Homepage should hide decorative side copy but preserve the other-tools list below the calculator"
-assert ".ca-home-calculator #calc-pad button" in site_css_compact, "Homepage calculator button styles must survive the CSS build"
+assert ".ca-home-calculator #calc-pad button" in site_css, "Homepage calculator button styles must survive the CSS build"
 input_css = (ROOT.parent / "styles" / "input.css").read_text(encoding="utf-8")
-input_css_compact = re.sub(r"\s+", "", input_css)
-assert "@media(max-width:640px)" in input_css_compact and ".ca-home-calculator #calc-pad button{min-height:2.8rem}" in input_css_compact, "Homepage mobile calculator sizing must be explicitly defined in source CSS"
+assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?\.ca-home-calculator\s+#calc-pad\s+button\s*\{\s*min-height:\s*2\.8rem", input_css), "Homepage mobile calculator sizing must be explicitly defined in source CSS"
 assert "20261023-standard-calculator-restore" in home_html, "Homepage must load the restored calculator-first stylesheet"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
 assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
