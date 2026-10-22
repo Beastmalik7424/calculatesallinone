@@ -1303,6 +1303,8 @@ def tool_page(t):
         desc = "Free online tasbih counter for daily dhikr. Tap to count, set targets of 33, 99 or 100, and save your count on your device. No download needed."
         ui = t["ui"]
         guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
     else:
         title = t["name"] + " | Free Online Tool | CalculatesAll"
         desc = t["description"]
