@@ -7,8 +7,11 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
 // Generated pages use absolute production asset URLs. Route same-origin assets back to this run's
 // freshly built public/ directory so layout tests validate the candidate CSS, not stale production CSS.
 async function useLocalAssets(page) {
-  await page.route("https://calculateallinone.vercel.app/assets/**", route => {
+  await page.route(/^https:\/\/calculateallinone\\.vercel\\.app\/assets\/.*$/, route => {
     const assetUrl = new URL(route.request().url());
+    if (assetUrl.pathname.endsWith("/site.css")) {
+      console.log("Layout test using candidate CSS: " + base + assetUrl.pathname + assetUrl.search);
+    }
     return route.continue({ url: base + assetUrl.pathname + assetUrl.search });
   });
 }
