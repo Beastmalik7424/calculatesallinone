@@ -747,3 +747,55 @@
     border-radius: .85rem;
   }
 }
+
+
+/* Homepage-only restoration: keep the Standard Calculator wide and immediately usable. */
+.ca-home-wrap {
+  margin-top: .25rem;
+  margin-bottom: .5rem;
+  padding: clamp(.5rem, 1.4vw, 1.15rem);
+  border-radius: 1.25rem;
+}
+.ca-home-header { margin-bottom: .55rem; }
+.ca-home-badge { padding: .35rem .65rem; font-size: .68rem; }
+.ca-home-header h1 {
+  margin-top: .45rem;
+  font-size: clamp(1.55rem, 2.6vw, 2.35rem);
+  line-height: 1.12;
+}
+.ca-home-lead { margin-top: .35rem; font-size: .98rem; line-height: 1.45; }
+.ca-home-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: .5rem;
+  width: 100%;
+  max-width: 72rem;
+}
+.ca-home-side { display: none !important; }
+.ca-home-tools { display: block !important; width: 100%; }
+.ca-home-calculator { padding: clamp(.65rem, 1.4vw, 1rem); border-radius: 1rem; }
+.ca-home-card-heading { margin-bottom: .45rem; }
+.ca-home-calculator #calc-display {
+  min-height: 3.5rem;
+  padding: .65rem .85rem;
+  font-size: clamp(1.65rem, 3vw, 2.2rem);
+}
+.ca-home-calculator #calc-mode-toggle {
+  min-height: 2.75rem;
+  margin-top: .45rem;
+  font-size: 1rem;
+}
+.ca-home-calculator #calc-pad { gap: .4rem; margin-top: .45rem; }
+.ca-home-calculator #calc-pad button {
+  min-height: clamp(2.65rem, 5.5vh, 3.1rem);
+  border-radius: .7rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+}
+@media (max-width: 640px) {
+  .ca-home-wrap { margin-top: .15rem; padding: .5rem; border-radius: 1rem; }
+  .ca-home-header h1 { font-size: clamp(1.45rem, 6vw, 1.85rem); }
+  .ca-home-lead { font-size: .92rem; }
+  .ca-home-calculator { padding: .55rem; }
+  .ca-home-calculator #calc-pad { gap: .35rem; }
+  .ca-home-calculator #calc-pad button { min-height: 2.8rem; }
+}
