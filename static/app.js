@@ -1279,7 +1279,7 @@
     document.addEventListener("keydown", function (event) {
       if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return
       var el = event.target
-      if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(el.tagName))) return
+      if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON|A|SUMMARY)$/.test(el.tagName))) return
       if (event.code === "Space" || event.key === "Enter") {
         event.preventDefault()
         increment()
