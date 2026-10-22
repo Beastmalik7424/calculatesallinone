@@ -446,7 +446,7 @@ TOOLS = [
         ),
         "guide": [
             ("What is tasbih?", [
-                "Tasbih is a word used for remembrance of Allah and for saying devotional phrases. People may use prayer beads, their fingers, or a digital counter to keep track. This page is a counting aid, not a religious authority, and it does not decide which phrase or number a person should choose.",
+                "Tasbih is a word used for remembrance of Allah and devotional phrases. This page is a counting aid, not a religious authority, and it does not decide which phrase or number a person should choose.",
                 "The counter records button presses. It cannot verify that a phrase was recited, detect a missed count, or determine whether a practice is required. Use it in the way that fits your own practice, and ask a qualified scholar or trusted teacher about religious rulings.",
             ]),
             ("How to use this online tasbih counter", [
@@ -463,7 +463,7 @@ TOOLS = [
             ]),
             ("Saving, privacy, and limitations", [
                 "The counter uses local browser storage on your device. It does not need an account and does not send the count to a server. Browser privacy settings, private browsing, clearing site data, or switching devices can make saved values unavailable. If storage is blocked, the counter continues in memory and displays a note, but values may be lost when you reload or leave the page.",
-                "A target is only a personal tracking setting in this tool. The page does not claim that a specific number is required or that using a digital counter has a particular religious reward. It does not replace prayer beads, finger counting, personal judgement, or guidance from a qualified scholar. If you are unsure about the wording, pronunciation, or religious status of a practice, seek reliable scholarly guidance.",
+                "A target is only a personal tracking setting in this tool. The page does not claim that a specific number is required or that using a digital counter has a particular religious reward. It does not replace prayer beads, finger counting, personal judgement, or guidance from a qualified scholar.",
             ]),
         ],
         "faq": [
