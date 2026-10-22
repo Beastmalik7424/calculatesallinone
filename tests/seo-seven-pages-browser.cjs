@@ -4,6 +4,15 @@ const assert = require("node:assert/strict");
 const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, "");
 const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"];
 
+// Generated pages use absolute production asset URLs. Route same-origin assets back to this run's
+// freshly built public/ directory so layout tests validate the candidate CSS, not stale production CSS.
+async function useLocalAssets(page) {
+  await page.route("https://calculateallinone.vercel.app/assets/**", route => {
+    const assetUrl = new URL(route.request().url());
+    return route.continue({ url: base + assetUrl.pathname + assetUrl.search });
+  });
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const failures = [];
@@ -86,6 +95,7 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
 
     // Desktop regression: homepage calculator must remain the first wide tool and the All Tools section must follow it.
     const desktop = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+    await useLocalAssets(desktop);
     const desktopErrors = [];
     desktop.on("console", msg => { if (msg.type() === "error") desktopErrors.push("console: " + msg.text()); });
     desktop.on("pageerror", err => desktopErrors.push("pageerror: " + err.message));
@@ -114,6 +124,7 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
     // EMI regression: the standalone page must preserve global navigation and centered layout at desktop and mobile widths.
     for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
       const emiPage = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      await useLocalAssets(emiPage);
       const emiErrors = [];
       emiPage.on("console", msg => { if (msg.type() === "error") emiErrors.push("console: " + msg.text()); });
       emiPage.on("pageerror", err => emiErrors.push("pageerror: " + err.message));
