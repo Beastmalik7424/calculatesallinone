@@ -1105,42 +1105,187 @@
     var countEl = $("t-count")
     if (!countEl) return
     var target = $("t-target")
+    var customTarget = $("t-custom-target")
+    var customTargetWrap = $("t-custom-target-wrap")
+    var targetError = $("t-target-error")
+    var phrase = $("t-phrase")
+    var customPhrase = $("t-custom-phrase")
+    var phraseError = $("t-phrase-error")
     var progress = $("t-progress")
-    var count = 0
-    try {
-      count = Number(window.localStorage.getItem("tasbih-count")) || 0
-    } catch (err) {
-      count = 0
+    if (!target || !progress) return
+    // Keep the older simple counter interface working for existing test fixtures or cached markup.
+    if (!phrase || !customPhrase || !customTarget || !targetError || !phraseError) {
+      var legacyCount = 0
+      try { legacyCount = Number(window.localStorage.getItem("tasbih-count")) || 0 } catch (err) { legacyCount = 0 }
+      function legacySave () {
+        try { window.localStorage.setItem("tasbih-count", String(legacyCount)) } catch (err) { return }
+      }
+      function legacyPaint () {
+        countEl.textContent = String(legacyCount)
+        var legacyGoal = Number(target.value)
+        if (legacyGoal === 0) progress.textContent = t("tasbihNone")
+        else if (legacyCount >= legacyGoal) progress.textContent = t("tasbihReached", { goal: legacyGoal })
+        else progress.textContent = t("tasbihLeft", { left: legacyGoal - legacyCount, goal: legacyGoal })
+      }
+      $("t-tap").addEventListener("click", function () { legacyCount += 1; legacySave(); legacyPaint() })
+      $("t-reset").addEventListener("click", function () { legacyCount = 0; legacySave(); legacyPaint() })
+      target.addEventListener("change", legacyPaint)
+      legacyPaint()
+      return
     }
-    function save () {
+    var lifetimeEl = $("t-lifetime")
+    var storageNote = $("t-storage-note")
+    var count = 0
+    var lifetime = 0
+    var phraseValue = "SubhanAllah"
+    var storageAvailable = true
+    var lastTargetReached = false
+
+    function readStored (key) {
       try {
-        window.localStorage.setItem("tasbih-count", String(count))
+        return window.localStorage.getItem(key)
       } catch (err) {
+        storageAvailable = false
+        return null
+      }
+    }
+    function writeStored (key, value) {
+      try {
+        window.localStorage.setItem(key, String(value))
+      } catch (err) {
+        storageAvailable = false
+      }
+    }
+    function showStorageState () {
+      if (storageNote) storageNote.hidden = storageAvailable
+    }
+    function activePhrase () {
+      if (phrase.value === "custom") return customPhrase.value.trim()
+      return phrase.value
+    }
+    function activeTarget () {
+      if (target.value !== "custom") return Number(target.value)
+      var raw = customTarget.value.trim()
+      if (!/^[0-9]+$/.test(raw)) return null
+      var n = Number(raw)
+      return Number.isSafeInteger(n) && n >= 1 && n <= 10000 ? n : null
+    }
+    function saveCount () { writeStored("tasbih.count", count); showStorageState() }
+    function savePhrase () { writeStored("tasbih.phrase", phrase.value === "custom" ? "custom:" + customPhrase.value.trim() : phrase.value); showStorageState() }
+    function saveLifetime () { writeStored("tasbih.lifetime", lifetime); showStorageState() }
+    function paint (allowVibration) {
+      countEl.textContent = String(count)
+      if (lifetimeEl) lifetimeEl.textContent = String(lifetime)
+      var goal = activeTarget()
+      if (target.value === "custom" && goal === null) {
+        targetError.textContent = customTarget.value.trim() ? "Enter a whole number from 1 to 10,000." : ""
+        progress.textContent = "Set a valid target to see progress."
+        lastTargetReached = false
         return
       }
-    }
-    function paint () {
-      countEl.textContent = String(count)
-      var goal = Number(target.value)
-      if (goal === 0) {
-        progress.textContent = t("tasbihNone")
-      } else if (count >= goal) {
+      targetError.textContent = ""
+      if (goal !== null && count >= goal) {
         progress.textContent = t("tasbihReached", { goal: goal })
+        if (allowVibration && !lastTargetReached && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+          try { navigator.vibrate(80) } catch (err) { /* vibration is optional */ }
+        }
+        lastTargetReached = true
       } else {
-        progress.textContent = t("tasbihLeft", { left: goal - count, goal: goal })
+        progress.textContent = goal === null ? "Set a valid target to see progress." : t("tasbihLeft", { left: goal - count, goal: goal })
+        lastTargetReached = false
       }
     }
-    $("t-tap").addEventListener("click", function () {
+    function increment () {
+      var goal = activeTarget()
+      if (goal === null) {
+        targetError.textContent = "Enter a whole number from 1 to 10,000."
+        customTarget.focus()
+        return
+      }
+      if (phrase.value === "custom" && !activePhrase()) {
+        phraseError.textContent = "Enter a custom phrase up to 40 characters."
+        customPhrase.focus()
+        return
+      }
+      phraseError.textContent = ""
       count += 1
-      save()
+      lifetime += 1
+      saveCount()
+      saveLifetime()
+      paint(true)
+    }
+    var storedCount = readStored("tasbih.count")
+    var storedPhrase = readStored("tasbih.phrase")
+    var storedLifetime = readStored("tasbih.lifetime")
+    if (storedCount === null) {
+      // Migrate the previous counter key so existing visitors keep their saved count.
+      var legacyCount = readStored("tasbih-count")
+      if (legacyCount !== null && /^[0-9]+$/.test(legacyCount) && Number.isSafeInteger(Number(legacyCount))) {
+        count = Number(legacyCount)
+        writeStored("tasbih.count", count)
+      }
+    } else if (/^[0-9]+$/.test(storedCount) && Number.isSafeInteger(Number(storedCount))) {
+      count = Number(storedCount)
+    }
+    if (storedPhrase !== null && ["SubhanAllah", "Alhamdulillah", "Allahu Akbar", "Astaghfirullah", "La ilaha illallah"].indexOf(storedPhrase) !== -1) phraseValue = storedPhrase
+    else if (storedPhrase !== null && storedPhrase.indexOf("custom:") === 0) phraseValue = storedPhrase.slice(7)
+    if (storedLifetime !== null && /^[0-9]+$/.test(storedLifetime) && Number.isSafeInteger(Number(storedLifetime))) lifetime = Number(storedLifetime)
+    else lifetime = count
+    phrase.value = storedPhrase !== null && storedPhrase.indexOf("custom:") === 0 ? "custom" : phraseValue
+    if (phrase.value === "custom") customPhrase.value = phraseValue
+    customTargetWrap.hidden = target.value !== "custom"
+    customPhrase.disabled = phrase.value !== "custom"
+    phrase.addEventListener("change", function () {
+      customPhrase.disabled = phrase.value !== "custom"
+      if (phrase.value === "custom") customPhrase.focus()
+      phraseError.textContent = ""
+      phraseValue = phrase.value === "custom" ? customPhrase.value.trim() : phrase.value
+      savePhrase()
+      paint()
+    })
+    customPhrase.addEventListener("input", function () {
+      if (customPhrase.value.length > 40) customPhrase.value = customPhrase.value.slice(0, 40)
+      phraseError.textContent = ""
+      if (phrase.value === "custom") {
+        phraseValue = customPhrase.value.trim()
+        savePhrase()
+      }
+      showStorageState()
+    })
+    target.addEventListener("change", function () {
+      customTargetWrap.hidden = target.value !== "custom"
+      targetError.textContent = ""
+      lastTargetReached = false
+      paint()
+    })
+    customTarget.addEventListener("input", function () {
+      targetError.textContent = ""
+      lastTargetReached = false
+      paint()
+    })
+    $("t-tap").addEventListener("click", increment)
+    $("t-undo").addEventListener("click", function () {
+      if (count > 0) count -= 1
+      saveCount()
       paint()
     })
     $("t-reset").addEventListener("click", function () {
+      if (!window.confirm("Reset the current count to zero?")) return
       count = 0
-      save()
+      lastTargetReached = false
+      saveCount()
       paint()
     })
-    target.addEventListener("change", paint)
+    document.addEventListener("keydown", function (event) {
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return
+      var el = event.target
+      if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON|A|SUMMARY)$/.test(el.tagName))) return
+      if (event.code === "Space" || event.key === "Enter") {
+        event.preventDefault()
+        increment()
+      }
+    })
+    showStorageState()
     paint()
   }
 

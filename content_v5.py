@@ -7,7 +7,7 @@ REVIEW_STATUS = {
     "age-calculator": "Calendar method checked against worked examples.",
     "unit-converter": "Conversion factors checked against published definitions.",
     "standard-calculator": "Order of operations checked with test expressions.",
-    "tasbih-counter": "Behaviour checked on this device only.",
+    "tasbih-counter": "Static output and automated build checks passed; direct device interaction testing is pending.",
     "stopwatch": "Timing method checked against the browser clock.",
 }
 
@@ -109,10 +109,10 @@ GUIDE_EXTRA = {
     ],
     "tasbih-counter": [
         ("Choosing a target", [
-            "Targets of 33, 100 and 1000 are common for dhikr, and the counter also supports an unlimited count. Choose the target that matches your practice.",
+            "Choose a preset target of 33, 99 or 100, or enter a custom whole number from 1 to 10,000. The target is a personal tracking setting, not a religious ruling or a claim that a particular number is required.",
         ]),
         ("Privacy of your count", [
-            "The count is stored only in your browser on this device. CalculatesAll does not send the count to a server or link it to an account.",
+            "The count is stored only in your browser on this device when browser storage is available. If storage is blocked, the counter works in memory until the page is reloaded or closed. CalculatesAll does not send the count to a server or link it to an account.",
         ]),
     ],
     "stopwatch": [
