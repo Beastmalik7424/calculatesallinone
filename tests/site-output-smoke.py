@@ -644,7 +644,7 @@ home_h1_pos = home_html.find("<h1")
 assert home_h1_pos >= 0 and home_calc_pos > home_h1_pos, "Homepage Standard Calculator must follow the heading"
 site_css_compact = re.sub(r"\s+", "", site_css)
 assert ".ca-home-layout" in site_css_compact and "grid-template-columns:minmax(0,1fr)" in site_css_compact, "Homepage calculator must use a single wide column"
-assert ".ca-home-side,.ca-home-tools{display:none!important}" in site_css_compact, "Homepage side panels must not narrow the Standard Calculator"
+assert ".ca-home-side{display:none!important}" in site_css_compact and ".ca-home-tools{display:block!important;width:100%}" in site_css_compact, "Homepage should hide decorative side copy but preserve the other-tools list below the calculator"
 assert "20261023-standard-calculator-restore" in home_html, "Homepage must load the restored calculator-first stylesheet"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
 assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
