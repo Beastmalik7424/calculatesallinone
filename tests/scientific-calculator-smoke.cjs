@@ -132,6 +132,18 @@ checkScientific(["log", "8", ",", "1", ")"], "Math domain error", "logarithm bas
 checkScientific(["tan", "9", "0", ")"], "Math domain error", "tangent singularity must be rejected");
 checkScientific(["sqrt", "-", "1", ")"], "Math domain error", "negative square root must be rejected");
 
+
+checkScientific(["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"], "1234567890", "all digit keys");
+checkScientific(["6", "*", "7"], "42", "multiplication key");
+checkScientific(["9", "-", "4"], "5", "subtraction key");
+checkScientific(["(", "2", "+", "3", ")", "*", "4"], "20", "parentheses and operator precedence");
+checkScientific(["ln", "e", ")"], "1", "natural logarithm");
+checkScientific(["exp", "1", ")"], "2.718281828459", "exponential function");
+click("scientific-pad", "C");
+click("scientific-pad", "MR");
+click("scientific-pad", "=");
+assert.equal(elements["calc-display"].textContent, "0", "memory clear should reset stored value to zero");
+
 handlers["calc-mode-toggle:click"]();
 assert.equal(elements["scientific-pad"].hidden, true, "scientific keypad should be hidden in standard mode");
 assert.equal(elements["calc-mode-toggle"].textContent, "Scientific Mode", "toggle label should offer scientific mode");
