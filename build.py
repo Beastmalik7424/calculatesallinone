@@ -437,7 +437,7 @@ TOOLS = [
             '<output id="t-count" class="block text-center text-6xl sm:text-7xl font-semibold tabular-nums bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8" aria-live="polite">0</output>'
             '<p id="t-progress" class="text-center text-base text-stone-800 dark:text-stone-200" aria-live="polite"></p>'
             '<p id="t-storage-note" class="text-sm text-amber-800 dark:text-amber-200" role="status" hidden>Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.</p>'
-            '<p class="text-sm text-stone-700 dark:text-stone-300">Lifetime counted total: <output id="t-lifetime">0</output></p>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300"><span id="t-lifetime-label">Lifetime counted total:</span><output id="t-lifetime">0</output></p>'
             '<button id="t-tap" type="button" aria-label="Count one" class="w-full min-h-[64px] @B@ text-xl">Count one</button>'
             '<div class="grid grid-cols-2 gap-3"><button id="t-undo" type="button" class="@S@">Undo</button>'
             '<button id="t-reset" type="button" class="@S@">Reset</button></div>'
@@ -1370,6 +1370,9 @@ def urdu_tool_page(t):
         ui = ui.replace('"' + en + '"', '"' + ur + '"')
         if t["slug"] == "bmi-calculator":
             ui = ui.replace(en, ur)
+    if t["slug"] == "tasbih-counter":
+        ui = ui.replace('<label class="', '<label lang="ur" class="')
+        ui = ui.replace('id="t-lifetime-label">', 'id="t-lifetime-label" lang="ur">')
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     cat_ur = {"money": "پیسہ اور کاروبار", "health": "صحت", "time": "تاریخ اور وقت", "math": "ریاضی اور اکائیاں", "worship": "عبادت اور روزمرہ"}[cat["slug"]]
     schema = [
