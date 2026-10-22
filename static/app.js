@@ -747,6 +747,7 @@
   function evaluateScientific (expr, angleMode, ansValue) {
     var source = String(expr || "").replace(/\s+/g, "")
     if (!source) throw new Error("incomplete")
+    if (source.length > 1000) throw new Error("invalid")
     var tokenPattern = /(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?|[A-Za-z]+|[+\-*\/^(),!%]/g
     var tokens = []
     var match
@@ -755,7 +756,7 @@
       tokens.push(match[0])
       consumed += match[0]
     }
-    if (consumed !== source || !tokens.length) throw new Error("invalid")
+    if (consumed !== source || !tokens.length || tokens.length > 256) throw new Error("invalid")
     var pos = 0
     function peek () { return tokens[pos] }
     function next () { return tokens[pos++] }
@@ -777,6 +778,40 @@
     }
     function callFunction (name, args) {
       var x = args[0]
+      if (["mean", "median", "min", "max", "sum", "stdev", "stdevp", "var", "varp", "gcd", "lcm"].indexOf(name) !== -1) {
+        if (!args.length || (["stdev", "var"].indexOf(name) !== -1 && args.length < 2)) throw new Error("domain")
+        var values = args.slice()
+        if (name === "sum") return values.reduce(function (a, b) { return a + b }, 0)
+        if (name === "mean") return values.reduce(function (a, b) { return a + b }, 0) / values.length
+        if (name === "min") return Math.min.apply(Math, values)
+        if (name === "max") return Math.max.apply(Math, values)
+        if (name === "median") {
+          values.sort(function (a, b) { return a - b })
+          var mid = Math.floor(values.length / 2)
+          return values.length % 2 ? values[mid] : (values[mid - 1] + values[mid]) / 2
+        }
+        if (name === "gcd" || name === "lcm") {
+          var resultInt = Math.abs(values[0])
+          for (var gi = 0; gi < values.length; gi += 1) {
+            if (Math.floor(values[gi]) !== values[gi] || Math.abs(values[gi]) > 1e9) throw new Error("domain")
+          }
+          for (var g = 1; g < values.length; g += 1) {
+            var aInt = resultInt, bInt = Math.abs(values[g])
+            while (bInt) { var tempInt = bInt; bInt = aInt % bInt; aInt = tempInt }
+            resultInt = name === "gcd" ? aInt : (resultInt === 0 || values[g] === 0 ? 0 : Math.abs(resultInt * values[g]) / aInt)
+          }
+          return resultInt
+        }
+        var avg = values.reduce(function (a, b) { return a + b }, 0) / values.length
+        var squares = values.reduce(function (total, n) { return total + Math.pow(n - avg, 2) }, 0)
+        var divisor = (name === "stdev" || name === "var") ? values.length - 1 : values.length
+        var variance = squares / divisor
+        return (name === "stdev" || name === "stdevp") ? Math.sqrt(variance) : variance
+      }
+      if (name === "log" && args.length === 2) {
+        if (args[0] <= 0 || args[1] <= 0 || args[1] === 1) throw new Error("domain")
+        return requireFinite(Math.log(args[0]) / Math.log(args[1]))
+      }
       if (name === "root") {
         if (args.length !== 2 || args[0] === 0) throw new Error("domain")
         var degree = args[0], radicand = args[1]
@@ -972,6 +1007,8 @@
       if (key === "Ans") { expr += "ans"; render(expr); return }
       if (key === "pi" || key === "e") { expr += key; render(expr); return }
       if ((key === "square" || key === "cube") && scientific) { expr += key === "square" ? "^2" : "^3"; render(expr); return }
+      if (key === "tenpow" && scientific) { expr += "10^("; render(expr); return }
+      if (key === "reciprocal" && scientific) { expr += "1/("; render(expr); return }
       if (key === "sqrt" && !scientific) {
         if (expr.trim() === "") { display.textContent = t("calcNeedValue"); return }
         try {
@@ -986,7 +1023,7 @@
           key === "tanh" || key === "csch" || key === "sech" || key === "coth" || key === "asinh" || key === "acosh" || key === "atanh" || key === "acsc" || key === "asec" || key === "acot" || key === "root" || key === "abs" ||
           key === "log" || key === "ln" || key === "exp" || key === "floor" || key === "ceil" ||
           key === "round" || key === "sec" || key === "csc" || key === "cot" || key === "nPr" ||
-          key === "nCr" || key === "mod") {
+          key === "nCr" || key === "mod" || key === "mean" || key === "median" || key === "min" || key === "max" || key === "sum" || key === "stdev" || key === "stdevp" || key === "var" || key === "varp" || key === "gcd" || key === "lcm") {
         expr += key + "("
         render(expr)
         return
