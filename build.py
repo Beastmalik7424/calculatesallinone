@@ -792,6 +792,20 @@ for _t in TOOLS:
     _t["sources"] = _t["sources"] + " " + REVIEW_STATUS.get(_t["slug"], "")
     if _t["slug"] == "standard-calculator":
         _t["ui"] = CALC_UI
+        _t["guide"] += [
+            ("How to use the online standard and scientific calculator", [
+                "CalculateAllInOne is a free online calculator for everyday arithmetic and more advanced scientific calculations. Use the standard keypad for addition, subtraction, multiplication, division, percentages and brackets. Select Scientific Mode when you need trigonometry, powers, roots, logarithms, factorials, combinations or permutations. The calculator works in a modern browser on desktop and mobile, with large, touch-friendly keys.",
+                "Enter an expression in the same order you would write it on paper. Brackets are evaluated first, then powers, multiplication and division, and finally addition and subtraction. For example, 2 + 3 × 4 equals 14 because multiplication takes priority. Use parentheses in (2 + 3) × 4 to make the result 20. Press clear to start again, or use backspace to remove the last character.",
+            ]),
+            ("Scientific calculator functions and angle modes", [
+                "Scientific Mode includes sine, cosine and tangent, inverse trigonometric functions, square roots, powers, constants such as pi and e, logarithms, factorials, combinations and permutations. Choose DEG when an angle is expressed in degrees, such as sin(30), which equals 0.5. Choose RAD when an angle is expressed in radians, such as sin(pi/2), which equals 1. Using the wrong angle mode is a common reason a trigonometry answer looks incorrect.",
+                "The calculator also provides an answer memory and basic memory controls to help with multi-step calculations. Check the displayed expression before pressing equals, especially when using negative exponents, nested brackets or logarithms with a custom base. Some inputs have no real-number result, such as dividing by zero or taking a square root of a negative number, so invalid operations should be corrected rather than treated as a numeric answer.",
+            ]),
+            ("Who can use this free online calculator", [
+                "Students can check arithmetic and practise algebra or trigonometry. Teachers and tutors can demonstrate order of operations, powers and angle conversion. Households can work out percentages, discounts and everyday totals, while office users can verify figures before entering them into a spreadsheet. These examples describe common uses, not a guarantee that a result is suitable for every professional task.",
+                "CalculateAllInOne performs calculations in the browser and is designed for quick access without installing an app. It is a practical calculation aid, not a substitute for independently checking high-stakes engineering, financial, medical or scientific work. For important results, verify the formula, units, rounding and assumptions with an authoritative source or qualified professional. If an answer seems unexpected, split the expression into smaller steps and compare the intermediate values.",
+            ]),
+        ]
 
 
 def home_extra_html(lang):
