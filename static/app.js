@@ -43,6 +43,9 @@
       calcDiv: "Cannot divide by zero",
       calcSqrtNegative: "Square root of a negative number is not a real number.",
       calcNeedValue: "Enter a number or expression first.",
+      calcScientificMode: "Scientific Mode",
+      calcStandardMode: "Standard Mode",
+      calcDomainError: "Math domain error",
       tasbihNone: "No target set.",
       tasbihReached: "Target of {goal} reached. Press Reset to start again.",
       tasbihLeft: "{left} to go for a target of {goal}.",
@@ -97,6 +100,9 @@
       calcDiv: "صفر سے تقسیم نہیں ہو سکتی",
       calcSqrtNegative: "منفی عدد کا مربع جذر حقیقی عدد نہیں ہوتا۔",
       calcNeedValue: "پہلے کوئی عدد یا حساب درج کریں۔",
+      calcScientificMode: "سائنسی کیلکولیٹر",
+      calcStandardMode: "معیاری کیلکولیٹر",
+      calcDomainError: "ریاضی کی حد سے باہر قدر",
       tasbihNone: "کوئی ہدف مقرر نہیں۔",
       tasbihReached: "ہدف {goal} پورا ہو گیا۔ دوبارہ شروع کرنے کے لیے ری سیٹ دبائیں۔",
       tasbihLeft: "ہدف {goal} کے لیے {left} باقی۔",
@@ -738,64 +744,360 @@
     return result
   }
 
+  function evaluateScientific (expr, angleMode, ansValue) {
+    var source = String(expr || "").replace(/\s+/g, "")
+    if (!source) throw new Error("incomplete")
+    if (source.length > 1000) throw new Error("invalid")
+    var tokenPattern = /(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?|[A-Za-z]+|[+\-*\/^(),!%]/g
+    var tokens = []
+    var match
+    var consumed = ""
+    while ((match = tokenPattern.exec(source)) !== null) {
+      tokens.push(match[0])
+      consumed += match[0]
+    }
+    if (consumed !== source || !tokens.length || tokens.length > 256) throw new Error("invalid")
+    var pos = 0
+    function peek () { return tokens[pos] }
+    function next () { return tokens[pos++] }
+    function requireFinite (value) {
+      if (!isFinite(value)) throw new Error("invalid")
+      return value
+    }
+    function factorial (value) {
+      if (!isFinite(value) || value < 0 || Math.floor(value) !== value || value > 170) throw new Error("domain")
+      var out = 1
+      for (var k = 2; k <= value; k += 1) out *= k
+      return out
+    }
+    function choose (n, r, permutation) {
+      if (!isFinite(n) || !isFinite(r) || Math.floor(n) !== n || Math.floor(r) !== r || n < 0 || r < 0 || r > n || n > 170) throw new Error("domain")
+      var out = 1
+      for (var k = 0; k < r; k += 1) out *= n - k
+      return permutation ? out : out / factorial(r)
+    }
+    function callFunction (name, args) {
+      var x = args[0]
+      if (["mean", "median", "min", "max", "sum", "stdev", "stdevp", "var", "varp", "gcd", "lcm"].indexOf(name) !== -1) {
+        if (!args.length || (["stdev", "var"].indexOf(name) !== -1 && args.length < 2)) throw new Error("domain")
+        var values = args.slice()
+        if (name === "sum") return values.reduce(function (a, b) { return a + b }, 0)
+        if (name === "mean") return values.reduce(function (a, b) { return a + b }, 0) / values.length
+        if (name === "min") return Math.min.apply(Math, values)
+        if (name === "max") return Math.max.apply(Math, values)
+        if (name === "median") {
+          values.sort(function (a, b) { return a - b })
+          var mid = Math.floor(values.length / 2)
+          return values.length % 2 ? values[mid] : (values[mid - 1] + values[mid]) / 2
+        }
+        if (name === "gcd" || name === "lcm") {
+          var resultInt = Math.abs(values[0])
+          for (var gi = 0; gi < values.length; gi += 1) {
+            if (Math.floor(values[gi]) !== values[gi] || Math.abs(values[gi]) > 1e9) throw new Error("domain")
+          }
+          for (var g = 1; g < values.length; g += 1) {
+            var aInt = resultInt, bInt = Math.abs(values[g])
+            while (bInt) { var tempInt = bInt; bInt = aInt % bInt; aInt = tempInt }
+            resultInt = name === "gcd" ? aInt : (resultInt === 0 || values[g] === 0 ? 0 : Math.abs(resultInt * values[g]) / aInt)
+          }
+          return resultInt
+        }
+        var avg = values.reduce(function (a, b) { return a + b }, 0) / values.length
+        var squares = values.reduce(function (total, n) { return total + Math.pow(n - avg, 2) }, 0)
+        var divisor = (name === "stdev" || name === "var") ? values.length - 1 : values.length
+        var variance = squares / divisor
+        return (name === "stdev" || name === "stdevp") ? Math.sqrt(variance) : variance
+      }
+      if (name === "log" && args.length === 2) {
+        if (args[0] <= 0 || args[1] <= 0 || args[1] === 1) throw new Error("domain")
+        return requireFinite(Math.log(args[0]) / Math.log(args[1]))
+      }
+      if (name === "root") {
+        if (args.length !== 2 || args[0] === 0) throw new Error("domain")
+        var degree = args[0], radicand = args[1]
+        if (radicand < 0 && (Math.floor(degree) !== degree || Math.abs(degree % 2) !== 1)) throw new Error("domain")
+        return requireFinite(radicand < 0 ? -Math.pow(-radicand, 1 / degree) : Math.pow(radicand, 1 / degree))
+      }
+      if (name === "npr" || name === "ncr" || name === "mod") {
+        if (args.length !== 2) throw new Error("domain")
+        if (name === "npr") return choose(args[0], args[1], true)
+        if (name === "ncr") return choose(args[0], args[1], false)
+        if (args[1] === 0) throw new Error("divzero")
+        return args[0] % args[1]
+      }
+      if (args.length !== 1) throw new Error("domain")
+      var radians = angleMode === "DEG" ? x * Math.PI / 180 : x
+      var value
+      switch (name) {
+        case "sin": value = Math.sin(radians); break
+        case "cos": value = Math.cos(radians); break
+        case "tan":
+          if (Math.abs(Math.cos(radians)) < 1e-12) throw new Error("domain")
+          value = Math.tan(radians); break
+        case "asin": case "arcsin":
+          if (x < -1 || x > 1) throw new Error("domain")
+          value = Math.asin(x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "acos": case "arccos":
+          if (x < -1 || x > 1) throw new Error("domain")
+          value = Math.acos(x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "atan": case "arctan":
+          value = Math.atan(x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "acsc": if (Math.abs(x) < 1 || x === 0) throw new Error("domain"); value = Math.asin(1 / x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "asec": if (Math.abs(x) < 1) throw new Error("domain"); value = Math.acos(1 / x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "acot": value = Math.atan2(1, x); if (angleMode === "DEG") value *= 180 / Math.PI; break
+        case "sinh": value = Math.sinh(x); break
+        case "cosh": value = Math.cosh(x); break
+        case "tanh": value = Math.tanh(x); break
+        case "csch": if (x === 0) throw new Error("domain"); value = 1 / Math.sinh(x); break
+        case "sech": value = 1 / Math.cosh(x); break
+        case "coth": if (x === 0) throw new Error("domain"); value = 1 / Math.tanh(x); break
+        case "asinh": value = Math.asinh(x); break
+        case "acosh": if (x < 1) throw new Error("domain"); value = Math.acosh(x); break
+        case "atanh": if (x <= -1 || x >= 1) throw new Error("domain"); value = Math.atanh(x); break
+        case "sqrt": if (x < 0) throw new Error("domain"); value = Math.sqrt(x); break
+        case "cbrt": value = Math.cbrt(x); break
+        case "abs": value = Math.abs(x); break
+        case "log": if (x <= 0) throw new Error("domain"); value = Math.log(x) / Math.LN10; break
+        case "ln": if (x <= 0) throw new Error("domain"); value = Math.log(x); break
+        case "exp": value = Math.exp(x); break
+        case "floor": value = Math.floor(x); break
+        case "ceil": value = Math.ceil(x); break
+        case "round": value = Math.round(x); break
+        case "fact": case "factorial": value = factorial(x); break
+        case "sec": if (Math.abs(Math.cos(radians)) < 1e-12) throw new Error("domain"); value = 1 / Math.cos(radians); break
+        case "csc": if (Math.abs(Math.sin(radians)) < 1e-12) throw new Error("domain"); value = 1 / Math.sin(radians); break
+        case "cot": if (Math.abs(Math.sin(radians)) < 1e-12) throw new Error("domain"); value = 1 / Math.tan(radians); break
+        default: throw new Error("invalid")
+      }
+      return requireFinite(value)
+    }
+    function primary () {
+      var tok = next()
+      if (tok === undefined) throw new Error("incomplete")
+      if (tok === "(") {
+        var inner = sum()
+        if (next() !== ")") throw new Error("incomplete")
+        return inner
+      }
+      if (/^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(tok)) return requireFinite(Number(tok))
+      if (/^[A-Za-z]+$/.test(tok)) {
+        var name = tok.toLowerCase()
+        if (peek() === "(") {
+          next()
+          var args = []
+          if (peek() !== ")") {
+            args.push(sum())
+            while (peek() === ",") { next(); args.push(sum()) }
+          }
+          if (next() !== ")") throw new Error("incomplete")
+          return requireFinite(callFunction(name, args))
+        }
+        if (name === "pi") return Math.PI
+        if (name === "e") return Math.E
+        if (name === "ans") return requireFinite(ansValue)
+        throw new Error("invalid")
+      }
+      throw new Error("invalid")
+    }
+    function postfix () {
+      var value = primary()
+      while (peek() === "!" || peek() === "%") {
+        var op = next()
+        value = op === "!" ? factorial(value) : value / 100
+      }
+      return requireFinite(value)
+    }
+    function power () {
+      var value = postfix()
+      if (peek() === "^") {
+        next()
+        value = Math.pow(value, unary())
+      }
+      return requireFinite(value)
+    }
+    function unary () {
+      if (peek() === "+") { next(); return unary() }
+      if (peek() === "-") { next(); return -unary() }
+      return power()
+    }
+    function product () {
+      var value = unary()
+      while (peek() === "*" || peek() === "/") {
+        var op = next()
+        var right = unary()
+        if (op === "/" && right === 0) throw new Error("divzero")
+        value = op === "*" ? value * right : value / right
+        requireFinite(value)
+      }
+      return value
+    }
+    function sum () {
+      var value = product()
+      while (peek() === "+" || peek() === "-") {
+        var op = next()
+        var right = product()
+        value = op === "+" ? value + right : value - right
+        requireFinite(value)
+      }
+      return value
+    }
+    var result = sum()
+    if (pos !== tokens.length) throw new Error("incomplete")
+    return requireFinite(result)
+  }
+
   function initCalculator () {
     var pad = $("calc-pad")
     if (!pad) return
     var display = $("calc-display")
+    var sciPad = $("scientific-pad")
+    var modeToggle = $("calc-mode-toggle")
+    var historyEl = $("calc-history")
     var expr = ""
+    var scientific = false
+    var angleMode = "DEG"
+    var ansValue = 0
+    var memory = 0
+    var history = []
+    if (sciPad) sciPad.hidden = true
+    if (modeToggle) {
+      modeToggle.textContent = t("calcScientificMode")
+      modeToggle.setAttribute("aria-pressed", "false")
+    }
+    function format (value) {
+      if (!isFinite(value)) throw new Error("invalid")
+      var rounded = Math.abs(value) < 1e12 ? Math.round(value * 1e12) / 1e12 : value
+      return String(rounded)
+    }
     function render (text) {
       display.textContent = text === "" ? "0" : text.replace(/\*/g, "×").replace(/\//g, "÷").replace(/-/g, "−")
+    }
+    function errorText (err) {
+      if (err.message === "divzero") return t("calcDiv")
+      if (err.message === "domain") return t("calcDomainError")
+      if (err.message === "incomplete") return t("calcError")
+      return t("calcError")
+    }
+    function paintHistory () {
+      if (!historyEl) return
+      historyEl.textContent = history.slice(-5).reverse().join("  ·  ")
+    }
+    function clear () {
+      expr = ""
+      render("")
+    }
+    function press (key) {
+      if (key === "angle-toggle") {
+        angleMode = angleMode === "DEG" ? "RAD" : "DEG"
+        var angleBtn = $("calc-angle-toggle")
+        if (angleBtn) {
+          angleBtn.textContent = angleMode
+          angleBtn.setAttribute("aria-pressed", angleMode === "RAD" ? "true" : "false")
+        }
+        return
+      }
+      if (key === "C") { clear(); return }
+      if (key === "BS") { expr = expr.slice(0, -1); render(expr); return }
+      if (key === "M+") {
+        try { memory = scientific ? evaluateScientific(expr, angleMode, ansValue) : evaluate(expr) } catch (err) { return }
+        return
+      }
+      if (key === "MR") { expr += format(memory); render(expr); return }
+      if (key === "MC") { memory = 0; return }
+      if (key === "Ans") { expr += "ans"; render(expr); return }
+      if (key === "pi" || key === "e") { expr += key; render(expr); return }
+      if ((key === "square" || key === "cube") && scientific) { expr += key === "square" ? "^2" : "^3"; render(expr); return }
+      if (key === "tenpow" && scientific) { expr += "10^("; render(expr); return }
+      if (key === "reciprocal" && scientific) { expr += "1/("; render(expr); return }
+      if (key === "sqrt" && !scientific) {
+        if (expr.trim() === "") { display.textContent = t("calcNeedValue"); return }
+        try {
+          var radicand = evaluate(expr)
+          if (radicand < 0) { expr = ""; display.textContent = t("calcSqrtNegative"); return }
+          expr = format(Math.sqrt(radicand)); render(expr)
+        } catch (err) { expr = ""; display.textContent = errorText(err) }
+        return
+      }
+      if (key === "sqrt" || key === "cbrt" || key === "sin" || key === "cos" || key === "tan" ||
+          key === "asin" || key === "acos" || key === "atan" || key === "sinh" || key === "cosh" ||
+          key === "tanh" || key === "csch" || key === "sech" || key === "coth" || key === "asinh" || key === "acosh" || key === "atanh" || key === "acsc" || key === "asec" || key === "acot" || key === "root" || key === "abs" ||
+          key === "log" || key === "ln" || key === "exp" || key === "floor" || key === "ceil" ||
+          key === "round" || key === "sec" || key === "csc" || key === "cot" || key === "nPr" ||
+          key === "nCr" || key === "mod" || key === "mean" || key === "median" || key === "min" || key === "max" || key === "sum" || key === "stdev" || key === "stdevp" || key === "var" || key === "varp" || key === "gcd" || key === "lcm") {
+        expr += key + "("
+        render(expr)
+        return
+      }
+      if (key === "=") {
+        try {
+          var value = scientific ? evaluateScientific(expr, angleMode, ansValue) : evaluate(expr)
+          ansValue = value
+          var result = format(value)
+          history.push(expr + " = " + result)
+          if (history.length > 20) history.shift()
+          paintHistory()
+          expr = result
+          render(expr)
+        } catch (err) {
+          display.textContent = errorText(err)
+          expr = ""
+        }
+        return
+      }
+      if (key === "%") {
+        if (scientific) { expr += "%"; render(expr) }
+        else {
+          expr = expr.replace(/(\d+\.?\d*)$/, function (m) { return String(Number(m) / 100) })
+          render(expr)
+        }
+        return
+      }
+      if (scientific && key === "-" && /[+*\/^]$/.test(expr)) { expr += key; render(expr); return }
+      if (/^[+\-*\/^]$/.test(key)) {
+        if (expr === "" && key !== "-") return
+        if (/[+\-*\/^]$/.test(expr) && expr.length > 1) expr = expr.slice(0, -1)
+        expr += key
+        render(expr)
+        return
+      }
+      if (key === "!" || key === "(" || key === ")" || key === ",") {
+        expr += key
+        render(expr)
+        return
+      }
+      if (key === "0" && expr === "") { expr = "0"; render(expr); return }
+      expr += key
+      render(expr)
     }
     pad.addEventListener("click", function (e) {
       var btn = e.target.closest("button")
       if (!btn) return
-      var key = btn.getAttribute("data-key")
-      if (key === "C") {
-        expr = ""
-        render("")
-      } else if (key === "BS") {
-        expr = expr.slice(0, -1)
-        render(expr)
-      } else if (key === "sqrt") {
-        if (expr.trim() === "") {
-          expr = ""
-          display.textContent = t("calcNeedValue")
-          return
-        }
-        try {
-          var radicand = evaluate(expr)
-          if (radicand < 0) {
-            expr = ""
-            display.textContent = t("calcSqrtNegative")
-            return
-          }
-          expr = String(Math.round(Math.sqrt(radicand) * 1e10) / 1e10)
-          render(expr)
-        } catch (err) {
-          expr = ""
-          display.textContent = err.message === "divzero" ? t("calcDiv") : t("calcError")
-        }
-      } else if (key === "%") {
-        expr = expr.replace(/(\d+\.?\d*)$/, function (m) { return String(Number(m) / 100) })
-        render(expr)
-      } else if (key === "=") {
-        try {
-          var value = evaluate(expr)
-          expr = String(Math.round(value * 1e10) / 1e10)
-          render(expr)
-        } catch (err) {
-          display.textContent = err.message === "divzero" ? t("calcDiv") : t("calcError")
-          expr = ""
-        }
-      } else if (/^[+\-*\/]$/.test(key)) {
-        if (expr === "" && key !== "-") return
-        if (/[+\-*\/]$/.test(expr) && expr.length > 1) expr = expr.slice(0, -1)
-        expr += key
-        render(expr)
-      } else {
-        expr += key
-        render(expr)
-      }
+      press(btn.getAttribute("data-key"))
+    })
+    if (sciPad) sciPad.addEventListener("click", function (e) {
+      var btn = e.target.closest("button")
+      if (!btn) return
+      press(btn.getAttribute("data-key"))
+    })
+    document.addEventListener("keydown", function (e) {
+      var target = e.target || {}
+      var tag = String(target.tagName || "").toLowerCase()
+      if (tag === "input" || tag === "textarea" || tag === "select" || target.isContentEditable) return
+      if (e.key === "Enter" || e.key === "=") { press("="); e.preventDefault(); return }
+      if (e.key === "Backspace") { press("BS"); e.preventDefault(); return }
+      if (e.key === "Escape") { press("C"); e.preventDefault(); return }
+      if (/^[0-9.]$/.test(e.key) || "+-*/^(),!%".indexOf(e.key) !== -1) { press(e.key); e.preventDefault() }
+    })
+    if (modeToggle) modeToggle.addEventListener("click", function () {
+      scientific = !scientific
+      expr = ""
+      render("")
+      if (sciPad) sciPad.hidden = !scientific
+      pad.hidden = scientific
+      modeToggle.textContent = scientific ? t("calcStandardMode") : t("calcScientificMode")
+      modeToggle.setAttribute("aria-pressed", scientific ? "true" : "false")
+      var angleBtn = $("calc-angle-toggle")
+      if (angleBtn) angleBtn.textContent = angleMode
     })
   }
 

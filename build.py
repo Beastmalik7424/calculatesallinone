@@ -678,9 +678,11 @@ SPECIAL = "bg-slate-100 hover:bg-teal-50 dark:bg-stone-700 dark:hover:bg-stone-6
 EQUALS = "bg-slate-900 hover:bg-slate-800 dark:bg-teal-700 dark:hover:bg-teal-600 text-white text-2xl font-bold rounded-xl min-h-[64px] shadow-md col-span-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
 
 CALC_UI = (
-    '<div class="max-w-md mx-auto">'
+    '<div class="ca-calculator-engine max-w-xl mx-auto">'
     '<output id="calc-display" class="block text-right text-4xl font-bold bg-white dark:bg-stone-950 border border-slate-200 dark:border-stone-600 rounded-2xl px-5 py-6 min-h-[5rem] break-all text-slate-900 dark:text-stone-100 shadow-inner" aria-live="polite">0</output>'
-    '<div id="calc-pad" class="grid grid-cols-4 gap-3 mt-4">'
+    '<button id="calc-mode-toggle" type="button" class="' + SPECIAL + ' mt-3 w-full" aria-pressed="false">Scientific Mode</button>'
+    '<p id="calc-history" class="mt-2 min-h-6 text-right text-xs text-stone-600 dark:text-stone-300 break-words" aria-live="polite"></p>'
+    '<div id="calc-pad" class="grid grid-cols-4 gap-3 mt-3">'
     '<button class="' + SPECIAL + '" data-key="C">C</button>'
     '<button class="' + DIGIT + '" data-key="(" aria-label="Open parenthesis">(</button>'
     '<button class="' + DIGIT + '" data-key=")" aria-label="Close parenthesis">)</button>'
@@ -704,6 +706,84 @@ CALC_UI = (
     '<button class="' + SPECIAL + '" data-key="sqrt" aria-label="Square root">√</button>'
     '<button class="' + SPECIAL + '" data-key="%">%</button>'
     '<button class="' + EQUALS + '" data-key="=">=</button>'
+    '</div>'
+    '<div id="scientific-pad" class="grid grid-cols-5 gap-2 mt-3" hidden>'
+    '<button id="calc-angle-toggle" type="button" class="' + SPECIAL + '" data-key="angle-toggle" aria-pressed="false">DEG</button>'
+    '<button class="' + SPECIAL + '" data-key="C">AC</button>'
+    '<button class="' + SPECIAL + '" data-key="BS" aria-label="Delete last character">⌫</button>'
+    '<button class="' + SPECIAL + '" data-key="M+">M+</button>'
+    '<button class="' + SPECIAL + '" data-key="MR">MR</button>'
+    '<button class="' + SPECIAL + '" data-key="MC">MC</button>'
+    '<button class="' + DIGIT + '" data-key="(">(</button>'
+    '<button class="' + DIGIT + '" data-key=")">)</button>'
+    '<button class="' + DIGIT + '" data-key="pi">π</button>'
+    '<button class="' + DIGIT + '" data-key="e">e</button>'
+    '<button class="' + SPECIAL + '" data-key="Ans">Ans</button>'
+    '<button class="' + SPECIAL + '" data-key="sin">sin</button>'
+    '<button class="' + SPECIAL + '" data-key="cos">cos</button>'
+    '<button class="' + SPECIAL + '" data-key="tan">tan</button>'
+    '<button class="' + SPECIAL + '" data-key="asin">sin⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="acos">cos⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="atan">tan⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="acsc">csc⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="asec">sec⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="acot">cot⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="sec">sec</button>'
+    '<button class="' + SPECIAL + '" data-key="csc">csc</button>'
+    '<button class="' + SPECIAL + '" data-key="cot">cot</button>'
+    '<button class="' + SPECIAL + '" data-key="sqrt">√</button>'
+    '<button class="' + SPECIAL + '" data-key="cbrt">∛</button>'
+    '<button class="' + SPECIAL + '" data-key="root">ⁿ√</button>'
+    '<button class="' + SPECIAL + '" data-key="square">x²</button>'
+    '<button class="' + SPECIAL + '" data-key="cube">x³</button>'
+    '<button class="' + SPECIAL + '" data-key="^">xʸ</button>'
+    '<button class="' + SPECIAL + '" data-key="log">log</button>'
+    '<button class="' + SPECIAL + '" data-key="ln">ln</button>'
+    '<button class="' + SPECIAL + '" data-key="exp">eˣ</button>'
+    '<button class="' + SPECIAL + '" data-key="tenpow">10ˣ</button>'
+    '<button class="' + SPECIAL + '" data-key="reciprocal">1/x</button>'
+    '<button class="' + SPECIAL + '" data-key="sinh">sinh</button>'
+    '<button class="' + SPECIAL + '" data-key="cosh">cosh</button>'
+    '<button class="' + SPECIAL + '" data-key="tanh">tanh</button>'
+    '<button class="' + SPECIAL + '" data-key="csch">csch</button>'
+    '<button class="' + SPECIAL + '" data-key="sech">sech</button>'
+    '<button class="' + SPECIAL + '" data-key="coth">coth</button>'
+    '<button class="' + SPECIAL + '" data-key="abs">abs</button>'
+    '<button class="' + SPECIAL + '" data-key="floor">floor</button>'
+    '<button class="' + SPECIAL + '" data-key="ceil">ceil</button>'
+    '<button class="' + SPECIAL + '" data-key="round">round</button>'
+    '<button class="' + SPECIAL + '" data-key="!">n!</button>'
+    '<button class="' + SPECIAL + '" data-key="%">%</button>'
+    '<button class="' + SPECIAL + '" data-key="nPr">nPr</button>'
+    '<button class="' + SPECIAL + '" data-key="nCr">nCr</button>'
+    '<button class="' + SPECIAL + '" data-key="mod">mod</button>'
+    '<button class="' + SPECIAL + '" data-key="mean">mean</button>'
+    '<button class="' + SPECIAL + '" data-key="median">median</button>'
+    '<button class="' + SPECIAL + '" data-key="stdev">stdev</button>'
+    '<button class="' + SPECIAL + '" data-key="stdevp">stdevp</button>'
+    '<button class="' + SPECIAL + '" data-key="var">var</button>'
+    '<button class="' + SPECIAL + '" data-key="varp">varp</button>'
+    '<button class="' + SPECIAL + '" data-key="min">min</button>'
+    '<button class="' + SPECIAL + '" data-key="max">max</button>'
+    '<button class="' + SPECIAL + '" data-key="sum">sum</button>'
+    '<button class="' + SPECIAL + '" data-key="gcd">gcd</button>'
+    '<button class="' + SPECIAL + '" data-key="lcm">lcm</button>'
+    '<button class="' + DIGIT + '" data-key="7">7</button>'
+    '<button class="' + DIGIT + '" data-key="8">8</button>'
+    '<button class="' + DIGIT + '" data-key="9">9</button>'
+    '<button class="' + OPS + '" data-key="/">÷</button>'
+    '<button class="' + OPS + '" data-key="*">×</button>'
+    '<button class="' + DIGIT + '" data-key="4">4</button>'
+    '<button class="' + DIGIT + '" data-key="5">5</button>'
+    '<button class="' + DIGIT + '" data-key="6">6</button>'
+    '<button class="' + OPS + '" data-key="-">−</button>'
+    '<button class="' + OPS + '" data-key="+">+</button>'
+    '<button class="' + DIGIT + '" data-key="1">1</button>'
+    '<button class="' + DIGIT + '" data-key="2">2</button>'
+    '<button class="' + DIGIT + '" data-key="3">3</button>'
+    '<button class="' + DIGIT + '" data-key="0">0</button>'
+    '<button class="' + DIGIT + '" data-key=".">.</button>'
+    '<button class="' + EQUALS + '" data-key="=">=</button>'
     '</div></div>'
 )
 
@@ -712,6 +792,20 @@ for _t in TOOLS:
     _t["sources"] = _t["sources"] + " " + REVIEW_STATUS.get(_t["slug"], "")
     if _t["slug"] == "standard-calculator":
         _t["ui"] = CALC_UI
+        _t["guide"] += [
+            ("How to use the online standard and scientific calculator", [
+                "CalculateAllInOne is a free online calculator for everyday arithmetic and more advanced scientific calculations. Use the standard keypad for addition, subtraction, multiplication, division, percentages and brackets. Select Scientific Mode when you need trigonometry, powers, roots, logarithms, factorials, combinations or permutations. The calculator works in a modern browser on desktop and mobile, with large, touch-friendly keys.",
+                "Enter an expression in the same order you would write it on paper. Brackets are evaluated first, then powers, multiplication and division, and finally addition and subtraction. For example, 2 + 3 × 4 equals 14 because multiplication takes priority. Use parentheses in (2 + 3) × 4 to make the result 20. Press clear to start again, or use backspace to remove the last character.",
+            ]),
+            ("Scientific calculator functions and angle modes", [
+                "Scientific Mode includes sine, cosine and tangent, inverse trigonometric functions, square roots, powers, constants such as pi and e, logarithms, factorials, combinations and permutations. Choose DEG when an angle is expressed in degrees, such as sin(30), which equals 0.5. Choose RAD when an angle is expressed in radians, such as sin(pi/2), which equals 1. Using the wrong angle mode is a common reason a trigonometry answer looks incorrect.",
+                "The calculator also provides an answer memory and basic memory controls to help with multi-step calculations. Check the displayed expression before pressing equals, especially when using negative exponents, nested brackets or logarithms with a custom base. Some inputs have no real-number result, such as dividing by zero or taking a square root of a negative number, so invalid operations should be corrected rather than treated as a numeric answer.",
+            ]),
+            ("Who can use this free online calculator", [
+                "Students can check arithmetic and practise algebra or trigonometry. Teachers and tutors can demonstrate order of operations, powers and angle conversion. Households can work out percentages, discounts and everyday totals, while office users can verify figures before entering them into a spreadsheet. These examples describe common uses, not a guarantee that a result is suitable for every professional task.",
+                "CalculateAllInOne performs calculations in the browser and is designed for quick access without installing an app. It is a practical calculation aid, not a substitute for independently checking high-stakes engineering, financial, medical or scientific work. For important results, verify the formula, units, rounding and assumptions with an authoritative source or qualified professional. If an answer seems unexpected, split the expression into smaller steps and compare the intermediate values.",
+            ]),
+        ]
 
 
 def home_extra_html(lang):

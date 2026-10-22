@@ -334,3 +334,16 @@
   .ca-home-tool-grid { gap: .35rem; }
   .ca-home-tool-grid a { min-height: 2.7rem; padding: .55rem; font-size: .85rem; }
 }
+
+
+/* Scientific calculator controls: compact but touch-friendly across narrow phones. */
+.ca-calculator-engine #calc-mode-toggle { width: 100%; min-height: 48px; }
+.ca-calculator-engine #scientific-pad[hidden],
+.ca-calculator-engine #calc-pad[hidden] { display: none !important; }
+.ca-calculator-engine #scientific-pad button { min-width: 0; min-height: 48px; padding: .45rem .2rem; font-size: clamp(.78rem, 2.8vw, 1rem); line-height: 1.15; overflow-wrap: anywhere; }
+.ca-calculator-engine #scientific-pad button[data-key="="] { grid-column: span 2; }
+.ca-calculator-engine #calc-history { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .ca-calculator-engine #scientific-pad { gap: .35rem; }
+  .ca-calculator-engine #scientific-pad button { min-height: 44px; border-radius: .5rem; }
+}
