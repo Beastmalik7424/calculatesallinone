@@ -609,3 +609,9 @@ assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?\.ca-home-calculator\s
 assert "20261023-home-layout-fix-v2" in home_html, "Homepage must load the restored calculator-first stylesheet"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
 assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
+standard_tool_h1_pos = standard_tool_html.find("<h1")
+standard_tool_lead_end = standard_tool_html.find("</p>", standard_tool_h1_pos)
+standard_tool_calc_pos = standard_tool_html.find('id="calc-display"')
+standard_tool_note_pos = standard_tool_html.find("Evidence-based note")
+assert standard_tool_calc_pos > standard_tool_lead_end, "Standard calculator widget must follow its title and lead"
+assert standard_tool_note_pos < 0 or standard_tool_calc_pos < standard_tool_note_pos, "Standard calculator widget must precede explanatory notes"
