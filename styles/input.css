@@ -161,13 +161,14 @@
 
 /* Calculator-first homepage: make the working calculator the first visible block. */
 .ca-home-wrap { display: flex; flex-direction: column; }
+.ca-home-header { order: -2; max-width: 58rem; margin: .25rem auto .7rem; }
 .ca-home-layout { order: -1; }
-.ca-home-header { order: 0; max-width: 58rem; margin: 1rem auto 1.25rem; }
 .ca-home-calculator { order: -2; }
 .ca-home-side-left { order: -1; }
 .ca-home-tools { order: 0; }
 .ca-home-header h1 { font-size: clamp(1.45rem, 3vw, 2.15rem); letter-spacing: -.025em; }
-.ca-home-lead { max-width: 58rem; margin-top: .5rem; font-size: .96rem; line-height: 1.55; }
+.ca-home-header .ca-home-badge { padding: .35rem .65rem; font-size: .65rem; }
+.ca-home-lead { max-width: 58rem; margin-top: .35rem; font-size: .92rem; line-height: 1.4; }
 .ca-home-calculator #calc-pad button { min-height: clamp(3rem, 6.8vw, 3.6rem); }
 @media (min-width: 1201px) {
   .ca-home-layout { grid-template-columns: minmax(0,1fr) minmax(21rem,1.35fr) minmax(0,1fr); }
