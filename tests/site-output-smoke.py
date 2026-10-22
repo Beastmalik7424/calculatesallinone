@@ -654,7 +654,7 @@ assert ".ca-home-layout" in site_css_compact and "grid-template-columns:minmax(0
 assert ".ca-home-side{display:none!important}" in site_css_compact and ".ca-home-tools{display:block!important;width:100%}" in site_css_compact, "Homepage should hide decorative side copy but preserve the other-tools list below the calculator"
 assert ".ca-home-calculator #calc-pad button" in site_css_compact, "Homepage calculator button styles must survive the CSS build"
 input_css = (ROOT.parent / "styles" / "input.css").read_text(encoding="utf-8")
-input_css_compact = re.sub(r"\\s+", "", input_css)
+input_css_compact = re.sub(r"\s+", "", input_css)
 assert "@media(max-width:640px)" in input_css_compact and ".ca-home-calculator #calc-pad button{min-height:2.8rem}" in input_css_compact, "Homepage mobile calculator sizing must be explicitly defined in source CSS"
 assert "20261023-standard-calculator-restore" in home_html, "Homepage must load the restored calculator-first stylesheet"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
