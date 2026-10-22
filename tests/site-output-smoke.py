@@ -584,3 +584,11 @@ assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage mus
 
 assert "<h1>Free Online Standard Calculator</h1>" in home_html, "Homepage H1 must identify the primary calculator"
 assert "Fast, free, and private. Tap the buttons or use your keyboard to calculate." in home_html, "Homepage opening paragraph must be concise and action-oriented"
+
+# The standard calculator landing page now explicitly describes its scientific mode.
+scientific_url = SITE + "/standard-calculator/"
+assert "Scientific" in titles[scientific_url], "Calculator page title must identify the scientific mode"
+assert "scientific calculator" in descriptions[scientific_url].lower(), "Calculator meta description must describe scientific calculations"
+scientific_html = output_for_url(scientific_url).read_text(encoding="utf-8")
+assert "Scientific Mode" in scientific_html, "Scientific mode toggle must be present in generated HTML"
+assert "How to use the online standard and scientific calculator" in visible_main_text(scientific_html).lower(), "Scientific calculator guide must be visible to crawlers"
