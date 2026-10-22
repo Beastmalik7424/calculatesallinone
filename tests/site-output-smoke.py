@@ -417,7 +417,10 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261023-standard-calculator-restore" in homepage_html, "Homepage must load the current Standard Calculator restoration stylesheet"
+assert "/assets/site.css?v=20261023-home-layout-fix" in homepage_html, "Homepage must load the current calculator layout stylesheet"
+assert ".ca-home-layout{display:grid" in site_css, "Homepage calculator layout must use the responsive single-column grid"
+assert ".ca-home-side-left{display:none!important}" in site_css, "Homepage promotional sidebar must not push the calculator below the fold"
+assert ".ca-home-calculator .ca-calculator-engine{width:100%;max-width:100%" in site_css, "Homepage calculator must use the available width"
 # Every dynamic calculator message, unit label, category label, and theme label
 # must be translated for all supported languages, not silently fall back to English.
 # This checks source coverage at build time; browser tests separately verify rendered output.
