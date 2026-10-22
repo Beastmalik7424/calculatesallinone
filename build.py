@@ -1057,7 +1057,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261022-calculator-first-layout">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261023-standard-calculator-restore">\n'
         + ld + ads + "</head>\n"
     )
 
