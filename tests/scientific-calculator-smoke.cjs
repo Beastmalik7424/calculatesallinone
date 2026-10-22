@@ -35,6 +35,7 @@ function click(id, key) {
 }
 function scientific(keys) {
   for (const key of keys) click("scientific-pad", key);
+  click("scientific-pad", "=");
   return elements["calc-display"].textContent;
 }
 
