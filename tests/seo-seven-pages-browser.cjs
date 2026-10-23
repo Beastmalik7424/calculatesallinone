@@ -151,6 +151,97 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
       }
       await emiPage.close();
     }
+
+    // All English calculator pages: first interactive control must remain near the top and the page must fit mobile/desktop viewports.
+    const calculatorRoutes = [
+      "/zakat-calculator/", "/bmi-calculator/", "/profit-loss-calculator/",
+      "/discount-calculator/", "/age-calculator/", "/unit-converter/",
+      "/standard-calculator/", "/tasbih-counter/", "/stopwatch/"
+    ];
+    for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+      for (const path of calculatorRoutes) {
+        const toolPage = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+        const toolErrors = [];
+        toolPage.on("console", msg => { if (msg.type() === "error") toolErrors.push("console: " + msg.text()); });
+        toolPage.on("pageerror", err => toolErrors.push("pageerror: " + err.message));
+        const toolResponse = await toolPage.goto(base + path, { waitUntil: "load", timeout: 30000 });
+        assert.equal(toolResponse && toolResponse.status(), 200, path + " should return HTTP 200 at " + viewport.width + "px");
+        const main = toolPage.locator("main").first();
+        assert.equal(await main.count(), 1, path + " should have a main landmark");
+        const mainBox = await main.boundingBox();
+        assert.ok(mainBox && mainBox.x >= 0 && mainBox.x + mainBox.width <= viewport.width + 2,
+          path + " main content must fit " + viewport.width + "px viewport");
+        assert.ok((await toolPage.evaluate(() => document.documentElement.scrollWidth)) <= viewport.width + 2,
+          path + " must not cause horizontal overflow at " + viewport.width + "px");
+        const firstToolControl = main.locator(
+          "#tasbih-app, .ca-calculator-engine, #calc-display, form, button[data-key], button[type=submit], input, select, button[type=button]"
+        ).first();
+        assert.ok(await firstToolControl.count(), path + " must expose an interactive calculator control");
+        const controlBox = await firstToolControl.boundingBox();
+        assert.ok(controlBox && controlBox.y < 1000,
+          path + " calculator controls must not be pushed excessively far below the page heading at " + viewport.width + "px");
+        if (toolErrors.length) {
+          toolErrors.forEach(error => console.log("  " + path + " " + viewport.width + "px " + error));
+          failures.push(path + " " + viewport.width + "px: browser console/page errors detected");
+        }
+        await toolPage.close();
+      }
+      console.log("All nine English calculator pages fit " + viewport.width + "px without horizontal overflow and keep controls near the top.");
+    }
+
+    // Tasbih counter: clear, readable count and touch targets, working count/undo/reset, and local persistence.
+    for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+      const tasbih = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      const tasbihErrors = [];
+      tasbih.on("console", msg => { if (msg.type() === "error") tasbihErrors.push("console: " + msg.text()); });
+      tasbih.on("pageerror", err => tasbihErrors.push("pageerror: " + err.message));
+      const response = await tasbih.goto(base + "/tasbih-counter/", { waitUntil: "load", timeout: 30000 });
+      assert.equal(response && response.status(), 200, "Tasbih page should return HTTP 200");
+      const counter = tasbih.locator("#tasbih-app");
+      const count = tasbih.locator("#t-count");
+      const tap = tasbih.locator("#t-tap");
+      assert.equal(await counter.isVisible(), true, "Tasbih counter UI must be visible");
+      assert.equal((await count.textContent()).trim(), "0", "Tasbih count should start at zero in a clean browser context");
+      const countBox = await count.boundingBox();
+      const tapBox = await tap.boundingBox();
+      assert.ok(countBox && countBox.height >= 140, "Tasbih count display must be large and easy to read");
+      assert.ok(tapBox && tapBox.height >= 90, "Tasbih Count one button must be a generous touch target");
+      assert.ok(countBox.x >= 0 && countBox.x + countBox.width <= viewport.width + 2,
+        "Tasbih count display must fit " + viewport.width + "px viewport");
+      await tap.click();
+      assert.equal((await count.textContent()).trim(), "1", "Tasbih Count one should increment");
+      await tasbih.locator("#t-undo").click();
+      assert.equal((await count.textContent()).trim(), "0", "Tasbih Undo should reverse one count");
+      await tap.click();
+      await tasbih.reload({ waitUntil: "load" });
+      assert.equal((await tasbih.locator("#t-count").textContent()).trim(), "1", "Tasbih count should persist on the device after reload");
+      await tasbih.locator("#t-reset").click();
+      assert.equal((await tasbih.locator("#t-count").textContent()).trim(), "0", "Tasbih Reset should clear the current count");
+      assert.ok((await tasbih.evaluate(() => document.documentElement.scrollWidth)) <= viewport.width + 2,
+        "Tasbih page must not cause horizontal overflow at " + viewport.width + "px");
+      if (tasbihErrors.length) {
+        tasbihErrors.forEach(error => console.log("  Tasbih " + viewport.width + "px " + error));
+        failures.push("Tasbih " + viewport.width + "px: browser console/page errors detected");
+      }
+      await tasbih.close();
+      console.log("Tasbih interaction and layout passed at " + viewport.width + "px.");
+    }
+
+    // EMI first-screen regression: the calculator panel should precede the long explanatory copy and breadcrumb.
+    for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+      const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      const response = await page.goto(base + "/emi-calculator/", { waitUntil: "load", timeout: 30000 });
+      assert.equal(response && response.status(), 200, "EMI page should return HTTP 200");
+      const heading = await page.locator("h1").boundingBox();
+      const calculatorPanel = await page.locator("#calculator").boundingBox();
+      const intro = await page.locator(".emi-intro").boundingBox();
+      assert.ok(heading && calculatorPanel && intro, "EMI heading, calculator and relocated introduction must exist");
+      assert.ok(calculatorPanel.y < intro.y, "EMI calculator must appear before the long description");
+      assert.ok(calculatorPanel.y < 300, "EMI calculator should start near the top of the page at " + viewport.width + "px");
+      assert.ok((await page.evaluate(() => document.documentElement.scrollWidth)) <= viewport.width + 2,
+        "EMI page must not cause horizontal overflow at " + viewport.width + "px");
+      await page.close();
+    }
   } catch (error) {
     failures.push("interactive calculator browser test: " + (error && error.message ? error.message : String(error)));
   } finally {
