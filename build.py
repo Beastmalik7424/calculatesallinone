@@ -1318,7 +1318,7 @@ def tool_page(t):
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
     elif t["slug"] == "unit-converter":
-        title = "Unit Converter for Length, Weight & Temperature | CalculatesAll"
+        title = "Unit Converter: Length, Weight & Temp | CalculatesAll"
         desc = "Convert length, weight and temperature units online, with clear results for common measurements."
         ui = t["ui"]
         guide = t["guide"]
