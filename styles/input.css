@@ -952,49 +952,57 @@
   }
 }
 
-/* Tasbih counter: high-clarity count display and generous touch targets on desktop and mobile. */
+/* Tasbih first-view layout: count, Count one, Undo and Reset fit without scrolling. */
+#tool-calculator:has(#tasbih-app) {
+  margin-top: .5rem !important;
+  padding: .75rem !important;
+}
 #tasbih-app {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 48rem;
   margin-inline: auto;
-  gap: 1rem;
+  gap: .5rem;
 }
 #tasbih-app #t-count {
   display: grid;
   place-items: center;
   width: 100%;
-  min-height: 10rem;
-  padding: 1rem;
+  min-height: 6.25rem;
+  padding: .5rem;
   border: 2px solid #cbd5e1;
-  border-radius: 1rem;
+  border-radius: .85rem;
   background: #f8fafc;
   color: #0f172a;
-  font-size: clamp(4rem, 10vw, 7rem);
+  font-size: clamp(3.5rem, 8vw, 5rem);
   font-weight: 850;
   line-height: 1;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 #tasbih-app #t-progress {
-  margin: .5rem 0;
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  margin: 0;
+  font-size: 1rem;
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.25;
 }
 #tasbih-app #t-tap {
-  min-height: 6.5rem;
+  min-height: 4.25rem;
+  padding: .5rem 1rem;
   border: 2px solid #0f766e;
-  border-radius: 1rem;
+  border-radius: .85rem;
   background: #0f766e;
   color: #fff;
-  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   font-weight: 800;
   touch-action: manipulation;
 }
 #tasbih-app #t-tap:hover { background: #115e59; }
 #tasbih-app #t-undo,
 #tasbih-app #t-reset {
-  min-height: 3.25rem;
+  min-height: 2.75rem;
+  padding: .45rem .75rem;
   font-size: 1rem;
   font-weight: 700;
 }
@@ -1002,14 +1010,14 @@
 #tasbih-app #t-custom-phrase,
 #tasbih-app #t-target,
 #tasbih-app #t-custom-target {
-  min-height: 3rem;
+  min-height: 2.75rem;
   font-size: 1rem;
 }
 #tasbih-app button:focus-visible,
 #tasbih-app input:focus-visible,
 #tasbih-app select:focus-visible {
   outline: 3px solid #0f766e;
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 .dark #tasbih-app #t-count {
   border-color: #475569;
@@ -1022,15 +1030,16 @@
   color: #fff;
 }
 @media (max-width: 640px) {
-  #tasbih-app { gap: .85rem; }
+  #tool-calculator:has(#tasbih-app) { padding: .625rem !important; }
+  #tasbih-app { gap: .4rem; }
   #tasbih-app #t-count {
-    min-height: 9rem;
-    font-size: clamp(3.75rem, 18vw, 5.5rem);
-    border-radius: .85rem;
+    min-height: 5.75rem;
+    font-size: clamp(3.25rem, 16vw, 4.5rem);
+    border-radius: .75rem;
   }
   #tasbih-app #t-tap {
-    min-height: 6rem;
-    border-radius: .85rem;
+    min-height: 3.75rem;
+    border-radius: .75rem;
   }
 }
 
