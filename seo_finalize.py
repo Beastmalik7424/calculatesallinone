@@ -21,6 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
+    "/tasbih-counter/": "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
     "/ur/zakat-calculator/": "اپنی بچت، اثاثے اور واجب الادا قرض درج کرکے چاندی کے نصاب اور مکمل قمری سال کی شرط کے مطابق زکوٰۃ کا حساب کریں۔",
@@ -118,7 +119,11 @@ def normalize_meta(raw, path, lang):
         title = "Profit and Loss Calculator | CalculatesAll"
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
+    if path == "/tasbih-counter/":
+        title = "Online Tasbih Counter | Free Dhikr Counter | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
+    if path == "/tasbih-counter/":
+        desc = "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app."
     if len(title) > 59:
         title = re.sub(r" \\| Free Online Tool \\| CalculatesAll$", " | CalculatesAll", title)
         if len(title) > 59:
