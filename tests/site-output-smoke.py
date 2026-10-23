@@ -77,6 +77,20 @@ for url in urls:
         assert desc_match.group(1) == "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app.", (
             "Tasbih description must be specific, useful and aligned with the page."
         )
+    if url == SITE + "/age-calculator/":
+        assert title_match.group(1) == "Age Calculator | Years, Months & Days | CalculatesAll", (
+            "Age calculator title must communicate its exact-age use case."
+        )
+        assert desc_match.group(1) == "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation.", (
+            "Age calculator description must be useful and page-specific."
+        )
+    if url == SITE + "/unit-converter/":
+        assert title_match.group(1) == "Unit Converter | Length, Weight & Temp | CalculatesAll", (
+            "Unit converter title must describe its supported conversion categories."
+        )
+        assert desc_match.group(1) == "Convert length, weight and temperature units online, including cm to inches, inches to cm, kilograms to pounds and Celsius to Fahrenheit.", (
+            "Unit converter description must describe supported conversion intent."
+        )
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
