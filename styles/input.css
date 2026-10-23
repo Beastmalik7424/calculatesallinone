@@ -954,7 +954,10 @@
 
 main:has(#tasbih-app) > h1 {
   background-image: linear-gradient(100deg, #065f46, #0f766e, #a88737) !important;
-  margin-bottom: .15rem !important;
+  font-size: clamp(1.4rem, 4vw, 1.8rem) !important;
+  line-height: 1.12 !important;
+  margin-top: .05rem !important;
+  margin-bottom: .1rem !important;
 }
 .dark main:has(#tasbih-app) > h1 {
   background-image: linear-gradient(100deg, #6ee7b7, #d6c28b) !important;
@@ -977,7 +980,7 @@ main:has(#tasbih-app) > h1 {
   width: 100%;
   max-width: 48rem;
   margin-inline: auto;
-  gap: .45rem;
+  gap: .35rem;
 }
 #tasbih-app #t-count {
   position: relative;
@@ -1015,7 +1018,7 @@ main:has(#tasbih-app) > h1 {
 #tasbih-app #t-progress {
   margin: 0;
   color: #065f46;
-  font-size: .95rem;
+  font-size: .88rem;
   font-weight: 750;
   line-height: 1.2;
   text-align: center;
@@ -1028,7 +1031,7 @@ main:has(#tasbih-app) > h1 {
   background: linear-gradient(135deg, #065f46, #047857);
   color: #fffdf7;
   box-shadow: 0 3px 0 #a88737;
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-size: clamp(1.1rem, 2.8vw, 1.35rem);
   font-weight: 850;
   letter-spacing: .01em;
   touch-action: manipulation;
@@ -1043,7 +1046,7 @@ main:has(#tasbih-app) > h1 {
   border-radius: .75rem;
   background: #fffdf7;
   color: #065f46;
-  font-size: 1rem;
+  font-size: .92rem;
   font-weight: 800;
 }
 #tasbih-app #t-reset { background: #f3efdf; }
@@ -1054,9 +1057,18 @@ main:has(#tasbih-app) > h1 {
   min-height: 2.65rem;
   border-color: #c9b16e;
   border-radius: .65rem;
-  font-size: 1rem;
+  font-size: .92rem;
 }
-#tasbih-app label { color: #065f46; font-weight: 750; }
+#tasbih-app label { color: #065f46; font-size: .9rem; font-weight: 750; }
+#tasbih-app .tasbih-target-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: .5rem;
+  margin-top: .1rem;
+}
+#tasbih-app .tasbih-target-row label { margin: 0; white-space: nowrap; }
+#tasbih-app .tasbih-target-row select { min-width: 0; width: 100%; }
 #tasbih-app button:focus-visible,
 #tasbih-app input:focus-visible,
 #tasbih-app select:focus-visible {
@@ -1091,9 +1103,16 @@ main:has(#tasbih-app) > h1 {
   #tasbih-app #t-count {
     min-height: 5.75rem;
     padding-top: 1.2rem;
-    font-size: clamp(3.2rem, 15vw, 4.3rem);
+    font-size: clamp(3rem, 14vw, 3.8rem);
     border-radius: .8rem;
   }
   #tasbih-app #t-tap { min-height: 3.8rem; border-radius: .75rem; }
+  #tasbih-app #t-undo,
+  #tasbih-app #t-reset { min-height: 2.5rem; }
+  #tasbih-app #t-phrase,
+  #tasbih-app #t-custom-phrase,
+  #tasbih-app #t-target,
+  #tasbih-app #t-custom-target { min-height: 2.4rem; }
+  #tasbih-app .tasbih-target-row { gap: .4rem; }
 }
 
