@@ -230,8 +230,22 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
       assert.equal((await count.textContent()).trim(), "0", "Tasbih count should start at zero in a clean browser context");
       const countBox = await count.boundingBox();
       const tapBox = await tap.boundingBox();
-      assert.ok(countBox && countBox.height >= 140, "Tasbih count display must be large and easy to read");
-      assert.ok(tapBox && tapBox.height >= 90, "Tasbih Count one button must be a generous touch target");
+      const undo = tasbih.locator("#t-undo");
+      const reset = tasbih.locator("#t-reset");
+      const undoBox = await undo.boundingBox();
+      const resetBox = await reset.boundingBox();
+      const viewportBottom = viewport.height;
+      assert.ok(countBox && countBox.height >= 90, "Tasbih count display must remain large and readable");
+      assert.ok(tapBox && tapBox.height >= 60, "Tasbih Count one button must remain an accessible touch target");
+      assert.ok(undoBox && resetBox && await undo.isVisible() && await reset.isVisible(),
+        "Tasbih Undo and Reset buttons must both be visible");
+      assert.ok([countBox, tapBox, undoBox, resetBox].every(box => box.y >= 0 && box.y + box.height <= viewportBottom),
+        "Count, Count one, Undo and Reset must all fit in the first " + viewport.width + "x" + viewport.height + " viewport without scrolling");
+      assert.ok(countBox.y < tapBox.y && tapBox.y < undoBox.y && tapBox.y < resetBox.y,
+        "Tasbih count and primary action buttons must appear in a clear top-to-bottom order");
+      const phraseBox = await tasbih.locator("#t-phrase").boundingBox();
+      assert.ok(phraseBox && phraseBox.y > Math.max(undoBox.y + undoBox.height, resetBox.y + resetBox.height),
+        "Phrase/target settings must be placed after the primary action buttons");
       assert.ok(countBox.x >= 0 && countBox.x + countBox.width <= viewport.width + 2,
         "Tasbih count display must fit " + viewport.width + "px viewport");
       await tap.click();
