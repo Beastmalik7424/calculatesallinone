@@ -1105,6 +1105,10 @@ def shell(main_html, lang="en", current_path=None):
     main_classes = main_width + " mx-auto px-5 py-10"
     if current_path in tool_paths | urdu_tool_paths:
         main_classes += " ca-tool-main"
+    # BMI and Tasbih are utility-first pages. Keep the heading, then show the tool
+    # immediately; reserve the long intro and breadcrumb for below the interaction.
+    if current_path in {"/bmi-calculator/", "/tasbih-counter/"}:
+        main_classes = main_width + " mx-auto px-5 pt-1 pb-10 ca-tool-main"
     return (
         '<body class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased">\n'
         '<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">'
@@ -1344,16 +1348,27 @@ def tool_page(t):
         + ui + '</section>'
     )
     answer_note = answer_block(t["slug"], "en")
-    primary_tool_content = calculator_section + answer_note
-    body = (
+    headline_first = t["slug"] in ("bmi-calculator", "tasbih-counter")
+    breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
         '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li><li aria-hidden="true">/</li>'
         '<li aria-current="page">' + t["name"] + "</li></ol></nav>"
-        '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
-        '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
-        + primary_tool_content
-        + ad_slot()
+    )
+    heading_html = (
+        '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent '
+        + ("mt-1" if headline_first else "mt-4") + '"><span aria-hidden="true">'
+        + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
+    )
+    lead_html = '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
+    # Keep only the headline before BMI/Tasbih controls. Move descriptive copy
+    # and breadcrumbs below the calculator, without hiding or deleting content.
+    primary_tool_content = calculator_section + (lead_html if headline_first else "") + answer_note
+    body = (
+        (heading_html + primary_tool_content + breadcrumb_html)
+        if headline_first else
+        (breadcrumb_html + heading_html + lead_html + primary_tool_content)
+    ) + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
         + '<h2 class="' + H2 + '">Rules and limits</h2>'
