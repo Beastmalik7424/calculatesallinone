@@ -1365,10 +1365,10 @@ def tool_page(t):
     # and breadcrumbs below the calculator, without hiding or deleting content.
     primary_tool_content = calculator_section + (lead_html if headline_first else "") + answer_note
     body = (
-        (heading_html + primary_tool_content + breadcrumb_html)
-        if headline_first else
-        (breadcrumb_html + heading_html + lead_html + primary_tool_content)
-    ) + ad_slot()
+        ((heading_html + primary_tool_content + breadcrumb_html)
+         if headline_first else
+         (breadcrumb_html + heading_html + lead_html + primary_tool_content))
+        + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
         + '<h2 class="' + H2 + '">Rules and limits</h2>'
