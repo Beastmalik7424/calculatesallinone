@@ -951,3 +951,86 @@
     min-height: 56px;
   }
 }
+
+/* Tasbih counter: high-clarity count display and generous touch targets on desktop and mobile. */
+#tasbih-app {
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+  gap: 1rem;
+}
+#tasbih-app #t-count {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 10rem;
+  padding: 1rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 1rem;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 850;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+#tasbih-app #t-progress {
+  margin: .5rem 0;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.5;
+}
+#tasbih-app #t-tap {
+  min-height: 6.5rem;
+  border: 2px solid #0f766e;
+  border-radius: 1rem;
+  background: #0f766e;
+  color: #fff;
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 800;
+  touch-action: manipulation;
+}
+#tasbih-app #t-tap:hover { background: #115e59; }
+#tasbih-app #t-undo,
+#tasbih-app #t-reset {
+  min-height: 3.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+#tasbih-app #t-phrase,
+#tasbih-app #t-custom-phrase,
+#tasbih-app #t-target,
+#tasbih-app #t-custom-target {
+  min-height: 3rem;
+  font-size: 1rem;
+}
+#tasbih-app button:focus-visible,
+#tasbih-app input:focus-visible,
+#tasbih-app select:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 3px;
+}
+.dark #tasbih-app #t-count {
+  border-color: #475569;
+  background: #0b1220;
+  color: #f8fafc;
+}
+.dark #tasbih-app #t-tap {
+  border-color: #14b8a6;
+  background: #0f766e;
+  color: #fff;
+}
+@media (max-width: 640px) {
+  #tasbih-app { gap: .85rem; }
+  #tasbih-app #t-count {
+    min-height: 9rem;
+    font-size: clamp(3.75rem, 18vw, 5.5rem);
+    border-radius: .85rem;
+  }
+  #tasbih-app #t-tap {
+    min-height: 6rem;
+    border-radius: .85rem;
+  }
+}
+
