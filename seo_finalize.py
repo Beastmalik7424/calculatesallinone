@@ -122,6 +122,8 @@ def normalize_meta(raw, path, lang):
     if path == "/tasbih-counter/":
         title = "Online Tasbih Counter | Free Dhikr Counter | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
+    if path == "/tasbih-counter/":
+        desc = "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app."
     if len(title) > 59:
         title = re.sub(r" \\| Free Online Tool \\| CalculatesAll$", " | CalculatesAll", title)
         if len(title) > 59:
