@@ -951,3 +951,168 @@
     min-height: 56px;
   }
 }
+
+main:has(#tasbih-app) > h1 {
+  background-image: linear-gradient(100deg, #065f46, #0f766e, #a88737) !important;
+  font-size: clamp(1.4rem, 4vw, 1.8rem) !important;
+  line-height: 1.12 !important;
+  margin-top: .05rem !important;
+  margin-bottom: .1rem !important;
+}
+.dark main:has(#tasbih-app) > h1 {
+  background-image: linear-gradient(100deg, #6ee7b7, #d6c28b) !important;
+}
+/* Tasbih: Islamic-inspired emerald, warm gold, and a compact first-screen layout. */
+#tool-calculator:has(#tasbih-app) {
+  margin-top: .35rem !important;
+  padding: .65rem !important;
+  border: 1px solid #d6c28b;
+  border-radius: 1.15rem;
+  background:
+    radial-gradient(ellipse at top left, rgba(214,194,139,.16), transparent 48%),
+    radial-gradient(ellipse at bottom right, rgba(5,150,105,.10), transparent 48%),
+    #fffdf7;
+  box-shadow: 0 8px 24px rgba(6,78,59,.08);
+}
+#tasbih-app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+  gap: .35rem;
+}
+#tasbih-app #t-count {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 6rem;
+  padding: 1.25rem .5rem .4rem;
+  border: 2px solid #b99a4b;
+  border-radius: .95rem;
+  background-color: #f7f5e9;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(6,95,70,.035) 0, rgba(6,95,70,.035) 1px, transparent 1px, transparent 12px),
+    repeating-linear-gradient(-45deg, rgba(185,154,75,.045) 0, rgba(185,154,75,.045) 1px, transparent 1px, transparent 12px);
+  color: #064e3b;
+  font-size: clamp(3.5rem, 8vw, 5rem);
+  font-weight: 850;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+#tasbih-app #t-count::before {
+  content: "ذِكْر  •  DHIKR";
+  position: absolute;
+  top: .35rem;
+  left: 0;
+  right: 0;
+  color: #8a6b24;
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  line-height: 1;
+  text-align: center;
+}
+#tasbih-app #t-progress {
+  margin: 0;
+  color: #065f46;
+  font-size: .88rem;
+  font-weight: 750;
+  line-height: 1.2;
+  text-align: center;
+}
+#tasbih-app #t-tap {
+  min-height: 4rem;
+  padding: .45rem 1rem;
+  border: 2px solid #b99a4b;
+  border-radius: .9rem;
+  background: linear-gradient(135deg, #065f46, #047857);
+  color: #fffdf7;
+  box-shadow: 0 3px 0 #a88737;
+  font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+  font-weight: 850;
+  letter-spacing: .01em;
+  touch-action: manipulation;
+}
+#tasbih-app #t-tap:hover { background: linear-gradient(135deg, #064e3b, #065f46); }
+#tasbih-app #t-tap:active { transform: translateY(2px); box-shadow: 0 1px 0 #a88737; }
+#tasbih-app #t-undo,
+#tasbih-app #t-reset {
+  min-height: 2.65rem;
+  padding: .4rem .7rem;
+  border: 1px solid #c9b16e;
+  border-radius: .75rem;
+  background: #fffdf7;
+  color: #065f46;
+  font-size: .92rem;
+  font-weight: 800;
+}
+#tasbih-app #t-reset { background: #f3efdf; }
+#tasbih-app #t-phrase,
+#tasbih-app #t-custom-phrase,
+#tasbih-app #t-target,
+#tasbih-app #t-custom-target {
+  min-height: 2.65rem;
+  border-color: #c9b16e;
+  border-radius: .65rem;
+  font-size: .92rem;
+}
+#tasbih-app label { color: #065f46; font-size: .9rem; font-weight: 750; }
+#tasbih-app .tasbih-target-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: .5rem;
+  margin-top: .1rem;
+}
+#tasbih-app .tasbih-target-row label { margin: 0; white-space: nowrap; }
+#tasbih-app .tasbih-target-row select { min-width: 0; width: 100%; }
+#tasbih-app button:focus-visible,
+#tasbih-app input:focus-visible,
+#tasbih-app select:focus-visible {
+  outline: 3px solid #0f766e;
+  outline-offset: 2px;
+}
+.dark #tool-calculator:has(#tasbih-app) {
+  border-color: #8a7137;
+  background:
+    radial-gradient(ellipse at top left, rgba(185,154,75,.12), transparent 48%),
+    #10231e;
+}
+.dark #tasbih-app #t-count {
+  border-color: #b99a4b;
+  background-color: #132f27;
+  color: #f8f5e8;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(214,194,139,.045) 0, rgba(214,194,139,.045) 1px, transparent 1px, transparent 12px),
+    repeating-linear-gradient(-45deg, rgba(214,194,139,.035) 0, rgba(214,194,139,.035) 1px, transparent 1px, transparent 12px);
+}
+.dark #tasbih-app #t-progress,
+.dark #tasbih-app label { color: #d6c28b; }
+.dark #tasbih-app #t-undo,
+.dark #tasbih-app #t-reset {
+  border-color: #8a7137;
+  background: #17382e;
+  color: #f8f5e8;
+}
+@media (max-width: 640px) {
+  #tool-calculator:has(#tasbih-app) { padding: .5rem !important; border-radius: .9rem; }
+  #tasbih-app { gap: .35rem; }
+  #tasbih-app #t-count {
+    min-height: 5.75rem;
+    padding-top: 1.2rem;
+    font-size: clamp(3rem, 14vw, 3.8rem);
+    border-radius: .8rem;
+  }
+  #tasbih-app #t-tap { min-height: 3.8rem; border-radius: .75rem; }
+  #tasbih-app #t-undo,
+  #tasbih-app #t-reset { min-height: 2.5rem; }
+  #tasbih-app #t-phrase,
+  #tasbih-app #t-custom-phrase,
+  #tasbih-app #t-target,
+  #tasbih-app #t-custom-target { min-height: 2.4rem; }
+  #tasbih-app .tasbih-target-row { gap: .4rem; }
+}
+

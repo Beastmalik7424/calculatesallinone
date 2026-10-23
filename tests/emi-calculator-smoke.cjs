@@ -23,6 +23,14 @@ assert.match(html, /<nav aria-label="Main" class="site-nav">[\s\S]*?<a href="\/#
 assert.match(html, /<main class="emi-page-main">/, "EMI calculator must use the shared-width main content wrapper");
 assert.match(html, /\.emi-page-main\s*\{[^}]*max-width:\s*960px/s, "EMI main content must be capped to the intended centered tool width");
 
+assert.match(html, /<header class="emi-page-header"><h1>Free EMI Calculator<\/h1><\/header>/,
+  "EMI page should keep a concise heading above the calculator");
+assert.ok(html.indexOf('<section id="calculator"') < html.indexOf('class="emi-intro"'),
+  "EMI calculator must appear before the long explanatory introduction");
+assert.ok(html.indexOf('<section id="calculator"') < html.indexOf('class="small breadcrumb"'),
+  "EMI breadcrumb should not push the calculator down the first screen");
+
+
 const match = html.match(/const Engine=\(\(\)=>\{[\s\S]*?\n\}\)\(\);/);
 assert.ok(match, "EMI calculation engine must remain extractable from the standalone page");
 const sandbox = { module: { exports: {} }, Number, Math, String, Error, URLSearchParams };

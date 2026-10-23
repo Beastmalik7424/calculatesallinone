@@ -2,6 +2,7 @@
 """Validate the homepage and seven scoped HTML files with the Nu HTML Checker."""
 import json
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -29,11 +30,27 @@ for path in FILES:
         headers={"Content-Type": "text/html; charset=utf-8", "User-Agent": "CalculateAllInOne-SEO-Validation/1.0"},
         method="POST",
     )
-    try:
-        with urllib.request.urlopen(request, timeout=45) as response:
-            result = json.loads(response.read().decode("utf-8"))
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-        print(f"HTML VALIDATION ERROR {path}: validator request failed: {exc}")
+    result = None
+    last_error = None
+    # The public Nu validator can briefly rate-limit CI bursts. Retry only
+    # transient HTTP/network failures; HTML validation errors remain failures.
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(request, timeout=45) as response:
+                result = json.loads(response.read().decode("utf-8"))
+            break
+        except urllib.error.HTTPError as exc:
+            last_error = exc
+            if exc.code != 429 and exc.code < 500:
+                break
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            last_error = exc
+        if attempt < 3:
+            delay = 2 ** (attempt + 1)
+            print(f"HTML VALIDATION RETRY {path}: attempt {attempt + 1}/4 after {last_error}; waiting {delay}s")
+            time.sleep(delay)
+    if result is None:
+        print(f"HTML VALIDATION ERROR {path}: validator request failed after retries: {last_error}")
         failed = True
         continue
     messages = result.get("messages", [])
