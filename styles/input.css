@@ -1089,11 +1089,11 @@ main:has(#tasbih-app) > h1 {
   #tool-calculator:has(#tasbih-app) { padding: .5rem !important; border-radius: .9rem; }
   #tasbih-app { gap: .35rem; }
   #tasbih-app #t-count {
-    min-height: 5.6rem;
+    min-height: 5.75rem;
     padding-top: 1.2rem;
     font-size: clamp(3.2rem, 15vw, 4.3rem);
     border-radius: .8rem;
   }
-  #tasbih-app #t-tap { min-height: 3.7rem; border-radius: .75rem; }
+  #tasbih-app #t-tap { min-height: 3.8rem; border-radius: .75rem; }
 }
 
