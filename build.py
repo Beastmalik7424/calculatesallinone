@@ -1933,6 +1933,10 @@ def main():
     google_verification = "google2e764d068684499b.html"
     if os.path.isfile(google_verification):
         shutil.copy2(google_verification, os.path.join(OUT, google_verification))
+    # Preserve the IndexNow key as a root-level static asset in the deployed output.
+    indexnow_key = "c07ad49659854199b740dc06dbd825a5.txt"
+    if os.path.isfile(indexnow_key):
+        shutil.copy2(indexnow_key, os.path.join(OUT, indexnow_key))
     llms_source = "llms.txt"
     if os.path.isfile(llms_source):
         shutil.copy2(llms_source, os.path.join(OUT, llms_source))
