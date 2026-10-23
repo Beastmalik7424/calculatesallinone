@@ -78,7 +78,7 @@ for url in urls:
             "Tasbih description must be specific, useful and aligned with the page."
         )
     if url == SITE + "/age-calculator/":
-        assert title_match.group(1) == "Age Calculator | Years, Months & Days | CalculatesAll", (
+        assert html_lib.unescape(title_match.group(1)) == "Age Calculator | Years, Months & Days | CalculatesAll", (
             "Age calculator title must communicate its exact-age use case."
         )
         assert desc_match.group(1) == "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation.", (
