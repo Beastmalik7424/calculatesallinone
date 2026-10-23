@@ -617,6 +617,7 @@ assert re.search(r"#main\s+\.ca-home-layout\s*\{[^}]*grid-template-columns:\s*mi
 assert homepage_layout_rule_start >= 0, "Generated CSS must retain the high-specificity one-column desktop override"
 assert 'id="all-tools" class="ca-home-tools"' in home_html, "Homepage must expose a stable All Tools anchor for cross-page navigation"
 standard_tool_html = output_for_url(SITE + "/standard-calculator/").read_text(encoding="utf-8")
+assert '<title>Standard and Scientific Calculator | CalculatesAll</title>' in standard_tool_html, "Standard calculator title must not be cut off mid-word"
 assert "ca-tool-main" not in standard_tool_html, "Standard Calculator tool route must not receive compact non-standard tool styling"
 standard_tool_h1_pos = standard_tool_html.find("<h1")
 standard_tool_lead_end = standard_tool_html.find("</p>", standard_tool_h1_pos)
