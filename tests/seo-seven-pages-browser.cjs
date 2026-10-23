@@ -174,7 +174,7 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
         assert.ok((await toolPage.evaluate(() => document.documentElement.scrollWidth)) <= viewport.width + 2,
           path + " must not cause horizontal overflow at " + viewport.width + "px");
         const firstToolControl = main.locator(
-          "#tasbih-app, .ca-calculator-engine, #calc-display, form, button[data-key], button[type=submit], input, select, button[type=button]"
+          "#tasbih-app, .ca-calculator-engine, #calc-display, #sw-display, #sw-start, form, button[data-key], button[type=submit], input, select, button[type=button]"
         ).first();
         assert.ok(await firstToolControl.count(), path + " must expose an interactive calculator control");
         const controlBox = await firstToolControl.boundingBox();
@@ -187,6 +187,32 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
         await toolPage.close();
       }
       console.log("All nine English calculator pages fit " + viewport.width + "px without horizontal overflow and keep controls near the top.");
+    }
+
+    // BMI and Tasbih: headline is the only content before the interactive tool.
+    for (const path of ["/bmi-calculator/", "/tasbih-counter/"]) {
+      for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+        const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+        const response = await page.goto(base + path, { waitUntil: "load", timeout: 30000 });
+        assert.equal(response && response.status(), 200, path + " should return HTTP 200");
+        const main = page.locator("main").first();
+        const heading = main.locator(":scope > h1");
+        const calculator = main.locator(":scope > #tool-calculator");
+        const intro = main.locator(":scope > p.text-lg");
+        assert.equal(await heading.count(), 1, path + " should keep its single headline at the top");
+        assert.equal(await calculator.count(), 1, path + " calculator should be directly under the headline");
+        assert.equal(await intro.count(), 1, path + " intro should remain available below the calculator");
+        const headingBox = await heading.boundingBox();
+        const calculatorBox = await calculator.boundingBox();
+        const introBox = await intro.boundingBox();
+        assert.ok(headingBox && calculatorBox && introBox, path + " heading, calculator, and intro must be visible in layout");
+        assert.ok(headingBox.y < calculatorBox.y, path + " heading must precede the calculator");
+        assert.ok(calculatorBox.y < 220, path + " calculator should begin near the top of the " + viewport.width + "px viewport");
+        assert.ok(introBox.y > calculatorBox.y + calculatorBox.height, path + " intro text must be below the calculator");
+        assert.ok((await page.evaluate(() => document.documentElement.scrollWidth)) <= viewport.width + 2,
+          path + " must not cause horizontal overflow at " + viewport.width + "px");
+        await page.close();
+      }
     }
 
     // Tasbih counter: clear, readable count and touch targets, working count/undo/reset, and local persistence.
