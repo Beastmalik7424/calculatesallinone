@@ -1310,6 +1310,34 @@ def tool_page(t):
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
+    elif t["slug"] == "age-calculator":
+        title = "Age Calculator by Date of Birth | CalculatesAll"
+        desc = "Calculate your exact age in years, months and days from your date of birth, with total days lived."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
+    elif t["slug"] == "unit-converter":
+        title = "Unit Converter for Length, Weight & Temperature | CalculatesAll"
+        desc = "Convert length, weight and temperature units online, with clear results for common measurements."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
+    elif t["slug"] == "discount-calculator":
+        title = "Discount Calculator: Sale Price & Savings | CalculatesAll"
+        desc = "Calculate a discount, final sale price and total savings from the original price and discount percentage."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
+    elif t["slug"] == "stopwatch":
+        title = "Free Online Stopwatch | CalculatesAll"
+        desc = "Use a free online stopwatch with start, stop, reset and hundredths-of-a-second timing in your browser."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
     else:
         title = t["name"] + " | Free Online Tool | CalculatesAll"
         desc = t["description"]
