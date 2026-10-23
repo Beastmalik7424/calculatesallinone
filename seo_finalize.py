@@ -116,6 +116,8 @@ def normalize_meta(raw, path, lang):
     # Repair the known malformed title explicitly rather than truncating it into a fragment.
     if path == "/profit-loss-calculator/":
         title = "Profit and Loss Calculator | CalculatesAll"
+    if path == "/standard-calculator/":
+        title = "Standard and Scientific Calculator | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
     if len(title) > 59:
         title = re.sub(r" \\| Free Online Tool \\| CalculatesAll$", " | CalculatesAll", title)
