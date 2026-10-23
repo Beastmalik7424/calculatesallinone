@@ -70,6 +70,18 @@ for url in urls:
         assert title_match.group(1) == "Profit and Loss Calculator | CalculatesAll", (
             "Profit and Loss title must be complete and descriptive."
         )
+    elif url == SITE + "/age-calculator/":
+        assert title_match.group(1) == "Age Calculator by Date of Birth | CalculatesAll"
+        assert "date of birth" in desc_match.group(1).lower()
+    elif url == SITE + "/unit-converter/":
+        assert title_match.group(1) == "Unit Converter for Length, Weight & Temperature | CalculatesAll"
+        assert "length, weight and temperature" in desc_match.group(1).lower()
+    elif url == SITE + "/discount-calculator/":
+        assert title_match.group(1) == "Discount Calculator: Sale Price & Savings | CalculatesAll"
+        assert "final sale price" in desc_match.group(1).lower()
+    elif url == SITE + "/stopwatch/":
+        assert title_match.group(1) == "Free Online Stopwatch | CalculatesAll"
+        assert "hundredths-of-a-second timing" in desc_match.group(1).lower()
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
