@@ -243,9 +243,20 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
         "Count, Count one, Undo and Reset must all fit in the first " + viewport.width + "x" + viewport.height + " viewport without scrolling");
       assert.ok(countBox.y < tapBox.y && tapBox.y < undoBox.y && tapBox.y < resetBox.y,
         "Tasbih count and primary action buttons must appear in a clear top-to-bottom order");
+      const target = tasbih.locator("#t-target");
+      const targetBox = await target.boundingBox();
+      assert.equal(await target.isVisible(), true, "Target selector must be visible without scrolling");
+      assert.ok(targetBox && targetBox.y >= 0 && targetBox.y + targetBox.height <= viewportBottom,
+        "The complete Target selector must fit in the first " + viewport.width + "x" + viewport.height + " viewport");
+      assert.ok(targetBox.y > Math.max(undoBox.y + undoBox.height, resetBox.y + resetBox.height),
+        "Target selector must appear after the primary count actions");
+      const tapLabel = await tap.getAttribute("aria-label");
+      assert.equal(tapLabel, "Count one", "Primary action must have an explicit accessible name");
+      assert.ok(tapBox.x >= 0 && tapBox.x + tapBox.width <= viewport.width + 2,
+        "Count one button must be fully visible and easy to reach horizontally");
       const phraseBox = await tasbih.locator("#t-phrase").boundingBox();
-      assert.ok(phraseBox && phraseBox.y > Math.max(undoBox.y + undoBox.height, resetBox.y + resetBox.height),
-        "Phrase/target settings must be placed after the primary action buttons");
+      assert.ok(phraseBox && phraseBox.y > targetBox.y + targetBox.height,
+        "Phrase settings must follow the immediately visible Target selector");
       assert.ok(countBox.x >= 0 && countBox.x + countBox.width <= viewport.width + 2,
         "Tasbih count display must fit " + viewport.width + "px viewport");
       await tap.click();
