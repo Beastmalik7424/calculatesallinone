@@ -266,8 +266,12 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
       await tap.click();
       await tasbih.reload({ waitUntil: "load" });
       assert.equal((await tasbih.locator("#t-count").textContent()).trim(), "1", "Tasbih count should persist on the device after reload");
+      tasbih.once("dialog", async dialog => {
+        assert.equal(dialog.type(), "confirm", "Tasbih Reset should ask for confirmation before clearing the count");
+        await dialog.accept();
+      });
       await tasbih.locator("#t-reset").click();
-      assert.equal((await tasbih.locator("#t-count").textContent()).trim(), "0", "Tasbih Reset should clear the current count");
+      assert.equal((await tasbih.locator("#t-count").textContent()).trim(), "0", "Tasbih Reset should clear the current count after confirmation");
       assert.ok((await tasbih.evaluate(() => document.documentElement.scrollWidth)) <= viewport.width + 2,
         "Tasbih page must not cause horizontal overflow at " + viewport.width + "px");
       if (tasbihErrors.length) {
