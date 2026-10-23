@@ -124,7 +124,7 @@ def normalize_meta(raw, path, lang):
     if path == "/age-calculator/":
         title = "Age Calculator | Years, Months & Days | CalculatesAll"
     if path == "/unit-converter/":
-        title = "Unit Converter | Length, Weight & Temp | CalculatesAll"
+        title = "Unit Converter: Length, Weight, Temperature | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
     if path == "/tasbih-counter/":
         desc = "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app."
