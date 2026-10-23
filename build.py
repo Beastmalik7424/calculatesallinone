@@ -420,14 +420,12 @@ TOOLS = [
         "lead": "A free digital tasbeeh counter for daily dhikr. Choose a phrase, set a target, and keep your count on this device without downloading an app.",
         "ui": (
             '<div class="max-w-lg mx-auto flex flex-col gap-2" id="tasbih-app">'
-            // Put the count and primary actions first so they fit in the first viewport.
             '<output id="t-count" class="block text-center font-semibold tabular-nums rounded-xl" aria-live="polite">0</output>'
             '<p id="t-progress" class="text-center text-base text-stone-800 dark:text-stone-200" aria-live="polite"></p>'
             '<button id="t-tap" type="button" aria-label="Count one" class="w-full @B@ text-xl">Count one</button>'
             '<div class="grid grid-cols-2 gap-2"><button id="t-undo" type="button" class="@S@">Undo</button>'
             '<button id="t-reset" type="button" class="@S@">Reset</button></div>'
             '<p class="text-sm text-stone-700 dark:text-stone-300"><span id="t-lifetime-label">Lifetime counted total:</span> <output id="t-lifetime">0</output></p>'
-            // Keep phrase and target settings available below the count and all action buttons.
             '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">'
             '<div><label class="@L@" for="t-phrase">Dhikr phrase</label>'
             '<select id="t-phrase" class="@I@">'
