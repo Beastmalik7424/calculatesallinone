@@ -419,7 +419,7 @@ TOOLS = [
         "h1": "Free Online Tasbih Counter",
         "lead": "A free digital tasbeeh counter for daily dhikr. Choose a phrase, set a target, and keep your count on this device without downloading an app.",
         "ui": (
-            '<div class="max-w-lg mx-auto space-y-5" id="tasbih-app">'
+            '<div class="ca-tasbih-shell max-w-lg mx-auto space-y-5" id="tasbih-app">'
             '<div class="grid sm:grid-cols-2 gap-4">'
             '<div><label class="@L@" for="t-phrase">Dhikr phrase</label>'
             '<select id="t-phrase" class="@I@">'
@@ -1339,7 +1339,7 @@ def tool_page(t):
     updated_date = LASTMOD.get(path)
     updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + ". " + t["sources"] + "</p>") if updated_date else ""
     calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
+        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
          if t["slug"] != "standard-calculator" else
          '<section class="mt-8 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">')
         + ui + '</section>'
