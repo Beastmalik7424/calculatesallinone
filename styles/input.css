@@ -1230,3 +1230,28 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
     min-height: 46px !important;
   }
 }
+
+@media (max-width: 359px) {
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] {
+    flex-wrap: wrap !important;
+    column-gap: .3rem !important;
+    row-gap: .1rem !important;
+    padding-inline: .55rem !important;
+    padding-block: .1rem !important;
+  }
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] > a {
+    font-size: 1rem !important; min-width: 0 !important;
+  }
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] > div {
+    gap: .2rem !important;
+    min-width: 0 !important;
+  }
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] #theme-toggle {
+    font-size: .72rem !important;
+    padding-inline: .3rem !important;
+  }
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] details summary {
+    font-size: .75rem !important;
+    padding-inline: .2rem !important;
+  }
+}
