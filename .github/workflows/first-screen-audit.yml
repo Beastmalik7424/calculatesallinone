@@ -1,0 +1,30 @@
+name: First-screen calculator browser audit
+on:
+  pull_request:
+    paths:
+      - 'build.py'
+      - 'styles/input.css'
+      - 'static/app.js'
+      - 'tests/viewport-audit.cjs'
+      - '.github/workflows/first-screen-audit.yml'
+  workflow_dispatch:
+jobs:
+  viewport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - run: npm run build
+      - run: npm install --no-save playwright@1.56.1
+      - run: npx playwright install --with-deps chromium
+      - name: Audit actual rendered first-screen buttons and profit calculations
+        run: |
+          python3 -m http.server 8123 --directory public >/tmp/site-server.log 2>&1 &
+          node tests/viewport-audit.cjs
