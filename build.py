@@ -420,6 +420,7 @@ TOOLS = [
         "lead": "A free digital tasbeeh counter for daily dhikr. Choose a phrase, set a target, and keep your count on this device without downloading an app.",
         "ui": (
             '<div class="ca-tasbih-shell max-w-lg mx-auto space-y-5" id="tasbih-app">'
+            '<div class="ca-tasbih-settings">'
             '<div class="grid sm:grid-cols-2 gap-4">'
             '<div><label class="@L@" for="t-phrase">Dhikr phrase</label>'
             '<select id="t-phrase" class="@I@">'
@@ -434,6 +435,7 @@ TOOLS = [
             '<div id="t-custom-target-wrap" hidden><label class="@L@" for="t-custom-target">Custom target (1 to 10,000)</label>'
             '<input id="t-custom-target" class="@I@" type="text" inputmode="numeric" autocomplete="off" pattern="[0-9]+" aria-describedby="t-target-error">'
             '<p id="t-target-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div>'
+            '</div>'
             '<output id="t-count" class="block text-center text-6xl sm:text-7xl font-semibold tabular-nums bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8" aria-live="polite">0</output>'
             '<p id="t-progress" class="text-center text-base text-stone-800 dark:text-stone-200" aria-live="polite"></p>'
             '<p id="t-storage-note" class="text-sm text-amber-800 dark:text-amber-200" role="status" hidden>Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.</p>'
