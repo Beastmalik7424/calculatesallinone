@@ -1012,3 +1012,27 @@
   #main .ca-tool-tasbih-counter, #main .ca-tool-bmi-calculator { padding: .45rem !important; }
   #main .ca-tasbih-shell #t-count { font-size: 3rem !important; }
 }
+
+/* First-screen priority: use compact, accessible controls only on BMI/Tasbih pages. */
+body:has(.ca-tool-bmi-calculator) header, body:has(.ca-tool-tasbih-counter) header { position: static !important; }
+body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) header nav { padding-top: .35rem !important; padding-bottom: .35rem !important; }
+#main .ca-tasbih-custom-phrase:has(input:disabled) { display: none !important; }
+#main .ca-tasbih-shell > .grid:first-child { display: grid; grid-template-columns: minmax(0,1fr); gap: .2rem !important; }
+#main .ca-tasbih-shell #t-count { min-height: 0 !important; padding: .25rem !important; }
+#main .ca-tasbih-shell #t-tap { min-height: 44px !important; }
+#main .ca-tasbih-shell > p:last-child { margin-top: .2rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form { display: flex !important; flex-direction: column; gap: .3rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset { display: flex !important; flex-wrap: wrap; align-items: center; gap: .2rem .5rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset legend { float: left; width: auto; margin-right: .5rem; padding: 0; font-size: .85rem; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset .flex { gap: .3rem .6rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset label { min-height: 34px; font-size: .82rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form > div label { font-size: .82rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form input[type=text] { min-height: 42px !important; }
+#main .ca-tool-bmi-calculator #bmi-form button[type=submit] { width: 100%; min-height: 44px; }
+#main .ca-tool-bmi-calculator #bmi-result:empty { display: none; }
+@media (max-width: 600px) {
+  body:has(.ca-tool-bmi-calculator) header, body:has(.ca-tool-tasbih-counter) header { min-height: 0 !important; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset legend { float: none; width: 100%; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset .flex { flex-wrap: nowrap; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset label { white-space: nowrap; }
+}
