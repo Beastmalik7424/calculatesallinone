@@ -610,7 +610,7 @@ for slug in calculator_slugs:
     calc_pos = tool_html.find('<section id="tool-calculator"')
     h1_pos = tool_html.find("<h1")
     lead_pos = tool_html.find('<p class="mt-3 text-lg', h1_pos)
-    if slug in {"bmi-calculator", "tasbih-counter"}:
+    if slug in {"bmi-calculator", "tasbih-counter", "zakat-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"}:
         moved_lead_pos = tool_html.find('ca-tool-lead-after', h1_pos)
         assert h1_pos >= 0 and calc_pos > h1_pos and moved_lead_pos > calc_pos, (
             f"Calculator must precede moved explanatory lead: /{slug}/"
@@ -704,3 +704,17 @@ assert '#main .ca-tool-tasbih-counter .ca-tasbih-settings' in site_css, "Missing
 
 assert '#main .ca-tool-tasbih-counter #t-tap' in site_css, "Missing Tasbih mobile button sizing rules"
 assert 'body:has(.ca-tool-tasbih-counter) #main' in site_css, "Missing Tasbih main spacing reduction"
+
+# Non-excluded calculators put their functional tools before descriptive lead text.
+for _slug in ("zakat-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"):
+    _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
+    assert _page.index('id="tool-calculator"') < _page.index("ca-tool-lead-after"), _slug + " must prioritize tool before lead"
+for _slug in ("standard-calculator", "bmi-calculator", "tasbih-counter"):
+    _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
+    assert 'ca-tool-lead-after' in _page or _slug == "standard-calculator", "Excluded calculator changed: " + _slug
+_profit_page = Path("public/profit-loss-calculator/index.html").read_text(encoding="utf-8")
+for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses", "pl-product-fields", "p-cost", "p-sell", "pl-result"):
+    assert 'id="' + _id + '"' in _profit_page, "Missing profit field: " + _id
+assert "Business P&amp;L" in _profit_page, "Business profit mode missing"
+assert "net operating" in _profit_page.lower(), "Profit page must explain net operating profit"
+assert "ca-profit-mode" in site_css, "Profit mode CSS missing"
