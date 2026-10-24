@@ -1,3 +1,11 @@
+# Regression: remove the full redundant title suffix, not just truncate words.
+from seo_finalize import normalize_meta
+_sample_title = "Advanced Example Online Calculator | Free Online Tool | CalculatesAll"
+_sample_html = '<title>' + _sample_title + '</title><meta name="description" content="' + ('A' * 100) + '">'
+_normalized, _title, _description = normalize_meta(_sample_html, "/example-calculator/", "en")
+assert _title == "Advanced Example Online Calculator | CalculatesAll", _title
+assert "<title>" + _title + "</title>" in _normalized
+
 import html as html_lib
 import json
 import os
