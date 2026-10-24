@@ -701,3 +701,6 @@ for control_id in ('id="t-count"', 'id="t-tap"', 'id="t-undo"', 'id="t-reset"'):
     assert control_id in tasbih_first_html, f"Missing Tasbih control: {control_id}"
 assert tasbih_first_html.index('class="ca-tasbih-settings"') < tasbih_first_html.index('id="t-phrase"') < tasbih_first_html.index('id="t-target"') < tasbih_first_html.index('id="t-count"') < tasbih_first_html.index('id="t-tap"') < tasbih_first_html.index('id="t-reset"'), "Tasbih phrase, target, count and buttons must appear in first-screen priority order"
 assert '#main .ca-tool-tasbih-counter .ca-tasbih-settings' in site_css, "Missing compact Tasbih settings styling"
+
+assert '#main .ca-tool-tasbih-counter #t-tap' in site_css, "Missing Tasbih mobile button sizing rules"
+assert 'body:has(.ca-tool-tasbih-counter) #main' in site_css, "Missing Tasbih main spacing reduction"

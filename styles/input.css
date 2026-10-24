@@ -1075,3 +1075,19 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
   #main .ca-tool-tasbih-counter { padding: .4rem !important; }
   #main .ca-tool-tasbih-counter .ca-tasbih-settings { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
 }
+
+/* Tasbih small-screen first-view: compress nonessential chrome, show all primary actions. */
+@media (max-width: 600px) {
+ body:has(.ca-tool-tasbih-counter) header nav { padding-block: .2rem !important; }
+ body:has(.ca-tool-tasbih-counter) #main { padding-top: .15rem !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-shell { gap: .12rem !important; margin-block: 0 !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-settings { gap: .2rem !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-settings label { font-size: .72rem !important; margin: 0 !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-settings select { min-height: 38px !important; height: 38px !important; padding-block: .15rem !important; }
+ #main .ca-tool-tasbih-counter #t-count { font-size: 2.4rem !important; padding: .1rem !important; line-height: 1 !important; min-height: 48px !important; }
+ #main .ca-tool-tasbih-counter #t-progress { font-size: .72rem !important; margin: 0 !important; }
+ #main .ca-tool-tasbih-counter #t-tap { min-height: 48px !important; height: 48px !important; padding: .25rem !important; font-size: 1.05rem !important; }
+ #main .ca-tool-tasbih-counter #t-tap + .grid { margin: 0 !important; gap: .25rem !important; }
+ #main .ca-tool-tasbih-counter #t-undo, #main .ca-tool-tasbih-counter #t-reset { min-height: 40px !important; padding: .2rem !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-shell > p:not(#t-progress):not(#t-storage-note) { font-size: .65rem !important; margin: 0 !important; }
+}
