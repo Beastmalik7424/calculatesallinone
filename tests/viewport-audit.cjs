@@ -23,6 +23,22 @@ const { chromium } = require('playwright');
   }
   await page.close();
  }
+ // Small-phone profit-only test and breadcrumb placement.
+ for (const size of [{width:360,height:640},{width:320,height:568}]) {
+  const small=await browser.newPage({viewport:size,deviceScaleFactor:1});
+  await small.goto('http://127.0.0.1:8123/profit-loss-calculator/');
+  const p=await small.evaluate(()=>{
+   const button=document.querySelector('#pl-form button[type="submit"]').getBoundingClientRect();
+   const breadcrumb=document.querySelector('#main nav[aria-label="Breadcrumb"]').getBoundingClientRect();
+   const section=document.querySelector('#tool-calculator').getBoundingClientRect();
+   return {buttonBottom:button.bottom,breadcrumbTop:breadcrumb.top,sectionBottom:section.bottom,overflow:document.documentElement.scrollWidth>innerWidth+2,wide:[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+2).slice(0,8).map(e=>({tag:e.tagName,id:e.id,cls:String(e.className).slice(0,70),right:Math.round(e.getBoundingClientRect().right)}))};
+  });
+  console.log('profit-small '+size.width+'x'+size.height,JSON.stringify(p));
+  if(p.buttonBottom>size.height-8||p.overflow)failures.push('profit first-screen failed '+size.width+'x'+size.height);
+  if(p.breadcrumbTop<p.sectionBottom)failures.push('profit breadcrumb not below tool');
+  await small.screenshot({path:'/tmp/profit-loss-calculator-'+size.width+'.png',fullPage:false});
+  await small.close();
+ }
  const page=await browser.newPage();
  await page.goto('http://127.0.0.1:8123/profit-loss-calculator/');
  await page.locator('#p-revenue').fill('1000');
