@@ -538,11 +538,45 @@
   function initProfit () {
     var form = $("pl-form")
     if (!form) return
+    var businessFields = $("pl-business-fields")
+    var productFields = $("pl-product-fields")
+    var modes = form.querySelectorAll('input[name="pl-mode"]')
+    function currentMode () {
+      var chosen = form.querySelector('input[name="pl-mode"]:checked')
+      return chosen ? chosen.value : "product"
+    }
+    function updateMode () {
+      var business = currentMode() === "business"
+      if (businessFields) businessFields.hidden = !business
+      if (productFields) productFields.hidden = business
+      say("pl-result", "")
+    }
+    Array.prototype.forEach.call(modes, function (radio) {
+      radio.addEventListener("change", updateMode)
+    })
+    updateMode()
     form.addEventListener("submit", function (e) {
       e.preventDefault()
+      if (currentMode() === "business") {
+        var revenue = num("p-revenue")
+        var cogs = num("p-cogs")
+        var expenses = num("p-expenses")
+        if (revenue === null || cogs === null || expenses === null ||
+            !Number.isFinite(revenue) || !Number.isFinite(cogs) || !Number.isFinite(expenses) ||
+            revenue < 0 || cogs < 0 || expenses < 0) {
+          say("pl-result", "Enter zero or positive numbers for revenue, cost of goods sold and other expenses.")
+          return
+        }
+        var gross = revenue - cogs
+        var net = gross - expenses
+        var margin = revenue === 0 ? "N/A (revenue is zero)" : (net / revenue * 100).toFixed(2) + "%"
+        say("pl-result", "Gross profit/loss: " + fmt(gross) + ". Net operating profit/loss: " +
+          fmt(net) + ". Net operating margin: " + margin + ".")
+        return
+      }
       var cost = num("p-cost")
       var sell = num("p-sell")
-      if (cost === null || sell === null || cost < 0 || sell < 0) {
+      if (cost === null || sell === null || !Number.isFinite(cost) || !Number.isFinite(sell) || cost < 0 || sell < 0) {
         say("pl-result", t("profitEnter"))
         return
       }
