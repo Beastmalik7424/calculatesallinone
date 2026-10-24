@@ -116,11 +116,11 @@ def normalize_meta(raw, path, lang):
     title = html.unescape(title_match.group(1).strip())
     # Repair the known malformed title explicitly rather than truncating it into a fragment.
     if path == "/profit-loss-calculator/":
-        title = "Profit and Loss Calculator | CalculatesAll"
+        title = "Profit and Loss Calculator | Profit % | CalculatesAll"
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
     if path == "/tasbih-counter/":
-        title = "Online Tasbih Counter | Free Dhikr Counter | CalculatesAll"
+        title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
     if path == "/age-calculator/":
         title = "Age Calculator | Years, Months & Days | CalculatesAll"
     if path == "/unit-converter/":
