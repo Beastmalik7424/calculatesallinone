@@ -540,10 +540,12 @@
     if (!form) return
     var businessFields = $("pl-business-fields")
     var productFields = $("pl-product-fields")
-    var modes = form.querySelectorAll('input[name="pl-mode"]')
+    var modes = document.querySelectorAll('input[name="pl-mode"]')
     function currentMode () {
-      var chosen = form.querySelector('input[name="pl-mode"]:checked')
-      return chosen ? chosen.value : "product"
+      for (var i = 0; i < modes.length; i++) {
+        if (modes[i].checked) return modes[i].value
+      }
+      return "product"
     }
     function updateMode () {
       var business = currentMode() === "business"
