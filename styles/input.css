@@ -1189,3 +1189,44 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
   #main .ca-tool-stopwatch .grid { gap: .35rem !important; }
   #main .ca-tool-stopwatch button { padding: .45rem .3rem !important; min-height: 44px !important; }
 }
+
+/* Profit-only first-screen layout. Preserve all inputs and other calculators. */
+#main:has(.ca-tool-profit-loss-calculator) > h1 { margin-top: .15rem !important; }
+#main .ca-tool-profit-loss-calculator { margin-top: .35rem !important; }
+#main .ca-tool-profit-loss-calculator #pl-form { margin: 0 !important; }
+#main .ca-tool-profit-loss-calculator .ca-profit-modes legend { margin-bottom: .2rem !important; }
+#main .ca-tool-profit-loss-calculator #pl-result:empty { min-height: 0 !important; padding: 0 !important; border: 0 !important; }
+#main:has(.ca-tool-profit-loss-calculator) > nav[aria-label="Breadcrumb"] {
+  margin-top: .75rem !important;
+}
+@media (max-width: 600px) {
+  #main:has(.ca-tool-profit-loss-calculator) > h1 {
+    font-size: 1.22rem !important; line-height: 1.12 !important;
+    margin-top: .1rem !important; margin-bottom: .15rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator {
+    padding: .45rem !important; margin-top: .2rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-form.space-y-5 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: .32rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-business-fields,
+  #main .ca-tool-profit-loss-calculator #pl-product-fields {
+    gap: .3rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-form label,
+  #main .ca-tool-profit-loss-calculator #pl-form legend {
+    font-size: .77rem !important; line-height: 1.1 !important;
+  }
+  #main .ca-tool-profit-loss-calculator .ca-profit-mode {
+    min-height: 42px !important; padding: .25rem .35rem !important;
+    font-size: .8rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-form input:not([type="radio"]) {
+    min-height: 42px !important; height: 42px !important;
+    padding: .25rem .4rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-form button {
+    min-height: 46px !important;
+  }
+}
