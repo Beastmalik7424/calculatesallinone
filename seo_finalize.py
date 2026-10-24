@@ -120,7 +120,7 @@ def normalize_meta(raw, path, lang):
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
     if path == "/tasbih-counter/":
-        title = "Online Tasbih Counter | Free Dhikr Counter | CalculatesAll"
+        title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
     if path == "/age-calculator/":
         title = "Age Calculator | Years, Months & Days | CalculatesAll"
     if path == "/unit-converter/":
