@@ -610,7 +610,7 @@ for slug in calculator_slugs:
     calc_pos = tool_html.find('<section id="tool-calculator"')
     h1_pos = tool_html.find("<h1")
     lead_pos = tool_html.find('<p class="mt-3 text-lg', h1_pos)
-    if slug in {"bmi-calculator", "tasbih-counter"}:
+    if slug in {"bmi-calculator", "tasbih-counter", "zakat-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"}:
         moved_lead_pos = tool_html.find('ca-tool-lead-after', h1_pos)
         assert h1_pos >= 0 and calc_pos > h1_pos and moved_lead_pos > calc_pos, (
             f"Calculator must precede moved explanatory lead: /{slug}/"
