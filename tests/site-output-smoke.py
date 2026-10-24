@@ -85,12 +85,17 @@ for url in urls:
             "Age calculator description must be useful and page-specific."
         )
     if url == SITE + "/unit-converter/":
-        assert title_match.group(1) == "Unit Converter: Length, Weight, Temperature | CalculatesAll", (
+        assert title_match.group(1) == "Unit Converter: cm to Inches, kg to lbs | CalculatesAll", (
             "Unit converter title must describe its supported conversion categories."
         )
-        assert desc_match.group(1) == "Convert length, weight and temperature units online, including cm to inches, inches to cm, kilograms to pounds and Celsius to Fahrenheit.", (
-            "Unit converter description must describe supported conversion intent."
+        assert desc_match.group(1) == "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result.", (
+            "Unit converter description must match supported conversions and search intent."
         )
+        assert len(title_match.group(1)) <= 59, "Unit converter title should remain concise"
+        assert "How do I convert centimeters to inches?" in html, "Unit converter must answer the high-demand cm-to-inches query"
+        assert "How do I convert kilograms to pounds?" in html, "Unit converter must answer the high-demand kg-to-lbs query"
+        assert "One inch is exactly 2.54 centimeters." in html, "Centimeter/inch conversion must use the exact NIST relationship"
+        assert "0.45359237 kg" in html, "Kilogram/pound conversion must include the exact reference relationship"
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
