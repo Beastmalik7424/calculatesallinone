@@ -610,9 +610,15 @@ for slug in calculator_slugs:
     calc_pos = tool_html.find('<section id="tool-calculator"')
     h1_pos = tool_html.find("<h1")
     lead_pos = tool_html.find('<p class="mt-3 text-lg', h1_pos)
-    assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
-        f"Calculator must follow the heading and short lead: /{slug}/"
-    )
+    if slug in {"bmi-calculator", "tasbih-counter"}:
+        moved_lead_pos = tool_html.find('ca-tool-lead-after', h1_pos)
+        assert h1_pos >= 0 and calc_pos > h1_pos and moved_lead_pos > calc_pos, (
+            f"Calculator must precede moved explanatory lead: /{slug}/"
+        )
+    else:
+        assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
+            f"Calculator must follow the heading and short lead: /{slug}/"
+        )
     main_open = re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', tool_html)
     assert main_open, f"Non-standard calculator page must use the compact calculator-first main layout: /{slug}/"
     note_pos = tool_html.find("Evidence-based note")
