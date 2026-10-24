@@ -210,21 +210,35 @@ TOOLS = [
         "category": "money",
         "name": "Profit and Loss Calculator",
         "app": "UtilitiesApplication",
-        "description": "Calculate profit or loss and profit percentage from cost price and selling price.",
-        "h1": "Profit and Loss Calculator",
-        "lead": "Enter the cost price and the selling price to see whether you made a profit or a loss, and by what percentage of cost.",
+        "description": "Calculate business profit and loss from revenue, cost of goods sold and expenses, or calculate profit and markup from a product cost and selling price.",
+        "h1": "Profit and Loss Calculator for Business and Products",
+        "lead": "Choose business P&L for revenue, costs and expenses, or product profit for buying and selling prices. Results show the correct percentage basis.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
-            '<div class="grid sm:grid-cols-2 gap-4">'
+            '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
+            '<div class="grid grid-cols-2 gap-2">'
+            '<label class="ca-profit-mode"><input type="radio" name="pl-mode" value="business" checked> Business P&amp;L</label>'
+            '<label class="ca-profit-mode"><input type="radio" name="pl-mode" value="product"> Product profit</label></div></fieldset>'
+            '<div id="pl-business-fields" class="grid sm:grid-cols-2 gap-4">'
+            + field("p-revenue", "Total revenue")
+            + field("p-cogs", "Cost of goods sold")
+            + field("p-expenses", "Other business expenses")
+            + '</div>'
+            '<div id="pl-product-fields" class="grid sm:grid-cols-2 gap-4" hidden>'
             + field("p-cost", "Cost price")
             + field("p-sell", "Selling price")
-            + '</div><button type="submit" class="@B@">Calculate</button></form>'
+            + '</div><button type="submit" class="@B@">Calculate profit or loss</button></form>'
             + result("pl-result")
         ),
         "guide": [
-            ("The formulas", [
-                "Profit or loss equals selling price minus cost price. A negative result is a loss.",
-                "Percentage equals profit or loss divided by cost price, multiplied by 100.",
+            ("Business P&L formulas", [
+                "Gross profit equals total revenue minus cost of goods sold. Net operating profit equals gross profit minus other business expenses.",
+                "Net operating margin equals net operating profit divided by total revenue, multiplied by 100. When revenue is zero, margin is not available.",
+                "This simplified operating P&L excludes separate interest and income tax calculations. Enter those amounts in other expenses only when appropriate.",
+            ]),
+            ("Product profit formulas", [
+                "Product profit or loss equals selling price minus cost price. A negative result is a loss.",
+                "Product markup percentage equals profit divided by cost price, multiplied by 100. Markup is not margin.",
             ]),
             ("Worked example, profit", [
                 "Cost price is 800. Selling price is 1,000. Profit is 200.",
@@ -240,10 +254,10 @@ TOOLS = [
             ]),
         ],
         "faq": [
-            ("Why is margin different from markup?", "Markup is calculated on cost. Margin is calculated on selling price. This calculator shows the percentage on cost price."),
-            ("Why does it show N/A?", "A percentage cannot be calculated when cost price is zero, because the formula divides by cost."),
+            ("Why is margin different from markup?", "Product mode shows markup on cost. Business mode shows net operating margin on revenue."),
+            ("Why does it show N/A?", "Product markup is unavailable when cost is zero. Business margin is unavailable when revenue is zero."),
         ],
-        "sources": "Standard accounting formulas for profit and percentage on cost.",
+        "sources": "Standard operating profit, margin and product markup formulas. This simplified calculator is not a formal financial statement.",
     },
     {
         "slug": "discount-calculator",
@@ -1306,6 +1320,13 @@ def tool_page(t):
         guide = BMI_GUIDE
         faqs = BMI_FAQ
         sources = BMI_SOURCES
+    elif t["slug"] == "profit-loss-calculator":
+        title = "Profit and Loss Calculator | Business P&L and Product Profit"
+        desc = "Free business P&L calculator for revenue, cost of goods sold and expenses, plus product profit and markup. See gross profit, operating profit and margin."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Free Online Tasbih Counter | Digital Tasbeeh Counter"
         desc = "Free online tasbih counter for daily dhikr. Tap to count, set targets of 33, 99 or 100, and save your count on your device. No download needed."
@@ -1355,7 +1376,7 @@ def tool_page(t):
         '<li aria-current="page">' + t["name"] + "</li></ol></nav>"
         '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
         + (primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
-           if t["slug"] in {"bmi-calculator", "tasbih-counter"}
+           if t["slug"] in {"bmi-calculator", "tasbih-counter"} or t["slug"] not in {"standard-calculator", "bmi-calculator", "tasbih-counter"}
            else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
         + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
