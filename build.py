@@ -665,9 +665,9 @@ EXTRA = {
         ],
     },
     "profit-loss-calculator": {
-        "quick": "Profit equals selling price minus cost price. Profit percentage equals profit divided by cost price, multiplied by 100.",
+        "quick": "Business P&L: net operating profit = revenue - cost of goods sold - other expenses, and operating margin = net operating profit / revenue x 100. Product mode: profit = selling price - cost price, and markup = profit / cost price x 100.",
         "faq": [
-            ("What is the difference between profit percentage and profit margin?", "Profit percentage uses cost as the base. Profit margin uses selling price as the base. This calculator shows profit percentage on cost."),
+            ("What is the difference between markup and margin?", "Product markup uses cost as its base. Business operating margin uses revenue as its base. These percentages are not interchangeable."),
             ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
         ],
     },
@@ -1239,7 +1239,7 @@ ANSWER_BLOCKS = {
         "ur": 'بالغ افراد میں CDC کے مطابق BMI کی 25.0 سے 30.0 سے کم حد کو زائد وزن کہا جاتا ہے؛ BMI صرف ابتدائی جانچ ہے، تشخیص نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC کی بالغوں کے لیے BMI درجہ بندی</a>۔'
     },
     "profit-loss-calculator": {
-        "en": 'If an item costs 1,000 and sells for 1,200, the difference is 200 before other business expenses. This is the basic cost-price comparison used by this calculator. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
+        "en": 'Business example: revenue 1,000, cost of goods sold 600 and other expenses 150 gives net operating profit 250 and margin 25%. Product example: cost 1,000 and selling price 1,200 gives markup 20%. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
         "ur": 'اگر کسی چیز کی قیمت خرید 1,000 اور فروخت 1,200 ہو تو دوسرے کاروباری اخراجات سے پہلے فرق 200 ہے۔ یہ اسی کیلکولیٹر کا بنیادی تقابل ہے۔ ماخذ: <a class="' + LINK + '" href="/methodology/">CalculatesAll کا حسابی طریقۂ کار</a>۔'
     },
     "discount-calculator": {
