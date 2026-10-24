@@ -951,3 +951,38 @@
     min-height: 56px;
   }
 }
+
+
+/* BMI and Tasbih: keep primary controls high in the viewport; preserve minimum touch sizes. */
+#main:has(.ca-tool-bmi-calculator), #main:has(.ca-tool-tasbih-counter) { padding-top: .5rem; }
+#main:has(.ca-tool-bmi-calculator) > h1, #main:has(.ca-tool-tasbih-counter) > h1 { margin-top: .35rem; font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.18; }
+#main:has(.ca-tool-bmi-calculator) > p:first-of-type, #main:has(.ca-tool-tasbih-counter) > p:first-of-type { margin-top: .3rem; font-size: .95rem; line-height: 1.35; }
+#main .ca-tool-bmi-calculator, #main .ca-tool-tasbih-counter { margin-top: .65rem; padding: .8rem; }
+#main #bmi-form { display: grid; gap: .45rem; }
+#main #bmi-form fieldset { margin: 0; }
+#main #bmi-form fieldset .flex { gap: .7rem; }
+#main #bmi-form label { margin-bottom: .15rem; }
+#main #bmi-form input[type=text] { min-height: 44px; }
+#main #bmi-form button[type=submit] { min-height: 48px; }
+#main .ca-tool-tasbih-counter { background: linear-gradient(145deg, #f3f9f3, #e7f3ed 65%, #fbf5e4); border: 1px solid #c5d9c8; }
+#main .ca-tasbih-shell { max-width: 38rem; gap: .55rem; }
+#main .ca-tasbih-shell > .grid:first-child { gap: .6rem; }
+#main .ca-tasbih-shell label { color: #14523f; font-weight: 650; }
+#main .ca-tasbih-shell select, #main .ca-tasbih-shell input { border-color: #8caf9b; background-color: #fffdf6; color: #123b30; min-height: 44px; }
+#main .ca-tasbih-shell #t-count { color: #f7e9ba; background: radial-gradient(circle at 50% 20%, #24705a, #103f34); border: 3px double #d8b866; border-radius: 1.5rem; padding: .65rem; font-size: clamp(3.1rem, 9vw, 4.7rem); line-height: 1.15; }
+#main .ca-tasbih-shell #t-tap { background: #146449; color: #fff; border: 2px solid #c5a65b; border-radius: 1rem; min-height: 58px; font-weight: 750; }
+#main .ca-tasbih-shell #t-tap:hover { background: #0d4c38; }
+#main .ca-tasbih-shell #t-undo, #main .ca-tasbih-shell #t-reset { min-height: 44px; }
+@media (min-width: 700px) {
+  #main #bmi-form { grid-template-columns: repeat(2, minmax(0,1fr)); column-gap: 1.2rem; align-items: end; }
+  #main #bmi-form button[type=submit] { grid-column: 1 / -1; }
+  #main .ca-tasbih-shell { max-width: 42rem; }
+}
+@media (max-width: 480px) {
+  #main .ca-tool-bmi-calculator, #main .ca-tool-tasbih-counter { padding: .65rem; }
+  #main .ca-tasbih-shell #t-count { padding: .45rem; }
+  #main .ca-tasbih-shell > .grid:first-child { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #main .ca-tasbih-shell #t-tap { transition: none; }
+}
