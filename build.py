@@ -426,6 +426,7 @@ TOOLS = [
             '<button id="t-tap" type="button" aria-label="Count one" class="w-full min-h-[64px] @B@ text-xl">Count one</button>'
             '<div class="grid grid-cols-2 gap-3"><button id="t-undo" type="button" class="@S@">Undo</button>'
             '<button id="t-reset" type="button" class="@S@">Reset</button></div>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300"><span id="t-lifetime-label">Lifetime counted total:</span><output id="t-lifetime">0</output></p>'
             '<div class="ca-tasbih-settings">'
             '<div class="grid sm:grid-cols-2 gap-4">'
             '<div><label class="@L@" for="t-phrase">Dhikr phrase</label>'
@@ -442,7 +443,6 @@ TOOLS = [
             '<input id="t-custom-target" class="@I@" type="text" inputmode="numeric" autocomplete="off" pattern="[0-9]+" aria-describedby="t-target-error">'
             '<p id="t-target-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div>'
             '</div>'
-            '<p class="text-sm text-stone-700 dark:text-stone-300"><span id="t-lifetime-label">Lifetime counted total:</span><output id="t-lifetime">0</output></p>'
             '<p class="text-sm text-stone-700 dark:text-stone-300">Keyboard: press Space or Enter to count when focus is not in a text field or control.</p>'
             '</div>'
         ),
