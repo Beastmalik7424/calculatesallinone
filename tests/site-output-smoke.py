@@ -671,3 +671,11 @@ standard_tool_calc_pos = standard_tool_html.find('id="calc-display"')
 standard_tool_note_pos = standard_tool_html.find("Evidence-based note")
 assert standard_tool_calc_pos > standard_tool_lead_end, "Standard calculator widget must follow its title and lead"
 assert standard_tool_note_pos < 0 or standard_tool_calc_pos < standard_tool_note_pos, "Standard calculator widget must precede explanatory notes"
+
+# Page-specific first-screen layout and Tasbih visual styling regression checks.
+assert 'ca-tool-bmi-calculator' in bmi_html, "BMI form must have scoped first-screen styling"
+tasbih_layout_html = output_for_url(SITE + "/tasbih-counter/").read_text(encoding="utf-8")
+assert 'ca-tool-tasbih-counter' in tasbih_layout_html, "Tasbih must have scoped visual styling"
+assert 'ca-tasbih-shell' in tasbih_layout_html, "Tasbih controls must retain styling hook"
+for token in ('#main #bmi-form', '#main .ca-tasbih-shell #t-count', '#main .ca-tasbih-shell #t-tap'):
+    assert token in site_css, f"Missing first-screen style: {token}"
