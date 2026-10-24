@@ -1369,15 +1369,19 @@ def tool_page(t):
     )
     answer_note = answer_block(t["slug"], "en")
     primary_tool_content = calculator_section + answer_note
-    body = (
+    breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
         '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li><li aria-hidden="true">/</li>'
         '<li aria-current="page">' + t["name"] + "</li></ol></nav>"
-        '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
+    )
+    body = (
+        ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
+        + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
         + (primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
            if t["slug"] in {"bmi-calculator", "tasbih-counter"} or t["slug"] not in {"standard-calculator", "bmi-calculator", "tasbih-counter"}
            else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
+        + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "")
         + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
