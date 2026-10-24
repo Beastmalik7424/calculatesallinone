@@ -1,4 +1,7 @@
 # Regression: remove the full redundant title suffix, not just truncate words.
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from seo_finalize import normalize_meta
 _sample_title = "Advanced Example Online Calculator | Free Online Tool | CalculatesAll"
 _sample_html = '<title>' + _sample_title + '</title><meta name="description" content="' + ('A' * 100) + '">'
