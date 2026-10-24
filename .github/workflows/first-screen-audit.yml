@@ -28,3 +28,11 @@ jobs:
         run: |
           python3 -m http.server 8123 --directory public >/tmp/site-server.log 2>&1 &
           node tests/viewport-audit.cjs
+      - name: Save actual first-screen screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-screen-screenshots
+          path: /tmp/*-*.png
+          if-no-files-found: warn
+          retention-days: 7
