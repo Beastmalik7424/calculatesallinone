@@ -87,7 +87,7 @@ for url in urls:
             assert social and social.group(1) == expected, f"Stale {name} on {url}"
     assert "Review the formula, worked example and limits before relying on the result" not in descriptions[url], f"Generic irrelevant metadata appended: {url}"
     if url == SITE + "/profit-loss-calculator/":
-        assert title_match.group(1) == "Profit and Loss Calculator | CalculatesAll", (
+        assert title_match.group(1) == "Profit and Loss Calculator | Profit % | CalculatesAll", (
             "Profit and Loss title must be complete and descriptive."
         )
     if url == SITE + "/tasbih-counter/":
