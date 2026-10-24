@@ -699,5 +699,5 @@ for token in ('#main .ca-tasbih-shell #t-count', '#main .ca-tool-bmi-calculator 
 tasbih_first_html = (ROOT / "tasbih-counter" / "index.html").read_text(encoding="utf-8")
 for control_id in ('id="t-count"', 'id="t-tap"', 'id="t-undo"', 'id="t-reset"'):
     assert control_id in tasbih_first_html, f"Missing Tasbih control: {control_id}"
-assert tasbih_first_html.index('id="t-count"') < tasbih_first_html.index('id="t-tap"') < tasbih_first_html.index('id="t-reset"') < tasbih_first_html.index('class="ca-tasbih-settings"'), "Tasbih count and buttons must precede settings"
+assert tasbih_first_html.index('class="ca-tasbih-settings"') < tasbih_first_html.index('id="t-phrase"') < tasbih_first_html.index('id="t-target"') < tasbih_first_html.index('id="t-count"') < tasbih_first_html.index('id="t-tap"') < tasbih_first_html.index('id="t-reset"'), "Tasbih phrase, target, count and buttons must appear in first-screen priority order"
 assert '#main .ca-tool-tasbih-counter .ca-tasbih-settings' in site_css, "Missing compact Tasbih settings styling"
