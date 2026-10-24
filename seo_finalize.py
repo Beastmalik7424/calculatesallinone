@@ -133,7 +133,7 @@ def normalize_meta(raw, path, lang):
     if path == "/unit-converter/":
         desc = "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result."
     if len(title) > 59:
-        title = re.sub(r" \\| Free Online Tool \\| CalculatesAll$", " | CalculatesAll", title)
+        title = re.sub(r" \| Free Online Tool \| CalculatesAll$", " | CalculatesAll", title)
         if len(title) > 59:
             suffix = " | CalculatesAll"
             title = title[:59-len(suffix)].rstrip(" |") + suffix
