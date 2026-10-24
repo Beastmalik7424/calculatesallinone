@@ -426,7 +426,7 @@ TOOLS = [
             '<option value="SubhanAllah">SubhanAllah</option><option value="Alhamdulillah">Alhamdulillah</option>'
             '<option value="Allahu Akbar">Allahu Akbar</option><option value="Astaghfirullah">Astaghfirullah</option>'
             '<option value="La ilaha illallah">La ilaha illallah</option><option value="custom">Custom phrase</option></select></div>'
-            '<div><label class="@L@" for="t-custom-phrase">Custom phrase (up to 40 characters)</label>'
+            '<div class="ca-tasbih-custom-phrase"><label class="@L@" for="t-custom-phrase">Custom phrase (up to 40 characters)</label>'
             '<input id="t-custom-phrase" class="@I@" type="text" maxlength="40" autocomplete="off" disabled aria-describedby="t-phrase-error">'
             '<p id="t-phrase-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div></div>'
             '<div><label class="@L@" for="t-target">Target</label>'
@@ -437,10 +437,10 @@ TOOLS = [
             '<output id="t-count" class="block text-center text-6xl sm:text-7xl font-semibold tabular-nums bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8" aria-live="polite">0</output>'
             '<p id="t-progress" class="text-center text-base text-stone-800 dark:text-stone-200" aria-live="polite"></p>'
             '<p id="t-storage-note" class="text-sm text-amber-800 dark:text-amber-200" role="status" hidden>Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.</p>'
-            '<p class="text-sm text-stone-700 dark:text-stone-300"><span id="t-lifetime-label">Lifetime counted total:</span><output id="t-lifetime">0</output></p>'
             '<button id="t-tap" type="button" aria-label="Count one" class="w-full min-h-[64px] @B@ text-xl">Count one</button>'
             '<div class="grid grid-cols-2 gap-3"><button id="t-undo" type="button" class="@S@">Undo</button>'
             '<button id="t-reset" type="button" class="@S@">Reset</button></div>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300"><span id="t-lifetime-label">Lifetime counted total:</span><output id="t-lifetime">0</output></p>'
             '<p class="text-sm text-stone-700 dark:text-stone-300">Keyboard: press Space or Enter to count when focus is not in a text field or control.</p>'
             '</div>'
         ),
@@ -1352,8 +1352,9 @@ def tool_page(t):
         '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li><li aria-hidden="true">/</li>'
         '<li aria-current="page">' + t["name"] + "</li></ol></nav>"
         '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
-        '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
-        + primary_tool_content
+        + (primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
+           if t["slug"] in {"bmi-calculator", "tasbih-counter"}
+           else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
         + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'

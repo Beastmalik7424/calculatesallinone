@@ -986,3 +986,53 @@
 @media (prefers-reduced-motion: reduce) {
   #main .ca-tasbih-shell #t-tap { transition: none; }
 }
+
+
+/* Prioritize full BMI/Tasbih interaction over explanatory text in the first viewport. */
+#main:has(.ca-tool-bmi-calculator), #main:has(.ca-tool-tasbih-counter) { padding-top: .25rem !important; }
+#main:has(.ca-tool-bmi-calculator) > nav, #main:has(.ca-tool-tasbih-counter) > nav { font-size: .75rem; line-height: 1.2; }
+#main:has(.ca-tool-bmi-calculator) > h1, #main:has(.ca-tool-tasbih-counter) > h1 { margin-top: .25rem !important; font-size: clamp(1.25rem,2.4vw,1.65rem) !important; line-height: 1.15 !important; }
+#main .ca-tool-bmi-calculator, #main .ca-tool-tasbih-counter { margin-top: .4rem !important; padding: .55rem .75rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form { gap: .25rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset { gap: .1rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form .flex { gap: .4rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form label { font-size: .88rem !important; line-height: 1.2 !important; }
+#main .ca-tool-bmi-calculator #bmi-form input[type=text] { min-height: 42px; padding-top: .35rem; padding-bottom: .35rem; }
+#main .ca-tool-bmi-calculator #bmi-form button[type=submit] { min-height: 44px; padding: .45rem; }
+#main .ca-tasbih-shell { gap: .3rem !important; }
+#main .ca-tasbih-shell label { font-size: .85rem !important; line-height: 1.15 !important; }
+#main .ca-tasbih-shell select, #main .ca-tasbih-shell input { min-height: 40px !important; padding-top: .25rem; padding-bottom: .25rem; }
+#main .ca-tasbih-shell #t-count { padding: .2rem !important; font-size: clamp(2.8rem, 9vw, 4.1rem) !important; line-height: 1.05 !important; }
+#main .ca-tasbih-shell #t-progress { margin: 0; font-size: .82rem !important; }
+#main .ca-tasbih-shell #t-tap { min-height: 48px !important; padding: .35rem !important; }
+#main .ca-tasbih-shell #t-undo, #main .ca-tasbih-shell #t-reset { min-height: 42px !important; padding: .3rem !important; }
+#main .ca-tasbih-shell > p:last-child { font-size: .75rem !important; line-height: 1.2 !important; }
+@media (max-width: 480px) {
+  #main .ca-tasbih-shell > .grid:first-child { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: .4rem !important; }
+  #main .ca-tool-tasbih-counter, #main .ca-tool-bmi-calculator { padding: .45rem !important; }
+  #main .ca-tasbih-shell #t-count { font-size: 3rem !important; }
+}
+
+/* First-screen priority: use compact, accessible controls only on BMI/Tasbih pages. */
+body:has(.ca-tool-bmi-calculator) header, body:has(.ca-tool-tasbih-counter) header { position: static !important; }
+body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) header nav { padding-top: .35rem !important; padding-bottom: .35rem !important; }
+#main .ca-tasbih-custom-phrase:has(input:disabled) { display: none !important; }
+#main .ca-tasbih-shell > .grid:first-child { display: grid; grid-template-columns: minmax(0,1fr); gap: .2rem !important; }
+#main .ca-tasbih-shell #t-count { min-height: 0 !important; padding: .25rem !important; }
+#main .ca-tasbih-shell #t-tap { min-height: 44px !important; }
+#main .ca-tasbih-shell > p:last-child { margin-top: .2rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form { display: flex !important; flex-direction: column; gap: .3rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset { display: flex !important; flex-wrap: wrap; align-items: center; gap: .2rem .5rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset legend { float: left; width: auto; margin-right: .5rem; padding: 0; font-size: .85rem; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset .flex { gap: .3rem .6rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset label { min-height: 34px; font-size: .82rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form > div label { font-size: .82rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form input[type=text] { min-height: 42px !important; }
+#main .ca-tool-bmi-calculator #bmi-form button[type=submit] { width: 100%; min-height: 44px; }
+#main .ca-tool-bmi-calculator #bmi-result:empty { display: none; }
+@media (max-width: 600px) {
+  body:has(.ca-tool-bmi-calculator) header, body:has(.ca-tool-tasbih-counter) header { min-height: 0 !important; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset legend { float: none; width: 100%; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset .flex { flex-wrap: nowrap; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset label { white-space: nowrap; }
+}

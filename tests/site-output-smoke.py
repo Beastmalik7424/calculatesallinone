@@ -610,9 +610,15 @@ for slug in calculator_slugs:
     calc_pos = tool_html.find('<section id="tool-calculator"')
     h1_pos = tool_html.find("<h1")
     lead_pos = tool_html.find('<p class="mt-3 text-lg', h1_pos)
-    assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
-        f"Calculator must follow the heading and short lead: /{slug}/"
-    )
+    if slug in {"bmi-calculator", "tasbih-counter"}:
+        moved_lead_pos = tool_html.find('ca-tool-lead-after', h1_pos)
+        assert h1_pos >= 0 and calc_pos > h1_pos and moved_lead_pos > calc_pos, (
+            f"Calculator must precede moved explanatory lead: /{slug}/"
+        )
+    else:
+        assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
+            f"Calculator must follow the heading and short lead: /{slug}/"
+        )
     main_open = re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', tool_html)
     assert main_open, f"Non-standard calculator page must use the compact calculator-first main layout: /{slug}/"
     note_pos = tool_html.find("Evidence-based note")
@@ -679,3 +685,12 @@ assert 'ca-tool-tasbih-counter' in tasbih_layout_html, "Tasbih must have scoped 
 assert 'ca-tasbih-shell' in tasbih_layout_html, "Tasbih controls must retain styling hook"
 for token in ('#main #bmi-form', '#main .ca-tasbih-shell #t-count', '#main .ca-tasbih-shell #t-tap'):
     assert token in site_css, f"Missing first-screen style: {token}"
+
+# The lead copy must follow the interactive calculator on the English BMI/Tasbih pages.
+for slug, form_marker in (("bmi-calculator", 'id="bmi-form"'), ("tasbih-counter", 'id="tasbih-app"')):
+    first_screen_html = output_for_url(SITE + "/" + slug + "/").read_text(encoding="utf-8")
+    assert form_marker in first_screen_html, f"Missing interactive form: {slug}"
+    assert 'ca-tool-lead-after' in first_screen_html, f"Lead must be below interactive form: {slug}"
+    assert first_screen_html.index(form_marker) < first_screen_html.index('ca-tool-lead-after'), f"Lead appears above calculator: {slug}"
+for token in ('#main .ca-tasbih-shell #t-count', '#main .ca-tool-bmi-calculator #bmi-form'):
+    assert token in site_css, f"Missing compact viewport layout: {token}"
