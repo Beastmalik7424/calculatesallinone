@@ -1036,3 +1036,21 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
   #main .ca-tool-bmi-calculator #bmi-form fieldset .flex { flex-wrap: nowrap; }
   #main .ca-tool-bmi-calculator #bmi-form fieldset label { white-space: nowrap; }
 }
+
+/* Tasbih first-viewport correction: preserve controls but move settings below count/actions visually. */
+#main .ca-tool-tasbih-counter .ca-tasbih-shell { display: flex !important; flex-direction: column !important; gap: .4rem !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings { order: 6; margin-top: .4rem; padding-top: .5rem; border-top: 1px solid #b8d3bf; }
+#main .ca-tool-tasbih-counter #t-count { order: 0; }
+#main .ca-tool-tasbih-counter #t-progress { order: 1; }
+#main .ca-tool-tasbih-counter #t-storage-note { order: 2; }
+#main .ca-tool-tasbih-counter #t-tap { order: 3; }
+#main .ca-tool-tasbih-counter #t-tap + .grid { order: 4; }
+#main .ca-tool-tasbih-counter .ca-tasbih-shell > p:not(#t-progress):not(#t-storage-note) { order: 5; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings > .grid { display: grid; grid-template-columns: minmax(0,1fr); gap: .4rem !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings .ca-tasbih-custom-phrase:has(input:disabled) { display: none !important; }
+#main .ca-tool-tasbih-counter #t-count { font-size: clamp(3.5rem,12vw,5rem) !important; padding: .65rem !important; }
+#main .ca-tool-tasbih-counter #t-tap { min-height: 60px !important; }
+#main .ca-tool-tasbih-counter #t-undo, #main .ca-tool-tasbih-counter #t-reset { min-height: 44px !important; }
+@media (min-width: 768px) {
+  #main .ca-tool-tasbih-counter .ca-tasbih-settings > .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
