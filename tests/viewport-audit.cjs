@@ -31,7 +31,7 @@ const { chromium } = require('playwright');
    const button=document.querySelector('#pl-form button[type="submit"]').getBoundingClientRect();
    const breadcrumb=document.querySelector('#main nav[aria-label="Breadcrumb"]').getBoundingClientRect();
    const section=document.querySelector('#tool-calculator').getBoundingClientRect();
-   return {buttonBottom:button.bottom,breadcrumbTop:breadcrumb.top,sectionBottom:section.bottom,overflow:document.documentElement.scrollWidth>innerWidth+2};
+   return {buttonBottom:button.bottom,breadcrumbTop:breadcrumb.top,sectionBottom:section.bottom,overflow:document.documentElement.scrollWidth>innerWidth+2,wide:[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+2).slice(0,8).map(e=>({tag:e.tagName,id:e.id,cls:String(e.className).slice(0,70),right:Math.round(e.getBoundingClientRect().right)}))};
   });
   console.log('profit-small '+size.width+'x'+size.height,JSON.stringify(p));
   if(p.buttonBottom>size.height-8||p.overflow)failures.push('profit first-screen failed '+size.width+'x'+size.height);
