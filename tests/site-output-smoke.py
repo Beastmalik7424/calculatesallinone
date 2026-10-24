@@ -694,3 +694,10 @@ for slug, form_marker in (("bmi-calculator", 'id="bmi-form"'), ("tasbih-counter"
     assert first_screen_html.index(form_marker) < first_screen_html.index('ca-tool-lead-after'), f"Lead appears above calculator: {slug}"
 for token in ('#main .ca-tasbih-shell #t-count', '#main .ca-tool-bmi-calculator #bmi-form'):
     assert token in site_css, f"Missing compact viewport layout: {token}"
+
+# Tasbih first-screen priority: all primary controls precede optional settings.
+tasbih_first_html = (ROOT / "tasbih-counter" / "index.html").read_text(encoding="utf-8")
+for control_id in ('id="t-count"', 'id="t-tap"', 'id="t-undo"', 'id="t-reset"'):
+    assert control_id in tasbih_first_html, f"Missing Tasbih control: {control_id}"
+assert tasbih_first_html.index('id="t-count"') < tasbih_first_html.index('id="t-tap"') < tasbih_first_html.index('id="t-reset"') < tasbih_first_html.index('class="ca-tasbih-settings"'), "Tasbih count and buttons must precede settings"
+assert '#main .ca-tool-tasbih-counter .ca-tasbih-settings' in site_css, "Missing compact Tasbih settings styling"
