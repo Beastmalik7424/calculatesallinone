@@ -65,6 +65,15 @@ for url in urls:
     titles[url] = title_match.group(1)
     descriptions[url] = desc_match.group(1)
     assert 70 <= len(descriptions[url]) <= 160, f"Meta description length outside 70-160 characters: {url} ({len(descriptions[url])})"
+    if url in {SITE + path for path in ("/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/")}:
+        for attr, name, expected in (
+            ("property", "og:title", title_match.group(1)),
+            ("property", "og:description", desc_match.group(1)),
+            ("name", "twitter:title", title_match.group(1)),
+            ("name", "twitter:description", desc_match.group(1)),
+        ):
+            social = re.search('<meta ' + attr + '="' + name + '" content="([^"]*)"', html)
+            assert social and social.group(1) == expected, f"Stale {name} on {url}"
     assert "Review the formula, worked example and limits before relying on the result" not in descriptions[url], f"Generic irrelevant metadata appended: {url}"
     if url == SITE + "/profit-loss-calculator/":
         assert title_match.group(1) == "Profit and Loss Calculator | CalculatesAll", (
