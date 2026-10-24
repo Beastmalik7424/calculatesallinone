@@ -91,7 +91,7 @@ for url in urls:
             "Profit and Loss title must be complete and descriptive."
         )
     if url == SITE + "/tasbih-counter/":
-        assert title_match.group(1) == "Online Tasbih Counter | Free Dhikr Counter | CalculatesAll", (
+        assert title_match.group(1) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
             "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
         )
         assert desc_match.group(1) == "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app.", (
