@@ -1519,6 +1519,35 @@
           remainingDays + " days). Exact Gregorian calendar days.")
         return
       }
+      // Roman Urdu and English everyday arithmetic, evaluated left-to-right
+      // only when each quantity's operation is explicit or contextually clear.
+      var everydayNumbers = Array.from(question.matchAll(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g))
+      var hasEverydayWords = /(?:\\b(?:pass|pas|have|had|bant|baant|diye|dia|diya|kharab|bach|bache|bachy|baqi|baki|remaining|left|gave|given|lost|spoiled|added|plus|minus|more|total|sum|spent|sold|used|kharch|aur|mazeed)\\b)/.test(question)
+      if (hasEverydayWords && everydayNumbers.length >= 2 && everydayNumbers.length <= 20) {
+        var arithmetic = Number(everydayNumbers[0][0])
+        var validArithmetic = Number.isFinite(arithmetic) && arithmetic <= 1000000000000
+        var arithmeticSteps = [timeConversionFormat(arithmetic)]
+        for (var ai = 1; ai < everydayNumbers.length && validArithmetic; ai++) {
+          var before = question.slice(everydayNumbers[ai - 1].index + everydayNumbers[ai - 1][0].length, everydayNumbers[ai].index)
+          var after = question.slice(everydayNumbers[ai].index + everydayNumbers[ai][0].length, ai + 1 < everydayNumbers.length ? everydayNumbers[ai + 1].index : question.length)
+          var subtract = /(?:bant|baant|diye|dia|diya|kharab|lost|gave|given|spoiled|spent|sold|used|kharch|minus|nikal|kam)/.test(after)
+          var add = /(?:added|plus|aur|mazeed|more|mila|milay|jama)/.test(after)
+          if (!subtract && !add) {
+            subtract = /(?:minus|subtract|less)/.test(before)
+            add = /(?:plus|add)/.test(before)
+          }
+          if (subtract === add) { validArithmetic = false; break }
+          var amount = Number(everydayNumbers[ai][0])
+          if (!Number.isFinite(amount) || amount > 1000000000000) { validArithmetic = false; break }
+          arithmetic = subtract ? arithmetic - amount : arithmetic + amount
+          arithmeticSteps.push((subtract ? " - " : " + ") + timeConversionFormat(amount))
+        }
+        if (validArithmetic && Number.isFinite(arithmetic)) {
+          say("qt-result", arithmeticSteps.join("") + " = " + timeConversionFormat(arithmetic) +
+            ". Remaining answer: " + timeConversionFormat(arithmetic) + ".")
+          return
+        }
+      }
       var numbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
       var tokens = question.match(/[a-z]+/g) || []
       var units = tokens.filter(function (word) { return !!aliases[word] })
