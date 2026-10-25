@@ -827,6 +827,60 @@ CALC_UI = (
     '</div></div>'
 )
 
+
+# Independent time-conversion and question calculators. Both are linked automatically
+# in the navigation, category pages, home tool list, sitemap, and SEO metadata.
+TOOLS.extend([
+    {
+        "slug": "years-to-days-calculator", "category": "time",
+        "name": "Years to Days Calculator", "app": "UtilitiesApplication",
+        "description": "Convert years into days, weeks, hours, minutes and seconds using either 365-day years or the Gregorian average of 365.2425 days.",
+        "h1": "Years to Days Calculator",
+        "lead": "Convert years to days, weeks, hours, minutes and seconds. Select the year definition. Exact calendar-year day counts require a starting date.",
+        "ui": (
+            '<form id="years-days-form" class="space-y-4" novalidate>'
+            '<label class="@L@" for="yd-value">Number of years</label>'
+            '<input class="@I@" id="yd-value" type="number" min="0" max="1000000" step="any" inputmode="decimal" value="80" required>'
+            '<label class="@L@" for="yd-method">Conversion method</label>'
+            '<select class="@I@" id="yd-method"><option value="365">365 days per year (simple)</option><option value="365.2425">365.2425 days per year (Gregorian average)</option></select>'
+            '<button class="@B@" type="submit">Convert Years</button></form>'
+            '<div id="yd-result" class="@R@" role="status" aria-live="polite"></div>'
+        ),
+        "guide": [
+            ("Conversion formulas", ["Days = years multiplied by 365 for the simple method. For the Gregorian average, days = years multiplied by 365.2425. Weeks = days divided by 7. Hours = days multiplied by 24. Minutes = hours multiplied by 60. Seconds = minutes multiplied by 60."]),
+            ("Worked example", ["80 years = 29,200 days by the 365-day method, or 29,219.4 days by the Gregorian average method. These are conversions, not exact elapsed days between calendar dates."]),
+            ("Accuracy limits", ["Calendar years vary between 365 and 366 days. To find exact elapsed days for a given number of calendar years, specify the starting date and count actual dates, including leap years."])
+        ],
+        "faq": [("How many days are in 80 years?", "29,200 with the simple method, or 29,219.4 with the Gregorian-average method."),
+                ("Does this account for leap years?", "The average method includes leap-year frequency statistically. Exact dates require a start date.")],
+        "sources": "Gregorian mean year: 365.2425 days over the 400-year Gregorian calendar cycle."
+    },
+    {
+        "slug": "query-calculator", "category": "time",
+        "name": "Query Calculator", "app": "UtilitiesApplication",
+        "description": "Ask a simple question in English or Roman Urdu about converting years, days, weeks, hours or minutes with clear supported units.",
+        "h1": "Query Calculator for Time Conversions",
+        "lead": "Ask a time conversion question such as 80 years mein kitne din hote hain? Supported units: years, days, weeks, hours, minutes and seconds.",
+        "ui": (
+            '<form id="query-time-form" class="space-y-4" novalidate>'
+            '<label class="@L@" for="qt-question">Your question</label>'
+            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="80 years mein kitne din hote hain?" required>'
+            '<p class="text-sm">Uses 365 days per year. Try: 2 weeks in hours, 3 days to minutes, 80 years mein kitne din.</p>'
+            '<button class="@B@" type="submit">Calculate Answer</button></form>'
+            '<div id="qt-result" class="@R@" role="status" aria-live="polite"></div>'
+        ),
+        "guide": [
+            ("How it works", ["The question parser recognizes one nonnegative number, a supported source unit and a supported target unit. It calculates using fixed time conversion factors and never guesses unsupported questions."]),
+            ("Examples", ["80 years to days = 29,200 days. 2 weeks to hours = 336 hours. 3 days to minutes = 4,320 minutes."]),
+            ("Limits", ["The parser supports time unit conversions only, not arbitrary arithmetic or calendar-specific elapsed time. A year is defined as 365 days for these questions."])
+        ],
+        "faq": [("Can I ask in Roman Urdu?", "Yes, simple patterns such as 80 years mein kitne din hote hain are supported."),
+                ("Can I ask any mathematical question?", "No. This version supports time-unit conversion questions only.")],
+        "sources": "Fixed conversion factors: 1 day = 24 hours, 1 hour = 60 minutes, 1 minute = 60 seconds; simple year = 365 days."
+    }
+])
+EXTRA.update({slug: {"faq": [], "quick": ""} for slug in ("years-to-days-calculator", "query-calculator")})
+
 for _t in TOOLS:
     _t["guide"] = _t["guide"] + GUIDE_EXTRA.get(_t["slug"], [])
     _t["sources"] = _t["sources"] + " " + REVIEW_STATUS.get(_t["slug"], "")
