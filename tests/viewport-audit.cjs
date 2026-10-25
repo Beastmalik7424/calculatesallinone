@@ -54,6 +54,36 @@ const { chromium } = require('playwright');
  await page.locator('#pl-form button[type="submit"]').click();
  result=await page.locator('#pl-result').innerText();
  if(!result.includes('20')||!result.includes('25.00'))failures.push('product markup result: '+result);
+
+ // Homepage Standard Calculator: actual no-scroll viewport and click checks.
+ for (const size of [{width:375,height:667},{width:390,height:844},{width:1024,height:768},{width:1366,height:768}]) {
+  const home=await browser.newPage({viewport:size,deviceScaleFactor:1});
+  await home.goto('http://127.0.0.1:8123/',{waitUntil:'load'});
+  const h=await home.evaluate(()=>{
+   const pad=document.querySelector('.ca-home-calculator #calc-pad');
+   const display=document.querySelector('.ca-home-calculator #calc-display');
+   const buttons=pad?[...pad.querySelectorAll('button')].filter(b=>b.getBoundingClientRect().height>0):[];
+   const rect=buttons.length?buttons[buttons.length-1].getBoundingClientRect():null;
+   const media=[...document.querySelectorAll('.ca-home-wrap img,.ca-home-wrap video,.ca-home-tools img')].filter(e=>e.getBoundingClientRect().width>innerWidth+2);
+   return {buttons:buttons.length,display:!!display,lastButtonBottom:rect?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,oversizedMedia:media.length};
+  });
+  console.log('homepage '+size.width+'x'+size.height,JSON.stringify(h));
+  if(!h.display||h.buttons<10)failures.push('homepage calculator missing '+size.width);
+  if(h.lastButtonBottom>size.height-8)failures.push('homepage scroll required '+size.width+'x'+size.height+' bottom='+h.lastButtonBottom);
+  if(h.overflow||h.oversizedMedia)failures.push('homepage overflow '+size.width);
+  if(h.buttons>=10) {
+   for(const key of ['C','7','+','3','=']) {
+    const button=home.locator('#calc-pad button[data-key="'+key+'"]');
+    if(await button.count())await button.first().click();
+    else failures.push('homepage key missing '+key);
+   }
+   const value=(await home.locator('#calc-display').innerText()).trim();
+   console.log('homepage interaction '+size.width,JSON.stringify({value}));
+   if(value!=='10')failures.push('homepage arithmetic failed '+size.width+': '+value);
+  }
+  await home.screenshot({path:'/tmp/homepage-'+size.width+'.png',fullPage:false});
+  await home.close();
+ }
  await browser.close();
  if(failures.length){console.error('VIEWPORT/INTERACTION FAILURES:',failures.join('; '));process.exitCode=1;}
  else console.log('All viewport and profit interaction checks PASS');
