@@ -1605,18 +1605,18 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    initTheme()
-    initZakat()
-    initBMI()
-    initProfit()
-    initAge()
-    initYearsDays()
-    initQueryTime()
-    initDiscount()
-    initConverter()
-    initCalculator()
-    initTasbih()
-    initStopwatch()
-    initAds()
+    // Initialize the query answer independently before any other calculator.
+    try { initQueryTime() } catch (err) {
+      say("qt-result", "Calculation failed to start. Please refresh this page.")
+      if (typeof console !== "undefined") console.error("Query Calculator:", err)
+    }
+    var initializers = [initTheme, initZakat, initBMI, initProfit, initAge,
+      initYearsDays, initDiscount, initConverter, initCalculator,
+      initTasbih, initStopwatch, initAds]
+    initializers.forEach(function (init) {
+      try { init() } catch (err) {
+        if (typeof console !== "undefined") console.error("Calculator initialization:", err)
+      }
+    })
   })
 })()
