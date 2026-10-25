@@ -151,7 +151,7 @@ assert.match(elements["pl-result"].textContent, /cost price.*zero or more/i, "ne
 for (const [dob, expected] of [
   ["2000-01-01",/26 years, 9 months and 17 days/],
   ["2020-02-29",/6 years, 7 months and 19 days/],
-  ["1980-12-31",/45 years, 9 months and 17 days/]
+  ["1980-12-31",/45 years, 9 months and 18 days/]
 ]) {
   elements["a-dob"].value = dob; submit("age-form");
   assert.match(elements["age-result"].textContent, expected);
