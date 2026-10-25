@@ -1637,7 +1637,7 @@ def home_app_page(lang):
     if urdu:
         for en, ur in URDU["standard-calculator"]["labels"]:
             hero_ui = hero_ui.replace('aria-label="' + en + '"', 'aria-label="' + ur + '"')
-    hero = ('<section aria-label="' + ("کیلکولیٹر" if urdu else "Calculator") + '" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span><span class="ca-home-live-dot" aria-hidden="true"></span></div>' + hero_ui + "</section>")
+    hero = ('<section aria-label="' + ("کیلکولیٹر" if urdu else "Calculator") + '" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span><a href="/tasbih-counter/" aria-label="Open Tasbih Counter" style="display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:4px 12px;border-radius:9px;background:#0f766e;color:#fff;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap">📿 Tasbih Counter</a><span class="ca-home-live-dot" aria-hidden="true"></span></div>' + hero_ui + "</section>")
     body = (
         '<div class="ca-home-wrap">'
         '<div class="ca-home-header">'
