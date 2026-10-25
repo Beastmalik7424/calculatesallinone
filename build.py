@@ -210,21 +210,35 @@ TOOLS = [
         "category": "money",
         "name": "Profit and Loss Calculator",
         "app": "UtilitiesApplication",
-        "description": "Calculate profit or loss and profit percentage from cost price and selling price.",
-        "h1": "Profit and Loss Calculator",
-        "lead": "Enter the cost price and the selling price to see whether you made a profit or a loss, and by what percentage of cost.",
+        "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
+        "h1": "Profit and Loss Calculator for Business and Products",
+        "lead": "Choose business P&L for revenue, costs and expenses, or product profit for buying and selling prices. Results show the correct percentage basis.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
-            '<div class="grid sm:grid-cols-2 gap-4">'
+            '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
+            '<div class="grid grid-cols-2 gap-2">'
+            '<label class="ca-profit-mode"><input type="radio" name="pl-mode" value="business" checked> Business P&amp;L</label>'
+            '<label class="ca-profit-mode"><input type="radio" name="pl-mode" value="product"> Product profit</label></div></fieldset>'
+            '<div id="pl-business-fields" class="grid sm:grid-cols-2 gap-4">'
+            + field("p-revenue", "Total revenue")
+            + field("p-cogs", "Cost of goods sold")
+            + field("p-expenses", "Other business expenses")
+            + '</div>'
+            '<div id="pl-product-fields" class="grid sm:grid-cols-2 gap-4" hidden>'
             + field("p-cost", "Cost price")
             + field("p-sell", "Selling price")
-            + '</div><button type="submit" class="@B@">Calculate</button></form>'
+            + '</div><button type="submit" class="@B@">Calculate profit or loss</button></form>'
             + result("pl-result")
         ),
         "guide": [
-            ("The formulas", [
-                "Profit or loss equals selling price minus cost price. A negative result is a loss.",
-                "Percentage equals profit or loss divided by cost price, multiplied by 100.",
+            ("Business P&L formulas", [
+                "Gross profit equals total revenue minus cost of goods sold. Net operating profit equals gross profit minus other business expenses.",
+                "Net operating margin equals net operating profit divided by total revenue, multiplied by 100. When revenue is zero, margin is not available.",
+                "This simplified operating P&L excludes separate interest and income tax calculations. Enter those amounts in other expenses only when appropriate.",
+            ]),
+            ("Product profit formulas", [
+                "Product profit or loss equals selling price minus cost price. A negative result is a loss.",
+                "Product markup percentage equals profit divided by cost price, multiplied by 100. Markup is not margin.",
             ]),
             ("Worked example, profit", [
                 "Cost price is 800. Selling price is 1,000. Profit is 200.",
@@ -240,10 +254,10 @@ TOOLS = [
             ]),
         ],
         "faq": [
-            ("Why is margin different from markup?", "Markup is calculated on cost. Margin is calculated on selling price. This calculator shows the percentage on cost price."),
-            ("Why does it show N/A?", "A percentage cannot be calculated when cost price is zero, because the formula divides by cost."),
+            ("Why is margin different from markup?", "Product mode shows markup on cost. Business mode shows net operating margin on revenue."),
+            ("Why does it show N/A?", "Product markup is unavailable when cost is zero. Business margin is unavailable when revenue is zero."),
         ],
-        "sources": "Standard accounting formulas for profit and percentage on cost.",
+        "sources": "Standard operating profit, margin and product markup formulas. This simplified calculator is not a formal financial statement.",
     },
     {
         "slug": "discount-calculator",
@@ -362,7 +376,7 @@ TOOLS = [
         "category": "math",
         "name": "Standard & Scientific Calculator",
         "app": "UtilitiesApplication",
-        "description": "Free online standard and scientific calculator for arithmetic, trigonometry, roots, powers, logarithms, factorials and DEG/RAD angle modes.",
+        "description": "Free online standard and scientific calculator with large buttons for addition, subtraction, percentages, trigonometry, square roots and logarithms.",
         "h1": "Online Standard and Scientific Calculator",
         "lead": "Use standard arithmetic or switch to Scientific Mode for trigonometry, powers, roots, logarithms and statistics. Calculations run in your browser.",
         "ui": (
@@ -415,18 +429,19 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Count tasbih with preset targets. The count stays saved on this device only.",
+        "description": "Free online digital tasbih counter for dhikr and zikr with 33, 99 and custom targets. Tap to count on mobile or desktop; no app download needed.",
         "h1": "Free Online Tasbih Counter",
         "lead": "A free digital tasbeeh counter for daily dhikr. Choose a phrase, set a target, and keep your count on this device without downloading an app.",
         "ui": (
-            '<div class="max-w-lg mx-auto space-y-5" id="tasbih-app">'
+            '<div class="ca-tasbih-shell max-w-lg mx-auto space-y-5" id="tasbih-app">'
+            '<div class="ca-tasbih-settings">'
             '<div class="grid sm:grid-cols-2 gap-4">'
             '<div><label class="@L@" for="t-phrase">Dhikr phrase</label>'
             '<select id="t-phrase" class="@I@">'
             '<option value="SubhanAllah">SubhanAllah</option><option value="Alhamdulillah">Alhamdulillah</option>'
             '<option value="Allahu Akbar">Allahu Akbar</option><option value="Astaghfirullah">Astaghfirullah</option>'
             '<option value="La ilaha illallah">La ilaha illallah</option><option value="custom">Custom phrase</option></select></div>'
-            '<div><label class="@L@" for="t-custom-phrase">Custom phrase (up to 40 characters)</label>'
+            '<div class="ca-tasbih-custom-phrase"><label class="@L@" for="t-custom-phrase">Custom phrase (up to 40 characters)</label>'
             '<input id="t-custom-phrase" class="@I@" type="text" maxlength="40" autocomplete="off" disabled aria-describedby="t-phrase-error">'
             '<p id="t-phrase-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div></div>'
             '<div><label class="@L@" for="t-target">Target</label>'
@@ -434,13 +449,14 @@ TOOLS = [
             '<div id="t-custom-target-wrap" hidden><label class="@L@" for="t-custom-target">Custom target (1 to 10,000)</label>'
             '<input id="t-custom-target" class="@I@" type="text" inputmode="numeric" autocomplete="off" pattern="[0-9]+" aria-describedby="t-target-error">'
             '<p id="t-target-error" class="mt-1 text-sm text-red-700 dark:text-red-300" aria-live="polite"></p></div>'
+            '</div>'
             '<output id="t-count" class="block text-center text-6xl sm:text-7xl font-semibold tabular-nums bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8" aria-live="polite">0</output>'
             '<p id="t-progress" class="text-center text-base text-stone-800 dark:text-stone-200" aria-live="polite"></p>'
             '<p id="t-storage-note" class="text-sm text-amber-800 dark:text-amber-200" role="status" hidden>Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.</p>'
-            '<p class="text-sm text-stone-700 dark:text-stone-300"><span id="t-lifetime-label">Lifetime counted total:</span><output id="t-lifetime">0</output></p>'
             '<button id="t-tap" type="button" aria-label="Count one" class="w-full min-h-[64px] @B@ text-xl">Count one</button>'
             '<div class="grid grid-cols-2 gap-3"><button id="t-undo" type="button" class="@S@">Undo</button>'
             '<button id="t-reset" type="button" class="@S@">Reset</button></div>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300"><span id="t-lifetime-label">Lifetime counted total:</span><output id="t-lifetime">0</output></p>'
             '<p class="text-sm text-stone-700 dark:text-stone-300">Keyboard: press Space or Enter to count when focus is not in a text field or control.</p>'
             '</div>'
         ),
@@ -649,9 +665,9 @@ EXTRA = {
         ],
     },
     "profit-loss-calculator": {
-        "quick": "Profit equals selling price minus cost price. Profit percentage equals profit divided by cost price, multiplied by 100.",
+        "quick": "Business P&L: net operating profit = revenue - cost of goods sold - other expenses, and operating margin = net operating profit / revenue x 100. Product mode: profit = selling price - cost price, and markup = profit / cost price x 100.",
         "faq": [
-            ("What is the difference between profit percentage and profit margin?", "Profit percentage uses cost as the base. Profit margin uses selling price as the base. This calculator shows profit percentage on cost."),
+            ("What is the difference between markup and margin?", "Product markup uses cost as its base. Business operating margin uses revenue as its base. These percentages are not interchangeable."),
             ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
         ],
     },
@@ -670,7 +686,8 @@ EXTRA = {
     "unit-converter": {
         "quick": "Convert by multiplying the value by the factor from the starting unit to the base unit, then dividing by the factor from the target unit to the base unit.",
         "faq": [
-            ("How many kilograms are in a pound?", "One pound is exactly 0.45359237 kilograms."),
+            ("How do I convert centimeters to inches?", "Divide centimeters by 2.54. For example, 10 cm is about 3.94 inches. One inch is exactly 2.54 centimeters."),
+            ("How do I convert kilograms to pounds?", "Multiply kilograms by about 2.20462262. For example, 1 kg is about 2.2046 lb. The exact reference is 1 lb = 0.45359237 kg."),
             ("How do I convert Celsius to Fahrenheit?", "Multiply Celsius by 9, divide by 5, then add 32."),
         ],
     },
@@ -809,6 +826,64 @@ CALC_UI = (
     '<button class="' + EQUALS + '" data-key="=">=</button>'
     '</div></div>'
 )
+
+
+# Independent time-conversion and question calculators. Both are linked automatically
+# in the navigation, category pages, home tool list, sitemap, and SEO metadata.
+TOOLS.extend([
+    {
+        "slug": "years-to-days-calculator", "category": "time",
+        "name": "Years to Days Calculator", "app": "UtilitiesApplication",
+        "description": "Convert years into days, weeks, hours, minutes and seconds using either 365-day years or the Gregorian average of 365.2425 days.",
+        "h1": "Years to Days Calculator",
+        "lead": "Convert years to days, weeks, hours, minutes and seconds. Select the year definition. Exact calendar-year day counts require a starting date.",
+        "ui": (
+            '<form id="years-days-form" class="space-y-4" novalidate>'
+            '<label class="@L@" for="yd-value">Number of years</label>'
+            '<input class="@I@" id="yd-value" type="number" min="0" max="1000000" step="any" inputmode="decimal" value="80" required>'
+            '<label class="@L@" for="yd-method">Conversion method</label>'
+            '<select class="@I@" id="yd-method"><option value="365">365 days per year (simple)</option><option value="365.2425">365.2425 days per year (Gregorian average)</option></select>'
+            '<button class="@B@" type="submit">Convert Years</button></form>'
+            '<div id="yd-result" class="@R@" role="status" aria-live="polite"></div>'
+        ),
+        "guide": [
+            ("Conversion formulas", ["Days = years multiplied by 365 for the simple method. For the Gregorian average, days = years multiplied by 365.2425. Weeks = days divided by 7. Hours = days multiplied by 24. Minutes = hours multiplied by 60. Seconds = minutes multiplied by 60."]),
+            ("Worked example", ["80 years = 29,200 days by the 365-day method, or 29,219.4 days by the Gregorian average method. These are conversions, not exact elapsed days between calendar dates."]),
+            ("Accuracy limits", ["Calendar years vary between 365 and 366 days. To find exact elapsed days for a given number of calendar years, specify the starting date and count actual dates, including leap years."]),
+            ("Choosing the right method", ["Use the simple 365-day method when a worksheet or a question explicitly defines one year as 365 days. Use the Gregorian average for long-term approximate conversions across many years, because the Gregorian calendar has 97 leap years in every 400-year cycle. Neither method tells you the exact days between two birthdays without their dates. If you need the exact elapsed time, use the Age Calculator with actual calendar dates. The weeks shown can contain fractions because the conversion divides the day result by seven."]),
+            ("Reading the results", ["Hours, minutes and seconds are derived from the selected number of days, not from an assumed start time. Decimal years can produce fractional days and seconds. The calculator shows up to eight decimal places for readability. Rounding the displayed value does not change the internal conversion factor. For example, 1.5 simple years is 547.5 days, which is 78.21428571 weeks and 13,140 hours. For a calendar-specific result, select real start and end dates instead of assuming every year is equal."])
+        ],
+        "faq": [("How many days are in 80 years?", "29,200 with the simple method, or 29,219.4 with the Gregorian-average method."),
+                ("Does this account for leap years?", "The average method includes leap-year frequency statistically. Exact dates require a start date.")],
+        "sources": "Gregorian mean year: 365.2425 days over the 400-year Gregorian calendar cycle."
+    },
+    {
+        "slug": "query-calculator", "category": "time",
+        "name": "Query Calculator", "app": "UtilitiesApplication",
+        "description": "Ask a simple question in English or Roman Urdu about converting years, days, weeks, hours or minutes with clear supported units.",
+        "h1": "Query Calculator for Time Conversions",
+        "lead": "Ask a time conversion question such as 80 years mein kitne din hote hain? Supports exact birth-date age in days and conversions between years, days, weeks, hours, minutes and seconds.",
+        "ui": (
+            '<form id="query-time-form" class="space-y-4" novalidate>'
+            '<label class="@L@" for="qt-question">Your question</label>'
+            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="Ager birth date 29-07-1984 ho to age kitne days hogi?" required>'
+            '<p class="text-sm">Uses 365 days per year. Try: 2 weeks in hours, 3 days to minutes, 80 years mein kitne din.</p>'
+            '<button class="@B@" type="submit">Calculate Answer</button></form>'
+            '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a question and tap Calculate Answer. If no result appears, refresh this page.</div>'
+        ),
+        "guide": [
+            ("How it works", ["The question parser recognizes one nonnegative number, a supported source unit and a supported target unit. It calculates using fixed time conversion factors and never guesses unsupported questions."]),
+            ("Examples", ["80 years to days = 29,200 days. 2 weeks to hours = 336 hours. 3 days to minutes = 4,320 minutes."]),
+            ("Limits", ["The parser supports time conversions and exact Gregorian birth-date-to-today calculations, not arbitrary arithmetic. Time conversion questions use 365 days per year."]),
+            ("Supported question patterns", ["Enter one numeric amount followed by a supported time unit and a target unit. For example, 2 weeks in hours, 3 days to minutes, and 80 years mein kitne din hote hain are supported. The parser recognizes year, years, day, days, din, week, weeks, hour, hours, minute, minutes, second and seconds, plus a few Roman Urdu alternatives. It does not use artificial intelligence or guess the meaning of unfamiliar terms. If a question is unclear, it asks for a simpler time conversion instead of giving a potentially misleading number."]),
+            ("Understanding answers", ["A year is treated as exactly 365 days in this calculator. A week is seven days, a day is 24 hours, an hour is 60 minutes and a minute is 60 seconds. This makes results repeatable and straightforward to check independently. Leap years and daylight-saving transitions are not inferred from a sentence. For a birth-date question, exact elapsed days are calculated through today using Gregorian calendar dates. Time-unit questions are not intended for legal deadlines, payroll or astronomy. For a different year convention, open the Years to Days Calculator and choose the Gregorian average method."])
+        ],
+        "faq": [("Can I ask in Roman Urdu?", "Yes, simple patterns such as 80 years mein kitne din hote hain are supported."),
+                ("Can I ask any mathematical question?", "No. This version supports time-unit conversion questions only.")],
+        "sources": "Fixed conversion factors: 1 day = 24 hours, 1 hour = 60 minutes, 1 minute = 60 seconds; simple year = 365 days."
+    }
+])
+EXTRA.update({slug: {"faq": [], "quick": ""} for slug in ("years-to-days-calculator", "query-calculator")})
 
 for _t in TOOLS:
     _t["guide"] = _t["guide"] + GUIDE_EXTRA.get(_t["slug"], [])
@@ -1057,7 +1132,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261023-home-layout-fix-v3">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261026-standard-mobile-v4">\n'
         + ld + ads + "</head>\n"
     )
 
@@ -1142,7 +1217,7 @@ def shell(main_html, lang="en", current_path=None):
         '</nav></div>'
         + lang_links(lang, s, current_path) +
         '</div></footer>\n'
-        '<script src="/assets/app.js" defer></script>\n'
+        '<script src="/assets/app.js?v=20261026-query-fix-3" defer></script>\n'
         '</body>\n</html>\n'
     )
 
@@ -1222,7 +1297,7 @@ ANSWER_BLOCKS = {
         "ur": 'بالغ افراد میں CDC کے مطابق BMI کی 25.0 سے 30.0 سے کم حد کو زائد وزن کہا جاتا ہے؛ BMI صرف ابتدائی جانچ ہے، تشخیص نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC کی بالغوں کے لیے BMI درجہ بندی</a>۔'
     },
     "profit-loss-calculator": {
-        "en": 'If an item costs 1,000 and sells for 1,200, the difference is 200 before other business expenses. This is the basic cost-price comparison used by this calculator. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
+        "en": 'Business example: revenue 1,000, cost of goods sold 600 and other expenses 150 gives net operating profit 250 and margin 25%. Product example: cost 1,000 and selling price 1,200 gives markup 20%. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
         "ur": 'اگر کسی چیز کی قیمت خرید 1,000 اور فروخت 1,200 ہو تو دوسرے کاروباری اخراجات سے پہلے فرق 200 ہے۔ یہ اسی کیلکولیٹر کا بنیادی تقابل ہے۔ ماخذ: <a class="' + LINK + '" href="/methodology/">CalculatesAll کا حسابی طریقۂ کار</a>۔'
     },
     "discount-calculator": {
@@ -1303,23 +1378,16 @@ def tool_page(t):
         guide = BMI_GUIDE
         faqs = BMI_FAQ
         sources = BMI_SOURCES
+    elif t["slug"] == "profit-loss-calculator":
+        title = "Profit and Loss Calculator | Business P&L and Product Profit"
+        desc = "Free business P&L calculator for revenue, cost of goods sold and expenses, plus product profit and markup. See gross profit, operating profit and margin."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Free Online Tasbih Counter | Digital Tasbeeh Counter"
         desc = "Free online tasbih counter for daily dhikr. Tap to count, set targets of 33, 99 or 100, and save your count on your device. No download needed."
-        ui = t["ui"]
-        guide = t["guide"]
-        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
-        sources = t["sources"]
-    elif t["slug"] == "age-calculator":
-        title = "Age Calculator by Date of Birth | CalculatesAll"
-        desc = "Calculate your exact age in years, months and days from your date of birth, with total days lived."
-        ui = t["ui"]
-        guide = t["guide"]
-        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
-        sources = t["sources"]
-    elif t["slug"] == "unit-converter":
-        title = "Unit Converter: Length, Weight & Temp | CalculatesAll"
-        desc = "Convert length, weight and temperature units online, with clear results for common measurements."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
@@ -1366,21 +1434,26 @@ def tool_page(t):
     updated_date = LASTMOD.get(path)
     updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + ". " + t["sources"] + "</p>") if updated_date else ""
     calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
+        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
          if t["slug"] != "standard-calculator" else
-         '<section class="mt-8 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">')
+         '<section id="tool-calculator" class="ca-tool-standard-calculator mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="Calculator">')
         + ui + '</section>'
     )
     answer_note = answer_block(t["slug"], "en")
     primary_tool_content = calculator_section + answer_note
-    body = (
+    breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
         '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li><li aria-hidden="true">/</li>'
         '<li aria-current="page">' + t["name"] + "</li></ol></nav>"
-        '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
-        '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
-        + primary_tool_content
+    )
+    body = (
+        ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
+        + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
+        + (primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
+           if t["slug"] in {tool["slug"] for tool in TOOLS}
+           else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
+        + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "")
         + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
@@ -1547,6 +1620,8 @@ STEPS = {
 }
 
 TILE_GRAD = {
+    "years-to-days-calculator": "bg-gradient-to-br from-indigo-700 to-sky-700",
+    "query-calculator": "bg-gradient-to-br from-teal-700 to-blue-800",
     "zakat-calculator": "bg-gradient-to-br from-emerald-700 to-teal-700",
     "bmi-calculator": "bg-gradient-to-br from-rose-700 to-pink-700",
     "profit-loss-calculator": "bg-gradient-to-br from-sky-700 to-blue-800",
@@ -1557,6 +1632,8 @@ TILE_GRAD = {
     "tasbih-counter": "bg-gradient-to-br from-green-700 to-emerald-800",
 }
 TILE_ICON = {
+    "years-to-days-calculator": "📅",
+    "query-calculator": "🔎",
     "zakat-calculator": "🤲",
     "bmi-calculator": "⚖️",
     "profit-loss-calculator": "📈",
@@ -1636,7 +1713,7 @@ def home_app_page(lang):
     if urdu:
         for en, ur in URDU["standard-calculator"]["labels"]:
             hero_ui = hero_ui.replace('aria-label="' + en + '"', 'aria-label="' + ur + '"')
-    hero = ('<section aria-label="' + ("کیلکولیٹر" if urdu else "Calculator") + '" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span><span class="ca-home-live-dot" aria-hidden="true"></span></div>' + hero_ui + "</section>")
+    hero = ('<section aria-label="' + ("کیلکولیٹر" if urdu else "Calculator") + '" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span><a href="/tasbih-counter/" aria-label="Open Tasbih Counter" style="display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:4px 12px;border-radius:9px;background:#0f766e;color:#fff;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap">📿 Tasbih Counter</a><span class="ca-home-live-dot" aria-hidden="true"></span></div>' + hero_ui + "</section>")
     body = (
         '<div class="ca-home-wrap">'
         '<div class="ca-home-header">'

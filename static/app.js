@@ -538,11 +538,47 @@
   function initProfit () {
     var form = $("pl-form")
     if (!form) return
+    var businessFields = $("pl-business-fields")
+    var productFields = $("pl-product-fields")
+    var modes = document.querySelectorAll('input[name="pl-mode"]')
+    function currentMode () {
+      for (var i = 0; i < modes.length; i++) {
+        if (modes[i].checked) return modes[i].value
+      }
+      return "product"
+    }
+    function updateMode () {
+      var business = currentMode() === "business"
+      if (businessFields) businessFields.hidden = !business
+      if (productFields) productFields.hidden = business
+      say("pl-result", "")
+    }
+    Array.prototype.forEach.call(modes, function (radio) {
+      radio.addEventListener("change", updateMode)
+    })
+    updateMode()
     form.addEventListener("submit", function (e) {
       e.preventDefault()
+      if (currentMode() === "business") {
+        var revenue = num("p-revenue")
+        var cogs = num("p-cogs")
+        var expenses = num("p-expenses")
+        if (revenue === null || cogs === null || expenses === null ||
+            !Number.isFinite(revenue) || !Number.isFinite(cogs) || !Number.isFinite(expenses) ||
+            revenue < 0 || cogs < 0 || expenses < 0) {
+          say("pl-result", "Enter zero or positive numbers for revenue, cost of goods sold and other expenses.")
+          return
+        }
+        var gross = revenue - cogs
+        var net = gross - expenses
+        var margin = revenue === 0 ? "N/A (revenue is zero)" : (net / revenue * 100).toFixed(2) + "%"
+        say("pl-result", "Gross profit/loss: " + fmt(gross) + ". Net operating profit/loss: " +
+          fmt(net) + ". Net operating margin: " + margin + ".")
+        return
+      }
       var cost = num("p-cost")
       var sell = num("p-sell")
-      if (cost === null || sell === null || cost < 0 || sell < 0) {
+      if (cost === null || sell === null || !Number.isFinite(cost) || !Number.isFinite(sell) || cost < 0 || sell < 0) {
         say("pl-result", t("profitEnter"))
         return
       }
@@ -569,29 +605,39 @@
         return
       }
       var parts = value.split("-").map(Number)
-      var dob = new Date(parts[0], parts[1] - 1, parts[2])
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || parts.length !== 3 ||
+          parts[0] < 100 || parts[1] < 1 || parts[1] > 12 ||
+          parts[2] < 1 || parts[2] > new Date(Date.UTC(parts[0], parts[1], 0)).getUTCDate()) {
+        say("age-result", t("ageCheck"))
+        return
+      }
       var now = new Date()
-      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-      if (dob > today) {
+      var todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+      var bornUtc = Date.UTC(parts[0], parts[1] - 1, parts[2])
+      if (bornUtc > todayUtc) {
         say("age-result", t("ageFuture"))
         return
       }
-      var years = today.getFullYear() - dob.getFullYear()
-      var months = today.getMonth() - dob.getMonth()
-      var days = today.getDate() - dob.getDate()
-      if (days < 0) {
-        months -= 1
-        days += new Date(today.getFullYear(), today.getMonth(), 0).getDate()
+      var total = Math.round((todayUtc - bornUtc) / 86400000)
+      var years = now.getFullYear() - parts[0]
+      var months = now.getMonth() - (parts[1] - 1)
+      var completedMonths = years * 12 + months
+      function anniversaryUtc (count) {
+        var index = (parts[1] - 1) + count
+        var year = parts[0] + Math.floor(index / 12)
+        var month = ((index % 12) + 12) % 12
+        var maxDay = new Date(Date.UTC(year, month + 1, 0)).getUTCDate()
+        return Date.UTC(year, month, Math.min(parts[2], maxDay))
       }
-      if (months < 0) {
-        months += 12
-        years -= 1
-      }
+      if (anniversaryUtc(completedMonths) > todayUtc) completedMonths--
+      if (completedMonths < 0) completedMonths = 0
+      years = Math.floor(completedMonths / 12)
+      months = completedMonths % 12
+      var days = Math.round((todayUtc - anniversaryUtc(completedMonths)) / 86400000)
       if (years > 150) {
         say("age-result", t("ageCheck"))
         return
       }
-      var total = Math.floor((Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) - Date.UTC(parts[0], parts[1] - 1, parts[2])) / 86400000)
       say("age-result", t("ageResult", { y: years, m: months, d: days, t: fmt(total) }))
     })
   }
@@ -1368,17 +1414,240 @@
     })
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    initTheme()
-    initZakat()
-    initBMI()
-    initProfit()
-    initAge()
-    initDiscount()
-    initConverter()
-    initCalculator()
-    initTasbih()
-    initStopwatch()
-    initAds()
-  })
+
+  /* Deterministic time conversions, without eval or external requests. */
+  function timeConversionNumber (value) {
+    var n = Number(value)
+    return value.trim() !== "" && Number.isFinite(n) && n >= 0 && n <= 1000000 ? n : null
+  }
+
+  function timeConversionFormat (value) {
+    if (!Number.isFinite(value)) return "Out of range"
+    return value.toLocaleString("en-US", { maximumFractionDigits: 8 })
+  }
+
+  function initYearsDays () {
+    var form = $("years-days-form")
+    if (!form) return
+    form.addEventListener("submit", function (event) {
+      event.preventDefault()
+      var value = timeConversionNumber($("yd-value").value)
+      var factor = Number($("yd-method").value)
+      if (value === null || (factor !== 365 && factor !== 365.2425)) {
+        say("yd-result", "Enter a number from 0 to 1,000,000 and choose a conversion method.")
+        return
+      }
+      var days = value * factor
+      say("yd-result", timeConversionFormat(value) + " years = " +
+        timeConversionFormat(days) + " days; " +
+        timeConversionFormat(days / 7) + " weeks; " +
+        timeConversionFormat(days * 24) + " hours; " +
+        timeConversionFormat(days * 1440) + " minutes; " +
+        timeConversionFormat(days * 86400) + " seconds. Method: " + factor + " days per year.")
+    })
+  }
+
+  function initQueryTime () {
+    var form = $("query-time-form")
+    if (!form) return
+    var factors = { year: 365 * 86400, day: 86400, week: 604800,
+      hour: 3600, minute: 60, second: 1 }
+    var aliases = { years: "year", year: "year", saal: "year", sal: "year",
+      days: "day", day: "day", din: "day",
+      weeks: "week", week: "week", haftay: "week", hafta: "week",
+      hours: "hour", hour: "hour", ghantay: "hour", ghanta: "hour",
+      minutes: "minute", minute: "minute", min: "minute",
+      seconds: "second", second: "second", sec: "second" }
+    function calculateQuery (event) {
+      event.preventDefault()
+      var question = $("qt-question").value.toLowerCase().trim()
+      // Normalize Arabic-Indic and Devanagari digits, punctuation, and common
+      // arithmetic verbs in the six published site languages.
+      var digitSets = ["٠١٢٣٤٥٦٧٨٩", "۰۱۲۳۴۵۶۷۸۹", "०१२३४५६७८९"]
+      question = Array.from(question).map(function (c) {
+        for (var ds = 0; ds < digitSets.length; ds++) {
+          var pos = digitSets[ds].indexOf(c)
+          if (pos !== -1) return String(pos)
+        }
+        return c
+      }).join("").replace(/[٫]/g, ".").replace(/[،]/g, ",")
+      var multilingualTerms = [
+        [/باقی|باقي|بچے|بچ گئے|بچیں|कितने बचे|कितना बचा|quedan|reste|remaining/g, " remaining "],
+        [/تقسیم|توزيع|وزعت|موزعة|بانٹ|بانٹ دیے|वितरित|बाँट|बांट|distribuidos|distribué|distribués|répartis/g, " distributed "],
+        [/چوری|چورى|سرقت|سرقة|चोरी|robados|robado|volés|volé|سرق|مسروق/g, " stolen "],
+        [/خراب|खराब|perdidos|perdu|perdus|تلف|ضائع/g, " spoiled "],
+        [/گئے|گیا|गए|गया/g, " "],
+        [/جمع|जोड़|जोड़|más|mas|plus|ajouté|ajoutés|اضافہ|إضافة/g, " plus "],
+        [/منفی|घटा|घटाए|menos|moins|طرح|ناقص/g, " minus "],
+        [/سال|साल|वर्ष|años|año|ans|années|سنوات|سنة/g, " year "],
+        [/دن|दिन|días|día|jours|jour|أيام|يوم/g, " day "],
+        [/ہفتے|ہفتہ|सप्ताह|semanas|semana|semaines|semaine|أسابيع|أسبوع/g, " week "],
+        [/گھنٹے|گھنٹہ|घंटे|घंटा|horas|hora|heures|heure|ساعات|ساعة/g, " hour "],
+        [/منٹ|मिनट|minutos|minuto|minutes|دقائق|دقيقة/g, " minute "],
+        [/سیکنڈ|सेकंड|segundos|segundo|secondes|ثواني|ثانية/g, " second "]
+      ]
+      multilingualTerms.forEach(function (item) { question = question.replace(item[0], item[1]) })
+      // Calendar-date questions take priority over generic time-unit conversions.
+      // Dates are interpreted as DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD.
+      var dateMatch = question.match(/(?:^|[^0-9])([0-9]{1,4})[-/]([0-9]{1,2})[-/]([0-9]{1,4})(?![0-9])/)
+      var namedMonths = { january: 1, jan: 1, february: 2, feb: 2,
+        march: 3, mar: 3, april: 4, apr: 4, may: 5, june: 6, jun: 6,
+        july: 7, jul: 7, august: 8, aug: 8, september: 9, sep: 9,
+        october: 10, oct: 10, november: 11, nov: 11, december: 12, dec: 12 }
+      var namedDate = question.match(/(?:^|[^0-9])([0-9]{1,2})[ ,.-]+(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sep|october|oct|november|nov|december|dec)[ ,.-]+([0-9]{4})(?![0-9])/)
+      if (!dateMatch && namedDate) dateMatch = [namedDate[0], namedDate[1], String(namedMonths[namedDate[2]]), namedDate[3]]
+      var leapBirthday = /(?:29[ -]?(?:feb|february)|(?:feb|february)[ -]?29|29[ -]?(?:farwari|februari))/.test(question)
+      var birthdayCountQuestion = /(?:birthday|birthdays|saalgirah|salgirah|bar|baar|times|kitni dafa)/.test(question)
+      if (leapBirthday && dateMatch) {
+        var febDate = /(?:29[-/]0?2[-/]|[-/]0?2[-/]29)/.test(dateMatch[0])
+        if (!febDate) {
+          say("qt-result", "Your question mentions 29 February but the supplied date is different. Please confirm the correct date of birth, for example 29-02-1984 or 29-07-1984.")
+          return
+        }
+      }
+      if (leapBirthday && !dateMatch) {
+        say("qt-result", "For a 29 February birthday, please include the birth year, for example 29-02-1984. The date appears only in leap years, but age increases every year.")
+        return
+      }
+      if (dateMatch) {
+        var first = Number(dateMatch[1])
+        var second = Number(dateMatch[2])
+        var third = Number(dateMatch[3])
+        var year = dateMatch[1].length === 4 ? first : third
+        var month = second
+        var day = dateMatch[1].length === 4 ? third : first
+        var max = new Date(Date.UTC(year, month, 0)).getUTCDate()
+        if (year < 100 || year > 9999 || month < 1 || month > 12 || day < 1 || day > max) {
+          say("qt-result", "Invalid birth date. Use DD-MM-YYYY, for example 29-07-1984.")
+          return
+        }
+        var now = new Date()
+        var todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+        var birthUtc = Date.UTC(year, month - 1, day)
+        if (birthUtc > todayUtc) {
+          say("qt-result", "Birth date cannot be in the future.")
+          return
+        }
+        if (birthdayCountQuestion) {
+          var completed = now.getFullYear() - year
+          if (now.getMonth() + 1 < month || (now.getMonth() + 1 === month && now.getDate() < day)) completed--
+          var count = 0
+          if (month === 2 && day === 29) {
+            for (var cy = year + 1; cy <= now.getFullYear(); cy++) {
+              if ((cy % 4 === 0 && (cy % 100 !== 0 || cy % 400 === 0)) &&
+                  (cy < now.getFullYear() || now.getMonth() + 1 > 2 ||
+                   (now.getMonth() + 1 === 2 && now.getDate() >= 29))) count++
+            }
+            say("qt-result", "Age: " + completed + " completed years. Actual 29 February dates after birth: " + count +
+              ". These are different counts. In non-leap years 29 February does not occur.")
+          } else {
+            say("qt-result", "Completed birthdays since birth: " + completed +
+              ". Birth date: " + String(day).padStart(2, "0") + "-" +
+              String(month).padStart(2, "0") + "-" + year + ".")
+          }
+          return
+        }
+        var totalDays = Math.round((todayUtc - birthUtc) / 86400000)
+        var totalWeeks = Math.floor(totalDays / 7)
+        var remainingDays = totalDays % 7
+        var ageYears = now.getFullYear() - year
+        if (now.getMonth() + 1 < month || (now.getMonth() + 1 === month && now.getDate() < day)) ageYears--
+        var completedMonths = (now.getFullYear() - year) * 12 + (now.getMonth() + 1 - month)
+        function monthAnniversary (count) {
+          var index = month - 1 + count
+          var y = year + Math.floor(index / 12)
+          var m = ((index % 12) + 12) % 12
+          return Date.UTC(y, m, Math.min(day, new Date(Date.UTC(y, m + 1, 0)).getUTCDate()))
+        }
+        if (monthAnniversary(completedMonths) > todayUtc) completedMonths--
+        var calendarYears = Math.floor(completedMonths / 12)
+        var calendarMonths = completedMonths % 12
+        var calendarDays = Math.round((todayUtc - monthAnniversary(completedMonths)) / 86400000)
+        var todayText = String(now.getDate()).padStart(2, "0") + "-" +
+          String(now.getMonth() + 1).padStart(2, "0") + "-" + now.getFullYear()
+        var eventIsBirth = /(^|[^a-z])(birth|born|dob|paida|birthday)([^a-z]|$)/.test(question)
+        var subject = /(^|[^a-z])pakistan([^a-z]|$)/.test(question) ? "Pakistan" : "The subject"
+        var prefix = eventIsBirth ? "Birth date: " : "Start date: "
+        var elapsedLabel = eventIsBirth ? " old" : " elapsed"
+        say("qt-result", prefix + String(day).padStart(2, "0") + "-" +
+          String(month).padStart(2, "0") + "-" + year +
+          ". As of " + todayText + ": " + timeConversionFormat(totalDays) +
+          " days" + elapsedLabel + " for " + subject + " (" + calendarYears + " years, " + calendarMonths + " months, " + calendarDays + " days; " + completedMonths + " completed months and " + calendarDays + " days; " +
+          timeConversionFormat(totalWeeks) + " full weeks and " +
+          remainingDays + " days). Exact Gregorian calendar days.")
+        return
+      }
+      // Roman Urdu and English everyday arithmetic, evaluated left-to-right
+      // only when each quantity's operation is explicit or contextually clear.
+      var everydayNumbers = Array.from(question.matchAll(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g))
+      var hasEverydayWords = /(?:^|[^a-z])(?:pass|pas|have|had|bant|baant|diye|dia|diya|kharab|bach|bache|bachy|baqi|baki|remaining|left|gave|given|lost|spoiled|added|plus|minus|more|total|sum|spent|sold|used|kharch|aur|mazeed|distribut|chori|stolen|stole|theft|spoiled)(?:[^a-z]|$)/.test(question)
+      if (hasEverydayWords && everydayNumbers.length >= 2 && everydayNumbers.length <= 20) {
+        var arithmetic = Number(everydayNumbers[0][0])
+        var validArithmetic = Number.isFinite(arithmetic) && arithmetic <= 1000000000000
+        var arithmeticSteps = [timeConversionFormat(arithmetic)]
+        for (var ai = 1; ai < everydayNumbers.length && validArithmetic; ai++) {
+          var before = question.slice(everydayNumbers[ai - 1].index + everydayNumbers[ai - 1][0].length, everydayNumbers[ai].index)
+          var after = question.slice(everydayNumbers[ai].index + everydayNumbers[ai][0].length, ai + 1 < everydayNumbers.length ? everydayNumbers[ai + 1].index : question.length)
+          var subtract = /(?:bant|baant|diye|dia|diya|kharab|lost|gave|given|spoiled|spent|sold|used|kharch|minus|nikal|kam|distribut|chori|stolen|stole|theft)/.test(after)
+          var add = /(?:added|plus|aur|mazeed|more|mila|milay|jama)/.test(after)
+          if (!subtract && !add) {
+            subtract = /(?:minus|subtract|less)/.test(before)
+            add = /(?:plus|add)/.test(before)
+          }
+          if (subtract === add) { validArithmetic = false; break }
+          var amount = Number(everydayNumbers[ai][0])
+          if (!Number.isFinite(amount) || amount > 1000000000000) { validArithmetic = false; break }
+          arithmetic = subtract ? arithmetic - amount : arithmetic + amount
+          arithmeticSteps.push((subtract ? " - " : " + ") + timeConversionFormat(amount))
+        }
+        if (validArithmetic && Number.isFinite(arithmetic)) {
+          say("qt-result", arithmeticSteps.join("") + " = " + timeConversionFormat(arithmetic) +
+            ". Remaining answer: " + timeConversionFormat(arithmetic) + ".")
+          return
+        }
+      }
+      var numbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
+      var tokens = question.match(/[a-z]+/g) || []
+      var units = tokens.filter(function (word) { return !!aliases[word] })
+      if (numbers.length !== 1 || units.length !== 2) {
+        say("qt-result", "Please ask one time conversion, for example: 80 years mein kitne din hote hain?")
+        return
+      }
+      var value = timeConversionNumber(numbers[0])
+      if (value === null) {
+        say("qt-result", "Enter a nonnegative number up to 1,000,000.")
+        return
+      }
+      var source = aliases[units[0]]
+      var target = aliases[units[1]]
+      var result = value * factors[source] / factors[target]
+      say("qt-result", timeConversionFormat(value) + " " + source +
+        "(s) = " + timeConversionFormat(result) + " " + target +
+        "(s). Uses 365 days per year.")
+    }
+    form.addEventListener("submit", calculateQuery)
+    $("qt-question").addEventListener("change", calculateQuery)
+    calculateQuery({ preventDefault: function () {} })
+  }
+
+  function initializeCalculators () {
+    // Initialize the query answer independently before any other calculator.
+    try { initQueryTime() } catch (err) {
+      say("qt-result", "Calculation failed to start. Please refresh this page.")
+      if (typeof console !== "undefined") console.error("Query Calculator:", err)
+    }
+    var initializers = [initTheme, initZakat, initBMI, initProfit, initAge,
+      initYearsDays, initDiscount, initConverter, initCalculator,
+      initTasbih, initStopwatch, initAds]
+    initializers.forEach(function (init) {
+      try { init() } catch (err) {
+        if (typeof console !== "undefined") console.error("Calculator initialization:", err)
+      }
+    })
+  }
+  if (!document.readyState || document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeCalculators)
+  } else {
+    initializeCalculators()
+  }
 })()

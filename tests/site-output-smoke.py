@@ -1,3 +1,14 @@
+# Regression: remove the full redundant title suffix, not just truncate words.
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from seo_finalize import normalize_meta
+_sample_title = "Advanced Example Online Calculator | Free Online Tool | CalculatesAll"
+_sample_html = '<title>' + _sample_title + '</title><meta name="description" content="' + ('A' * 100) + '">'
+_normalized, _title, _description = normalize_meta(_sample_html, "/example-calculator/", "en")
+assert _title == "Advanced Example Online Calculator | CalculatesAll", _title
+assert "<title>" + _title + "</title>" in _normalized
+
 import html as html_lib
 import json
 import os
@@ -65,23 +76,52 @@ for url in urls:
     titles[url] = title_match.group(1)
     descriptions[url] = desc_match.group(1)
     assert 70 <= len(descriptions[url]) <= 160, f"Meta description length outside 70-160 characters: {url} ({len(descriptions[url])})"
+    if url in {SITE + path for path in ("/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/", "/discount-calculator/", "/stopwatch/")}:
+        for attr, name, expected in (
+            ("property", "og:title", title_match.group(1)),
+            ("property", "og:description", desc_match.group(1)),
+            ("name", "twitter:title", title_match.group(1)),
+            ("name", "twitter:description", desc_match.group(1)),
+        ):
+            social = re.search('<meta ' + attr + '="' + name + '" content="([^"]*)"', html)
+            assert social and html_lib.unescape(social.group(1)) == html_lib.unescape(expected), f"Stale {name} on {url}"
     assert "Review the formula, worked example and limits before relying on the result" not in descriptions[url], f"Generic irrelevant metadata appended: {url}"
     if url == SITE + "/profit-loss-calculator/":
-        assert title_match.group(1) == "Profit and Loss Calculator | CalculatesAll", (
+        assert title_match.group(1) == "Profit and Loss Calculator | Profit % | CalculatesAll", (
             "Profit and Loss title must be complete and descriptive."
         )
-    elif url == SITE + "/age-calculator/":
-        assert html_lib.unescape(title_match.group(1)) == "Age Calculator by Date of Birth | CalculatesAll"
-        assert "date of birth" in desc_match.group(1).lower()
-    elif url == SITE + "/unit-converter/":
-        assert html_lib.unescape(title_match.group(1)) == "Unit Converter: Length, Weight & Temp | CalculatesAll"
-        assert "length, weight and temperature" in desc_match.group(1).lower()
-    elif url == SITE + "/discount-calculator/":
+    if url == SITE + "/tasbih-counter/":
+        assert title_match.group(1) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
+            "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
+        )
+        assert desc_match.group(1) == "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app.", (
+            "Tasbih description must be specific, useful and aligned with the page."
+        )
+    if url == SITE + "/age-calculator/":
+        assert html_lib.unescape(title_match.group(1)) == "Age Calculator | Years, Months & Days | CalculatesAll", (
+            "Age calculator title must communicate its exact-age use case."
+        )
+        assert desc_match.group(1) == "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation.", (
+            "Age calculator description must be useful and page-specific."
+        )
+    if url == SITE + "/unit-converter/":
+        assert title_match.group(1) == "Unit Converter: cm to Inches, kg to lbs | CalculatesAll", (
+            "Unit converter title must describe its supported conversion categories."
+        )
+        assert desc_match.group(1) == "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result.", (
+            "Unit converter description must match supported conversions and search intent."
+        )
+        assert len(title_match.group(1)) <= 59, "Unit converter title should remain concise"
+        assert "How do I convert centimeters to inches?" in html, "Unit converter must answer the high-demand cm-to-inches query"
+        assert "How do I convert kilograms to pounds?" in html, "Unit converter must answer the high-demand kg-to-lbs query"
+        assert "One inch is exactly 2.54 centimeters." in html, "Centimeter/inch conversion must use the exact NIST relationship"
+        assert "0.45359237 kg" in html, "Kilogram/pound conversion must include the exact reference relationship"
+    if url == SITE + "/discount-calculator/":
         assert html_lib.unescape(title_match.group(1)) == "Discount Calculator: Sale Price & Savings | CalculatesAll"
-        assert "final sale price" in desc_match.group(1).lower()
-    elif url == SITE + "/stopwatch/":
+        assert desc_match.group(1) == "Calculate a discount, final sale price and total savings from the original price and discount percentage."
+    if url == SITE + "/stopwatch/":
         assert html_lib.unescape(title_match.group(1)) == "Free Online Stopwatch | CalculatesAll"
-        assert "hundredths-of-a-second timing" in desc_match.group(1).lower()
+        assert desc_match.group(1) == "Use a free online stopwatch with start, stop, reset and hundredths-of-a-second timing in your browser."
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
@@ -429,7 +469,7 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261023-home-layout-fix-v3" in homepage_html, "Homepage must load the current calculator layout stylesheet"
+assert "/assets/site.css?v=20261026-standard-mobile-v4" in homepage_html, "Homepage must load the current calculator layout stylesheet"
 assert ".ca-home-layout{display:grid" in site_css, "Homepage calculator layout must use the responsive single-column grid"
 homepage_layout_rule_start = site_css.find("#main .ca-home-layout{")
 homepage_layout_rule_end = site_css.find("}", homepage_layout_rule_start)
@@ -576,9 +616,15 @@ for slug in calculator_slugs:
     calc_pos = tool_html.find('<section id="tool-calculator"')
     h1_pos = tool_html.find("<h1")
     lead_pos = tool_html.find('<p class="mt-3 text-lg', h1_pos)
-    assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
-        f"Calculator must follow the heading and short lead: /{slug}/"
-    )
+    if slug in {"bmi-calculator", "tasbih-counter", "zakat-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"}:
+        moved_lead_pos = tool_html.find('ca-tool-lead-after', h1_pos)
+        assert h1_pos >= 0 and calc_pos > h1_pos and moved_lead_pos > calc_pos, (
+            f"Calculator must precede moved explanatory lead: /{slug}/"
+        )
+    else:
+        assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
+            f"Calculator must follow the heading and short lead: /{slug}/"
+        )
     main_open = re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', tool_html)
     assert main_open, f"Non-standard calculator page must use the compact calculator-first main layout: /{slug}/"
     note_pos = tool_html.find("Evidence-based note")
@@ -621,7 +667,7 @@ assert ".ca-home-side-left{display:none!important}" in site_css_compact and ".ca
 assert ".ca-home-calculator" in site_css, "Homepage calculator styles must survive the CSS build"
 input_css = (ROOT.parent / "styles" / "input.css").read_text(encoding="utf-8")
 assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?\.ca-home-calculator\s+#calc-pad\s+button\s*\{\s*min-height:\s*2\.8rem", input_css), "Homepage mobile calculator sizing must be explicitly defined in source CSS"
-assert "20261023-home-layout-fix-v3" in home_html, "Homepage must load the restored calculator-first stylesheet"
+assert "20261026-standard-mobile-v4" in home_html, "Homepage must load the restored calculator-first stylesheet"
 layout_marker = "/* Persistent homepage calculator-first layout override. Keep this in source CSS because build:css regenerates static/site.css. */"
 assert layout_marker in input_css, "Calculator-first desktop layout must live in source CSS, not only the generated stylesheet"
 layout_override = input_css.split(layout_marker, 1)[1]
@@ -635,5 +681,47 @@ standard_tool_h1_pos = standard_tool_html.find("<h1")
 standard_tool_lead_end = standard_tool_html.find("</p>", standard_tool_h1_pos)
 standard_tool_calc_pos = standard_tool_html.find('id="calc-display"')
 standard_tool_note_pos = standard_tool_html.find("Evidence-based note")
-assert standard_tool_calc_pos > standard_tool_lead_end, "Standard calculator widget must follow its title and lead"
+assert standard_tool_h1_pos < standard_tool_calc_pos < standard_tool_lead_end, "Standard calculator widget must appear immediately after title and before explanatory lead"
+assert 'class="ca-tool-standard-calculator mt-2' in standard_tool_html, "Standard calculator must use compact top spacing"
 assert standard_tool_note_pos < 0 or standard_tool_calc_pos < standard_tool_note_pos, "Standard calculator widget must precede explanatory notes"
+
+# Page-specific first-screen layout and Tasbih visual styling regression checks.
+assert 'ca-tool-bmi-calculator' in bmi_html, "BMI form must have scoped first-screen styling"
+tasbih_layout_html = output_for_url(SITE + "/tasbih-counter/").read_text(encoding="utf-8")
+assert 'ca-tool-tasbih-counter' in tasbih_layout_html, "Tasbih must have scoped visual styling"
+assert 'ca-tasbih-shell' in tasbih_layout_html, "Tasbih controls must retain styling hook"
+for token in ('#main #bmi-form', '#main .ca-tasbih-shell #t-count', '#main .ca-tasbih-shell #t-tap'):
+    assert token in site_css, f"Missing first-screen style: {token}"
+
+# The lead copy must follow the interactive calculator on the English BMI/Tasbih pages.
+for slug, form_marker in (("bmi-calculator", 'id="bmi-form"'), ("tasbih-counter", 'id="tasbih-app"')):
+    first_screen_html = output_for_url(SITE + "/" + slug + "/").read_text(encoding="utf-8")
+    assert form_marker in first_screen_html, f"Missing interactive form: {slug}"
+    assert 'ca-tool-lead-after' in first_screen_html, f"Lead must be below interactive form: {slug}"
+    assert first_screen_html.index(form_marker) < first_screen_html.index('ca-tool-lead-after'), f"Lead appears above calculator: {slug}"
+for token in ('#main .ca-tasbih-shell #t-count', '#main .ca-tool-bmi-calculator #bmi-form'):
+    assert token in site_css, f"Missing compact viewport layout: {token}"
+
+# Tasbih first-screen priority: all primary controls precede optional settings.
+tasbih_first_html = (ROOT / "tasbih-counter" / "index.html").read_text(encoding="utf-8")
+for control_id in ('id="t-count"', 'id="t-tap"', 'id="t-undo"', 'id="t-reset"'):
+    assert control_id in tasbih_first_html, f"Missing Tasbih control: {control_id}"
+assert tasbih_first_html.index('class="ca-tasbih-settings"') < tasbih_first_html.index('id="t-phrase"') < tasbih_first_html.index('id="t-target"') < tasbih_first_html.index('id="t-count"') < tasbih_first_html.index('id="t-tap"') < tasbih_first_html.index('id="t-reset"'), "Tasbih phrase, target, count and buttons must appear in first-screen priority order"
+assert '#main .ca-tool-tasbih-counter .ca-tasbih-settings' in site_css, "Missing compact Tasbih settings styling"
+
+assert '#main .ca-tool-tasbih-counter #t-tap' in site_css, "Missing Tasbih mobile button sizing rules"
+assert 'body:has(.ca-tool-tasbih-counter) #main' in site_css, "Missing Tasbih main spacing reduction"
+
+# Non-excluded calculators put their functional tools before descriptive lead text.
+for _slug in ("zakat-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"):
+    _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
+    assert _page.index('id="tool-calculator"') < _page.index("ca-tool-lead-after"), _slug + " must prioritize tool before lead"
+for _slug in ("standard-calculator", "bmi-calculator", "tasbih-counter"):
+    _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
+    assert 'ca-tool-lead-after' in _page or _slug == "standard-calculator", "Excluded calculator changed: " + _slug
+_profit_page = Path("public/profit-loss-calculator/index.html").read_text(encoding="utf-8")
+for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses", "pl-product-fields", "p-cost", "p-sell", "pl-result"):
+    assert 'id="' + _id + '"' in _profit_page, "Missing profit field: " + _id
+assert "Business P&amp;L" in _profit_page, "Business profit mode missing"
+assert "net operating" in _profit_page.lower(), "Profit page must explain net operating profit"
+assert "ca-profit-mode" in site_css, "Profit mode CSS missing"

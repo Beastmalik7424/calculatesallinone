@@ -951,3 +951,455 @@
     min-height: 56px;
   }
 }
+
+
+/* BMI and Tasbih: keep primary controls high in the viewport; preserve minimum touch sizes. */
+#main:has(.ca-tool-bmi-calculator), #main:has(.ca-tool-tasbih-counter) { padding-top: .5rem; }
+#main:has(.ca-tool-bmi-calculator) > h1, #main:has(.ca-tool-tasbih-counter) > h1 { margin-top: .35rem; font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.18; }
+#main:has(.ca-tool-bmi-calculator) > p:first-of-type, #main:has(.ca-tool-tasbih-counter) > p:first-of-type { margin-top: .3rem; font-size: .95rem; line-height: 1.35; }
+#main .ca-tool-bmi-calculator, #main .ca-tool-tasbih-counter { margin-top: .65rem; padding: .8rem; }
+#main #bmi-form { display: grid; gap: .45rem; }
+#main #bmi-form fieldset { margin: 0; }
+#main #bmi-form fieldset .flex { gap: .7rem; }
+#main #bmi-form label { margin-bottom: .15rem; }
+#main #bmi-form input[type=text] { min-height: 44px; }
+#main #bmi-form button[type=submit] { min-height: 48px; }
+#main .ca-tool-tasbih-counter { background: linear-gradient(145deg, #f3f9f3, #e7f3ed 65%, #fbf5e4); border: 1px solid #c5d9c8; }
+#main .ca-tasbih-shell { max-width: 38rem; gap: .55rem; }
+#main .ca-tasbih-shell > .grid:first-child { gap: .6rem; }
+#main .ca-tasbih-shell label { color: #14523f; font-weight: 650; }
+#main .ca-tasbih-shell select, #main .ca-tasbih-shell input { border-color: #8caf9b; background-color: #fffdf6; color: #123b30; min-height: 44px; }
+#main .ca-tasbih-shell #t-count { color: #f7e9ba; background: radial-gradient(circle at 50% 20%, #24705a, #103f34); border: 3px double #d8b866; border-radius: 1.5rem; padding: .65rem; font-size: clamp(3.1rem, 9vw, 4.7rem); line-height: 1.15; }
+#main .ca-tasbih-shell #t-tap { background: #146449; color: #fff; border: 2px solid #c5a65b; border-radius: 1rem; min-height: 58px; font-weight: 750; }
+#main .ca-tasbih-shell #t-tap:hover { background: #0d4c38; }
+#main .ca-tasbih-shell #t-undo, #main .ca-tasbih-shell #t-reset { min-height: 44px; }
+@media (min-width: 700px) {
+  #main #bmi-form { grid-template-columns: repeat(2, minmax(0,1fr)); column-gap: 1.2rem; align-items: end; }
+  #main #bmi-form button[type=submit] { grid-column: 1 / -1; }
+  #main .ca-tasbih-shell { max-width: 42rem; }
+}
+@media (max-width: 480px) {
+  #main .ca-tool-bmi-calculator, #main .ca-tool-tasbih-counter { padding: .65rem; }
+  #main .ca-tasbih-shell #t-count { padding: .45rem; }
+  #main .ca-tasbih-shell > .grid:first-child { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #main .ca-tasbih-shell #t-tap { transition: none; }
+}
+
+
+/* Prioritize full BMI/Tasbih interaction over explanatory text in the first viewport. */
+#main:has(.ca-tool-bmi-calculator), #main:has(.ca-tool-tasbih-counter) { padding-top: .25rem !important; }
+#main:has(.ca-tool-bmi-calculator) > nav, #main:has(.ca-tool-tasbih-counter) > nav { font-size: .75rem; line-height: 1.2; }
+#main:has(.ca-tool-bmi-calculator) > h1, #main:has(.ca-tool-tasbih-counter) > h1 { margin-top: .25rem !important; font-size: clamp(1.25rem,2.4vw,1.65rem) !important; line-height: 1.15 !important; }
+#main .ca-tool-bmi-calculator, #main .ca-tool-tasbih-counter { margin-top: .4rem !important; padding: .55rem .75rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form { gap: .25rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset { gap: .1rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form .flex { gap: .4rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form label { font-size: .88rem !important; line-height: 1.2 !important; }
+#main .ca-tool-bmi-calculator #bmi-form input[type=text] { min-height: 42px; padding-top: .35rem; padding-bottom: .35rem; }
+#main .ca-tool-bmi-calculator #bmi-form button[type=submit] { min-height: 44px; padding: .45rem; }
+#main .ca-tasbih-shell { gap: .3rem !important; }
+#main .ca-tasbih-shell label { font-size: .85rem !important; line-height: 1.15 !important; }
+#main .ca-tasbih-shell select, #main .ca-tasbih-shell input { min-height: 40px !important; padding-top: .25rem; padding-bottom: .25rem; }
+#main .ca-tasbih-shell #t-count { padding: .2rem !important; font-size: clamp(2.8rem, 9vw, 4.1rem) !important; line-height: 1.05 !important; }
+#main .ca-tasbih-shell #t-progress { margin: 0; font-size: .82rem !important; }
+#main .ca-tasbih-shell #t-tap { min-height: 48px !important; padding: .35rem !important; }
+#main .ca-tasbih-shell #t-undo, #main .ca-tasbih-shell #t-reset { min-height: 42px !important; padding: .3rem !important; }
+#main .ca-tasbih-shell > p:last-child { font-size: .75rem !important; line-height: 1.2 !important; }
+@media (max-width: 480px) {
+  #main .ca-tasbih-shell > .grid:first-child { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: .4rem !important; }
+  #main .ca-tool-tasbih-counter, #main .ca-tool-bmi-calculator { padding: .45rem !important; }
+  #main .ca-tasbih-shell #t-count { font-size: 3rem !important; }
+}
+
+/* First-screen priority: use compact, accessible controls only on BMI/Tasbih pages. */
+body:has(.ca-tool-bmi-calculator) header, body:has(.ca-tool-tasbih-counter) header { position: static !important; }
+body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) header nav { padding-top: .35rem !important; padding-bottom: .35rem !important; }
+#main .ca-tasbih-custom-phrase:has(input:disabled) { display: none !important; }
+#main .ca-tasbih-shell > .grid:first-child { display: grid; grid-template-columns: minmax(0,1fr); gap: .2rem !important; }
+#main .ca-tasbih-shell #t-count { min-height: 0 !important; padding: .25rem !important; }
+#main .ca-tasbih-shell #t-tap { min-height: 44px !important; }
+#main .ca-tasbih-shell > p:last-child { margin-top: .2rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form { display: flex !important; flex-direction: column; gap: .3rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset { display: flex !important; flex-wrap: wrap; align-items: center; gap: .2rem .5rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset legend { float: left; width: auto; margin-right: .5rem; padding: 0; font-size: .85rem; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset .flex { gap: .3rem .6rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form fieldset label { min-height: 34px; font-size: .82rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form > div label { font-size: .82rem !important; }
+#main .ca-tool-bmi-calculator #bmi-form input[type=text] { min-height: 42px !important; }
+#main .ca-tool-bmi-calculator #bmi-form button[type=submit] { width: 100%; min-height: 44px; }
+#main .ca-tool-bmi-calculator #bmi-result:empty { display: none; }
+@media (max-width: 600px) {
+  body:has(.ca-tool-bmi-calculator) header, body:has(.ca-tool-tasbih-counter) header { min-height: 0 !important; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset legend { float: none; width: 100%; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset .flex { flex-wrap: nowrap; }
+  #main .ca-tool-bmi-calculator #bmi-form fieldset label { white-space: nowrap; }
+}
+
+/* Tasbih first-viewport correction: preserve controls but move settings below count/actions visually. */
+#main .ca-tool-tasbih-counter .ca-tasbih-shell { display: flex !important; flex-direction: column !important; gap: .4rem !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings { order: 6; margin-top: .4rem; padding-top: .5rem; border-top: 1px solid #b8d3bf; }
+#main .ca-tool-tasbih-counter #t-count { order: 0; }
+#main .ca-tool-tasbih-counter #t-progress { order: 1; }
+#main .ca-tool-tasbih-counter #t-storage-note { order: 2; }
+#main .ca-tool-tasbih-counter #t-tap { order: 3; }
+#main .ca-tool-tasbih-counter #t-tap + .grid { order: 4; }
+#main .ca-tool-tasbih-counter .ca-tasbih-shell > p:not(#t-progress):not(#t-storage-note) { order: 5; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings > .grid { display: grid; grid-template-columns: minmax(0,1fr); gap: .4rem !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings .ca-tasbih-custom-phrase:has(input:disabled) { display: none !important; }
+#main .ca-tool-tasbih-counter #t-count { font-size: clamp(3.5rem,12vw,5rem) !important; padding: .65rem !important; }
+#main .ca-tool-tasbih-counter #t-tap { min-height: 60px !important; }
+#main .ca-tool-tasbih-counter #t-undo, #main .ca-tool-tasbih-counter #t-reset { min-height: 44px !important; }
+@media (min-width: 768px) {
+  #main .ca-tool-tasbih-counter .ca-tasbih-settings > .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+
+/* Tasbih: phrase, target, count and every action in the first mobile screen. */
+#main .ca-tool-tasbih-counter .ca-tasbih-shell { display: flex !important; flex-direction: column !important; gap: .25rem !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings { order: 0 !important; display: grid !important; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .35rem !important; margin: 0 !important; padding: 0 !important; border: 0 !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings > .grid { display: contents !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings label { display: block; font-size: .78rem !important; line-height: 1.15 !important; margin-bottom: .12rem !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings select, #main .ca-tool-tasbih-counter .ca-tasbih-settings input { display: block; width: 100%; min-width: 0; min-height: 44px !important; font-size: .85rem !important; padding: .35rem !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings .ca-tasbih-custom-phrase:has(input:disabled) { display: none !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-settings #t-custom-target-wrap[hidden] { display: none !important; }
+#main .ca-tool-tasbih-counter #t-count { order: 1 !important; padding: .25rem !important; font-size: clamp(2.9rem, 11vw, 4.1rem) !important; line-height: 1.08 !important; }
+#main .ca-tool-tasbih-counter #t-progress { order: 2 !important; min-height: 0; font-size: .8rem !important; line-height: 1.15 !important; }
+#main .ca-tool-tasbih-counter #t-storage-note { order: 3 !important; }
+#main .ca-tool-tasbih-counter #t-tap { order: 4 !important; min-height: 48px !important; }
+#main .ca-tool-tasbih-counter #t-tap + .grid { order: 5 !important; gap: .35rem !important; }
+#main .ca-tool-tasbih-counter #t-undo, #main .ca-tool-tasbih-counter #t-reset { min-height: 44px !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-shell > p:not(#t-progress):not(#t-storage-note) { order: 6 !important; font-size: .72rem !important; line-height: 1.15 !important; }
+#main .ca-tool-tasbih-counter .ca-tasbih-shell > p:last-child { margin-top: 0 !important; }
+@media (max-width: 480px) {
+  #main .ca-tool-tasbih-counter { padding: .4rem !important; }
+  #main .ca-tool-tasbih-counter .ca-tasbih-settings { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+}
+
+/* Tasbih small-screen first-view: compress nonessential chrome, show all primary actions. */
+@media (max-width: 600px) {
+ body:has(.ca-tool-tasbih-counter) header nav { padding-block: .2rem !important; }
+ body:has(.ca-tool-tasbih-counter) #main { padding-top: .15rem !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-shell { gap: .12rem !important; margin-block: 0 !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-settings { gap: .2rem !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-settings label { font-size: .72rem !important; margin: 0 !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-settings select { min-height: 38px !important; height: 38px !important; padding-block: .15rem !important; }
+ #main .ca-tool-tasbih-counter #t-count { font-size: 2.4rem !important; padding: .1rem !important; line-height: 1 !important; min-height: 48px !important; }
+ #main .ca-tool-tasbih-counter #t-progress { font-size: .72rem !important; margin: 0 !important; }
+ #main .ca-tool-tasbih-counter #t-tap { min-height: 48px !important; height: 48px !important; padding: .25rem !important; font-size: 1.05rem !important; }
+ #main .ca-tool-tasbih-counter #t-tap + .grid { margin: 0 !important; gap: .25rem !important; }
+ #main .ca-tool-tasbih-counter #t-undo, #main .ca-tool-tasbih-counter #t-reset { min-height: 40px !important; padding: .2rem !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-shell > p:not(#t-progress):not(#t-storage-note) { font-size: .65rem !important; margin: 0 !important; }
+}
+
+/* Tasbih screenshot fix: target the real #tasbih-app, not only ancestor classes. */
+#tasbih-app { display: flex !important; flex-direction: column !important; gap: .3rem !important; max-width: 100% !important; }
+#tasbih-app .ca-tasbih-settings { display: grid !important; grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: .35rem !important; order: 0 !important; border: 0 !important; margin: 0 !important; padding: 0 !important; }
+#tasbih-app .ca-tasbih-settings > .grid { display: contents !important; }
+#tasbih-app .ca-tasbih-custom-phrase { display: none !important; }
+#tasbih-app:has(#t-phrase option[value="custom"]:checked) .ca-tasbih-custom-phrase { display: block !important; grid-column: 1 / -1; }
+#tasbih-app #t-custom-target-wrap[hidden] { display: none !important; }
+#tasbih-app #t-custom-target-wrap:not([hidden]) { grid-column: 1 / -1; }
+#tasbih-app .ca-tasbih-settings label { display: block !important; font-size: .85rem !important; line-height: 1.1 !important; margin: 0 0 .15rem !important; }
+#tasbih-app .ca-tasbih-settings select, #tasbih-app .ca-tasbih-settings input { display: block !important; width: 100% !important; min-width: 0 !important; height: 42px !important; min-height: 42px !important; padding: .3rem .45rem !important; font-size: .9rem !important; }
+#tasbih-app #t-count { order: 1 !important; font-size: clamp(2.5rem,10vw,4rem) !important; line-height: 1 !important; min-height: 54px !important; padding: .3rem !important; }
+#tasbih-app #t-progress { order: 2 !important; font-size: .8rem !important; line-height: 1.15 !important; margin: 0 !important; }
+#tasbih-app #t-storage-note { order: 3 !important; }
+#tasbih-app #t-tap { order: 4 !important; min-height: 48px !important; height: 48px !important; font-size: 1.05rem !important; padding: .25rem !important; }
+#tasbih-app #t-tap + .grid { order: 5 !important; gap: .4rem !important; margin: 0 !important; }
+#tasbih-app #t-undo, #tasbih-app #t-reset { min-height: 44px !important; padding: .25rem !important; }
+#tasbih-app > p:not(#t-progress):not(#t-storage-note) { order: 6 !important; font-size: .72rem !important; line-height: 1.1 !important; margin: 0 !important; }
+@media (max-width: 600px) {
+ body:has(#tasbih-app) header { min-height: 0 !important; }
+ body:has(#tasbih-app) header nav { padding-block: .2rem !important; }
+ body:has(#tasbih-app) #main { padding-top: .15rem !important; }
+ body:has(#tasbih-app) #main h1 { font-size: 1.35rem !important; line-height: 1.15 !important; margin-top: .3rem !important; margin-bottom: .25rem !important; }
+ body:has(#tasbih-app) #main nav[aria-label="Breadcrumb"] { font-size: .75rem !important; line-height: 1.15 !important; }
+ body:has(#tasbih-app) .ca-tool-tasbih-counter { padding: .45rem !important; margin-top: .25rem !important; }
+ #tasbih-app { gap: .2rem !important; }
+ #tasbih-app .ca-tasbih-settings { gap: .3rem !important; }
+ #tasbih-app #t-count { font-size: 2.6rem !important; min-height: 52px !important; }
+}
+
+/* First-screen tools, excluding the user-approved Standard, BMI and Tasbih layouts. */
+.ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) {
+  scroll-margin-top: .5rem;
+}
+.ca-tool-profit-loss-calculator .ca-profit-mode {
+  display: flex; align-items: center; gap: .4rem; padding: .35rem .5rem;
+  border: 1px solid #a8a29e; border-radius: .6rem; min-height: 44px;
+  font-size: .9rem; cursor: pointer;
+}
+.ca-tool-profit-loss-calculator .ca-profit-mode input { width: 1rem; height: 1rem; flex-shrink: 0; }
+.ca-tool-profit-loss-calculator #pl-business-fields[hidden],
+.ca-tool-profit-loss-calculator #pl-product-fields[hidden] { display: none !important; }
+@media (max-width: 600px) {
+  body:has(.ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter)) #main {
+    padding-top: .25rem !important;
+  }
+  body:has(.ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter)) #main > nav[aria-label="Breadcrumb"] {
+    font-size: .75rem !important; line-height: 1.2 !important;
+  }
+  body:has(.ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter)) #main > h1 {
+    font-size: 1.35rem !important; line-height: 1.2 !important;
+    margin-top: .35rem !important; margin-bottom: .2rem !important;
+  }
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) {
+    margin-top: .3rem !important; padding: .55rem !important;
+  }
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form {
+    gap: .45rem !important;
+  }
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form.space-y-5 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: .45rem !important;
+  }
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form .grid {
+    gap: .4rem !important;
+  }
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form label,
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form legend {
+    font-size: .79rem !important; line-height: 1.2 !important; margin-bottom: .15rem !important;
+  }
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form input:not([type="checkbox"]):not([type="radio"]),
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form select {
+    min-height: 44px !important; padding: .35rem .45rem !important;
+    font-size: .95rem !important; min-width: 0; width: 100%;
+  }
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form button {
+    min-height: 44px !important; padding: .4rem .65rem !important;
+    font-size: .95rem !important;
+  }
+  #main .ca-tool-calculator:not(.ca-tool-bmi-calculator):not(.ca-tool-tasbih-counter) form + [aria-live="polite"] {
+    margin-top: .45rem !important; padding: .55rem !important; min-height: 2.75rem !important;
+  }
+  #main .ca-tool-zakat-calculator #zakat-form > .grid,
+  #main .ca-tool-discount-calculator #disc-form > .grid,
+  #main .ca-tool-profit-loss-calculator #pl-business-fields,
+  #main .ca-tool-profit-loss-calculator #pl-product-fields,
+  #main .ca-tool-unit-converter #conv-form > .grid {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  }
+  #main .ca-tool-zakat-calculator #zakat-form p.text-sm {
+    font-size: .72rem !important; line-height: 1.15 !important;
+  }
+  #main .ca-tool-stopwatch #sw-display {
+    font-size: clamp(1.9rem, 7vw, 3rem) !important;
+    padding-block: .75rem !important;
+  }
+  #main .ca-tool-stopwatch .grid { gap: .35rem !important; }
+  #main .ca-tool-stopwatch button { padding: .45rem .3rem !important; min-height: 44px !important; }
+}
+
+/* Profit-only first-screen layout. Preserve all inputs and other calculators. */
+#main:has(.ca-tool-profit-loss-calculator) > h1 { margin-top: .15rem !important; }
+#main .ca-tool-profit-loss-calculator { margin-top: .35rem !important; }
+#main .ca-tool-profit-loss-calculator #pl-form { margin: 0 !important; }
+#main .ca-tool-profit-loss-calculator .ca-profit-modes legend { margin-bottom: .2rem !important; }
+#main .ca-tool-profit-loss-calculator #pl-result:empty { min-height: 0 !important; padding: 0 !important; border: 0 !important; }
+#main:has(.ca-tool-profit-loss-calculator) > nav[aria-label="Breadcrumb"] {
+  margin-top: .75rem !important;
+}
+@media (max-width: 600px) {
+  #main:has(.ca-tool-profit-loss-calculator) > h1 {
+    font-size: 1.22rem !important; line-height: 1.12 !important;
+    margin-top: .1rem !important; margin-bottom: .15rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator {
+    padding: .45rem !important; margin-top: .2rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-form.space-y-5 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: .32rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-business-fields,
+  #main .ca-tool-profit-loss-calculator #pl-product-fields {
+    gap: .3rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-form label,
+  #main .ca-tool-profit-loss-calculator #pl-form legend {
+    font-size: .77rem !important; line-height: 1.1 !important;
+  }
+  #main .ca-tool-profit-loss-calculator .ca-profit-mode {
+    min-height: 42px !important; padding: .25rem .35rem !important;
+    font-size: .8rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-form input:not([type="radio"]) {
+    min-height: 42px !important; height: 42px !important;
+    padding: .25rem .4rem !important;
+  }
+  #main .ca-tool-profit-loss-calculator #pl-form button {
+    min-height: 46px !important;
+  }
+}
+
+@media (max-width: 359px) {
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] {
+    flex-wrap: wrap !important;
+    column-gap: .3rem !important;
+    row-gap: .1rem !important;
+    padding-inline: .55rem !important;
+    padding-block: .1rem !important;
+  }
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] > a {
+    font-size: 1rem !important; min-width: 0 !important;
+  }
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] > div {
+    gap: .2rem !important;
+    min-width: 0 !important;
+  }
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] #theme-toggle {
+    font-size: .72rem !important;
+    padding-inline: .3rem !important;
+  }
+  body:has(.ca-tool-profit-loss-calculator) header nav[aria-label] details summary {
+    font-size: .75rem !important;
+    padding-inline: .2rem !important;
+  }
+}
+
+
+/* Responsive audit remediation, scoped to the homepage. Keep the calculator
+   visible and preserve accessible button sizes and all tool logic. */
+#main .ca-home-wrap,
+#main .ca-home-layout,
+#main .ca-home-calculator,
+#main .ca-home-tools,
+#main .ca-home-calculator .ca-calculator-engine {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+#main .ca-home-wrap img,
+#main .ca-home-wrap video,
+#main .ca-home-wrap iframe,
+#main .ca-home-tools img,
+#main .ca-home-tools video {
+  max-inline-size: 100%;
+}
+#main .ca-home-wrap img,
+#main .ca-home-wrap video,
+#main .ca-home-tools img,
+#main .ca-home-tools video {
+  block-size: auto;
+}
+#main .ca-home-calculator #calc-pad {
+  min-width: 0;
+}
+#main .ca-home-calculator #calc-pad > * {
+  min-width: 0;
+  box-sizing: border-box;
+}
+@media (max-width: 640px) {
+  #main .ca-home-wrap { width: 100%; }
+  #main .ca-home-layout { grid-template-columns: minmax(0, 1fr) !important; }
+  #main .ca-home-calculator { padding-inline: clamp(.5rem, 2vw, .75rem); }
+  #main .ca-home-tools { padding-inline: clamp(.5rem, 2vw, .75rem); }
+  #main .ca-home-tool-grid { grid-template-columns: minmax(0, 1fr); }
+  #main .ca-home-calculator #calc-pad { gap: clamp(.3rem, 1vw, .5rem); }
+}
+
+/* Standard Calculator tool page only: compact the first mobile viewport.
+   Preserve all 24 keys and >=44px touch targets; leave homepage and other tools untouched. */
+@media (max-width: 600px) {
+  body:has(#main .ca-tool-standard-calculator) header nav[aria-label] {
+    min-height: 0 !important;
+    padding-block: .3rem !important;
+  }
+  body:has(#main .ca-tool-standard-calculator) #main {
+    padding-top: .3rem !important;
+  }
+  #main:has(.ca-tool-standard-calculator) > nav[aria-label="Breadcrumb"] {
+    font-size: .7rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: .25rem !important;
+  }
+  #main:has(.ca-tool-standard-calculator) > h1 {
+    font-size: clamp(1.12rem, 4.8vw, 1.45rem) !important;
+    line-height: 1.12 !important;
+    margin-block: .3rem !important;
+  }
+  #main .ca-tool-standard-calculator {
+    margin-top: .3rem !important;
+    padding: .5rem !important;
+    border-radius: .8rem !important;
+  }
+  #main .ca-tool-standard-calculator #calc-display {
+    min-height: 3.4rem !important;
+    padding: .35rem .65rem !important;
+    font-size: clamp(1.8rem, 7vw, 2.35rem) !important;
+    line-height: 1.2 !important;
+  }
+  #main .ca-tool-standard-calculator #calc-mode-toggle {
+    min-height: 44px !important;
+    margin-top: .3rem !important;
+    padding: .25rem .5rem !important;
+    font-size: 1rem !important;
+  }
+  #main .ca-tool-standard-calculator #calc-history:empty {
+    display: none !important;
+  }
+  #main .ca-tool-standard-calculator #calc-history {
+    min-height: 0 !important;
+    margin-top: .2rem !important;
+  }
+  #main .ca-tool-standard-calculator #calc-pad {
+    gap: .3rem !important;
+    margin-top: .3rem !important;
+  }
+  #main .ca-tool-standard-calculator #calc-pad button {
+    min-height: 44px !important;
+    height: 44px !important;
+    padding: .15rem .2rem !important;
+    border-radius: .65rem !important;
+    font-size: clamp(1.05rem, 4.5vw, 1.4rem) !important;
+    line-height: 1.1 !important;
+  }
+}
+
+/* Standard tool mobile first-fold override, scoped to this route only. */
+@media (max-width: 600px) {
+  #main:has(.ca-tool-standard-calculator) > nav[aria-label="Breadcrumb"] {
+    display: none !important;
+  }
+  #main:has(.ca-tool-standard-calculator) > h1 {
+    font-size: 1.15rem !important;
+    line-height: 1.15 !important;
+    margin: .15rem 0 .25rem !important;
+  }
+  #main .ca-tool-standard-calculator .ca-calculator-engine {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  #main .ca-tool-standard-calculator #calc-history:empty {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #main .ca-tool-standard-calculator #calc-pad {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-auto-rows: 44px !important;
+    align-content: start !important;
+    row-gap: 4px !important;
+    column-gap: 5px !important;
+    margin-top: 5px !important;
+  }
+  #main .ca-tool-standard-calculator #calc-pad > button {
+    width: 100% !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    margin: 0 !important;
+    padding: 2px !important;
+  }
+}
+
+/* Compact short laptop viewport only; mobile and other calculators remain unchanged. */
+@media (min-width: 601px) and (max-height: 850px) {
+  body:has(.ca-tool-standard-calculator) #main { padding-top: 12px !important; }
+  #main:has(.ca-tool-standard-calculator) > h1 { margin-top: 4px !important; font-size: 24px !important; line-height: 1.1 !important; }
+  #main .ca-tool-standard-calculator { padding: 10px !important; }
+  #main .ca-tool-standard-calculator #calc-display { min-height: 58px !important; padding: 8px 14px !important; font-size: 30px !important; }
+  #main .ca-tool-standard-calculator #calc-mode-toggle { margin-top: 5px !important; min-height: 44px !important; }
+  #main .ca-tool-standard-calculator #calc-history:empty { display: none !important; height: 0 !important; margin: 0 !important; }
+  #main .ca-tool-standard-calculator #calc-pad { grid-auto-rows: 54px !important; gap: 6px !important; margin-top: 6px !important; }
+  #main .ca-tool-standard-calculator #calc-pad > button { min-height: 54px !important; height: 54px !important; }
+}

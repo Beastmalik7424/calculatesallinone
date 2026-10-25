@@ -21,6 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
+    "/tasbih-counter/": "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
     "/ur/zakat-calculator/": "اپنی بچت، اثاثے اور واجب الادا قرض درج کرکے چاندی کے نصاب اور مکمل قمری سال کی شرط کے مطابق زکوٰۃ کا حساب کریں۔",
@@ -115,12 +116,24 @@ def normalize_meta(raw, path, lang):
     title = html.unescape(title_match.group(1).strip())
     # Repair the known malformed title explicitly rather than truncating it into a fragment.
     if path == "/profit-loss-calculator/":
-        title = "Profit and Loss Calculator | CalculatesAll"
+        title = "Profit and Loss Calculator | Profit % | CalculatesAll"
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
+    if path == "/tasbih-counter/":
+        title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
+    if path == "/age-calculator/":
+        title = "Age Calculator | Years, Months & Days | CalculatesAll"
+    if path == "/unit-converter/":
+        title = "Unit Converter: cm to Inches, kg to lbs | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
+    if path == "/tasbih-counter/":
+        desc = "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app."
+    if path == "/age-calculator/":
+        desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
+    if path == "/unit-converter/":
+        desc = "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result."
     if len(title) > 59:
-        title = re.sub(r" \\| Free Online Tool \\| CalculatesAll$", " | CalculatesAll", title)
+        title = re.sub(r" \| Free Online Tool \| CalculatesAll$", " | CalculatesAll", title)
         if len(title) > 59:
             suffix = " | CalculatesAll"
             title = title[:59-len(suffix)].rstrip(" |") + suffix
@@ -133,6 +146,18 @@ def normalize_meta(raw, path, lang):
         raise SystemExit("Meta description needs a useful, page-specific 70-160 character description: " + path + " (" + str(len(desc)) + ")")
     raw = re.sub(r"<title>.*?</title>", "<title>" + html.escape(title, quote=False) + "</title>", raw, count=1, flags=re.S)
     raw = re.sub(r'<meta name="description" content="[^"]*"', '<meta name="description" content="' + html.escape(desc, quote=True) + '"', raw, count=1)
+    # Keep social previews aligned when these four SEO titles/descriptions are rewritten.
+    if path in {"/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/"}:
+        for attr, name, value in (
+            ("property", "og:title", title),
+            ("property", "og:description", desc),
+            ("name", "twitter:title", title),
+            ("name", "twitter:description", desc),
+        ):
+            pattern = '(<meta ' + attr + '="' + name + '" content=")[^"]*(")'
+            raw, count = re.subn(pattern, lambda m: m.group(1) + html.escape(value, quote=True) + m.group(2), raw, count=1)
+            if count != 1:
+                raise SystemExit("Missing or duplicate social meta tag: " + path + " " + name)
     return raw, title, desc
 
 def main():
