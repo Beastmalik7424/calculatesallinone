@@ -1255,3 +1255,44 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
     padding-inline: .2rem !important;
   }
 }
+
+
+/* Responsive audit remediation, scoped to the homepage. Keep the calculator
+   visible and preserve accessible button sizes and all tool logic. */
+#main .ca-home-wrap,
+#main .ca-home-layout,
+#main .ca-home-calculator,
+#main .ca-home-tools,
+#main .ca-home-calculator .ca-calculator-engine {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+#main .ca-home-wrap img,
+#main .ca-home-wrap video,
+#main .ca-home-wrap iframe,
+#main .ca-home-tools img,
+#main .ca-home-tools video {
+  max-inline-size: 100%;
+}
+#main .ca-home-wrap img,
+#main .ca-home-wrap video,
+#main .ca-home-tools img,
+#main .ca-home-tools video {
+  block-size: auto;
+}
+#main .ca-home-calculator #calc-pad {
+  min-width: 0;
+}
+#main .ca-home-calculator #calc-pad > * {
+  min-width: 0;
+  box-sizing: border-box;
+}
+@media (max-width: 640px) {
+  #main .ca-home-wrap { width: 100%; }
+  #main .ca-home-layout { grid-template-columns: minmax(0, 1fr) !important; }
+  #main .ca-home-calculator { padding-inline: clamp(.5rem, 2vw, .75rem); }
+  #main .ca-home-tools { padding-inline: clamp(.5rem, 2vw, .75rem); }
+  #main .ca-home-tool-grid { grid-template-columns: minmax(0, 1fr); }
+  #main .ca-home-calculator #calc-pad { gap: clamp(.3rem, 1vw, .5rem); }
+}
