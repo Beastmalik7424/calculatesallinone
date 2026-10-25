@@ -1461,6 +1461,32 @@
     function calculateQuery (event) {
       event.preventDefault()
       var question = $("qt-question").value.toLowerCase().trim()
+      // Normalize Arabic-Indic and Devanagari digits, punctuation, and common
+      // arithmetic verbs in the six published site languages.
+      var digitSets = ["٠١٢٣٤٥٦٧٨٩", "۰۱۲۳۴۵۶۷۸۹", "०१२३४५६७८९"]
+      question = Array.from(question).map(function (c) {
+        for (var ds = 0; ds < digitSets.length; ds++) {
+          var pos = digitSets[ds].indexOf(c)
+          if (pos !== -1) return String(pos)
+        }
+        return c
+      }).join("").replace(/[٫]/g, ".").replace(/[،]/g, ",")
+      var multilingualTerms = [
+        [/باقی|باقي|بچے|بچ گئے|بچیں|कितने बचे|कितना बचा|quedan|reste|remaining/g, " remaining "],
+        [/تقسیم|بانٹ|بانٹ دیے|वितरित|बाँट|बांट|distribuidos|distribué|distribués|répartis/g, " distributed "],
+        [/چوری|چورى|चोरी|robados|robado|volés|volé|سرق|مسروق/g, " stolen "],
+        [/خراب|खराब|perdidos|perdu|perdus|تلف|ضائع/g, " spoiled "],
+        [/گئے|گیا|गए|गया/g, " "],
+        [/جمع|जोड़|जोड़|más|mas|plus|ajouté|ajoutés|اضافہ|إضافة/g, " plus "],
+        [/منفی|घटा|घटाए|menos|moins|طرح|ناقص/g, " minus "],
+        [/سال|साल|वर्ष|años|año|ans|années|سنوات|سنة/g, " year "],
+        [/دن|दिन|días|día|jours|jour|أيام|يوم/g, " day "],
+        [/ہفتے|ہفتہ|सप्ताह|semanas|semana|semaines|semaine|أسابيع|أسبوع/g, " week "],
+        [/گھنٹے|گھنٹہ|घंटे|घंटा|horas|hora|heures|heure|ساعات|ساعة/g, " hour "],
+        [/منٹ|मिनट|minutos|minuto|minutes|دقائق|دقيقة/g, " minute "],
+        [/سیکنڈ|सेकंड|segundos|segundo|secondes|ثواني|ثانية/g, " second "]
+      ]
+      multilingualTerms.forEach(function (item) { question = question.replace(item[0], item[1]) })
       // Calendar-date questions take priority over generic time-unit conversions.
       // Dates are interpreted as DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD.
       var dateMatch = question.match(/(?:^|[^0-9])([0-9]{1,4})[-/]([0-9]{1,2})[-/]([0-9]{1,4})(?![0-9])/)
@@ -1554,7 +1580,7 @@
       // Roman Urdu and English everyday arithmetic, evaluated left-to-right
       // only when each quantity's operation is explicit or contextually clear.
       var everydayNumbers = Array.from(question.matchAll(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g))
-      var hasEverydayWords = /(?:^|[^a-z])(?:pass|pas|have|had|bant|baant|diye|dia|diya|kharab|bach|bache|bachy|baqi|baki|remaining|left|gave|given|lost|spoiled|added|plus|minus|more|total|sum|spent|sold|used|kharch|aur|mazeed|distribut|chori|stolen|stole|theft)(?:[^a-z]|$)/.test(question)
+      var hasEverydayWords = /(?:^|[^a-z])(?:pass|pas|have|had|bant|baant|diye|dia|diya|kharab|bach|bache|bachy|baqi|baki|remaining|left|gave|given|lost|spoiled|added|plus|minus|more|total|sum|spent|sold|used|kharch|aur|mazeed|distribut|chori|stolen|stole|theft|spoiled)(?:[^a-z]|$)/.test(question)
       if (hasEverydayWords && everydayNumbers.length >= 2 && everydayNumbers.length <= 20) {
         var arithmetic = Number(everydayNumbers[0][0])
         var validArithmetic = Number.isFinite(arithmetic) && arithmetic <= 1000000000000
