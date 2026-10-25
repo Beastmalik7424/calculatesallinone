@@ -1473,8 +1473,8 @@
       }).join("").replace(/[٫]/g, ".").replace(/[،]/g, ",")
       var multilingualTerms = [
         [/باقی|باقي|بچے|بچ گئے|بچیں|कितने बचे|कितना बचा|quedan|reste|remaining/g, " remaining "],
-        [/تقسیم|بانٹ|بانٹ دیے|वितरित|बाँट|बांट|distribuidos|distribué|distribués|répartis/g, " distributed "],
-        [/چوری|چورى|चोरी|robados|robado|volés|volé|سرق|مسروق/g, " stolen "],
+        [/تقسیم|توزيع|وزعت|موزعة|بانٹ|بانٹ دیے|वितरित|बाँट|बांट|distribuidos|distribué|distribués|répartis/g, " distributed "],
+        [/چوری|چورى|سرقت|سرقة|चोरी|robados|robado|volés|volé|سرق|مسروق/g, " stolen "],
         [/خراب|खराब|perdidos|perdu|perdus|تلف|ضائع/g, " spoiled "],
         [/گئے|گیا|गए|गया/g, " "],
         [/جمع|जोड़|जोड़|más|mas|plus|ajouté|ajoutés|اضافہ|إضافة/g, " plus "],
