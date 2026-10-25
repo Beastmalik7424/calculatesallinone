@@ -849,7 +849,7 @@ TOOLS.extend([
         "guide": [
             ("Conversion formulas", ["Days = years multiplied by 365 for the simple method. For the Gregorian average, days = years multiplied by 365.2425. Weeks = days divided by 7. Hours = days multiplied by 24. Minutes = hours multiplied by 60. Seconds = minutes multiplied by 60."]),
             ("Worked example", ["80 years = 29,200 days by the 365-day method, or 29,219.4 days by the Gregorian average method. These are conversions, not exact elapsed days between calendar dates."]),
-            ("Accuracy limits", ["Calendar years vary between 365 and 366 days. To find exact elapsed days for a given number of calendar years, specify the starting date and count actual dates, including leap years."])
+            ("Accuracy limits", ["Calendar years vary between 365 and 366 days. To find exact elapsed days for a given number of calendar years, specify the starting date and count actual dates, including leap years."]),
             ("Choosing the right method", ["Use the simple 365-day method when a worksheet or a question explicitly defines one year as 365 days. Use the Gregorian average for long-term approximate conversions across many years, because the Gregorian calendar has 97 leap years in every 400-year cycle. Neither method tells you the exact days between two birthdays without their dates. If you need the exact elapsed time, use the Age Calculator with actual calendar dates. The weeks shown can contain fractions because the conversion divides the day result by seven."]),
             ("Reading the results", ["Hours, minutes and seconds are derived from the selected number of days, not from an assumed start time. Decimal years can produce fractional days and seconds. The calculator shows up to eight decimal places for readability. Rounding the displayed value does not change the internal conversion factor. For example, 1.5 simple years is 547.5 days, which is 78.21428571 weeks and 13,140 hours. For a calendar-specific result, select real start and end dates instead of assuming every year is equal."])
         ],
@@ -874,11 +874,11 @@ TOOLS.extend([
         "guide": [
             ("How it works", ["The question parser recognizes one nonnegative number, a supported source unit and a supported target unit. It calculates using fixed time conversion factors and never guesses unsupported questions."]),
             ("Examples", ["80 years to days = 29,200 days. 2 weeks to hours = 336 hours. 3 days to minutes = 4,320 minutes."]),
-            ("Limits", ["The parser supports time unit conversions only, not arbitrary arithmetic or calendar-specific elapsed time. A year is defined as 365 days for these questions."])
+            ("Limits", ["The parser supports time unit conversions only, not arbitrary arithmetic or calendar-specific elapsed time. A year is defined as 365 days for these questions."]),
             ("Supported question patterns", ["Enter one numeric amount followed by a supported time unit and a target unit. For example, 2 weeks in hours, 3 days to minutes, and 80 years mein kitne din hote hain are supported. The parser recognizes year, years, day, days, din, week, weeks, hour, hours, minute, minutes, second and seconds, plus a few Roman Urdu alternatives. It does not use artificial intelligence or guess the meaning of unfamiliar terms. If a question is unclear, it asks for a simpler time conversion instead of giving a potentially misleading number."]),
             ("Understanding answers", ["A year is treated as exactly 365 days in this calculator. A week is seven days, a day is 24 hours, an hour is 60 minutes and a minute is 60 seconds. This makes results repeatable and straightforward to check independently. Leap years and daylight-saving transitions are not inferred from a sentence. The tool is intended for everyday time-unit questions rather than legal deadlines, payroll, astronomy or date-specific scheduling. For a different year convention, open the Years to Days Calculator and choose the Gregorian average method."])
         ],
-, "Yes, simple patterns such as 80 years mein kitne din hote hain are supported."),
+        "faq": [("Can I ask in Roman Urdu?", "Yes, simple patterns such as 80 years mein kitne din hote hain are supported."),
                 ("Can I ask any mathematical question?", "No. This version supports time-unit conversion questions only.")],
         "sources": "Fixed conversion factors: 1 day = 24 hours, 1 hour = 60 minutes, 1 minute = 60 seconds; simple year = 365 days."
     }
