@@ -605,29 +605,39 @@
         return
       }
       var parts = value.split("-").map(Number)
-      var dob = new Date(parts[0], parts[1] - 1, parts[2])
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || parts.length !== 3 ||
+          parts[0] < 100 || parts[1] < 1 || parts[1] > 12 ||
+          parts[2] < 1 || parts[2] > new Date(Date.UTC(parts[0], parts[1], 0)).getUTCDate()) {
+        say("age-result", t("ageCheck"))
+        return
+      }
       var now = new Date()
-      var today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-      if (dob > today) {
+      var todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+      var bornUtc = Date.UTC(parts[0], parts[1] - 1, parts[2])
+      if (bornUtc > todayUtc) {
         say("age-result", t("ageFuture"))
         return
       }
-      var years = today.getFullYear() - dob.getFullYear()
-      var months = today.getMonth() - dob.getMonth()
-      var days = today.getDate() - dob.getDate()
-      if (days < 0) {
-        months -= 1
-        days += new Date(today.getFullYear(), today.getMonth(), 0).getDate()
+      var total = Math.round((todayUtc - bornUtc) / 86400000)
+      var years = now.getFullYear() - parts[0]
+      var months = now.getMonth() - (parts[1] - 1)
+      var completedMonths = years * 12 + months
+      function anniversaryUtc (count) {
+        var index = (parts[1] - 1) + count
+        var year = parts[0] + Math.floor(index / 12)
+        var month = ((index % 12) + 12) % 12
+        var maxDay = new Date(Date.UTC(year, month + 1, 0)).getUTCDate()
+        return Date.UTC(year, month, Math.min(parts[2], maxDay))
       }
-      if (months < 0) {
-        months += 12
-        years -= 1
-      }
+      if (anniversaryUtc(completedMonths) > todayUtc) completedMonths--
+      if (completedMonths < 0) completedMonths = 0
+      years = Math.floor(completedMonths / 12)
+      months = completedMonths % 12
+      var days = Math.round((todayUtc - anniversaryUtc(completedMonths)) / 86400000)
       if (years > 150) {
         say("age-result", t("ageCheck"))
         return
       }
-      var total = Math.floor((Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) - Date.UTC(parts[0], parts[1] - 1, parts[2])) / 86400000)
       say("age-result", t("ageResult", { y: years, m: months, d: days, t: fmt(total) }))
     })
   }
