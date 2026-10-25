@@ -1602,6 +1602,8 @@ STEPS = {
 }
 
 TILE_GRAD = {
+    "years-to-days-calculator": "bg-gradient-to-br from-indigo-700 to-sky-700",
+    "query-calculator": "bg-gradient-to-br from-teal-700 to-blue-800",
     "zakat-calculator": "bg-gradient-to-br from-emerald-700 to-teal-700",
     "bmi-calculator": "bg-gradient-to-br from-rose-700 to-pink-700",
     "profit-loss-calculator": "bg-gradient-to-br from-sky-700 to-blue-800",
@@ -1612,6 +1614,8 @@ TILE_GRAD = {
     "tasbih-counter": "bg-gradient-to-br from-green-700 to-emerald-800",
 }
 TILE_ICON = {
+    "years-to-days-calculator": "📅",
+    "query-calculator": "🔎",
     "zakat-calculator": "🤲",
     "bmi-calculator": "⚖️",
     "profit-loss-calculator": "📈",
