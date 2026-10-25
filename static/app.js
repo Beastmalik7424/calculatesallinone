@@ -1461,6 +1461,43 @@
     form.addEventListener("submit", function (event) {
       event.preventDefault()
       var question = $("qt-question").value.toLowerCase().trim()
+      // Calendar-date questions take priority over generic time-unit conversions.
+      // Dates are interpreted as DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD.
+      var dateMatch = question.match(/(?:^|[^0-9])([0-9]{1,4})[-\\/]([0-9]{1,2})[-\\/]([0-9]{1,4})(?![0-9])/)
+      if (dateMatch) {
+        var first = Number(dateMatch[1])
+        var second = Number(dateMatch[2])
+        var third = Number(dateMatch[3])
+        var year = dateMatch[1].length === 4 ? first : third
+        var month = second
+        var day = dateMatch[1].length === 4 ? third : first
+        var max = new Date(Date.UTC(year, month, 0)).getUTCDate()
+        if (year < 100 || year > 9999 || month < 1 || month > 12 || day < 1 || day > max) {
+          say("qt-result", "Invalid birth date. Use DD-MM-YYYY, for example 29-07-1984.")
+          return
+        }
+        var now = new Date()
+        var todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+        var birthUtc = Date.UTC(year, month - 1, day)
+        if (birthUtc > todayUtc) {
+          say("qt-result", "Birth date cannot be in the future.")
+          return
+        }
+        var totalDays = Math.round((todayUtc - birthUtc) / 86400000)
+        var totalWeeks = Math.floor(totalDays / 7)
+        var remainingDays = totalDays % 7
+        var ageYears = now.getFullYear() - year
+        if (now.getMonth() + 1 < month || (now.getMonth() + 1 === month && now.getDate() < day)) ageYears--
+        var todayText = String(now.getDate()).padStart(2, "0") + "-" +
+          String(now.getMonth() + 1).padStart(2, "0") + "-" + now.getFullYear()
+        say("qt-result", "Birth date: " + String(day).padStart(2, "0") + "-" +
+          String(month).padStart(2, "0") + "-" + year +
+          ". As of " + todayText + ": " + timeConversionFormat(totalDays) +
+          " days old (" + ageYears + " completed years; " +
+          timeConversionFormat(totalWeeks) + " full weeks and " +
+          remainingDays + " days). Exact Gregorian calendar days.")
+        return
+      }
       var numbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
       var tokens = question.match(/[a-z]+/g) || []
       var units = tokens.filter(function (word) { return !!aliases[word] })
