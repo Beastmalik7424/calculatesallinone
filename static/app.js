@@ -1470,6 +1470,19 @@
         october: 10, oct: 10, november: 11, nov: 11, december: 12, dec: 12 }
       var namedDate = question.match(/(?:^|[^0-9])([0-9]{1,2})[ ,.-]+(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sep|october|oct|november|nov|december|dec)[ ,.-]+([0-9]{4})(?![0-9])/)
       if (!dateMatch && namedDate) dateMatch = [namedDate[0], namedDate[1], String(namedMonths[namedDate[2]]), namedDate[3]]
+      var leapBirthday = /(?:29[ -]?(?:feb|february)|(?:feb|february)[ -]?29|29[ -]?(?:farwari|februari))/.test(question)
+      var birthdayCountQuestion = /(?:birthday|birthdays|saalgirah|salgirah|bar|baar|times|kitni dafa)/.test(question)
+      if (leapBirthday && dateMatch) {
+        var febDate = /(?:29[-/]0?2[-/]|[-/]0?2[-/]29)/.test(dateMatch[0])
+        if (!febDate) {
+          say("qt-result", "Your question mentions 29 February but the supplied date is different. Please confirm the correct date of birth, for example 29-02-1984 or 29-07-1984.")
+          return
+        }
+      }
+      if (leapBirthday && !dateMatch) {
+        say("qt-result", "For a 29 February birthday, please include the birth year, for example 29-02-1984. The date appears only in leap years, but age increases every year.")
+        return
+      }
       if (dateMatch) {
         var first = Number(dateMatch[1])
         var second = Number(dateMatch[2])
@@ -1487,6 +1500,25 @@
         var birthUtc = Date.UTC(year, month - 1, day)
         if (birthUtc > todayUtc) {
           say("qt-result", "Birth date cannot be in the future.")
+          return
+        }
+        if (birthdayCountQuestion) {
+          var completed = now.getFullYear() - year
+          if (now.getMonth() + 1 < month || (now.getMonth() + 1 === month && now.getDate() < day)) completed--
+          var count = 0
+          if (month === 2 && day === 29) {
+            for (var cy = year + 1; cy <= now.getFullYear(); cy++) {
+              if ((cy % 4 === 0 && (cy % 100 !== 0 || cy % 400 === 0)) &&
+                  (cy < now.getFullYear() || now.getMonth() + 1 > 2 ||
+                   (now.getMonth() + 1 === 2 && now.getDate() >= 29))) count++
+            }
+            say("qt-result", "Age: " + completed + " completed years. Actual 29 February dates after birth: " + count +
+              ". These are different counts. In non-leap years 29 February does not occur.")
+          } else {
+            say("qt-result", "Completed birthdays since birth: " + completed +
+              ". Birth date: " + String(day).padStart(2, "0") + "-" +
+              String(month).padStart(2, "0") + "-" + year + ".")
+          }
           return
         }
         var totalDays = Math.round((todayUtc - birthUtc) / 86400000)
