@@ -1554,7 +1554,7 @@
       // Roman Urdu and English everyday arithmetic, evaluated left-to-right
       // only when each quantity's operation is explicit or contextually clear.
       var everydayNumbers = Array.from(question.matchAll(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g))
-      var hasEverydayWords = /(?:^|[^a-z])(?:pass|pas|have|had|bant|baant|diye|dia|diya|kharab|bach|bache|bachy|baqi|baki|remaining|left|gave|given|lost|spoiled|added|plus|minus|more|total|sum|spent|sold|used|kharch|aur|mazeed)(?:[^a-z]|$)/.test(question)
+      var hasEverydayWords = /(?:^|[^a-z])(?:pass|pas|have|had|bant|baant|diye|dia|diya|kharab|bach|bache|bachy|baqi|baki|remaining|left|gave|given|lost|spoiled|added|plus|minus|more|total|sum|spent|sold|used|kharch|aur|mazeed|distribut|chori|stolen|stole|theft)(?:[^a-z]|$)/.test(question)
       if (hasEverydayWords && everydayNumbers.length >= 2 && everydayNumbers.length <= 20) {
         var arithmetic = Number(everydayNumbers[0][0])
         var validArithmetic = Number.isFinite(arithmetic) && arithmetic <= 1000000000000
@@ -1562,7 +1562,7 @@
         for (var ai = 1; ai < everydayNumbers.length && validArithmetic; ai++) {
           var before = question.slice(everydayNumbers[ai - 1].index + everydayNumbers[ai - 1][0].length, everydayNumbers[ai].index)
           var after = question.slice(everydayNumbers[ai].index + everydayNumbers[ai][0].length, ai + 1 < everydayNumbers.length ? everydayNumbers[ai + 1].index : question.length)
-          var subtract = /(?:bant|baant|diye|dia|diya|kharab|lost|gave|given|spoiled|spent|sold|used|kharch|minus|nikal|kam)/.test(after)
+          var subtract = /(?:bant|baant|diye|dia|diya|kharab|lost|gave|given|spoiled|spent|sold|used|kharch|minus|nikal|kam|distribut|chori|stolen|stole|theft)/.test(after)
           var add = /(?:added|plus|aur|mazeed|more|mila|milay|jama)/.test(after)
           if (!subtract && !add) {
             subtract = /(?:minus|subtract|less)/.test(before)
