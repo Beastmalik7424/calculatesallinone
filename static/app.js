@@ -1463,7 +1463,7 @@
       var question = $("qt-question").value.toLowerCase().trim()
       // Calendar-date questions take priority over generic time-unit conversions.
       // Dates are interpreted as DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD.
-      var dateMatch = question.match(/(?:^|[^0-9])([0-9]{1,4})[-\\/]([0-9]{1,2})[-\\/]([0-9]{1,4})(?![0-9])/)
+      var dateMatch = question.match(/(?:^|[^0-9])([0-9]{1,4})[-\/]([0-9]{1,2})[-\/]([0-9]{1,4})(?![0-9])/)
       if (dateMatch) {
         var first = Number(dateMatch[1])
         var second = Number(dateMatch[2])
