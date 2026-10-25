@@ -675,7 +675,8 @@ standard_tool_h1_pos = standard_tool_html.find("<h1")
 standard_tool_lead_end = standard_tool_html.find("</p>", standard_tool_h1_pos)
 standard_tool_calc_pos = standard_tool_html.find('id="calc-display"')
 standard_tool_note_pos = standard_tool_html.find("Evidence-based note")
-assert standard_tool_calc_pos > standard_tool_lead_end, "Standard calculator widget must follow its title and lead"
+assert standard_tool_h1_pos < standard_tool_calc_pos < standard_tool_lead_end, "Standard calculator widget must appear immediately after title and before explanatory lead"
+assert 'class="ca-tool-standard-calculator mt-2' in standard_tool_html, "Standard calculator must use compact top spacing"
 assert standard_tool_note_pos < 0 or standard_tool_calc_pos < standard_tool_note_pos, "Standard calculator widget must precede explanatory notes"
 
 # Page-specific first-screen layout and Tasbih visual styling regression checks.
