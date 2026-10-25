@@ -1299,7 +1299,8 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
 
 /* Keep the homepage's last key above the fold on short phones without shrinking touch targets. */
 @media (max-width: 400px) and (max-height: 700px) {
-  #main .ca-home-header { margin-bottom: 0; }
+  #main .ca-home-header { margin-bottom: 0 !important; }
+  #main .ca-home-calculator #calc-pad { gap: 2px !important; }
 }
 
 /* Standard Calculator tool page only: compact the first mobile viewport.
