@@ -1507,8 +1507,8 @@
         var calendarDays = Math.round((todayUtc - monthAnniversary(completedMonths)) / 86400000)
         var todayText = String(now.getDate()).padStart(2, "0") + "-" +
           String(now.getMonth() + 1).padStart(2, "0") + "-" + now.getFullYear()
-        var eventIsBirth = /\\b(birth|born|dob|paida|birthday)\\b/.test(question)
-        var subject = /\\bpakistan\\b/.test(question) ? "Pakistan" : "The subject"
+        var eventIsBirth = /(^|[^a-z])(birth|born|dob|paida|birthday)([^a-z]|$)/.test(question)
+        var subject = /(^|[^a-z])pakistan([^a-z]|$)/.test(question) ? "Pakistan" : "The subject"
         var prefix = eventIsBirth ? "Birth date: " : "Start date: "
         var elapsedLabel = eventIsBirth ? " old" : " elapsed"
         say("qt-result", prefix + String(day).padStart(2, "0") + "-" +
