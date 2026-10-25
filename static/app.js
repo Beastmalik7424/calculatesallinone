@@ -1630,7 +1630,7 @@
     calculateQuery({ preventDefault: function () {} })
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
+  function initializeCalculators () {
     // Initialize the query answer independently before any other calculator.
     try { initQueryTime() } catch (err) {
       say("qt-result", "Calculation failed to start. Please refresh this page.")
@@ -1644,5 +1644,10 @@
         if (typeof console !== "undefined") console.error("Calculator initialization:", err)
       }
     })
-  })
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeCalculators)
+  } else {
+    initializeCalculators()
+  }
 })()
