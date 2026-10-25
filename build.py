@@ -1437,7 +1437,7 @@ def tool_page(t):
         ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
         + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
         + (primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
-           if t["slug"] in {"bmi-calculator", "tasbih-counter"} or t["slug"] not in {"standard-calculator", "bmi-calculator", "tasbih-counter"}
+           if True
            else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
         + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "")
         + ad_slot()
