@@ -1354,3 +1354,40 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
     line-height: 1.1 !important;
   }
 }
+
+/* Standard tool mobile first-fold override, scoped to this route only. */
+@media (max-width: 600px) {
+  #main:has(.ca-tool-standard-calculator) > nav[aria-label="Breadcrumb"] {
+    display: none !important;
+  }
+  #main:has(.ca-tool-standard-calculator) > h1 {
+    font-size: 1.15rem !important;
+    line-height: 1.15 !important;
+    margin: .15rem 0 .25rem !important;
+  }
+  #main .ca-tool-standard-calculator .ca-calculator-engine {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  #main .ca-tool-standard-calculator #calc-history:empty {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #main .ca-tool-standard-calculator #calc-pad {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-auto-rows: 44px !important;
+    align-content: start !important;
+    row-gap: 4px !important;
+    column-gap: 5px !important;
+    margin-top: 5px !important;
+  }
+  #main .ca-tool-standard-calculator #calc-pad > button {
+    width: 100% !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    margin: 0 !important;
+    padding: 2px !important;
+  }
+}
