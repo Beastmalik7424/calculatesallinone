@@ -1522,7 +1522,7 @@
       // Roman Urdu and English everyday arithmetic, evaluated left-to-right
       // only when each quantity's operation is explicit or contextually clear.
       var everydayNumbers = Array.from(question.matchAll(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g))
-      var hasEverydayWords = /(?:\\b(?:pass|pas|have|had|bant|baant|diye|dia|diya|kharab|bach|bache|bachy|baqi|baki|remaining|left|gave|given|lost|spoiled|added|plus|minus|more|total|sum|spent|sold|used|kharch|aur|mazeed)\\b)/.test(question)
+      var hasEverydayWords = /(?:^|[^a-z])(?:pass|pas|have|had|bant|baant|diye|dia|diya|kharab|bach|bache|bachy|baqi|baki|remaining|left|gave|given|lost|spoiled|added|plus|minus|more|total|sum|spent|sold|used|kharch|aur|mazeed)(?:[^a-z]|$)/.test(question)
       if (hasEverydayWords && everydayNumbers.length >= 2 && everydayNumbers.length <= 20) {
         var arithmetic = Number(everydayNumbers[0][0])
         var validArithmetic = Number.isFinite(arithmetic) && arithmetic <= 1000000000000
