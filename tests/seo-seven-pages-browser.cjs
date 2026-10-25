@@ -92,7 +92,7 @@ const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/e
     const homeResponse = await desktop.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
     assert.equal(homeResponse && homeResponse.status(), 200, "homepage should return HTTP 200 on desktop");
     const stylesheetHref = await desktop.locator('link[rel="stylesheet"][href*="site.css"]').first().getAttribute("href");
-    assert.ok(stylesheetHref && stylesheetHref.includes("20261023-home-layout-fix-v3"), "homepage must request the cache-busted candidate stylesheet");
+    assert.ok(stylesheetHref && stylesheetHref.includes("20261026-standard-mobile-v6"), "homepage must request the cache-busted candidate stylesheet");
     // The root-relative stylesheet URL above loads this build's generated CSS in the local test server.
     const homeCalculator = await desktop.locator(".ca-home-calculator .ca-calculator-engine").boundingBox();
     const homeTitle = await desktop.locator(".ca-home-header h1").boundingBox();

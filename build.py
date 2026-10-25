@@ -1132,7 +1132,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261026-standard-mobile-v4">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261026-standard-mobile-v6">\n'
         + ld + ads + "</head>\n"
     )
 
@@ -1388,6 +1388,20 @@ def tool_page(t):
     elif t["slug"] == "tasbih-counter":
         title = "Free Online Tasbih Counter | Digital Tasbeeh Counter"
         desc = "Free online tasbih counter for daily dhikr. Tap to count, set targets of 33, 99 or 100, and save your count on your device. No download needed."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
+    elif t["slug"] == "discount-calculator":
+        title = "Discount Calculator: Sale Price & Savings | CalculatesAll"
+        desc = "Calculate a discount, final sale price and total savings from the original price and discount percentage."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
+    elif t["slug"] == "stopwatch":
+        title = "Free Online Stopwatch | CalculatesAll"
+        desc = "Use a free online stopwatch with start, stop, reset and hundredths-of-a-second timing in your browser."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]

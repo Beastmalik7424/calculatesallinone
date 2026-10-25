@@ -76,7 +76,7 @@ for url in urls:
     titles[url] = title_match.group(1)
     descriptions[url] = desc_match.group(1)
     assert 70 <= len(descriptions[url]) <= 160, f"Meta description length outside 70-160 characters: {url} ({len(descriptions[url])})"
-    if url in {SITE + path for path in ("/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/")}:
+    if url in {SITE + path for path in ("/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/", "/discount-calculator/", "/stopwatch/")}:
         for attr, name, expected in (
             ("property", "og:title", title_match.group(1)),
             ("property", "og:description", desc_match.group(1)),
@@ -84,7 +84,7 @@ for url in urls:
             ("name", "twitter:description", desc_match.group(1)),
         ):
             social = re.search('<meta ' + attr + '="' + name + '" content="([^"]*)"', html)
-            assert social and social.group(1) == expected, f"Stale {name} on {url}"
+            assert social and html_lib.unescape(social.group(1)) == html_lib.unescape(expected), f"Stale {name} on {url}"
     assert "Review the formula, worked example and limits before relying on the result" not in descriptions[url], f"Generic irrelevant metadata appended: {url}"
     if url == SITE + "/profit-loss-calculator/":
         assert title_match.group(1) == "Profit and Loss Calculator | Profit % | CalculatesAll", (
@@ -116,6 +116,12 @@ for url in urls:
         assert "How do I convert kilograms to pounds?" in html, "Unit converter must answer the high-demand kg-to-lbs query"
         assert "One inch is exactly 2.54 centimeters." in html, "Centimeter/inch conversion must use the exact NIST relationship"
         assert "0.45359237 kg" in html, "Kilogram/pound conversion must include the exact reference relationship"
+    if url == SITE + "/discount-calculator/":
+        assert html_lib.unescape(title_match.group(1)) == "Discount Calculator: Sale Price & Savings | CalculatesAll"
+        assert desc_match.group(1) == "Calculate a discount, final sale price and total savings from the original price and discount percentage."
+    if url == SITE + "/stopwatch/":
+        assert html_lib.unescape(title_match.group(1)) == "Free Online Stopwatch | CalculatesAll"
+        assert desc_match.group(1) == "Use a free online stopwatch with start, stop, reset and hundredths-of-a-second timing in your browser."
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
@@ -463,7 +469,7 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261026-standard-mobile-v4" in homepage_html, "Homepage must load the current calculator layout stylesheet"
+assert "/assets/site.css?v=20261026-standard-mobile-v6" in homepage_html, "Homepage must load the current calculator layout stylesheet"
 assert ".ca-home-layout{display:grid" in site_css, "Homepage calculator layout must use the responsive single-column grid"
 homepage_layout_rule_start = site_css.find("#main .ca-home-layout{")
 homepage_layout_rule_end = site_css.find("}", homepage_layout_rule_start)
@@ -661,7 +667,7 @@ assert ".ca-home-side-left{display:none!important}" in site_css_compact and ".ca
 assert ".ca-home-calculator" in site_css, "Homepage calculator styles must survive the CSS build"
 input_css = (ROOT.parent / "styles" / "input.css").read_text(encoding="utf-8")
 assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?\.ca-home-calculator\s+#calc-pad\s+button\s*\{\s*min-height:\s*2\.8rem", input_css), "Homepage mobile calculator sizing must be explicitly defined in source CSS"
-assert "20261026-standard-mobile-v4" in home_html, "Homepage must load the restored calculator-first stylesheet"
+assert "20261026-standard-mobile-v6" in home_html, "Homepage must load the restored calculator-first stylesheet"
 layout_marker = "/* Persistent homepage calculator-first layout override. Keep this in source CSS because build:css regenerates static/site.css. */"
 assert layout_marker in input_css, "Calculator-first desktop layout must live in source CSS, not only the generated stylesheet"
 layout_override = input_css.split(layout_marker, 1)[1]
