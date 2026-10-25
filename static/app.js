@@ -1414,12 +1414,82 @@
     })
   }
 
+
+  /* Deterministic time conversions, without eval or external requests. */
+  function timeConversionNumber (value) {
+    var n = Number(value)
+    return value.trim() !== "" && Number.isFinite(n) && n >= 0 && n <= 1000000 ? n : null
+  }
+
+  function timeConversionFormat (value) {
+    if (!Number.isFinite(value)) return "Out of range"
+    return value.toLocaleString("en-US", { maximumFractionDigits: 8 })
+  }
+
+  function initYearsDays () {
+    var form = $("years-days-form")
+    if (!form) return
+    form.addEventListener("submit", function (event) {
+      event.preventDefault()
+      var value = timeConversionNumber($("yd-value").value)
+      var factor = Number($("yd-method").value)
+      if (value === null || (factor !== 365 && factor !== 365.2425)) {
+        say("yd-result", "Enter a number from 0 to 1,000,000 and choose a conversion method.")
+        return
+      }
+      var days = value * factor
+      say("yd-result", timeConversionFormat(value) + " years = " +
+        timeConversionFormat(days) + " days; " +
+        timeConversionFormat(days / 7) + " weeks; " +
+        timeConversionFormat(days * 24) + " hours; " +
+        timeConversionFormat(days * 1440) + " minutes; " +
+        timeConversionFormat(days * 86400) + " seconds. Method: " + factor + " days per year.")
+    })
+  }
+
+  function initQueryTime () {
+    var form = $("query-time-form")
+    if (!form) return
+    var factors = { year: 365 * 86400, day: 86400, week: 604800,
+      hour: 3600, minute: 60, second: 1 }
+    var aliases = { years: "year", year: "year", saal: "year", sal: "year",
+      days: "day", day: "day", din: "day",
+      weeks: "week", week: "week", haftay: "week", hafta: "week",
+      hours: "hour", hour: "hour", ghantay: "hour", ghanta: "hour",
+      minutes: "minute", minute: "minute", min: "minute",
+      seconds: "second", second: "second", sec: "second" }
+    form.addEventListener("submit", function (event) {
+      event.preventDefault()
+      var question = $("qt-question").value.toLowerCase().trim()
+      var numbers = question.match(/(?:\\d+(?:\\.\\d+)?|\\.\\d+)/g) || []
+      var tokens = question.match(/[a-z]+/g) || []
+      var units = tokens.filter(function (word) { return !!aliases[word] })
+      if (numbers.length !== 1 || units.length !== 2) {
+        say("qt-result", "Please ask one time conversion, for example: 80 years mein kitne din hote hain?")
+        return
+      }
+      var value = timeConversionNumber(numbers[0])
+      if (value === null) {
+        say("qt-result", "Enter a nonnegative number up to 1,000,000.")
+        return
+      }
+      var source = aliases[units[0]]
+      var target = aliases[units[1]]
+      var result = value * factors[source] / factors[target]
+      say("qt-result", timeConversionFormat(value) + " " + source +
+        "(s) = " + timeConversionFormat(result) + " " + target +
+        "(s). Uses 365 days per year.")
+    })
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     initTheme()
     initZakat()
     initBMI()
     initProfit()
     initAge()
+    initYearsDays()
+    initQueryTime()
     initDiscount()
     initConverter()
     initCalculator()
