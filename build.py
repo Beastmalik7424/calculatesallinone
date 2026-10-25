@@ -862,11 +862,11 @@ TOOLS.extend([
         "name": "Query Calculator", "app": "UtilitiesApplication",
         "description": "Ask a simple question in English or Roman Urdu about converting years, days, weeks, hours or minutes with clear supported units.",
         "h1": "Query Calculator for Time Conversions",
-        "lead": "Ask a time conversion question such as 80 years mein kitne din hote hain? Supported units: years, days, weeks, hours, minutes and seconds.",
+        "lead": "Ask a time conversion question such as 80 years mein kitne din hote hain? Supports exact birth-date age in days and conversions between years, days, weeks, hours, minutes and seconds.",
         "ui": (
             '<form id="query-time-form" class="space-y-4" novalidate>'
             '<label class="@L@" for="qt-question">Your question</label>'
-            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="80 years mein kitne din hote hain?" required>'
+            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="Ager birth date 29-07-1984 ho to age kitne days hogi?" required>'
             '<p class="text-sm">Uses 365 days per year. Try: 2 weeks in hours, 3 days to minutes, 80 years mein kitne din.</p>'
             '<button class="@B@" type="submit">Calculate Answer</button></form>'
             '<div id="qt-result" class="@R@" role="status" aria-live="polite"></div>'
@@ -874,9 +874,9 @@ TOOLS.extend([
         "guide": [
             ("How it works", ["The question parser recognizes one nonnegative number, a supported source unit and a supported target unit. It calculates using fixed time conversion factors and never guesses unsupported questions."]),
             ("Examples", ["80 years to days = 29,200 days. 2 weeks to hours = 336 hours. 3 days to minutes = 4,320 minutes."]),
-            ("Limits", ["The parser supports time unit conversions only, not arbitrary arithmetic or calendar-specific elapsed time. A year is defined as 365 days for these questions."]),
+            ("Limits", ["The parser supports time conversions and exact Gregorian birth-date-to-today calculations, not arbitrary arithmetic. Time conversion questions use 365 days per year."]),
             ("Supported question patterns", ["Enter one numeric amount followed by a supported time unit and a target unit. For example, 2 weeks in hours, 3 days to minutes, and 80 years mein kitne din hote hain are supported. The parser recognizes year, years, day, days, din, week, weeks, hour, hours, minute, minutes, second and seconds, plus a few Roman Urdu alternatives. It does not use artificial intelligence or guess the meaning of unfamiliar terms. If a question is unclear, it asks for a simpler time conversion instead of giving a potentially misleading number."]),
-            ("Understanding answers", ["A year is treated as exactly 365 days in this calculator. A week is seven days, a day is 24 hours, an hour is 60 minutes and a minute is 60 seconds. This makes results repeatable and straightforward to check independently. Leap years and daylight-saving transitions are not inferred from a sentence. The tool is intended for everyday time-unit questions rather than legal deadlines, payroll, astronomy or date-specific scheduling. For a different year convention, open the Years to Days Calculator and choose the Gregorian average method."])
+            ("Understanding answers", ["A year is treated as exactly 365 days in this calculator. A week is seven days, a day is 24 hours, an hour is 60 minutes and a minute is 60 seconds. This makes results repeatable and straightforward to check independently. Leap years and daylight-saving transitions are not inferred from a sentence. For a birth-date question, exact elapsed days are calculated through today using Gregorian calendar dates. Time-unit questions are not intended for legal deadlines, payroll or astronomy. For a different year convention, open the Years to Days Calculator and choose the Gregorian average method."])
         ],
         "faq": [("Can I ask in Roman Urdu?", "Yes, simple patterns such as 80 years mein kitne din hote hain are supported."),
                 ("Can I ask any mathematical question?", "No. This version supports time-unit conversion questions only.")],
