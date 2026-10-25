@@ -210,7 +210,7 @@ TOOLS = [
         "category": "money",
         "name": "Profit and Loss Calculator",
         "app": "UtilitiesApplication",
-        "description": "Calculate business profit and loss from revenue, cost of goods sold and expenses, or calculate profit and markup from a product cost and selling price.",
+        "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
         "h1": "Profit and Loss Calculator for Business and Products",
         "lead": "Choose business P&L for revenue, costs and expenses, or product profit for buying and selling prices. Results show the correct percentage basis.",
         "ui": (
@@ -376,7 +376,7 @@ TOOLS = [
         "category": "math",
         "name": "Standard & Scientific Calculator",
         "app": "UtilitiesApplication",
-        "description": "Free online standard and scientific calculator for arithmetic, trigonometry, roots, powers, logarithms, factorials and DEG/RAD angle modes.",
+        "description": "Free online standard and scientific calculator with large buttons for addition, subtraction, percentages, trigonometry, square roots and logarithms.",
         "h1": "Online Standard and Scientific Calculator",
         "lead": "Use standard arithmetic or switch to Scientific Mode for trigonometry, powers, roots, logarithms and statistics. Calculations run in your browser.",
         "ui": (
@@ -429,7 +429,7 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Count tasbih with preset targets. The count stays saved on this device only.",
+        "description": "Free online digital tasbih counter for dhikr and zikr with 33, 99 and custom targets. Tap to count on mobile or desktop; no app download needed.",
         "h1": "Free Online Tasbih Counter",
         "lead": "A free digital tasbeeh counter for daily dhikr. Choose a phrase, set a target, and keep your count on this device without downloading an app.",
         "ui": (
