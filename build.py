@@ -1132,7 +1132,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261026-standard-mobile-v4">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261026-standard-mobile-v5">\n'
         + ld + ads + "</head>\n"
     )
 

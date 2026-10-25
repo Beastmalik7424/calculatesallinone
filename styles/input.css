@@ -1297,6 +1297,11 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
   #main .ca-home-calculator #calc-pad { gap: clamp(.3rem, 1vw, .5rem); }
 }
 
+/* Keep the homepage's last key above the fold on short phones without shrinking touch targets. */
+@media (max-width: 400px) and (max-height: 700px) {
+  #main .ca-home-header { margin-bottom: 0; }
+}
+
 /* Standard Calculator tool page only: compact the first mobile viewport.
    Preserve all 24 keys and >=44px touch targets; leave homepage and other tools untouched. */
 @media (max-width: 600px) {
