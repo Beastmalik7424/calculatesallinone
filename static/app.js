@@ -1488,12 +1488,23 @@
         var remainingDays = totalDays % 7
         var ageYears = now.getFullYear() - year
         if (now.getMonth() + 1 < month || (now.getMonth() + 1 === month && now.getDate() < day)) ageYears--
+        var completedMonths = (now.getFullYear() - year) * 12 + (now.getMonth() + 1 - month)
+        function monthAnniversary (count) {
+          var index = month - 1 + count
+          var y = year + Math.floor(index / 12)
+          var m = ((index % 12) + 12) % 12
+          return Date.UTC(y, m, Math.min(day, new Date(Date.UTC(y, m + 1, 0)).getUTCDate()))
+        }
+        if (monthAnniversary(completedMonths) > todayUtc) completedMonths--
+        var calendarYears = Math.floor(completedMonths / 12)
+        var calendarMonths = completedMonths % 12
+        var calendarDays = Math.round((todayUtc - monthAnniversary(completedMonths)) / 86400000)
         var todayText = String(now.getDate()).padStart(2, "0") + "-" +
           String(now.getMonth() + 1).padStart(2, "0") + "-" + now.getFullYear()
         say("qt-result", "Birth date: " + String(day).padStart(2, "0") + "-" +
           String(month).padStart(2, "0") + "-" + year +
           ". As of " + todayText + ": " + timeConversionFormat(totalDays) +
-          " days old (" + ageYears + " completed years; " +
+          " days old (" + calendarYears + " years, " + calendarMonths + " months, " + calendarDays + " days; " + completedMonths + " completed months and " + calendarDays + " days; " +
           timeConversionFormat(totalWeeks) + " full weeks and " +
           remainingDays + " days). Exact Gregorian calendar days.")
         return
