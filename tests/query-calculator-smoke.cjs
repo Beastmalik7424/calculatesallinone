@@ -13,6 +13,7 @@ const input = {value:"Ager birth date 29-02-1984 ho to age kitne days hogi?",add
 const result = {textContent:""};
 const nodes = {"query-time-form":form,"qt-question":input,"qt-result":result};
 const document = {
+ readyState:"loading",
  documentElement:{lang:"en"},
  getElementById:(id)=>nodes[id] || null,
  addEventListener:(name,fn)=>{listeners[name]=fn;},
