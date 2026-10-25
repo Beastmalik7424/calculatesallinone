@@ -869,7 +869,7 @@ TOOLS.extend([
             '<input class="@I@" id="qt-question" type="text" maxlength="160" value="Ager birth date 29-07-1984 ho to age kitne days hogi?" required>'
             '<p class="text-sm">Uses 365 days per year. Try: 2 weeks in hours, 3 days to minutes, 80 years mein kitne din.</p>'
             '<button class="@B@" type="submit">Calculate Answer</button></form>'
-            '<div id="qt-result" class="@R@" role="status" aria-live="polite"></div>'
+            '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a question and tap Calculate Answer. If no result appears, refresh this page.</div>'
         ),
         "guide": [
             ("How it works", ["The question parser recognizes one nonnegative number, a supported source unit and a supported target unit. It calculates using fixed time conversion factors and never guesses unsupported questions."]),
@@ -1217,7 +1217,7 @@ def shell(main_html, lang="en", current_path=None):
         '</nav></div>'
         + lang_links(lang, s, current_path) +
         '</div></footer>\n'
-        '<script src="/assets/app.js" defer></script>\n'
+        '<script src="/assets/app.js?v=20261026-query-fix-3" defer></script>\n'
         '</body>\n</html>\n'
     )
 
