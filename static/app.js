@@ -1463,7 +1463,13 @@
       var question = $("qt-question").value.toLowerCase().trim()
       // Calendar-date questions take priority over generic time-unit conversions.
       // Dates are interpreted as DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD.
-      var dateMatch = question.match(/(?:^|[^0-9])([0-9]{1,4})[-\/]([0-9]{1,2})[-\/]([0-9]{1,4})(?![0-9])/)
+      var dateMatch = question.match(/(?:^|[^0-9])([0-9]{1,4})[-/]([0-9]{1,2})[-/]([0-9]{1,4})(?![0-9])/)
+      var namedMonths = { january: 1, jan: 1, february: 2, feb: 2,
+        march: 3, mar: 3, april: 4, apr: 4, may: 5, june: 6, jun: 6,
+        july: 7, jul: 7, august: 8, aug: 8, september: 9, sep: 9,
+        october: 10, oct: 10, november: 11, nov: 11, december: 12, dec: 12 }
+      var namedDate = question.match(/(?:^|[^0-9])([0-9]{1,2})[ ,.-]+(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sep|october|oct|november|nov|december|dec)[ ,.-]+([0-9]{4})(?![0-9])/)
+      if (!dateMatch && namedDate) dateMatch = [namedDate[0], namedDate[1], String(namedMonths[namedDate[2]]), namedDate[3]]
       if (dateMatch) {
         var first = Number(dateMatch[1])
         var second = Number(dateMatch[2])
@@ -1501,10 +1507,14 @@
         var calendarDays = Math.round((todayUtc - monthAnniversary(completedMonths)) / 86400000)
         var todayText = String(now.getDate()).padStart(2, "0") + "-" +
           String(now.getMonth() + 1).padStart(2, "0") + "-" + now.getFullYear()
-        say("qt-result", "Birth date: " + String(day).padStart(2, "0") + "-" +
+        var eventIsBirth = /\\b(birth|born|dob|paida|birthday)\\b/.test(question)
+        var subject = /\\bpakistan\\b/.test(question) ? "Pakistan" : "The subject"
+        var prefix = eventIsBirth ? "Birth date: " : "Start date: "
+        var elapsedLabel = eventIsBirth ? " old" : " elapsed"
+        say("qt-result", prefix + String(day).padStart(2, "0") + "-" +
           String(month).padStart(2, "0") + "-" + year +
           ". As of " + todayText + ": " + timeConversionFormat(totalDays) +
-          " days old (" + calendarYears + " years, " + calendarMonths + " months, " + calendarDays + " days; " + completedMonths + " completed months and " + calendarDays + " days; " +
+          " days" + elapsedLabel + " for " + subject + " (" + calendarYears + " years, " + calendarMonths + " months, " + calendarDays + " days; " + completedMonths + " completed months and " + calendarDays + " days; " +
           timeConversionFormat(totalWeeks) + " full weeks and " +
           remainingDays + " days). Exact Gregorian calendar days.")
         return
