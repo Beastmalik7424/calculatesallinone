@@ -1645,7 +1645,7 @@
       }
     })
   }
-  if (document.readyState === "loading") {
+  if (!document.readyState || document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initializeCalculators)
   } else {
     initializeCalculators()
