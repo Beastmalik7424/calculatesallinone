@@ -1461,7 +1461,7 @@
     form.addEventListener("submit", function (event) {
       event.preventDefault()
       var question = $("qt-question").value.toLowerCase().trim()
-      var numbers = question.match(/(?:\\d+(?:\\.\\d+)?|\\.\\d+)/g) || []
+      var numbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
       var tokens = question.match(/[a-z]+/g) || []
       var units = tokens.filter(function (word) { return !!aliases[word] })
       if (numbers.length !== 1 || units.length !== 2) {
