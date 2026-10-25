@@ -1458,7 +1458,7 @@
       hours: "hour", hour: "hour", ghantay: "hour", ghanta: "hour",
       minutes: "minute", minute: "minute", min: "minute",
       seconds: "second", second: "second", sec: "second" }
-    form.addEventListener("submit", function (event) {
+    function calculateQuery (event) {
       event.preventDefault()
       var question = $("qt-question").value.toLowerCase().trim()
       // Calendar-date questions take priority over generic time-unit conversions.
@@ -1598,7 +1598,10 @@
       say("qt-result", timeConversionFormat(value) + " " + source +
         "(s) = " + timeConversionFormat(result) + " " + target +
         "(s). Uses 365 days per year.")
-    })
+    }
+    form.addEventListener("submit", calculateQuery)
+    $("qt-question").addEventListener("change", calculateQuery)
+    calculateQuery({ preventDefault: function () {} })
   }
 
   document.addEventListener("DOMContentLoaded", function () {
