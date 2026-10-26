@@ -1367,6 +1367,15 @@ BMI_FAQ = [
 ]
 BMI_SOURCES = 'Adult BMI categories are based on the World Health Organization\'s classification. Read the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" rel="noopener noreferrer">WHO fact sheet on obesity and overweight</a>. BMI is a screening measure and should be interpreted in context.'
 
+INTENT_RELATED = {
+    "tasbih-counter": ["standard-calculator", "age-calculator"],
+    "standard-calculator": ["percentage-calculator", "scientific-calculator"],
+    "age-calculator": ["date-calculator", "time-calculator"],
+    "percentage-calculator": ["discount-calculator", "fraction-calculator"],
+    "discount-calculator": ["percentage-calculator", "profit-loss-calculator"],
+    "bmi-calculator": ["age-calculator", "calorie-calculator"],
+}
+
 def tool_page(t):
     path = "/" + t["slug"] + "/"
     url = SITE_URL + path
@@ -1424,8 +1433,12 @@ def tool_page(t):
             {"@type": "ListItem", "position": 3, "name": t["name"], "item": url}]},
     ]
     related = ""
-    related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
-    related_tools += [other for other in TOOLS if other["slug"] != t["slug"] and other not in related_tools]
+    related_slugs = INTENT_RELATED.get(t["slug"])
+    if related_slugs:
+        related_tools = [next((other for other in TOOLS if other["slug"] == slug), None) for slug in related_slugs]
+        related_tools = [other for other in related_tools if other is not None]
+    else:
+        related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
     for other in related_tools[:2]:
         related += '<li><a class="' + LINK + '" href="/' + other["slug"] + '/">' + other["name"] + "</a></li>"
     alternates = None
