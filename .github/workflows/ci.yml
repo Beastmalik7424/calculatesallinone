@@ -37,6 +37,8 @@ jobs:
         run: python -m py_compile build.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
       - name: Build the site
         run: npm run build
+      - name: Test percentage, fraction, compound interest and date engines
+        run: node tests/extra-calculators-smoke.cjs
       - name: Validate generated inline scripts against CSP hashes
         run: python3 tests/csp-inline-hash-smoke.py
       - name: Validate sitemap XML with xmllint
