@@ -1376,6 +1376,39 @@ INTENT_RELATED = {
     "bmi-calculator": ["age-calculator", "calorie-calculator"],
 }
 
+SEARCH_INTENT_EXAMPLES = {
+    "age-calculator": [
+        ("How old is someone born in 1943 in 2026?", "2026 minus 1943 equals 83 years. The exact age is 82 until their birthday in 2026, then 83. Enter both dates above for an exact answer."),
+        ("How many days are in 80 years?", "80 ordinary 365-day years contain 29,200 days. Calendar spans also include leap days, so the exact number depends on the start and end dates. Use the date calculator for a specific interval."),
+    ],
+    "tasbih-counter": [
+        ("How do I use an online tasbih counter?", "Open the counter, choose a target such as 33, 99 or 100, and tap once for each recitation of dhikr. The counter records the number of taps, not whether a recitation was completed."),
+        ("Is 33 or 99 a required target?", "The counter offers convenient target options. It does not determine religious rulings or prescribe a specific practice. Choose the target appropriate for your own practice."),
+    ],
+    "standard-calculator": [
+        ("What is 15 + 27?", "15 + 27 = 42. Use the standard calculator for addition, subtraction, multiplication and division."),
+        ("What is 15% of 200?", "Convert 15% to 0.15, then multiply: 200 × 0.15 = 30. For sale-price questions, use the discount calculator."),
+    ],
+    "percentage-calculator": [
+        ("What is 20% of 150?", "20% = 0.20, so 150 × 0.20 = 30. Enter the percentage and base value above to calculate another example."),
+    ],
+    "discount-calculator": [
+        ("What is 25% off 80?", "The discount is 80 × 0.25 = 20. The final price is 80 − 20 = 60, before any additional taxes or fees."),
+    ],
+}
+
+def search_intent_examples_html(slug):
+    examples = SEARCH_INTENT_EXAMPLES.get(slug, [])
+    if not examples:
+        return ""
+    parts = ['<section class="mt-8" aria-label="Worked examples and search questions">',
+             '<h2 class="' + H2 + '">Worked examples and search questions</h2>']
+    for question, answer in examples:
+        parts.append('<h3 class="mt-4 text-lg font-semibold text-stone-900 dark:text-stone-100">' + html.escape(question) + '</h3>')
+        parts.append('<p class="' + P + '">' + html.escape(answer) + '</p>')
+    parts.append('</section>')
+    return "".join(parts)
+
 def tool_page(t):
     path = "/" + t["slug"] + "/"
     url = SITE_URL + path
@@ -1472,6 +1505,7 @@ def tool_page(t):
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
         + '<h2 class="' + H2 + '">Rules and limits</h2>'
         + guide_html(guide)
+        + search_intent_examples_html(t["slug"])
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
         + updated
