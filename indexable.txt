@@ -5,8 +5,8 @@
 /bmi-calculator/
 /contact/
 /discount-calculator/
-/emi-calculator/
 /editorial-policy/
+/emi-calculator/
 /health/
 /marketplaces/
 /math/
@@ -14,6 +14,7 @@
 /money/
 /privacy/
 /profit-loss-calculator/
+/query-calculator/
 /standard-calculator/
 /stopwatch/
 /tasbih-counter/
@@ -30,4 +31,5 @@
 /ur/unit-converter/
 /ur/zakat-calculator/
 /worship/
+/years-to-days-calculator/
 /zakat-calculator/
