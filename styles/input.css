@@ -1409,3 +1409,24 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
   #main .ca-tool-standard-calculator #calc-pad { grid-auto-rows: 54px !important; gap: 6px !important; margin-top: 6px !important; }
   #main .ca-tool-standard-calculator #calc-pad > button { min-height: 54px !important; height: 54px !important; }
 }
+
+/* BMI desktop layout: balanced unit selectors, input pairs and centered action. */
+@media (min-width:701px){
+#main .ca-tool-bmi-calculator{max-width:760px;margin-inline:auto;padding:22px 28px!important;border-radius:20px}
+#main .ca-tool-bmi-calculator #bmi-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px;align-items:end}
+#main .ca-tool-bmi-calculator #bmi-form>fieldset,#main .ca-tool-bmi-calculator #bmi-form>div{margin:0!important;min-width:0}
+#main .ca-tool-bmi-calculator #bmi-form>fieldset:nth-of-type(1){grid-column:1;grid-row:1}
+#main .ca-tool-bmi-calculator #bmi-form>fieldset:nth-of-type(2){grid-column:2;grid-row:1}
+#main .ca-tool-bmi-calculator #bmi-form>div:nth-child(2),#main .ca-tool-bmi-calculator #bmi-form>div:nth-child(3){grid-column:1;grid-row:2}
+#main .ca-tool-bmi-calculator #bmi-form>div:nth-child(5),#main .ca-tool-bmi-calculator #bmi-form>div:nth-child(6){grid-column:2;grid-row:2}
+#main .ca-tool-bmi-calculator #bmi-form>button{grid-column:1/-1;justify-self:center;min-width:220px;margin:4px 0 0!important}
+#main .ca-tool-bmi-calculator #bmi-result{margin-top:14px!important}
+}
+
+/* BMI regression fix: site-wide flex rule had overridden the intended grid. */
+@media (min-width:701px){
+#main .ca-tool-bmi-calculator #bmi-form{display:grid!important;align-items:start!important}
+#main .ca-tool-bmi-calculator #bmi-form>fieldset{width:100%;min-width:0;min-height:76px;align-self:start!important;justify-content:flex-start}
+#main .ca-tool-bmi-calculator #bmi-form>div{width:100%;min-width:0}
+#main .ca-tool-bmi-calculator #bmi-form>div input{width:100%;max-width:100%}
+}
