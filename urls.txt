@@ -5,8 +5,8 @@ https://calculateallinone.vercel.app/age-calculator/
 https://calculateallinone.vercel.app/bmi-calculator/
 https://calculateallinone.vercel.app/contact/
 https://calculateallinone.vercel.app/discount-calculator/
-https://calculateallinone.vercel.app/emi-calculator/
 https://calculateallinone.vercel.app/editorial-policy/
+https://calculateallinone.vercel.app/emi-calculator/
 https://calculateallinone.vercel.app/health/
 https://calculateallinone.vercel.app/marketplaces/
 https://calculateallinone.vercel.app/math/
@@ -14,6 +14,7 @@ https://calculateallinone.vercel.app/methodology/
 https://calculateallinone.vercel.app/money/
 https://calculateallinone.vercel.app/privacy/
 https://calculateallinone.vercel.app/profit-loss-calculator/
+https://calculateallinone.vercel.app/query-calculator/
 https://calculateallinone.vercel.app/standard-calculator/
 https://calculateallinone.vercel.app/stopwatch/
 https://calculateallinone.vercel.app/tasbih-counter/
@@ -30,4 +31,5 @@ https://calculateallinone.vercel.app/ur/tasbih-counter/
 https://calculateallinone.vercel.app/ur/unit-converter/
 https://calculateallinone.vercel.app/ur/zakat-calculator/
 https://calculateallinone.vercel.app/worship/
+https://calculateallinone.vercel.app/years-to-days-calculator/
 https://calculateallinone.vercel.app/zakat-calculator/

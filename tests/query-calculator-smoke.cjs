@@ -19,12 +19,18 @@ const document = {
  addEventListener:(name,fn)=>{listeners[name]=fn;},
  querySelector:()=>null, querySelectorAll:()=>[]
 };
-const ctx = {document, console, Date, Number, String, Array, Math, Object, RegExp, Intl};
+// Freeze the date so this regression test does not fail as calendar days advance.
+const FIXED_NOW = new Date(2026, 9, 26, 12, 0, 0);
+class FixedDate extends Date {
+ constructor(...args) { super(...(args.length ? args : [FIXED_NOW.getTime()])); }
+ static now() { return FIXED_NOW.getTime(); }
+}
+const ctx = {document, console, Date: FixedDate, Number, String, Array, Math, Object, RegExp, Intl};
 vm.createContext(ctx);
 vm.runInContext(js,ctx,{timeout:3000});
 assert.equal(typeof listeners.DOMContentLoaded,"function");
 listeners.DOMContentLoaded();
-assert.match(result.textContent,/15579|15,579/);
+assert.match(result.textContent,/15,580|15580/, "Leap-day birth to 26 October 2026 must be 15,580 days");
 const cases = [
  ["Mer pass 99 packets hn 29 distribute kr die 19 chori ho gye baki kotny bach gye",/51/],
  ["मेरे पास 99 पैकेट हैं 29 बाँट दिए 19 चोरी हो गए कितने बचे",/51/],
