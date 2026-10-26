@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build:css": "tailwindcss -c tailwind.config.js -i styles/input.css -o static/site.css --minify",
-    "build": "npm run build:css && python3 build.py && python3 seo_finalize.py && python3 tests/site-output-smoke.py && python3 tests/monetization-smoke.py && node tests/all-calculator-smoke.cjs && node tests/emi-calculator-smoke.cjs && node tests/scientific-calculator-smoke.cjs && node tests/query-calculator-smoke.cjs"
+    "build": "npm run build:css && python3 build.py && python3 seo_finalize.py && python3 tests/site-output-smoke.py && python3 tests/search-intent-related-smoke.py && python3 tests/seo-original-examples-smoke.py && python3 tests/monetization-smoke.py && node tests/all-calculator-smoke.cjs && node tests/emi-calculator-smoke.cjs && node tests/scientific-calculator-smoke.cjs && node tests/query-calculator-smoke.cjs"
   },
   "devDependencies": {
     "tailwindcss": "3.4.19"

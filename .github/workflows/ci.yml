@@ -39,6 +39,8 @@ jobs:
         run: npm run build
       - name: Test percentage, fraction, compound interest and date engines
         run: node tests/extra-calculators-smoke.cjs
+      - name: Verify contextual links
+        run: python3 tests/related-calculator-links-smoke.py
       - name: Validate generated inline scripts against CSP hashes
         run: python3 tests/csp-inline-hash-smoke.py
       - name: Validate sitemap XML with xmllint
