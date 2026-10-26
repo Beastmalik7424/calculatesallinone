@@ -1422,3 +1422,11 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
 #main .ca-tool-bmi-calculator #bmi-form>button{grid-column:1/-1;justify-self:center;min-width:220px;margin:4px 0 0!important}
 #main .ca-tool-bmi-calculator #bmi-result{margin-top:14px!important}
 }
+
+/* BMI regression fix: site-wide flex rule had overridden the intended grid. */
+@media (min-width:701px){
+#main .ca-tool-bmi-calculator #bmi-form{display:grid!important;align-items:start!important}
+#main .ca-tool-bmi-calculator #bmi-form>fieldset{width:100%;min-width:0;min-height:76px;align-self:start!important;justify-content:flex-start}
+#main .ca-tool-bmi-calculator #bmi-form>div{width:100%;min-width:0}
+#main .ca-tool-bmi-calculator #bmi-form>div input{width:100%;max-width:100%}
+}
