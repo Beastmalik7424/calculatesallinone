@@ -2019,6 +2019,8 @@ def main():
         paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA, "/about/": ABOUT_EXTRA}.get(path, [])
         static_page(path, title, desc, h1, paras)
         entries.append((path, []))
+    from extra_calculator_pages import build_extra_pages
+    entries.extend(build_extra_pages(head, shell, write))
     entries.append(("/emi-calculator/", []))
     not_found()
     normalize_internal_page_links()
