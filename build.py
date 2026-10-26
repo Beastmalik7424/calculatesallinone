@@ -1367,6 +1367,15 @@ BMI_FAQ = [
 ]
 BMI_SOURCES = 'Adult BMI categories are based on the World Health Organization\'s classification. Read the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" rel="noopener noreferrer">WHO fact sheet on obesity and overweight</a>. BMI is a screening measure and should be interpreted in context.'
 
+INTENT_RELATED = {
+    "tasbih-counter": ["standard-calculator", "age-calculator"],
+    "standard-calculator": ["percentage-calculator", "scientific-calculator"],
+    "age-calculator": ["date-calculator", "time-calculator"],
+    "percentage-calculator": ["discount-calculator", "fraction-calculator"],
+    "discount-calculator": ["percentage-calculator", "profit-loss-calculator"],
+    "bmi-calculator": ["age-calculator", "calorie-calculator"],
+}
+
 def tool_page(t):
     path = "/" + t["slug"] + "/"
     url = SITE_URL + path
@@ -1424,8 +1433,12 @@ def tool_page(t):
             {"@type": "ListItem", "position": 3, "name": t["name"], "item": url}]},
     ]
     related = ""
-    related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
-    related_tools += [other for other in TOOLS if other["slug"] != t["slug"] and other not in related_tools]
+    related_slugs = INTENT_RELATED.get(t["slug"])
+    if related_slugs:
+        related_tools = [next((other for other in TOOLS if other["slug"] == slug), None) for slug in related_slugs]
+        related_tools = [other for other in related_tools if other is not None]
+    else:
+        related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
     for other in related_tools[:2]:
         related += '<li><a class="' + LINK + '" href="/' + other["slug"] + '/">' + other["name"] + "</a></li>"
     alternates = None
@@ -1542,6 +1555,8 @@ def category_page(c):
         items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
                   '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/emi-calculator/">EMI Calculator</a>'
                   '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">Estimate monthly loan installments, total interest and a month-by-month repayment schedule. Lender fees and contract terms may change the final quote.</p></li>')
+    for slug, label in {"math": [("percentage-calculator", "Percentage Calculator"), ("fraction-calculator", "Fraction Calculator")], "money": [("compound-interest-calculator", "Compound Interest Calculator")], "time": [("date-calculator", "Date Difference Calculator")]}.get(c["slug"], []):
+        items += '<li><a class="text-sky-800 underline" href="/' + slug + '/">' + label + '</a></li>'
     title = c["name"] + " | CalculatesAll"
     schema = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": c["name"], "url": SITE_URL + path}]
     if c["slug"] == "health":
@@ -1738,6 +1753,7 @@ def home_app_page(lang):
         + '<ul class="ca-home-tool-grid">' + tiles + '</ul></aside>'
         '</div>'
         + cats
+        + ('<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">Explore more calculators</h2><ul class="mt-3 grid gap-3"><li><a class="text-sky-800 dark:text-sky-300 underline" href="/percentage-calculator/">Percentage Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/fraction-calculator/">Fraction Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/compound-interest-calculator/">Compound Interest Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/date-calculator/">Date Difference Calculator</a></li></ul></nav>' if not urdu else '')
         + '<section class="ca-home-extra">' + home_extra_html(lang) + '</section>'
         '</div>'
     )
