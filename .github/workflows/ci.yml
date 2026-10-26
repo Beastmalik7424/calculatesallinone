@@ -111,6 +111,7 @@ jobs:
             sleep 1
           done
           node tests/seo-seven-pages-browser.cjs
+          node tests/extra-calculators-browser.cjs
       # Protected Vercel previews are verified separately through the authenticated Vercel connector.
       - name: Test safe monetization configuration
         run: python tests/monetization-smoke.py
