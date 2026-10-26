@@ -10,7 +10,7 @@ assert.deepEqual(fraction(2,3,3,4,"multiply"),{n:1,d:2});
 assert.deepEqual(fraction(1,2,1,2,"subtract"),{n:0,d:1});
 assert.throws(()=>fraction(1,0,1,2,"add"));
 assert.throws(()=>fraction(1,2,0,1,"divide"));
-assert.equal(compound(1000,10,2,1),1102.5);
+assert.equal(compound(1000,10,1,2),1102.5);
 assert.equal(compound(1000,0,2,12),1000);
 assert.throws(()=>compound(1000,-120,1,12));
 assert.equal(dateDifference("2024-02-28","2024-03-01"),2);
