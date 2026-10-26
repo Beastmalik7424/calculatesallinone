@@ -77,6 +77,9 @@
 
 @media screen and (max-height:800px) and (min-width:701px){#calculator .chart{display:none}}
 @media screen and (max-height:740px) and (min-width:701px){body:has(#loan-form)>header p{display:none}body:has(#loan-form)>header{padding:2px 0}#calculator .presets{margin:0 0 3px}#calculator.panel{padding:8px 12px}}
+
+/* Balanced desktop EMI layout: four aligned input groups and centered actions. */
+@media screen and (min-width:701px){#loan-form .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}#loan-form .field{min-width:0}#loan-form .field input,#loan-form .field select{max-width:100%}#loan-form .field input[type=range]{width:100%}#loan-form .actions{justify-content:center;flex-wrap:wrap}#calculator .presets{justify-content:center}}
 </style>
 </head>
 <body>
