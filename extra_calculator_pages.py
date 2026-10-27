@@ -46,7 +46,7 @@ def build_extra_pages(head,shell,write):
         body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="mt-4 grid gap-3">'
         for key,label,kind in fields:
             body+='<label for="'+key+'" class="font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
-            body+='<input required id="'+key+'" type="'+kind+'" '+('step="any" ' if kind=="number" else '')+'class="w-full rounded-lg border border-stone-400 bg-white p-3 text-lg text-stone-900 min-h-[44px]">'
+            body+='<input required id="'+key+'" type="'+kind+'" '+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full rounded-lg border border-stone-400 bg-white p-3 text-lg text-stone-900 min-h-[44px]">'
         if slug=="fraction-calculator":
             body+='<label for="operation" class="font-semibold">Operation</label><select id="operation" class="rounded-lg border border-stone-400 p-3 text-stone-900 bg-white"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select>'
         body+='<button type="submit" class="rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'

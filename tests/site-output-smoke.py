@@ -725,3 +725,10 @@ for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses"
 assert "Business P&amp;L" in _profit_page, "Business profit mode missing"
 assert "net operating" in _profit_page.lower(), "Profit page must explain net operating profit"
 assert "ca-profit-mode" in site_css, "Profit mode CSS missing"
+
+# Fraction inputs must use the same whole-number constraint documented on the page.
+fraction_html = output_for_url(SITE + "/fraction-calculator/").read_text(encoding="utf-8")
+for fraction_id in ("a", "b", "c", "d"):
+    assert re.search(r'<input\b[^>]*\bid="' + fraction_id + r'"[^>]*\btype="number"[^>]*\bstep="1"', fraction_html), (
+        f"Fraction {fraction_id} must reject decimal inputs at the HTML form level"
+    )
