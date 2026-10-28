@@ -735,3 +735,10 @@ for fraction_id in ("a", "b", "c", "d"):
     assert re.search(r'<input\b[^>]*\bid="' + fraction_id + r'"[^>]*\btype="number"[^>]*\bstep="1"', fraction_html), (
         f"Fraction {fraction_id} must reject decimal inputs at the HTML form level"
     )
+
+# AdSense content-quality regression: checkable conversion examples and honest precision.
+_unit_quality = output_for_url(SITE + "/unit-converter/").read_text(encoding="utf-8")
+assert "approximately 5 km, not exactly 5 km" in _unit_quality, "Rounded reverse conversion must not claim exact equality"
+for _fact in ("12 inches equals 30.48 centimetres", "10 pounds equals 4.5359237 kilograms", "25 degrees Celsius equals 77 degrees Fahrenheit"):
+    assert _fact in _unit_quality, "Missing checkable conversion example: " + _fact
+assert "gives back 5 kilometres" not in _unit_quality, "Misleading exact round-trip claim remains"

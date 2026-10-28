@@ -89,7 +89,7 @@ GUIDE_EXTRA = {
         ]),
         ("Worked example with length", [
             "Five kilometres divided by 1.609344 gives 3.10686 miles, rounded to six significant figures.",
-            "Converting in the other direction, 3.10686 miles multiplied by 1.609344 gives back 5 kilometres.",
+            "Converting the rounded value 3.10686 miles back to kilometres gives approximately 5 km, not exactly 5 km. Keep the unrounded value for intermediate steps when a precise round trip matters.",
         ]),
         ("Temperature is different", [
             "Temperature scales have different zero points, so the calculator uses formulas instead of multiplication. Kelvin starts at absolute zero, so it cannot be negative.",
@@ -125,6 +125,14 @@ GUIDE_EXTRA = {
         ]),
     ],
 }
+
+GUIDE_EXTRA["unit-converter"].append(
+    ("Check a conversion without trusting a rounded display", [
+        "One international inch is exactly 2.54 centimetres. For example, 12 inches equals 30.48 centimetres. This is a defined relationship, not an estimate.",
+        "One international avoirdupois pound is exactly 0.45359237 kilograms. Therefore 10 pounds equals 4.5359237 kilograms before display rounding. A shortened result should not be reused as though it were exact.",
+        "Temperature uses an offset as well as a scale factor: Fahrenheit = Celsius x 9 / 5 + 32. For example, 25 degrees Celsius equals 77 degrees Fahrenheit. Do not use the length or weight multiplication method for temperature.",
+    ]),
+)
 
 # Search Console query-specific worked examples. These complement existing tools;
 # they do not create near-duplicate landing pages for the same search intent.
