@@ -126,6 +126,42 @@ GUIDE_EXTRA = {
     ],
 }
 
+# Worked examples and checking steps added for the AdSense content review.
+GUIDE_EXTRA["query-calculator"] = [
+    ("Worked examples", [
+        "Question: 2 weeks in hours. Step 1: 2 x 7 = 14 days. Step 2: 14 x 24 = 336 hours. Result: 336 hours.",
+        "Question: 3 days to minutes. Step 1: 3 x 24 = 72 hours. Step 2: 72 x 60 = 4,320 minutes. Result: 4,320 minutes.",
+        "The same chain works in reverse. For a question such as 336 hours to days, each step divides by the same factor instead of multiplying: 336 / 24 = 14 days, and 14 / 7 = 2 weeks.",
+    ]),
+    ("Checking an answer by hand", [
+        "Divide the answer by each factor used in the question, in reverse order. For 4,320 minutes, dividing by 60 gives 72 hours, and dividing by 24 gives 3 days. This check confirms the unit chain and the arithmetic, using the same fixed factors the calculator uses.",
+        "Questions about years use 365 days per year in this calculator. A birth-date question counts exact Gregorian calendar days between the two dates you enter, so the two methods can differ by a few days over long periods.",
+    ]),
+]
+GUIDE_EXTRA["years-to-days-calculator"] = [
+    ("Worked example for 12 years", [
+        "Simple method: 12 x 365 = 4,380 days. Weeks: 4,380 / 7 = 625.71 weeks. Hours: 4,380 x 24 = 105,120 hours.",
+        "Gregorian average method: 12 x 365.2425 = 4,382.91 days. The difference between the two methods is 2.91 days over 12 years, which equals 0.2425 days per year multiplied by 12.",
+        "Minutes: 105,120 x 60 = 6,307,200 minutes. Seconds: 6,307,200 x 60 = 378,432,000 seconds.",
+    ]),
+    ("Checking a result", [
+        "Divide the day count by 365 for the simple method. 4,380 / 365 = 12. For the Gregorian method, divide by 365.2425. 4,382.91 / 365.2425 = 12. Repeating these divisions confirms the result by hand.",
+        "Fractional years work the same way. 0.5 x 365 = 182.5 days in the simple method, which is 182 days and 12 hours, because 0.5 x 24 = 12 hours.",
+    ]),
+]
+GUIDE_EXTRA["stopwatch"].append(
+    ("Worked examples", [
+        "A lap time of 83 seconds equals 1 minute and 23 seconds. Step 1: 1 x 60 = 60 seconds. Step 2: 60 + 23 = 83 seconds.",
+        "A total of 3,725 seconds equals 1 hour, 2 minutes and 5 seconds. Step 1: 1 x 3,600 = 3,600 seconds. Step 2: 3,725 - 3,600 = 125 seconds. Step 3: 2 x 60 = 120 seconds, leaving 125 - 120 = 5 seconds.",
+    ])
+)
+GUIDE_EXTRA["tasbih-counter"].append(
+    ("Worked example", [
+        "Target 99 is reached after 99 presses. Three rounds of 33 presses give 3 x 33 = 99 presses, which matches the target. If you select a target of 100 instead, 100 - 99 = 1 more press is needed after the first 99.",
+        "The count stays on this device when browser storage is available. The counter records presses, not the phrases you recited, so the worked example counts presses only.",
+    ])
+)
+
 HOME_EXTRA = {
     "en": {
         "heading": "What can you calculate with these free tools?",
@@ -166,7 +202,7 @@ TRUST_EXTRA = {
         "We do not sell your data and we do not run accounts. If the site shows advertising, the advertising partner follows its own policies, which are described on the privacy page.",
     ],
     "/contact": [
-        "Use this address for corrections, feedback, accessibility problems and Urdu translation fixes. Please include the tool name, the inputs you used and the result you expected.",
+        "Use this address for corrections, feedback, accessibility problems and Urdu translation fixes.",
         "We read every message. Confirmed formula or content errors are corrected on the affected tool page.",
     ],
     "/methodology": [
