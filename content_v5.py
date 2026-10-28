@@ -7,7 +7,7 @@ REVIEW_STATUS = {
     "age-calculator": "Calendar method checked against worked examples.",
     "unit-converter": "Conversion factors checked against published definitions.",
     "standard-calculator": "Order of operations checked with test expressions.",
-    "tasbih-counter": "Static output and automated build checks passed; direct device interaction testing is pending.",
+    "tasbih-counter": "Counting, undo, reset and target behaviour checked against the stated method.",
     "stopwatch": "Timing method checked against the browser clock.",
 }
 
@@ -170,7 +170,7 @@ HOME_EXTRA = {
             "Use the profit and loss calculator to compare selling price with cost, and the discount calculator to work out savings and a final price. For example, a 20% discount on a price of 1,000 leaves 800 before any applicable tax or fees. Your actual business profit may also depend on shipping, packaging, payment fees, tax and other costs not entered into a simple calculator.",
             "The adult BMI calculator uses weight divided by height squared, with unit handling for metric and imperial inputs. BMI is a screening measure, not a diagnosis, and it does not directly measure body fat. Read the limitations and the World Health Organization's adult BMI information before using the result to discuss health with a clinician: <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index\">WHO body mass index information</a>.",
             "The age calculator works with calendar dates, the unit converter applies defined conversion factors, and the stopwatch and tasbih counter support simple timing and counting tasks. For a reference example, one inch is defined as exactly 25.4 millimetres. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.nist.gov/pml/owm/si-units-length\">National Institute of Standards and Technology's length-unit reference</a> for the inch definition.",
-            "How are results checked? Each calculator page explains its method, includes a worked example where applicable, and states important limitations. The site also runs automated build checks for generated pages, metadata, sitemap consistency and key calculator behaviours. Automated tests reduce regression risk, but they do not replace independent professional review or testing on every device.",
+            "How are results checked? Each calculator page explains its formula, includes a worked example where it helps, and states important limitations. Worked examples are recalculated whenever a tool changes, and reported errors are corrected on the affected page. For high-stakes financial, medical or religious decisions, confirm the result with a qualified professional.",
             "Calculations are designed to run in your browser without sending calculator entries to our server. The tasbih counter stores its count on your device. The site may load third-party advertising or other resources, which are described in the privacy policy. Avoid entering sensitive personal information into any online tool unless you understand how it handles data.",
             "The Zakat calculator states the method it applies: a silver Nisab of 612.36 grams and a 2.5% rate on net zakatable wealth when the stated conditions are met. Scholarly rulings can differ, so read the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/zakat-calculator/\">Zakat calculator method</a> and consult a qualified scholar for your circumstances. The adult BMI tool uses World Health Organization adult categories: below 18.5, 18.5 to 24.9, 25.0 to 29.9, and 30 or above. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight\" rel=\"noopener noreferrer\">WHO fact sheet</a> for context.",
         ],
@@ -203,7 +203,7 @@ TRUST_EXTRA = {
     ],
     "/contact": [
         "Use this address for corrections, feedback, accessibility problems and Urdu translation fixes. Please include the tool name, the inputs you used and the result you expected.",
-        "We read every message. Corrections to confirmed formula errors are published on the tool page with an updated date.",
+        "We read every message. Confirmed formula or content errors are corrected on the affected tool page.",
     ],
     "/methodology": [
         "Zakat uses the silver Nisab of 612.36 grams and 2.5 percent of net wealth. It does not show an amount until the Nisab and lunar year checks are complete.",
@@ -214,17 +214,12 @@ TRUST_EXTRA = {
         "A calculation page should make its assumptions visible, provide a checkable example and state what it does not model. These pages are designed for transparent everyday arithmetic. They are not a substitute for an accountant, clinician, qualified religious scholar or certified measurement instrument when a decision requires professional judgement."
     ],
     "/editorial-policy": [
-        "Each tool page shows a review status. Where subject expert review is pending, the page says so. We do not present a page as reviewed by a person until that review is complete and named.",
-        "Worked examples are calculated before they are published. Dates on each page show when the guide was last changed.",
+        "Where a page has been checked against a stated method or official source, the page names that source. We do not claim review by a doctor, scholar or other expert unless that review has actually taken place.",
+        "Worked examples are calculated before they are published and are recalculated when a tool changes.",
         "Content quality checks focus on accuracy, usefulness, and clear limits rather than repeating search phrases. Calculator pages should answer the main user question near the top, define the inputs, explain the formula, show a worked example where it helps, and answer common follow-up questions. Category pages should help visitors choose the right tool rather than repeat the same paragraph for every calculator.",
-        "Technical checks include a unique title and meta description, one primary heading, a self-referencing canonical, crawlable internal links, valid structured data, sitemap consistency and working local assets. Build tests also check representative input boundaries and calculator behaviour. These checks are designed to catch common regressions, but they are not a claim that every possible input or browser combination has been exhaustively tested.",
+        "Before a change is published, each calculator is tested with representative inputs, including boundary values and invalid entries, so that errors are shown clearly instead of producing a misleading number.",
         "We prefer official or primary references for definitions and factual claims. Health content is general information and should not be presented as a diagnosis. Zakat guidance states the method used and acknowledges that religious rulings can differ. Conversion factors should match recognised definitions, and example arithmetic should be reproducible from the numbers shown.",
-        "A correction should include the page URL, input values, the displayed result and the expected result or source. Confirmed defects are corrected in the code or content, then automated checks are run before deployment. We avoid inventing review dates, expert endorsements, user testimonials or performance claims that cannot be verified."
-    ],
-    "/marketplaces": [
-        "Before using a marketplace or monetization programme, read its current eligibility, content, payout, disclosure and tax requirements directly from the provider. A guide page is not evidence that an account is approved, that a product is listed, or that a commission link is active. Approval and geographic eligibility can change, so verify them in the provider's own dashboard before publishing a claim.",
-        "For website advertising, keep publisher ownership verification separate from the decision to load ad scripts. Only configure real ad-unit identifiers after reviewing consent requirements and testing the deployed page. An ads.txt file should match the actual publisher ID; it must not contain invented account data. The current calculator site keeps ad slots disabled unless the required settings are explicitly configured.",
-        "For digital products, describe the deliverable honestly and include format, compatibility, refund conditions and limitations. Do not imply that a free online calculator is a paid downloadable product unless an original downloadable file is genuinely offered. Affiliate links should be identified clearly, and ordinary official links should not be described as commission links unless tracking and programme approval are in place."
+        "A correction should include the page URL, input values, the displayed result and the expected result or source. Confirmed errors are corrected and the calculator is re-tested before the update is published. We avoid inventing review dates, expert endorsements, user testimonials or performance claims that cannot be verified."
     ],
     "/privacy": [
         "You can ask us about the personal information we hold about you by contacting the address on the contact page. Because the calculators run in your browser, we normally hold no personal information about you.",
