@@ -108,6 +108,22 @@ def extract_faq_items(raw):
 def word_count(value):
     return len(strip_tags(value).split())
 
+SEO_OVERRIDES = {
+    "/zakat-calculator/": ("Zakat Calculator: Nisab Check & 2.5% Zakat | CalculatesAll", "Calculate Zakat at 2.5% on cash, gold, silver and business stock. Check the silver nisab of 612.36 g, deduct debts due now and confirm the hawl."),
+    "/years-to-days-calculator/": ("Years to Days Calculator: Days & Hours | CalculatesAll", "How many days are in a year, 10 years or 80 years? Convert years to days, weeks, hours, minutes and seconds with 365 or 365.2425-day years."),
+    "/query-calculator/": ("Query Calculator: Ask Time Questions | CalculatesAll", "Type a question like 80 saal mein kitne din or 2 weeks in hours and get the answer. Supports English and Roman Urdu time questions and age in days."),
+    "/percentage-calculator/": ("Percentage Calculator: What Is X% of Y? | CalculatesAll", "Find X% of a number, what percent one number is of another, or the percentage increase or decrease between two values, with formulas and examples."),
+    "/fraction-calculator/": ("Fraction Calculator with Simplified Answers | CalculatesAll", "Add, subtract, multiply and divide fractions online. Get the answer in lowest terms, with the cross-multiplication method and worked examples."),
+    "/compound-interest-calculator/": ("Compound Interest Calculator Online | CalculatesAll", "Calculate compound interest with A = P(1 + r/n)^(nt). Compare yearly, monthly and daily compounding, with a worked example and clear limits."),
+    "/date-calculator/": ("Days Between Dates Calculator | CalculatesAll", "Count the days between two dates, including leap years. See how many days are left until a date or have passed since one, with worked examples."),
+    "/health/": ("Health Calculators: Adult BMI | CalculatesAll", None),
+    "/money/": ("Money Calculators: EMI, Zakat, Profit | CalculatesAll", None),
+    "/math/": ("Math Calculators and Unit Converters | CalculatesAll", None),
+    "/time/": ("Date and Time Calculators: Age, Days | CalculatesAll", None),
+    "/worship/": ("Worship Tools: Online Tasbih Counter | CalculatesAll", None),
+}
+
+
 def normalize_meta(raw, path, lang):
     title_match = re.search(r"<title>(.*?)</title>", raw, re.S)
     desc_match = re.search(r'<meta name="description" content="([^"]*)"', raw)
@@ -126,6 +142,11 @@ def normalize_meta(raw, path, lang):
     if path == "/unit-converter/":
         title = "Unit Converter: cm to Inches, kg to lbs | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
+    # Search-intent titles and descriptions for pages whose generated wording was generic.
+    if path in SEO_OVERRIDES:
+        title, override_desc = SEO_OVERRIDES[path]
+        if override_desc:
+            desc = override_desc
     if path == "/tasbih-counter/":
         desc = "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app."
     if path == "/age-calculator/":
@@ -147,7 +168,7 @@ def normalize_meta(raw, path, lang):
     raw = re.sub(r"<title>.*?</title>", "<title>" + html.escape(title, quote=False) + "</title>", raw, count=1, flags=re.S)
     raw = re.sub(r'<meta name="description" content="[^"]*"', '<meta name="description" content="' + html.escape(desc, quote=True) + '"', raw, count=1)
     # Keep social previews aligned when these four SEO titles/descriptions are rewritten.
-    if path in {"/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/"}:
+    if path in {"/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/"} | set(SEO_OVERRIDES):
         for attr, name, value in (
             ("property", "og:title", title),
             ("property", "og:description", desc),

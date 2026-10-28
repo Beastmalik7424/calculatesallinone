@@ -1,10 +1,17 @@
 "use strict";
 const assert=require("node:assert/strict");
-const {percentage,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
+const {percentage,whatPercent,percentChange,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
 assert.equal(percentage(25,200),50);
 assert.equal(percentage(12.5,80),10);
 assert.equal(percentage(0,200),0);
 assert.throws(()=>percentage(10,Infinity));
+assert.equal(whatPercent(30,120),25);
+assert.equal(whatPercent(15,60),25);
+assert.throws(()=>whatPercent(5,0));
+assert.equal(percentChange(80,100),25);
+assert.equal(percentChange(100,80),-20);
+assert.equal(percentChange(-50,-25),50);
+assert.throws(()=>percentChange(0,10));
 assert.deepEqual(fraction(1,2,1,3,"add"),{n:5,d:6});
 assert.deepEqual(fraction(2,3,3,4,"multiply"),{n:1,d:2});
 assert.deepEqual(fraction(1,2,1,2,"subtract"),{n:0,d:1});
@@ -18,3 +25,10 @@ assert.equal(dateDifference("2026-01-01","2026-01-01"),0);
 assert.equal(dateDifference("2026-01-02","2026-01-01"),-1);
 assert.throws(()=>dateDifference("2026-02-29","2026-03-01"));
 console.log("Competitor calculator arithmetic and date regression: PASS");
+
+// Regression: Calculate button classes on extra pages must exist in compiled CSS (was invisible white-on-white).
+{
+  const css = require('fs').readFileSync(require('path').join(__dirname, '..', 'static', 'site.css'), 'utf8');
+  require('assert').ok(css.includes('.bg-sky-700'), 'bg-sky-700 missing from static/site.css; check tailwind content paths');
+  console.log('PASS: extra page button styles compiled');
+}

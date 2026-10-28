@@ -202,8 +202,9 @@ TOOLS = [
             ("Can I use this for children?", "No. This page covers adults. Children and teenagers are assessed with age and sex specific percentile charts."),
             ("Is BMI a diagnosis?", "No. It is a screening measure. Discuss your result with a doctor or qualified health professional."),
             ("What does 0 to 11.9 inches mean?", "Inches must be at least 0 and less than 12. For example, 5 ft 11 in is valid, while 5 ft 13 in is not."),
+            ("Are BMI ranges different for people from Pakistan, India or other Asian countries?", "This calculator uses the international WHO adult categories, where overweight starts at 25. A WHO expert consultation published in 2004 kept those categories for international use, but found that many Asian populations face a higher risk of type 2 diabetes and heart disease at lower BMI values, and identified 23 and 27.5 as additional points for public health action. If your BMI is between 23 and 25, it is reasonable to ask a doctor what that means for you."),
         ],
-        "sources": "Adult BMI categories follow the World Health Organization classification. The calculation uses the standard BMI formula.",
+        "sources": 'Adult BMI categories follow the World Health Organization classification. The calculation uses the standard BMI formula. Asian public health action points: <a class="' + LINK + '" href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(03)15268-3/fulltext" target="_blank" rel="noopener noreferrer">WHO expert consultation, The Lancet, 2004</a>.',
     },
     {
         "slug": "profit-loss-calculator",
@@ -328,6 +329,8 @@ TOOLS = [
         "faq": [
             ("Does it accept future dates?", "No. The date of birth must be today or earlier."),
             ("Does my time zone change the result?", "No. The calculator compares calendar dates, so the time of day does not change the result."),
+            ("How many years have passed from 1997 to 2026?", "29 years, because 2026 minus 1997 is 29. That is the count from a date in 1997 to the same date in 2026. Until that date arrives in 2026, only 28 full years have passed. People often search this as 1997 se 2026 tak kitne saal hue. Enter the exact date of birth above to get years, months and days."),
+            ("How do I count years between two years quickly?", "Subtract the earlier year from the later year. For example, 2026 minus 2008 is 18. Then check whether the anniversary date has been reached in the later year; if not, subtract one to get the number of completed years."),
         ],
         "sources": "Calendar arithmetic using the Gregorian calendar.",
     },
@@ -563,10 +566,10 @@ HUB_CONTENT = {
 }
 
 CATEGORIES = [
-    {"slug": "money", "name": "Money and Business", "desc": "Money calculators for EMI, Zakat, profit and loss, and discounts, with worked examples and clear limits for everyday decisions."},
+    {"slug": "money", "name": "Money and Business", "desc": "Money calculators for EMI, Zakat, compound interest, profit and loss, and discounts, with worked examples and clear limits for everyday decisions."},
     {"slug": "health", "name": "Health", "desc": "Calculate adult BMI in metric or imperial units, review WHO weight categories, and understand what the screening result cannot tell you."},
-    {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, and use a browser stopwatch for everyday timing with clear notes about date and timing limits."},
-    {"slug": "math", "name": "Math and Converters", "desc": "Use a standard calculator and convert weight, length and temperature with validation for invalid or physically impossible values."},
+    {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, count days between dates, convert years to days, and time tasks with a browser stopwatch."},
+    {"slug": "math", "name": "Math and Converters", "desc": "Use a standard and scientific calculator, work out percentages and fractions, and convert weight, length and temperature with clear validation."},
     {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
 ]
 
@@ -854,7 +857,9 @@ TOOLS.extend([
             ("Reading the results", ["Hours, minutes and seconds are derived from the selected number of days, not from an assumed start time. Decimal years can produce fractional days and seconds. The calculator shows up to eight decimal places for readability. Rounding the displayed value does not change the internal conversion factor. For example, 1.5 simple years is 547.5 days, which is 78.21428571 weeks and 13,140 hours. For a calendar-specific result, select real start and end dates instead of assuming every year is equal."])
         ],
         "faq": [("How many days are in 80 years?", "29,200 with the simple method, or 29,219.4 with the Gregorian-average method."),
-                ("Does this account for leap years?", "The average method includes leap-year frequency statistically. Exact dates require a start date.")],
+                ("Does this account for leap years?", "The average method includes leap-year frequency statistically. Exact dates require a start date."),
+                ("How many days are in one year?", "A common year has 365 days and a leap year has 366. Averaged over the 400-year Gregorian cycle, one year is 365.2425 days."),
+                ("How many days are in 10 years?", "3,650 days with the simple 365-day method, or 3,652.425 with the Gregorian average. A real 10-year calendar span contains two or three leap days, so it is 3,652 or 3,653 days depending on the start date. For example, 1 January 2020 to 1 January 2030 is 3,653 days.")],
         "sources": "Gregorian mean year: 365.2425 days over the 400-year Gregorian calendar cycle."
     },
     {
