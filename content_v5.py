@@ -148,6 +148,29 @@ GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
     ])
 )
 
+# Distinctive, query-matched explanations benchmarked against calculator competitors.
+# Keep one canonical page per intent and explain assumptions instead of duplicating pages.
+GUIDE_EXTRA["years-to-days-calculator"].append(
+    ("365 days versus 365.2425 days per year", [
+        "A fixed 365-day year is useful for simple arithmetic. The 365.2425-day Gregorian mean reflects the complete 400-year leap-year cycle: (400 x 365 + 97) / 400 = 365.2425. Some converters use 365.25, a four-year approximation. The methods are not identical over very long durations.",
+        "For 13 years, the simple result is 4,745 days, while the Gregorian-average result is 4,748.1525 days. Neither value establishes the exact number of days between two calendar anniversaries without a start date. Use the date difference tool for that question.",
+        "A day count of 800,000 divided by 365.2425 gives approximately 2,190.33 years. Always state which year length you selected when comparing conversion results from different sites.",
+    ])
+)
+GUIDE_EXTRA["profit-loss-calculator"].append(
+    ("Profit margin versus markup: practical comparison", [
+        "Profit is selling price minus cost. Margin uses selling price as its denominator; markup uses cost. On a cost of 60 and a price of 100, profit is 40, margin is 40%, and markup is about 66.67%. Calling both percentages profit percentage without naming the base can mislead buyers.",
+        "For a target 20% margin with a cost of 800, the required selling price is 800 / (1 - 0.20) = 1,000 before other charges. A 20% markup would instead give 800 x 1.20 = 960, with a margin of about 16.67%. This distinction matters when pricing products.",
+        "These calculations describe a gross item-level result unless all relevant costs are included. Returns, marketplace commissions, shipping, tax treatment and overhead can change net profitability.",
+    ])
+)
+GUIDE_EXTRA["tasbih-counter"].append(
+    ("Choosing the right online tasbeeh counter", [
+        "A useful digital tasbih counter should make the increment action easy to reach on a phone, show the current count clearly, and allow an accidental press to be undone. A visible target and remaining count can help when tracking a personal routine.",
+        "Tasbih, tasbeeh and zikr counter are common ways to describe this same counting task. The page uses one functioning counter rather than multiple nearly identical keyword pages. Count tracking is not a statement about prescribed religious repetitions.",
+    ])
+)
+
 HOME_EXTRA = {
     "en": {
         "heading": "What can you calculate with these free tools?",
