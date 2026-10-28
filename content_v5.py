@@ -202,7 +202,7 @@ TRUST_EXTRA = {
         "We do not sell your data and we do not run accounts. If the site shows advertising, the advertising partner follows its own policies, which are described on the privacy page.",
     ],
     "/contact": [
-        "Use this address for corrections, feedback, accessibility problems and Urdu translation fixes. Please include the tool name, the inputs you used and the result you expected.",
+        "Use this address for corrections, feedback, accessibility problems and Urdu translation fixes.",
         "We read every message. Confirmed formula or content errors are corrected on the affected tool page.",
     ],
     "/methodology": [
