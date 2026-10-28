@@ -1049,7 +1049,7 @@ LANG_LOCALE = {"en": "en_US", "ur": "ur_PK", "ar": "ar_AR", "hi": "hi_IN", "es":
 RTL_LANGS = ("ur", "ar")
 SHELL_EN = {"menu": "All tools", "skip": "Skip to content", "about": "About", "privacy": "Privacy", "contact": "Contact",
             "methodology": "Methodology", "editorial": "Editorial policy", "tag": "© CalculatesAll. Free tools that run in your browser.",
-            "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Affiliate disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE", "discount": "Discount Calculator", "health_link": "Health"}
+            "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Advertising disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE", "discount": "Discount Calculator", "health_link": "Health"}
 SHELL_UR = {"menu": "تمام ٹولز", "skip": "مرکزی مواد پر جائیں", "about": "ہمارے بارے میں", "privacy": "رازداری", "contact": "رابطہ",
             "methodology": "طریقہ کار", "editorial": "ادارتی پالیسی", "tag": "© CalculatesAll۔ مفت ٹولز جو آپ کے براؤزر میں چلتے ہیں۔",
             "theme": "ڈارک موڈ", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت", "discount": "ڈسکاؤنٹ کیلکولیٹر", "health_link": "صحت"}
@@ -1112,7 +1112,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         '<title>' + title + '</title>\n'
         '<meta name="description" content="' + desc + '">\n'
         '<meta name="robots" content="' + robots + '">\n'
-        '<link rel="canonical" href="' + url + '">\n'
+        + ('' if path == "/404" else '<link rel="canonical" href="' + url + '">\n')
         + alt
         + '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">\n'
         '<meta property="og:type" content="website">\n'
@@ -1212,7 +1212,6 @@ def shell(main_html, lang="en", current_path=None):
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/methodology/">' + s["methodology"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/editorial-policy/">' + s["editorial"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/terms/">' + s["terms"] + '</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/marketplaces/">' + s["marketplace"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">' + s["affiliate"] + '</a>'
         '</nav></div>'
         + lang_links(lang, s, current_path) +
@@ -1317,8 +1316,8 @@ ANSWER_BLOCKS = {
         "ur": 'عام ترتیبِ عملیات کے مطابق 2 + 3 × 4 کا جواب 14 ہے، کیونکہ جمع سے پہلے ضرب کی جاتی ہے۔ ماخذ: <a class="' + LINK + '" href="https://www.khanacademy.org/math/arithmetic/arith-review-negative-numbers/arith-review-order-of-operations/a/order-of-operations-review" target="_blank" rel="noopener noreferrer">Khan Academy کی ترتیبِ عملیات</a>۔'
     },
     "tasbih-counter": {
-        "en": 'Each tap adds one count, so 33 deliberate taps produce a displayed count of 33 if the counter starts at zero. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll tool methodology</a>.',
-        "ur": 'ہر دبانے سے گنتی میں ایک کا اضافہ ہوتا ہے، اس لیے صفر سے شروع کر کے 33 بار دبانے پر گنتی 33 ہو گی۔ ماخذ: <a class="' + LINK + '" href="/methodology/">CalculatesAll کا طریقۂ کار</a>۔'
+        "en": 'Each tap adds exactly one to the count, so starting from zero, 33 taps show 33. The target, undo and reset controls never change a count without a tap or your confirmation.',
+        "ur": 'ہر دبانے سے گنتی میں ٹھیک ایک کا اضافہ ہوتا ہے، اس لیے صفر سے شروع کر کے 33 بار دبانے پر گنتی 33 ہو گی۔'
     },
     "stopwatch": {
         "en": 'One second contains 1,000 milliseconds, the unit commonly used for sub-second timing displays. Source: <a class="' + LINK + '" href="https://www.nist.gov/pml/owm/metric-si/si-units" target="_blank" rel="noopener noreferrer">NIST SI units</a>.',
@@ -1457,7 +1456,6 @@ def tool_page(t):
         + ad_slot()
         + '<h2 class="' + H2 + '">How it is calculated</h2>'
         + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
-        + '<h2 class="' + H2 + '">Rules and limits</h2>'
         + guide_html(guide)
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
@@ -1980,18 +1978,21 @@ def main():
             "Religious and health tools state their limits on the page. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
         ]),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
-            "Calculator inputs are processed in your browser. We do not send them to our server.",
-            "The tasbih counter and the stopwatch do not send data anywhere. The tasbih counter keeps its count in local storage on your device. You can clear this from your browser settings.",
-            "CalculatesAll does not run its own analytics or user accounts. Ad slots are currently disabled. When a publisher ID is configured, a lightweight AdSense ownership meta tag is present in the page head. The external AdSense JavaScript is not loaded while ad units are disabled. If Google ad units are enabled, Google and other third-party vendors may use cookies, web beacons, IP addresses, cookie identifiers and browsing activity to serve, measure or personalize ads. Third-party vendors, including Google, may use cookies to serve ads based on a user's prior visits to this website or other websites. Read <a href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>How Google uses information from sites or apps that use its services</a> and the <a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer'>Google Privacy Policy</a>. You can review or change Google's personalized advertising settings at <a href='https://adssettings.google.com/' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>, and learn about industry opt-out choices at <a href='https://optout.aboutads.info/' target='_blank' rel='noopener noreferrer'>YourAdChoices</a>. Available opt-out choices may not disable all advertising; they may affect personalization only.",
-            "For personalized ads to users in the EEA, UK or Switzerland, publishers must configure a Google-certified consent management platform (CMP) integrated with the IAB Transparency and Consent Framework where required. Applicable consent and privacy requirements must be reviewed before enabling ads. See <a href='https://support.google.com/adsense/answer/13554116' target='_blank' rel='noopener noreferrer'>Google's consent requirements</a>. The site cannot independently verify account-side CMP settings.",
-            "No Google ads are served unless a real publisher ID, ad-unit slot and the explicit ADSENSE_CONSENT_READY=true deployment setting are present. Set that flag only after the relevant AdSense account-side consent configuration has been set up and tested. It is a safeguard, not proof of compliance. The build publishes /ads.txt only when a valid publisher ID is configured, using the exact ID supplied by the site owner.",
-            "If approved affiliate links are added in the future, a marketplace may use cookies or similar tracking to attribute qualifying purchases. Any active affiliate relationship will be disclosed on the affiliate-disclosure page and near the relevant link.",
-            "Google's use of data is described at policies.google.com. Contact " + CONTACT_EMAIL + " with privacy questions.",
+            "This policy explains what information CalculatesAll handles when you use the website. It applies to every page on calculateallinone.vercel.app.",
+            "<strong>Calculator entries.</strong> The numbers and dates you type into a calculator are processed by JavaScript in your own browser. They are not sent to our server and we do not keep a copy of them.",
+            "<strong>Data stored on your device.</strong> The tasbih counter saves your current count, chosen phrase and target in your browser's local storage, and the dark-mode setting is saved the same way. This information stays on your device. You can remove it at any time by clearing this site's data in your browser settings.",
+            "<strong>No accounts or analytics.</strong> CalculatesAll does not offer user accounts, does not run its own analytics and does not sell personal information. Like most websites, our hosting provider (Vercel) may process technical request data such as IP address, browser type and the page requested in order to deliver and secure the site.",
+            "<strong>Advertising and cookies.</strong> CalculatesAll may show advertising served by Google AdSense. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet. Google and its partners may also use web beacons, IP addresses and device identifiers to measure and protect advertising. Read <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>how Google uses information from sites that use its services</a> and the <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/ads' target='_blank' rel='noopener noreferrer'>Google advertising technologies page</a>.",
+            "<strong>Your choices.</strong> You can opt out of personalised advertising by visiting <a class='underline text-sky-800 dark:text-sky-300' href='https://adssettings.google.com/' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>. You can also opt out of some third-party vendors' use of cookies for personalised advertising at <a class='underline text-sky-800 dark:text-sky-300' href='https://www.aboutads.info/choices/' target='_blank' rel='noopener noreferrer'>www.aboutads.info</a>. Opting out stops personalised ads; you may still see non-personalised ads. You can also block or delete cookies in your browser settings.",
+            "<strong>Visitors in the EEA, UK and Switzerland.</strong> Where the law requires it, you will be asked for consent through a Google-certified consent message before personalised advertising cookies are used, and you can change your choice later.",
+            "<strong>Children.</strong> CalculatesAll is a general-audience website. It is not directed at children under 13 and we do not knowingly collect personal information from children.",
+            "<strong>External links.</strong> Some pages link to official sources such as the World Health Organization or NIST. Those websites have their own privacy policies.",
+            "<strong>Changes and contact.</strong> If this policy changes, the updated version will be published on this page. For privacy questions, email <a class='underline text-sky-800 dark:text-sky-300' href='mailto:" + CONTACT_EMAIL + "'>" + CONTACT_EMAIL + "</a>.",
         ]),
         ("/methodology/", "How Our Calculations Work | CalculatesAll", "See the formulas, conversion factors, worked examples and limitations used by CalculatesAll calculators and reference tools.", "How Our Calculations Work", [
             "Each tool uses a published formula. Zakat uses the silver Nisab of 612.36 grams. BMI uses the standard formula with WHO adult categories. Profit, discount, age and unit conversions use standard arithmetic and fixed conversion factors.",
             "Every tool page states its assumptions and limits. When a rule depends on a school of law or a clinical judgement, the page says so and points to a qualified professional.",
-            "If you find a formula error, email " + CONTACT_EMAIL + " with the tool name and the inputs. We correct confirmed errors and show the update date on the tool page.",
+            "If you find a formula error, email " + CONTACT_EMAIL + " with the tool name and the inputs. We check the report, correct confirmed errors on the tool page and reply to let you know.",
         ]),
         ("/editorial-policy/", "Editorial Policy | CalculatesAll", "Learn how CalculatesAll researches, checks, updates and corrects its calculator guides, formulas and reference information.", "Editorial Policy", [
             "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Numbers in worked examples are checked with a calculation before publication.",
@@ -1999,20 +2000,12 @@ def main():
             "A last-updated date is shown only when a substantive page update is tracked. We name sources where they support a claim, and we correct confirmed errors when reported or discovered. We do not label a page as independently reviewed unless that review has taken place.",
         ]),
         ("/terms/", "Terms of Use | CalculatesAll", "Read the terms for using CalculatesAll free calculators, including accuracy limits, professional-advice disclaimers and permitted use.", "Terms of Use", TERMS_PARAS),
-        ("/marketplaces/", "Marketplace and Monetization Guide | CalculatesAll", "Official marketplace resources for distributing digital downloads and exploring compliant website monetization.", "Marketplace and Monetization Guide", [
-            "This page is a setup guide, not a claim that CalculatesAll products are already listed on these marketplaces. Each marketplace requires its own account, product listing, payout setup and policy review.",
-            'For digital downloads, read <a class="underline text-sky-800" href="https://www.etsy.com/ca/seller-handbook/article/47330319230" target="_blank" rel="noopener noreferrer">Etsy’s official digital-download guide</a>. For selling downloadable products directly, review <a class="underline text-sky-800" href="https://gumroad.com/features" target="_blank" rel="noopener noreferrer">Gumroad’s creator features</a>.',
-            'For a retail marketplace, review <a class="underline text-sky-800" href="https://www.daraz.pk/sell/" target="_blank" rel="noopener noreferrer">Daraz seller registration</a>. For product referral commissions, see <a class="underline text-sky-800" href="https://affiliate-program.amazon.com/" target="_blank" rel="noopener noreferrer">Amazon Associates</a>, <a class="underline text-sky-800" href="https://partnernetwork.ebay.com/" target="_blank" rel="noopener noreferrer">eBay Partner Network</a> and <a class="underline text-sky-800" href="https://www.etsy.com/ca/legal/affiliates/" target="_blank" rel="noopener noreferrer">Etsy’s affiliate programme</a>. Acceptance, geographic eligibility and payout rules vary by programme.',
-            "Do not describe a normal marketplace link as an affiliate link. Commission tracking is only active after approval and after the correct tracking link or ID is supplied. No marketplace listing or affiliate account is created by this website build.",
-            "Website advertising is not enabled by this page. The owner has configured the publisher ID supplied in their AdSense account, and the build publishes the matching ads.txt entry. Ad slots remain disabled until a real ad-unit slot ID and required consent configuration are confirmed.",
-            "The calculators remain free to use. Any future paid download should be an original, clearly described product such as a spreadsheet, printable worksheet or source-code package, not a claim that the online calculator itself has been uploaded to a marketplace.",
-        ]),
-        ("/affiliate-disclosure/", "Affiliate Disclosure | CalculatesAll", "How affiliate links and commissions will be disclosed on CalculatesAll.", "Affiliate Disclosure", [
-            "At the time this page was generated, no active marketplace affiliate IDs or tracking links were configured on CalculatesAll. The ordinary official links on the marketplace guide do not earn a commission merely because they are present.",
-            "If affiliate links are added later, they will be clearly identified near the relevant link. CalculatesAll may earn a commission from qualifying purchases without increasing the buyer’s price, subject to the relevant programme’s rules.",
-            "Affiliate relationships do not change calculator formulas or the result shown by a tool. We will not invent ratings, prices, endorsements or product availability.",
-            "Amazon Associates participants must use the disclosure required by Amazon, including the statement: ‘As an Amazon Associate I earn from qualifying purchases.’ This statement must only be used if the site is actually accepted into the Amazon Associates programme.",
-            'Questions about this disclosure can be sent to <a class="underline text-sky-800" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
+        ("/affiliate-disclosure/", "Advertising Disclosure | CalculatesAll", "How CalculatesAll is funded, how advertising is labelled and why ads never change calculator results.", "Advertising and Affiliate Disclosure", [
+            "CalculatesAll is free to use. The site may be supported by advertising served by Google AdSense. Ads are shown in clearly separated areas and are never disguised as calculator results, buttons or navigation.",
+            "CalculatesAll does not currently use affiliate links. If affiliate links are added in the future, they will be clearly labelled next to the link and explained on this page.",
+            "Advertising does not influence how any tool works. Formulas, worked examples and results are the same for every visitor, and advertisers cannot pay to change them.",
+            "We do not publish paid reviews, invented ratings or sponsored content presented as editorial content.",
+            'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
         ]),
         ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
             'For corrections, feedback or questions about a tool, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
@@ -2037,7 +2030,12 @@ def main():
         raise SystemExit("Required emi-calculator.html source file is missing")
     emi_output = os.path.join(OUT, "emi-calculator")
     os.makedirs(emi_output, exist_ok=True)
-    shutil.copy2(emi_source, os.path.join(emi_output, "index.html"))
+    with open(emi_source, encoding="utf-8") as f:
+        emi_html = f.read()
+    if ADSENSE_CLIENT and 'name="google-adsense-account"' not in emi_html:
+        emi_html = emi_html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="google-adsense-account" content="' + html.escape(ADSENSE_CLIENT, quote=True) + '">', 1)
+    with open(os.path.join(emi_output, "index.html"), "w", encoding="utf-8") as f:
+        f.write(emi_html)
     # Preserve the Google Search Console HTML ownership token in Vercel output.
     # The repo root is not deployed because Vercel publishes only the public/ directory.
     google_verification = "google2e764d068684499b.html"
