@@ -883,7 +883,10 @@ TOOLS.extend([
         "sources": "Fixed conversion factors: 1 day = 24 hours, 1 hour = 60 minutes, 1 minute = 60 seconds; simple year = 365 days."
     }
 ])
-EXTRA.update({slug: {"faq": [], "quick": ""} for slug in ("years-to-days-calculator", "query-calculator")})
+EXTRA.update({
+    "years-to-days-calculator": {"faq": [], "quick": "Days equal years multiplied by 365 for the simple method, or by 365.2425 for the Gregorian average. Example: 12 x 365 = 4,380 days."},
+    "query-calculator": {"faq": [], "quick": "Each question is converted in steps using fixed factors. Example: 2 weeks to hours = 2 x 7 x 24 = 336 hours."},
+})
 
 for _t in TOOLS:
     _t["guide"] = _t["guide"] + GUIDE_EXTRA.get(_t["slug"], [])
