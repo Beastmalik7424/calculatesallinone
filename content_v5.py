@@ -145,7 +145,7 @@ GUIDE_EXTRA["years-to-days-calculator"] = [
         "Minutes: 105,120 x 60 = 6,307,200 minutes. Seconds: 6,307,200 x 60 = 378,432,000 seconds.",
     ]),
     ("Checking a result", [
-        "Divide the day count by 365 for the simple method. 4,380 / 365 = 12. For the Gregorian method, divide by 365.2425. 4,382.91 / 365.2425 = 12. These divisions confirm the result without a calculator app.",
+        "Divide the day count by 365 for the simple method. 4,380 / 365 = 12. For the Gregorian method, divide by 365.2425. 4,382.91 / 365.2425 = 12. Repeating these divisions confirms the result by hand.",
         "Fractional years work the same way. 0.5 x 365 = 182.5 days in the simple method, which is 182 days and 12 hours, because 0.5 x 24 = 12 hours.",
     ]),
 ]
@@ -158,7 +158,7 @@ GUIDE_EXTRA["stopwatch"].append(
 GUIDE_EXTRA["tasbih-counter"].append(
     ("Worked example", [
         "Target 99 is reached after 99 presses. Three rounds of 33 presses give 3 x 33 = 99 presses, which matches the target. If you select a target of 100 instead, 100 - 99 = 1 more press is needed after the first 99.",
-        "The counter stores the count on this device only. It does not check which phrase you recited, so the worked example describes presses, not the number of recitations you intended.",
+        "The count stays on this device when browser storage is available. The counter records presses, not the phrases you recited, so the worked example counts presses only.",
     ])
 )
 
