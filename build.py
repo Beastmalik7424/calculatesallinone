@@ -1374,7 +1374,7 @@ def tool_page(t):
         title = "BMI Calculator for Adults | cm or ft/in | CalculatesAll"
         desc = "Calculate adult BMI using kilograms and centimetres or kilograms with feet and inches. See WHO adult BMI ranges and their limitations."
         ui = BMI_UI
-        guide = BMI_GUIDE
+        guide = BMI_GUIDE + GUIDE_EXTRA.get(t["slug"], [])
         faqs = BMI_FAQ
         sources = BMI_SOURCES
     elif t["slug"] == "profit-loss-calculator":
