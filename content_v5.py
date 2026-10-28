@@ -126,6 +126,28 @@ GUIDE_EXTRA = {
     ],
 }
 
+# Search Console query-specific worked examples. These complement existing tools;
+# they do not create near-duplicate landing pages for the same search intent.
+GUIDE_EXTRA["profit-loss-calculator"].append(
+    ("Profit loss calculator: cost versus selling price", [
+        "Example: A product costs 800 and sells for 1,000. Profit = 1,000 - 800 = 200. Profit on cost = (200 / 800) x 100 = 25%. Profit margin on revenue = (200 / 1,000) x 100 = 20%. The two percentages use different denominators.",
+        "If the selling price is 700 instead, loss = 800 - 700 = 100 and loss percentage on cost = (100 / 800) x 100 = 12.5%. Enter the total cost, including relevant direct expenses, rather than the purchase price alone when you need a realistic business estimate.",
+    ])
+)
+GUIDE_EXTRA["tasbih-counter"].append(
+    ("Tasbih calculator and digital zikr counter example", [
+        "For a personal target of 99 presses, three sets of 33 presses make 3 x 33 = 99. If you have already counted 67 presses, 99 - 67 = 32 presses remain. This is a counting example, not a ruling about how many repetitions are required.",
+        "Use the same counter for tasbih, tasbeeh or zikr. Alternate spellings describe the same counting task, so a separate near-identical page is not needed.",
+    ])
+)
+GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
+    ("Years and months in days: interpreting search questions", [
+        "For 29 years, the simple conversion is 29 x 365 = 10,585 days. Using the Gregorian average gives 29 x 365.2425 = 10,592.0325 days. The exact calendar-day total depends on the start and end dates.",
+        "For 3 years and 2 months, there is no single exact number of days without calendar dates: months contain 28, 29, 30 or 31 days. Enter the actual dates in the date difference calculator for an exact Gregorian calendar interval.",
+        "To convert 800,000 days into approximate years, divide by the chosen year length: 800,000 / 365 = about 2,191.78 simple years, or 800,000 / 365.2425 = about 2,190.33 Gregorian-average years. This is a duration conversion, not a birth-date calculation.",
+    ])
+)
+
 HOME_EXTRA = {
     "en": {
         "heading": "What can you calculate with these free tools?",
