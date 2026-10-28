@@ -1451,7 +1451,8 @@ header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
 
 /* Very small phones (320px): keep header on one line without horizontal scroll */
 @media (max-width: 359px) {
-  header nav { padding-left: 8px !important; padding-right: 8px !important; }
+  header nav { padding-left: 8px !important; padding-right: 8px !important; flex-wrap: wrap !important; row-gap: 4px !important; }
+  header nav > div { margin-left: auto; }
   header #theme-toggle { padding-left: 8px !important; padding-right: 8px !important; }
   header details > summary { padding-left: 4px !important; padding-right: 4px !important; }
 }
