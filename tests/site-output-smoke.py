@@ -742,3 +742,25 @@ assert "approximately 5 km, not exactly 5 km" in _unit_quality, "Rounded reverse
 for _fact in ("12 inches equals 30.48 centimetres", "10 pounds equals 4.5359237 kilograms", "25 degrees Celsius equals 77 degrees Fahrenheit"):
     assert _fact in _unit_quality, "Missing checkable conversion example: " + _fact
 assert "gives back 5 kilometres" not in _unit_quality, "Misleading exact round-trip claim remains"
+
+
+# Editorial content regression checks for approved four-page guide updates.
+from content_v5 import GUIDE_EXTRA
+for slug, phrases in {
+    "bmi-calculator": ["22.8571", "18.5 to below 25", "not a diagnosis"],
+    "zakat-calculator": ["PKR 153,090", "PKR 16,250", "not a religious ruling"],
+    "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
+}.items():
+    guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA[slug] for paragraph in paragraphs)
+    for phrase in phrases:
+        assert phrase.lower() in guide.lower(), (slug, phrase)
+emi_guide = (ROOT / "emi-calculator" / "index.html").read_text(encoding="utf-8")
+for phrase in ("PKR 36,152.40", "PKR 1,301,486.24", "PKR 1,301,486.40", "PKR 301,486.24", "PKR 0.16 difference"):
+    assert phrase in emi_guide, phrase
+assert "PKR 36,153" not in emi_guide
+
+# Regression: the specialized BMI template must include the supplemental editorial guide.
+_bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
+assert "BMI formula and worked example" in _bmi_html, "BMI supplemental guide missing from generated page"
+assert "22.8571" in _bmi_html and "22.9" in _bmi_html, "BMI 70 kg / 1.75 m example missing"
+assert "BMI questions and mistakes" in _bmi_html, "BMI supplemental FAQ guide missing"

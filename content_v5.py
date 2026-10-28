@@ -29,6 +29,14 @@ GUIDE_EXTRA = {
             "The hawl is one lunar year, which is about 354 days. It starts from the date your wealth first reached Nisab and stays above it.",
             "If your wealth falls below Nisab during the year, the count usually restarts once it rises above Nisab again. Keep a dated record of your balances to make this easier to check.",
         ]),
+        ("Zakat arithmetic and worked example", [
+            "For commonly zakatable wealth, the calculation is 2.5% of net zakatable wealth when the applicable Nisab and lunar-year requirements are met. This tool uses a silver-based Nisab of 612.36 grams multiplied by the entered silver price per gram. A gold-based reference sometimes used is 87.48 grams; the applicable basis depends on scholarly guidance.",
+            "Example: PKR 500,000 savings + PKR 200,000 precious metals + PKR 100,000 trading inventory = PKR 800,000 gross assets. After PKR 150,000 qualifying debts, net wealth is PKR 650,000. At PKR 250 per gram of silver, Nisab = 612.36 × 250 = PKR 153,090. The arithmetic gives Zakat = 650,000 × 0.025 = PKR 16,250.",
+        ]),
+        ("Zakat limitations and common questions", [
+            "Only deduct debts qualifying under the method you follow; treatment of near-term instalments, mortgages and other liabilities varies. Do not assume all long-term debt is deductible. Check current valuations, Nisab basis and lunar-year timing.",
+            "Is Zakat always 2.5%? Not for every asset category. Is a primary home zakatable? A home used as a residence is generally treated differently from trading inventory, but circumstances vary. This is a calculation aid, not a religious ruling. Consult a qualified scholar. Reference: https://islamic-relief.org/news/how-to-calculate-and-pay-zakat/",
+        ]),
     ],
     "bmi-calculator": [
         ("Why BMI is used", [
@@ -42,6 +50,14 @@ GUIDE_EXTRA = {
         ("How to measure correctly", [
             "Weigh yourself in the morning, after using the toilet and before eating, in light clothing. Measure height without shoes, standing straight against a flat wall.",
             "Round your height to the nearest millimetre or sixteenth of an inch, and check that you entered the correct units before reading the result.",
+        ]),
+        ("BMI formula and worked example", [
+            "For adults, BMI = weight in kilograms divided by height in metres squared. For 70 kg and 1.75 m, BMI = 70 / (1.75 × 1.75) = 22.8571, displayed as 22.9.",
+            "WHO adult screening thresholds: underweight below 18.5; normal weight 18.5 to below 25; overweight 25 to below 30; obesity 30 or above. These categories are not a diagnosis. Children require age- and sex-specific references. Reference: https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
+        ]),
+        ("BMI questions and mistakes", [
+            "Do not confuse centimetres and metres or use adult categories for children. Standard adult categories are not appropriate for assessing weight during pregnancy. Athletes may have high BMI due to muscle.",
+            "Is BMI a body-fat test? No. Does the formula differ by sex? No, but clinical interpretation depends on more than BMI. Seek qualified clinical advice for individual health decisions.",
         ]),
     ],
     "profit-loss-calculator": [
@@ -68,6 +84,15 @@ GUIDE_EXTRA = {
         ]),
         ("Using discounts for pricing", [
             "To find the price that gives a target final price, divide the target by one minus the discount rate. For a 20 percent discount and a target of 800, the original price is 800 divided by 0.8, which is 1,000.",
+        ]),
+        ("Single discount worked example", [
+            "Discount amount = original price × discount percentage / 100. On PKR 4,500 at 20% off, the saving is PKR 900 and the final price is PKR 3,600. Check taxes and delivery separately.",
+        ]),
+        ("Reverse discount worked example", [
+            "Original price = sale price / (1 - discount rate). A PKR 3,600 sale price after 20% off represents 80% of the original price, so 3,600 / 0.80 = PKR 4,500. The formula requires a discount below 100%.",
+        ]),
+        ("Successive discounts worked example", [
+            "On PKR 4,500, a 20% discount gives PKR 3,600; a further 10% gives PKR 3,240. The saving is PKR 1,260, or 28% of the original price, not 30%. Do not add successive percentage discounts. Two successive 50% reductions leave 25% of the original price.",
         ]),
     ],
     "age-calculator": [
