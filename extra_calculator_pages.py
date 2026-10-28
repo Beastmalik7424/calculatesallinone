@@ -2,16 +2,16 @@
 import html
 
 PAGES = [
- ("percentage-calculator","Percentage Calculator","Calculate a percentage of any number instantly. Enter the percentage and the base value to see the exact arithmetic result.",[("value","Percentage (%)","number"),("total","Number","number")],"What is 25% of 200? Enter 25 and 200 to get 50. Formula: percentage divided by 100, multiplied by the number."),
+ ("percentage-calculator","Percentage Calculator","Work out X% of a number, what percent one number is of another, or the percentage change between two values.",[("value","Percentage (%)","number"),("total","Number","number")],"X% of Y = X divided by 100, multiplied by Y. For example, 25% of 200 is 50. X as a percent of Y = X divided by Y, multiplied by 100, so 30 out of 120 is 25%. Percentage change = (new value minus old value) divided by old value, multiplied by 100, so 80 to 100 is a 25% increase."),
  ("fraction-calculator","Fraction Calculator","Add, subtract, multiply and divide two fractions. Get a simplified fraction result with a positive denominator.",[("a","First numerator","number"),("b","First denominator","number"),("c","Second numerator","number"),("d","Second denominator","number")],"For addition, a/b + c/d = (ad + bc)/bd. Fractions are reduced to lowest terms."),
  ("compound-interest-calculator","Compound Interest Calculator","Estimate compounded investment growth from principal, annual rate, time and compounding frequency with clear formulas.",[("principal","Starting amount","number"),("rate","Annual interest rate (%)","number"),("years","Years","number"),("frequency","Compounding times per year (1 to 365)","number")],"Formula: A = P × (1 + r/n)^(nt). Rates are entered as annual percentages. This estimate excludes fees, taxes and additional deposits."),
- ("date-calculator","Date Difference Calculator","Find the signed number of calendar days between two dates using the Gregorian calendar, including leap years.",[("start","Start date","date"),("end","End date","date")],"The result is end date minus start date in full calendar days. It does not count the starting day."),
+ ("date-calculator","Days Between Dates Calculator","Find how many days are between two dates, how many days are left until a date, or how many have passed since one. Leap years are included.",[("start","Start date","date"),("end","End date","date")],"The result is end date minus start date in full calendar days. It does not count the starting day."),
 ]
 
 
 GUIDES = {
 "percentage-calculator": [
-"Percentages express a part of a hundred. When you enter 25 as the percentage and 200 as the number, the calculator multiplies 200 by 25 and divides by 100. The result is 50. This operation answers what a percentage of a number is. It is different from finding what percentage one number represents of another. For that reverse question, divide the part by the total and multiply by 100, provided the total is not zero.",
+"Percentages express a part of a hundred, and this calculator answers three different questions. X% of a number: 25% of 200 is 200 multiplied by 25 and divided by 100, which is 50. X as a percent of Y: 30 out of 120 is 30 divided by 120, multiplied by 100, which is 25%. Percentage change: moving from 80 to 100 is a change of 20 on a starting value of 80, which is a 25% increase. The second and third questions need a starting value that is not zero, because dividing by zero has no answer.",
 "Use this calculation to estimate a discount amount before subtracting it from the original price. For example, a 15 percent discount on 80 is 12, so the reduced price is 68. For a tax amount, add the percentage amount instead of subtracting it. If an item costs 80 before a 15 percent tax, the tax is 12 and the total is 92. Always check whether the advertised percentage applies to the original amount or to a previously adjusted amount.",
 "A percentage increase and a percentage decrease are not interchangeable. If a price rises by 20 percent and then falls by 20 percent, the final price is not the original price. Starting from 100, the increase gives 120 and the subsequent decrease gives 96. The second percentage is calculated using 120 as its base. For sequential changes, apply each percentage to the latest amount rather than adding the percentages together.",
 "Enter finite numeric values, including decimals where needed. Negative percentages produce negative results, which can be meaningful for a signed adjustment but may not describe a normal retail discount. Very large numbers may lose decimal precision because browsers use standard floating-point arithmetic. For financial settlement or tax filing, verify the rounding policy required by your jurisdiction. This tool is a quick arithmetic aid rather than an official tax determination."
@@ -36,14 +36,66 @@ GUIDES = {
 ]
 }
 
+
+# Search-intent structure for each page: H1, category hub, section headings for GUIDES paragraphs, FAQs.
+META = {
+"percentage-calculator": {
+ "h1": "Percentage Calculator", "cat": ("math", "Math and Converters"), "app": "UtilitiesApplication",
+ "headings": ["Three percentage questions", "Discounts and tax", "Percentage increase and decrease", "Input and rounding limits"],
+ "faq": [
+  ("What is 25% of 200?", "50. Multiply 200 by 25 and divide by 100."),
+  ("What percent is 30 of 120?", "25%. Divide 30 by 120 to get 0.25, then multiply by 100."),
+  ("How do I calculate a percentage increase?", "Subtract the old value from the new value, divide by the old value and multiply by 100. From 80 to 100 is (100 minus 80) divided by 80, which is a 25% increase."),
+  ("Why is a fall from 100 to 80 only 20% when a rise from 80 to 100 is 25%?", "Each change is measured against its own starting value. The rise is 20 out of 80, and the fall is 20 out of 100."),
+ ],
+},
+"fraction-calculator": {
+ "h1": "Fraction Calculator", "cat": ("math", "Math and Converters"), "app": "UtilitiesApplication",
+ "headings": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero", "Large numbers and decimals"],
+ "faq": [
+  ("What is 1/2 + 1/3?", "5/6. Cross-multiply to get 3/6 + 2/6, then add the numerators."),
+  ("What is 1/2 minus 1/3?", "1/6. With the common denominator 6, the fractions are 3/6 and 2/6, and 3 minus 2 is 1."),
+  ("How do I divide fractions?", "Multiply the first fraction by the reciprocal of the second. For example, 3/4 divided by 1/2 is 3/4 times 2/1, which is 6/4 and simplifies to 3/2."),
+  ("Can I enter decimals?", "No. Enter whole-number numerators and denominators. Convert a decimal first, for example 0.75 is 3/4."),
+ ],
+},
+"compound-interest-calculator": {
+ "h1": "Compound Interest Calculator", "cat": ("money", "Money and Business"), "app": "FinanceApplication",
+ "headings": ["Compound interest formula", "Worked example", "What the estimate leaves out", "Choosing the compounding frequency"],
+ "faq": [
+  ("How much is 1,000 at 12% compounded monthly for one year?", "About 1,126.83. Each month earns 1%, so the amount is 1,000 times 1.01 to the power of 12. Yearly compounding at 12% gives 1,120.00, and daily compounding gives about 1,127.47."),
+  ("What is the difference between simple and compound interest?", "Simple interest is earned only on the starting amount. Compound interest is also earned on interest already added, so the balance grows faster over time."),
+  ("What number should I enter for monthly compounding?", "Enter 12 for monthly, 4 for quarterly, 1 for yearly and 365 for daily compounding."),
+  ("Does this include monthly deposits?", "No. It assumes one starting amount with no further deposits or withdrawals, and it does not subtract fees or tax."),
+ ],
+},
+"date-calculator": {
+ "h1": "Days Between Dates Calculator", "cat": ("time", "Date and Time"), "app": "UtilitiesApplication",
+ "headings": ["How the days are counted", "Leap years", "Dates without time zones", "Inclusive counts and business days"],
+ "faq": [
+  ("How many days are there from 1 January to 31 December 2026?", "364 days when the end date minus the start date is counted. If both the first and last day are included, it is 365."),
+  ("How many days are in 2024?", "366, because 2024 is a leap year. From 1 January 2024 to 1 January 2025 is 366 days."),
+  ("How do I count days left until a future date?", "Enter today as the start date and the future date as the end date. The result is the number of days remaining."),
+  ("Does this count weekends and holidays?", "Yes. It counts every calendar day. It does not remove weekends or public holidays."),
+ ],
+},
+}
+
 def build_extra_pages(head,shell,write):
+    site="https://calculateallinone.vercel.app"
+    link='underline text-sky-800 dark:text-sky-300 hover:text-sky-950'
     entries=[]
     for slug,title,description,fields,explanation in PAGES:
         path="/"+slug+"/"
-        body='<section class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 p-4 sm:p-6">'
-        body+='<h1 class="text-2xl font-bold text-stone-900 dark:text-white">'+html.escape(title)+'</h1>'
+        m=META[slug]
+        cat_slug,cat_name=m["cat"]
+        body='<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2"><li><a class="'+link+'" href="/">Home</a></li><li aria-hidden="true">/</li><li><a class="'+link+'" href="/'+cat_slug+'/">'+html.escape(cat_name)+'</a></li><li aria-hidden="true">/</li><li aria-current="page">'+html.escape(title)+'</li></ol></nav>'
+        body+='<section class="mt-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 p-4 sm:p-6">'
+        body+='<h1 class="text-2xl font-bold text-stone-900 dark:text-white">'+html.escape(m["h1"])+'</h1>'
         body+='<p class="mt-2 text-base text-stone-700 dark:text-stone-200">'+html.escape(description)+'</p>'
-        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="mt-4 grid gap-3">'
+        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound")+'" class="mt-4 grid grid-cols-1 gap-3 min-w-0">'
+        if slug=="percentage-calculator":
+            body+='<label for="pct-mode" class="font-semibold text-stone-800 dark:text-stone-100">What do you want to find?</label><select id="pct-mode" class="w-full min-w-0 max-w-full rounded-lg border border-stone-400 p-3 text-stone-900 bg-white min-h-[44px]"><option value="of">X% of a number</option><option value="whatpercent">X is what percent of Y</option><option value="change">Percentage increase or decrease</option></select>'
         for key,label,kind in fields:
             body+='<label for="'+key+'" class="font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
             body+='<input required id="'+key+'" type="'+kind+'" '+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full rounded-lg border border-stone-400 bg-white p-3 text-lg text-stone-900 min-h-[44px]">'
@@ -52,15 +104,28 @@ def build_extra_pages(head,shell,write):
         body+='<button type="submit" class="rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
         body+='<p role="status" aria-live="polite" id="extra-result" class="mt-4 text-xl font-bold text-stone-900 dark:text-white"></p></section>'
         body+='<section class="mt-6"><h2 class="text-xl font-semibold">How this calculation works</h2><p class="mt-3">'+html.escape(explanation)+'</p></section>'
-        for paragraph in GUIDES[slug]:
-            body+='<p class="mt-4 leading-7 text-stone-800 dark:text-stone-200">'+html.escape(paragraph)+'</p>'
+        for heading,paragraph in zip(m["headings"],GUIDES[slug]):
+            body+='<h2 class="mt-8 text-xl font-semibold">'+html.escape(heading)+'</h2><p class="mt-3 leading-7 text-stone-800 dark:text-stone-200">'+html.escape(paragraph)+'</p>'
+        body+='<h2 class="mt-8 text-xl font-semibold">Common questions</h2><div class="mt-3">'
+        for q,a in m["faq"]:
+            body+=('<details class="border-b border-stone-300 dark:border-stone-700 py-4"><summary class="cursor-pointer font-medium text-stone-900 dark:text-stone-100 min-h-[44px] flex items-center">'+html.escape(q)+'</summary><p class="mt-2 text-base text-stone-800 dark:text-stone-200">'+html.escape(a)+'</p></details>')
+        body+='</div>'
         body+='<nav aria-label="Related calculators" class="mt-6"><h2 class="text-xl font-semibold">More free calculators</h2><ul>'
         for other,other_title,*_ in PAGES:
             if other!=slug:body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="/'+other+'/">'+html.escape(other_title)+'</a></li>'
+        body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="/'+cat_slug+'/">All '+html.escape(cat_name)+' tools</a></li>'
         body+='</ul></nav>'
-        schema=[{"@context":"https://schema.org","@type":"WebPage","name":title,"url":"https://calculateallinone.vercel.app"+path}]
+        url=site+path
+        schema=[
+            {"@context":"https://schema.org","@type":"WebPage","name":title,"url":url},
+            {"@context":"https://schema.org","@type":"WebApplication","name":title,"url":url,"description":description,"applicationCategory":m["app"],"operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"inLanguage":"en"},
+            {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+                {"@type":"ListItem","position":1,"name":"Home","item":site+"/"},
+                {"@type":"ListItem","position":2,"name":cat_name,"item":site+"/"+cat_slug+"/"},
+                {"@type":"ListItem","position":3,"name":title,"item":url}]},
+        ]
         page=head(title+" | CalculatesAll",description,path,schema)+shell(body,current_path=path)
-        page=page.replace("</body>",'<script defer src="/assets/extra-calculators.js"></script><script defer src="/assets/extra-calculators-ui.js"></script></body>')
+        page=page.replace("</body>",'<script defer src="/assets/extra-calculators.js?v=20261028-pct"></script><script defer src="/assets/extra-calculators-ui.js?v=20261028-pct"></script></body>')
         write(path,page)
         entries.append((path,[]))
     return entries

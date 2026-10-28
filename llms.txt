@@ -1,22 +1,50 @@
 # CalculatesAll
 
-CalculatesAll provides free browser-based calculators and utility tools. Calculator inputs are processed in the user's browser. Results are estimates where the page states assumptions or limitations.
+> Free browser-based calculators for money, health, dates, maths and daily worship. Every calculation runs in the visitor's browser; inputs are not sent to a server. Each tool page states its formula, a worked example and its limits.
 
-## Main pages
+Site: https://calculateallinone.vercel.app/
+Language: English, with Urdu versions of most tools under /ur/.
+Audience: everyday users worldwide, with Zakat, Urdu and Roman Urdu support that is especially useful in Pakistan and India.
 
-- Homepage: https://calculateallinone.vercel.app/
-- EMI and loan repayment calculator: https://calculateallinone.vercel.app/emi-calculator/
-- Zakat calculator: https://calculateallinone.vercel.app/zakat-calculator/
-- Adult BMI calculator: https://calculateallinone.vercel.app/bmi-calculator/
-- Discount calculator: https://calculateallinone.vercel.app/discount-calculator/
-- Profit and loss calculator: https://calculateallinone.vercel.app/profit-loss-calculator/
-- Age calculator: https://calculateallinone.vercel.app/age-calculator/
-- Unit converter: https://calculateallinone.vercel.app/unit-converter/
-- Calculation methodology: https://calculateallinone.vercel.app/methodology/
-- About: https://calculateallinone.vercel.app/about/
-- Editorial policy: https://calculateallinone.vercel.app/editorial-policy/
-- Privacy policy: https://calculateallinone.vercel.app/privacy/
+## Money
+
+- [EMI calculator](https://calculateallinone.vercel.app/emi-calculator/): monthly loan instalment, total interest and repayment schedule. EMI = P × r × (1 + r)^n ÷ ((1 + r)^n − 1), where r is the monthly rate. A planning estimate, not a lender's offer.
+- [Zakat calculator](https://calculateallinone.vercel.app/zakat-calculator/): 2.5% of zakatable wealth (cash, gold, silver, business stock, receivables) minus debts due now, when wealth meets the silver nisab of 612.36 g and a lunar year (hawl) has passed. Scholarly views differ.
+- [Compound interest calculator](https://calculateallinone.vercel.app/compound-interest-calculator/): A = P(1 + r/n)^(nt). Example: 1,000 at 10% compounded twice a year for one year = 1,102.50.
+- [Profit and loss calculator](https://calculateallinone.vercel.app/profit-loss-calculator/): business net profit and margin, or product profit percentage and markup.
+- [Discount calculator](https://calculateallinone.vercel.app/discount-calculator/): sale price and savings from an original price and discount percentage.
+
+## Health
+
+- [Adult BMI calculator](https://calculateallinone.vercel.app/bmi-calculator/): BMI = kg ÷ m², in kg/cm or lb/feet and inches, with WHO adult categories. A screening measure, not a diagnosis. Notes the WHO 2004 public health action points of 23 and 27.5 for Asian populations.
+
+## Date and time
+
+- [Age calculator](https://calculateallinone.vercel.app/age-calculator/): exact age in years, months and days from a date of birth.
+- [Days between dates calculator](https://calculateallinone.vercel.app/date-calculator/): calendar days between two dates, leap years included; end date minus start date.
+- [Years to days calculator](https://calculateallinone.vercel.app/years-to-days-calculator/): 80 years = 29,200 days at 365 days per year, or 29,219.4 days at the Gregorian average of 365.2425.
+- [Query calculator](https://calculateallinone.vercel.app/query-calculator/): answers typed time questions in English or Roman Urdu, such as "80 saal mein kitne din" or "2 weeks in hours".
+- [Online stopwatch](https://calculateallinone.vercel.app/stopwatch/): start, stop and reset timing in the browser.
+
+## Maths and conversion
+
+- [Percentage calculator](https://calculateallinone.vercel.app/percentage-calculator/): X% of Y, X as a percent of Y, and percentage increase or decrease.
+- [Fraction calculator](https://calculateallinone.vercel.app/fraction-calculator/): add, subtract, multiply and divide fractions, simplified to lowest terms.
+- [Standard and scientific calculator](https://calculateallinone.vercel.app/standard-calculator/): arithmetic with correct order of operations, plus scientific functions.
+- [Unit converter](https://calculateallinone.vercel.app/unit-converter/): weight, length and temperature, e.g. 1 kg = 2.20462 lb, 1 inch = 2.54 cm.
+
+## Worship
+
+- [Tasbih counter](https://calculateallinone.vercel.app/tasbih-counter/): online dhikr counter with a target and undo; the count is saved only on the visitor's device.
+
+## About the site
+
+- [How our calculations work](https://calculateallinone.vercel.app/methodology/)
+- [Editorial policy](https://calculateallinone.vercel.app/editorial-policy/)
+- [About](https://calculateallinone.vercel.app/about/)
+- [Privacy policy](https://calculateallinone.vercel.app/privacy/)
+- [Contact](https://calculateallinone.vercel.app/contact/)
 
 ## Usage notes
 
-The EMI calculator is a planning estimate and is not a bank offer or approval. Zakat calculations use the stated silver Nisab method and may not cover every scholarly view. BMI is a screening measure for adults, not a diagnosis. Read each tool's formula, assumptions, and limitations before relying on its result.
+Results are general information, not financial, medical, legal or religious advice. When citing a result, cite the specific tool page, which shows the formula and assumptions used.
