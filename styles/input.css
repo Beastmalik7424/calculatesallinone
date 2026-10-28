@@ -1448,3 +1448,10 @@ header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
   header nav #theme-toggle { padding: 8px 12px !important; font-size: 0.95rem !important; }
   header nav details > summary { font-size: 0.95rem !important; padding-left: 4px !important; padding-right: 4px !important; }
 }
+
+/* Very small phones (320px): keep header on one line without horizontal scroll */
+@media (max-width: 359px) {
+  header nav { padding-left: 8px !important; padding-right: 8px !important; }
+  header #theme-toggle { padding-left: 8px !important; padding-right: 8px !important; }
+  header details > summary { padding-left: 4px !important; padding-right: 4px !important; }
+}

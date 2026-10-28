@@ -24,5 +24,13 @@ const {chromium}=require("playwright");
    console.log(path+" interactive result PASS: "+text);
    await page.close();
   }
+  for(const path of ["/","/percentage-calculator/","/fraction-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
+   const page=await browser.newPage({viewport:{width:320,height:700}});
+   await page.goto("http://127.0.0.1:4174"+path);
+   const sw=await page.evaluate(()=>document.documentElement.scrollWidth);
+   if(sw>320)throw Error(path+" horizontal overflow at 320px: "+sw);
+   console.log(path+" 320px no horizontal overflow PASS");
+   await page.close();
+  }
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

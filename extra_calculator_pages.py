@@ -93,9 +93,9 @@ def build_extra_pages(head,shell,write):
         body+='<section class="mt-3 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 p-4 sm:p-6">'
         body+='<h1 class="text-2xl font-bold text-stone-900 dark:text-white">'+html.escape(m["h1"])+'</h1>'
         body+='<p class="mt-2 text-base text-stone-700 dark:text-stone-200">'+html.escape(description)+'</p>'
-        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound")+'" class="mt-4 grid gap-3">'
+        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound")+'" class="mt-4 grid grid-cols-1 gap-3 min-w-0">'
         if slug=="percentage-calculator":
-            body+='<label for="pct-mode" class="font-semibold text-stone-800 dark:text-stone-100">What do you want to find?</label><select id="pct-mode" class="rounded-lg border border-stone-400 p-3 text-stone-900 bg-white min-h-[44px]"><option value="of">X% of a number</option><option value="whatpercent">X is what percent of Y</option><option value="change">Percentage increase or decrease</option></select>'
+            body+='<label for="pct-mode" class="font-semibold text-stone-800 dark:text-stone-100">What do you want to find?</label><select id="pct-mode" class="w-full min-w-0 max-w-full rounded-lg border border-stone-400 p-3 text-stone-900 bg-white min-h-[44px]"><option value="of">X% of a number</option><option value="whatpercent">X is what percent of Y</option><option value="change">Percentage increase or decrease</option></select>'
         for key,label,kind in fields:
             body+='<label for="'+key+'" class="font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
             body+='<input required id="'+key+'" type="'+kind+'" '+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full rounded-lg border border-stone-400 bg-white p-3 text-lg text-stone-900 min-h-[44px]">'
