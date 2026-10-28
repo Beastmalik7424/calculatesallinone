@@ -266,7 +266,9 @@ def main():
         "/editorial-policy/": "2026-10-21",
         "/health/": "2026-10-21",
     }
-    urlset = ET.Element("urlset", {"xmlns":"http://www.sitemaps.org/schemas/sitemap/0.9","xmlns:xhtml":"http://www.w3.org/1999/xhtml"})
+    ET.register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
+    ET.register_namespace("xhtml", "http://www.w3.org/1999/xhtml")
+    urlset = ET.Element("{http://www.sitemaps.org/schemas/sitemap/0.9}urlset")
     for path in indexable:
         raw = paths[path].read_text(encoding="utf-8")
         canonical = SITE + path

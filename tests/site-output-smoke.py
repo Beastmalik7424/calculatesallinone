@@ -266,7 +266,7 @@ for page in ROOT.rglob("index.html"):
     for src in re.findall(r'src="(/assets/[^"]+)"', html):
         target = ROOT / urlparse(src).path.lstrip("/")
         assert target.is_file(), f"Broken local asset reference in {page}: {src}"
-for required in ("/marketplaces/", "/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
+for required in ("/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"
 vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert vercel_config.get("cleanUrls") is False, "Vercel cleanUrls must stay disabled so the Google ownership HTML file is served at its exact URL"
@@ -288,18 +288,20 @@ assert img_src and "https://ep1.adtrafficquality.google" in img_src.group(1).spl
     "CSP img-src must allow the exact Google Ad Traffic Quality image host observed in production."
 )
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
-marketplace_html = (ROOT / "marketplaces" / "index.html").read_text(encoding="utf-8")
-assert "Ad slots are currently disabled" in privacy_html and "lightweight AdSense ownership meta tag is present" in privacy_html and "external AdSense JavaScript is not loaded" in privacy_html, "Privacy page must explain lightweight ownership verification and inactive ad loading"
-assert "ADSENSE_CONSENT_READY=true" in privacy_html, "Privacy page must disclose the consent-readiness safeguard"
-assert "Google-certified consent management platform" in privacy_html, "Privacy page must describe the CMP requirement"
-assert "cookie identifiers" in privacy_html and "web beacons" in privacy_html and "IP addresses" in privacy_html, "Privacy page must disclose relevant advertising technologies/data"
-assert "https://policies.google.com/technologies/partner-sites" in privacy_html, "Privacy page must link Google's data-use disclosure"
-assert "https://policies.google.com/privacy" in privacy_html, "Privacy page must link Google's privacy policy"
-assert "https://adssettings.google.com/" in privacy_html, "Privacy page must link Google's personalized-ad settings"
-assert "https://optout.aboutads.info/" in privacy_html, "Privacy page must link an industry advertising opt-out resource"
-assert "Third-party vendors, including Google, may use cookies" in privacy_html, "Privacy page must explain third-party advertising cookies"
-assert "Available opt-out choices may not disable all advertising" in privacy_html, "Privacy page must not overpromise the effect of opt-out choices"
-assert "publishes the matching ads.txt entry" in marketplace_html, "Marketplace guide must accurately describe the configured ads.txt entry"
+assert not (ROOT / "marketplaces").exists(), "Internal marketplace setup guide must not be published"
+assert SITE + "/marketplaces/" not in sitemap_urls, "Removed marketplace guide must not be in the sitemap"
+for required_text in (
+    "Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites",
+    "Google's use of advertising cookies enables it and its partners to serve ads",
+    "https://policies.google.com/technologies/partner-sites",
+    "https://adssettings.google.com/",
+    "https://www.aboutads.info/choices/",
+    "Google-certified consent message",
+    "web beacons", "IP addresses",
+):
+    assert required_text in privacy_html, "Privacy page missing required AdSense disclosure: " + required_text
+for leaked in ("ADSENSE_CONSENT_READY", "publisher ID is configured", "deployment setting", "The build publishes"):
+    assert leaked not in privacy_html, "Privacy page must not expose internal build/deployment notes: " + leaked
 # ads.txt must never contain a fabricated publisher ID or an entry unrelated to the configured account.
 ads_path = ROOT / "ads.txt"
 ads_client = os.environ.get("ADSENSE_CLIENT", "ca-pub-9453966537556063").strip()
@@ -340,22 +342,22 @@ for english_text in ("Math and Converters", "Marketplace guide", "Affiliate disc
 # Shared navigation and footer must be localized on every translated homepage.
 localized_home_checks = {
     "ar": {
-        "terms": "شروط الاستخدام", "marketplace": "دليل منصات البيع",
+        "terms": "شروط الاستخدام", 
         "affiliate": "إفصاح الروابط التابعة", "main": 'aria-label="القائمة الرئيسية"',
         "footer": 'aria-label="تذييل الصفحة"',
     },
     "hi": {
-        "terms": "उपयोग की शर्तें", "marketplace": "मार्केटप्लेस गाइड",
+        "terms": "उपयोग की शर्तें", 
         "affiliate": "एफिलिएट प्रकटीकरण", "main": 'aria-label="मुख्य नेविगेशन"',
         "footer": 'aria-label="पाद लेख"',
     },
     "es": {
-        "terms": "Términos de uso", "marketplace": "Guía de plataformas",
+        "terms": "Términos de uso", 
         "affiliate": "Divulgación de afiliación", "main": 'aria-label="Navegación principal"',
         "footer": 'aria-label="Pie de página"',
     },
     "fr": {
-        "terms": "Conditions d’utilisation", "marketplace": "Guide des plateformes",
+        "terms": "Conditions d’utilisation", 
         "affiliate": "Divulgation d’affiliation", "main": 'aria-label="Navigation principale"',
         "footer": 'aria-label="Pied de page"',
     },
@@ -364,6 +366,7 @@ for locale, expected in localized_home_checks.items():
     localized_html = output_for_url(SITE + "/" + locale + "/").read_text(encoding="utf-8")
     for key, expected_text in expected.items():
         assert expected_text in localized_html, f"Missing localized {key} label on /{locale}/"
+    assert 'href="/marketplaces/"' not in localized_html, f"Removed marketplace guide still linked on /{locale}/"
     for english_text in ("All tools", "Terms of use", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
         assert english_text not in localized_html, f"English shared UI text remains on /{locale}/: {english_text}"
 # Tool-menu labels on translated homepages must not fall back to English.
