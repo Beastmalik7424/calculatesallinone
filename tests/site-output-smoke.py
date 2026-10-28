@@ -758,3 +758,9 @@ emi_guide = (ROOT / "emi-calculator" / "index.html").read_text(encoding="utf-8")
 for phrase in ("PKR 36,152.40", "PKR 1,301,486.24", "PKR 1,301,486.40", "PKR 301,486.24", "PKR 0.16 difference"):
     assert phrase in emi_guide, phrase
 assert "PKR 36,153" not in emi_guide
+
+# Regression: the specialized BMI template must include the supplemental editorial guide.
+_bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
+assert "BMI formula and worked example" in _bmi_html, "BMI supplemental guide missing from generated page"
+assert "22.8571" in _bmi_html and "22.9" in _bmi_html, "BMI 70 kg / 1.75 m example missing"
+assert "BMI questions and mistakes" in _bmi_html, "BMI supplemental FAQ guide missing"
