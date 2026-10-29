@@ -1549,7 +1549,7 @@ def category_page(c):
         items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
                   '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/emi-calculator/">EMI Calculator</a>'
                   '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">Estimate monthly loan installments, total interest and a month-by-month repayment schedule. Lender fees and contract terms may change the final quote.</p></li>')
-    for slug, label in {"math": [("percentage-calculator", "Percentage Calculator"), ("fraction-calculator", "Fraction Calculator")], "money": [("compound-interest-calculator", "Compound Interest Calculator")], "time": [("date-calculator", "Date Difference Calculator")]}.get(c["slug"], []):
+    for slug, label in {"math": [("percentage-calculator", "Percentage Calculator"), ("fraction-calculator", "Fraction Calculator")], "money": [("compound-interest-calculator", "Compound Interest Calculator")], "time": [("date-calculator", "Date Difference Calculator"), ("years-to-days-calculator", "Years to Days Calculator")]}.get(c["slug"], []):
         items += '<li><a class="text-sky-800 underline" href="/' + slug + '/">' + label + '</a></li>'
     related = "".join(
         '<li><a class="text-sky-800 dark:text-sky-300 underline" href="/'
@@ -2080,6 +2080,8 @@ def main():
         entries.append((path, []))
     from extra_calculator_pages import build_extra_pages
     entries.extend(build_extra_pages(head, shell, write))
+    from years_to_days_page import build_years_to_days_page
+    entries.append(build_years_to_days_page(head, shell, write))
     entries.append(("/emi-calculator/", []))
     not_found()
     normalize_internal_page_links()
