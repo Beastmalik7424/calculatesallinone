@@ -1169,6 +1169,9 @@ def lang_links(lang, s, current_path=None):
             + items + "</ul></nav>")
 
 
+FOOTER_EMI_LABEL = {"en": "EMI Calculator", "ur": "ای ایم آئی کیلکولیٹر", "ar": "حاسبة الأقساط", "hi": "ईएमआई कैलकुलेटर", "es": "Calculadora de EMI", "fr": "Calculateur EMI"}
+
+
 def shell(main_html, lang="en", current_path=None):
     s = shell_strings(lang)
     home = "/" if lang == "en" else "/" + lang + "/"
@@ -1204,7 +1207,7 @@ def shell(main_html, lang="en", current_path=None):
         '<p>' + s["tag"] + '</p>'
         '<nav class="flex flex-wrap gap-5" aria-label="' + s["footer"] + '">'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/about/">' + s["about"] + '</a>'
-        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/emi-calculator/">EMI Calculator</a>'
+        '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/emi-calculator/">' + (FOOTER_EMI_LABEL["ur"] if lang == "ur" else "EMI Calculator") + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/privacy/">' + s["privacy"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/contact/">' + s["contact"] + '</a>'
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/discount-calculator/">' + s["discount"] + '</a>'
@@ -1483,10 +1486,13 @@ def urdu_tool_page(t):
         ui = ui.replace('"' + en + '"', '"' + ur + '"')
         if t["slug"] == "bmi-calculator":
             ui = ui.replace(en, ur)
+    if t["slug"] == "standard-calculator":
+        ui = ui.replace('>Scientific Mode</button>', '>سائنسی کیلکولیٹر</button>')
     if t["slug"] == "profit-loss-calculator":
         ui = ui.replace("> Business P&amp;L</label>", "> کاروبار کا نفع و نقصان</label>")
         ui = ui.replace("> Product profit</label>", "> پروڈکٹ کا نفع</label>")
     if t["slug"] == "tasbih-counter":
+        ui = ui.replace("Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.", "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے۔ آپ کی گنتی اس صفحے کو چھوڑنے یا دوبارہ لوڈ کرنے تک عارضی طور پر محفوظ رہے گی۔")
         ui = ui.replace('<label class="', '<label lang="ur" class="')
         ui = ui.replace('id="t-lifetime-label">', 'id="t-lifetime-label" lang="ur">')
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
@@ -1716,7 +1722,8 @@ def home_app_page(lang):
     if urdu:
         for en, ur in URDU["standard-calculator"]["labels"]:
             hero_ui = hero_ui.replace('aria-label="' + en + '"', 'aria-label="' + ur + '"')
-    hero = ('<section aria-label="' + ("کیلکولیٹر" if urdu else "Calculator") + '" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span><a href="/tasbih-counter/" aria-label="Open Tasbih Counter" style="display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:4px 12px;border-radius:9px;background:#0f766e;color:#fff;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap">📿 Tasbih Counter</a><span class="ca-home-live-dot" aria-hidden="true"></span></div>' + hero_ui + "</section>")
+        hero_ui = hero_ui.replace('>Scientific Mode</button>', '>سائنسی کیلکولیٹر</button>')
+    hero = ('<section aria-label="' + ("کیلکولیٹر" if urdu else "Calculator") + '" class="ca-home-calculator"><div class="ca-home-card-heading"><span class="ca-home-kicker">' + calc_title + '</span>' + ('<a href="/ur/tasbih-counter/" aria-label="تسبیح کاؤنٹر کھولیں" style="display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:4px 12px;border-radius:9px;background:#0f766e;color:#fff;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap">📿 تسبیح کاؤنٹر</a>' if urdu else '<a href="/tasbih-counter/" aria-label="Open Tasbih Counter" style="display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:4px 12px;border-radius:9px;background:#0f766e;color:#fff;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap">📿 Tasbih Counter</a>') + '<span class="ca-home-live-dot" aria-hidden="true"></span></div>' + hero_ui + "</section>")
     body = (
         '<div class="ca-home-wrap">'
         '<div class="ca-home-header">'
