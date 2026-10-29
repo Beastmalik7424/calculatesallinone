@@ -2022,7 +2022,39 @@ def main():
         ]),
     ]
     for path, title, desc, h1, paras in static_pages:
-        paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA, "/about/": ABOUT_EXTRA}.get(path, [])
+        # Keep these trust pages focused: avoid repeating material from older content layers.
+        if path == "/about/":
+            paras = [
+                "CalculatesAll is a free collection of browser-based calculators for money, health screening, dates, unit conversion and everyday tasks. It is maintained by Muhammad Fayyaz Adeel (also known as Malik Adeel Bhatti).",
+                "Calculator entries are processed in your browser rather than sent to our server. Tools explain their methods, worked examples where useful, and important limitations.",
+                "The main tools are in English, with Urdu versions of many tools. Short introductions in Arabic, Hindi, Spanish and French link to the English tools.",
+                "The adult BMI calculator is a screening aid, the Zakat calculator follows a stated method rather than issuing a religious ruling, and the stopwatch is for everyday timing rather than certified measurement.",
+                "Automated checks cover representative calculations and generated pages, but cannot establish accuracy for every device or circumstance. To report a reproducible problem, use the contact page.",
+            ]
+        elif path == "/contact/":
+            desc = "Contact CalculatesAll to report a calculator issue, accessibility problem, translation correction or general feedback."
+            paras = [
+                'For questions, corrections, accessibility problems or Urdu translation feedback, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
+                "To report a calculation error, include the tool name or page URL, inputs, displayed result and expected result or supporting source.",
+                "Reports can help us investigate and correct confirmed issues. Please avoid sending sensitive personal information.",
+            ]
+        elif path == "/editorial-policy/":
+            paras = [
+                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Examples are checked against their stated calculations.",
+                "We prefer official or primary references for factual claims. Health information is general guidance, not a diagnosis; Zakat calculations state their method and do not replace a qualified scholar's ruling.",
+                "Page reviews and expert endorsements are identified only when they have actually taken place. Update dates reflect tracked substantive changes.",
+                "Quality checks cover representative inputs and boundaries, generated pages, titles, descriptions, canonical URLs, structured data, sitemap entries and internal links. They reduce regression risk but cannot cover every browser or situation.",
+                "To request a correction, send the page URL, inputs, displayed result and expected result or source. Confirmed issues are investigated and corrected, with relevant checks before publication.",
+            ]
+        elif path == "/affiliate-disclosure/":
+            paras = [
+                "CalculatesAll is free to use. Advertising is not currently enabled on the site. If ads are enabled in the future, they will be separated from calculator results, buttons and navigation.",
+                "CalculatesAll does not currently use affiliate links. Any future affiliate relationship will be disclosed beside relevant links and on this page.",
+                "Advertising does not determine calculator formulas, worked examples or results. We do not publish paid reviews, invented ratings or undisclosed sponsored editorial content.",
+                'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
+            ]
+        else:
+            paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA, "/about/": ABOUT_EXTRA}.get(path, [])
         static_page(path, title, desc, h1, paras)
         entries.append((path, []))
     from extra_calculator_pages import build_extra_pages
