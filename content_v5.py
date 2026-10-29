@@ -75,6 +75,14 @@ GUIDE_EXTRA = {
         ]),
     ],
     "discount-calculator": [
+        ("Worked example: discount and sales tax", [
+            "Suppose an item has a listed price of 2,000, a 15% discount and a 10% sales tax calculated on the discounted price. The discount is 300, the discounted price is 1,700, and the tax is 170. The final amount is 1,870.",
+            "If a store instead calculates tax before applying the discount, the receipt can differ. This example assumes tax is charged on the discounted price. The calculator's discount result alone is not a complete tax-inclusive checkout quote.",
+        ]),
+        ("Why the order of percentage changes matters", [
+            "A 25% discount followed by a 10% price increase leaves a 100-unit starting price at 82.50: first 100 becomes 75, then 75 increases by 7.50. It is not the same as subtracting 15% from the starting price.",
+            "For sequential adjustments, apply each percentage to the amount immediately before that step. Keep intermediate values unrounded when calculating a final payable amount, then follow the applicable currency and merchant rounding rules.",
+        ]),
         ("Stacked discounts", [
             "Two discounts applied one after another are not the same as adding their percentages. A 20 percent discount followed by a 10 percent discount on the reduced price gives a total reduction of 28 percent, not 30 percent.",
             "Example: an item priced at 1,000 with 20 percent off becomes 800. A further 10 percent off 800 is 80, so the final price is 720. The total saving is 280, which is 28 percent of 1,000.",
