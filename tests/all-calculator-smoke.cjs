@@ -205,3 +205,41 @@ elements["sw-reset"]._handlers.click();
 assert.equal(elements["sw-display"].textContent, "00:00:00.00");
 
 console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, discount and unit conversion; plus Tasbih, stopwatch and fixed-date validation.");
+
+
+// Exact Gregorian-calendar years: leap days, century exceptions, validation and generated controls.
+{
+  const source = fs.readFileSync("static/app.js", "utf8");
+  const start = source.indexOf("  function exactCalendarYearDays (");
+  const end = source.indexOf("  function initYearsDays ()", start);
+  assert.ok(start !== -1 && end > start, "Exact calendar engine must exist");
+  const testContext = { Date, Math, Number, String };
+  vm.runInNewContext(source.slice(start, end) + "\nthis.calculateExact = exactCalendarYearDays;", testContext);
+  const exact = testContext.calculateExact;
+  for (const [date,years,days,endDate,leaps] of [
+    ["2024-01-01",4,1461,"2028-01-01",1],
+    ["2020-02-29",1,366,"2021-03-01",1],
+    ["1896-03-01",4,1460,"1900-03-01",0],
+    ["1999-03-01",1,366,"2000-03-01",1],
+    ["2099-03-01",1,365,"2100-03-01",0],
+    ["0001-01-01",1,365,"0002-01-01",0],
+    ["2024-01-01",0,0,"2024-01-01",0]
+  ]) {
+    const got = exact(date, years);
+    assert.ok(got, "Valid calendar scenario must calculate: " + date);
+    assert.equal(got.days, days, date + " days");
+    assert.equal(got.endDate, endDate, date + " end date");
+    assert.equal(got.leapDays, leaps, date + " leap count");
+  }
+  for (const [date,years] of [["2023-02-29",1],["2024-02-30",1],
+    ["2024-01-01",1.5],["2024-01-01",-1],["9999-01-01",1],["",2]]) {
+    assert.equal(exact(date, years), null, "Reject invalid calendar input: " + date);
+  }
+  const generated = fs.readFileSync("public/years-to-days-calculator/index.html", "utf8");
+  assert.match(generated, /id="yd-exact-fields"/);
+  assert.match(generated, /id="yd-start-date"/);
+  assert.match(generated, /option value="calendar"/);
+  assert.match(generated, /href="https:\/\/calculateallinone\.vercel\.app\/years-to-days-calculator\/"/);
+  assert.match(generated, /20261030-exact-years-1/);
+  console.log("PASS: exact calendar day count, leap years, invalid dates and generated controls");
+}
