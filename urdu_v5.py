@@ -7,7 +7,7 @@ URDU_EXTRA = {
         "description": "قیمت خرید اور قیمت فروخت سے منافع یا نقصان اور اس کا فیصد نکالیں۔",
         "h1": "منافع اور نقصان کیلکولیٹر",
         "lead": "قیمت خرید اور قیمت فروخت لکھیں تاکہ معلوم ہو کہ منافع ہوا ہے یا نقصان، اور قیمت خرید کے مقابلے میں کتنے فیصد۔",
-        "labels": [("Cost price", "قیمت خرید"), ("Selling price", "قیمت فروخت"), ("Calculate", "حساب کریں")],
+        "labels": [("Cost price", "قیمت خرید"), ("Selling price", "قیمت فروخت"), ("Calculation type", "حساب کی قسم"), ("Total revenue", "کل آمدنی"), ("Cost of goods sold", "فروخت شدہ اشیاء کی لاگت"), ("Other business expenses", "کاروبار کے دیگر اخراجات"), ("Calculate profit or loss", "نفع یا نقصان کا حساب لگائیں"), ("Calculate", "حساب کریں")],
         "how_heading": "فارمولا اور مثال",
         "faq_heading": "سوالات",
         "how": [
