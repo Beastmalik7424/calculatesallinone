@@ -764,3 +764,12 @@ _bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
 assert "BMI formula and worked example" in _bmi_html, "BMI supplemental guide missing from generated page"
 assert "22.8571" in _bmi_html and "22.9" in _bmi_html, "BMI 70 kg / 1.75 m example missing"
 assert "BMI questions and mistakes" in _bmi_html, "BMI supplemental FAQ guide missing"
+
+# Urdu Profit and Loss: all visible form labels are localized, without altering IDs.
+_ur_profit = (ROOT / "ur/profit-loss-calculator" / "index.html").read_text(encoding="utf-8")
+for _label in ("حساب کی قسم", "کاروبار کا نفع و نقصان", "پروڈکٹ کا نفع", "کل آمدنی", "فروخت شدہ اشیاء کی لاگت", "کاروبار کے دیگر اخراجات", "نفع یا نقصان کا حساب لگائیں"):
+    assert _label in _ur_profit, "Urdu Profit and Loss label missing: " + _label
+for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses", "pl-product-fields", "p-cost", "p-sell", "pl-result"):
+    assert 'id="' + _id + '"' in _ur_profit, "Urdu profit field ID changed: " + _id
+for _english in ("> Business P&amp;L</label>", "> Product profit</label>", ">Calculate profit or loss</button>"):
+    assert _english not in _ur_profit, "Untranslated profit control: " + _english

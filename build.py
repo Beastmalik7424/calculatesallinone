@@ -1483,6 +1483,9 @@ def urdu_tool_page(t):
         ui = ui.replace('"' + en + '"', '"' + ur + '"')
         if t["slug"] == "bmi-calculator":
             ui = ui.replace(en, ur)
+    if t["slug"] == "profit-loss-calculator":
+        ui = ui.replace("> Business P&amp;L</label>", "> کاروبار کا نفع و نقصان</label>")
+        ui = ui.replace("> Product profit</label>", "> پروڈکٹ کا نفع</label>")
     if t["slug"] == "tasbih-counter":
         ui = ui.replace('<label class="', '<label lang="ur" class="')
         ui = ui.replace('id="t-lifetime-label">', 'id="t-lifetime-label" lang="ur">')
