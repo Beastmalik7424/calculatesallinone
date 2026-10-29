@@ -96,6 +96,14 @@ GUIDE_EXTRA = {
         ]),
     ],
     "age-calculator": [
+        ("Worked example: age across a leap day", [
+            "A person born on 28 February 2000 is 24 full calendar years old on 28 February 2024. The period from 28 February 2024 to 1 March 2024 spans two elapsed days because 2024 includes 29 February. Calendar age and total elapsed days answer different questions.",
+            "When you need an exact day count for a deadline, enter both dates rather than estimating years times 365. The number of leap days depends on the specific years in the interval, and the result can differ by several days over a lifetime.",
+        ]),
+        ("What a calendar-age result does not tell you", [
+            "An age expressed in years, months and days is based on calendar dates, not the time of birth. Two people born on the same date but at different hours will receive the same calendar-age result.",
+            "For an official age requirement, verify which date and time zone the issuing authority uses. This calculator does not determine legal eligibility, and a document's rules may differ from an ordinary calendar calculation.",
+        ]),
         ("Leap years", [
             "A leap year has 366 days. The extra day falls on 29 February. Leap years occur in years divisible by 4, except years divisible by 100 that are not divisible by 400.",
             "The calculator follows the Gregorian calendar, so day counts include every leap day between the two dates.",
