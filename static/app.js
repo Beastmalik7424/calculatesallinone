@@ -1426,13 +1426,66 @@
     return value.toLocaleString("en-US", { maximumFractionDigits: 8 })
   }
 
+  function exactCalendarYearDays (startValue, years) {
+    if (typeof startValue !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(startValue) ||
+        !Number.isSafeInteger(years) || years < 0) return null
+    var parts = startValue.split("-").map(Number)
+    var year = parts[0], month = parts[1], day = parts[2]
+    if (year < 1 || year + years > 9999) return null
+    var start = new Date(0)
+    start.setUTCHours(0, 0, 0, 0)
+    start.setUTCFullYear(year, month - 1, day)
+    if (start.getUTCFullYear() !== year || start.getUTCMonth() !== month - 1 ||
+        start.getUTCDate() !== day) return null
+    var end = new Date(start.getTime())
+    end.setUTCFullYear(year + years)
+    var days = Math.round((end.getTime() - start.getTime()) / 86400000)
+    return { days: days, leapDays: days - years * 365, endDate: end.toISOString().slice(0, 10) }
+  }
+
   function initYearsDays () {
     var form = $("years-days-form")
     if (!form) return
+    var method = $("yd-method")
+    var dateInput = $("yd-start-date")
+    var dateFields = $("yd-exact-fields")
+    function setDateVisibility () {
+      var exact = method.value === "calendar"
+      dateFields.hidden = !exact
+      dateInput.disabled = !exact
+    }
+    var today = new Date()
+    dateInput.value = String(today.getFullYear()).padStart(4, "0") + "-" +
+      String(today.getMonth() + 1).padStart(2, "0") + "-" +
+      String(today.getDate()).padStart(2, "0")
+    method.addEventListener("change", setDateVisibility)
+    setDateVisibility()
     form.addEventListener("submit", function (event) {
       event.preventDefault()
       var value = timeConversionNumber($("yd-value").value)
-      var factor = Number($("yd-method").value)
+      if (method.value === "calendar") {
+        if (value === null || !Number.isSafeInteger(value)) {
+          say("yd-result", "Enter a whole number of years from 0 to 1,000,000 for exact calendar calculation.")
+          return
+        }
+        var result = exactCalendarYearDays(dateInput.value, value)
+        if (!result) {
+          say("yd-result", "Enter a valid start date. The resulting calendar year must be 9999 or earlier.")
+          return
+        }
+        var days = result.days
+        say("yd-result", timeConversionFormat(value) + " calendar years = " +
+          timeConversionFormat(days) + " days; " +
+          timeConversionFormat(Math.floor(days / 7)) + " weeks and " + (days % 7) + " days; " +
+          timeConversionFormat(days * 24) + " hours; " +
+          timeConversionFormat(days * 1440) + " minutes; " +
+          timeConversionFormat(days * 86400) + " seconds. " +
+          "Start: " + dateInput.value + ". End (exclusive): " + result.endDate +
+          ". Leap days included: " + result.leapDays +
+          ". For a February 29 start, a non-leap anniversary uses March 1.")
+        return
+      }
+      var factor = Number(method.value)
       if (value === null || (factor !== 365 && factor !== 365.2425)) {
         say("yd-result", "Enter a number from 0 to 1,000,000 and choose a conversion method.")
         return
