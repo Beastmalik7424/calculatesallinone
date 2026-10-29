@@ -773,3 +773,23 @@ for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses"
     assert 'id="' + _id + '"' in _ur_profit, "Urdu profit field ID changed: " + _id
 for _english in ("> Business P&amp;L</label>", "> Product profit</label>", ">Calculate profit or loss</button>"):
     assert _english not in _ur_profit, "Untranslated profit control: " + _english
+
+# Urdu localization regression: visible storage note and scientific toggle must not stay English on Urdu pages.
+_ur_tasbih = output_for_url(SITE + "/ur/tasbih-counter/").read_text(encoding="utf-8")
+assert "Saving is unavailable in this browser" not in _ur_tasbih, "Urdu tasbih storage note must be localized"
+assert "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے" in _ur_tasbih, "Urdu tasbih storage note missing"
+for _ur_page in ("/ur/", "/ur/standard-calculator/"):
+    _ur_html = output_for_url(SITE + _ur_page).read_text(encoding="utf-8")
+    assert ">Scientific Mode</button>" not in _ur_html, _ur_page + " Scientific Mode toggle must be localized"
+    assert "سائنسی کیلکولیٹر</button>" in _ur_html, _ur_page + " Urdu Scientific Mode toggle missing"
+# Urdu footer regression: the EMI footer link must use the Urdu label on Urdu pages.
+_ur_zakat = output_for_url(SITE + "/ur/zakat-calculator/").read_text(encoding="utf-8")
+assert ">EMI Calculator</a>" not in _ur_zakat, "Urdu footer EMI link must be localized"
+assert "ای ایم آئی کیلکولیٹر</a>" in _ur_zakat, "Urdu footer EMI label missing"
+# Urdu homepage hero regression: the Tasbih link must stay in Urdu and point to the Urdu route.
+_ur_home = output_for_url(SITE + "/ur/").read_text(encoding="utf-8")
+assert 'href="/ur/tasbih-counter/"' in _ur_home, "Urdu homepage Tasbih hero link must use /ur/tasbih-counter/"
+assert 'aria-label="Open Tasbih Counter"' not in _ur_home, "Urdu homepage must not expose an English Tasbih aria-label"
+assert "📿 Tasbih Counter" not in _ur_home, "Urdu homepage must not show the English Tasbih label"
+_en_home = output_for_url(SITE + "/").read_text(encoding="utf-8")
+assert 'aria-label="Open Tasbih Counter"' in _en_home, "English homepage Tasbih hero must be unchanged"
