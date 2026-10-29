@@ -19,13 +19,14 @@ assert.equal(dateDifference("2026-01-02","2026-01-01"),-1);
 assert.throws(()=>dateDifference("2026-02-29","2026-03-01"));
 console.log("Competitor calculator arithmetic and date regression: PASS");
 
+
 const fs = require("node:fs");
 const path = require("node:path");
 // Regression: Tailwind must compile the primary action's background on all four extra pages.
 const compiledCss = fs.readFileSync(path.join(__dirname, "..", "static", "site.css"), "utf8");
-assert.match(compiledCss, /\\.bg-sky-700\\s*\\{/, "Missing bg-sky-700: extra calculator Calculate buttons become white-on-white");
+assert.match(compiledCss, /\.bg-sky-700\s*\{/, "Missing bg-sky-700: extra calculator Calculate buttons become white-on-white");
 for (const slug of ["percentage-calculator", "fraction-calculator", "compound-interest-calculator", "date-calculator"]) {
   const html = fs.readFileSync(path.join(__dirname, "..", "public", slug, "index.html"), "utf8");
-  assert.match(html, /<button[^>]*bg-sky-700[^>]*>Calculate<\\/button>/, slug + " primary action lacks background class");
+  assert.match(html, /<button[^>]*bg-sky-700[^>]*>Calculate<\/button>/, slug + " primary action lacks background class");
 }
 console.log("Extra calculator button visibility CSS regression: PASS");
