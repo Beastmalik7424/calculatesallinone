@@ -808,3 +808,11 @@ _age_editorial_html = (Path(__file__).resolve().parents[1] / "public" / "age-cal
 assert "Worked example: age across a leap day" in _age_editorial_html
 assert "2024 includes 29 February" in _age_editorial_html
 assert "does not determine legal eligibility" in _age_editorial_html
+
+
+# Editorial regression: discount guidance must explain the tax-base assumption
+# and the order of successive percentage adjustments.
+_discount_editorial_html = (Path(__file__).resolve().parents[1] / "public" / "discount-calculator" / "index.html").read_text(encoding="utf-8")
+assert "Worked example: discount and sales tax" in _discount_editorial_html
+assert "The final amount is 1,870" in _discount_editorial_html
+assert "Why the order of percentage changes matters" in _discount_editorial_html
