@@ -37,4 +37,4 @@ const html=fs.readFileSync(page,'utf8');
 for(const fragment of ['<h1','Years to Days Calculator','/assets/years-to-days.js','/years-to-days-calculator/','2024','1,461']) assert.ok(html.includes(fragment),'missing '+fragment);
 assert.ok(fs.readFileSync(path.join(__dirname,'../public/sitemap.xml'),'utf8').includes('/years-to-days-calculator/'),'sitemap inclusion');
 assert.ok(fs.readFileSync(path.join(__dirname,'../public/time/index.html'),'utf8').includes('/years-to-days-calculator/'),'time hub link');
-console.log('PASS: years-t...[truncated]
+console.log('PASS: years-to-days accuracy, invalid inputs, SEO integration and hub link');

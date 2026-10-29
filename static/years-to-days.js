@@ -53,4 +53,66 @@
     if (!/^[0-9]+$/.test(input)) throw new Error('Enter a whole number of years.');
     var years = Number(input);
     if (!Number.isSafeInteger(years) || years > 9999 - start.year) {
-      throw new ...[truncated]
+      throw new Error('Choose fewer years so the end date is within year 9999.');
+    }
+    var endYear = start.year + years;
+    var endDay = Math.min(start.day, daysInMonth(endYear, start.month));
+    var end = { year: endYear, month: start.month, day: endDay };
+    var days = dayNumber(end) - dayNumber(start);
+    return {
+      days: days,
+      endDate: toIso(end),
+      leapDays: leapDaysBefore(end) - leapDaysBefore(start),
+      weeks: Math.floor(days / 7),
+      remainingDays: days % 7,
+      hours: days * 24,
+      minutes: days * 1440
+    };
+  }
+
+  function init() {
+    var form = document.getElementById('years-days-form');
+    if (!form) return;
+    var startInput = document.getElementById('yd-start');
+    var yearsInput = document.getElementById('yd-years');
+    var error = document.getElementById('yd-error');
+    var fields = ['days', 'end', 'weeks', 'hours', 'minutes', 'leap'];
+    var today = new Date();
+    startInput.value = String(today.getFullYear()).padStart(4, '0') + '-' +
+      String(today.getMonth() + 1).padStart(2, '0') + '-' +
+      String(today.getDate()).padStart(2, '0');
+    var format = function(n) { return n.toLocaleString('en-US'); };
+    function render() {
+      try {
+        var r = calculateDays(startInput.value, yearsInput.value);
+        error.textContent = '';
+        document.getElementById('yd-days').textContent = format(r.days) + ' days';
+        document.getElementById('yd-end').textContent = 'End date: ' + r.endDate;
+        document.getElementById('yd-weeks').textContent = format(r.weeks) +
+          ' weeks and ' + r.remainingDays + ' days';
+        document.getElementById('yd-hours').textContent = format(r.hours);
+        document.getElementById('yd-minutes').textContent = format(r.minutes);
+        document.getElementById('yd-leap').textContent = format(r.leapDays);
+      } catch (e) {
+        fields.forEach(function(id) {
+          document.getElementById('yd-' + id).textContent = '—';
+        });
+        error.textContent = e.message;
+      }
+    }
+    form.addEventListener('submit', function(e) { e.preventDefault(); render(); });
+    startInput.addEventListener('change', render);
+    yearsInput.addEventListener('change', render);
+    render();
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { isLeapYear: isLeapYear, parseCalendarDate: parseCalendarDate,
+      calculateDays: calculateDays };
+  }
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  }
+})(this);
+
