@@ -75,6 +75,14 @@ GUIDE_EXTRA = {
         ]),
     ],
     "discount-calculator": [
+        ("Worked example: discount and sales tax", [
+            "Suppose an item has a listed price of 2,000, a 15% discount and a 10% sales tax calculated on the discounted price. The discount is 300, the discounted price is 1,700, and the tax is 170. The final amount is 1,870.",
+            "If a store instead calculates tax before applying the discount, the receipt can differ. This example assumes tax is charged on the discounted price. The calculator's discount result alone is not a complete tax-inclusive checkout quote.",
+        ]),
+        ("Why the order of percentage changes matters", [
+            "A 25% discount followed by a 10% price increase leaves a 100-unit starting price at 82.50: first 100 becomes 75, then 75 increases by 7.50. It is not the same as subtracting 15% from the starting price.",
+            "For sequential adjustments, apply each percentage to the amount immediately before that step. Keep intermediate values unrounded when calculating a final payable amount, then follow the applicable currency and merchant rounding rules.",
+        ]),
         ("Stacked discounts", [
             "Two discounts applied one after another are not the same as adding their percentages. A 20 percent discount followed by a 10 percent discount on the reduced price gives a total reduction of 28 percent, not 30 percent.",
             "Example: an item priced at 1,000 with 20 percent off becomes 800. A further 10 percent off 800 is 80, so the final price is 720. The total saving is 280, which is 28 percent of 1,000.",
@@ -96,6 +104,14 @@ GUIDE_EXTRA = {
         ]),
     ],
     "age-calculator": [
+        ("Worked example: age across a leap day", [
+            "A person born on 28 February 2000 is 24 full calendar years old on 28 February 2024. The period from 28 February 2024 to 1 March 2024 spans two elapsed days because 2024 includes 29 February. Calendar age and total elapsed days answer different questions.",
+            "When you need an exact day count for a deadline, enter both dates rather than estimating years times 365. The number of leap days depends on the specific years in the interval, and the result can differ by several days over a lifetime.",
+        ]),
+        ("What a calendar-age result does not tell you", [
+            "An age expressed in years, months and days is based on calendar dates, not the time of birth. Two people born on the same date but at different hours will receive the same calendar-age result.",
+            "For an official age requirement, verify which date and time zone the issuing authority uses. This calculator does not determine legal eligibility, and a document's rules may differ from an ordinary calendar calculation.",
+        ]),
         ("Leap years", [
             "A leap year has 366 days. The extra day falls on 29 February. Leap years occur in years divisible by 4, except years divisible by 100 that are not divisible by 400.",
             "The calculator follows the Gregorian calendar, so day counts include every leap day between the two dates.",

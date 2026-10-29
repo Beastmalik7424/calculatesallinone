@@ -800,3 +800,19 @@ for _sw_path in ("/stopwatch/", "/ur/stopwatch/"):
     assert 'id="sw-display"' in _sw_html, _sw_path + " stopwatch readout missing"
     assert 'text-[clamp(1.35rem,6vw,3rem)]' in _sw_html, _sw_path + " stopwatch readout lacks narrow-screen sizing"
     assert 'min-w-0' in _sw_html, _sw_path + " stopwatch wrapper must shrink at 320px"
+
+
+# Editorial regression: the age page must retain its calculator-specific,
+# independently checkable leap-day example and legal-use limitation.
+_age_editorial_html = (Path(__file__).resolve().parents[1] / "public" / "age-calculator" / "index.html").read_text(encoding="utf-8")
+assert "Worked example: age across a leap day" in _age_editorial_html
+assert "2024 includes 29 February" in _age_editorial_html
+assert "does not determine legal eligibility" in _age_editorial_html
+
+
+# Editorial regression: discount guidance must explain the tax-base assumption
+# and the order of successive percentage adjustments.
+_discount_editorial_html = (Path(__file__).resolve().parents[1] / "public" / "discount-calculator" / "index.html").read_text(encoding="utf-8")
+assert "Worked example: discount and sales tax" in _discount_editorial_html
+assert "The final amount is 1,870" in _discount_editorial_html
+assert "Why the order of percentage changes matters" in _discount_editorial_html
