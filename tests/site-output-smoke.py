@@ -793,3 +793,10 @@ assert 'aria-label="Open Tasbih Counter"' not in _ur_home, "Urdu homepage must n
 assert "📿 Tasbih Counter" not in _ur_home, "Urdu homepage must not show the English Tasbih label"
 _en_home = output_for_url(SITE + "/").read_text(encoding="utf-8")
 assert 'aria-label="Open Tasbih Counter"' in _en_home, "English homepage Tasbih hero must be unchanged"
+
+# Regression: stopwatch readout must have responsive typography and no forced min-width.
+for _sw_path in ("/stopwatch/", "/ur/stopwatch/"):
+    _sw_html = output_for_url(SITE + _sw_path).read_text(encoding="utf-8")
+    assert 'id="sw-display"' in _sw_html, _sw_path + " stopwatch readout missing"
+    assert 'text-[clamp(1.35rem,6vw,3rem)]' in _sw_html, _sw_path + " stopwatch readout lacks narrow-screen sizing"
+    assert 'min-w-0' in _sw_html, _sw_path + " stopwatch wrapper must shrink at 320px"

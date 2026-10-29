@@ -497,8 +497,8 @@ TOOLS = [
         "h1": "Online Stopwatch",
         "lead": "Start, stop and reset a stopwatch with hundredths of a second. It runs in your browser tab.",
         "ui": (
-            '<div class="max-w-sm mx-auto space-y-5 text-center">'
-            '<output id="sw-display" class="block text-5xl font-semibold bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8 tabular-nums" aria-live="off">00:00:00.00</output>'
+            '<div class="max-w-sm min-w-0 mx-auto space-y-5 text-center">'
+            '<output id="sw-display" class="block w-full min-w-0 text-[clamp(1.35rem,6vw,3rem)] font-semibold bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8 px-1 tabular-nums" aria-live="off">00:00:00.00</output>'
             '<div class="grid grid-cols-3 gap-3">'
             '<button id="sw-start" class="@B@">Start</button>'
             '<button id="sw-stop" class="@B@">Stop</button>'
