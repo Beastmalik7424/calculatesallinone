@@ -1551,6 +1551,11 @@ def category_page(c):
                   '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">Estimate monthly loan installments, total interest and a month-by-month repayment schedule. Lender fees and contract terms may change the final quote.</p></li>')
     for slug, label in {"math": [("percentage-calculator", "Percentage Calculator"), ("fraction-calculator", "Fraction Calculator")], "money": [("compound-interest-calculator", "Compound Interest Calculator")], "time": [("date-calculator", "Date Difference Calculator")]}.get(c["slug"], []):
         items += '<li><a class="text-sky-800 underline" href="/' + slug + '/">' + label + '</a></li>'
+    related = "".join(
+        '<li><a class="text-sky-800 dark:text-sky-300 underline" href="/'
+        + other["slug"] + '/">' + html.escape(other["name"]) + "</a></li>"
+        for other in CATEGORIES if other["slug"] != c["slug"]
+    )
     title = c["name"] + " | CalculatesAll"
     schema = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": c["name"], "url": SITE_URL + path}]
     if c["slug"] == "health":
@@ -1562,6 +1567,7 @@ def category_page(c):
             '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + c["desc"] + '</p>'
             '<p class="mt-4 text-base leading-relaxed text-stone-800 dark:text-stone-200">' + HUB_CONTENT[c["slug"]]["intro"] + '</p>'
             '<ul class="mt-8 grid gap-4">' + items + "</ul>"
+        + '<nav aria-label="Other calculator categories" class="mt-8"><h2 class="text-xl font-semibold">Explore other calculator categories</h2><ul class="mt-3 flex flex-wrap gap-4">' + related + "</ul></nav>"
         + guide_html(HUB_EXTRA[c["slug"]]) +
             '<h2 class="' + H2 + '">Questions</h2><div class="mt-3">' + faq_html(HUB_CONTENT[c["slug"]]["faq"]) + "</div>")
     write(path, head(title, c["desc"], path, schema) + shell(body))
