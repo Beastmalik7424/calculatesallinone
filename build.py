@@ -238,7 +238,7 @@ TOOLS = [
             ]),
             ("Product profit formulas", [
                 "Product profit or loss equals selling price minus cost price. A negative result is a loss.",
-                "Product markup percentage equals profit divided by cost price, multiplied by 100. Markup is not margin.",
+                "Product markup percentage equals profit divided by cost price, multiplied by 100. Gross margin equals profit divided by selling price, multiplied by 100. Either percentage is unavailable when its denominator is zero.",
             ]),
             ("Worked example, profit", [
                 "Cost price is 800. Selling price is 1,000. Profit is 200.",
@@ -254,7 +254,7 @@ TOOLS = [
             ]),
         ],
         "faq": [
-            ("Why is margin different from markup?", "Product mode shows markup on cost. Business mode shows net operating margin on revenue."),
+            ("Why is margin different from markup?", "Product mode shows both markup on cost and gross margin on selling price. Business mode shows net operating margin on revenue."),
             ("Why does it show N/A?", "Product markup is unavailable when cost is zero. Business margin is unavailable when revenue is zero."),
         ],
         "sources": "Standard operating profit, margin and product markup formulas. This simplified calculator is not a formal financial statement.",
@@ -665,9 +665,9 @@ EXTRA = {
         ],
     },
     "profit-loss-calculator": {
-        "quick": "Business P&L: net operating profit = revenue - cost of goods sold - other expenses, and operating margin = net operating profit / revenue x 100. Product mode: profit = selling price - cost price, and markup = profit / cost price x 100.",
+        "quick": "Business P&L: net operating profit = revenue - cost of goods sold - other expenses, and operating margin = net operating profit / revenue x 100. Product mode: profit = selling price - cost price, markup = profit / cost price x 100, and gross margin = profit / selling price x 100.",
         "faq": [
-            ("What is the difference between markup and margin?", "Product markup uses cost as its base. Business operating margin uses revenue as its base. These percentages are not interchangeable."),
+            ("What is the difference between markup and margin?", "Product markup uses cost as its base; product gross margin uses selling price. Business operating margin uses revenue after listed expenses. These percentages are not interchangeable."),
             ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
         ],
     },
