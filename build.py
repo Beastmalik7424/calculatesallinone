@@ -1448,9 +1448,9 @@ def tool_page(t):
     primary_tool_content = calculator_section + answer_note
     breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
-        '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
-        '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li><li aria-hidden="true">/</li>'
-        '<li aria-current="page">' + t["name"] + "</li></ol></nav>"
+        '<li><a class="' + LINK + '" href="/">Home</a></li>'
+        '<li><span aria-hidden="true" class="mr-2">/</span><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li>'
+        '<li aria-current="page"><span aria-hidden="true" class="mr-2">/</span>' + t["name"] + "</li></ol></nav>"
     )
     body = (
         ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
@@ -1460,8 +1460,9 @@ def tool_page(t):
            else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
         + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "")
         + ad_slot()
-        + '<h2 class="' + H2 + '">How it is calculated</h2>'
-        + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>'
+        + (('<h2 class="' + H2 + '">How it is calculated</h2>'
+            + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>')
+           if EXTRA[t["slug"]]["quick"].strip() else "")
         + guide_html(guide)
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
