@@ -2015,7 +2015,7 @@ def main():
             "If you find a formula error, email " + CONTACT_EMAIL + " with the tool name and the inputs. We check the report, correct confirmed errors on the tool page and reply to let you know.",
         ]),
         ("/editorial-policy/", "Editorial Policy | CalculatesAll", "Learn how CalculatesAll researches, checks, updates and corrects its calculator guides, formulas and reference information.", "Editorial Policy", [
-            "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Numbers in worked examples are checked with a calculation before publication.",
+            "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Worked examples show the calculation steps for readers to follow.",
             "Religious and health content is labelled as a general guide. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
             "A last-updated date is shown only when a substantive page update is tracked. We name sources where they support a claim, and we correct confirmed errors when reported or discovered. We do not label a page as independently reviewed unless that review has taken place.",
         ]),
@@ -2057,7 +2057,7 @@ def main():
             ]
         elif path == "/editorial-policy/":
             paras = [
-                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Examples are checked against their stated calculations.",
+                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Worked examples show the calculation steps used.",
                 "We prefer official or primary references for factual claims. Health information is general guidance, not a diagnosis; Zakat calculations state their method and do not replace a qualified scholar's ruling.",
                 "Page reviews and expert endorsements are identified only when they have actually taken place. Update dates reflect tracked substantive changes.",
                 "Quality checks cover representative inputs and boundaries, generated pages, titles, descriptions, canonical URLs, structured data, sitemap entries and internal links. They reduce regression risk but cannot cover every browser or situation.",
