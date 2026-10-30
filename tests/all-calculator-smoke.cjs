@@ -144,6 +144,19 @@ for (const [cost, sell, expected] of [[100,150,/Profit: 50/],[100,80,/Loss: 20/]
   assert.match(elements["pl-result"].textContent, expected);
 }
 
+// Product profit now shows margin (selling-price denominator) separately from markup (cost denominator).
+for (const [cost, sell, margin] of [
+  [100, 150, /Margin on selling price: 33\\.33%/],
+  [100, 80, /Margin on selling price: -25\\.00%/],
+  [0, 10, /Margin on selling price: 100\\.00%/],
+  [10, 0, /Margin on selling price: N\\/A/]
+]) {
+  setValues({"p-cost":cost,"p-sell":sell}); submit("pl-form");
+  assert.match(elements["pl-result"].textContent, margin);
+}
+setValues({"p-cost":100,"p-sell":150}); submit("pl-form");
+assert.match(elements["pl-result"].textContent, /50\\.00 percent of cost price/, "markup remains on cost base");
+
 setValues({"p-cost":-1,"p-sell":100}); submit("pl-form");
 assert.match(elements["pl-result"].textContent, /cost price.*zero or more/i, "negative cost must be rejected");
 
