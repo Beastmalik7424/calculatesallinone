@@ -31,6 +31,7 @@
 .emi-page-main{width:100%;max-width:960px;margin-inline:auto}@media(max-width:700px){.emi-page-main{width:calc(100% - 20px)}}
 
 /* Compact EMI layout: keep primary controls and totals readable on narrow screens. */
+@media(min-width:701px){.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric strong{font-size:clamp(1rem,2vw,1.3rem);overflow-wrap:anywhere}}
 .metric strong{overflow-wrap:anywhere;word-break:normal;font-variant-numeric:tabular-nums}
 @media(max-width:700px){
  body{font-size:15px;line-height:1.35}
