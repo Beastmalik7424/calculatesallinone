@@ -29,6 +29,36 @@
 @media(prefers-color-scheme:dark){:root{--bg:#101722;--panel:#192433;--text:#f1f5fb;--muted:#c1cede;--line:#45566d;--accent:#80bdff;--accentText:#071a2d;--good:#77e0b1;--bad:#ff9ba4;--field:#111b28;--focus:#9dcaff;--shadow:0 2px 12px #0004}}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--accent);text-underline-offset:3px}header,nav,main,footer,.breadcrumb{width:min(1120px,100% - 28px);margin-inline:auto}.breadcrumb{margin-top:0;margin-bottom:14px}header{padding:24px 0 12px}header p,.muted{color:var(--muted)}nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}nav a,.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);font:inherit;text-decoration:none;cursor:pointer}main{padding-bottom:30px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:clamp(14px,3vw,24px);margin:14px 0;box-shadow:var(--shadow)}h1{font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.15;margin:.3rem 0 .6rem}h2{font-size:1.45rem;margin:.1rem 0 1rem}h3{font-size:1.08rem;margin:1rem 0 .4rem}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.field{min-width:0}.field label{display:block;font-weight:650;margin-bottom:5px}.field input,.field select{width:100%;min-height:46px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--text);font:inherit}.field input[type=range]{padding:0;accent-color:var(--accent)}.error{display:block;color:var(--bad);min-height:1.4em;font-size:.9rem}.btn.primary{background:var(--accent);color:var(--accentText);border-color:var(--accent)}.btn:disabled{opacity:.45;cursor:not-allowed}.presets,.actions,.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.presets{margin:10px 0 16px}.result-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.metric{border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}.metric span{display:block;color:var(--muted);font-size:.9rem}.metric strong{display:block;overflow-wrap:anywhere;font-size:clamp(1rem,2.5vw,1.35rem)}.status{margin-top:10px;min-height:1.5em}.table-wrap{overflow:auto;max-height:540px;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;white-space:nowrap}th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line)}th{position:sticky;top:0;background:var(--panel);z-index:1}th:first-child,td:first-child{text-align:left}.chart{height:170px;width:100%;display:block;margin-top:10px}.bar{fill:var(--accent)}.bar2{fill:#d18a2b}.small{font-size:.92rem}.good{color:var(--good)}.bad{color:var(--bad)}.tablist{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}.tablist button[aria-selected=true]{background:var(--accent);color:var(--accentText);border-color:var(--accent)}[role=tabpanel][hidden]{display:none}.faq details{padding:12px 0;border-bottom:1px solid var(--line)}summary{font-weight:700;cursor:pointer}.skip{position:absolute;left:-9999px}.skip:focus{left:10px;top:10px;background:var(--panel);padding:10px;z-index:10}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}.note{border-left:4px solid var(--accent);padding:10px 14px;background:color-mix(in srgb,var(--accent) 8%,var(--panel))}footer{padding:16px 0 36px;color:var(--muted)}@media(max-width:700px){.grid,.three{grid-template-columns:1fr}.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}header,nav,main,footer,.breadcrumb{width:calc(100% - 20px)}.panel{padding:14px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}@media print{body{background:#fff;color:#000;font-size:10pt}.tablist,#panel-prepayment,#panel-affordability,#panel-compare{display:none!important}body *{visibility:hidden!important}.print-area,.print-area *{visibility:visible!important}.print-area{position:static;width:100%;border:0;box-shadow:none;padding:0;margin:0}#schedule[hidden]{display:block!important}.print-area .table-wrap{max-height:none;overflow:visible}.print-area th{position:static}header,nav,footer,.no-print{display:none!important}table{white-space:normal}th,td{padding:4px;border:1px solid #aaa}}
 .emi-page-main{width:100%;max-width:960px;margin-inline:auto}@media(max-width:700px){.emi-page-main{width:calc(100% - 20px)}}
+
+/* Compact EMI layout: keep primary controls and totals readable on narrow screens. */
+.metric strong{overflow-wrap:normal;word-break:normal;font-variant-numeric:tabular-nums}
+@media(max-width:700px){
+ body{font-size:15px;line-height:1.35}
+ .site-nav{gap:5px;margin-bottom:6px}.site-nav a{min-height:36px;padding:5px 8px;font-size:13px}
+ header{padding:8px 0 2px}header h1{font-size:1.55rem;margin:2px 0 5px}header p{margin:4px 0;font-size:13px}
+ .breadcrumb{margin:3px auto 5px;font-size:12px}
+ .panel{margin:7px 0;padding:10px;border-radius:12px}
+ #calc-heading{font-size:1.2rem;margin:0 0 6px}
+ .presets{gap:5px;margin:5px 0 8px}.presets .btn{min-height:34px;padding:4px 8px;font-size:13px}
+ #loan-form>.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #loan-form .field label{font-size:12px;margin-bottom:3px}
+ #loan-form .field input:not([type=range]),#loan-form .field select{min-height:40px;padding:6px;font-size:15px}
+ #loan-form .field input[type=range]{min-height:20px;height:20px;margin:3px 0 0}
+ #loan-form .field .error{min-height:0;line-height:1.2}
+ #loan-form .field .error:empty{display:none}
+ #loan-form .field .row{gap:4px;flex-wrap:nowrap;margin-top:5px}
+ #loan-form .field .row label{white-space:nowrap;margin:0}
+ #loan-form .field .row select{min-width:0;flex:1}
+ #loan-form .actions{margin-top:7px!important;gap:5px}
+ #loan-form .actions .btn{min-height:36px;padding:5px 8px;font-size:12px}
+ #summary{margin-top:5px;min-height:0;font-size:13px}
+ #summary p{margin:4px 0}
+ .result-grid{gap:6px}
+ .metric{padding:7px;min-width:0}
+ .metric span{font-size:12px}
+ .metric strong{font-size:clamp(11px,3.1vw,15px);line-height:1.3;overflow-wrap:anywhere}
+ .chart{height:85px;margin-top:4px}
+}
 </style>
 </head>
 <body>
