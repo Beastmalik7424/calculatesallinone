@@ -28,6 +28,7 @@
       lossWord: "Loss",
       profitNA: "Percentage is N/A because cost price is zero.",
       profitPct: "percent of cost price",
+      profitMargin: "Margin on selling price",
       ageEnter: "Enter your date of birth.",
       ageFuture: "Date of birth cannot be in the future.",
       ageCheck: "Please check the date of birth.",
@@ -85,6 +86,7 @@
       lossWord: "نقصان",
       profitNA: "فیصد N/A ہے کیونکہ قیمت خرید صفر ہے۔",
       profitPct: "فیصد قیمت خرید پر",
+      profitMargin: "فروخت کی قیمت پر منافع کا مارجن",
       ageEnter: "اپنی تاریخ پیدائش لکھیں۔",
       ageFuture: "تاریخ پیدائش مستقبل کی نہیں ہو سکتی۔",
       ageCheck: "براہ کرم تاریخ پیدائش دوبارہ دیکھیں۔",
@@ -134,6 +136,7 @@
       lossWord: "خسارة",
       profitNA: "النسبة غير متاحة لأن سعر التكلفة يساوي صفرًا.",
       profitPct: "من سعر التكلفة بالمئة",
+      profitMargin: "هامش الربح من سعر البيع",
       ageEnter: "أدخل تاريخ ميلادك.",
       ageFuture: "لا يمكن أن يكون تاريخ الميلاد في المستقبل.",
       ageCheck: "يرجى التحقق من تاريخ الميلاد.",
@@ -176,6 +179,7 @@
       lossWord: "हानि",
       profitNA: "प्रतिशत उपलब्ध नहीं है क्योंकि लागत मूल्य शून्य है।",
       profitPct: "लागत मूल्य का प्रतिशत",
+      profitMargin: "बिक्री मूल्य पर लाभ मार्जिन",
       ageEnter: "अपनी जन्मतिथि दर्ज करें।",
       ageFuture: "जन्मतिथि भविष्य की नहीं हो सकती।",
       ageCheck: "कृपया जन्मतिथि जाँचें।",
@@ -218,6 +222,7 @@
       lossWord: "Pérdida",
       profitNA: "El porcentaje no está disponible porque el precio de coste es cero.",
       profitPct: "del precio de coste",
+      profitMargin: "Margen sobre el precio de venta",
       ageEnter: "Introduce tu fecha de nacimiento.",
       ageFuture: "La fecha de nacimiento no puede estar en el futuro.",
       ageCheck: "Comprueba la fecha de nacimiento.",
@@ -260,6 +265,7 @@
       lossWord: "Perte",
       profitNA: "Le pourcentage n’est pas disponible car le prix de revient est nul.",
       profitPct: "du prix de revient",
+      profitMargin: "Marge sur le prix de vente",
       ageEnter: "Saisissez votre date de naissance.",
       ageFuture: "La date de naissance ne peut pas être dans le futur.",
       ageCheck: "Veuillez vérifier la date de naissance.",
@@ -585,12 +591,15 @@
       var diff = sell - cost
       var word = diff >= 0 ? t("profitWord") : t("lossWord")
       var amount = fmt(Math.abs(diff))
+      // Margin uses selling price, while markup uses cost. Neither denominator may be zero.
+      var margin = sell === 0 ? "N/A" : (diff / sell * 100).toFixed(2) + "%"
+      var marginResult = " " + t("profitMargin") + ": " + margin + "."
       if (cost === 0) {
-        say("pl-result", word + ": " + amount + ". " + t("profitNA"))
+        say("pl-result", word + ": " + amount + ". " + t("profitNA") + marginResult)
         return
       }
       var pct = (diff / cost) * 100
-      say("pl-result", word + ": " + amount + " (" + Math.abs(pct).toFixed(2) + " " + t("profitPct") + ").")
+      say("pl-result", word + ": " + amount + " (" + Math.abs(pct).toFixed(2) + " " + t("profitPct") + ")." + marginResult)
     })
   }
 
