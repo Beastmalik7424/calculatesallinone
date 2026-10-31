@@ -3,6 +3,18 @@
  const form=document.getElementById("extra-calculator-form");
  if(!form||!window.ExtraCalculators)return;
  const output=document.getElementById("extra-result");
+ const percentageMode=document.getElementById("percentage-mode");
+ if(percentageMode){
+  const valueLabel=form.querySelector('label[for="value"]');
+  const totalLabel=form.querySelector('label[for="total"]');
+  const updatePercentageLabels=()=>{
+   const reverse=percentageMode.value==="share";
+   if(valueLabel)valueLabel.textContent=reverse?"Part":"Percentage (%)";
+   if(totalLabel)totalLabel.textContent=reverse?"Whole":"Number";
+  };
+  percentageMode.addEventListener("change",updatePercentageLabels);
+  updatePercentageLabels();
+ }
  form.addEventListener("submit",function(event){
   event.preventDefault();
   try{
