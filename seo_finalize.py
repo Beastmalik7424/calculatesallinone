@@ -259,13 +259,6 @@ def main():
     Path("urls.txt").write_text("\n".join(SITE + path for path in indexable) + "\n", encoding="utf-8")
     Path("no-slash.txt").write_text("\n".join(NO_SLASH_PATHS) + "\n", encoding="utf-8")
     indexable_urls = {SITE + path for path in indexable}
-    # Dates are added only for pages substantively updated in this change.
-    lastmod_by_path = {
-        "/contact/": "2026-10-21",
-        "/discount-calculator/": "2026-10-21",
-        "/editorial-policy/": "2026-10-21",
-        "/health/": "2026-10-21",
-    }
     ET.register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
     ET.register_namespace("xhtml", "http://www.w3.org/1999/xhtml")
     urlset = ET.Element("{http://www.sitemaps.org/schemas/sitemap/0.9}urlset")
@@ -274,8 +267,6 @@ def main():
         canonical = SITE + path
         node = ET.SubElement(urlset, "{http://www.sitemaps.org/schemas/sitemap/0.9}url")
         ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}loc").text = canonical
-        if path in lastmod_by_path:
-            ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod").text = lastmod_by_path[path]
         for code, href in re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', raw):
             if href in indexable_urls:
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})

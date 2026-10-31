@@ -90,6 +90,13 @@ check(len(set(titles.values())) == len(titles), "duplicate titles across homepag
 check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across homepage and seven scoped pages")
 
 home = pages.get("/", "")
+check('href="#all-tools"' in home and "Browse all free calculators" in home,
+      "homepage is missing the primary browse-calculators CTA")
+check("Muhammad Fayyaz Adeel" in home and 'href="/about/"' in home,
+      "homepage is missing the named maintainer and About link")
+profit_loss = read(ROOT / "profit-loss-calculator" / "index.html")
+check("online calculator" in home.lower(), "homepage should retain the online calculator topic wording")
+check("profit loss calculator" in profit_loss.lower(), "profit-loss page should retain the profit loss calculator wording")
 for path in TARGETS:
     check(bool(re.search(r'href=["\']' + re.escape(path) + r'["\']', home)),
           "homepage is missing direct internal link to " + path)
@@ -106,10 +113,12 @@ try:
         if decision == "index":
             node = next((n for n in root.findall("sm:url", ns) if n.findtext("sm:loc", namespaces=ns) == url), None)
             lastmod = node.findtext("sm:lastmod", namespaces=ns) if node is not None else None
-            check(bool(lastmod and re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod)),
-                  "missing valid lastmod for " + url)
+            check(lastmod is None, "unverified lastmod must be omitted for " + url)
     for url in locs:
         check(url.endswith("/"), "sitemap URL lacks trailing slash: " + str(url))
+    for node in root.findall("sm:url", ns):
+        check(node.find("sm:lastmod", ns) is None,
+              "sitemap must omit unverified lastmod: " + str(node.findtext("sm:loc", namespaces=ns)))
     print("SITEMAP_SCOPED_INDEXABLE_URLS")
     for path, decision in TARGETS.items():
         if decision == "index":

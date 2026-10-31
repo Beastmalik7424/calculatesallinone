@@ -21,10 +21,6 @@ ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lowe
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
-# Har page ki asal update date. Sirf wahi pages likhein jin ka content badla ho.
-LASTMOD = {
-    "/zakat-calculator/": "2026-10-17",
-}
 OUT = "public"
 STATIC = "static"
 
@@ -927,6 +923,9 @@ def home_extra_html(lang):
         "Yes. CalculatesAll tools are free, calculations run in your browser, and calculator entries are not sent to our server. Each tool explains its formula and limits. Confirm important financial, medical or religious decisions with a qualified professional."
     )
     out += '<h2 class="' + H2 + '">' + heading + '</h2><p class="' + P + '">' + answer_first + '</p><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
+    if lang == "en":
+        out += '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel. <a class="' + LINK + '" href="/about/">About the maintainer</a>.</p>'
+        out += '<p class="' + P + '"><a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools">Browse all free calculators</a></p>'
     return out
 
 
@@ -1789,10 +1788,7 @@ def sitemap(entries):
         links = ""
         for code, href in alts:
             links += '    <xhtml:link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '"/>\n'
-        lastmod = ""
-        if path in LASTMOD:
-            lastmod = "    <lastmod>" + LASTMOD[path] + "</lastmod>\n"
-        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + lastmod + links + "  </url>\n")
+        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + links + "  </url>\n")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
            + items + "</urlset>\n")
