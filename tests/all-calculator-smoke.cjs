@@ -6,7 +6,7 @@ const handlers = {};
 const elements = {};
 function element(id, value = "") {
   return elements[id] = {
-    id, value, checked: false, disabled: false, textContent: "", options: [], selectedIndex: 0,
+    id, value, checked: false, disabled: false, hidden: false, textContent: "", options: [], selectedIndex: 0,
     attributes: {}, _handlers: {}, classList: {
       _set: new Set(),
       toggle(name, force) { if (force === undefined ? !this._set.has(name) : force) this._set.add(name); else this._set.delete(name); },
@@ -27,7 +27,8 @@ function element(id, value = "") {
   "b-kg","b-kg-error","b-lb","b-lb-error","bmi-weight-kg","bmi-weight-lb","bmi-weight-kg-group","bmi-weight-lb-group","b-cm","b-cm-error","b-ft","b-ft-error","b-in","b-in-error","bmi-result",
   "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
   "conv-form","u-cat","u-val","u-from","u-to","conv-result","t-count","t-target","t-progress","t-tap","t-reset",
-  "sw-display","sw-start","sw-stop","sw-reset"
+  "sw-display","sw-start","sw-stop","sw-reset",
+  "years-days-form","yd-direction","yd-value","yd-value-label","yd-method","yd-calendar-option","yd-exact-fields","yd-start-date","yd-submit","yd-result"
 ].forEach(id => element(id));
 elements["u-cat"].value = "weight";
 elements["bmi-unit"].value = "metric";
@@ -35,6 +36,10 @@ elements["bmi-height-cm"].checked = true;
 elements["bmi-height-ftin"].checked = false;
 elements["bmi-weight-kg"].checked = true;
 elements["bmi-weight-lb"].checked = false;
+elements["yd-direction"].value = "years-to-days";
+elements["yd-value"].value = "80";
+elements["yd-method"].value = "365";
+elements["yd-calendar-option"].value = "calendar";
 const storage = new Map();
 let clock = 0;
 const NativeDate = Date;
@@ -64,6 +69,46 @@ function submit(form) {
   return prevented;
 }
 function setValues(values) { for (const [id, value] of Object.entries(values)) elements[id].value = String(value); }
+
+// Years to days and days to years: both directions, method switching and validation.
+assert.equal(elements["yd-value-label"].textContent, "Number of years");
+assert.equal(elements["yd-submit"].textContent, "Convert Years");
+assert.equal(elements["yd-exact-fields"].hidden, true);
+assert.equal(elements["yd-start-date"].disabled, true);
+setValues({"yd-value":80,"yd-method":365}); submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /80 years = 29,200 days/);
+setValues({"yd-value":80,"yd-method":365.2425}); submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /29,219\.4 days/);
+elements["yd-method"].value = "calendar";
+elements["yd-start-date"].value = "2024-01-01";
+elements["yd-method"]._handlers.change();
+assert.equal(elements["yd-exact-fields"].hidden, false);
+assert.equal(elements["yd-start-date"].disabled, false);
+submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /1,461 days/);
+elements["yd-direction"].value = "days-to-years";
+elements["yd-direction"]._handlers.change();
+assert.equal(elements["yd-method"].value, "365.2425", "reverse mode must replace the exact calendar-only method");
+assert.equal(elements["yd-calendar-option"].disabled, true);
+assert.equal(elements["yd-exact-fields"].hidden, true);
+assert.equal(elements["yd-start-date"].disabled, true);
+assert.equal(elements["yd-value-label"].textContent, "Number of days");
+assert.equal(elements["yd-submit"].textContent, "Convert Days");
+setValues({"yd-value":1009}); submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /1,009 days = 2\.76254817 years/);
+elements["yd-method"].value = "365";
+submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /2\.76438356 years/);
+setValues({"yd-value":-1}); submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /Enter a number of days from 0 to 1,000,000/);
+elements["yd-method"].value = "calendar";
+submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /choose a 365-day or Gregorian-average year/i);
+elements["yd-direction"].value = "years-to-days";
+elements["yd-direction"]._handlers.change();
+assert.equal(elements["yd-calendar-option"].disabled, false);
+assert.equal(elements["yd-value-label"].textContent, "Number of years");
+assert.equal(elements["yd-submit"].textContent, "Convert Years");
 
 // Zakat: reject invalid negative input before the representative outcomes.
 setValues({"z-cash":-1,"z-silverprice":1}); submit("zakat-form");
@@ -251,6 +296,10 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
     assert.equal(exact(date, years), null, "Reject invalid calendar input: " + date);
   }
   const generated = fs.readFileSync("public/years-to-days-calculator/index.html", "utf8");
+  assert.match(generated, /id="yd-direction"/);
+  assert.match(generated, /option value="days-to-years"/);
+  assert.match(generated, /id="yd-calendar-option"/);
+  assert.match(generated, /How many years is 1,009 days\?/);
   assert.match(generated, /id="yd-exact-fields"/);
   assert.match(generated, /id="yd-start-date"/);
   assert.match(generated, /option value="calendar"/);

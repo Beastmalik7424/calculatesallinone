@@ -833,30 +833,39 @@ TOOLS.extend([
     {
         "slug": "years-to-days-calculator", "category": "time",
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
-        "description": "Convert years into days, weeks, hours, minutes and seconds using a 365-day year, the Gregorian average, or exact calendar dates that include leap days.",
+        "description": "Convert years to days or days to years using a 365-day year, the Gregorian average, or exact calendar dates for years-to-days calculations.",
         "h1": "Years to Days Calculator",
-        "lead": "Convert years to days, weeks, hours, minutes and seconds. Choose a simple or average-year conversion, or enter a start date for an exact leap-year-aware day count.",
+        "lead": "Convert in either direction. Choose a 365-day or Gregorian-average year, or enter a start date for an exact leap-year-aware years-to-days result.",
         "ui": (
-            '<form id="years-days-form" class="space-y-4" novalidate>'
-            '<label class="@L@" for="yd-value">Number of years</label>'
+            '<form id="years-days-form" class="space-y-3" novalidate>'
+            '<div class="grid grid-cols-2 gap-3">'
+            '<div><label class="@L@" for="yd-direction">Convert</label>'
+            '<select class="@I@" id="yd-direction"><option value="years-to-days">Years to days</option><option value="days-to-years">Days to years</option></select></div>'
+            '<div><label class="@L@" for="yd-method">Year length</label>'
+            '<select class="@I@" id="yd-method"><option value="365">365-day year</option><option value="365.2425">Gregorian average (365.2425)</option><option id="yd-calendar-option" value="calendar">Exact calendar years (years to days only)</option></select></div>'
+            '</div>'
+            '<label class="@L@" id="yd-value-label" for="yd-value">Number of years</label>'
             '<input class="@I@" id="yd-value" type="number" min="0" max="1000000" step="any" inputmode="decimal" value="80" required>'
-            '<label class="@L@" for="yd-method">Conversion method</label>'
-            '<select class="@I@" id="yd-method"><option value="365">365 days per year (simple)</option><option value="365.2425">365.2425 days per year (Gregorian average)</option><option value="calendar">Exact calendar years (requires start date)</option></select>'
             '<div id="yd-exact-fields" hidden><label class="@L@" for="yd-start-date">Start date (Gregorian calendar)</label>'
             '<input class="@I@" id="yd-start-date" type="date" min="0001-01-01" max="9999-12-31" disabled>'
             '<p class="mt-2 text-sm">Exact mode accepts whole years and counts actual days from the start date up to, but not including, the anniversary. For 29 February, a non-leap anniversary uses 1 March.</p></div>'
-            '<button class="@B@" type="submit">Convert Years</button></form>'
+            '<button id="yd-submit" class="@B@" type="submit">Convert Years</button></form>'
             '<div id="yd-result" class="@R@" role="status" aria-live="polite"></div>'
         ),
         "guide": [
-            ("Conversion formulas", ["Days = years multiplied by 365 for the simple method. For the Gregorian average, days = years multiplied by 365.2425. Weeks = days divided by 7. Hours = days multiplied by 24. Minutes = hours multiplied by 60. Seconds = minutes multiplied by 60."]),
+            ("Conversion formulas", ["Days = years multiplied by 365 for the simple method. For the Gregorian average, days = years multiplied by 365.2425. For reverse conversion, years = days divided by the selected 365 or 365.2425 day year. Weeks = days divided by 7. Hours = days multiplied by 24. Minutes = hours multiplied by 60. Seconds = minutes multiplied by 60."]),
             ("Worked example", ["80 years = 29,200 days by the 365-day method, or 29,219.4 days by the Gregorian average method. These are conversions, not exact elapsed days between calendar dates."]),
+            ("Days to years", ["Select Days to years to divide a day count by the selected year length. For example, 1,009 days is 2.76254817 years using 365.2425 days per year, or 2.76438356 years using a 365-day year. This is a decimal-year estimate, not a calendar age. For exact elapsed calendar years, use actual start and end dates."]),
             ("Accuracy limits", ["Calendar years vary between 365 and 366 days. For exact elapsed days, choose Exact calendar years, enter a valid start date and whole number of years. The ending anniversary is excluded and any February 29 inside the period is counted. When a start date is February 29 and the ending year is not leap, the ending anniversary is March 1. For legal deadlines, check the rule that applies to your document."]),
             ("Choosing the right method", ["Use the simple 365-day method when a worksheet or a question explicitly defines one year as 365 days. Use the Gregorian average for long-term approximate conversions across many years, because the Gregorian calendar has 97 leap years in every 400-year cycle. Neither method tells you the exact days between two birthdays without their dates. If you need the exact elapsed time, use the Age Calculator with actual calendar dates. The weeks shown can contain fractions because the conversion divides the day result by seven."]),
             ("Reading the results", ["Hours, minutes and seconds are derived from the selected number of days, not from an assumed start time. Decimal years can produce fractional days and seconds. The calculator shows up to eight decimal places for readability. Rounding the displayed value does not change the internal conversion factor. For example, 1.5 simple years is 547.5 days, which is 78.21428571 weeks and 13,140 hours. For a calendar-specific result, select real start and end dates instead of assuming every year is equal."])
         ],
         "faq": [("How many days are in 80 years?", "29,200 with the simple method, or 29,219.4 with the Gregorian-average method."),
-                ("Does this account for leap years?", "Yes in Exact calendar years mode, which uses a start date and counts actual February 29 dates. The average method only approximates leap-year frequency.")],
+                ("Does this account for leap years?", "Yes in Exact calendar years mode, which uses a start date and counts actual February 29 dates. The average method only approximates leap-year frequency."),
+                ("Can I convert days to years?", "Yes. Select Days to years and choose a 365-day year or the 365.2425-day Gregorian average. Exact calendar mode is only available for converting whole years to days from a start date."),
+                ("How many years is 1,009 days?", "About 2.76 years using the Gregorian average of 365.2425 days per year. For an exact elapsed calendar age, use actual start and end dates because calendar years contain 365 or 366 days."),
+                ("How many days are in one year?", "A common year has 365 days and a leap year has 366. Averaged over the 400-year Gregorian cycle, one year is 365.2425 days."),
+                ("How many days are in 10 years?", "3,650 using the simple method or 3,652.425 using the Gregorian average. A real calendar span may contain two or three leap days depending on its start and end dates.")],
         "sources": "Gregorian mean year: 365.2425 days over the 400-year Gregorian calendar cycle."
     },
     {
