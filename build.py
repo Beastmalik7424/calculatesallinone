@@ -2206,8 +2206,11 @@ def main():
                 "Advertising does not determine calculator formulas, worked examples or results. We do not publish paid reviews, invented ratings or undisclosed sponsored editorial content.",
                 'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
             ]
+        elif path == "/about/":
+            # ABOUT_EXTRA is already supplied by the About page definition above.
+            pass
         else:
-            paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA, "/about/": ABOUT_EXTRA}.get(path, [])
+            paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA}.get(path, [])
         static_page(path, title, desc, h1, paras)
         entries.append((path, []))
     from extra_calculator_pages import build_extra_pages

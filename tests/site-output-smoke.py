@@ -63,7 +63,10 @@ assert "Free browser-based calculators and everyday utility tools for people wor
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
-about_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", about_html))
+about_main_match = re.search(r"<main\b[^>]*>(.*?)</main>", about_html, re.S)
+assert about_main_match, "About page should have a main content landmark"
+about_main_html = re.sub(r"<script\b.*?</script>", " ", about_main_match.group(1), flags=re.S)
+about_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", about_main_html))
 about_words = re.findall(r"\b[\w'-]+\b", about_text)
 assert 420 <= len(about_words) <= 700, f"About page should provide concise, substantive project information (420-700 words), got {len(about_words)}"
 assert about_html.count("<h1") == 1, "About page must have exactly one H1"
