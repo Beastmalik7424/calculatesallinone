@@ -1417,7 +1417,7 @@ def tool_page(t):
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
     elif t["slug"] == "years-to-days-calculator":
-        title = "Years to Days Calculator | Exact & Average"
+        title = "Years to Days Calculator | Exact and Average"
         desc = "Convert years to days using 365 days, the Gregorian average of 365.2425 days, or exact calendar dates. See quick-reference examples and leap-year limits."
         ui = t["ui"]
         guide = t["guide"]
