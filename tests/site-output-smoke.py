@@ -62,6 +62,10 @@ for path in ("/about/", "/contact/", "/health/", "/terms/", "/time/"):
     page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
     title = re.search(r"<title>([^<]+)</title>", page_html)
     assert title and 30 <= len(html_lib.unescape(title.group(1))) <= 60, f"Flagged page title should clearly identify its purpose: {path}"
+for path in ("/ur/age-calculator/", "/ur/bmi-calculator/", "/ur/discount-calculator/", "/ur/profit-loss-calculator/", "/ur/standard-calculator/", "/ur/stopwatch/", "/ur/tasbih-counter/", "/ur/unit-converter/", "/ur/zakat-calculator/"):
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    meta = re.search(r'<meta name="description" content="([^"]+)"', page_html)
+    assert meta and 120 <= len(html_lib.unescape(meta.group(1))) <= 160, f"Flagged Urdu description should be complete and page-specific: {path}"
 urdu_age_html = output_for_url(SITE + "/ur/age-calculator/").read_text(encoding="utf-8")
 urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
