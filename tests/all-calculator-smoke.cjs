@@ -79,6 +79,7 @@ setValues({"yd-value":80,"yd-method":365}); submit("years-days-form");
 assert.match(elements["yd-result"].textContent, /80 years = 29,200 days/);
 setValues({"yd-value":80,"yd-method":365.2425}); submit("years-days-form");
 assert.match(elements["yd-result"].textContent, /29,219\.4 days/);
+elements["yd-value"].value = "4";
 elements["yd-method"].value = "calendar";
 elements["yd-start-date"].value = "2024-01-01";
 elements["yd-method"]._handlers.change();
