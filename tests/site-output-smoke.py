@@ -78,7 +78,7 @@ for href in ("/profit-loss-calculator/", "/discount-calculator/", "/emi-calculat
 for href in ("https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "https://www.nist.gov/pml/owm/si-units-length", "https://openstax.org/books/principles-finance/pages/5-1-the-income-statement", "https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"):
     assert 'href="' + href + '"' in about_html and 'rel="noopener noreferrer"' in about_html, f"About source links should be explicit and safe: {href}"
 assert 'href="mailto:malikadeelbhatti@gmail.com"' in about_html, "About page should provide a direct, verified correction contact"
-assert "<caption>" in about_html and "<th scope=" in about_html, "About page's assumptions table should have accessible caption and column headers"
+assert re.search(r"<caption\b", about_html) and re.search(r"<th\s+scope=", about_html), "About page's assumptions table should have accessible caption and column headers"
 assert "Every calculator is independently verified" not in about_html and "certified expert" not in about_html.lower(), "About page must not invent universal review or credential claims"
 assert '<title>About CalculatesAll | Project, Methods & Privacy</title>' in about_html, "About title should clearly identify the page and its useful scope"
 assert 'name="description" content="Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details."' in about_html, "About meta description should accurately summarize the page"
