@@ -27,7 +27,7 @@ jobs:
           [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "Invalid full SHA"; exit 1; }
           test -n "$VERCEL_TOKEN" || { echo "VERCEL_TOKEN secret missing"; exit 1; }
       - name: Checkout exact commit
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.commit_sha }}
           persist-credentials: false
@@ -35,11 +35,11 @@ jobs:
         env:
           TARGET_SHA: ${{ inputs.commit_sha }}
         run: test "$(git rev-parse HEAD)" = "$TARGET_SHA"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: npm
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - name: Build and regression checks

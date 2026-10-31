@@ -1,14 +1,14 @@
 """Editorial content for CalculatesAll. Edit text here, then run npm run build."""
 
 REVIEW_STATUS = {
-    "bmi-calculator": "Formula and WHO categories checked against the stated method. Clinical review is pending.",
-    "profit-loss-calculator": "Formulas checked against the stated method.",
-    "discount-calculator": "Formulas checked against the stated method.",
-    "age-calculator": "Calendar method checked against worked examples.",
-    "unit-converter": "Conversion factors checked against published definitions.",
-    "standard-calculator": "Order of operations checked with test expressions.",
-    "tasbih-counter": "Counting, undo, reset and target behaviour checked against the stated method.",
-    "stopwatch": "Timing method checked against the browser clock.",
+    "bmi-calculator": "Formula is weight divided by height squared. Categories follow the adult ranges shown on this page. This tool is not a clinical assessment.",
+    "profit-loss-calculator": "Formulas follow the method stated on this page.",
+    "discount-calculator": "Formulas follow the method stated on this page.",
+    "age-calculator": "Calendar method counts whole years, months and days between the two dates entered.",
+    "unit-converter": "Conversions use the factors shown in the worked examples on this page.",
+    "standard-calculator": "Expressions follow standard operator precedence, as shown in the examples on this page.",
+    "tasbih-counter": "Counting, undo, reset and target behaviour are described on this page.",
+    "stopwatch": "Elapsed time comes from the browser timer, as described on this page.",
 }
 
 GUIDE_EXTRA = {
@@ -69,7 +69,7 @@ GUIDE_EXTRA = {
             "Cost price is 1,500 and selling price is 1,200. The difference is minus 300, which is a loss of 300.",
             "The percentage is minus 300 divided by 1,500, multiplied by 100, which is minus 20 percent. The loss is 20 percent of cost.",
         ]),
-        ("Common mistakes", [
+        ("More common mistakes", [
             "Forgetting that discounts reduce the selling price. Calculate profit after the discount you actually gave the customer.",
             "Comparing a percentage on cost with a percentage on selling price. Always check which base a percentage uses before you compare two figures.",
         ]),

@@ -114,6 +114,15 @@ def normalize_meta(raw, path, lang):
     if not title_match or not desc_match:
         raise SystemExit("Missing title/description: " + path)
     title = html.unescape(title_match.group(1).strip())
+    title_overrides = {
+        "/about/": "About CalculatesAll | Project, Methods & Privacy",
+        "/contact/": "Contact CalculatesAll | Help and Feedback",
+        "/health/": "Health Calculators and BMI Guide | CalculatesAll",
+        "/terms/": "Terms of Use | CalculatesAll Free Tools",
+        "/time/": "Date and Time Calculators | CalculatesAll",
+        "/ur/age-calculator/": "عمر کیلکولیٹر | سال، مہینے اور دن",
+    }
+    title = title_overrides.get(path, title)
     # Repair the known malformed title explicitly rather than truncating it into a fragment.
     if path == "/profit-loss-calculator/":
         title = "Profit and Loss Calculator | Profit % | CalculatesAll"
@@ -126,6 +135,30 @@ def normalize_meta(raw, path, lang):
     if path == "/unit-converter/":
         title = "Unit Converter: cm to Inches, kg to lbs | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
+    description_overrides = {
+    "/about/": "Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details.",
+    "/affiliate-disclosure/": "Learn how CalculatesAll is funded, how advertisements are labelled, and how future affiliate links will be disclosed without influencing calculator results.",
+    "/compound-interest-calculator/": "Estimate compound interest from your starting balance, annual rate, time and compounding frequency. Review the formula and see how growth accumulates.",
+    "/contact/": "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review.",
+    "/date-calculator/": "Find calendar days between two dates using the Gregorian calendar. The result accounts for leap years and shows the direction from start date to end date.",
+    "/discount-calculator/": "Calculate your discount amount, final sale price and total savings from the original price and discount percentage. See the formula and a worked example.",
+    "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",
+    "/stopwatch/": "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app.",
+    "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
+    "/zakat-calculator/": "Calculate 2.5 percent Zakat on net wealth, check the silver Nisab threshold and lunar-year condition. Confirm personal rulings with a qualified scholar."
+}
+    urdu_description_overrides = {
+    "/ur/age-calculator/": "تاریخ پیدائش اور مطلوبہ تاریخ درج کرکے عمر سال، مہینوں اور دنوں میں معلوم کریں۔ کل گزرے دن بھی دیکھیں اور کیلکولیٹر کے تاریخوں کے حساب کا طریقہ سمجھیں۔",
+    "/ur/bmi-calculator/": "کلوگرام یا پاؤنڈ وزن اور سینٹی میٹر یا فٹ و انچ قد درج کرکے بالغ افراد کا BMI معلوم کریں۔ WHO کی وزن کی درجہ بندی دیکھیں اور نتیجے کی حدود سمجھیں۔",
+    "/ur/discount-calculator/": "اصل قیمت اور رعایت کا فیصد درج کرکے بچت، رعایت کے بعد آخری قیمت اور حساب کا طریقہ دیکھیں۔ مختلف رعایتوں کا موازنہ کریں اور خریداری سے پہلے نتیجہ چیک کریں۔",
+    "/ur/profit-loss-calculator/": "قیمت خرید اور فروخت درج کرکے منافع یا نقصان اور اس کا فیصد معلوم کریں۔ کاروباری آمدنی، لاگت اور اخراجات سے خالص منافع کا حساب بھی کریں اور فارمولے دیکھیں۔",
+    "/ur/standard-calculator/": "براؤزر میں جمع، تفریق، ضرب، تقسیم، فیصد اور قوسین کے ساتھ حساب کریں۔ سائنسی موڈ میں مثلثاتی افعال، جذر اور لاگرتھم استعمال کریں، بغیر ایپ ڈاؤن لوڈ کیے۔",
+    "/ur/stopwatch/": "براؤزر میں وقت شروع، روکیں اور دوبارہ صفر کریں۔ اسٹاپ واچ سیکنڈ کے سو حصوں تک وقت دکھاتی ہے، مگر درستگی آلے اور براؤزر کی کارکردگی پر منحصر ہو سکتی ہے۔",
+    "/ur/tasbih-counter/": "ذکر کے لیے تسبیح کاؤنٹر استعمال کریں، 33، 99 یا اپنا ہدف مقرر کریں اور گنتی اسی ڈیوائس پر محفوظ رکھیں۔ گنتی واپس لینے، صفر کرنے اور محفوظ رہنے کا طریقہ دیکھیں۔",
+    "/ur/unit-converter/": "وزن، لمبائی اور درجہ حرارت کی اکائیاں تبدیل کریں، جیسے کلوگرام سے پاؤنڈ، سینٹی میٹر سے انچ اور سیلسیئس سے فارن ہائیٹ۔ ہر تبدیلی کا نتیجہ فوری دیکھیں۔",
+    "/ur/zakat-calculator/": "چاندی کے نصاب کے مطابق خالص مال پر 2.5 فیصد زکوٰۃ کا حساب کریں۔ نقدی، سونا، چاندی، کاروباری مال اور واجب الادا قرض درج کریں، پھر قمری سال کی شرط کی تصدیق کریں۔"
+}
+    desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
         desc = "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app."
     if path == "/age-calculator/":
@@ -137,7 +170,7 @@ def normalize_meta(raw, path, lang):
         if len(title) > 59:
             suffix = " | CalculatesAll"
             title = title[:59-len(suffix)].rstrip(" |") + suffix
-    if len(desc) < 90:
+    if len(desc) < 120:
         desc = DESCRIPTION_FALLBACKS.get(path, URDU_DESCRIPTION_FALLBACKS.get(path, desc))
     if len(desc) > 160:
         shortened = desc[:157].rsplit(" ", 1)[0].rstrip(" ,.;:")
@@ -146,18 +179,17 @@ def normalize_meta(raw, path, lang):
         raise SystemExit("Meta description needs a useful, page-specific 70-160 character description: " + path + " (" + str(len(desc)) + ")")
     raw = re.sub(r"<title>.*?</title>", "<title>" + html.escape(title, quote=False) + "</title>", raw, count=1, flags=re.S)
     raw = re.sub(r'<meta name="description" content="[^"]*"', '<meta name="description" content="' + html.escape(desc, quote=True) + '"', raw, count=1)
-    # Keep social previews aligned when these four SEO titles/descriptions are rewritten.
-    if path in {"/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/"}:
-        for attr, name, value in (
-            ("property", "og:title", title),
-            ("property", "og:description", desc),
-            ("name", "twitter:title", title),
-            ("name", "twitter:description", desc),
-        ):
-            pattern = '(<meta ' + attr + '="' + name + '" content=")[^"]*(")'
-            raw, count = re.subn(pattern, lambda m: m.group(1) + html.escape(value, quote=True) + m.group(2), raw, count=1)
-            if count != 1:
-                raise SystemExit("Missing or duplicate social meta tag: " + path + " " + name)
+    # Keep Open Graph and Twitter previews aligned with the canonical page title and description.
+    for attr, name, value in (
+        ("property", "og:title", title),
+        ("property", "og:description", desc),
+        ("name", "twitter:title", title),
+        ("name", "twitter:description", desc),
+    ):
+        pattern = '(<meta ' + attr + '="' + name + '" content=")[^"]*(")'
+        raw, count = re.subn(pattern, lambda m: m.group(1) + html.escape(value, quote=True) + m.group(2), raw, count=1)
+        if count != 1:
+            raise SystemExit("Missing or duplicate social meta tag: " + path + " " + name)
     return raw, title, desc
 
 def main():
@@ -225,7 +257,7 @@ def main():
                 schemas.append(json.loads(match.group(1)))
             except json.JSONDecodeError as exc:
                 raise SystemExit("Invalid JSON-LD in " + path + ": " + str(exc))
-        web_page = next((s for s in schemas if s.get("@type") == "WebPage"), None)
+        web_page = next((s for s in schemas if s.get("@type") in ("WebPage", "AboutPage", "ProfilePage")), None)
         if web_page is None:
             web_page = {"@context":"https://schema.org","@type":"WebPage","name":title,"url":canonical}
             schemas.append(web_page)
@@ -259,13 +291,6 @@ def main():
     Path("urls.txt").write_text("\n".join(SITE + path for path in indexable) + "\n", encoding="utf-8")
     Path("no-slash.txt").write_text("\n".join(NO_SLASH_PATHS) + "\n", encoding="utf-8")
     indexable_urls = {SITE + path for path in indexable}
-    # Dates are added only for pages substantively updated in this change.
-    lastmod_by_path = {
-        "/contact/": "2026-10-21",
-        "/discount-calculator/": "2026-10-21",
-        "/editorial-policy/": "2026-10-21",
-        "/health/": "2026-10-21",
-    }
     ET.register_namespace("", "http://www.sitemaps.org/schemas/sitemap/0.9")
     ET.register_namespace("xhtml", "http://www.w3.org/1999/xhtml")
     urlset = ET.Element("{http://www.sitemaps.org/schemas/sitemap/0.9}urlset")
@@ -274,8 +299,6 @@ def main():
         canonical = SITE + path
         node = ET.SubElement(urlset, "{http://www.sitemaps.org/schemas/sitemap/0.9}url")
         ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}loc").text = canonical
-        if path in lastmod_by_path:
-            ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod").text = lastmod_by_path[path]
         for code, href in re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', raw):
             if href in indexable_urls:
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})

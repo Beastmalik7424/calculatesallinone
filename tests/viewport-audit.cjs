@@ -1,30 +1,38 @@
 const { chromium } = require('playwright');
 (async () => {
  const browser = await chromium.launch({headless:true,args:['--no-sandbox']});
- const slugs=['zakat-calculator','profit-loss-calculator','discount-calculator','age-calculator','unit-converter','stopwatch'];
+ const slugs=['zakat-calculator','bmi-calculator','profit-loss-calculator','discount-calculator','age-calculator','unit-converter','stopwatch','emi-calculator','standard-calculator','tasbih-counter','years-to-days-calculator','query-calculator','percentage-calculator','fraction-calculator','compound-interest-calculator','date-calculator','ur/age-calculator','ur/bmi-calculator','ur/discount-calculator','ur/profit-loss-calculator','ur/standard-calculator','ur/stopwatch','ur/tasbih-counter','ur/unit-converter','ur/zakat-calculator'];
  let failures=[];
- for (const size of [{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
+ for (const size of [{width:320,height:568},{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
   for (const slug of slugs) {
    await page.goto('http://127.0.0.1:8123/'+slug+'/',{waitUntil:'load'});
    const data=await page.evaluate(()=>{
-    const section=document.querySelector('#tool-calculator');
-    const visible=(e)=>e && getComputedStyle(e).display!=='none' && e.getBoundingClientRect().height>0;
-    const buttons=[...section.querySelectorAll('button')].filter(visible);
-    const last=buttons[buttons.length-1];
+    const section=document.querySelector('#tool-calculator')
+      || document.querySelector('#main .ca-home-calculator')
+      || document.querySelector('#extra-calculator-form')
+      || document.querySelector('#calculator')
+      || document.querySelector('#loan-form')
+      || document.querySelector('#main form')
+      || document.querySelector('#main');
+    const visible=(e)=>e && getComputedStyle(e).display!=='none' && getComputedStyle(e).visibility!=='hidden' && e.getBoundingClientRect().height>0;
+    const buttons=section ? [...section.querySelectorAll('button,input[type="submit"]')].filter(visible) : [];
+    const submit=section?.querySelector('button[type="submit"],input[type="submit"]');
+    const last=visible(submit) ? submit : buttons[buttons.length-1];
     const r=last?.getBoundingClientRect();
-    return {lastButton:last?.textContent.trim(),top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2};
+    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2};
    });
    const key=slug+' '+size.width+'x'+size.height;
    console.log(key,JSON.stringify(data));
    if(data.overflow)failures.push(key+' horizontal overflow');
-   if(!data.lastButton||data.bottom>size.height-8)failures.push(key+' primary button below fold');
-   await page.screenshot({path:'/tmp/'+slug+'-'+size.width+'.png',fullPage:false});
+   if(!data.lastButton||data.bottom>size.height)failures.push(key+' primary button below fold');
+   const screenshotSlug=slug.replaceAll('/','-');
+   await page.screenshot({path:'/tmp/'+screenshotSlug+'-'+size.width+'.png',fullPage:false});
   }
   await page.close();
  }
  // Small-phone profit-only test and breadcrumb placement.
- for (const size of [{width:360,height:640},{width:320,height:568}]) {
+ for (const size of [{width:320,height:568},{width:375,height:667},{width:768,height:1024},{width:1366,height:768}]) {
   const small=await browser.newPage({viewport:size,deviceScaleFactor:1});
   await small.goto('http://127.0.0.1:8123/profit-loss-calculator/');
   const p=await small.evaluate(()=>{
@@ -54,9 +62,32 @@ const { chromium } = require('playwright');
  await page.locator('#pl-form button[type="submit"]').click();
  result=await page.locator('#pl-result').innerText();
  if(!result.includes('20')||!result.includes('25.00'))failures.push('product markup result: '+result);
+ // Product gross margin is based on selling price, not cost.
+ await page.locator('#p-cost').fill('40');
+ await page.locator('#p-sell').fill('50');
+ await page.locator('#pl-form button[type="submit"]').click();
+ result=await page.locator('#pl-result').innerText();
+ if(!result.includes('Profit: 10')||!result.includes('25.00 percent of cost price')||!result.includes('Margin on selling price: 20.00%'))failures.push('product gross margin result: '+result);
+ // Zero cost: markup is unavailable, but gross margin remains 100% when selling price is positive.
+ await page.locator('#p-cost').fill('0');
+ await page.locator('#p-sell').fill('10');
+ await page.locator('#pl-form button[type="submit"]').click();
+ result=await page.locator('#pl-result').innerText();
+ if(!result.includes('Markup is N/A because cost price is zero.')||!result.includes('Margin on selling price: 100.00%'))failures.push('zero-cost markup/margin result: '+result);
+ // Zero selling price: margin is unavailable because its denominator is zero.
+ await page.locator('#p-cost').fill('10');
+ await page.locator('#p-sell').fill('0');
+ await page.locator('#pl-form button[type="submit"]').click();
+ result=await page.locator('#pl-result').innerText();
+ if(!result.includes('Loss: 10')||!result.includes('Margin on selling price: N/A'))failures.push('zero-selling-price result: '+result);
+ await page.locator('#p-cost').fill('-1');
+ await page.locator('#p-sell').fill('100');
+ await page.locator('#pl-form button[type="submit"]').click();
+ result=await page.locator('#pl-result').innerText();
+ if(!result.includes('Enter a cost price and a selling price of zero or more.'))failures.push('negative cost validation: '+result);
 
  // Homepage Standard Calculator: actual no-scroll viewport and click checks.
- for (const size of [{width:375,height:667},{width:390,height:844},{width:1024,height:768},{width:1366,height:768}]) {
+ for (const size of [{width:320,height:568},{width:375,height:667},{width:390,height:844},{width:1024,height:768},{width:1366,height:768}]) {
   const home=await browser.newPage({viewport:size,deviceScaleFactor:1});
   await home.goto('http://127.0.0.1:8123/',{waitUntil:'load'});
   const h=await home.evaluate(()=>{

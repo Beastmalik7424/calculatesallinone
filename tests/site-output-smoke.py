@@ -4,10 +4,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from seo_finalize import normalize_meta
 _sample_title = "Advanced Example Online Calculator | Free Online Tool | CalculatesAll"
-_sample_html = '<title>' + _sample_title + '</title><meta name="description" content="' + ('A' * 100) + '">'
+_sample_desc = 'A' * 100
+_sample_html = ('<title>' + _sample_title + '</title>'
+                + '<meta name="description" content="' + _sample_desc + '">'
+                + '<meta property="og:title" content="' + _sample_title + '">'
+                + '<meta property="og:description" content="' + _sample_desc + '">'
+                + '<meta name="twitter:title" content="' + _sample_title + '">'
+                + '<meta name="twitter:description" content="' + _sample_desc + '">')
 _normalized, _title, _description = normalize_meta(_sample_html, "/example-calculator/", "en")
 assert _title == "Advanced Example Online Calculator | CalculatesAll", _title
 assert "<title>" + _title + "</title>" in _normalized
+assert '<meta property="og:description" content="' + _description + '">' in _normalized, "Open Graph description should match normalized metadata"
 
 import html as html_lib
 import json
@@ -36,21 +43,108 @@ assert set(lastmod_entries) <= set(urls), "Sitemap lastmod entries must refer on
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
-expected_lastmod_entries = {
-    SITE + "/contact/": "2026-10-21",
-    SITE + "/discount-calculator/": "2026-10-21",
-    SITE + "/editorial-policy/": "2026-10-21",
-    SITE + "/health/": "2026-10-21",
-}
-assert lastmod_entries == expected_lastmod_entries, (
-    "Only the four scoped pages with verified content/template updates may carry lastmod dates. "
-    f"Expected {expected_lastmod_entries!r}, got {lastmod_entries!r}"
+assert not lastmod_entries, (
+    "Sitemap must omit lastmod until reliable page-specific substantive update dates are tracked. "
+    f"Unexpected entries: {lastmod_entries!r}"
 )
 def output_for_url(url):
     parsed = urlparse(url)
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
+home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
+for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "free browser-based calculators"):
+    assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
+assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
+assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
+assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
+assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
+assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
+about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
+for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
+    assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
+about_main_match = re.search(r"<main\b[^>]*>(.*?)</main>", about_html, re.S)
+assert about_main_match, "About page should have a main content landmark"
+about_main_html = re.sub(r"<script\b.*?</script>", " ", about_main_match.group(1), flags=re.S)
+about_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", about_main_html))
+about_words = re.findall(r"\b[\w'-]+\b", about_text)
+assert 420 <= len(about_words) <= 700, f"About page should provide concise, substantive project information (420-700 words), got {len(about_words)}"
+assert about_html.count("<h1") == 1, "About page must have exactly one H1"
+about_headings = ["Who maintains CalculatesAll?", "What calculators and tools are available?", "How are calculator methods and changes checked?", "What happens to calculator inputs?", "What are the limits of these tools?", "How can a calculation issue be reported?"]
+assert all(heading in about_html for heading in about_headings), "About page should have distinct, question-led sections that answer reader questions"
+assert "The Query Calculator accepts supported plain-language time-conversion questions" in about_html, "About page should describe the Query Calculator accurately and state its scope"
+assert about_html.index("Who maintains CalculatesAll?") < about_html.index("What calculators and tools are available?") < about_html.index("How are calculator methods and changes checked?") < about_html.index("What happens to calculator inputs?") < about_html.index("What are the limits of these tools?") < about_html.index("How can a calculation issue be reported?"), "About sections should follow a clear reader-first sequence"
+for href in ("/profit-loss-calculator/", "/discount-calculator/", "/emi-calculator/", "/age-calculator/", "/years-to-days-calculator/", "/query-calculator/", "/unit-converter/", "/bmi-calculator/", "/zakat-calculator/", "/methodology/", "/editorial-policy/", "/privacy/", "/contact/"):
+    assert 'href="' + href + '"' in about_html, f"About page should link to the relevant site resource: {href}"
+for href in ("https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "https://www.nist.gov/pml/owm/si-units-length", "https://openstax.org/books/principles-finance/pages/5-1-the-income-statement", "https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"):
+    assert 'href="' + href + '"' in about_html and 'rel="noopener noreferrer"' in about_html, f"About source links should be explicit and safe: {href}"
+assert 'href="mailto:malikadeelbhatti@gmail.com"' in about_html, "About page should provide a direct, verified correction contact"
+assert re.search(r"<caption\b", about_html) and re.search(r"<th\s+scope=", about_html), "About page's assumptions table should have accessible caption and column headers"
+assert "Every calculator is independently verified" not in about_html and "certified expert" not in about_html.lower(), "About page must not invent universal review or credential claims"
+assert '<title>About CalculatesAll | Project, Methods &amp; Privacy</title>' in about_html, "About title should clearly identify the page and its useful scope"
+assert 'name="description" content="Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details."' in about_html, "About meta description should accurately summarize the page"
+def jsonld_nodes(page_html):
+    nodes = []
+    for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page_html, re.S):
+        value = json.loads(raw)
+        nodes.extend(value.get("@graph", []) if isinstance(value, dict) and "@graph" in value else [value])
+    return nodes
+
+home_nodes = jsonld_nodes(home_html)
+home_orgs = [node for node in home_nodes if node.get("@type") == "Organization" and node.get("name") == "CalculatesAll"]
+assert len(home_orgs) == 1 and home_orgs[0].get("@id") == SITE + "/#organization", "Homepage must expose exactly one canonical CalculatesAll Organization entity"
+home_sites = [node for node in home_nodes if node.get("@type") == "WebSite" and node.get("name") == "CalculatesAll"]
+assert len(home_sites) == 1 and home_sites[0].get("@id") == SITE + "/#website", "Homepage must expose exactly one canonical WebSite entity"
+home_people = [node for node in home_nodes if node.get("@type") == "Person" and node.get("name") == "Muhammad Fayyaz Adeel"]
+assert len(home_people) == 1 and home_people[0].get("@id") == SITE + "/#maintainer", "Homepage must expose exactly one canonical maintainer entity"
+assert "CalculatesAll is a free online calculator" in home_html, "Homepage should state its free online calculator purpose in visible content"
+about_nodes = jsonld_nodes(about_html)
+about_pages = [node for node in about_nodes if node.get("@type") == "AboutPage"]
+assert len(about_pages) == 1 and about_pages[0].get("mainEntity", {}).get("@id") == SITE + "/#organization", "About page should describe the project as its primary entity"
+assert about_pages[0].get("about", {}).get("@id") == SITE + "/#maintainer", "About page should identify the actual maintainer as a related person"
+assert not [node for node in about_nodes if node.get("@type") == "ProfilePage"], "Project About page should not be mislabelled as a personal profile page"
+assert not [node for node in about_nodes if node.get("@type") == "WebPage"], "AboutPage is already a WebPage subtype and should not receive a duplicate generic WebPage node"
+assert len([node for node in about_nodes if node.get("@type") in ("AboutPage", "WebPage", "ProfilePage")]) == 1, "About page should expose one page-level entity, not duplicate page nodes"
+about_breadcrumbs = [node for node in about_nodes if node.get("@type") == "BreadcrumbList"]
+assert len(about_breadcrumbs) == 1 and [item["name"] for item in about_breadcrumbs[0]["itemListElement"]] == ["Home", "About CalculatesAll"], "About page should expose a matching breadcrumb graph"
+about_people = [node for node in about_nodes if node.get("@type") == "Person" and node.get("@id") == SITE + "/#maintainer"]
+assert len(about_people) == 1 and "Malik Adeel Bhatti" in about_people[0].get("alternateName", []), "Maintainer schema must consistently include the publicly stated alternate name"
+profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
+profit_nodes = jsonld_nodes(profit_html)
+profit_orgs = [node for node in profit_nodes if node.get("@type") == "Organization" and node.get("name") == "CalculatesAll"]
+assert len(profit_orgs) == 1 and profit_orgs[0].get("@id") == SITE + "/#organization", "Profit and Loss page must reference one canonical Organization entity"
+assert "A profit and loss calculator estimates business profit or loss" in profit_html, "Profit and Loss page should open its explanatory copy with a concise definition"
+assert 'href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement"' in profit_html, "Profit and Loss page should cite the OpenStax income-statement source"
+assert 'href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"' in profit_html, "Profit and Loss page should cite ACCA ratio-analysis guidance"
+assert "Markup versus margin at a glance" in profit_html and "<table" in profit_html, "Profit and Loss page should include a useful comparison table"
+contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
+for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy"):
+    assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
+profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
+assert "Maintained by <a" in profit_html and "Muhammad Fayyaz Adeel" in profit_html and 'href="/about/"' in profit_html, "Calculator guide should have an honest maintainer byline"
+assert '"author":{"@id":"' + SITE + '/#maintainer"}' in profit_html, "Calculator WebApplication schema should reference the named maintainer"
+assert '"description":"Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."' in profit_html, "Calculator schema should use the same organization description as the homepage"
+# Only pages flagged by the completed crawler get metadata changes; keep copy page-specific.
+for path in ("/affiliate-disclosure/", "/compound-interest-calculator/", "/contact/", "/date-calculator/", "/discount-calculator/", "/fraction-calculator/", "/stopwatch/", "/worship/", "/zakat-calculator/"):
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    meta = re.search(r'<meta name="description" content="([^"]+)"', page_html)
+    assert meta and 120 <= len(html_lib.unescape(meta.group(1))) <= 160, f"Flagged English description should be specific and 120-160 characters: {path}"
+for path in ("/about/", "/contact/", "/health/", "/terms/", "/time/"):
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    title = re.search(r"<title>([^<]+)</title>", page_html)
+    assert title and 30 <= len(html_lib.unescape(title.group(1))) <= 60, f"Flagged page title should clearly identify its purpose: {path}"
+for path in ("/ur/age-calculator/", "/ur/bmi-calculator/", "/ur/discount-calculator/", "/ur/profit-loss-calculator/", "/ur/standard-calculator/", "/ur/stopwatch/", "/ur/tasbih-counter/", "/ur/unit-converter/", "/ur/zakat-calculator/"):
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    meta = re.search(r'<meta name="description" content="([^"]+)"', page_html)
+    assert meta and 120 <= len(html_lib.unescape(meta.group(1))) <= 160, f"Flagged Urdu description should be complete and page-specific: {path}"
+urdu_age_html = output_for_url(SITE + "/ur/age-calculator/").read_text(encoding="utf-8")
+urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
+assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
+years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
+assert "<title>Years to Days Calculator | Exact and Average</title>" in years_html, "Years-to-Days title should describe exact and average methods"
+assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
+assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
+assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
 assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
@@ -118,10 +212,10 @@ for url in urls:
         assert "0.45359237 kg" in html, "Kilogram/pound conversion must include the exact reference relationship"
     if url == SITE + "/discount-calculator/":
         assert html_lib.unescape(title_match.group(1)) == "Discount Calculator: Sale Price & Savings | CalculatesAll"
-        assert desc_match.group(1) == "Calculate a discount, final sale price and total savings from the original price and discount percentage."
+        assert desc_match.group(1) == "Calculate your discount amount, final sale price and total savings from the original price and discount percentage. See the formula and a worked example."
     if url == SITE + "/stopwatch/":
         assert html_lib.unescape(title_match.group(1)) == "Free Online Stopwatch | CalculatesAll"
-        assert desc_match.group(1) == "Use a free online stopwatch with start, stop, reset and hundredths-of-a-second timing in your browser."
+        assert desc_match.group(1) == "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app."
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
@@ -522,6 +616,16 @@ for index, locale in enumerate(locale_order):
 assert 'var code = (document.documentElement.lang || "en").toLowerCase().split("-")[0]' in app_js, (
     "Calculator message selection must support language tags such as es-ES and fr-FR."
 )
+expected_markup_na = {
+    "en": "Markup is N/A because cost price is zero.",
+    "ur": "قیمتِ خرید صفر ہے، اس لیے مارک اَپ کا فیصد دستیاب نہیں۔",
+    "ar": "نسبة الزيادة على التكلفة غير متاحة لأن التكلفة صفر.",
+    "hi": "लागत शून्य है, इसलिए मार्कअप प्रतिशत उपलब्ध नहीं है।",
+    "es": "El porcentaje de recargo (markup) no está disponible porque el coste es cero.",
+    "fr": "Le pourcentage de majoration (markup) n’est pas disponible car le coût est nul.",
+}
+for locale, phrase in expected_markup_na.items():
+    assert phrase in locale_blocks[locale], f"Locale {locale} must clearly identify unavailable markup when cost is zero."
 assert "Object.prototype.hasOwnProperty.call(MSG, code) ? code : \"en\"" in app_js, (
     "Unknown languages must safely fall back to English."
 )
@@ -816,3 +920,44 @@ _discount_editorial_html = (Path(__file__).resolve().parents[1] / "public" / "di
 assert "Worked example: discount and sales tax" in _discount_editorial_html
 assert "The final amount is 1,870" in _discount_editorial_html
 assert "Why the order of percentage changes matters" in _discount_editorial_html
+
+# Localized landing pages must reuse the single canonical WebSite entity.
+for _lang_path in ("/ar/", "/es/", "/fr/"):
+    _lang_html = output_for_url(SITE + _lang_path).read_text(encoding="utf-8")
+    _lang_schemas = [
+        json.loads(match.group(1))
+        for match in re.finditer(
+            r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+            _lang_html,
+            re.S | re.I,
+        )
+    ]
+    _websites = [schema for schema in _lang_schemas if schema.get("@type") == "WebSite"]
+    assert len(_websites) == 1, f"{_lang_path} must expose exactly one WebSite entity"
+    assert _websites[0].get("@id") == SITE + "/#website", f"{_lang_path} WebSite must use the canonical entity ID"
+    assert _websites[0].get("url") == SITE + "/", f"{_lang_path} WebSite URL must point to the canonical site root"
+
+# Compact Zakat fields must remain fully localized on the Urdu calculator.
+_ur_zakat_compact = output_for_url(SITE + "/ur/zakat-calculator/").read_text(encoding="utf-8")
+for _label in ("نقد اور بینک بچت", "سونے کی قیمت", "چاندی کی قیمت", "فروخت کا کاروباری مال",
+               "وصول ہونے والی رقم", "موجودہ واجب الادا قرض", "چاندی کی فی گرام قیمت",
+               "یہ مال ایک مکمل قمری سال (حول) تک رکھا گیا ہے", "زکوٰۃ کا حساب کریں"):
+    assert _label in _ur_zakat_compact, "Urdu Zakat label missing: " + _label
+for _english_label in ("Cash / savings", "Gold value", "Silver value", "Stock for sale",
+                       "Expected receivables", "Debts due now", "Silver price per gram",
+                       "Held for one full lunar year (hawl)", "Calculate Zakat"):
+    assert _english_label not in _ur_zakat_compact, "English Zakat label leaked into Urdu page: " + _english_label
+for _field_id in ("z-cash", "z-gold", "z-silver", "z-stock", "z-recv", "z-debts", "z-silverprice", "z-hawl", "zakat-result"):
+    assert 'id="' + _field_id + '"' in _ur_zakat_compact, "Urdu Zakat field ID changed: " + _field_id
+
+# Urdu calculator templates must carry the same page-specific responsive hooks as English tools.
+for _slug in ("age-calculator", "bmi-calculator", "discount-calculator", "profit-loss-calculator",
+              "stopwatch", "tasbih-counter", "unit-converter", "zakat-calculator"):
+    _html = output_for_url(SITE + "/ur/" + _slug + "/").read_text(encoding="utf-8")
+    assert 'id="tool-calculator" class="ca-tool-calculator ca-tool-' + _slug + ' mt-4"' in _html, (
+        "Urdu calculator lost its page-specific responsive class: " + _slug
+    )
+_ur_standard = output_for_url(SITE + "/ur/standard-calculator/").read_text(encoding="utf-8")
+assert 'id="tool-calculator" class="ca-tool-standard-calculator mt-4"' in _ur_standard, (
+    "Urdu Standard Calculator must use the standard calculator responsive layout"
+)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the homepage and seven scoped HTML files with the Nu HTML Checker."""
+"""Validate the homepage and eight scoped HTML files with the Nu HTML Checker."""
 import json
 import sys
 import urllib.error
@@ -11,6 +11,7 @@ FILES = [
     Path("public/ar/index.html"),
     Path("public/es/index.html"),
     Path("public/fr/index.html"),
+    Path("public/about/index.html"),
     Path("public/contact/index.html"),
     Path("public/discount-calculator/index.html"),
     Path("public/editorial-policy/index.html"),
@@ -51,4 +52,4 @@ for path in FILES:
 if failed:
     print("Nu HTML Checker: FAIL")
     sys.exit(1)
-print("Nu HTML Checker: PASS (8 files, zero errors)")
+print("Nu HTML Checker: PASS (9 files, zero errors)")

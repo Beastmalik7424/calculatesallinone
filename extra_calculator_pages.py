@@ -43,13 +43,13 @@ def build_extra_pages(head,shell,write):
         body='<section class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 p-4 sm:p-6">'
         body+='<h1 class="text-2xl font-bold text-stone-900 dark:text-white">'+html.escape(title)+'</h1>'
         body+='<p class="mt-2 text-base text-stone-700 dark:text-stone-200">'+html.escape(description)+'</p>'
-        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="mt-4 grid gap-3">'
+        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="mt-3 grid grid-cols-2 gap-x-3 gap-y-2">'
         for key,label,kind in fields:
-            body+='<label for="'+key+'" class="font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
-            body+='<input required id="'+key+'" type="'+kind+'" '+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full rounded-lg border border-stone-400 bg-white p-3 text-lg text-stone-900 min-h-[44px]">'
+            body+='<div class="min-w-0"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
+            body+='<input required id="'+key+'" type="'+kind+'" '+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
         if slug=="fraction-calculator":
-            body+='<label for="operation" class="font-semibold">Operation</label><select id="operation" class="rounded-lg border border-stone-400 p-3 text-stone-900 bg-white"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select>'
-        body+='<button type="submit" class="rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
+            body+='<div class="col-span-2 min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
+        body+='<button type="submit" class="col-span-2 rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
         body+='<p role="status" aria-live="polite" id="extra-result" class="mt-4 text-xl font-bold text-stone-900 dark:text-white"></p></section>'
         body+='<section class="mt-6"><h2 class="text-xl font-semibold">How this calculation works</h2><p class="mt-3">'+html.escape(explanation)+'</p></section>'
         for paragraph in GUIDES[slug]:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused build-output checks for the seven scoped SEO URLs."""
+"""Focused build-output checks for the eight scoped SEO URLs."""
 import html
 import re
 import sys
@@ -13,6 +13,7 @@ TARGETS = {
     "/ar/": "noindex",
     "/es/": "noindex",
     "/fr/": "noindex",
+    "/about/": "index",
     "/contact/": "index",
     "/discount-calculator/": "index",
     "/editorial-policy/": "index",
@@ -67,7 +68,7 @@ for path, raw in pages.items():
     check(len(titles[path]) < 60, path + ": title must be under 60 characters (" + str(len(titles[path])) + ")")
     check(0 < len(descriptions[path]) < 160, path + ": description must be under 160 characters")
     check(not re.search(r"<img\b(?![^>]*\balt\s*=)", raw, re.I), path + ": image missing alt attribute")
-    if path in ("/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"):
+    if path in ("/about/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"):
         schemas = []
         for match in re.finditer(r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', raw, re.S | re.I):
             try:
@@ -76,20 +77,32 @@ for path, raw in pages.items():
             except Exception as exc:
                 errors.append(path + ": invalid JSON-LD: " + str(exc))
         check(any(obj.get("@type") == "BreadcrumbList" for obj in schemas), path + ": missing BreadcrumbList")
+        if path == "/about/":
+            check(any(obj.get("@type") == "AboutPage" for obj in schemas), path + ": missing AboutPage schema")
+            check(not any(obj.get("@type") in ("WebPage", "ProfilePage") for obj in schemas), path + ": duplicate or mismatched page schema")
+            check(any(obj.get("@type") == "Organization" and obj.get("@id") == SITE + "/#organization" for obj in schemas), path + ": missing canonical Organization entity")
+            check(any(obj.get("@type") == "Person" and obj.get("@id") == SITE + "/#maintainer" for obj in schemas), path + ": missing canonical maintainer entity")
         if path == "/discount-calculator/":
             check(any(obj.get("@type") == "WebApplication" for obj in schemas), path + ": missing WebApplication")
             check(any(obj.get("@type") == "FAQPage" for obj in schemas), path + ": missing FAQPage for visible FAQs")
             check(visible_main(raw).count("?") >= 3, path + ": expected at least three visible FAQ questions")
-    if path in ("/discount-calculator/", "/editorial-policy/", "/health/"):
+    if path in ("/about/", "/discount-calculator/", "/editorial-policy/", "/health/"):
         words = re.findall(r"\b[\w’'-]+\b", visible_main(raw), re.UNICODE)
-        minimum = 300 if path == "/discount-calculator/" else 150
+        minimum = 420 if path == "/about/" else (300 if path == "/discount-calculator/" else 150)
         print("WORDCOUNT", path, len(words))
         check(len(words) >= minimum, path + ": main-content word count below " + str(minimum) + " (" + str(len(words)) + ")")
 
-check(len(set(titles.values())) == len(titles), "duplicate titles across homepage and seven scoped pages")
-check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across homepage and seven scoped pages")
+check(len(set(titles.values())) == len(titles), "duplicate titles across homepage and eight scoped pages")
+check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across homepage and eight scoped pages")
 
 home = pages.get("/", "")
+check('href="#all-tools"' in home and "Browse all free calculators" in home,
+      "homepage is missing the primary browse-calculators CTA")
+check("Muhammad Fayyaz Adeel" in home and 'href="/about/"' in home,
+      "homepage is missing the named maintainer and About link")
+profit_loss = read(ROOT / "profit-loss-calculator" / "index.html")
+check("online calculator" in home.lower(), "homepage should retain the online calculator topic wording")
+check("profit loss calculator" in profit_loss.lower(), "profit-loss page should retain the profit loss calculator wording")
 for path in TARGETS:
     check(bool(re.search(r'href=["\']' + re.escape(path) + r'["\']', home)),
           "homepage is missing direct internal link to " + path)
@@ -106,10 +119,12 @@ try:
         if decision == "index":
             node = next((n for n in root.findall("sm:url", ns) if n.findtext("sm:loc", namespaces=ns) == url), None)
             lastmod = node.findtext("sm:lastmod", namespaces=ns) if node is not None else None
-            check(bool(lastmod and re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod)),
-                  "missing valid lastmod for " + url)
+            check(lastmod is None, "unverified lastmod must be omitted for " + url)
     for url in locs:
         check(url.endswith("/"), "sitemap URL lacks trailing slash: " + str(url))
+    for node in root.findall("sm:url", ns):
+        check(node.find("sm:lastmod", ns) is None,
+              "sitemap must omit unverified lastmod: " + str(node.findtext("sm:loc", namespaces=ns)))
     print("SITEMAP_SCOPED_INDEXABLE_URLS")
     for path, decision in TARGETS.items():
         if decision == "index":

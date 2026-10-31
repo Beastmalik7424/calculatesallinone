@@ -21,10 +21,9 @@ ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lowe
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
-# Har page ki asal update date. Sirf wahi pages likhein jin ka content badla ho.
-LASTMOD = {
-    "/zakat-calculator/": "2026-10-17",
-}
+SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
+# No page-specific substantive update dates are currently verified.
+LASTMOD = {}
 OUT = "public"
 STATIC = "static"
 
@@ -104,15 +103,15 @@ TOOLS = [
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-cash", "Cash and bank savings")
-            + field("z-gold", "Gold value (in your currency)")
-            + field("z-silver", "Silver value (in your currency)")
-            + field("z-stock", "Business goods for sale (market value)")
-            + field("z-recv", "Money owed to you that you expect to receive")
-            + field("z-debts", "Debts due now (subtracted from wealth)")
+            + field("z-cash", "Cash / savings")
+            + field("z-gold", "Gold value")
+            + field("z-silver", "Silver value")
+            + field("z-stock", "Stock for sale")
+            + field("z-recv", "Expected receivables")
+            + field("z-debts", "Debts due now")
             + "</div>"
-            + field("z-silverprice", "Silver price per gram today (in your currency)", hint="Required to check Nisab. Without it, no Zakat amount is shown.")
-            + check("z-hawl", "This wealth has been held for one full lunar year (hawl)")
+            + field("z-silverprice", "Silver price per gram", hint="Required to check Nisab. Without it, no Zakat amount is shown.")
+            + check("z-hawl", "Held for one full lunar year (hawl)")
             + '<button type="submit" class="@B@">Calculate Zakat</button></form>'
             + result("zakat-result")
         ),
@@ -212,7 +211,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
         "h1": "Profit and Loss Calculator for Business and Products",
-        "lead": "Choose business P&L for revenue, costs and expenses, or product profit for buying and selling prices. Results show the correct percentage basis.",
+        "lead": "A profit and loss calculator estimates business profit or loss from revenue, costs and expenses, or product profit from cost and selling price. Choose the calculation type to see the correct percentage basis.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
@@ -238,7 +237,7 @@ TOOLS = [
             ]),
             ("Product profit formulas", [
                 "Product profit or loss equals selling price minus cost price. A negative result is a loss.",
-                "Product markup percentage equals profit divided by cost price, multiplied by 100. Markup is not margin.",
+                "Product markup percentage equals profit divided by cost price, multiplied by 100. Gross margin equals profit divided by selling price, multiplied by 100. Either percentage is unavailable when its denominator is zero.",
             ]),
             ("Worked example, profit", [
                 "Cost price is 800. Selling price is 1,000. Profit is 200.",
@@ -254,10 +253,10 @@ TOOLS = [
             ]),
         ],
         "faq": [
-            ("Why is margin different from markup?", "Product mode shows markup on cost. Business mode shows net operating margin on revenue."),
+            ("Why is margin different from markup?", "Product mode shows both markup on cost and gross margin on selling price. Business mode shows net operating margin on revenue."),
             ("Why does it show N/A?", "Product markup is unavailable when cost is zero. Business margin is unavailable when revenue is zero."),
         ],
-        "sources": "Standard operating profit, margin and product markup formulas. This simplified calculator is not a formal financial statement.",
+        "sources": 'Formula references: <a class="' + LINK + '" href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement" target="_blank" rel="noopener noreferrer">OpenStax Principles of Finance: The Income Statement</a> explains gross profit, operating income and margin. <a class="' + LINK + '" href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html" target="_blank" rel="noopener noreferrer">ACCA Ratio Analysis</a> explains gross and operating profit margin ratios. This calculator is a simplified estimate, not a formal financial statement.',
     },
     {
         "slug": "discount-calculator",
@@ -578,14 +577,14 @@ URDU = {
         "h1": "نصاب چیک کے ساتھ زکوٰۃ کیلکولیٹر",
         "lead": "اپنی بچت اور اثاثے درج کریں، پھر چاندی کی فی گرام قیمت لکھیں۔ کیلکولیٹر پہلے نصاب چیک کرتا ہے اور زکوٰۃ کی رقم اسی وقت دکھاتا ہے جب نصاب اور قمری سال کی شرط پوری ہو۔",
         "labels": [
-            ("Cash and bank savings", "نقد اور بینک میں بچت"),
-            ("Gold value (in your currency)", "سونے کی قیمت (آپ کی کرنسی میں)"),
-            ("Silver value (in your currency)", "چاندی کی قیمت (آپ کی کرنسی میں)"),
-            ("Business goods for sale (market value)", "فروخت کے لیے کاروباری سامان (بازاری قیمت)"),
-            ("Money owed to you that you expect to receive", "آپ کو واجب الادا رقم جو آپ کو ملنے کی امید ہے"),
-            ("Debts due now (subtracted from wealth)", "ابھی واجب الادا قرض (مال سے منہا ہوگا)"),
-            ("Silver price per gram today (in your currency)", "آج چاندی کی فی گرام قیمت (آپ کی کرنسی میں)"),
-            ("This wealth has been held for one full lunar year (hawl)", "یہ مال ایک مکمل قمری سال (حول) تک رکھا گیا ہے"),
+            ("Cash / savings", "نقد اور بینک بچت"),
+            ("Gold value", "سونے کی قیمت"),
+            ("Silver value", "چاندی کی قیمت"),
+            ("Stock for sale", "فروخت کا کاروباری مال"),
+            ("Expected receivables", "وصول ہونے والی رقم"),
+            ("Debts due now", "موجودہ واجب الادا قرض"),
+            ("Silver price per gram", "چاندی کی فی گرام قیمت"),
+            ("Held for one full lunar year (hawl)", "یہ مال ایک مکمل قمری سال (حول) تک رکھا گیا ہے"),
             ("Calculate Zakat", "زکوٰۃ کا حساب کریں"),
             ("Required to check Nisab. Without it, no Zakat amount is shown.", "نصاب چیک کرنے کے لیے ضروری ہے۔ اس کے بغیر زکوٰۃ کی رقم نہیں دکھائی جائے گی۔"),
         ],
@@ -665,9 +664,9 @@ EXTRA = {
         ],
     },
     "profit-loss-calculator": {
-        "quick": "Business P&L: net operating profit = revenue - cost of goods sold - other expenses, and operating margin = net operating profit / revenue x 100. Product mode: profit = selling price - cost price, and markup = profit / cost price x 100.",
+        "quick": "Business P&L: net operating profit = revenue - cost of goods sold - other expenses, and operating margin = net operating profit / revenue x 100. Product mode: profit = selling price - cost price, markup = profit / cost price x 100, and gross margin = profit / selling price x 100.",
         "faq": [
-            ("What is the difference between markup and margin?", "Product markup uses cost as its base. Business operating margin uses revenue as its base. These percentages are not interchangeable."),
+            ("What is the difference between markup and margin?", "Product markup uses cost as its base; product gross margin uses selling price. Business operating margin uses revenue after listed expenses. These percentages are not interchangeable."),
             ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
         ],
     },
@@ -927,6 +926,11 @@ def home_extra_html(lang):
         "Yes. CalculatesAll tools are free, calculations run in your browser, and calculator entries are not sent to our server. Each tool explains its formula and limits. Confirm important financial, medical or religious decisions with a qualified professional."
     )
     out += '<h2 class="' + H2 + '">' + heading + '</h2><p class="' + P + '">' + answer_first + '</p><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
+    if lang == "en":
+        out += '<p class="' + P + '">Choose a tool for the task at hand. The <a class="' + LINK + '" href="/profit-loss-calculator/">Profit and Loss Calculator</a> separates product markup from gross margin, the <a class="' + LINK + '" href="/years-to-days-calculator/">Years to Days Calculator</a> distinguishes fixed-year and calendar-date methods, and the <a class="' + LINK + '" href="/tasbih-counter/">Tasbih Counter</a> keeps its count on your device.</p>'
+        out += '<p class="' + P + '">CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel. ' + SITE_DESCRIPTION + ' <a class="' + LINK + '" href="/about/">About the maintainer</a>.</p>'
+        out += '<section aria-labelledby="how-it-works" class="mt-8"><h2 id="how-it-works" class="' + H2 + '">How it works</h2><ol class="mt-3 list-decimal pl-6 space-y-2 text-base leading-relaxed text-stone-800 dark:text-stone-200"><li>Choose a calculator for the task you want to complete.</li><li>Enter your values and select the units or options the tool requests.</li><li>Review the result and formula, including the worked example and stated limitations, before relying on it.</li></ol><p class="' + P + '">No account or download is required. Calculator entries are processed in your browser and are not sent to our server.</p></section>'
+        out += '<p class="' + P + '"><a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools">Browse all free calculators</a></p>'
     return out
 
 
@@ -1079,6 +1083,39 @@ def home_alts_all():
 
 def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     url = SITE_URL + path
+    # Keep one canonical, linked identity graph on every public page.
+    # Merge page-level declarations rather than duplicating the homepage Organization/WebSite nodes.
+    if path != "/404":
+        schema = list(schema or [])
+        shared_entities = [
+            {"@context": "https://schema.org", "@type": "WebSite", "@id": SITE_URL + "/#website",
+             "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION,
+             "publisher": {"@id": SITE_URL + "/#organization"}},
+            {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization",
+             "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION,
+             "logo": SITE_URL + "/assets/favicon.svg",
+             "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
+            {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer",
+             "name": "Muhammad Fayyaz Adeel", "alternateName": ["Malik Adeel Bhatti"],
+             "description": "Maintainer of the CalculatesAll online calculator project.",
+             "url": SITE_URL + "/about/",
+             "affiliation": {"@id": SITE_URL + "/#organization"}},
+        ]
+        for entity in shared_entities:
+            existing = next((item for item in schema
+                             if item.get("@id") == entity["@id"]
+                             or (item.get("@type") == entity["@type"]
+                                 and item.get("name") == entity["name"]
+                                 and item.get("url", SITE_URL + "/") == entity["url"])), None)
+            if existing is None:
+                schema.append(entity)
+            else:
+                existing["@context"] = "https://schema.org"
+                existing["@type"] = entity["@type"]
+                existing["@id"] = entity["@id"]
+                for key, value in entity.items():
+                    if key not in ("@context", "@type", "@id"):
+                        existing[key] = value
     robots = "noindex, follow" if noindex else "index, follow"
     alt = ""
     if alternates:
@@ -1097,7 +1134,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     for s in schema:
         # Add page language only to schema types that support inLanguage.
         # This keeps structured data consistent with the actual HTML language.
-        if s.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
+        if s.get("@type") in ("WebSite", "WebPage", "ProfilePage", "CollectionPage", "WebApplication"):
             s.setdefault("inLanguage", lang)
         ld += '<script type="application/ld+json">' + json.dumps(s, ensure_ascii=False) + "</script>\n"
     og_image = SITE_URL + "/assets/og-image.png"
@@ -1195,7 +1232,7 @@ def shell(main_html, lang="en", current_path=None):
         '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
-        '<nav class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4" aria-label="' + s["main"] + '">'
+        '<nav class="max-w-5xl mx-auto px-5 py-3 flex flex-wrap items-center justify-between gap-3" aria-label="' + s["main"] + '">'
         '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
         '<div class="flex items-center gap-3">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
@@ -1245,11 +1282,12 @@ def home_lang_page(code):
         '<ul class="mt-10 grid gap-4">' + cards + "</ul>" + extra
     )
     schema = [
-        {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": code},
-        {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+        {"@context": "https://schema.org", "@type": "WebSite", "@id": SITE_URL + "/#website", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": code},
+        {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/",
+         "description": SITE_DESCRIPTION,
          "logo": SITE_URL + "/assets/favicon.svg",
          "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
+        {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
     ]
     write(path, head(u["title"], u["desc"], path, schema, lang=code, alternates=home_alts_all()) + shell(body, lang=code, current_path=path))
     return path
@@ -1266,6 +1304,31 @@ def write(path, content):
     os.makedirs(folder, exist_ok=True)
     with open(os.path.join(folder, "index.html"), "w", encoding="utf-8") as f:
         f.write(fill(content))
+
+
+def years_to_days_reference_html():
+    rows = [
+        (1, "365", "365.2425"),
+        (2, "730", "730.485"),
+        (3, "1,095", "1,095.7275"),
+        (5, "1,825", "1,826.2125"),
+        (10, "3,650", "3,652.425"),
+        (20, "7,300", "7,304.85"),
+        (50, "18,250", "18,262.125"),
+        (80, "29,200", "29,219.4"),
+        (100, "36,500", "36,524.25"),
+    ]
+    out = ('<section class="mt-10"><h2 class="' + H2 + '">Quick reference: years to days</h2>'
+           '<p class="' + P + '">Common conversions using a fixed 365-day year and the 365.2425-day Gregorian average. Average-method values can be fractional days.</p>'
+           '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
+           '<caption class="sr-only">Years converted to days using the 365-day and Gregorian-average methods</caption>'
+           '<thead><tr><th scope="col" class="border-b p-3">Years</th><th scope="col" class="border-b p-3">365-day method</th><th scope="col" class="border-b p-3">Gregorian average</th></tr></thead><tbody>')
+    for years, simple, average in rows:
+        out += ('<tr><th scope="row" class="border-b p-3">' + str(years) + '</th>'
+                '<td class="border-b p-3">' + simple + '</td>'
+                '<td class="border-b p-3">' + average + '</td></tr>')
+    out += ('</tbody></table></div><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. This table is a duration reference, not a substitute for a date-specific count.</p></section>')
+    return out
 
 
 def guide_html(sections):
@@ -1390,6 +1453,13 @@ def tool_page(t):
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
+    elif t["slug"] == "years-to-days-calculator":
+        title = "Years to Days Calculator | Exact and Average"
+        desc = "Convert years to days using 365 days, the Gregorian average of 365.2425 days, or exact calendar dates. See quick-reference examples and leap-year limits."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Free Online Tasbih Counter | Digital Tasbeeh Counter"
         desc = "Free online tasbih counter for daily dhikr. Tap to count, set targets of 33, 99 or 100, and save your count on your device. No download needed."
@@ -1421,12 +1491,15 @@ def tool_page(t):
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": t["name"], "url": url,
          "description": desc, "applicationCategory": t["app"], "operatingSystem": "Any",
+         "author": {"@id": SITE_URL + "/#maintainer"}, "publisher": {"@id": SITE_URL + "/#organization"},
          "browserRequirements": "Requires JavaScript",
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}},
         {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
             {"@type": "ListItem", "position": 2, "name": cat["name"], "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": t["name"], "item": url}]},
+        {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
+        {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION, "logo": SITE_URL + "/assets/favicon.svg", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
     related = ""
     related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
@@ -1452,6 +1525,20 @@ def tool_page(t):
         '<li><span aria-hidden="true" class="mr-2">/</span><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li>'
         '<li aria-current="page"><span aria-hidden="true" class="mr-2">/</span>' + t["name"] + "</li></ol></nav>"
     )
+    profit_reference_table = (
+        '<section class="mt-8" aria-labelledby="markup-margin-comparison">'
+        '<h2 id="markup-margin-comparison" class="' + H2 + '">Markup versus margin at a glance</h2>'
+        '<p class="' + P + '">Both percentages describe profit against a different base. The base must be named before comparing results.</p>'
+        '<div class="mt-4 overflow-x-auto rounded-xl border border-stone-300 dark:border-stone-700">'
+        '<table class="w-full min-w-[600px] border-collapse text-left text-sm"><caption class="sr-only">Profit, markup and margin formulas with worked examples</caption>'
+        '<thead class="bg-slate-100 dark:bg-stone-800"><tr><th scope="col" class="p-3">Measure</th><th scope="col" class="p-3">Formula</th><th scope="col" class="p-3">Worked example</th></tr></thead>'
+        '<tbody>'
+        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Product profit</th><td class="p-3">Selling price − cost price</td><td class="p-3">1,000 − 800 = 200</td></tr>'
+        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Markup on cost</th><td class="p-3">Profit ÷ cost × 100</td><td class="p-3">200 ÷ 800 × 100 = 25%</td></tr>'
+        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Product gross margin</th><td class="p-3">Profit ÷ selling price × 100</td><td class="p-3">200 ÷ 1,000 × 100 = 20%</td></tr>'
+        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Business operating margin</th><td class="p-3">Operating profit ÷ revenue × 100</td><td class="p-3">(1,000 − 600 − 150) ÷ 1,000 × 100 = 25%</td></tr>'
+        '</tbody></table></div></section>'
+    ) if t["slug"] == "profit-loss-calculator" else ""
     body = (
         ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
         + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
@@ -1463,9 +1550,12 @@ def tool_page(t):
         + (('<h2 class="' + H2 + '">How it is calculated</h2>'
             + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>')
            if EXTRA[t["slug"]]["quick"].strip() else "")
-        + guide_html(guide)
+        + profit_reference_table
+        + (guide_html(guide[:2]) + years_to_days_reference_html() + guide_html(guide[2:])
+           if t["slug"] == "years-to-days-calculator" else guide_html(guide))
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
+        + '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p>'
         + updated
         + review_box(t["slug"])
         + '<section class="mt-12"><h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100">More in ' + cat["name"] + '</h2>'
@@ -1516,9 +1606,9 @@ def urdu_tool_page(t):
         how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
     calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator mt-4" aria-label="کیلکولیٹر">'
+        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4" aria-label="کیلکولیٹر">'
          if t["slug"] != "standard-calculator" else
-         '<section class="mt-8" aria-label="کیلکولیٹر">')
+         '<section id="tool-calculator" class="ca-tool-standard-calculator mt-4" aria-label="کیلکولیٹر">')
         + ui + '</section>'
     )
     answer_note = "" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur")
@@ -1529,9 +1619,14 @@ def urdu_tool_page(t):
         '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat_ur + '</a></li><li aria-hidden="true">/</li>'
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
-        '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
-        + primary_tool_content
-        + '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
+    )
+    _urdu_lead = '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
+    if t["slug"] == "standard-calculator":
+        body += primary_tool_content + _urdu_lead
+    else:
+        body += _urdu_lead + primary_tool_content
+    body += (
+        '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
         + ('<h2 class="' + H2 + '">ماخذ</h2><p class="' + P + '">' + u["sources"] + '</p>' if u.get("sources") else "")
         + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">انگریزی ورژن</a></p>'
@@ -1579,18 +1674,74 @@ def category_page(c):
 
 
 def static_page(path, title, desc, h1, paragraphs, noindex=False):
-    schema = [{"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": SITE_URL + path}]
-    if path in ("/contact/", "/editorial-policy/"):
-        schema.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    if path == "/about/":
+        schema = [{"@context": "https://schema.org", "@type": "AboutPage", "@id": SITE_URL + "/about/#webpage",
+                   "name": title, "url": SITE_URL + path, "description": desc,
+                   "mainEntity": {"@id": SITE_URL + "/#organization"},
+                   "about": {"@id": SITE_URL + "/#maintainer"},
+                   "isPartOf": {"@id": SITE_URL + "/#website"}}]
+    else:
+        schema = [{"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": SITE_URL + path}]
+    if path in ("/about/", "/contact/", "/editorial-policy/"):
+        schema.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "@id": SITE_URL + path + "#breadcrumb",
+                       "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
             {"@type": "ListItem", "position": 2, "name": h1, "item": SITE_URL + path},
         ]})
-    body = '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
+        if path == "/about/":
+            schema[0]["breadcrumb"] = {"@id": SITE_URL + path + "#breadcrumb"}
+    if path == "/about/":
+        body = ('<nav aria-label="Breadcrumb" class="mb-6 text-sm text-stone-700 dark:text-stone-300"><ol class="flex flex-wrap items-center gap-2">'
+                '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
+                '<li aria-current="page">About CalculatesAll</li></ol></nav>')
+    else:
+        body = ""
+    body += '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
     for p in paragraphs:
         body += '<p class="' + P + '">' + p + "</p>"
+    if path == "/about/":
+        contact_email = html.escape(CONTACT_EMAIL, quote=True)
+        body += (
+            '<section aria-labelledby="about-maintainer" class="mt-8">'
+            '<h2 id="about-maintainer" class="' + H2 + '">Who maintains CalculatesAll?</h2>'
+            '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel, also known as Malik Adeel Bhatti. The maintainer looks after the calculator pages, site updates and reproducible correction reports. This identifies the person responsible for the project; it does not claim a regulated professional qualification or independent expert review.</p>'
+            '</section>'
+            '<section aria-labelledby="about-tools" class="mt-8">'
+            '<h2 id="about-tools" class="' + H2 + '">What calculators and tools are available?</h2>'
+            '<p class="' + P + '">The money tools include the <a class="' + LINK + '" href="/profit-loss-calculator/">Profit and Loss Calculator</a>, <a class="' + LINK + '" href="/discount-calculator/">Discount Calculator</a>, <a class="' + LINK + '" href="/emi-calculator/">EMI Calculator</a> and <a class="' + LINK + '" href="/zakat-calculator/">Zakat Calculator</a>. Date and measurement tools include the <a class="' + LINK + '" href="/age-calculator/">Age Calculator</a>, <a class="' + LINK + '" href="/years-to-days-calculator/">Years to Days Calculator</a>, <a class="' + LINK + '" href="/query-calculator/">Query Calculator</a> and <a class="' + LINK + '" href="/unit-converter/">Unit Converter</a>.</p>'
+            '<p class="' + P + '">The Query Calculator accepts supported plain-language time-conversion questions, such as asking how many days are in 80 years; it does not try to answer arbitrary questions.</p>'
+            '<p class="' + P + '">Everyday tools include the <a class="' + LINK + '" href="/standard-calculator/">Standard Calculator</a>, <a class="' + LINK + '" href="/bmi-calculator/">adult BMI calculator</a>, <a class="' + LINK + '" href="/tasbih-counter/">Tasbih Counter</a> and <a class="' + LINK + '" href="/stopwatch/">Stopwatch</a>.</p>'
+            '</section>'
+            '<section aria-labelledby="about-checks" class="mt-8">'
+            '<h2 id="about-checks" class="' + H2 + '">How are calculator methods and changes checked?</h2>'
+            '<p class="' + P + '">Calculator pages explain their required inputs, formulas, assumptions and important limits. Worked examples are included where they help a visitor check the result. The project uses automated checks for representative calculations, boundary and invalid inputs, generated pages and site metadata. Test coverage varies by tool. Passing tests reduce regression risk, but they do not prove every possible input or device combination. Read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a> and <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a> for more detail.</p>'
+            '<h3 class="mt-6 text-lg font-semibold text-stone-900 dark:text-stone-100">Which reference sources support selected tools?</h3>'
+            '<p class="' + P + '">Where a method relies on published health, measurement or financial guidance, the relevant calculator page links to its source. Examples include the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization adult BMI information</a>, the <a class="' + LINK + '" href="https://www.nist.gov/pml/owm/si-units-length" target="_blank" rel="noopener noreferrer">NIST length-unit reference</a>, the <a class="' + LINK + '" href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement" target="_blank" rel="noopener noreferrer">OpenStax income-statement chapter</a> and <a class="' + LINK + '" href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html" target="_blank" rel="noopener noreferrer">ACCA ratio-analysis guidance</a>.</p>'
+            '</section>'
+            '<section aria-labelledby="about-privacy" class="mt-8">'
+            '<h2 id="about-privacy" class="' + H2 + '">What happens to calculator inputs?</h2>'
+            '<p class="' + P + '">Values entered into calculator forms are processed in your browser and are not sent to the CalculatesAll server. The Tasbih Counter stores its count on the current device. The hosting provider and third-party resources may process technical request data, and advertising services may use cookies as explained in the <a class="' + LINK + '" href="/privacy/">privacy policy</a>. Avoid sending sensitive financial, medical or account information in an email.</p>'
+            '</section>'
+            '<section aria-labelledby="about-limits" class="mt-8">'
+            '<h2 id="about-limits" class="' + H2 + '">What are the limits of these tools?</h2>'
+            '<p class="' + P + '">A calculator can only account for the inputs and assumptions it is designed to use. Check the units, percentage basis and exclusions shown on the relevant tool before relying on a result.</p>'
+            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm"><caption class="mb-2 text-left font-semibold text-stone-900 dark:text-stone-100">Important assumptions to check before using a result</caption>'
+            '<thead><tr><th scope="col" class="border border-stone-300 dark:border-stone-700 p-3">Tool area</th><th scope="col" class="border border-stone-300 dark:border-stone-700 p-3">What to check</th></tr></thead><tbody>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Money</th><td class="border border-stone-300 dark:border-stone-700 p-3">The percentage basis matters. Taxes, fees, shipping and other costs are included only when the tool supports them and you enter them.</td></tr>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Dates</th><td class="border border-stone-300 dark:border-stone-700 p-3">Calendar months have different lengths and leap years affect durations. Check whether the selected tool counts the start and end dates inclusively.</td></tr>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Units</th><td class="border border-stone-300 dark:border-stone-700 p-3">Confirm both units. Temperature conversions require an offset as well as a scale factor.</td></tr>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Health and Zakat</th><td class="border border-stone-300 dark:border-stone-700 p-3">Adult BMI is a screening measure, not a diagnosis. The Zakat calculator follows its stated method and is not a religious ruling.</td></tr>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Timing</th><td class="border border-stone-300 dark:border-stone-700 p-3">The stopwatch is for everyday timing, not certified measurement.</td></tr>'
+            '</tbody></table></div>'
+            '<p class="' + P + '">For important financial, medical or religious decisions, confirm the result with an appropriately qualified professional or scholar.</p>'
+            '</section>'
+            '<section aria-labelledby="about-contact" class="mt-8">'
+            '<h2 id="about-contact" class="' + H2 + '">How can a calculation issue be reported?</h2>'
+            '<p class="' + P + '">Email <a class="' + LINK + '" href="mailto:' + contact_email + '">' + html.escape(CONTACT_EMAIL) + '</a> or use the <a class="' + LINK + '" href="/contact/">contact page</a>. Include the calculator name, page URL, exact input values, displayed result, expected result and steps to reproduce the issue. Do not include passwords, payment details, medical records or other sensitive personal information.</p>'
+            '</section>'
+        )
     write(path, head(title, desc, path, schema, noindex=noindex) + shell(body))
     return path
-
 
 def home_page(lang="en"):
     if lang == "ur":
@@ -1610,7 +1761,7 @@ def home_page(lang="en"):
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for Zakat, BMI, profit and loss, age, discounts, unit conversion, a standard calculator, tasbih counter and stopwatch."
         h1 = "Free Online Standard Calculator"
-        lead = "Fast, free, and private. Tap the buttons or use your keyboard to calculate."
+        lead = "CalculatesAll is a free online calculator for everyday maths. Tap the buttons or use your keyboard."
         cards = ""
         for c in CATEGORIES:
             cards += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
@@ -1620,7 +1771,7 @@ def home_page(lang="en"):
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+         "description": SITE_DESCRIPTION,
          "logo": SITE_URL + "/assets/favicon.svg",
          "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
@@ -1763,14 +1914,16 @@ def home_app_page(lang):
         '</div>'
     )
     schema = [
-        {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": lang},
+        {"@context": "https://schema.org", "@type": "WebSite", "@id": SITE_URL + "/#website", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "WebApplication", "name": "Standard Calculator", "url": SITE_URL + path,
          "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript",
+         "author": {"@id": SITE_URL + "/#maintainer"}, "publisher": {"@id": SITE_URL + "/#organization"},
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "inLanguage": lang},
-        {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+        {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/",
+         "description": SITE_DESCRIPTION,
          "logo": SITE_URL + "/assets/favicon.svg",
          "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
+        {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
     ]
     write(path, head(title, desc, path, schema, lang=lang, alternates=home_alts_all()) + shell(body, lang=lang, current_path=path))
 
@@ -1789,10 +1942,7 @@ def sitemap(entries):
         links = ""
         for code, href in alts:
             links += '    <xhtml:link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '"/>\n'
-        lastmod = ""
-        if path in LASTMOD:
-            lastmod = "    <lastmod>" + LASTMOD[path] + "</lastmod>\n"
-        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + lastmod + links + "  </url>\n")
+        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + links + "  </url>\n")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
            + items + "</urlset>\n")
@@ -1992,11 +2142,7 @@ def main():
         else:
             entries.append((path, []))
     static_pages = [
-        ("/about/", "About CalculatesAll", "Learn what CalculatesAll offers, how its free calculators work, and the principles behind clear formulas, examples and stated limitations.", "About CalculatesAll", [
-            "CalculatesAll is a collection of free online calculators and everyday utility tools.",
-            "Calculations run in your browser. The tools do not store your entries on our server.",
-            "Religious and health tools state their limits on the page. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
-        ]),
+        ("/about/", "About CalculatesAll | Project, Methods & Privacy", "Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details.", "About CalculatesAll", ABOUT_EXTRA),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "This policy explains what information CalculatesAll handles when you use the website. It applies to every page on calculateallinone.vercel.app.",
             "<strong>Calculator entries.</strong> The numbers and dates you type into a calculator are processed by JavaScript in your own browser. They are not sent to our server and we do not keep a copy of them.",
@@ -2015,7 +2161,7 @@ def main():
             "If you find a formula error, email " + CONTACT_EMAIL + " with the tool name and the inputs. We check the report, correct confirmed errors on the tool page and reply to let you know.",
         ]),
         ("/editorial-policy/", "Editorial Policy | CalculatesAll", "Learn how CalculatesAll researches, checks, updates and corrects its calculator guides, formulas and reference information.", "Editorial Policy", [
-            "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Numbers in worked examples are checked with a calculation before publication.",
+            "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Numbers in worked examples are shown as step-by-step calculations.",
             "Religious and health content is labelled as a general guide. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
             "A last-updated date is shown only when a substantive page update is tracked. We name sources where they support a claim, and we correct confirmed errors when reported or discovered. We do not label a page as independently reviewed unless that review has taken place.",
         ]),
@@ -2025,6 +2171,8 @@ def main():
             "CalculatesAll does not currently use affiliate links. If affiliate links are added in the future, they will be clearly labelled next to the link and explained on this page.",
             "Advertising does not influence how any tool works. Formulas, worked examples and results are the same for every visitor, and advertisers cannot pay to change them.",
             "We do not publish paid reviews, invented ratings or sponsored content presented as editorial content.",
+            "An advertisement is not an endorsement by CalculatesAll. We do not control the advertiser, its offer or the destination page, so review third-party terms before taking action.",
+            'For information about advertising cookies and privacy choices, read the <a class="underline text-sky-800 dark:text-sky-300" href="/privacy/">Privacy Policy</a>. Any future affiliate relationship will be disclosed before or beside the relevant link.',
             'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
         ]),
         ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
@@ -2033,31 +2181,17 @@ def main():
     ]
     for path, title, desc, h1, paras in static_pages:
         # Keep these trust pages focused: avoid repeating material from older content layers.
-        if path == "/about/":
+        if path == "/contact/":
+            desc = "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review."
             paras = [
-                "CalculatesAll is a free collection of browser-based calculators for money, health screening, dates, unit conversion and everyday tasks. It is maintained by Muhammad Fayyaz Adeel (also known as Malik Adeel Bhatti).",
-                "Calculator entries are processed in your browser rather than sent to our server. Tools explain their methods, worked examples where useful, and important limitations.",
-                "The main tools are in English, with Urdu versions of many tools. Short introductions in Arabic, Hindi, Spanish and French link to the English tools.",
-                "The adult BMI calculator is a screening aid, the Zakat calculator follows a stated method rather than issuing a religious ruling, and the stopwatch is for everyday timing rather than certified measurement.",
-                "Automated checks cover representative calculations and generated pages, but cannot establish accuracy for every device or circumstance. To report a reproducible problem, use the contact page.",
-                "For a money calculation, check whether the percentage is based on cost, selling price, original price or loan principal. Different bases produce different answers even when the percentage shown is identical.",
-                "For date calculations, the site uses calendar dates rather than treating every month as a fixed number of days. Leap years and the length of each month can change the result.",
-                "Unit conversions distinguish fixed multiplicative factors from conversions such as temperature, which also require an offset. The units beside each field are part of the calculation and should be checked before relying on a result.",
-                "Health screening results should be interpreted in context. An adult BMI number cannot by itself diagnose a condition or describe body composition, and the page identifies its intended audience and limitations.",
-                "For Zakat, users should check the wealth categories, Nisab basis and lunar-year conditions described by the calculator. Individual religious questions require guidance from a qualified scholar.",
-                "The site also offers simple utilities such as a stopwatch and tasbih counter. A stopwatch is intended for everyday timing, not calibrated measurement. The tasbih counter stores its count locally in the browser so it can be resumed on the same device.",
-                "To check a result, first confirm the units and inputs, then compare the displayed formula and worked example where available. If you find a discrepancy, share reproducible inputs through the contact page rather than sending confidential financial or medical records.",
-            ]
-        elif path == "/contact/":
-            desc = "Contact CalculatesAll to report a calculator issue, accessibility problem, translation correction or general feedback."
-            paras = [
-                'For questions, corrections, accessibility problems or Urdu translation feedback, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
-                "To report a calculation error, include the tool name or page URL, inputs, displayed result and expected result or supporting source.",
-                "Reports can help us investigate and correct confirmed issues. Please avoid sending sensitive personal information.",
+                'For corrections, feedback, accessibility problems or translation issues, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
+                "To report a calculation error, include the calculator name, page URL, exact input values, displayed result, expected result and steps to reproduce the issue. For date or time calculations, include the date format and time zone if relevant.",
+                "Do not email passwords, payment card numbers, bank details, medical records or other sensitive personal information. Calculator entries remain in your browser. We only receive details you choose to include in your message.",
+                'For formula methods, read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a>. For the correction process, read the <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a>. For data handling, read the <a class="' + LINK + '" href="/privacy/">privacy policy</a>.',
             ]
         elif path == "/editorial-policy/":
             paras = [
-                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Examples are checked against their stated calculations.",
+                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Each worked example states its calculation so readers can repeat it.",
                 "We prefer official or primary references for factual claims. Health information is general guidance, not a diagnosis; Zakat calculations state their method and do not replace a qualified scholar's ruling.",
                 "Page reviews and expert endorsements are identified only when they have actually taken place. Update dates reflect tracked substantive changes.",
                 "Quality checks cover representative inputs and boundaries, generated pages, titles, descriptions, canonical URLs, structured data, sitemap entries and internal links. They reduce regression risk but cannot cover every browser or situation.",
@@ -2078,8 +2212,11 @@ def main():
                 "Advertising does not determine calculator formulas, worked examples or results. We do not publish paid reviews, invented ratings or undisclosed sponsored editorial content.",
                 'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
             ]
+        elif path == "/about/":
+            # ABOUT_EXTRA is already supplied by the About page definition above.
+            pass
         else:
-            paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA, "/about/": ABOUT_EXTRA}.get(path, [])
+            paras = paras + TRUST_EXTRA.get(path.rstrip("/") if path.rstrip("/") in TRUST_EXTRA else path, []) + {"/contact/": CONTACT_EXTRA}.get(path, [])
         static_page(path, title, desc, h1, paras)
         entries.append((path, []))
     from extra_calculator_pages import build_extra_pages
