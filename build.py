@@ -21,6 +21,7 @@ ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lowe
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
+SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
 # No page-specific substantive update dates are currently verified.
 LASTMOD = {}
 OUT = "public"
@@ -927,7 +928,8 @@ def home_extra_html(lang):
     out += '<h2 class="' + H2 + '">' + heading + '</h2><p class="' + P + '">' + answer_first + '</p><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     if lang == "en":
         out += '<p class="' + P + '">Looking for a free calculator in Pakistan or elsewhere? CalculatesAll is a free online calculator website. Try the <a class="' + LINK + '" href="/profit-loss-calculator/">profit loss calculator</a> for business and product figures, the <a class="' + LINK + '" href="/years-to-days-calculator/">years to days calculator</a> for date and duration conversions, or the <a class="' + LINK + '" href="/tasbih-counter/">tasbih calculator</a> for dhikr. The tools run in your browser.</p>'
-        out += '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel. <a class="' + LINK + '" href="/about/">About the maintainer</a>.</p>'
+        out += '<p class="' + P + '">CalculatesAll is an independent online calculator project maintained by Muhammad Fayyaz Adeel. ' + SITE_DESCRIPTION + ' <a class="' + LINK + '" href="/about/">About the maintainer</a>.</p>'
+        out += '<section aria-labelledby="how-it-works" class="mt-8"><h2 id="how-it-works" class="' + H2 + '">How it works</h2><ol class="mt-3 list-decimal pl-6 space-y-2 text-base leading-relaxed text-stone-800 dark:text-stone-200"><li>Choose a calculator for the task you want to complete.</li><li>Enter your values and select the units or options the tool requests.</li><li>Review the result, formula, worked example and stated limitations before relying on it.</li></ol><p class="' + P + '">No account or download is required. Calculator entries are processed in your browser and are not sent to our server.</p></section>'
         out += '<p class="' + P + '"><a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools">Browse all free calculators</a></p>'
     return out
 
@@ -1249,7 +1251,7 @@ def home_lang_page(code):
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": code},
         {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+         "description": SITE_DESCRIPTION,
          "logo": SITE_URL + "/assets/favicon.svg",
          "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
         {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
@@ -1660,7 +1662,7 @@ def home_page(lang="en"):
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+         "description": SITE_DESCRIPTION,
          "logo": SITE_URL + "/assets/favicon.svg",
          "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
@@ -1809,7 +1811,7 @@ def home_app_page(lang):
          "author": {"@id": SITE_URL + "/#maintainer"}, "publisher": {"@id": SITE_URL + "/#organization"},
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/",
-         "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
+         "description": SITE_DESCRIPTION,
          "logo": SITE_URL + "/assets/favicon.svg",
          "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
         {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
@@ -2032,7 +2034,8 @@ def main():
             entries.append((path, []))
     static_pages = [
         ("/about/", "About CalculatesAll", "Learn what CalculatesAll offers, how its free calculators work, and the principles behind clear formulas, examples and stated limitations.", "About CalculatesAll", [
-            "CalculatesAll is a collection of free online calculators and everyday utility tools.",
+            "CalculatesAll is an independent online calculator project maintained by Muhammad Fayyaz Adeel.",
+            SITE_DESCRIPTION,
             "Calculations run in your browser. The tools do not store your entries on our server.",
             "Religious and health tools state their limits on the page. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
         ]),
