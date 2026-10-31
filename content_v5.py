@@ -1,14 +1,14 @@
 """Editorial content for CalculatesAll. Edit text here, then run npm run build."""
 
 REVIEW_STATUS = {
-    "bmi-calculator": "BMI is calculated from height and weight. This tool is not a clinical assessment.",
+    "bmi-calculator": "Formula is weight divided by height squared. Categories follow the adult ranges shown on this page. This tool is not a clinical assessment.",
     "profit-loss-calculator": "Formulas follow the method stated on this page.",
     "discount-calculator": "Formulas follow the method stated on this page.",
-    "age-calculator": "Age is calculated from the entered dates using the calendar method described on this page.",
-    "unit-converter": "Unit conversions use the factors stated in the calculator.",
-    "standard-calculator": "Order of operations checked with test expressions.",
-    "tasbih-counter": "The counter provides counting, undo, reset and target controls.",
-    "stopwatch": "The stopwatch measures elapsed time using browser timing.",
+    "age-calculator": "Calendar method counts whole years, months and days between the two dates entered.",
+    "unit-converter": "Conversions use the factors shown in the worked examples on this page.",
+    "standard-calculator": "Expressions follow standard operator precedence, as shown in the examples on this page.",
+    "tasbih-counter": "Counting, undo, reset and target behaviour are described on this page.",
+    "stopwatch": "Elapsed time comes from the browser timer, as described on this page.",
 }
 
 GUIDE_EXTRA = {

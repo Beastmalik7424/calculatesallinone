@@ -1195,7 +1195,7 @@ def shell(main_html, lang="en", current_path=None):
         '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
-        '<nav class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between gap-4" aria-label="' + s["main"] + '">'
+        '<nav class="max-w-5xl mx-auto px-5 py-3 flex flex-wrap items-center justify-between gap-3" aria-label="' + s["main"] + '">'
         '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
         '<div class="flex items-center gap-3">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
@@ -2015,7 +2015,7 @@ def main():
             "If you find a formula error, email " + CONTACT_EMAIL + " with the tool name and the inputs. We check the report, correct confirmed errors on the tool page and reply to let you know.",
         ]),
         ("/editorial-policy/", "Editorial Policy | CalculatesAll", "Learn how CalculatesAll researches, checks, updates and corrects its calculator guides, formulas and reference information.", "Editorial Policy", [
-            "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Worked examples show the calculation steps for readers to follow.",
+            "Tool guides are written to explain the formula, show a worked example, and list common mistakes. Numbers in worked examples are shown as step-by-step calculations.",
             "Religious and health content is labelled as a general guide. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
             "A last-updated date is shown only when a substantive page update is tracked. We name sources where they support a claim, and we correct confirmed errors when reported or discovered. We do not label a page as independently reviewed unless that review has taken place.",
         ]),
@@ -2057,7 +2057,7 @@ def main():
             ]
         elif path == "/editorial-policy/":
             paras = [
-                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Worked examples show the calculation steps used.",
+                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Each worked example states its calculation so readers can repeat it.",
                 "We prefer official or primary references for factual claims. Health information is general guidance, not a diagnosis; Zakat calculations state their method and do not replace a qualified scholar's ruling.",
                 "Page reviews and expert endorsements are identified only when they have actually taken place. Update dates reflect tracked substantive changes.",
                 "Quality checks cover representative inputs and boundaries, generated pages, titles, descriptions, canonical URLs, structured data, sitemap entries and internal links. They reduce regression risk but cannot cover every browser or situation.",
