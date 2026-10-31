@@ -57,6 +57,7 @@ for phrase in ("online calculator", "profit loss calculator", "tasbih calculator
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
+assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
 contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
 for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy"):
     assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
