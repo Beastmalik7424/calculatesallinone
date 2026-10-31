@@ -1,7 +1,7 @@
 const { chromium } = require('playwright');
 (async () => {
  const browser = await chromium.launch({headless:true,args:['--no-sandbox']});
- const slugs=['zakat-calculator','profit-loss-calculator','discount-calculator','age-calculator','unit-converter','stopwatch'];
+ const slugs=['zakat-calculator','bmi-calculator','profit-loss-calculator','discount-calculator','age-calculator','unit-converter','stopwatch','emi-calculator','standard-calculator','tasbih-counter','years-to-days-calculator','query-calculator','percentage-calculator','fraction-calculator','compound-interest-calculator','date-calculator','ur/age-calculator','ur/bmi-calculator','ur/discount-calculator','ur/profit-loss-calculator','ur/standard-calculator','ur/stopwatch','ur/tasbih-counter','ur/unit-converter','ur/zakat-calculator'];
  let failures=[];
  for (const size of [{width:320,height:568},{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
@@ -79,7 +79,7 @@ const { chromium } = require('playwright');
  if(!result.includes('Enter a cost price and a selling price of zero or more.'))failures.push('negative cost validation: '+result);
 
  // Homepage Standard Calculator: actual no-scroll viewport and click checks.
- for (const size of [{width:375,height:667},{width:390,height:844},{width:1024,height:768},{width:1366,height:768}]) {
+ for (const size of [{width:320,height:568},{width:375,height:667},{width:390,height:844},{width:1024,height:768},{width:1366,height:768}]) {
   const home=await browser.newPage({viewport:size,deviceScaleFactor:1});
   await home.goto('http://127.0.0.1:8123/',{waitUntil:'load'});
   const h=await home.evaluate(()=>{
