@@ -66,7 +66,7 @@ for page_name, page_html in (("About", about_html), ("Contact", output_for_url(S
 assert "Who maintains CalculatesAll?" in about_html and "How are calculator results checked?" in about_html, "About page should answer core identity and process questions with clear headings"
 def jsonld_nodes(page_html):
     nodes = []
-    for raw in re.findall(r'<script type="application/ld\\+json">(.*?)</script>', page_html, re.S):
+    for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page_html, re.S):
         value = json.loads(raw)
         nodes.extend(value.get("@graph", []) if isinstance(value, dict) and "@graph" in value else [value])
     return nodes
