@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
  const browser = await chromium.launch({headless:true,args:['--no-sandbox']});
  const slugs=['zakat-calculator','profit-loss-calculator','discount-calculator','age-calculator','unit-converter','stopwatch'];
  let failures=[];
- for (const size of [{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
+ for (const size of [{width:320,height:568},{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
   for (const slug of slugs) {
    await page.goto('http://127.0.0.1:8123/'+slug+'/',{waitUntil:'load'});
