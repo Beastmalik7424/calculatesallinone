@@ -1,15 +1,21 @@
 HUB_EXTRA = {
     "money": [
-        ("How to use money calculators", [
-            "Each money calculator asks for a few numbers and shows one result. Enter the numbers carefully, check the units and currency, and read the result together with the explanation on the tool page.",
-            "Start with the numbers you know for sure. If a number is an estimate, say so in your own notes so you remember it later.",
+        ("Choose the right money calculator", [
+            "Use the Profit and Loss Calculator when you know sales revenue, cost of goods sold and operating expenses and want to see the difference between gross and net operating profit. Use the Discount Calculator when you need a reduced selling price. Use the EMI Calculator when a loan is repaid through fixed periodic instalments. Use the Compound Interest Calculator only for a fixed starting balance and rate with no recurring deposits or withdrawals.",
+            "For Zakat planning, open the Zakat Calculator and enter the assets, debts due now, current silver price per gram and lunar-year confirmation it requests. Its result follows the method stated on that page. It is an arithmetic aid, not a ruling for every school of law or personal circumstance."
         ]),
-        ("Why people use these tools", [
-            "Business owners use the profit and loss calculator to check whether a sale covers the cost of an item. Shoppers use the discount calculator to compare offers. Families and community members use the Zakat calculator to plan a payment that follows a clear method.",
+        ("Worked examples and how to check a result", [
+            "Discount example: an item priced at PKR 4,500 with a 20% discount has a discount amount of PKR 900 (4,500 × 20 ÷ 100) and a reduced price of PKR 3,600 before any separately added tax or delivery. Check whether a seller applies tax before or after a discount because that changes the tax base.",
+            "Profit example: if sales are PKR 100,000, cost of goods sold is PKR 60,000 and operating expenses are PKR 15,000, gross profit is PKR 40,000 and net operating profit is PKR 25,000. Do not call revenue minus product cost 'net profit' when operating expenses remain."
         ]),
-        ("Limits you should know", [
-            "These tools calculate arithmetic and follow the method stated on each page. They do not know your full financial situation, your tax rules, or the rulings of your school of law. For tax advice, consult an accountant. For Zakat rulings, consult a qualified scholar.",
+        ("Loan and interest assumptions", [
+            "An EMI result depends on the principal, interest rate, term, payment frequency and the rate convention used by the lender. Compare the calculator's assumptions with the lender's offer, including processing fees, insurance, variable-rate clauses and the exact payment dates. A calculated instalment is not a loan approval or a lender quotation.",
+            "Compound interest assumes the fixed nominal annual rate and compounding frequency entered on the tool page. It excludes recurring contributions, withdrawals, fees, taxes and inflation. Do not enter an advertised APY as though it were a nominal rate unless the product documentation confirms they are equivalent."
         ]),
+        ("Currency, precision and limits", [
+            "Enter every amount in one consistent currency for a single calculation. The tools do not convert currencies or fetch live exchange rates. The currency label in a worked example is illustrative and does not change the arithmetic.",
+            "Displayed values may be rounded. Keep the unrounded values for intermediate calculations when the tool provides them, and confirm the rounding method required by your bank, accountant or tax authority before using a result in a formal record. The calculators do not provide tax, investment, lending or religious advice."
+        ])
     ],
     "health": [
         ("How to use the health tool", [
@@ -46,21 +52,22 @@ HUB_EXTRA = {
         ]),
     ],
     "math": [
-        ("How to use the math tools", [
-            "The standard calculator supports addition, subtraction, multiplication, division, percentages and brackets. Type the numbers and signs as you would write them on paper, then press equals. Multiplication and division are done before addition and subtraction, and brackets are done first.",
-            "The unit converter changes weight, length and temperature. Choose the category, enter the value, pick the starting unit and the target unit, then press convert.",
+        ("Choose the right math tool", [
+            "Use the Standard Calculator for ordinary arithmetic and bracketed expressions. Switch to Scientific mode for functions such as powers, roots and trigonometry. Use the Percentage Calculator for a percentage of an amount or to find what percentage a part represents of a whole. Use the Fraction Calculator when exact numerator-and-denominator arithmetic is more useful than a decimal answer.",
+            "Use the Unit Converter only when the starting and target units measure the same physical quantity. For example, convert kilograms to pounds under weight, metres to feet under length, and Celsius to Fahrenheit under temperature. A length conversion cannot convert area, volume or speed."
         ]),
-        ("Why the converter rejects some values", [
-            "A weight or length cannot be negative, so the converter shows a message when you enter one. Kelvin cannot be below zero because zero Kelvin is the lowest possible temperature.",
+        ("Worked arithmetic and percentage checks", [
+            "Order-of-operations example: 8 + 3 × 4 = 20 because multiplication is performed before addition. With brackets, (8 + 3) × 4 = 44. If your answer differs, check the brackets and operation order before assuming the calculator is wrong.",
+            "Percentage example: 18% of 250 is 250 × 18 ÷ 100 = 45. To find what percentage 45 is of 250, calculate 45 ÷ 250 × 100 = 18%. These are different questions, so select the matching calculation type."
         ]),
-        ("Who uses these tools", [
-            "Students check homework, shoppers compare sizes and prices from different countries, and cooks convert recipe weights and temperatures. The tools run in your browser, so your numbers stay on your device.",
+        ("Fractions, exactness and invalid inputs", [
+            "For 1/2 + 1/3, use a common denominator of 6: 3/6 + 2/6 = 5/6. The fraction tool reduces the result and keeps the denominator positive. A denominator of zero is undefined, and division by a fraction whose numerator is zero is not allowed.",
+            "The fraction tool accepts whole-number numerators and denominators and rejects values outside the safe integer range. Do not enter decimal approximations as if they were exact fractions. Convert a decimal to a suitable exact scale first, such as 0.25 = 25/100 = 1/4."
         ]),
-        ("Check units, precision and assumptions", [
-            "A conversion is only useful when the starting and target units describe the same kind of measurement. Choose weight for kilograms and pounds, length for metres and miles, and temperature for Celsius, Fahrenheit or Kelvin. Do not use a length conversion to compare area or volume, because those are different dimensions.",
-            "Some conversion factors are exact by definition, while displayed results may be rounded for readability. For example, one inch is exactly 25.4 millimetres, but a converted decimal may contain more digits than you need for a recipe or school exercise. Keep extra precision during intermediate steps when accuracy matters.",
-            "For arithmetic, remember the order of operations: brackets first, multiplication and division before addition and subtraction. If an answer looks unexpected, split the expression into smaller steps and compare it with the worked example on the relevant tool page. These browser-based tools support everyday checks, not certified scientific measurements.",
-        ]),
+        ("Units, rounding and scientific limits", [
+            "One inch is exactly 25.4 millimetres by definition. A displayed conversion may be rounded, so retain sufficient precision for the task. For recipes, use practical kitchen precision; for engineering or laboratory work, follow the measurement standard and tolerance required by the task.",
+            "These browser-based tools are designed for everyday calculations and learning. They are not certified instruments, symbolic algebra systems or substitutes for specialist software when measurement uncertainty, significant figures or formal verification matter."
+        ])
     ],
     "worship": [
         ("How to use the tasbih counter", [
