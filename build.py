@@ -1606,9 +1606,9 @@ def urdu_tool_page(t):
         how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
     calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator mt-4" aria-label="کیلکولیٹر">'
+        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4" aria-label="کیلکولیٹر">'
          if t["slug"] != "standard-calculator" else
-         '<section class="mt-8" aria-label="کیلکولیٹر">')
+         '<section id="tool-calculator" class="ca-tool-standard-calculator mt-4" aria-label="کیلکولیٹر">')
         + ui + '</section>'
     )
     answer_note = "" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur")
