@@ -256,7 +256,7 @@ def main():
                 schemas.append(json.loads(match.group(1)))
             except json.JSONDecodeError as exc:
                 raise SystemExit("Invalid JSON-LD in " + path + ": " + str(exc))
-        web_page = next((s for s in schemas if s.get("@type") == "WebPage"), None)
+        web_page = next((s for s in schemas if s.get("@type") in ("WebPage", "ProfilePage")), None)
         if web_page is None:
             web_page = {"@context":"https://schema.org","@type":"WebPage","name":title,"url":canonical}
             schemas.append(web_page)

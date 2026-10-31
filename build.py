@@ -1134,7 +1134,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     for s in schema:
         # Add page language only to schema types that support inLanguage.
         # This keeps structured data consistent with the actual HTML language.
-        if s.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
+        if s.get("@type") in ("WebSite", "WebPage", "ProfilePage", "CollectionPage", "WebApplication"):
             s.setdefault("inLanguage", lang)
         ld += '<script type="application/ld+json">' + json.dumps(s, ensure_ascii=False) + "</script>\n"
     og_image = SITE_URL + "/assets/og-image.png"
