@@ -1282,7 +1282,7 @@ def home_lang_page(code):
         '<ul class="mt-10 grid gap-4">' + cards + "</ul>" + extra
     )
     schema = [
-        {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": code},
+        {"@context": "https://schema.org", "@type": "WebSite", "@id": SITE_URL + "/#website", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": code},
         {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/",
          "description": SITE_DESCRIPTION,
          "logo": SITE_URL + "/assets/favicon.svg",
