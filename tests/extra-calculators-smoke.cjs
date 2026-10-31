@@ -1,9 +1,12 @@
 "use strict";
 const assert=require("node:assert/strict");
-const {percentage,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
+const {percentage,percentageShare,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
 assert.equal(percentage(25,200),50);
 assert.equal(percentage(12.5,80),10);
 assert.equal(percentage(0,200),0);
+assert.equal(percentageShare(45,250),18);
+assert.equal(percentageShare(3,4),75);
+assert.throws(()=>percentageShare(1,0));
 assert.throws(()=>percentage(10,Infinity));
 assert.deepEqual(fraction(1,2,1,3,"add"),{n:5,d:6});
 assert.deepEqual(fraction(2,3,3,4,"multiply"),{n:1,d:2});
@@ -30,3 +33,14 @@ for (const slug of ["percentage-calculator", "fraction-calculator", "compound-in
   assert.match(html, /<button[^>]*bg-sky-700[^>]*>Calculate<\/button>/, slug + " primary action lacks background class");
 }
 console.log("Extra calculator button visibility CSS regression: PASS");
+
+// Content and calculator capability must agree, and the money/math hubs must give actionable examples.
+const fs2=require("node:fs");
+const extraSource=fs2.readFileSync(require("node:path").join(__dirname,"..","extra_calculator_pages.py"),"utf8");
+assert.match(extraSource,/What percentage one number represents of another/);
+assert.match(extraSource,/18% of PKR 2,500/);
+assert.match(extraSource,/1,102\.50/);
+assert.match(extraSource,/28 February 2024 to 1 March 2024 is 2 days/);
+const hubSource=fs2.readFileSync(require("node:path").join(__dirname,"..","content_v13.py"),"utf8");
+for(const phrase of ["PKR 4,500","PKR 3,600","net operating profit","advertised APY","8 + 3 × 4 = 20","1/2 + 1/3","25.4 millimetres"]){assert.ok(hubSource.includes(phrase),"Missing useful hub guidance: "+phrase);}
+console.log("AdSense content usefulness regression: PASS");
