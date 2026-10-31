@@ -64,6 +64,34 @@ about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
 assert "Who maintains CalculatesAll?" in about_html and "How are calculator results checked?" in about_html, "About page should answer core identity and process questions with clear headings"
+def jsonld_nodes(page_html):
+    nodes = []
+    for raw in re.findall(r'<script type="application/ld\\+json">(.*?)</script>', page_html, re.S):
+        value = json.loads(raw)
+        nodes.extend(value.get("@graph", []) if isinstance(value, dict) and "@graph" in value else [value])
+    return nodes
+
+home_nodes = jsonld_nodes(home_html)
+home_orgs = [node for node in home_nodes if node.get("@type") == "Organization" and node.get("name") == "CalculatesAll"]
+assert len(home_orgs) == 1 and home_orgs[0].get("@id") == SITE + "/#organization", "Homepage must expose exactly one canonical CalculatesAll Organization entity"
+home_sites = [node for node in home_nodes if node.get("@type") == "WebSite" and node.get("name") == "CalculatesAll"]
+assert len(home_sites) == 1 and home_sites[0].get("@id") == SITE + "/#website", "Homepage must expose exactly one canonical WebSite entity"
+home_people = [node for node in home_nodes if node.get("@type") == "Person" and node.get("name") == "Muhammad Fayyaz Adeel"]
+assert len(home_people) == 1 and home_people[0].get("@id") == SITE + "/#maintainer", "Homepage must expose exactly one canonical maintainer entity"
+assert "CalculatesAll is a free online calculator" in home_html, "Homepage opening should answer what CalculatesAll is before the calculator UI"
+about_nodes = jsonld_nodes(about_html)
+profile_pages = [node for node in about_nodes if node.get("@type") == "ProfilePage"]
+assert len(profile_pages) == 1 and profile_pages[0].get("mainEntity", {}).get("@id") == SITE + "/#maintainer", "About page must identify the maintainer as its profile-page main entity"
+about_people = [node for node in about_nodes if node.get("@type") == "Person" and node.get("@id") == SITE + "/#maintainer"]
+assert len(about_people) == 1 and "Malik Adeel Bhatti" in about_people[0].get("alternateName", []), "Maintainer schema must consistently include the publicly stated alternate name"
+profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
+profit_nodes = jsonld_nodes(profit_html)
+profit_orgs = [node for node in profit_nodes if node.get("@type") == "Organization" and node.get("name") == "CalculatesAll"]
+assert len(profit_orgs) == 1 and profit_orgs[0].get("@id") == SITE + "/#organization", "Profit and Loss page must reference one canonical Organization entity"
+assert "A profit and loss calculator estimates business profit or loss" in profit_html, "Profit and Loss page should open its explanatory copy with a concise definition"
+assert 'href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement"' in profit_html, "Profit and Loss page should cite the OpenStax income-statement source"
+assert 'href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"' in profit_html, "Profit and Loss page should cite ACCA ratio-analysis guidance"
+assert "Markup versus margin at a glance" in profit_html and "<table" in profit_html, "Profit and Loss page should include a useful comparison table"
 contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
 for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy"):
     assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
