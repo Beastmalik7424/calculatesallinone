@@ -927,7 +927,7 @@ for _lang_path in ("/ar/", "/es/", "/fr/"):
     _lang_schemas = [
         json.loads(match.group(1))
         for match in re.finditer(
-            r'<script\\b[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>',
+            r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
             _lang_html,
             re.S | re.I,
         )
