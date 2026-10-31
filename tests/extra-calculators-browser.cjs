@@ -30,6 +30,8 @@ const {chromium}=require("playwright");
    const response=await page.goto("http://127.0.0.1:4174/percentage-calculator/");
    if(!response||response.status()!==200)throw Error("Percentage reverse-mode HTTP failure");
    await page.locator("#percentage-mode").selectOption("share");
+   const reverseLabels=await page.evaluate(()=>({part:document.querySelector('label[for="value"]').textContent.trim(),whole:document.querySelector('label[for="total"]').textContent.trim()}));
+   if(reverseLabels.part!=="Part"||reverseLabels.whole!=="Whole")throw Error("Reverse mode labels are unclear: "+JSON.stringify(reverseLabels));
    await page.locator("#value").fill("45");
    await page.locator("#total").fill("250");
    await page.locator("#extra-calculator-form button[type=submit]").click();
@@ -51,7 +53,10 @@ const {chromium}=require("playwright");
     };
    });
    if(layout.horizontal||!layout.buttonVisible||!layout.controlsFit||errors.length)throw Error("Percentage responsive failure at "+width+"px: "+JSON.stringify({layout,errors}));
-   console.log("Percentage reverse-mode browser PASS "+width+"px: "+reverse+"; zero-whole validation PASS");
+   await page.locator("#percentage-mode").selectOption("of");
+   const defaultLabels=await page.evaluate(()=>({percentage:document.querySelector('label[for="value"]').textContent.trim(),number:document.querySelector('label[for="total"]').textContent.trim()}));
+   if(defaultLabels.percentage!=="Percentage (%)"||defaultLabels.number!=="Number")throw Error("Default percentage labels are unclear: "+JSON.stringify(defaultLabels));
+   console.log("Percentage reverse-mode browser PASS "+width+"px: "+reverse+"; mode labels and zero-whole validation PASS");
    await page.close();
   }
 
