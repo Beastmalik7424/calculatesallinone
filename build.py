@@ -104,13 +104,13 @@ TOOLS = [
             '<form id="zakat-form" class="space-y-5" novalidate>'
             '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-cash", "Cash and bank savings")
-            + field("z-gold", "Gold value (in your currency)")
-            + field("z-silver", "Silver value (in your currency)")
-            + field("z-stock", "Business goods for sale (market value)")
-            + field("z-recv", "Money owed to you that you expect to receive")
-            + field("z-debts", "Debts due now (subtracted from wealth)")
+            + field("z-gold", "Gold value")
+            + field("z-silver", "Silver value")
+            + field("z-stock", "Business stock for sale")
+            + field("z-recv", "Money owed to you")
+            + field("z-debts", "Debts due now")
             + "</div>"
-            + field("z-silverprice", "Silver price per gram today (in your currency)", hint="Required to check Nisab. Without it, no Zakat amount is shown.")
+            + field("z-silverprice", "Silver price per gram", hint="Required to check Nisab. Without it, no Zakat amount is shown.")
             + check("z-hawl", "This wealth has been held for one full lunar year (hawl)")
             + '<button type="submit" class="@B@">Calculate Zakat</button></form>'
             + result("zakat-result")
@@ -578,12 +578,12 @@ URDU = {
         "lead": "اپنی بچت اور اثاثے درج کریں، پھر چاندی کی فی گرام قیمت لکھیں۔ کیلکولیٹر پہلے نصاب چیک کرتا ہے اور زکوٰۃ کی رقم اسی وقت دکھاتا ہے جب نصاب اور قمری سال کی شرط پوری ہو۔",
         "labels": [
             ("Cash and bank savings", "نقد اور بینک میں بچت"),
-            ("Gold value (in your currency)", "سونے کی قیمت (آپ کی کرنسی میں)"),
-            ("Silver value (in your currency)", "چاندی کی قیمت (آپ کی کرنسی میں)"),
-            ("Business goods for sale (market value)", "فروخت کے لیے کاروباری سامان (بازاری قیمت)"),
-            ("Money owed to you that you expect to receive", "آپ کو واجب الادا رقم جو آپ کو ملنے کی امید ہے"),
-            ("Debts due now (subtracted from wealth)", "ابھی واجب الادا قرض (مال سے منہا ہوگا)"),
-            ("Silver price per gram today (in your currency)", "آج چاندی کی فی گرام قیمت (آپ کی کرنسی میں)"),
+            ("Gold value", "سونے کی قیمت"),
+            ("Silver value", "چاندی کی قیمت"),
+            ("Business stock for sale", "فروخت کا کاروباری مال"),
+            ("Money owed to you", "وصول ہونے والی رقم"),
+            ("Debts due now", "موجودہ واجب الادا قرض"),
+            ("Silver price per gram", "چاندی کی فی گرام قیمت"),
             ("This wealth has been held for one full lunar year (hawl)", "یہ مال ایک مکمل قمری سال (حول) تک رکھا گیا ہے"),
             ("Calculate Zakat", "زکوٰۃ کا حساب کریں"),
             ("Required to check Nisab. Without it, no Zakat amount is shown.", "نصاب چیک کرنے کے لیے ضروری ہے۔ اس کے بغیر زکوٰۃ کی رقم نہیں دکھائی جائے گی۔"),
