@@ -21,6 +21,8 @@ ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lowe
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
+# No page-specific substantive update dates are currently verified.
+LASTMOD = {}
 OUT = "public"
 STATIC = "static"
 
