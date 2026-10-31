@@ -178,18 +178,17 @@ def normalize_meta(raw, path, lang):
         raise SystemExit("Meta description needs a useful, page-specific 70-160 character description: " + path + " (" + str(len(desc)) + ")")
     raw = re.sub(r"<title>.*?</title>", "<title>" + html.escape(title, quote=False) + "</title>", raw, count=1, flags=re.S)
     raw = re.sub(r'<meta name="description" content="[^"]*"', '<meta name="description" content="' + html.escape(desc, quote=True) + '"', raw, count=1)
-    # Keep social previews aligned when these four SEO titles/descriptions are rewritten.
-    if path in {"/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/"}:
-        for attr, name, value in (
-            ("property", "og:title", title),
-            ("property", "og:description", desc),
-            ("name", "twitter:title", title),
-            ("name", "twitter:description", desc),
-        ):
-            pattern = '(<meta ' + attr + '="' + name + '" content=")[^"]*(")'
-            raw, count = re.subn(pattern, lambda m: m.group(1) + html.escape(value, quote=True) + m.group(2), raw, count=1)
-            if count != 1:
-                raise SystemExit("Missing or duplicate social meta tag: " + path + " " + name)
+    # Keep Open Graph and Twitter previews aligned with the canonical page title and description.
+    for attr, name, value in (
+        ("property", "og:title", title),
+        ("property", "og:description", desc),
+        ("name", "twitter:title", title),
+        ("name", "twitter:description", desc),
+    ):
+        pattern = '(<meta ' + attr + '="' + name + '" content=")[^"]*(")'
+        raw, count = re.subn(pattern, lambda m: m.group(1) + html.escape(value, quote=True) + m.group(2), raw, count=1)
+        if count != 1:
+            raise SystemExit("Missing or duplicate social meta tag: " + path + " " + name)
     return raw, title, desc
 
 def main():

@@ -2064,10 +2064,15 @@ def main():
             "CalculatesAll does not currently use affiliate links. If affiliate links are added in the future, they will be clearly labelled next to the link and explained on this page.",
             "Advertising does not influence how any tool works. Formulas, worked examples and results are the same for every visitor, and advertisers cannot pay to change them.",
             "We do not publish paid reviews, invented ratings or sponsored content presented as editorial content.",
+            "An advertisement is not an endorsement by CalculatesAll. We do not control the advertiser, its offer or the destination page, so review third-party terms before taking action.",
+            'For information about advertising cookies and privacy choices, read the <a class="underline text-sky-800 dark:text-sky-300" href="/privacy/">Privacy Policy</a>. Any future affiliate relationship will be disclosed before or beside the relevant link.',
             'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
         ]),
         ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
             'For corrections, feedback or questions about a tool, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
+            "For a calculation report, include the calculator name, page URL, input values, displayed result and the result you expected. If possible, explain the steps needed to reproduce the issue.",
+            "Please do not email passwords, payment card numbers, bank details, medical records or other sensitive personal information. Calculator entries stay in your browser; we only receive information you choose to send in your message.",
+            'You can also report accessibility problems, keyboard issues, broken links or translation corrections. Read the <a class="underline text-sky-800 dark:text-sky-300" href="/methodology/">calculation methodology</a>, <a class="underline text-sky-800 dark:text-sky-300" href="/editorial-policy/">editorial policy</a> and <a class="underline text-sky-800 dark:text-sky-300" href="/privacy/">privacy policy</a> for more detail.',
         ]),
     ]
     for path, title, desc, h1, paras in static_pages:
