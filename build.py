@@ -1269,6 +1269,31 @@ def write(path, content):
         f.write(fill(content))
 
 
+def years_to_days_reference_html():
+    rows = [
+        (1, "365", "365.2425"),
+        (2, "730", "730.485"),
+        (3, "1,095", "1,095.7275"),
+        (5, "1,825", "1,826.2125"),
+        (10, "3,650", "3,652.425"),
+        (20, "7,300", "7,304.85"),
+        (50, "18,250", "18,262.125"),
+        (80, "29,200", "29,219.4"),
+        (100, "36,500", "36,524.25"),
+    ]
+    out = ('<section class="mt-10"><h2 class="' + H2 + '">Quick reference: years to days</h2>'
+           '<p class="' + P + '">Common conversions using a fixed 365-day year and the 365.2425-day Gregorian average. Average-method values can be fractional days.</p>'
+           '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
+           '<caption class="sr-only">Years converted to days using the 365-day and Gregorian-average methods</caption>'
+           '<thead><tr><th scope="col" class="border-b p-3">Years</th><th scope="col" class="border-b p-3">365-day method</th><th scope="col" class="border-b p-3">Gregorian average</th></tr></thead><tbody>')
+    for years, simple, average in rows:
+        out += ('<tr><th scope="row" class="border-b p-3">' + str(years) + '</th>'
+                '<td class="border-b p-3">' + simple + '</td>'
+                '<td class="border-b p-3">' + average + '</td></tr>')
+    out += ('</tbody></table></div><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. This table is a duration reference, not a substitute for a date-specific count.</p></section>')
+    return out
+
+
 def guide_html(sections):
     out = ""
     for heading, paras in sections:
@@ -1391,6 +1416,13 @@ def tool_page(t):
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
+    elif t["slug"] == "years-to-days-calculator":
+        title = "Years to Days Calculator | Exact & Average"
+        desc = "Convert years to days using 365 days, the Gregorian average of 365.2425 days, or exact calendar dates. See quick-reference examples and leap-year limits."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Free Online Tasbih Counter | Digital Tasbeeh Counter"
         desc = "Free online tasbih counter for daily dhikr. Tap to count, set targets of 33, 99 or 100, and save your count on your device. No download needed."
@@ -1464,7 +1496,8 @@ def tool_page(t):
         + (('<h2 class="' + H2 + '">How it is calculated</h2>'
             + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>')
            if EXTRA[t["slug"]]["quick"].strip() else "")
-        + guide_html(guide)
+        + (guide_html(guide[:2]) + years_to_days_reference_html() + guide_html(guide[2:])
+           if t["slug"] == "years-to-days-calculator" else guide_html(guide))
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
         + updated

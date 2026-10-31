@@ -45,6 +45,11 @@ def output_for_url(url):
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
+years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
+assert "<title>Years to Days Calculator | Exact &amp; Average</title>" in years_html, "Years-to-Days title should describe exact and average methods"
+assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
+assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
+assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
 assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
