@@ -1083,6 +1083,23 @@ def home_alts_all():
 
 def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     url = SITE_URL + path
+    # Give every public page the same canonical site and maintainer entities.
+    # Reuse page-level entities when present so JSON-LD does not create duplicates.
+    if path != "/404":
+        schema = list(schema or [])
+        existing_ids = {item.get("@id") for item in schema}
+        shared_entities = [
+            {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization",
+             "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION,
+             "logo": SITE_URL + "/assets/favicon.svg",
+             "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
+            {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer",
+             "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/",
+             "worksFor": {"@id": SITE_URL + "/#organization"}},
+        ]
+        for entity in shared_entities:
+            if entity["@id"] not in existing_ids:
+                schema.append(entity)
     robots = "noindex, follow" if noindex else "index, follow"
     alt = ""
     if alternates:
@@ -1466,7 +1483,7 @@ def tool_page(t):
             {"@type": "ListItem", "position": 2, "name": cat["name"], "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": t["name"], "item": url}]},
         {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
-        {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
+        {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION, "logo": SITE_URL + "/assets/favicon.svg", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
     related = ""
     related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
@@ -1629,7 +1646,10 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
         ]})
     body = '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
     for p in paragraphs:
-        body += '<p class="' + P + '">' + p + "</p>"
+        if p.startswith("<h2 "):
+            body += p
+        else:
+            body += '<p class="' + P + '">' + p + "</p>"
     write(path, head(title, desc, path, schema, noindex=noindex) + shell(body))
     return path
 
@@ -2033,11 +2053,17 @@ def main():
         else:
             entries.append((path, []))
     static_pages = [
-        ("/about/", "About CalculatesAll", "Learn what CalculatesAll offers, how its free calculators work, and the principles behind clear formulas, examples and stated limitations.", "About CalculatesAll", [
+        ("/about/", "About CalculatesAll", "Learn what CalculatesAll offers, who maintains the project, how its free calculators work and how calculation methods are checked.", "About CalculatesAll", [
             "CalculatesAll is an independent online calculator project maintained by Muhammad Fayyaz Adeel.",
             SITE_DESCRIPTION,
-            "Calculations run in your browser. The tools do not store your entries on our server.",
-            "Religious and health tools state their limits on the page. For a ruling on Zakat or a diagnosis, consult a qualified scholar or health professional.",
+            '<h2 class="' + H2 + '">Who maintains CalculatesAll?</h2>',
+            "Muhammad Fayyaz Adeel maintains the website and its calculator content. The site is presented under the CalculatesAll name. No separate registered company or physical office is claimed on this page.",
+            '<h2 class="' + H2 + '">How are calculator results checked?</h2>',
+            'Each calculator page explains its inputs, formula, worked example and important limitations. Automated tests check representative calculations, input boundaries, generated pages and site metadata. These checks reduce regression risk but do not replace professional advice or exhaustive testing on every device. Read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a> and <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a>.',
+            '<h2 class="' + H2 + '">How do the calculators work?</h2>',
+            "Choose a tool, enter the requested values and units, then review the result alongside the method and limitations. No account or download is required. Calculator entries are processed in your browser and are not sent to our server.",
+            '<h2 class="' + H2 + '">Are calculator inputs stored?</h2>',
+            'Calculator entries are not sent to our server. The tasbih counter stores its count on the current device. See the <a class="' + LINK + '" href="/privacy/">privacy policy</a> for details about local storage, hosting data and third-party resources.',
         ]),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "This policy explains what information CalculatesAll handles when you use the website. It applies to every page on calculateallinone.vercel.app.",
