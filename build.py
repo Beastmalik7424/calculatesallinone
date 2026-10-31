@@ -1619,9 +1619,14 @@ def urdu_tool_page(t):
         '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat_ur + '</a></li><li aria-hidden="true">/</li>'
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
-        '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
-        + primary_tool_content
-        + '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
+    )
+    _urdu_lead = '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
+    if t["slug"] == "standard-calculator":
+        body += primary_tool_content + _urdu_lead
+    else:
+        body += _urdu_lead + primary_tool_content
+    body += (
+        '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
         + ('<h2 class="' + H2 + '">ماخذ</h2><p class="' + P + '">' + u["sources"] + '</p>' if u.get("sources") else "")
         + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">انگریزی ورژن</a></p>'
