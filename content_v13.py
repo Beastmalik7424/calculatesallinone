@@ -99,7 +99,7 @@ CONTACT_EXTRA = [
 ]
 
 ABOUT_EXTRA = [
-    "CalculatesAll is maintained by Muhammad Fayyaz Adeel (also known as Malik Adeel Bhatti). It is a personal project providing free, browser-based calculators. For corrections or feedback, email malikadeelbhatti@gmail.com.",
+    "The website is published under the CalculatesAll name and provides free browser-based calculators for everyday calculations.",
     "Our goal is simple: a visitor should be able to open the site, understand what each tool does in a few seconds, and get a correct result. Tool pages explain the method used and list important limits, with worked examples on the pages where they help.",
     "The main tools are available in English, and most are also available in Urdu. Short introduction pages are available in Arabic, Hindi, Spanish and French, and those pages link to the English tools. Calculations run in your browser, so your numbers are not sent to us.",
     "CalculatesAll brings together practical calculators for money, health screening, dates, unit conversion, arithmetic and daily counting. The aim is not to replace a professional service, but to make routine calculations easier to check. Each page names the inputs it uses, explains the formula in plain language and gives examples that help visitors catch unit or entry mistakes.",

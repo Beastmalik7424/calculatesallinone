@@ -1646,10 +1646,16 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
         ]})
     body = '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
     for p in paragraphs:
-        if p.startswith("<h2 "):
-            body += p
-        else:
-            body += '<p class="' + P + '">' + p + "</p>"
+        body += '<p class="' + P + '">' + p + "</p>"
+    if path == "/about/":
+        body += ('<section aria-labelledby="about-maintainer" class="mt-8"><h2 id="about-maintainer" class="' + H2 + '">Who maintains CalculatesAll?</h2>'
+                 '<p class="' + P + '">CalculatesAll is an independent online calculator project maintained by Muhammad Fayyaz Adeel. The site is published under the CalculatesAll name.</p>'
+                 '<h2 class="' + H2 + '">How are calculator results checked?</h2>'
+                 '<p class="' + P + '">Each calculator page explains its inputs, formula, worked example and important limitations. Automated tests check representative calculations, input boundaries, generated pages and site metadata. These checks reduce regression risk but do not replace professional advice or exhaustive testing on every device. Read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a> and <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a>.</p>'
+                 '<h2 class="' + H2 + '">How do the calculators work?</h2>'
+                 '<p class="' + P + '">Choose a tool, enter the requested values and units, then review the result alongside the method and limitations. No account or download is required. Calculator entries are processed in your browser and are not sent to our server.</p>'
+                 '<h2 class="' + H2 + '">Are calculator inputs stored?</h2>'
+                 '<p class="' + P + '">Calculator entries are not sent to our server. The tasbih counter stores its count on the current device. See the <a class="' + LINK + '" href="/privacy/">privacy policy</a> for details about local storage, hosting data and third-party resources.</p></section>')
     write(path, head(title, desc, path, schema, noindex=noindex) + shell(body))
     return path
 
@@ -2056,14 +2062,6 @@ def main():
         ("/about/", "About CalculatesAll", "Learn what CalculatesAll offers, who maintains the project, how its free calculators work and how calculation methods are checked.", "About CalculatesAll", [
             "CalculatesAll is an independent online calculator project maintained by Muhammad Fayyaz Adeel.",
             SITE_DESCRIPTION,
-            '<h2 class="' + H2 + '">Who maintains CalculatesAll?</h2>',
-            "Muhammad Fayyaz Adeel maintains the website and its calculator content. The site is presented under the CalculatesAll name. No separate registered company or physical office is claimed on this page.",
-            '<h2 class="' + H2 + '">How are calculator results checked?</h2>',
-            'Each calculator page explains its inputs, formula, worked example and important limitations. Automated tests check representative calculations, input boundaries, generated pages and site metadata. These checks reduce regression risk but do not replace professional advice or exhaustive testing on every device. Read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a> and <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a>.',
-            '<h2 class="' + H2 + '">How do the calculators work?</h2>',
-            "Choose a tool, enter the requested values and units, then review the result alongside the method and limitations. No account or download is required. Calculator entries are processed in your browser and are not sent to our server.",
-            '<h2 class="' + H2 + '">Are calculator inputs stored?</h2>',
-            'Calculator entries are not sent to our server. The tasbih counter stores its count on the current device. See the <a class="' + LINK + '" href="/privacy/">privacy policy</a> for details about local storage, hosting data and third-party resources.',
         ]),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "This policy explains what information CalculatesAll handles when you use the website. It applies to every page on calculateallinone.vercel.app.",
