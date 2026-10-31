@@ -102,6 +102,8 @@ about_pages = [node for node in about_nodes if node.get("@type") == "AboutPage"]
 assert len(about_pages) == 1 and about_pages[0].get("mainEntity", {}).get("@id") == SITE + "/#organization", "About page should describe the project as its primary entity"
 assert about_pages[0].get("about", {}).get("@id") == SITE + "/#maintainer", "About page should identify the actual maintainer as a related person"
 assert not [node for node in about_nodes if node.get("@type") == "ProfilePage"], "Project About page should not be mislabelled as a personal profile page"
+assert not [node for node in about_nodes if node.get("@type") == "WebPage"], "AboutPage is already a WebPage subtype and should not receive a duplicate generic WebPage node"
+assert len([node for node in about_nodes if node.get("@type") in ("AboutPage", "WebPage", "ProfilePage")]) == 1, "About page should expose one page-level entity, not duplicate page nodes"
 about_breadcrumbs = [node for node in about_nodes if node.get("@type") == "BreadcrumbList"]
 assert len(about_breadcrumbs) == 1 and [item["name"] for item in about_breadcrumbs[0]["itemListElement"]] == ["Home", "About CalculatesAll"], "About page should expose a matching breadcrumb graph"
 about_people = [node for node in about_nodes if node.get("@type") == "Person" and node.get("@id") == SITE + "/#maintainer"]
