@@ -2,7 +2,7 @@ const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
 
 const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, "");
-const paths = ["/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"];
+const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"];
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
