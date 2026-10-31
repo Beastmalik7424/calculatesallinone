@@ -60,6 +60,10 @@ assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_ht
 assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
 assert "CalculatesAll is an independent online calculator project maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the brand and maintainer consistently"
 assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
+about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
+for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
+    assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
+assert "Who maintains CalculatesAll?" in about_html and "How are calculator results checked?" in about_html, "About page should answer core identity and process questions with clear headings"
 contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
 for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy"):
     assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
