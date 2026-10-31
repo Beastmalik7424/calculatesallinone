@@ -33,6 +33,7 @@ GUIDES = {
 "Worked example: 28 February 2024 to 1 March 2024 is 2 days because 29 February is a leap day. The same dates in 2025 are 1 day. If a form or contract counts both the first and last dates, the inclusive count for a forward interval is normally the elapsed result plus one. Check the specific rule before using a date count for a deadline.",
 "To verify a result manually, count the calendar-day boundary crossings from the start date up to the end date. For a forward interval that crosses a month, include the actual length of that month. February has 29 days in a leap year and 28 otherwise. The Gregorian leap-year rule is divisible by four, except century years unless divisible by 400.",
 "This calculator does not count weekdays only, remove public holidays, calculate working days, or decide legal deadline rules. It also does not measure exact elapsed hours between timestamps. Use a jurisdiction-specific business calendar for working-day deadlines, and confirm contract, court, travel or immigration counting rules with the relevant authority. Invalid dates are rejected rather than silently changed."
+"Before relying on a result, compare the entered dates with the source document and confirm whether it asks for elapsed days, inclusive calendar days or business days. Those counting methods answer different questions and can produce different totals."
 ]
 }
 
