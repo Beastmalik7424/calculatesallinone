@@ -161,5 +161,5 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
     failures.forEach(x => console.error("FAIL: " + x));
     process.exit(1);
   }
-  console.log("HEADLESS BROWSER AUDIT: PASS (7 SEO URLs + calculator end-to-end, zero console/page errors)");
+  console.log("HEADLESS BROWSER AUDIT: PASS (8 SEO URLs + calculator end-to-end, zero console/page errors)");
 })().catch(err => { console.error(err); process.exit(1); });
