@@ -926,6 +926,7 @@ def home_extra_html(lang):
     )
     out += '<h2 class="' + H2 + '">' + heading + '</h2><p class="' + P + '">' + answer_first + '</p><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     if lang == "en":
+        out += '<p class="' + P + '">Looking for a free calculator in Pakistan or elsewhere? CalculatesAll is a free online calculator website. Try the <a class="' + LINK + '" href="/profit-loss-calculator/">profit loss calculator</a> for business and product figures, the <a class="' + LINK + '" href="/years-to-days-calculator/">years to days calculator</a> for date and duration conversions, or the <a class="' + LINK + '" href="/tasbih-counter/">tasbih calculator</a> for dhikr. The tools run in your browser.</p>'
         out += '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel. <a class="' + LINK + '" href="/about/">About the maintainer</a>.</p>'
         out += '<p class="' + P + '"><a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools">Browse all free calculators</a></p>'
     return out
@@ -1247,10 +1248,11 @@ def home_lang_page(code):
     )
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": code},
-        {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
+        {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/",
          "description": "Free browser-based calculators for money, health screening, dates, unit conversions and everyday tasks.",
          "logo": SITE_URL + "/assets/favicon.svg",
          "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
+        {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
     ]
     write(path, head(u["title"], u["desc"], path, schema, lang=code, alternates=home_alts_all()) + shell(body, lang=code, current_path=path))
     return path
@@ -1454,12 +1456,15 @@ def tool_page(t):
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": t["name"], "url": url,
          "description": desc, "applicationCategory": t["app"], "operatingSystem": "Any",
+         "author": {"@id": SITE_URL + "/#maintainer"}, "publisher": {"@id": SITE_URL + "/#organization"},
          "browserRequirements": "Requires JavaScript",
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}},
         {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
             {"@type": "ListItem", "position": 2, "name": cat["name"], "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": t["name"], "item": url}]},
+        {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
+        {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
     related = ""
     related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
@@ -1500,6 +1505,7 @@ def tool_page(t):
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
+        + '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p>'
         + updated
         + review_box(t["slug"])
         + '<section class="mt-12"><h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100">More in ' + cat["name"] + '</h2>'
