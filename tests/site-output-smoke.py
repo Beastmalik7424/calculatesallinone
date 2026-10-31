@@ -949,3 +949,15 @@ for _english_label in ("Cash / savings", "Gold value", "Silver value", "Stock fo
     assert _english_label not in _ur_zakat_compact, "English Zakat label leaked into Urdu page: " + _english_label
 for _field_id in ("z-cash", "z-gold", "z-silver", "z-stock", "z-recv", "z-debts", "z-silverprice", "z-hawl", "zakat-result"):
     assert 'id="' + _field_id + '"' in _ur_zakat_compact, "Urdu Zakat field ID changed: " + _field_id
+
+# Urdu calculator templates must carry the same page-specific responsive hooks as English tools.
+for _slug in ("age-calculator", "bmi-calculator", "discount-calculator", "profit-loss-calculator",
+              "stopwatch", "tasbih-counter", "unit-converter", "zakat-calculator"):
+    _html = output_for_url(SITE + "/ur/" + _slug + "/").read_text(encoding="utf-8")
+    assert 'id="tool-calculator" class="ca-tool-calculator ca-tool-' + _slug + ' mt-4"' in _html, (
+        "Urdu calculator lost its page-specific responsive class: " + _slug
+    )
+_ur_standard = output_for_url(SITE + "/ur/standard-calculator/").read_text(encoding="utf-8")
+assert 'id="tool-calculator" class="ca-tool-standard-calculator mt-4"' in _ur_standard, (
+    "Urdu Standard Calculator must use the standard calculator responsive layout"
+)
