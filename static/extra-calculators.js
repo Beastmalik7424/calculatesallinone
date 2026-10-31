@@ -5,8 +5,8 @@
  if(root)root.ExtraCalculators=api;
 })(typeof window!=="undefined"?window:null,function(){
  function finite(...values){if(values.some(v=>typeof v!=="number"||!Number.isFinite(v)))throw Error("Enter valid finite numbers");}
- function percentage(part,total){finite(part,total);return part*total/100;}
- function percentageShare(part,whole){finite(part,whole);if(whole===0)throw Error("The whole amount cannot be zero");return part/whole*100;}
+ function percentage(part,total){finite(part,total);const result=Math.abs(part)>=Math.abs(total)?(part/100)*total:part*(total/100);if(!Number.isFinite(result))throw Error("Result exceeds supported range");return result;}
+ function percentageShare(part,whole){finite(part,whole);if(whole===0)throw Error("The whole amount cannot be zero");const result=part/whole*100;if(!Number.isFinite(result))throw Error("Result exceeds supported range");return result;}
  function gcd(a,b){while(b){[a,b]=[b,a%b];}return Math.abs(a);}
  function fraction(a,b,c,d,operation){finite(a,b,c,d);if(![a,b,c,d].every(Number.isSafeInteger)||b===0||d===0)throw Error("Use whole-number numerators and nonzero denominators");
  const A=BigInt(a),B=BigInt(b),C=BigInt(c),D=BigInt(d);
