@@ -303,7 +303,7 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   assert.match(generated, /How many years is 1,009 days\?/);
   assert.match(generated, /id="yd-exact-fields"/);
   assert.match(generated, /id="yd-start-date"/);
-  assert.match(generated, /option value="calendar"/);
+  assert.match(generated, /id="yd-calendar-option" value="calendar"/);
   assert.match(generated, /href="https:\/\/calculateallinone\.vercel\.app\/years-to-days-calculator\/"/);
   assert.match(generated, /20261030-exact-years-1/);
   console.log("PASS: exact calendar day count, leap years, invalid dates and generated controls");
