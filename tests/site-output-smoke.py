@@ -63,7 +63,22 @@ assert "Free browser-based calculators and everyday utility tools for people wor
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
-assert "Who maintains CalculatesAll?" in about_html and "How are calculator results checked?" in about_html, "About page should answer core identity and process questions with clear headings"
+about_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", about_html))
+about_words = re.findall(r"\\b[\\w'-]+\\b", about_text)
+assert 420 <= len(about_words) <= 700, f"About page should provide concise, substantive project information (420-700 words), got {len(about_words)}"
+assert about_html.count("<h1") == 1, "About page must have exactly one H1"
+about_headings = ["Who maintains CalculatesAll?", "What calculators and tools are available?", "How are calculator methods and changes checked?", "What happens to calculator inputs?", "What are the limits of these tools?", "How can a calculation issue be reported?"]
+assert all(heading in about_html for heading in about_headings), "About page should have distinct, question-led sections that answer reader questions"
+assert about_html.index("Who maintains CalculatesAll?") < about_html.index("What calculators and tools are available?") < about_html.index("How are calculator methods and changes checked?") < about_html.index("What happens to calculator inputs?") < about_html.index("What are the limits of these tools?") < about_html.index("How can a calculation issue be reported?"), "About sections should follow a clear reader-first sequence"
+for href in ("/profit-loss-calculator/", "/discount-calculator/", "/emi-calculator/", "/age-calculator/", "/unit-converter/", "/bmi-calculator/", "/zakat-calculator/", "/methodology/", "/editorial-policy/", "/privacy/", "/contact/"):
+    assert 'href="' + href + '"' in about_html, f"About page should link to the relevant site resource: {href}"
+for href in ("https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "https://www.nist.gov/pml/owm/si-units-length", "https://openstax.org/books/principles-finance/pages/5-1-the-income-statement", "https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"):
+    assert 'href="' + href + '"' in about_html and 'rel="noopener noreferrer"' in about_html, f"About source links should be explicit and safe: {href}"
+assert 'href="mailto:malikadeelbhatti@gmail.com"' in about_html, "About page should provide a direct, verified correction contact"
+assert "<caption>" in about_html and "<th scope=" in about_html, "About page's assumptions table should have accessible caption and column headers"
+assert "Every calculator is independently verified" not in about_html and "certified expert" not in about_html.lower(), "About page must not invent universal review or credential claims"
+assert '<title>About CalculatesAll | Project, Methods & Privacy</title>' in about_html, "About title should clearly identify the page and its useful scope"
+assert 'name="description" content="Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details."' in about_html, "About meta description should accurately summarize the page"
 def jsonld_nodes(page_html):
     nodes = []
     for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page_html, re.S):
@@ -80,8 +95,12 @@ home_people = [node for node in home_nodes if node.get("@type") == "Person" and 
 assert len(home_people) == 1 and home_people[0].get("@id") == SITE + "/#maintainer", "Homepage must expose exactly one canonical maintainer entity"
 assert "CalculatesAll is a free online calculator" in home_html, "Homepage opening should answer what CalculatesAll is before the calculator UI"
 about_nodes = jsonld_nodes(about_html)
-profile_pages = [node for node in about_nodes if node.get("@type") == "ProfilePage"]
-assert len(profile_pages) == 1 and profile_pages[0].get("mainEntity", {}).get("@id") == SITE + "/#maintainer", "About page must identify the maintainer as its profile-page main entity"
+about_pages = [node for node in about_nodes if node.get("@type") == "AboutPage"]
+assert len(about_pages) == 1 and about_pages[0].get("mainEntity", {}).get("@id") == SITE + "/#organization", "About page should describe the project as its primary entity"
+assert about_pages[0].get("about", {}).get("@id") == SITE + "/#maintainer", "About page should identify the actual maintainer as a related person"
+assert not [node for node in about_nodes if node.get("@type") == "ProfilePage"], "Project About page should not be mislabelled as a personal profile page"
+about_breadcrumbs = [node for node in about_nodes if node.get("@type") == "BreadcrumbList"]
+assert len(about_breadcrumbs) == 1 and [item["item"]["name"] for item in about_breadcrumbs[0]["itemListElement"]] == ["Home", "About CalculatesAll"], "About page should expose a matching breadcrumb graph"
 about_people = [node for node in about_nodes if node.get("@type") == "Person" and node.get("@id") == SITE + "/#maintainer"]
 assert len(about_people) == 1 and "Malik Adeel Bhatti" in about_people[0].get("alternateName", []), "Maintainer schema must consistently include the publicly stated alternate name"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
