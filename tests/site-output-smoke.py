@@ -53,7 +53,7 @@ def output_for_url(url):
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
-for phrase in ("online calculator", "profit loss calculator", "tasbih calculator", "free calculator in pakistan"):
+for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
