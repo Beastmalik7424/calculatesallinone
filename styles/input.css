@@ -1657,3 +1657,20 @@ header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
     font-size: 1.05rem !important;
   }
 }
+
+/* Keep Urdu tool navigation compact on very short phones while retaining the page title. */
+@media (max-width: 340px) and (max-height: 640px) {
+  #main:has(.ca-tool-bmi-calculator) > nav,
+  #main:has(.ca-tool-standard-calculator) > nav,
+  #main:has(.ca-tool-unit-converter) > nav,
+  #main:has(.ca-tool-zakat-calculator) > nav {
+    display: none !important;
+  }
+}
+@media (max-width: 600px) {
+  #main:has(.ca-tool-bmi-calculator) > p {
+    font-size: .84rem !important;
+    line-height: 1.2 !important;
+    margin: .2rem 0 !important;
+  }
+}
