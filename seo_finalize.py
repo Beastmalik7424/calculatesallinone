@@ -115,7 +115,7 @@ def normalize_meta(raw, path, lang):
         raise SystemExit("Missing title/description: " + path)
     title = html.unescape(title_match.group(1).strip())
     title_overrides = {
-        "/about/": "About CalculatesAll | Free Online Calculators",
+        "/about/": "About CalculatesAll | Project, Methods & Privacy",
         "/contact/": "Contact CalculatesAll | Help and Feedback",
         "/health/": "Health Calculators and BMI Guide | CalculatesAll",
         "/terms/": "Terms of Use | CalculatesAll Free Tools",
@@ -136,6 +136,7 @@ def normalize_meta(raw, path, lang):
         title = "Unit Converter: cm to Inches, kg to lbs | CalculatesAll"
     desc = html.unescape(desc_match.group(1).strip())
     description_overrides = {
+    "/about/": "Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details.",
     "/affiliate-disclosure/": "Learn how CalculatesAll is funded, how advertisements are labelled, and how future affiliate links will be disclosed without influencing calculator results.",
     "/compound-interest-calculator/": "Estimate compound interest from your starting balance, annual rate, time and compounding frequency. Review the formula and see how growth accumulates.",
     "/contact/": "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review.",
