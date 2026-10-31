@@ -2070,9 +2070,6 @@ def main():
         ]),
         ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
             'For corrections, feedback or questions about a tool, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
-            "For a calculation report, include the calculator name, page URL, input values, displayed result and the result you expected. If possible, explain the steps needed to reproduce the issue.",
-            "Please do not email passwords, payment card numbers, bank details, medical records or other sensitive personal information. Calculator entries stay in your browser; we only receive information you choose to send in your message.",
-            'You can also report accessibility problems, keyboard issues, broken links or translation corrections. Read the <a class="underline text-sky-800 dark:text-sky-300" href="/methodology/">calculation methodology</a>, <a class="underline text-sky-800 dark:text-sky-300" href="/editorial-policy/">editorial policy</a> and <a class="underline text-sky-800 dark:text-sky-300" href="/privacy/">privacy policy</a> for more detail.',
         ]),
     ]
     for path, title, desc, h1, paras in static_pages:
@@ -2093,11 +2090,12 @@ def main():
                 "To check a result, first confirm the units and inputs, then compare the displayed formula and worked example where available. If you find a discrepancy, share reproducible inputs through the contact page rather than sending confidential financial or medical records.",
             ]
         elif path == "/contact/":
-            desc = "Contact CalculatesAll to report a calculator issue, accessibility problem, translation correction or general feedback."
+            desc = "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review."
             paras = [
-                'For questions, corrections, accessibility problems or Urdu translation feedback, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
-                "To report a calculation error, include the tool name or page URL, inputs, displayed result and expected result or supporting source.",
-                "Reports can help us investigate and correct confirmed issues. Please avoid sending sensitive personal information.",
+                'For corrections, feedback, accessibility problems or translation issues, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
+                "To report a calculation error, include the calculator name, page URL, exact input values, displayed result, expected result and steps to reproduce the issue. For date or time calculations, include the date format and time zone if relevant.",
+                "Do not email passwords, payment card numbers, bank details, medical records or other sensitive personal information. Calculator entries remain in your browser. We only receive details you choose to include in your message.",
+                'For formula methods, read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a>. For the correction process, read the <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a>. For data handling, read the <a class="' + LINK + '" href="/privacy/">privacy policy</a>.',
             ]
         elif path == "/editorial-policy/":
             paras = [
