@@ -96,7 +96,7 @@ home_sites = [node for node in home_nodes if node.get("@type") == "WebSite" and 
 assert len(home_sites) == 1 and home_sites[0].get("@id") == SITE + "/#website", "Homepage must expose exactly one canonical WebSite entity"
 home_people = [node for node in home_nodes if node.get("@type") == "Person" and node.get("name") == "Muhammad Fayyaz Adeel"]
 assert len(home_people) == 1 and home_people[0].get("@id") == SITE + "/#maintainer", "Homepage must expose exactly one canonical maintainer entity"
-assert "CalculatesAll is a free online calculator" in home_html, "Homepage opening should answer what CalculatesAll is before the calculator UI"
+assert "CalculatesAll is a free online calculator" in home_html, "Homepage should state its free online calculator purpose in visible content"
 about_nodes = jsonld_nodes(about_html)
 about_pages = [node for node in about_nodes if node.get("@type") == "AboutPage"]
 assert len(about_pages) == 1 and about_pages[0].get("mainEntity", {}).get("@id") == SITE + "/#organization", "About page should describe the project as its primary entity"
