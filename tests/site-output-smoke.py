@@ -50,6 +50,9 @@ for phrase in ("online calculator", "profit loss calculator", "tasbih calculator
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
+contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
+for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy"):
+    assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 assert "Maintained by <a" in profit_html and "Muhammad Fayyaz Adeel" in profit_html and 'href="/about/"' in profit_html, "Calculator guide should have an honest maintainer byline"
 assert '"author":{"@id":"' + SITE + '/#maintainer"}' in profit_html, "Calculator WebApplication schema should reference the named maintainer"
