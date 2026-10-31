@@ -36,15 +36,9 @@ assert set(lastmod_entries) <= set(urls), "Sitemap lastmod entries must refer on
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
-expected_lastmod_entries = {
-    SITE + "/contact/": "2026-10-21",
-    SITE + "/discount-calculator/": "2026-10-21",
-    SITE + "/editorial-policy/": "2026-10-21",
-    SITE + "/health/": "2026-10-21",
-}
-assert lastmod_entries == expected_lastmod_entries, (
-    "Only the four scoped pages with verified content/template updates may carry lastmod dates. "
-    f"Expected {expected_lastmod_entries!r}, got {lastmod_entries!r}"
+assert not lastmod_entries, (
+    "Sitemap must omit lastmod until reliable page-specific substantive update dates are tracked. "
+    f"Unexpected entries: {lastmod_entries!r}"
 )
 def output_for_url(url):
     parsed = urlparse(url)
