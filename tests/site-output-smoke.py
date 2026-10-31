@@ -52,7 +52,7 @@ assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 assert "Maintained by <a" in profit_html and "Muhammad Fayyaz Adeel" in profit_html and 'href="/about/"' in profit_html, "Calculator guide should have an honest maintainer byline"
-assert '"author": {"@id": "' + SITE + '/#maintainer"}' in profit_html, "Calculator WebApplication schema should reference the named maintainer"
+assert '"author":{"@id":"' + SITE + '/#maintainer"}' in profit_html, "Calculator WebApplication schema should reference the named maintainer"
 # Only pages flagged by the completed crawler get metadata changes; keep copy page-specific.
 for path in ("/affiliate-disclosure/", "/compound-interest-calculator/", "/contact/", "/date-calculator/", "/discount-calculator/", "/fraction-calculator/", "/stopwatch/", "/worship/", "/zakat-calculator/"):
     page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
