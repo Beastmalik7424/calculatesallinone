@@ -23,6 +23,43 @@ const {chromium}=require("playwright");
    await page.close();
   }
 
+  // Reverse percentage mode must be wired to the visible form, not only the arithmetic helper.
+  for(const width of [390,1366]){
+   const page=await browser.newPage({viewport:{width,height:width<500?844:768}});
+   const errors=[];page.on("pageerror",e=>errors.push(e.message));
+   const response=await page.goto("http://127.0.0.1:4174/percentage-calculator/");
+   if(!response||response.status()!==200)throw Error("Percentage reverse-mode HTTP failure");
+   await page.locator("#percentage-mode").selectOption("share");
+   const reverseLabels=await page.evaluate(()=>({part:document.querySelector('label[for="value"]').textContent.trim(),whole:document.querySelector('label[for="total"]').textContent.trim()}));
+   if(reverseLabels.part!=="Part"||reverseLabels.whole!=="Whole")throw Error("Reverse mode labels are unclear: "+JSON.stringify(reverseLabels));
+   await page.locator("#value").fill("45");
+   await page.locator("#total").fill("250");
+   await page.locator("#extra-calculator-form button[type=submit]").click();
+   const reverse=await page.locator("#extra-result").innerText();
+   if(!reverse.includes("18%")||!reverse.includes("45 ÷ 250 × 100"))throw Error("Reverse percentage UI failed at "+width+"px: "+reverse);
+   await page.locator("#total").fill("0");
+   await page.locator("#extra-calculator-form button[type=submit]").click();
+   const invalid=await page.locator("#extra-result").innerText();
+   if(!invalid.includes("whole amount cannot be zero"))throw Error("Zero-whole validation failed: "+invalid);
+   const layout=await page.evaluate(()=>{
+    const form=document.querySelector("#extra-calculator-form");
+    const button=form.querySelector("button");
+    const controls=[...form.querySelectorAll("input,select")];
+    const buttonRect=button.getBoundingClientRect();
+    return {
+     horizontal:document.documentElement.scrollWidth>innerWidth+2,
+     buttonVisible:buttonRect.top<innerHeight&&buttonRect.bottom>0,
+     controlsFit:controls.every(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+2;})
+    };
+   });
+   if(layout.horizontal||!layout.buttonVisible||!layout.controlsFit||errors.length)throw Error("Percentage responsive failure at "+width+"px: "+JSON.stringify({layout,errors}));
+   await page.locator("#percentage-mode").selectOption("of");
+   const defaultLabels=await page.evaluate(()=>({percentage:document.querySelector('label[for="value"]').textContent.trim(),number:document.querySelector('label[for="total"]').textContent.trim()}));
+   if(defaultLabels.percentage!=="Percentage (%)"||defaultLabels.number!=="Number")throw Error("Default percentage labels are unclear: "+JSON.stringify(defaultLabels));
+   console.log("Percentage reverse-mode browser PASS "+width+"px: "+reverse+"; mode labels and zero-whole validation PASS");
+   await page.close();
+  }
+
   for(const width of [320,360,390,1366]){
    const page=await browser.newPage({viewport:{width,height:width<500?740:768}});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
