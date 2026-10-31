@@ -151,10 +151,10 @@ for url in urls:
         assert "0.45359237 kg" in html, "Kilogram/pound conversion must include the exact reference relationship"
     if url == SITE + "/discount-calculator/":
         assert html_lib.unescape(title_match.group(1)) == "Discount Calculator: Sale Price & Savings | CalculatesAll"
-        assert desc_match.group(1) == "Calculate a discount, final sale price and total savings from the original price and discount percentage."
+        assert desc_match.group(1) == "Calculate your discount amount, final sale price and total savings from the original price and discount percentage. See the formula and a worked example."
     if url == SITE + "/stopwatch/":
         assert html_lib.unescape(title_match.group(1)) == "Free Online Stopwatch | CalculatesAll"
-        assert desc_match.group(1) == "Use a free online stopwatch with start, stop, reset and hundredths-of-a-second timing in your browser."
+        assert desc_match.group(1) == "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app."
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
