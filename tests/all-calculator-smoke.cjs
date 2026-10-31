@@ -154,6 +154,8 @@ for (const [cost, sell, margin] of [
   setValues({"p-cost":cost,"p-sell":sell}); submit("pl-form");
   assert.match(elements["pl-result"].textContent, margin);
 }
+setValues({"p-cost":0,"p-sell":10}); submit("pl-form");
+assert.match(elements["pl-result"].textContent, /Markup is N\\/A because cost price is zero\\./, "zero cost must identify markup as unavailable");
 setValues({"p-cost":100,"p-sell":150}); submit("pl-form");
 assert.match(elements["pl-result"].textContent, /50\.00 percent of cost price/, "markup remains on cost base");
 

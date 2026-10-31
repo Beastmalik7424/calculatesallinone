@@ -24,7 +24,7 @@ const { chromium } = require('playwright');
   await page.close();
  }
  // Small-phone profit-only test and breadcrumb placement.
- for (const size of [{width:360,height:640},{width:320,height:568}]) {
+ for (const size of [{width:320,height:568},{width:375,height:667},{width:768,height:1024},{width:1366,height:768}]) {
   const small=await browser.newPage({viewport:size,deviceScaleFactor:1});
   await small.goto('http://127.0.0.1:8123/profit-loss-calculator/');
   const p=await small.evaluate(()=>{
@@ -54,6 +54,29 @@ const { chromium } = require('playwright');
  await page.locator('#pl-form button[type="submit"]').click();
  result=await page.locator('#pl-result').innerText();
  if(!result.includes('20')||!result.includes('25.00'))failures.push('product markup result: '+result);
+ // Product gross margin is based on selling price, not cost.
+ await page.locator('#p-cost').fill('40');
+ await page.locator('#p-sell').fill('50');
+ await page.locator('#pl-form button[type="submit"]').click();
+ result=await page.locator('#pl-result').innerText();
+ if(!result.includes('Profit: 10')||!result.includes('25.00 percent of cost price')||!result.includes('Margin on selling price: 20.00%'))failures.push('product gross margin result: '+result);
+ // Zero cost: markup is unavailable, but gross margin remains 100% when selling price is positive.
+ await page.locator('#p-cost').fill('0');
+ await page.locator('#p-sell').fill('10');
+ await page.locator('#pl-form button[type="submit"]').click();
+ result=await page.locator('#pl-result').innerText();
+ if(!result.includes('Markup is N/A because cost price is zero.')||!result.includes('Margin on selling price: 100.00%'))failures.push('zero-cost markup/margin result: '+result);
+ // Zero selling price: margin is unavailable because its denominator is zero.
+ await page.locator('#p-cost').fill('10');
+ await page.locator('#p-sell').fill('0');
+ await page.locator('#pl-form button[type="submit"]').click();
+ result=await page.locator('#pl-result').innerText();
+ if(!result.includes('Loss: 10')||!result.includes('Margin on selling price: N/A'))failures.push('zero-selling-price result: '+result);
+ await page.locator('#p-cost').fill('-1');
+ await page.locator('#p-sell').fill('100');
+ await page.locator('#pl-form button[type="submit"]').click();
+ result=await page.locator('#pl-result').innerText();
+ if(!result.includes('Enter a cost price and a selling price of zero or more.'))failures.push('negative cost validation: '+result);
 
  // Homepage Standard Calculator: actual no-scroll viewport and click checks.
  for (const size of [{width:375,height:667},{width:390,height:844},{width:1024,height:768},{width:1366,height:768}]) {

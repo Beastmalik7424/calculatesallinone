@@ -522,6 +522,16 @@ for index, locale in enumerate(locale_order):
 assert 'var code = (document.documentElement.lang || "en").toLowerCase().split("-")[0]' in app_js, (
     "Calculator message selection must support language tags such as es-ES and fr-FR."
 )
+expected_markup_na = {
+    "en": "Markup is N/A because cost price is zero.",
+    "ur": "قیمتِ خرید صفر ہے، اس لیے مارک اَپ کا فیصد دستیاب نہیں۔",
+    "ar": "نسبة الزيادة على التكلفة غير متاحة لأن التكلفة صفر.",
+    "hi": "लागत शून्य है, इसलिए मार्कअप प्रतिशत उपलब्ध नहीं है।",
+    "es": "El porcentaje de recargo (markup) no está disponible porque el coste es cero.",
+    "fr": "Le pourcentage de majoration (markup) n’est pas disponible car le coût est nul.",
+}
+for locale, phrase in expected_markup_na.items():
+    assert phrase in locale_blocks[locale], f"Locale {locale} must clearly identify unavailable markup when cost is zero."
 assert "Object.prototype.hasOwnProperty.call(MSG, code) ? code : \"en\"" in app_js, (
     "Unknown languages must safely fall back to English."
 )
