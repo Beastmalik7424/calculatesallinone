@@ -103,15 +103,15 @@ TOOLS = [
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-cash", "Cash and bank savings")
+            + field("z-cash", "Cash / savings")
             + field("z-gold", "Gold value")
             + field("z-silver", "Silver value")
-            + field("z-stock", "Business stock for sale")
-            + field("z-recv", "Money owed to you")
+            + field("z-stock", "Stock for sale")
+            + field("z-recv", "Expected receivables")
             + field("z-debts", "Debts due now")
             + "</div>"
             + field("z-silverprice", "Silver price per gram", hint="Required to check Nisab. Without it, no Zakat amount is shown.")
-            + check("z-hawl", "This wealth has been held for one full lunar year (hawl)")
+            + check("z-hawl", "Held for one full lunar year (hawl)")
             + '<button type="submit" class="@B@">Calculate Zakat</button></form>'
             + result("zakat-result")
         ),
