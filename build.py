@@ -211,7 +211,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
         "h1": "Profit and Loss Calculator for Business and Products",
-        "lead": "Choose business P&L for revenue, costs and expenses, or product profit for buying and selling prices. Results show the correct percentage basis.",
+        "lead": "A profit and loss calculator estimates business profit or loss from revenue, costs and expenses, or product profit from cost and selling price. Choose the calculation type to see the correct percentage basis.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
@@ -256,7 +256,7 @@ TOOLS = [
             ("Why is margin different from markup?", "Product mode shows both markup on cost and gross margin on selling price. Business mode shows net operating margin on revenue."),
             ("Why does it show N/A?", "Product markup is unavailable when cost is zero. Business margin is unavailable when revenue is zero."),
         ],
-        "sources": "Standard operating profit, margin and product markup formulas. This simplified calculator is not a formal financial statement.",
+        "sources": 'Formula references: <a class="' + LINK + '" href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement" target="_blank" rel="noopener noreferrer">OpenStax Principles of Finance: The Income Statement</a> explains gross profit, operating income and margin. <a class="' + LINK + '" href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html" target="_blank" rel="noopener noreferrer">ACCA Ratio Analysis</a> explains gross and operating profit margin ratios. This calculator is a simplified estimate, not a formal financial statement.',
     },
     {
         "slug": "discount-calculator",
@@ -1083,23 +1083,39 @@ def home_alts_all():
 
 def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
     url = SITE_URL + path
-    # Give every public page the same canonical site and maintainer entities.
-    # Reuse page-level entities when present so JSON-LD does not create duplicates.
+    # Keep one canonical, linked identity graph on every public page.
+    # Merge page-level declarations rather than duplicating the homepage Organization/WebSite nodes.
     if path != "/404":
         schema = list(schema or [])
-        existing_ids = {item.get("@id") for item in schema}
         shared_entities = [
+            {"@context": "https://schema.org", "@type": "WebSite", "@id": SITE_URL + "/#website",
+             "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION,
+             "publisher": {"@id": SITE_URL + "/#organization"}},
             {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization",
              "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION,
              "logo": SITE_URL + "/assets/favicon.svg",
              "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
             {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer",
-             "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/",
-             "worksFor": {"@id": SITE_URL + "/#organization"}},
+             "name": "Muhammad Fayyaz Adeel", "alternateName": ["Malik Adeel Bhatti"],
+             "description": "Maintainer of the CalculatesAll online calculator project.",
+             "url": SITE_URL + "/about/",
+             "affiliation": {"@id": SITE_URL + "/#organization"}},
         ]
         for entity in shared_entities:
-            if entity["@id"] not in existing_ids:
+            existing = next((item for item in schema
+                             if item.get("@id") == entity["@id"]
+                             or (item.get("@type") == entity["@type"]
+                                 and item.get("name") == entity["name"]
+                                 and item.get("url", SITE_URL + "/") == entity["url"])), None)
+            if existing is None:
                 schema.append(entity)
+            else:
+                existing["@context"] = "https://schema.org"
+                existing["@type"] = entity["@type"]
+                existing["@id"] = entity["@id"]
+                for key, value in entity.items():
+                    if key not in ("@context", "@type", "@id"):
+                        existing[key] = value
     robots = "noindex, follow" if noindex else "index, follow"
     alt = ""
     if alternates:
@@ -1509,6 +1525,20 @@ def tool_page(t):
         '<li><span aria-hidden="true" class="mr-2">/</span><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li>'
         '<li aria-current="page"><span aria-hidden="true" class="mr-2">/</span>' + t["name"] + "</li></ol></nav>"
     )
+    profit_reference_table = (
+        '<section class="mt-8" aria-labelledby="markup-margin-comparison">'
+        '<h2 id="markup-margin-comparison" class="' + H2 + '">Markup versus margin at a glance</h2>'
+        '<p class="' + P + '">Both percentages describe profit against a different base. The base must be named before comparing results.</p>'
+        '<div class="mt-4 overflow-x-auto rounded-xl border border-stone-300 dark:border-stone-700">'
+        '<table class="w-full min-w-[600px] border-collapse text-left text-sm"><caption class="sr-only">Profit, markup and margin formulas with worked examples</caption>'
+        '<thead class="bg-slate-100 dark:bg-stone-800"><tr><th scope="col" class="p-3">Measure</th><th scope="col" class="p-3">Formula</th><th scope="col" class="p-3">Worked example</th></tr></thead>'
+        '<tbody>'
+        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Product profit</th><td class="p-3">Selling price − cost price</td><td class="p-3">1,000 − 800 = 200</td></tr>'
+        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Markup on cost</th><td class="p-3">Profit ÷ cost × 100</td><td class="p-3">200 ÷ 800 × 100 = 25%</td></tr>'
+        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Product gross margin</th><td class="p-3">Profit ÷ selling price × 100</td><td class="p-3">200 ÷ 1,000 × 100 = 20%</td></tr>'
+        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Business operating margin</th><td class="p-3">Operating profit ÷ revenue × 100</td><td class="p-3">(1,000 − 600 − 150) ÷ 1,000 × 100 = 25%</td></tr>'
+        '</tbody></table></div></section>'
+    ) if t["slug"] == "profit-loss-calculator" else ""
     body = (
         ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
         + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
@@ -1520,6 +1550,7 @@ def tool_page(t):
         + (('<h2 class="' + H2 + '">How it is calculated</h2>'
             + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>')
            if EXTRA[t["slug"]]["quick"].strip() else "")
+        + profit_reference_table
         + (guide_html(guide[:2]) + years_to_days_reference_html() + guide_html(guide[2:])
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
@@ -1638,7 +1669,13 @@ def category_page(c):
 
 
 def static_page(path, title, desc, h1, paragraphs, noindex=False):
-    schema = [{"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": SITE_URL + path}]
+    if path == "/about/":
+        schema = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": SITE_URL + "/about/#webpage",
+                   "name": title, "url": SITE_URL + path,
+                   "mainEntity": {"@id": SITE_URL + "/#maintainer"},
+                   "isPartOf": {"@id": SITE_URL + "/#website"}}]
+    else:
+        schema = [{"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": SITE_URL + path}]
     if path in ("/contact/", "/editorial-policy/"):
         schema.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
@@ -1649,11 +1686,12 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
         body += '<p class="' + P + '">' + p + "</p>"
     if path == "/about/":
         body += ('<section aria-labelledby="about-maintainer" class="mt-8"><h2 id="about-maintainer" class="' + H2 + '">Who maintains CalculatesAll?</h2>'
-                 '<p class="' + P + '">CalculatesAll is an independent online calculator project maintained by Muhammad Fayyaz Adeel. The site is published under the CalculatesAll name.</p>'
+                 '<p class="' + P + '">The project is maintained by Muhammad Fayyaz Adeel, also known as Malik Adeel Bhatti. CalculatesAll is the public project name used on this website.</p>'
                  '<h2 class="' + H2 + '">How are calculator results checked?</h2>'
                  '<p class="' + P + '">Each calculator page explains its inputs, formula, worked example and important limitations. Automated tests check representative calculations, input boundaries, generated pages and site metadata. These checks reduce regression risk but do not replace professional advice or exhaustive testing on every device. Read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a> and <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a>.</p>'
                  '<h2 class="' + H2 + '">How do the calculators work?</h2>'
-                 '<p class="' + P + '">Choose a tool, enter the requested values and units, then review the result alongside the method and limitations. No account or download is required. Calculator entries are processed in your browser and are not sent to our server.</p>'
+                 '<ol class="mt-3 list-decimal pl-6 space-y-2 text-base leading-relaxed text-stone-800 dark:text-stone-200"><li>Choose the calculator that matches the task.</li><li>Enter the requested values and check the units.</li><li>Calculate, then review the result, formula, worked example and limitations.</li></ol>'
+                 '<p class="' + P + '">No account or download is required. Calculator entries are processed in your browser and are not sent to our server.</p>'
                  '<h2 class="' + H2 + '">Are calculator inputs stored?</h2>'
                  '<p class="' + P + '">Calculator entries are not sent to our server. The tasbih counter stores its count on the current device. See the <a class="' + LINK + '" href="/privacy/">privacy policy</a> for details about local storage, hosting data and third-party resources.</p></section>')
     write(path, head(title, desc, path, schema, noindex=noindex) + shell(body))
@@ -1678,7 +1716,7 @@ def home_page(lang="en"):
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for Zakat, BMI, profit and loss, age, discounts, unit conversion, a standard calculator, tasbih counter and stopwatch."
         h1 = "Free Online Standard Calculator"
-        lead = "Fast, free, and private. Tap the buttons or use your keyboard to calculate."
+        lead = "CalculatesAll is a free online calculator for everyday maths. Tap the buttons or use your keyboard."
         cards = ""
         for c in CATEGORIES:
             cards += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
@@ -2060,7 +2098,7 @@ def main():
             entries.append((path, []))
     static_pages = [
         ("/about/", "About CalculatesAll", "Learn what CalculatesAll offers, who maintains the project, how its free calculators work and how calculation methods are checked.", "About CalculatesAll", [
-            "CalculatesAll is an independent online calculator project maintained by Muhammad Fayyaz Adeel.",
+            "CalculatesAll is the public project name used by this website.",
             SITE_DESCRIPTION,
         ]),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
