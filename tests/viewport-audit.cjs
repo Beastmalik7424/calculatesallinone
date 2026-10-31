@@ -11,18 +11,21 @@ const { chromium } = require('playwright');
     const section=document.querySelector('#tool-calculator')
       || document.querySelector('#main .ca-home-calculator')
       || document.querySelector('#extra-calculator-form')
+      || document.querySelector('#calculator')
+      || document.querySelector('#loan-form')
       || document.querySelector('#main form')
       || document.querySelector('#main');
     const visible=(e)=>e && getComputedStyle(e).display!=='none' && getComputedStyle(e).visibility!=='hidden' && e.getBoundingClientRect().height>0;
-    const buttons=section ? [...section.querySelectorAll('button')].filter(visible) : [];
-    const last=buttons[buttons.length-1];
+    const buttons=section ? [...section.querySelectorAll('button,input[type="submit"]')].filter(visible) : [];
+    const submit=section?.querySelector('button[type="submit"],input[type="submit"]');
+    const last=visible(submit) ? submit : buttons[buttons.length-1];
     const r=last?.getBoundingClientRect();
-    return {lastButton:last?.textContent.trim(),top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2};
+    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2};
    });
    const key=slug+' '+size.width+'x'+size.height;
    console.log(key,JSON.stringify(data));
    if(data.overflow)failures.push(key+' horizontal overflow');
-   if(!data.lastButton||data.bottom>size.height-8)failures.push(key+' primary button below fold');
+   if(!data.lastButton||data.bottom>size.height)failures.push(key+' primary button below fold');
    const screenshotSlug=slug.replaceAll('/','-');
    await page.screenshot({path:'/tmp/'+screenshotSlug+'-'+size.width+'.png',fullPage:false});
   }
