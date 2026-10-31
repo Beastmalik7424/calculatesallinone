@@ -53,6 +53,18 @@ assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_ht
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 assert "Maintained by <a" in profit_html and "Muhammad Fayyaz Adeel" in profit_html and 'href="/about/"' in profit_html, "Calculator guide should have an honest maintainer byline"
 assert '"author": {"@id": "' + SITE + '/#maintainer"}' in profit_html, "Calculator WebApplication schema should reference the named maintainer"
+# Only pages flagged by the completed crawler get metadata changes; keep copy page-specific.
+for path in ("/affiliate-disclosure/", "/compound-interest-calculator/", "/contact/", "/date-calculator/", "/discount-calculator/", "/fraction-calculator/", "/stopwatch/", "/worship/", "/zakat-calculator/"):
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    meta = re.search(r'<meta name="description" content="([^"]+)"', page_html)
+    assert meta and 120 <= len(html_lib.unescape(meta.group(1))) <= 160, f"Flagged English description should be specific and 120-160 characters: {path}"
+for path in ("/about/", "/contact/", "/health/", "/terms/", "/time/"):
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    title = re.search(r"<title>([^<]+)</title>", page_html)
+    assert title and 30 <= len(html_lib.unescape(title.group(1))) <= 60, f"Flagged page title should clearly identify its purpose: {path}"
+urdu_age_html = output_for_url(SITE + "/ur/age-calculator/").read_text(encoding="utf-8")
+urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
+assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days Calculator | Exact and Average</title>" in years_html, "Years-to-Days title should describe exact and average methods"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
