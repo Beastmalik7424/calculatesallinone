@@ -37,7 +37,7 @@ console.log("Extra calculator button visibility CSS regression: PASS");
 // Content and calculator capability must agree, and the money/math hubs must give actionable examples.
 const fs2=require("node:fs");
 const extraSource=fs2.readFileSync(require("node:path").join(__dirname,"..","extra_calculator_pages.py"),"utf8");
-assert.match(extraSource,/What percentage one number represents of another/);
+assert.match(extraSource,/what percentage the part represents of another/);
 assert.match(extraSource,/18% of PKR 2,500/);
 assert.match(extraSource,/1,102\.50/);
 assert.match(extraSource,/28 February 2024 to 1 March 2024 is 2 days/);
