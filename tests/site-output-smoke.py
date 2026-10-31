@@ -936,3 +936,16 @@ for _lang_path in ("/ar/", "/es/", "/fr/"):
     assert len(_websites) == 1, f"{_lang_path} must expose exactly one WebSite entity"
     assert _websites[0].get("@id") == SITE + "/#website", f"{_lang_path} WebSite must use the canonical entity ID"
     assert _websites[0].get("url") == SITE + "/", f"{_lang_path} WebSite URL must point to the canonical site root"
+
+# Compact Zakat fields must remain fully localized on the Urdu calculator.
+_ur_zakat_compact = output_for_url(SITE + "/ur/zakat-calculator/").read_text(encoding="utf-8")
+for _label in ("نقد اور بینک بچت", "سونے کی قیمت", "چاندی کی قیمت", "فروخت کا کاروباری مال",
+               "وصول ہونے والی رقم", "موجودہ واجب الادا قرض", "چاندی کی فی گرام قیمت",
+               "یہ مال ایک مکمل قمری سال (حول) تک رکھا گیا ہے", "زکوٰۃ کا حساب کریں"):
+    assert _label in _ur_zakat_compact, "Urdu Zakat label missing: " + _label
+for _english_label in ("Cash / savings", "Gold value", "Silver value", "Stock for sale",
+                       "Expected receivables", "Debts due now", "Silver price per gram",
+                       "Held for one full lunar year (hawl)", "Calculate Zakat"):
+    assert _english_label not in _ur_zakat_compact, "English Zakat label leaked into Urdu page: " + _english_label
+for _field_id in ("z-cash", "z-gold", "z-silver", "z-stock", "z-recv", "z-debts", "z-silverprice", "z-hawl", "zakat-result"):
+    assert 'id="' + _field_id + '"' in _ur_zakat_compact, "Urdu Zakat field ID changed: " + _field_id
