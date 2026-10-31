@@ -920,3 +920,19 @@ _discount_editorial_html = (Path(__file__).resolve().parents[1] / "public" / "di
 assert "Worked example: discount and sales tax" in _discount_editorial_html
 assert "The final amount is 1,870" in _discount_editorial_html
 assert "Why the order of percentage changes matters" in _discount_editorial_html
+
+# Localized landing pages must reuse the single canonical WebSite entity.
+for _lang_path in ("/ar/", "/es/", "/fr/"):
+    _lang_html = output_for_url(SITE + _lang_path).read_text(encoding="utf-8")
+    _lang_schemas = [
+        json.loads(match.group(1))
+        for match in re.finditer(
+            r'<script\\b[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>',
+            _lang_html,
+            re.S | re.I,
+        )
+    ]
+    _websites = [schema for schema in _lang_schemas if schema.get("@type") == "WebSite"]
+    assert len(_websites) == 1, f"{_lang_path} must expose exactly one WebSite entity"
+    assert _websites[0].get("@id") == SITE + "/#website", f"{_lang_path} WebSite must use the canonical entity ID"
+    assert _websites[0].get("url") == SITE + "/", f"{_lang_path} WebSite URL must point to the canonical site root"
