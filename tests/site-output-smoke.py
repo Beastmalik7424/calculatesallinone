@@ -45,6 +45,14 @@ def output_for_url(url):
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
+home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
+for phrase in ("online calculator", "profit loss calculator", "tasbih calculator", "free calculator in Pakistan"):
+    assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
+assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
+assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
+profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
+assert "Maintained by Muhammad Fayyaz Adeel" in profit_html, "Calculator guide should have an honest maintainer byline"
+assert '"author":{"@id":"' + SITE + '/#maintainer"}' in profit_html, "Calculator WebApplication schema should reference the named maintainer"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days Calculator | Exact and Average</title>" in years_html, "Years-to-Days title should describe exact and average methods"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
