@@ -1670,33 +1670,72 @@ def category_page(c):
 
 def static_page(path, title, desc, h1, paragraphs, noindex=False):
     if path == "/about/":
-        schema = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": SITE_URL + "/about/#webpage",
-                   "name": title, "url": SITE_URL + path,
-                   "mainEntity": {"@id": SITE_URL + "/#maintainer"},
+        schema = [{"@context": "https://schema.org", "@type": "AboutPage", "@id": SITE_URL + "/about/#webpage",
+                   "name": title, "url": SITE_URL + path, "description": desc,
+                   "mainEntity": {"@id": SITE_URL + "/#organization"},
+                   "about": {"@id": SITE_URL + "/#maintainer"},
                    "isPartOf": {"@id": SITE_URL + "/#website"}}]
     else:
         schema = [{"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": SITE_URL + path}]
-    if path in ("/contact/", "/editorial-policy/"):
-        schema.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    if path in ("/about/", "/contact/", "/editorial-policy/"):
+        schema.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "@id": SITE_URL + path + "#breadcrumb",
+                       "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
             {"@type": "ListItem", "position": 2, "name": h1, "item": SITE_URL + path},
         ]})
-    body = '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
+        if path == "/about/":
+            schema[0]["breadcrumb"] = {"@id": SITE_URL + path + "#breadcrumb"}
+    if path == "/about/":
+        body = ('<nav aria-label="Breadcrumb" class="mb-6 text-sm text-stone-700 dark:text-stone-300"><ol class="flex flex-wrap items-center gap-2">'
+                '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
+                '<li aria-current="page">About CalculatesAll</li></ol></nav>')
+    else:
+        body = ""
+    body += '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
     for p in paragraphs:
         body += '<p class="' + P + '">' + p + "</p>"
     if path == "/about/":
-        body += ('<section aria-labelledby="about-maintainer" class="mt-8"><h2 id="about-maintainer" class="' + H2 + '">Who maintains CalculatesAll?</h2>'
-                 '<p class="' + P + '">The project is maintained by Muhammad Fayyaz Adeel, also known as Malik Adeel Bhatti. CalculatesAll is the public project name used on this website.</p>'
-                 '<h2 class="' + H2 + '">How are calculator results checked?</h2>'
-                 '<p class="' + P + '">Each calculator page explains its inputs, formula, worked example and important limitations. Automated tests check representative calculations, input boundaries, generated pages and site metadata. These checks reduce regression risk but do not replace professional advice or exhaustive testing on every device. Read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a> and <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a>.</p>'
-                 '<h2 class="' + H2 + '">How do the calculators work?</h2>'
-                 '<ol class="mt-3 list-decimal pl-6 space-y-2 text-base leading-relaxed text-stone-800 dark:text-stone-200"><li>Choose the calculator that matches the task.</li><li>Enter the requested values and check the units.</li><li>Calculate, then review the result, formula, worked example and limitations.</li></ol>'
-                 '<p class="' + P + '">No account or download is required. Calculator entries are processed in your browser and are not sent to our server.</p>'
-                 '<h2 class="' + H2 + '">Are calculator inputs stored?</h2>'
-                 '<p class="' + P + '">Calculator entries are not sent to our server. The tasbih counter stores its count on the current device. See the <a class="' + LINK + '" href="/privacy/">privacy policy</a> for details about local storage, hosting data and third-party resources.</p></section>')
+        contact_email = html.escape(CONTACT_EMAIL, quote=True)
+        body += (
+            '<section aria-labelledby="about-maintainer" class="mt-8">'
+            '<h2 id="about-maintainer" class="' + H2 + '">Who maintains CalculatesAll?</h2>'
+            '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel, also known as Malik Adeel Bhatti. The maintainer looks after the calculator pages, site updates and reproducible correction reports. This identifies the person responsible for the project; it does not claim a regulated professional qualification or independent expert review.</p>'
+            '</section>'
+            '<section aria-labelledby="about-tools" class="mt-8">'
+            '<h2 id="about-tools" class="' + H2 + '">What calculators and tools are available?</h2>'
+            '<p class="' + P + '">The money tools include the <a class="' + LINK + '" href="/profit-loss-calculator/">Profit and Loss Calculator</a>, <a class="' + LINK + '" href="/discount-calculator/">Discount Calculator</a>, <a class="' + LINK + '" href="/emi-calculator/">EMI Calculator</a> and <a class="' + LINK + '" href="/zakat-calculator/">Zakat Calculator</a>. Date and measurement tools include the <a class="' + LINK + '" href="/age-calculator/">Age Calculator</a>, <a class="' + LINK + '" href="/years-to-days-calculator/">Years to Days Calculator</a> and <a class="' + LINK + '" href="/unit-converter/">Unit Converter</a>.</p>'
+            '<p class="' + P + '">Everyday tools include the <a class="' + LINK + '" href="/standard-calculator/">Standard Calculator</a>, <a class="' + LINK + '" href="/bmi-calculator/">adult BMI calculator</a>, <a class="' + LINK + '" href="/tasbih-counter/">Tasbih Counter</a> and <a class="' + LINK + '" href="/stopwatch/">Stopwatch</a>. The main tools are in English, many have Urdu versions, and short introductory pages in Arabic, Hindi, Spanish and French link to the English tools.</p>'
+            '</section>'
+            '<section aria-labelledby="about-checks" class="mt-8">'
+            '<h2 id="about-checks" class="' + H2 + '">How are calculator methods and changes checked?</h2>'
+            '<p class="' + P + '">Each calculator page should make its required inputs, formula, assumptions and important limits clear. Worked examples are included where they help a visitor check the result. The project uses automated checks for representative calculations, boundary and invalid inputs, generated pages and site metadata. Test coverage varies by tool. Passing tests reduce regression risk, but they do not prove every possible input or device combination. Read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a> and <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a> for more detail.</p>'
+            '<h3 class="mt-6 text-lg font-semibold text-stone-900 dark:text-stone-100">Which reference sources support selected tools?</h3>'
+            '<p class="' + P + '">Where a method relies on published health, measurement or financial guidance, the relevant calculator page links to its source. Examples include the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization adult BMI information</a>, the <a class="' + LINK + '" href="https://www.nist.gov/pml/owm/si-units-length" target="_blank" rel="noopener noreferrer">NIST length-unit reference</a>, the <a class="' + LINK + '" href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement" target="_blank" rel="noopener noreferrer">OpenStax income-statement chapter</a> and <a class="' + LINK + '" href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html" target="_blank" rel="noopener noreferrer">ACCA ratio-analysis guidance</a>.</p>'
+            '</section>'
+            '<section aria-labelledby="about-privacy" class="mt-8">'
+            '<h2 id="about-privacy" class="' + H2 + '">What happens to calculator inputs?</h2>'
+            '<p class="' + P + '">Values entered into calculator forms are processed in your browser and are not sent to the CalculatesAll server. The Tasbih Counter stores its count on the current device. The hosting provider and third-party resources may process technical request data, and advertising services may use cookies as explained in the <a class="' + LINK + '" href="/privacy/">privacy policy</a>. Avoid sending sensitive financial, medical or account information in an email.</p>'
+            '</section>'
+            '<section aria-labelledby="about-limits" class="mt-8">'
+            '<h2 id="about-limits" class="' + H2 + '">What are the limits of these tools?</h2>'
+            '<p class="' + P + '">A calculator can only account for the inputs and assumptions it is designed to use. Check the units, percentage basis and exclusions shown on the relevant tool before relying on a result.</p>'
+            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm"><caption class="mb-2 text-left font-semibold text-stone-900 dark:text-stone-100">Important assumptions to check before using a result</caption>'
+            '<thead><tr><th scope="col" class="border border-stone-300 dark:border-stone-700 p-3">Tool area</th><th scope="col" class="border border-stone-300 dark:border-stone-700 p-3">What to check</th></tr></thead><tbody>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Money</th><td class="border border-stone-300 dark:border-stone-700 p-3">The percentage basis matters. Taxes, fees, shipping and other costs are included only when the tool supports them and you enter them.</td></tr>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Dates</th><td class="border border-stone-300 dark:border-stone-700 p-3">Calendar months have different lengths and leap years affect durations. Check whether the selected tool counts the start and end dates inclusively.</td></tr>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Units</th><td class="border border-stone-300 dark:border-stone-700 p-3">Confirm both units. Temperature conversions require an offset as well as a scale factor.</td></tr>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Health and Zakat</th><td class="border border-stone-300 dark:border-stone-700 p-3">Adult BMI is a screening measure, not a diagnosis. The Zakat calculator follows its stated method and is not a religious ruling.</td></tr>'
+            '<tr><th scope="row" class="border border-stone-300 dark:border-stone-700 p-3">Timing</th><td class="border border-stone-300 dark:border-stone-700 p-3">The stopwatch is for everyday timing, not certified measurement.</td></tr>'
+            '</tbody></table></div>'
+            '<p class="' + P + '">For important financial, medical or religious decisions, confirm the result with an appropriately qualified professional or scholar.</p>'
+            '</section>'
+            '<section aria-labelledby="about-contact" class="mt-8">'
+            '<h2 id="about-contact" class="' + H2 + '">How can a calculation issue be reported?</h2>'
+            '<p class="' + P + '">Email <a class="' + LINK + '" href="mailto:' + contact_email + '">' + html.escape(CONTACT_EMAIL) + '</a> or use the <a class="' + LINK + '" href="/contact/">contact page</a>. Include the calculator name, page URL, exact input values, displayed result, expected result and steps to reproduce the issue. Do not include passwords, payment details, medical records or other sensitive personal information.</p>'
+            '</section>'
+        )
     write(path, head(title, desc, path, schema, noindex=noindex) + shell(body))
     return path
-
 
 def home_page(lang="en"):
     if lang == "ur":
@@ -2097,10 +2136,7 @@ def main():
         else:
             entries.append((path, []))
     static_pages = [
-        ("/about/", "About CalculatesAll", "Learn what CalculatesAll offers, who maintains the project, how its free calculators work and how calculation methods are checked.", "About CalculatesAll", [
-            "CalculatesAll is the public project name used by this website.",
-            SITE_DESCRIPTION,
-        ]),
+        ("/about/", "About CalculatesAll | Project, Methods & Privacy", "Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details.", "About CalculatesAll", ABOUT_EXTRA),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "This policy explains what information CalculatesAll handles when you use the website. It applies to every page on calculateallinone.vercel.app.",
             "<strong>Calculator entries.</strong> The numbers and dates you type into a calculator are processed by JavaScript in your own browser. They are not sent to our server and we do not keep a copy of them.",
@@ -2139,22 +2175,7 @@ def main():
     ]
     for path, title, desc, h1, paras in static_pages:
         # Keep these trust pages focused: avoid repeating material from older content layers.
-        if path == "/about/":
-            paras = [
-                "CalculatesAll is a free collection of browser-based calculators for money, health screening, dates, unit conversion and everyday tasks. It is maintained by Muhammad Fayyaz Adeel (also known as Malik Adeel Bhatti).",
-                "Calculator entries are processed in your browser rather than sent to our server. Tools explain their methods, worked examples where useful, and important limitations.",
-                "The main tools are in English, with Urdu versions of many tools. Short introductions in Arabic, Hindi, Spanish and French link to the English tools.",
-                "The adult BMI calculator is a screening aid, the Zakat calculator follows a stated method rather than issuing a religious ruling, and the stopwatch is for everyday timing rather than certified measurement.",
-                "Automated checks cover representative calculations and generated pages, but cannot establish accuracy for every device or circumstance. To report a reproducible problem, use the contact page.",
-                "For a money calculation, check whether the percentage is based on cost, selling price, original price or loan principal. Different bases produce different answers even when the percentage shown is identical.",
-                "For date calculations, the site uses calendar dates rather than treating every month as a fixed number of days. Leap years and the length of each month can change the result.",
-                "Unit conversions distinguish fixed multiplicative factors from conversions such as temperature, which also require an offset. The units beside each field are part of the calculation and should be checked before relying on a result.",
-                "Health screening results should be interpreted in context. An adult BMI number cannot by itself diagnose a condition or describe body composition, and the page identifies its intended audience and limitations.",
-                "For Zakat, users should check the wealth categories, Nisab basis and lunar-year conditions described by the calculator. Individual religious questions require guidance from a qualified scholar.",
-                "The site also offers simple utilities such as a stopwatch and tasbih counter. A stopwatch is intended for everyday timing, not calibrated measurement. The tasbih counter stores its count locally in the browser so it can be resumed on the same device.",
-                "To check a result, first confirm the units and inputs, then compare the displayed formula and worked example where available. If you find a discrepancy, share reproducible inputs through the contact page rather than sending confidential financial or medical records.",
-            ]
-        elif path == "/contact/":
+        if path == "/contact/":
             desc = "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review."
             paras = [
                 'For corrections, feedback, accessibility problems or translation issues, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',

@@ -100,7 +100,7 @@ assert len(about_pages) == 1 and about_pages[0].get("mainEntity", {}).get("@id")
 assert about_pages[0].get("about", {}).get("@id") == SITE + "/#maintainer", "About page should identify the actual maintainer as a related person"
 assert not [node for node in about_nodes if node.get("@type") == "ProfilePage"], "Project About page should not be mislabelled as a personal profile page"
 about_breadcrumbs = [node for node in about_nodes if node.get("@type") == "BreadcrumbList"]
-assert len(about_breadcrumbs) == 1 and [item["item"]["name"] for item in about_breadcrumbs[0]["itemListElement"]] == ["Home", "About CalculatesAll"], "About page should expose a matching breadcrumb graph"
+assert len(about_breadcrumbs) == 1 and [item["name"] for item in about_breadcrumbs[0]["itemListElement"]] == ["Home", "About CalculatesAll"], "About page should expose a matching breadcrumb graph"
 about_people = [node for node in about_nodes if node.get("@type") == "Person" and node.get("@id") == SITE + "/#maintainer"]
 assert len(about_people) == 1 and "Malik Adeel Bhatti" in about_people[0].get("alternateName", []), "Maintainer schema must consistently include the publicly stated alternate name"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
