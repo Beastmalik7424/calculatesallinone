@@ -33,7 +33,7 @@ const { chromium } = require('playwright');
    console.log(key,JSON.stringify(data));
    if(data.overflow)failures.push(key+' horizontal overflow');
    const urduPage=slug.startsWith('ur/');
-   if(!data.carouselVisible||data.carouselCount<(urduPage?8:16))failures.push(key+' calculator carousel missing or incomplete');
+   if(!data.carouselVisible||data.carouselCount!==16)failures.push(key+' calculator carousel must show all 16 destinations');
    if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
    if(size.width<=420&&data.headerHeight>140)failures.push(key+' calculator navigation added an extra header row: '+data.headerHeight);
    if(size.width<=360 && (slug==='fraction-calculator'||slug==='compound-interest-calculator') && data.mainNavFlexWrap==='nowrap')failures.push(key+' main navigation cannot wrap on narrow screens');
