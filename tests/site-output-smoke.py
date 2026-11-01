@@ -149,6 +149,11 @@ assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row mus
 assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"
 assert "How many days are in 20 years?" in years_html and "7,300" in years_html and "7,304.85" in years_html, "The Google Search Console 20-year query should have a checkable answer"
 assert "How many days are in 50 years?" in years_html and "18,250" in years_html and "18,262.125" in years_html, "The Google Search Console 50-year query should have a checkable answer"
+assert "How many days are in 11 years?" in years_html and "4,015" in years_html and "4,017.6675" in years_html, "The exposed 11-year query should have a checkable answer"
+assert "How many days are in 13 years?" in years_html and "4,745" in years_html and "4,748.1525" in years_html, "The exposed 13-year query should have a checkable answer"
+assert "How many hours and minutes are in 10 years?" in years_html and "87,600 hours" in years_html and "5,259,492 minutes" in years_html, "The exposed 10-year hours/minutes query should explain both year methods"
+assert "How many years is 2,392 days?" in years_html and "6.55342466" in years_html and "6.54907356" in years_html, "The exposed 2,392-day reverse conversion should be checkable"
+assert "How many years is 42,069 days?" in years_html and "115.25753425" in years_html and "115.18100988" in years_html, "The exposed 42,069-day reverse conversion should be checkable"
 assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
