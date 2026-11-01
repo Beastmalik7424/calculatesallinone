@@ -14,13 +14,13 @@ Publication scope: English adult maintenance estimate only
 
 ## Application-defined assumptions
 
-| Identifier | Multiplier | Display label | Source status | Limitation |
+| Identifier | Version | Multiplier | Display label | Source | Limitation |
 |---|---:|---|---|---|
-| sedentary | 1.2 | Sedentary | App-defined consumer preset | Heuristic only, not a measured PAL. |
-| light | 1.375 | Light activity | App-defined consumer preset | Heuristic only, not a measured PAL. |
-| moderate | 1.55 | Moderate activity | App-defined consumer preset | Heuristic only, not a measured PAL. |
-| very_active | 1.725 | Very active | App-defined consumer preset | Heuristic only, not a measured PAL. |
-| extra_active | 1.9 | Extra active | App-defined consumer preset | Heuristic only, not a measured PAL. |
+| sedentary | 1.0 | 1.2 | Sedentary | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
+| light | 1.0 | 1.375 | Light activity | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
+| moderate | 1.0 | 1.55 | Moderate activity | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
+| very_active | 1.0 | 1.725 | Very active | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
+| extra_active | 1.0 | 1.9 | Extra active | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
 
 These activity values are configuration assumptions supplied for a consumer estimate. They are not coefficients from the Mifflin–St Jeor study and are not represented as FAO/WHO/UNU PAL categories. They have not been clinically validated for this website.
 
