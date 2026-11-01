@@ -1905,3 +1905,15 @@ header nav[aria-label="Main"] > div { min-width: 0; }
     gap: .25rem !important;
   }
 }
+
+/* Higher-specificity override for the legacy compact-home rules on small phones. */
+@media (max-width: 600px) {
+  #main .ca-home-header {
+    margin-bottom: .1rem !important;
+  }
+  #main .ca-home-header h1 {
+    margin: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1.05 !important;
+  }
+}
