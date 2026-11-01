@@ -98,5 +98,6 @@ assert "#t-tap" in css and "min-height:48px" in css, (
     "Tasbih Count one button must retain a visible, accessible touch target"
 )
 
-assert ".ca-calculator-carousel" in css and "width: 100%" in css, "Tools slide must span the full available header row"
+assert ".ca-calculator-carousel" in css and re.search(r"\.ca-calculator-carousel[^{}]*\{[^}]*width:\s*100%", css), "Tools slide must span the full available header row"
+assert "ca-site-nav-topline" in css and "justify-content:space-between" in css.replace(" ", ""), "Theme control and brand must stay on opposite ends of the top row"
 print("Calculator carousel, all 17 tools, header layout, reduced-motion support and Tasbih action smoke tests PASS")
