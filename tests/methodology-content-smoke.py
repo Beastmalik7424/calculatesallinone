@@ -45,7 +45,7 @@ for phrase in (
     "does not imply medical, legal, accounting, financial or religious credentials",
     "We do not invent expert reviewers",
     "A passing automated test is evidence for the cases tested",
-    "qualified professional or scholar",
+    "qualified scholar's ruling",
     "report the page URL",
 ):
     assert phrase.lower() in editorial.lower(), f"Editorial policy missing transparency detail: {phrase}"
