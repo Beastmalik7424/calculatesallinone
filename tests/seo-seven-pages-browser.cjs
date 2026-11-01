@@ -143,13 +143,26 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       }
       console.log("/emi-calculator/ layout/navigation passed (" + viewport.width + "px, calculator carousel visible, no console/page errors)");
       if (viewport.width === 390) {
+        const marquee = calculatorCarousel.locator(".ca-calculator-track");
+        // Verify real motion, not just the presence of an animation declaration.
+        await emiPage.mouse.move(viewport.width - 1, viewport.height - 1);
+        const initialMotion = await marquee.evaluate(el => ({
+          name: getComputedStyle(el).animationName,
+          state: getComputedStyle(el).animationPlayState,
+          transform: getComputedStyle(el).transform
+        }));
+        assert.equal(initialMotion.name, "ca-calculator-marquee", "calculator carousel must use its marquee animation");
+        assert.equal(initialMotion.state, "running", "calculator marquee must run when the pointer is outside the carousel");
+        await emiPage.waitForTimeout(500);
+        const advancedTransform = await marquee.evaluate(el => getComputedStyle(el).transform);
+        assert.notEqual(advancedTransform, initialMotion.transform, "calculator marquee must visibly advance over time");
+
         const tasbihShortcut = calculatorCarousel.locator('[data-tool-set="primary"] [data-tool-shortcut="tasbih-counter"]');
         assert.equal(await tasbihShortcut.isVisible(), true, "Tasbih Counter shortcut must exist in the primary carousel group");
 
-        // A DOM-visible link may still be outside the carousel's clipped viewport.
-        // Pause the marquee as a real pointer user would, then scroll the carousel
-        // until the Tasbih link is genuinely exposed before attempting the click.
+        // Hover must pause the marquee so a user can select a moving shortcut.
         await calculatorCarousel.hover();
+        assert.equal(await marquee.evaluate(el => getComputedStyle(el).animationPlayState), "paused", "hovering the carousel must pause its movement");
         await tasbihShortcut.evaluate(el => el.scrollIntoView({ block: "nearest", inline: "center" }));
         await emiPage.waitForFunction(() => {
           const carousel = document.querySelector('nav.site-nav[aria-label="Main"] .ca-calculator-carousel');
