@@ -143,7 +143,7 @@ assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30,
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days &amp; Days to Years Calculator</title>" in years_html, "Years-to-Days title should identify both conversion directions"
 assert 'name="description" content="Convert years to days or days to years with 365-day, Gregorian-average or exact calendar-date methods. Also derive weeks, hours and minutes."' in years_html, "Years-to-Days meta description should explain conversions and derived time units"
-assert "Days to years" in years_html and "1,009 days" in years_html, "Years-to-Days page should explain the reverse conversion example"
+assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 5 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
 assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"
@@ -152,6 +152,7 @@ assert "How many days are in 50 years?" in years_html and "18,250" in years_html
 assert "How many hours and minutes are in 10 years?" in years_html and "87,600 hours" in years_html and "5,259,492 minutes" in years_html, "The exposed 10-year hours/minutes query should explain both year methods"
 assert "How do I convert days to years?" in years_html and "191.78 years" in years_html and "191.65 years" in years_html, "Reverse conversion guidance should include a checkable real search example"
 assert "How many years and days are in 115 months?" in years_html and "9 years and 7 months" in years_html and "3,500.24 days" in years_html, "The exposed 115-month query should explain its average-month assumption"
+assert "How many years and months are in 504 days?" in years_html and "1 year, 4 months and 17 days" in years_html, "The exposed 504-day query should explain its average-month assumption"
 assert all(value in years_html for value in ("4,015", "4,017.6675", "4,745", "4,748.1525")), "Quick reference table should include the exposed 11- and 13-year conversions"
 assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
