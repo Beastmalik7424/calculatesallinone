@@ -16,6 +16,14 @@ def visible(slug):
     return re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", " ", text))).strip()
 
 method = visible("methodology")
+method_html = (ROOT / "methodology" / "index.html").read_text(encoding="utf-8")
+for url in (
+    "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
+    "https://www.nist.gov/pml/owm/si-units-length",
+    "https://openstax.org/books/precalculus-2e/pages/4-1-exponential-functions",
+    "https://aa.usno.navy.mil/faq/leap_years",
+):
+    assert url in method_html, f"Methodology missing primary reference: {url}"
 for phrase in (
     "Order of operations example",
     "8 + 3 × 4 = 20",
@@ -35,6 +43,7 @@ for phrase in (
     "Rounding and precision",
     "Input validation",
     "Automated tests",
+    "Reference sources and what they support",
     "Report a suspected error",
 ):
     assert phrase.lower() in method.lower(), f"Methodology missing useful detail: {phrase}"
