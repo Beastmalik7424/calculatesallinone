@@ -143,10 +143,27 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       }
       console.log("/emi-calculator/ layout/navigation passed (" + viewport.width + "px, calculator carousel visible, no console/page errors)");
       if (viewport.width === 390) {
-        const tasbihShortcut = calculatorCarousel.locator('[data-tool-shortcut="tasbih-counter"]').first();
-        assert.equal(await tasbihShortcut.isVisible(), true, "Tasbih Counter shortcut must be visible/selectable in the moving carousel");
+        const tasbihShortcut = calculatorCarousel.locator('[data-tool-set="primary"] [data-tool-shortcut="tasbih-counter"]');
+        assert.equal(await tasbihShortcut.isVisible(), true, "Tasbih Counter shortcut must exist in the primary carousel group");
+
+        // A DOM-visible link may still be outside the carousel's clipped viewport.
+        // Pause the marquee as a real pointer user would, then scroll the carousel
+        // until the Tasbih link is genuinely exposed before attempting the click.
+        await calculatorCarousel.hover();
+        await tasbihShortcut.evaluate(el => el.scrollIntoView({ block: "nearest", inline: "center" }));
+        await emiPage.waitForFunction(() => {
+          const carousel = document.querySelector('nav.site-nav[aria-label="Main"] .ca-calculator-carousel');
+          const link = carousel && carousel.querySelector('[data-tool-set="primary"] [data-tool-shortcut="tasbih-counter"]');
+          if (!carousel || !link) return false;
+          const clip = carousel.getBoundingClientRect();
+          const rect = link.getBoundingClientRect();
+          const visibleWidth = Math.min(clip.right, rect.right) - Math.max(clip.left, rect.left);
+          const visibleHeight = Math.min(clip.bottom, rect.bottom) - Math.max(clip.top, rect.top);
+          return visibleWidth >= Math.min(44, rect.width * 0.5) && visibleHeight >= Math.min(24, rect.height * 0.75);
+        }, null, { timeout: 10000 });
+
         const tasbihNavigation = emiPage.waitForURL(url => new URL(url).pathname === "/tasbih-counter/", { waitUntil: "domcontentloaded", timeout: 10000 });
-        await tasbihShortcut.click({ noWaitAfter: true });
+        await tasbihShortcut.click({ timeout: 10000 });
         await tasbihNavigation;
         assert.equal(new URL(emiPage.url()).pathname, "/tasbih-counter/", "Selecting Tasbih Counter must open its calculator page");
         assert.equal(await emiPage.locator("#t-tap").isVisible(), true, "Tasbih Count one button must remain visible after selecting it");
