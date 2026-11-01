@@ -53,15 +53,17 @@ def output_for_url(url):
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
-for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "free browser-based calculators"):
+for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "tasbih calculator", "days to years calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
 assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
+assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
-assert "<h1>Free Online Standard Calculator</h1>" in home_html and "Tap the buttons or use your keyboard to calculate." in home_html, "Homepage should answer what the site offers in its opening copy"
+assert "<h1>Free Online Standard Calculator</h1>" in home_html and "CalculatesAll offers free browser calculators, including the Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." in home_html, "Homepage should answer what the site offers and name core tools in its opening copy"
 assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
+assert "https://github.com/Beastmalik7424" in about_html and "source repository" in about_html, "About page should expose the verified public maintainer profile and source repository"
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
 about_main_match = re.search(r"<main\b[^>]*>(.*?)</main>", about_html, re.S)
@@ -98,6 +100,7 @@ home_sites = [node for node in home_nodes if node.get("@type") == "WebSite" and 
 assert len(home_sites) == 1 and home_sites[0].get("@id") == SITE + "/#website", "Homepage must expose exactly one canonical WebSite entity"
 home_people = [node for node in home_nodes if node.get("@type") == "Person" and node.get("name") == "Muhammad Fayyaz Adeel"]
 assert len(home_people) == 1 and home_people[0].get("@id") == SITE + "/#maintainer", "Homepage must expose exactly one canonical maintainer entity"
+assert home_people[0].get("sameAs") == ["https://github.com/Beastmalik7424"], "Maintainer entity should link only to the verified public GitHub profile"
 assert "CalculatesAll is a free online calculator" in home_html, "Homepage should state its free online calculator purpose in visible content"
 about_nodes = jsonld_nodes(about_html)
 about_pages = [node for node in about_nodes if node.get("@type") == "AboutPage"]
