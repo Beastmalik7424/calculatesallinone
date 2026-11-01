@@ -881,6 +881,7 @@ TOOLS.extend([
                 ("How many hours and minutes are in 10 years?", "Using 365 days per year, 10 years are 87,600 hours or 5,256,000 minutes. Using the 365.2425-day Gregorian average, they are 87,658.2 hours or 5,259,492 minutes."),
                 ("How many years is 2,392 days?", "About 6.55342466 years using 365 days per year, or 6.54907356 years using the 365.2425-day Gregorian average. These are decimal-year estimates, not calendar ages."),
                 ("How many years is 42,069 days?", "About 115.25753425 years using 365 days per year, or 115.18100988 years using the 365.2425-day Gregorian average. These are decimal-year estimates, not calendar ages."),
+                ("How many years is 70,000 days?", "About 191.78082192 years using 365 days per year, or 191.65349049 years using the 365.2425-day Gregorian average. These are decimal-year estimates, not calendar ages."),
                 ("80 saal mein kitne din hote hain?", "29,200 using 365 days per year, or 29,219.4 using the Gregorian average of 365.2425 days per year. An exact calendar total depends on the start and end dates.")],
         "sources": "Gregorian mean year: 365.2425 days over the 400-year Gregorian calendar cycle."
     },
