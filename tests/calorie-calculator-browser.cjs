@@ -31,6 +31,14 @@ const { chromium } = require("playwright");
       const associatedWeightLabels = await page.locator("#cal-weight").evaluate(el => Array.from(el.labels || []).map(label => label.textContent.trim()));
       assert.equal(associatedWeightLabels.filter(label => label === "Weight").length, 1, "Weight input must have exactly one explicit, correctly named associated label");
       assert.equal(await page.getByLabel("Weight unit").count(), 1);
+      assert.equal(await page.locator("#cal-height-metric").isVisible(), true, "Metric height controls must be visible by default");
+      assert.equal(await page.locator("#cal-height-imperial").isVisible(), false, "Imperial height controls must be hidden by default");
+      await page.locator("#cal-height-unit").selectOption("ft-in");
+      assert.equal(await page.locator("#cal-height-metric").isVisible(), false, "Metric height controls must hide when feet/inches is selected");
+      assert.equal(await page.locator("#cal-height-imperial").isVisible(), true, "Feet/inches controls must appear when selected");
+      await page.locator("#cal-height-unit").selectOption("cm");
+      assert.equal(await page.locator("#cal-height-metric").isVisible(), true, "Metric height controls must return when centimetres are selected");
+      assert.equal(await page.locator("#cal-height-imperial").isVisible(), false, "Feet/inches controls must hide when centimetres are selected");
 
       const layout = await page.evaluate(() => {
         const rect = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return { top: r.top, bottom: r.bottom, height: r.height, marginTop: s.marginTop, marginBottom: s.marginBottom, paddingTop: s.paddingTop, paddingBottom: s.paddingBottom, display: s.display }; };
