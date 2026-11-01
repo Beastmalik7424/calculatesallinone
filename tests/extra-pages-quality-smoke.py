@@ -72,6 +72,14 @@ for slug, spec in CASES.items():
     types = {schema.get("@type") for schema in schemas}
     assert "WebApplication" in types, f"Missing WebApplication schema: {slug}"
     assert "BreadcrumbList" in types, f"Missing breadcrumb schema: {slug}"
+    expected_domain = {
+        "percentage-calculator": "openstax.org",
+        "fraction-calculator": "openstax.org",
+        "compound-interest-calculator": "investor.gov",
+        "date-calculator": "aa.usno.navy.mil",
+    }[slug]
+    assert expected_domain in decoded, f"Missing authoritative reference link: {slug}"
+    assert any(schema.get("@type") == "WebPage" and expected_domain in " ".join(schema.get("citation", [])) for schema in schemas), f"Missing structured source citations: {slug}"
 
 percentage_html = (ROOT / "percentage-calculator" / "index.html").read_text(encoding="utf-8")
 for value in (r'value=["\']of["\']', r'value=["\']share["\']', r'value=["\']change["\']', r'id=["\']percentage-mode["\']'):
