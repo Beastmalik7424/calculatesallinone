@@ -9,7 +9,7 @@ assert llms_path.is_file(), "public/llms.txt is missing"
 assert sitemap_path.is_file(), "public/sitemap.xml is missing"
 llms = llms_path.read_text(encoding="utf-8")
 sitemap = sitemap_path.read_text(encoding="utf-8")
-listed = set(re.findall(r"https://calculateallinone\.vercel\.app/[^\s)]+", llms))
+listed = set(re.findall(r"https://calculateallinone\.vercel\.app/[^\s)]*", llms))
 sitemap_urls = set(re.findall(r"<loc>(.*?)</loc>", sitemap))
 missing = sorted(sitemap_urls - listed)
 stale = sorted(listed - sitemap_urls)
