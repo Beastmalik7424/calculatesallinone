@@ -46,7 +46,7 @@ function calculateMaintenanceCalories(input){
 }
 function formatKcal(value){
  var scale=Math.max(1,Math.abs(value));
- var rounded=Math.round((value+Number.EPSILON*scale)*10)/10;
+ var rounded=Math.round((value+Number.EPSILON*scale*8)*10)/10;
  return new Intl.NumberFormat("en-US",{minimumFractionDigits:1,maximumFractionDigits:1}).format(rounded);
 }
 var api=Object.freeze({LB_TO_KG:LB_TO_KG,IN_TO_CM:IN_TO_CM,ACTIVITY_PRESETS:ACTIVITY_PRESETS,calculateMaintenanceCalories:calculateMaintenanceCalories,formatKcal:formatKcal});
