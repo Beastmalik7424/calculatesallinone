@@ -162,6 +162,7 @@ def build_extra_pages(head,shell,write):
         for source_title,source_url,source_note in SOURCE_LINKS[slug]:
             body+='<li><a class="text-sky-800 underline dark:text-sky-300" href="'+html.escape(source_url,quote=True)+'" target="_blank" rel="noopener noreferrer">'+html.escape(source_title)+'</a><p class="text-sm text-stone-700 dark:text-stone-300">'+html.escape(source_note)+'</p></li>'
         body+='</ul></section>'
+        body+='<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Found a calculation or content issue? <a class="text-sky-800 underline dark:text-sky-300" href="/contact/">Report this calculator and include the values you entered.</a></p>'
         body+='<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">More free calculators</h2><ul>'
         for related_path,related_title in RELATED_LINKS[slug]:
             body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="'+related_path+'">'+html.escape(related_title)+'</a></li>'
