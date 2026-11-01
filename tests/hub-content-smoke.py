@@ -5,7 +5,7 @@ def page(slug):
     path = Path("public") / slug / "index.html"
     assert path.is_file(), f"Missing generated /{slug}/ page"
     html = path.read_text(encoding="utf-8")
-    assert re.search(r'<link rel="canonical" href="https://calculateallinone\\.vercel\\.app/' + slug + r'/">', html), slug
+    assert re.search(r'<link rel="canonical" href="https://calculateallinone\.vercel\.app/' + slug + r'/">', html), slug
     assert re.search(r'<meta name="robots" content="index, follow">', html), slug
     return html
 
