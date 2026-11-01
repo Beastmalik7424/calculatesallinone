@@ -1385,8 +1385,8 @@ def shell(main_html, lang="en", current_path=None):
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
         '<nav class="ca-site-nav max-w-screen-2xl mx-auto w-full px-4 py-2 flex flex-col items-stretch gap-2" aria-label="' + s["main"] + '">'
         '<div class="ca-site-nav-topline flex w-full items-center justify-between gap-3" dir="ltr">'
-        '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px] shrink-0">' + s["theme"] + '</button>'
         '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
+        '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px] shrink-0">' + s["theme"] + '</button>'
         '</div>'
         + calculator_carousel(lang, current_path)
         + '</nav></header>\n'
