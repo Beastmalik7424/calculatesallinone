@@ -32,7 +32,10 @@ const { chromium } = require("playwright");
       assert.equal(associatedWeightLabels.filter(label => label === "Weight").length, 1, "Weight input must have exactly one explicit, correctly named associated label");
       assert.equal(await page.getByLabel("Weight unit").count(), 1);
 
-      const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight, buttonTop: document.querySelector("#cal-calculate").getBoundingClientRect().top, pageHeight: document.documentElement.scrollHeight }));
+      const layout = await page.evaluate(() => {
+        const rect = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return { top: r.top, bottom: r.bottom, height: r.height, marginTop: s.marginTop, marginBottom: s.marginBottom, paddingTop: s.paddingTop, paddingBottom: s.paddingBottom, display: s.display }; };
+        return { overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight, buttonTop: document.querySelector("#cal-calculate").getBoundingClientRect().top, pageHeight: document.documentElement.scrollHeight, body: rect("body"), main: rect("main"), breadcrumb: rect("main nav"), pageHeader: rect("main header"), eligibility: rect("main aside"), card: rect("main section"), form: rect("#calorie-form"), age: rect("#cal-age"), weight: rect("#cal-weight"), height: rect("#cal-height-cm"), activity: rect("#cal-activity"), eligible: rect("#cal-eligibility") };
+      });
       console.log("CALORIE VIEWPORT", viewport.width, JSON.stringify(layout));
       const geometry = await page.evaluate(() => {
         const rect = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); return { top:r.top, bottom:r.bottom, height:r.height, display:getComputedStyle(el).display }; };
