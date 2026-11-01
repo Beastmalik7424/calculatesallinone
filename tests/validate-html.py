@@ -24,10 +24,12 @@ FILES = [
 ENDPOINT = "https://validator.w3.org/nu/?out=json"
 ALTERNATE_ENDPOINT = "https://html5.validator.nu/?out=json"
 PRIMARY_ATTEMPTS = 2
+ALTERNATE_ATTEMPTS = 2
+REQUEST_TIMEOUT_SECONDS = 20
 MAX_ATTEMPTS = 5
 BASE_RETRY_SECONDS = 5
-MAX_RETRY_SECONDS = 60
-MAX_RETRY_AFTER_SECONDS = 300
+MAX_RETRY_SECONDS = 20
+MAX_RETRY_AFTER_SECONDS = 30
 REQUEST_INTERVAL_SECONDS = 15
 RETRYABLE_HTTP_CODES = {429, 500, 502, 503, 504}
 
@@ -55,7 +57,7 @@ def fetch_validator_result(path, opener=None, sleep_fn=time.sleep):
     """Use Nu HTML Checker, then a separate Nu-compatible endpoint on transient outage."""
     open_url = opener or urllib.request.urlopen
     last_error = None
-    for endpoint, attempts in ((ENDPOINT, PRIMARY_ATTEMPTS), (ALTERNATE_ENDPOINT, MAX_ATTEMPTS)):
+    for endpoint, attempts in ((ENDPOINT, PRIMARY_ATTEMPTS), (ALTERNATE_ENDPOINT, ALTERNATE_ATTEMPTS)):
         request = urllib.request.Request(
             endpoint,
             data=path.read_bytes(),
@@ -67,7 +69,7 @@ def fetch_validator_result(path, opener=None, sleep_fn=time.sleep):
         )
         for attempt in range(attempts):
             try:
-                with open_url(request, timeout=45) as response:
+                with open_url(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
                     return json.loads(response.read().decode("utf-8"))
             except urllib.error.HTTPError as exc:
                 if exc.code not in RETRYABLE_HTTP_CODES:
