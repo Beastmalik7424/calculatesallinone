@@ -45,3 +45,20 @@ These activity values are configuration assumptions supplied for a consumer esti
 - Production verification: pending.
 - Qualified clinical review: not performed.
 - Medical certification or endorsement: none claimed.
+
+## Query-to-page map
+
+Search-volume status: not measured. The phrases below are user-intent seeds, not keyword-volume or ranking claims. No permutation pages are created.
+
+| Query seed / primary intent | Related questions served | Destination | Evidence needed | Existing content coverage | Publication status |
+|---|---|---|---|---|---|
+| calorie calculator; daily calorie calculator; maintenance calorie calculator | How many calories do I need daily? What is maintenance energy? | `/calorie-calculator/` | Mifflin–St Jeor original equation, stated activity assumptions, independently checked examples | Existing BMI page does not estimate maintenance calories; this page adds a distinct calculation intent | English page planned for release; not production-published |
+| TDEE calculator; daily calorie needs; how many calories do I need | What does the activity factor mean? Are exercise calories included? | `/calorie-calculator/` | Explain REE × app-defined factor; distinguish this estimate from measured TEE and from FAO/WHO/UNU PAL calculations | Existing health hub had BMI-focused content; new page adds the missing maintenance estimate | English page planned for release; not production-published |
+| BMR calculator; resting energy calculator; Mifflin St Jeor calculator | Is REE the same as BMR or RMR? Is BMR a safe minimum? | `/calorie-calculator/` | Original 1990 paper, accurate terminology and explicit limitations | Existing BMI page does not explain the Mifflin equation or REE | English page planned for release; not production-published |
+| calorie calculator kg cm; calorie calculator pounds feet | How are pounds and feet/inches converted? Why can rounding change results? | `/calorie-calculator/` | Exact unit conversion constants, metric/imperial equivalence fixtures, rounding tests | No equivalent existing unit-aware calorie estimator | English page planned for release; not production-published |
+| why calorie calculators differ; activity level calculator explanation | Why does another calculator or wearable show a different estimate? What if activity is uncertain? | `/calorie-calculator/` | Compare equation, population, activity assumptions and rounding without unsupported accuracy claims | Existing general methodology page does not cover calorie-estimate differences in detail | English FAQ planned for release; not production-published |
+| is this calorie calculator free; does it need sign-up; are measurements stored | Does reset clear entries? Are values sent to an API? | `/calorie-calculator/` | Verify browser code, network requests, URL and storage behavior; check existing privacy policy and third-party scripts | General privacy page exists; page-specific FAQ documents this feature's behavior and limits | English FAQ planned for release; not production-published |
+| can teenagers use a calorie calculator; pregnancy calorie calculator; breastfeeding calories | Who is excluded and why? | `/calorie-calculator/` | Adult eligibility boundary, NIDDK disclaimer context, no ordinary result for excluded selections | Existing BMI page is not a substitute for this calculator's eligibility rules | English safety explanation planned for release; not production-published |
+| daily kitni calories chahiye; meri maintenance calories kitni hain; calories kaise calculate karein; روزانہ کتنی کیلوریز چاہئیں; کیلوری کیلکولیٹر | Urdu explanation of REE, activity assumptions, safety and result interpretation | No localized destination currently published | Competent Urdu translation review of every scientific, safety, form, result, navigation and metadata string | Existing Urdu journey does not yet include this calculator | Planned; unpublished until competent language review |
+
+This map deliberately consolidates related intents on one useful calculator page. It does not imply measured demand, search volume, indexing, rankings, AI citations or language support.
