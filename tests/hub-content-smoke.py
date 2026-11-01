@@ -59,7 +59,10 @@ for stale_phrase in ("33, 100 or 1000", "choose unlimited"):
     assert stale_phrase not in worship.lower(), ("stale tasbih instructions", stale_phrase)
 
 description = re.search(r'<meta name="description" content="([^"]+)"', worship)
-assert description and "local count storage when available" in description.group(1).lower(), "Worship hub metadata must describe storage conditionally"
+assert description and "count, phrase and target are stored locally when browser storage is available" in description.group(1).lower(), "Worship hub metadata must describe storage conditionally"
+
+home = (Path("public") / "index.html").read_text(encoding="utf-8")
+assert "33, 99, 100 or custom targets and local count storage when available" in home.lower(), "Homepage worship card must describe the real targets and conditional storage"
 
 tasbih = (Path("public") / "tasbih-counter" / "index.html").read_text(encoding="utf-8")
 assert "Custom target (1 to 10,000)" in tasbih, "Tasbih calculator custom target range changed without updating the hub"
