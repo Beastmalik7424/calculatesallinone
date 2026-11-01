@@ -107,7 +107,7 @@ const {chromium}=require("playwright");
    if(!response||response.status()!==200)throw Error("Tasbih page HTTP failure at "+width+"px");
    const order=await page.evaluate(()=>{
     const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {top:r.top,bottom:r.bottom};};
-    return {count:rect("#t-count"),tap:rect("#t-tap"),actions:rect("#t-tap + .grid"),settings:rect(".ca-tasbih-settings"),undo:rect("#t-undo"),reset:rect("#t-reset"),overflow:document.documentElement.scrollWidth>innerWidth+2};
+    return {count:rect("#t-count"),tap:rect("#t-tap"),actions:rect("#t-tap + .grid"),settings:rect(".ca-tasbih-settings"),phrase:rect("#t-phrase"),target:rect("#t-target"),undo:rect("#t-undo"),reset:rect("#t-reset"),overflow:document.documentElement.scrollWidth>innerWidth+2};
    });
    if(!(order.count.top<order.settings.top&&order.settings.top<order.tap.top&&order.tap.top<order.actions.top))throw Error("Tasbih count, phrase/target settings, tap and reset must follow the intended first-screen order at "+width+"px: "+JSON.stringify(order));
    if(order.settings.bottom>(width===390?844:768)||order.count.bottom>(width===390?844:768)||order.undo.bottom>(width===390?844:768)||order.reset.bottom>(width===390?844:768)||order.overflow)throw Error("Tasbih count, phrase/target and primary actions must fit the first viewport at "+width+"px: "+JSON.stringify(order));
