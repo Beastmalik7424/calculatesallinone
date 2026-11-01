@@ -37,6 +37,11 @@ assert.deepEqual(
   Object.fromEntries(ACTIVITY_PRESETS.map(item => [item.id, item.multiplier])),
   expectedActivities
 );
+for (const preset of ACTIVITY_PRESETS) {
+  assert.equal(preset.version, "1.0", "Every activity assumption must have a version");
+  assert.match(preset.source, /application-defined/i, "Every activity assumption must identify its source");
+  assert.match(preset.limitations, /approximate/i, "Every activity assumption must state its limitation");
+}
 for (const [activityId, multiplier] of Object.entries(expectedActivities)) {
   const result = calculateMaintenanceCalories({
     age: 30, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175,
