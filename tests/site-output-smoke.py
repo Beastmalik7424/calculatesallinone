@@ -396,6 +396,15 @@ orphans = sorted(url for url, sources in incoming.items() if not sources)
 assert not orphans, "Sitemap URLs without an incoming crawlable internal link: " + repr(orphans)
 contact_html = (ROOT / "contact" / "index.html").read_text(encoding="utf-8")
 assert 'href="mailto:' in contact_html, "Contact email must be a clickable mailto link"
+terms_html = (ROOT / "terms" / "index.html").read_text(encoding="utf-8")
+for required in (
+    "Project operator. CalculatesAll is an independently maintained project.",
+    "Muhammad Fayyaz Adeel is responsible for site updates and the correction process.",
+    "Applicable law and disputes. These general terms do not designate an exclusive governing law or court venue.",
+    "Mandatory laws and consumer protections that apply to you remain in effect.",
+    'href="/contact/"',
+):
+    assert required in terms_html, "Terms page is missing transparent operator or legal-scope information: " + required
 # Verify local image/script asset references resolve in the generated output.
 for page in ROOT.rglob("index.html"):
     html = page.read_text(encoding="utf-8")
