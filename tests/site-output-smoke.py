@@ -153,7 +153,7 @@ assert "How many hours and minutes are in 10 years?" in years_html and "87,600 h
 assert "How do I convert days to years?" in years_html and "191.78 years" in years_html and "191.65 years" in years_html, "Reverse conversion guidance should include a checkable real search example"
 assert "How many years and days are in 115 months?" in years_html and "9 years and 7 months" in years_html and "3,500.24 days" in years_html, "The exposed 115-month query should explain its average-month assumption"
 assert "How many years and months are in 504 days?" in years_html and "1 year, 4 months and 17 days" in years_html, "The exposed 504-day query should explain its average-month assumption"
-assert all(value in years_html for value in ("4,015", "4,017.6675", "4,745", "4,748.1525")), "Quick reference table should include the exposed 11- and 13-year conversions"
+assert all(value in years_html for value in ("1,460", "1,460.97", "4,015", "4,017.6675", "4,745", "4,748.1525")), "Quick reference table should include the exposed 11- and 13-year conversions"
 assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
