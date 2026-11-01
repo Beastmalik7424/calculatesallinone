@@ -19,7 +19,7 @@ GUIDES = {
     "To measure a percentage change, subtract the starting value from the ending value, divide that difference by the starting value, and multiply by 100. A change from 80 to 92 is a 15 percent increase. A change from 80 to 68 is a 15 percent decrease. If the starting value is zero, percentage change is undefined. A negative starting value also needs careful interpretation because the sign can make a simple increase/decrease label misleading.",
 ],
 "fraction-calculator": [
-    "A fraction has a numerator above a denominator. The denominator cannot be zero. To add one half and one third, multiply each numerator by the other denominator, add the two products, and divide by the product of the denominators. The result is five sixths. Subtraction uses the same common denominator but subtracts the cross-products. The calculator then reduces the result to lowest terms using the greatest common divisor.",
+    "A fraction has a numerator above a denominator. The denominator cannot be zero. A zero denominator is invalid because division by zero has no defined value. To add one half and one third, multiply each numerator by the other denominator, add the two products, and divide by the product of the denominators. The result is five sixths. Subtraction uses the same common denominator but subtracts the cross-products. The calculator then reduces the result to lowest terms using the greatest common divisor.",
     "For multiplication, multiply the numerators and multiply the denominators. Two thirds times three quarters is six twelfths, which simplifies to one half. For division, multiply the first fraction by the reciprocal of the second fraction. Dividing by a fraction with a zero numerator is undefined, so the tool rejects that operation. A negative sign is always placed in the numerator of the simplified result.",
     "You can enter improper fractions, such as seven fourths, as well as proper fractions. An improper fraction has a numerator whose absolute value is at least as large as the denominator. It may be written as a mixed number, but this calculator intentionally returns a single simplified fraction to keep the arithmetic unambiguous. Zero is represented as zero over one. Inputs must be whole numbers, not decimal approximations.",
     "The browser has a safe range for integer arithmetic. Extremely large numerators or denominators can exceed that range, and the calculator rejects results that are not safe integers rather than silently reporting a rounded fraction. For measurements that require decimal values, convert the quantity to a fraction using an appropriate exact scale first. For example, 0.5 is one half. Check units separately because adding fractions of different physical units does not produce a meaningful measurement.",
@@ -45,31 +45,93 @@ GUIDES = {
 ]
 }
 
+
+CATEGORY = {
+    "percentage-calculator": ("/math/", "Math and Converters"),
+    "fraction-calculator": ("/math/", "Math and Converters"),
+    "compound-interest-calculator": ("/money/", "Money and Business"),
+    "date-calculator": ("/time/", "Date and Time"),
+}
+
+SECTION_HEADINGS = {
+    "percentage-calculator": ["Worked percentage examples", "Discounts and tax", "Percentage increase and decrease", "Input limits and rounding", "Finding a percentage share", "How percentage change is measured"],
+    "fraction-calculator": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero denominators", "Large numbers and decimal inputs", "Check the result", "Compare equivalent fractions"],
+    "compound-interest-calculator": ["What compound interest means", "Worked example: semiannual compounding", "Simple versus compound interest", "Formula and variables", "Compare compounding frequency", "Assumptions and limits"],
+    "date-calculator": ["How elapsed days are counted", "Leap-year example", "Verify the result manually", "Business days and legal deadlines", "Inclusive versus elapsed dates", "Date order and negative results"],
+}
+
+FAQS = {
+    "percentage-calculator": [
+        ("What is 25% of 200?", "50. Multiply 200 by 25 and divide by 100."),
+        ("What percentage is 45 of 250?", "18%. Divide 45 by 250 and multiply by 100."),
+        ("What is the percentage change from 80 to 100?", "A 25% increase. The change is 20, and 20 divided by the starting value 80 is 0.25."),
+        ("Why does a 20% rise followed by a 20% fall not return to the starting amount?", "Starting from 100, a 20% rise gives 120. A 20% fall from 120 is 24, leaving 96."),
+    ],
+    "fraction-calculator": [
+        ("What is 1/2 + 1/3?", "5/6. Convert to sixths: 3/6 + 2/6 = 5/6."),
+        ("How do I divide two fractions?", "Multiply the first fraction by the reciprocal of the second. For example, 3/4 divided by 1/2 is 3/2."),
+        ("Can a fraction have a zero denominator?", "No. A zero denominator is invalid because division by zero is undefined."),
+        ("Can I enter decimal numerators or denominators?", "No. Enter whole-number numerators and denominators. Convert a decimal first, for example 0.75 is 3/4."),
+    ],
+    "compound-interest-calculator": [
+        ("How much is 1,000 at 10% compounded semiannually for one year?", "1,102.50. Each six-month period earns 5%, so the balance is 1,000 × 1.05 × 1.05."),
+        ("What is the difference between simple and compound interest?", "Simple interest is calculated on the starting principal. Compound interest also earns interest on interest already added to the balance."),
+        ("What number should I enter for monthly compounding?", "Enter 12 for monthly, 4 for quarterly, 1 for annual and 365 for daily compounding."),
+        ("Does this include fees, tax or additional deposits?", "No. The estimate assumes one starting amount, a constant nominal annual rate and no deposits, withdrawals, fees or tax."),
+    ],
+    "date-calculator": [
+        ("How many days are there from 28 February 2024 to 1 March 2024?", "2 elapsed Gregorian calendar days because 29 February 2024 is a leap day."),
+        ("How many days are there from 28 February 2025 to 1 March 2025?", "1 elapsed calendar day. 2025 is not a leap year."),
+        ("Does the result include both the start date and end date?", "No. It is elapsed days, calculated as end date minus start date. An inclusive count may be one greater for a forward interval."),
+        ("Does this calculate business days?", "No. It counts calendar days and does not remove weekends or public holidays. Use a calendar for the relevant jurisdiction for business-day deadlines."),
+    ],
+}
+
 def build_extra_pages(head,shell,write):
     entries=[]
+    site="https://calculateallinone.vercel.app"
     for slug,title,description,fields,explanation in PAGES:
         path="/"+slug+"/"
-        body='<section class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 p-4 sm:p-6">'
+        category_path,category_name=CATEGORY[slug]
+        body='<nav aria-label="Breadcrumb" class="mb-3 text-sm text-stone-700 dark:text-stone-200"><ol class="flex flex-wrap gap-2"><li><a class="underline text-sky-800 dark:text-sky-300" href="/">Home</a></li><li aria-hidden="true">/</li><li><a class="underline text-sky-800 dark:text-sky-300" href="'+category_path+'">'+html.escape(category_name)+'</a></li><li aria-hidden="true">/</li><li aria-current="page">'+html.escape(title)+'</li></ol></nav>'
+        body+='<section class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 p-4 sm:p-6">'
         body+='<h1 class="text-2xl font-bold text-stone-900 dark:text-white">'+html.escape(title)+'</h1>'
         body+='<p class="mt-2 text-base text-stone-700 dark:text-stone-200">'+html.escape(description)+'</p>'
-        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="mt-3 grid grid-cols-2 gap-x-3 gap-y-2">'
+        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2 min-w-0">'
         if slug=="percentage-calculator":
-            body+="<div class='mt-4'><label for='percentage-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='percentage-mode' class='w-full rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='of'>What is X% of a number?</option><option value='share'>What percentage is one number of another?</option><option value='change'>What is the percentage change?</option></select></div>"
+            body+="<div class='sm:col-span-2 mt-1'><label for='percentage-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='percentage-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='of'>What is X% of a number?</option><option value='share'>What percentage is one number of another?</option><option value='change'>What is the percentage change?</option></select></div>"
         for key,label,kind in fields:
             body+='<div class="min-w-0"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
             body+='<input required id="'+key+'" type="'+kind+'" '+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
         if slug=="fraction-calculator":
-            body+='<div class="col-span-2 min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
-        body+='<button type="submit" class="col-span-2 rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
+            body+='<div class="sm:col-span-2 min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
+        body+='<button type="submit" class="sm:col-span-2 rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
         body+='<p role="status" aria-live="polite" id="extra-result" class="mt-4 text-xl font-bold text-stone-900 dark:text-white"></p></section>'
         body+='<section class="mt-6"><h2 class="text-xl font-semibold">How this calculation works</h2><p class="mt-3">'+html.escape(explanation)+'</p></section>'
-        for paragraph in GUIDES[slug]:
-            body+='<p class="mt-4 leading-7 text-stone-800 dark:text-stone-200">'+html.escape(paragraph)+'</p>'
-        body+='<nav aria-label="Related calculators" class="mt-6"><h2 class="text-xl font-semibold">More free calculators</h2><ul>'
+        for heading,paragraph in zip(SECTION_HEADINGS[slug],GUIDES[slug]):
+            body+='<section class="mt-6"><h2 class="text-xl font-semibold">'+html.escape(heading)+'</h2><p class="mt-3 leading-7 text-stone-800 dark:text-stone-200">'+html.escape(paragraph)+'</p></section>'
+        faq_items=FAQS[slug]
+        body+='<section class="mt-8"><h2 class="text-xl font-semibold">Common questions</h2><div class="mt-3">'
+        for question,answer in faq_items:
+            body+='<details class="border-b border-stone-300 dark:border-stone-700 py-4"><summary class="cursor-pointer font-medium text-stone-900 dark:text-stone-100 min-h-[44px] flex items-center">'+html.escape(question)+'</summary><p class="mt-2 text-base text-stone-800 dark:text-stone-200">'+html.escape(answer)+'</p></details>'
+        body+='</div></section>'
+        body+='<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">More free calculators</h2><ul>'
         for other,other_title,*_ in PAGES:
-            if other!=slug:body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="/'+other+'/">'+html.escape(other_title)+'</a></li>'
-        body+='</ul></nav>'
-        schema=[{"@context":"https://schema.org","@type":"WebPage","name":title,"url":"https://calculateallinone.vercel.app"+path}]
+            if other!=slug:
+                body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="/'+other+'/">'+html.escape(other_title)+'</a></li>'
+        body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="'+category_path+'">All '+html.escape(category_name)+' tools</a></li></ul></nav>'
+        breadcrumb_items=[
+            {"@type":"ListItem","position":1,"name":"Home","item":site+"/"},
+            {"@type":"ListItem","position":2,"name":category_name,"item":site+category_path},
+            {"@type":"ListItem","position":3,"name":title,"item":site+path},
+        ]
+        faq_entities=[{"@type":"Question","name":question,"acceptedAnswer":{"@type":"Answer","text":answer}} for question,answer in faq_items]
+        schema=[
+            {"@context":"https://schema.org","@type":"WebPage","name":title,"url":site+path,"description":description,"inLanguage":"en"},
+            {"@context":"https://schema.org","@type":"WebApplication","name":title,"url":site+path,"description":description,"applicationCategory":"FinanceApplication" if slug=="compound-interest-calculator" else "UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"inLanguage":"en"},
+            {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":breadcrumb_items},
+            {"@context":"https://schema.org","@type":"FAQPage","mainEntity":faq_entities},
+        ]
         page=head(title+" | CalculatesAll",description,path,schema)+shell(body,current_path=path)
         page=page.replace("</body>",'<script defer src="/assets/extra-calculators.js"></script><script defer src="/assets/extra-calculators-ui.js"></script></body>')
         write(path,page)
