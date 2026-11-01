@@ -1524,11 +1524,23 @@ def tool_page(t):
         {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
         {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION, "logo": SITE_URL + "/assets/favicon.svg", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
-    related = ""
-    related_tools = [other for other in TOOLS if other["slug"] != t["slug"] and other["category"] == t["category"]]
-    related_tools += [other for other in TOOLS if other["slug"] != t["slug"] and other not in related_tools]
-    for other in related_tools[:2]:
-        related += '<li><a class="' + LINK + '" href="/' + other["slug"] + '/">' + other["name"] + "</a></li>"
+    related_map = {
+        "profit-loss-calculator": [("discount-calculator", "Discount Calculator"), ("percentage-calculator", "Percentage Calculator")],
+        "discount-calculator": [("percentage-calculator", "Percentage Calculator"), ("profit-loss-calculator", "Profit and Loss Calculator")],
+        "standard-calculator": [("percentage-calculator", "Percentage Calculator"), ("fraction-calculator", "Fraction Calculator")],
+        "age-calculator": [("date-calculator", "Date Difference Calculator"), ("years-to-days-calculator", "Years to Days Calculator")],
+        "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator")],
+        "query-calculator": [("years-to-days-calculator", "Years to Days Calculator"), ("age-calculator", "Age Calculator")],
+    }
+    related_items = related_map.get(t["slug"], [])
+    related = "".join(
+        '<li><a class="' + LINK + '" href="/' + slug + '/">' + label + "</a></li>"
+        for slug, label in related_items
+    )
+    related_section = (
+        '<section class="mt-12"><h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100">Related calculators</h2>'
+        '<ul class="mt-3 grid sm:grid-cols-2 gap-2 text-base">' + related + "</ul></section>"
+    ) if related else ""
     alternates = None
     if t["slug"] in URDU:
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
@@ -1581,8 +1593,7 @@ def tool_page(t):
         + '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p>'
         + updated
         + review_box(t["slug"])
-        + '<section class="mt-12"><h2 class="text-xl font-semibold text-stone-900 dark:text-stone-100">More in ' + cat["name"] + '</h2>'
-        '<ul class="mt-3 grid sm:grid-cols-2 gap-2 text-base">' + related + "</ul></section>"
+        + related_section
     )
     rs = reviewer_schema(t["slug"])
     if rs:
@@ -1679,13 +1690,20 @@ def category_page(c):
         for other in CATEGORIES if other["slug"] != c["slug"]
     )
     title = c["name"] + " | CalculatesAll"
-    schema = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": c["name"], "url": SITE_URL + path}]
-    if c["slug"] == "health":
-        schema.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+    schema = [
+        {"@context": "https://schema.org", "@type": "CollectionPage", "name": c["name"], "url": SITE_URL + path},
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
-            {"@type": "ListItem", "position": 2, "name": "Health", "item": SITE_URL + "/health/"},
-        ]})
-    body = ('<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + c["name"] + '</h1>'
+            {"@type": "ListItem", "position": 2, "name": c["name"], "item": SITE_URL + path},
+        ]},
+    ]
+    breadcrumb = (
+        '<nav aria-label="Breadcrumb" class="mb-6 text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap items-center gap-2">'
+        '<li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li>'
+        '<li aria-current="page">' + html.escape(c["name"]) + '</li></ol></nav>'
+    )
+    body = (breadcrumb
+            + '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + c["name"] + '</h1>'
             '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + c["desc"] + '</p>'
             '<p class="mt-4 text-base leading-relaxed text-stone-800 dark:text-stone-200">' + HUB_CONTENT[c["slug"]]["intro"] + '</p>'
             '<ul class="mt-8 grid gap-4">' + items + "</ul>"
