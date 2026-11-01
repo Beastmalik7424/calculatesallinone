@@ -74,7 +74,7 @@ for slug, spec in CASES.items():
     assert "BreadcrumbList" in types, f"Missing breadcrumb schema: {slug}"
 
 percentage_html = (ROOT / "percentage-calculator" / "index.html").read_text(encoding="utf-8")
-for value in ('value="of"', 'value="share"', 'value="change"', 'id="percentage-mode"'):
-    assert value in percentage_html, f"Missing percentage mode control: {value}"
+for value in (r'value=["\']of["\']', r'value=["\']share["\']', r'value=["\']change["\']', r'id=["\']percentage-mode["\']'):
+    assert re.search(value, percentage_html), f"Missing percentage mode control: {value}"
 
 print("Extra calculator content, metadata, breadcrumb, schema and mode quality checks: PASS")
