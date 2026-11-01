@@ -1679,7 +1679,7 @@ def category_page(c):
     for t in TOOLS:
         if t["category"] == c["slug"]:
             items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
-                      '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + t["slug"] + '">' + t["name"] + "</a>"
+                      '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + t["slug"] + '/">' + t["name"] + "</a>"
                       '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + t["description"] + "</p></li>")
     if c["slug"] == "money":
         items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
@@ -1798,7 +1798,7 @@ def home_page(lang="en"):
         for t in TOOLS:
             if t["slug"] in URDU:
                 cards += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
-                          '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/ur/' + t["slug"] + '">' + URDU[t["slug"]]["name"] + "</a>"
+                          '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/ur/' + t["slug"] + '/">' + URDU[t["slug"]]["name"] + "</a>"
                           '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + URDU[t["slug"]]["description"] + "</p></li>")
     else:
         path = "/"
