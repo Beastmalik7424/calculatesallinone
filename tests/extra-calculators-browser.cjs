@@ -64,6 +64,39 @@ const {chromium}=require("playwright");
    await page.close();
   }
 
+  for(const width of [390,1366]){
+   const page=await browser.newPage({viewport:{width,height:width===390?844:768}});
+   const errors=[];page.on("pageerror",e=>errors.push(e.message));
+   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   const response=await page.goto(base+"/bmi-calculator/");
+   if(!response||response.status()!==200)throw Error("BMI page HTTP failure at "+width+"px");
+   const form=page.locator("#bmi-form");
+   const formBox=await form.boundingBox();
+   const buttonBox=await form.locator('button[type="submit"]').boundingBox();
+   if(!formBox||!buttonBox||formBox.y+formBox.height>(width===390?844:768))throw Error("BMI form not fully visible at "+width+"px");
+   if(width===1366){
+    const display=await form.evaluate(el=>getComputedStyle(el).display);
+    if(display!=="grid")throw Error("BMI desktop form must use the two-column grid, got "+display);
+   }
+   await page.locator("#b-kg").fill("70");
+   await page.locator("#b-cm").fill("170");
+   await form.locator('button[type="submit"]').click();
+   const metric=await page.locator("#bmi-result").innerText();
+   if(!metric.includes("24.2"))throw Error("BMI metric result incorrect: "+metric);
+   await page.locator("#bmi-weight-lb").check();
+   await page.locator("#b-lb").fill("154.324");
+   await page.locator("#bmi-height-ftin").check();
+   await page.locator("#b-ft").fill("5");
+   await page.locator("#b-in").fill("7");
+   await form.locator('button[type="submit"]').click();
+   const imperial=await page.locator("#bmi-result").innerText();
+   if(!imperial.includes("24.2"))throw Error("BMI imperial result incorrect: "+imperial);
+   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
+   if(overflow||errors.length)throw Error("BMI layout/browser failure at "+width+"px: "+JSON.stringify({overflow,errors}));
+   console.log("BMI browser PASS "+width+"px: metric and imperial = 24.2, first-screen form aligned");
+   await page.close();
+  }
+
   for(const width of [320,360,390,1366]){
    for(const path of ["/","/percentage-calculator/","/fraction-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
     const page=await browser.newPage({viewport:{width,height:width===1366?768:844}});
@@ -77,7 +110,7 @@ const {chromium}=require("playwright");
   }
 
   for(const width of [320,360,390,1366]){
-   const page=await browser.newPage({viewport:{width,height:width<500?740:768}});
+   const page=await browser.newPage({viewport:{width,height:width===320?568:width===360?740:width===390?844:768}});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
    page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
    const response=await page.goto("http://127.0.0.1:4174/emi-calculator/");
@@ -93,9 +126,10 @@ const {chromium}=require("playwright");
     return {horizontal:document.documentElement.scrollWidth>innerWidth+2,
       sideBySide:a.right<=b.left+2,
       badCard:cards.some(el=>{const box=el.getBoundingClientRect(),strong=el.querySelector("strong");return strong.scrollWidth>strong.clientWidth+2||strong.getBoundingClientRect().right>box.right+2;}),
-      emi:document.querySelector("#emi-out").textContent};
+      emi:document.querySelector("#emi-out").textContent,
+      submitBottom:document.querySelector("#loan-form button[type=submit]").getBoundingClientRect().bottom};
    });
-   if(result.horizontal||result.badCard||width<500&&!result.sideBySide||errors.length||result.emi.includes("NaN"))throw Error("EMI responsive failure "+width+": "+JSON.stringify({result,errors}));
+   if(result.horizontal||result.badCard||width<500&&!result.sideBySide||errors.length||result.emi.includes("NaN")||([390,1366].includes(width)&&result.submitBottom>(width===390?844:768)))throw Error("EMI responsive/first-screen failure "+width+": "+JSON.stringify({result,errors}));
    console.log("EMI responsive browser PASS "+width+"px",result.emi);
    await page.close();
   }
