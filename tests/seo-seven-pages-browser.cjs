@@ -123,9 +123,13 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       const emiResponse = await emiPage.goto(base + "/emi-calculator/", { waitUntil: "domcontentloaded", timeout: 30000 });
       assert.equal(emiResponse && emiResponse.status(), 200, "EMI page should return HTTP 200");
       const globalNav = emiPage.locator('nav.site-nav[aria-label="Main"]');
-      const allToolsLink = globalNav.getByRole("link", { name: "All Tools" });
+      const calculatorCarousel = globalNav.locator(".ca-calculator-carousel");
+      const emiShortcut = calculatorCarousel.locator('[data-tool-shortcut="emi-calculator"][aria-current="page"]');
+      const primaryShortcuts = calculatorCarousel.locator('[data-tool-set="primary"] [data-tool-shortcut]');
       assert.equal(await globalNav.isVisible(), true, "EMI page global navigation must remain visible");
-      assert.equal(await allToolsLink.isVisible(), true, "EMI page All Tools option must remain visible");
+      assert.equal(await calculatorCarousel.isVisible(), true, "EMI calculator shortcut carousel must remain visible");
+      assert.equal(await primaryShortcuts.count(), 16, "EMI carousel must expose all 16 calculator destinations");
+      assert.equal(await emiShortcut.isVisible(), true, "EMI calculator must be highlighted as the active tool");
       const emiMain = await emiPage.locator("main.emi-page-main").boundingBox();
       assert.ok(emiMain, "EMI main calculator column must exist");
       assert.ok(emiMain.width <= 961, "EMI calculator content must stay centered within the 960px desktop width cap");
