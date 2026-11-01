@@ -878,7 +878,7 @@ TOOLS.extend([
                 ("How many days are in 50 years?", "18,250 with the simple 365-day method, or 18,262.125 with the Gregorian average. The exact calendar total depends on the start and end dates."),
                 ("How many hours and minutes are in 10 years?", "Using 365 days per year, 10 years are 87,600 hours or 5,256,000 minutes. Using the 365.2425-day Gregorian average, they are 87,658.2 hours or 5,259,492 minutes."),
                 ("How do I convert days to years?", "Divide the number of days by 365 or by 365.2425 for the Gregorian average. For example, 70,000 days is about 191.78 years or 191.65 years respectively. These are decimal-year estimates, not calendar ages."),
-                ("How many years and days are in 115 months?", "115 months is 9 years and 7 months. Using an average month of 30.436875 days, that is about 3,500.24 days. Exact elapsed days depend on the actual start date and calendar months. Use the Query Calculator for the month estimate.")
+                ("How many years and days are in 115 months?", "115 months is 9 years and 7 months. Using an average month of 30.436875 days, that is about 3,500.24 days. Exact elapsed days depend on the actual start date and calendar months. Use the Query Calculator for the month estimate."),
                 ("80 saal mein kitne din hote hain?", "29,200 using 365 days per year, or 29,219.4 using the Gregorian average of 365.2425 days per year. An exact calendar total depends on the start and end dates.")],
         "sources": "Gregorian mean year: 365.2425 days over the 400-year Gregorian calendar cycle."
     },
