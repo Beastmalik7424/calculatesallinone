@@ -38,11 +38,14 @@ for path in ("/", "/bmi-calculator/", "/tasbih-counter/", "/percentage-calculato
         f"Carousel must expose all 16 calculator destinations on {path}. "
         f"Missing={sorted(ENGLISH_TOOLS-found)}, extra={sorted(found-ENGLISH_TOOLS)}"
     )
-    assert '<header' in markup and '</header>' in markup
-    header = markup.split("</header>", 1)[0]
-    assert 'class="ca-calculator-carousel"' in header, (
-        f"Carousel must stay inside the existing header so it does not push calculator content down: {path}"
-    )
+    if path == "/emi-calculator/":
+        assert '<nav aria-label="Main" class="site-nav">' in markup, "EMI carousel must reuse the existing site navigation row"
+    else:
+        assert '<header' in markup and '</header>' in markup
+        header = markup.split("</header>", 1)[0]
+        assert 'class="ca-calculator-carousel"' in header, (
+            f"Carousel must stay inside the existing header so it does not push calculator content down: {path}"
+        )
     if path != "/":
         slug = path.strip("/").split("/")[-1]
         assert re.search(
