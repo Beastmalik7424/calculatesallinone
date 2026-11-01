@@ -841,9 +841,9 @@ TOOLS.extend([
     {
         "slug": "years-to-days-calculator", "category": "time",
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
-        "description": "Convert years to days or days to years using a 365-day year, the Gregorian average, or exact calendar dates for years-to-days calculations.",
+        "description": "Convert years to days or days to years with 365-day, Gregorian-average or exact calendar-date methods. Also derive weeks, hours and minutes.",
         "h1": "Years to Days Calculator",
-        "lead": "Convert in either direction. Choose a 365-day or Gregorian-average year, or enter a start date for an exact leap-year-aware years-to-days result.",
+        "lead": "Convert in either direction and view derived weeks, hours, minutes and seconds. Choose a 365-day or Gregorian-average year, or enter a start date for an exact leap-year-aware years-to-days result.",
         "ui": (
             '<form id="years-days-form" class="space-y-3" novalidate>'
             '<div class="grid grid-cols-2 gap-3">'
