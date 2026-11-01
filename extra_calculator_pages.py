@@ -139,7 +139,6 @@ def build_extra_pages(head,shell,write):
         section_padding = "p-3 sm:p-6" if compact_mobile else "p-4 sm:p-6"
         form_margin = "mt-2" if compact_mobile else "mt-3"
         mobile_columns = "grid-cols-2" if compact_mobile else "grid-cols-1"
-        full_row_class = "col-span-2" if compact_mobile else "sm:col-span-2"
         trust_markup = (
             '<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="text-sky-800 underline dark:text-sky-300" href="/about/">Muhammad Fayyaz Adeel</a>. See the method, references and limitations below.</p>'
             '<p class="mt-1 text-xs text-stone-600 dark:text-stone-400">Verification: representative results and invalid inputs are covered by automated tests. This is not an independent professional review.</p>'
@@ -150,7 +149,7 @@ def build_extra_pages(head,shell,write):
         body+='<p class="mt-2 text-base text-stone-700 dark:text-stone-200">'+html.escape(description)+'</p>'
         if not compact_mobile:
             body+=trust_markup
-        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="'+form_margin+' grid '+mobile_columns+' sm:grid-cols-2 gap-x-3 gap-y-2 min-w-0">'
+        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="'+form_margin+' grid '+mobile_columns+' sm:grid-cols-2 gap-x-3 gap-y-2 min-w-0'+(" ca-compact-calculator-form" if compact_mobile else "")+'">'
         if slug=="percentage-calculator":
             body+="<div class='sm:col-span-2 mt-1'><label for='percentage-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='percentage-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='of'>What is X% of a number?</option><option value='share'>What percentage is one number of another?</option><option value='change'>What is the percentage change?</option></select></div>"
         for key,label,kind in fields:
