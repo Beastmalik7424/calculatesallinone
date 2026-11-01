@@ -3,8 +3,8 @@ import html
 
 PAGES = [
  ("percentage-calculator","Percentage Calculator","Calculate a percentage of a number, find what percentage one amount is of another, or measure percentage change with clear inputs and steps.",[("value","Percentage (%)","number"),("total","Number","number")],"What is 25% of 200? Enter 25 and 200 to get 50. Formula: percentage divided by 100, multiplied by the number."),
- ("fraction-calculator","Fraction Calculator","Add, subtract, multiply and divide two fractions. Get a simplified fraction result with a positive denominator.",[("a","First numerator","number"),("b","First denominator","number"),("c","Second numerator","number"),("d","Second denominator","number")],"For addition, a/b + c/d = (ad + bc)/bd. Fractions are reduced to lowest terms."),
- ("compound-interest-calculator","Compound Interest Calculator","Estimate compounded investment growth from principal, annual rate, time and compounding frequency with clear formulas.",[("principal","Starting amount","number"),("rate","Annual interest rate (%)","number"),("years","Years","number"),("frequency","Compounding times per year (1 to 365)","number")],"Formula: A = P × (1 + r/n)^(nt). Rates are entered as annual percentages. This estimate excludes fees, taxes and additional deposits."),
+ ("fraction-calculator","Fraction Calculator","Add, subtract, multiply or divide fractions and simplify the result.",[("a","First numerator","number"),("b","First denominator","number"),("c","Second numerator","number"),("d","Second denominator","number")],"For addition, a/b + c/d = (ad + bc)/bd. Fractions are reduced to lowest terms."),
+ ("compound-interest-calculator","Compound Interest Calculator","Estimate compound growth from a starting amount, annual rate, time and compounding frequency.",[("principal","Starting amount","number"),("rate","Annual interest rate (%)","number"),("years","Years","number"),("frequency","Compounding times per year (1 to 365)","number")],"Formula: A = P × (1 + r/n)^(nt). Rates are entered as annual percentages. This estimate excludes fees, taxes and additional deposits."),
  ("date-calculator","Date Difference Calculator","Find the signed number of calendar days between two dates using the Gregorian calendar, including leap years.",[("start","Start date","date"),("end","End date","date")],"The result is end date minus start date in full calendar days. It does not count the starting day."),
 ]
 
@@ -135,25 +135,34 @@ def build_extra_pages(head,shell,write):
     for slug,title,description,fields,explanation in PAGES:
         path="/"+slug+"/"
         category_path,category_name=CATEGORY[slug]
-        body='<nav aria-label="Breadcrumb" class="mb-3 text-sm text-stone-700 dark:text-stone-200"><ol class="flex flex-wrap gap-2"><li><a class="underline text-sky-800 dark:text-sky-300" href="/">Home</a></li><li aria-hidden="true">/</li><li><a class="underline text-sky-800 dark:text-sky-300" href="'+category_path+'">'+html.escape(category_name)+'</a></li><li aria-hidden="true">/</li><li aria-current="page">'+html.escape(title)+'</li></ol></nav>'
-        body+='<section class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 p-4 sm:p-6">'
-        body+='<h1 class="text-2xl font-bold text-stone-900 dark:text-white">'+html.escape(title)+'</h1>'
-        body+='<p class="mt-2 text-base text-stone-700 dark:text-stone-200">'+html.escape(description)+'</p>'
-        body+='<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="text-sky-800 underline dark:text-sky-300" href="/about/">Muhammad Fayyaz Adeel</a>. See the method, references and limitations below.</p>'
-        body+='<p class="mt-1 text-xs text-stone-600 dark:text-stone-400">Verification: representative results and invalid inputs are covered by automated tests. This is not an independent professional review.</p>'
         compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator")
+        section_padding = "p-3 sm:p-6" if compact_mobile else "p-4 sm:p-6"
+        form_margin = "mt-2" if compact_mobile else "mt-3"
         mobile_columns = "grid-cols-2" if compact_mobile else "grid-cols-1"
         full_row_class = "col-span-2" if compact_mobile else "sm:col-span-2"
-        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="mt-3 grid '+mobile_columns+' sm:grid-cols-2 gap-x-3 gap-y-2 min-w-0">'
+        trust_markup = (
+            '<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="text-sky-800 underline dark:text-sky-300" href="/about/">Muhammad Fayyaz Adeel</a>. See the method, references and limitations below.</p>'
+            '<p class="mt-1 text-xs text-stone-600 dark:text-stone-400">Verification: representative results and invalid inputs are covered by automated tests. This is not an independent professional review.</p>'
+        )
+        body='<nav aria-label="Breadcrumb" class="mb-2 text-sm text-stone-700 dark:text-stone-200"><ol class="flex flex-wrap gap-2"><li><a class="underline text-sky-800 dark:text-sky-300" href="/">Home</a></li><li aria-hidden="true">/</li><li><a class="underline text-sky-800 dark:text-sky-300" href="'+category_path+'">'+html.escape(category_name)+'</a></li><li aria-hidden="true">/</li><li aria-current="page">'+html.escape(title)+'</li></ol></nav>'
+        body+='<section class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 '+section_padding+'">'
+        body+='<h1 class="'+('text-xl sm:text-2xl' if compact_mobile else 'text-2xl')+' font-bold text-stone-900 dark:text-white">'+html.escape(title)+'</h1>'
+        body+='<p class="mt-2 text-base text-stone-700 dark:text-stone-200">'+html.escape(description)+'</p>'
+        if not compact_mobile:
+            body+=trust_markup
+        body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="'+form_margin+' grid '+mobile_columns+' sm:grid-cols-2 gap-x-3 gap-y-2 min-w-0">'
         if slug=="percentage-calculator":
             body+="<div class='sm:col-span-2 mt-1'><label for='percentage-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='percentage-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='of'>What is X% of a number?</option><option value='share'>What percentage is one number of another?</option><option value='change'>What is the percentage change?</option></select></div>"
         for key,label,kind in fields:
             body+='<div class="min-w-0"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
             body+='<input required id="'+key+'" type="'+kind+'" '+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
         if slug=="fraction-calculator":
-            body+='<div class="'+full_row_class+' min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
-        body+='<button type="submit" class="'+full_row_class+' rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
-        body+='<p role="status" aria-live="polite" id="extra-result" class="mt-4 text-xl font-bold text-stone-900 dark:text-white"></p></section>'
+            body+='<div class="sm:col-span-2 compact-form-full min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
+        body+='<button type="submit" class="sm:col-span-2 compact-form-full rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
+        body+='<p role="status" aria-live="polite" id="extra-result" class="mt-3 text-xl font-bold text-stone-900 dark:text-white"></p>'
+        if compact_mobile:
+            body+=trust_markup
+        body+='</section>'
         body+='<section class="mt-6"><h2 class="text-xl font-semibold">How this calculation works</h2><p class="mt-3">'+html.escape(explanation)+'</p></section>'
         for heading,paragraph in zip(SECTION_HEADINGS[slug],GUIDES[slug]):
             body+='<section class="mt-6"><h2 class="text-xl font-semibold">'+html.escape(heading)+'</h2><p class="mt-3 leading-7 text-stone-800 dark:text-stone-200">'+html.escape(paragraph)+'</p></section>'
