@@ -90,6 +90,9 @@ HUB_EXTRA = {
 
 TERMS_PARAS = [
     "These terms describe how you may use CalculatesAll. By using the site you agree to them. If you do not agree, please stop using the site.",
+    "Project operator. CalculatesAll is an independently maintained project. Muhammad Fayyaz Adeel is responsible for site updates and the correction process. This identifies the project maintainer and does not claim a regulated professional qualification or independent legal review.",
+    "Notices. For a formal notice or question about these terms, use the Contact page. Include the relevant page URL and a clear description. Do not send passwords, payment details, medical records or other sensitive information.",
+    "Applicable law and disputes. These general terms do not designate an exclusive governing law or court venue. Mandatory laws and consumer protections that apply to you remain in effect. If you have a concern, contact us through the Contact page first. This statement does not replace legal advice for a specific dispute.",
     "CalculatesAll provides free calculators and reference information for general use. The tools perform arithmetic and follow the method shown on each page. They are not professional advice, tax advice, medical advice, or religious rulings.",
     "You are responsible for checking results before you rely on them. Where a decision affects money, health, or religious practice, confirm it with a qualified professional.",
     "We try to keep the tools accurate and available, but we cannot guarantee that every result is error free or that the site will always be available. We may change or remove tools and pages at any time.",
