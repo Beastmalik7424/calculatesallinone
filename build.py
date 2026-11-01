@@ -2313,7 +2313,7 @@ def main():
     print("ads.txt " + ("configured from ADSENSE_CLIENT" if configured else "not generated until a real ADSENSE_CLIENT is configured"))
     print("translation review rows: " + str(write_review_sheet()))
     verify_csp_hashes()
-    print("Built " + str(len(entries)) + " indexable URLs into " + OUT + "/")
+    print("Generated " + str(len(entries)) + " page routes into " + OUT + " before SEO indexability filtering")
 
 
 def verify_csp_hashes():
