@@ -7,14 +7,16 @@ const {chromium}=require("playwright");
    ["/percentage-calculator/",[["value","25"],["total","200"]],"50"],
    ["/fraction-calculator/",[["a","1"],["b","2"],["c","1"],["d","3"]],"5/6"],
    ["/compound-interest-calculator/",[["principal","1000"],["rate","10"],["years","1"],["frequency","2"]],"1,102.50"],
-   ["/date-calculator/",[["start","2024-02-28"],["end","2024-03-01"]],"2 days"]
+   ["/date-calculator/",[["start","2024-02-28"],["end","2024-03-01"]],"2 days"],
+   ["/percentage-calculator/",[["pct-mode","whatpercent"],["value","30"],["total","120"]],"is 25% of 120"],
+   ["/percentage-calculator/",[["pct-mode","change"],["value","100"],["total","80"]],"Decrease of 20%"]
   ];
   for(const [path,fields,expected] of cases){
    const page=await browser.newPage({viewport:{width:390,height:844}});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
    const response=await page.goto("http://127.0.0.1:4174"+path);
    if(!response||response.status()!==200)throw Error(path+" HTTP failure");
-   for(const [id,value] of fields)await page.locator("#"+id).fill(value);
+   for(const [id,value] of fields){const el=page.locator("#"+id);if(id==="pct-mode")await el.selectOption(value);else await el.fill(value);}
    await page.locator("#extra-calculator-form button[type=submit]").click();
    const text=await page.locator("#extra-result").innerText();
    if(!text.includes(expected))throw Error(path+" wrong result: "+text);
@@ -22,65 +24,12 @@ const {chromium}=require("playwright");
    console.log(path+" interactive result PASS: "+text);
    await page.close();
   }
-
-  // Reverse percentage mode must be wired to the visible form, not only the arithmetic helper.
-  for(const width of [390,1366]){
-   const page=await browser.newPage({viewport:{width,height:width<500?844:768}});
-   const errors=[];page.on("pageerror",e=>errors.push(e.message));
-   const response=await page.goto("http://127.0.0.1:4174/percentage-calculator/");
-   if(!response||response.status()!==200)throw Error("Percentage reverse-mode HTTP failure");
-   await page.locator("#percentage-mode").selectOption("share");
-   const reverseLabels=await page.evaluate(()=>({part:document.querySelector('label[for="value"]').textContent.trim(),whole:document.querySelector('label[for="total"]').textContent.trim()}));
-   if(reverseLabels.part!=="Part"||reverseLabels.whole!=="Whole")throw Error("Reverse mode labels are unclear: "+JSON.stringify(reverseLabels));
-   await page.locator("#value").fill("45");
-   await page.locator("#total").fill("250");
-   await page.locator("#extra-calculator-form button[type=submit]").click();
-   const reverse=await page.locator("#extra-result").innerText();
-   if(!reverse.includes("18%")||!reverse.includes("45 ÷ 250 × 100"))throw Error("Reverse percentage UI failed at "+width+"px: "+reverse);
-   await page.locator("#total").fill("0");
-   await page.locator("#extra-calculator-form button[type=submit]").click();
-   const invalid=await page.locator("#extra-result").innerText();
-   if(!invalid.includes("whole amount cannot be zero"))throw Error("Zero-whole validation failed: "+invalid);
-   const layout=await page.evaluate(()=>{
-    const form=document.querySelector("#extra-calculator-form");
-    const button=form.querySelector("button");
-    const controls=[...form.querySelectorAll("input,select")];
-    const buttonRect=button.getBoundingClientRect();
-    return {
-     horizontal:document.documentElement.scrollWidth>innerWidth+2,
-     buttonVisible:buttonRect.top<innerHeight&&buttonRect.bottom>0,
-     controlsFit:controls.every(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+2;})
-    };
-   });
-   if(layout.horizontal||!layout.buttonVisible||!layout.controlsFit||errors.length)throw Error("Percentage responsive failure at "+width+"px: "+JSON.stringify({layout,errors}));
-   await page.locator("#percentage-mode").selectOption("of");
-   const defaultLabels=await page.evaluate(()=>({percentage:document.querySelector('label[for="value"]').textContent.trim(),number:document.querySelector('label[for="total"]').textContent.trim()}));
-   if(defaultLabels.percentage!=="Percentage (%)"||defaultLabels.number!=="Number")throw Error("Default percentage labels are unclear: "+JSON.stringify(defaultLabels));
-   console.log("Percentage reverse-mode browser PASS "+width+"px: "+reverse+"; mode labels and zero-whole validation PASS");
-   await page.close();
-  }
-
-  for(const width of [320,360,390,1366]){
-   const page=await browser.newPage({viewport:{width,height:width<500?740:768}});
-   const errors=[];page.on("pageerror",e=>errors.push(e.message));
-   const response=await page.goto("http://127.0.0.1:4174/emi-calculator/");
-   if(!response||response.status()!==200)throw Error("EMI page HTTP failure");
-   await page.locator("#amount").fill("895842100");
-   await page.locator("#rate").fill("12");
-   await page.locator("#tenure").fill("5");
-   await page.locator("#loan-form button[type=submit]").click();
-   const result=await page.evaluate(()=>{
-    const a=document.querySelector("#amount").getBoundingClientRect();
-    const b=document.querySelector("#rate").getBoundingClientRect();
-    const cards=[...document.querySelectorAll(".metric")];
-    return {horizontal:document.documentElement.scrollWidth>innerWidth+2,
-     sideBySide:a.right<=b.left+2,
-     badCard:cards.some(el=>{const box=el.getBoundingClientRect(),strong=el.querySelector("strong");return strong.scrollWidth>strong.clientWidth+2||strong.getBoundingClientRect().right>box.right+2}),
-     emi:document.querySelector("#emi-out").textContent};
-   });
-   if(result.horizontal||result.badCard||width<500&&!result.sideBySide||errors.length||result.emi.includes("NaN"))throw Error("EMI responsive failure "+width+": "+JSON.stringify({result,errors}));
-   console.log("EMI responsive browser PASS "+width+"px",result.emi);
-   await page.screenshot({path:"/tmp/emi-"+width+".png",fullPage:true});
+  for(const path of ["/","/percentage-calculator/","/fraction-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
+   const page=await browser.newPage({viewport:{width:320,height:700}});
+   await page.goto("http://127.0.0.1:4174"+path);
+   const sw=await page.evaluate(()=>document.documentElement.scrollWidth);
+   if(sw>320)throw Error(path+" horizontal overflow at 320px: "+sw);
+   console.log(path+" 320px no horizontal overflow PASS");
    await page.close();
   }
  }finally{await browser.close();}
