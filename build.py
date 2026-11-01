@@ -2266,7 +2266,8 @@ def main():
             ]
         elif path == "/editorial-policy/":
             paras = [
-                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Each worked example states its calculation so readers can repeat it.",
+                "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Each worked example states its calculation so readers can repeat it. Guides are designed around the visitor task, not around a target word count.",
+                "The project maintainer is identified on the About and Terms pages. This identifies responsibility for site operation and corrections, but does not imply medical, legal, accounting, financial or religious credentials. We do not invent expert reviewers, author biographies, qualifications, testimonials or independent review claims.",
                 "We prefer official or primary references for factual claims. Health information is general guidance, not a diagnosis; Zakat calculations state their method and do not replace a qualified scholar's ruling.",
                 "Page reviews and expert endorsements are identified only when they have actually taken place. Update dates reflect tracked substantive changes.",
                 "Quality checks cover representative inputs and boundaries, generated pages, titles, descriptions, canonical URLs, structured data, sitemap entries and internal links. They reduce regression risk but cannot cover every browser or situation.",
@@ -2276,9 +2277,9 @@ def main():
                 "Date and conversion tools describe their units and conventions. A month is not treated as a constant number of days, and temperature conversions account for the different zero points of the scales.",
                 "Medical screening content identifies the population for which a formula is intended and makes clear that a calculator cannot replace clinical evaluation. Religious guidance states the calculation approach without presenting a numerical output as a personal ruling.",
                 "Editorial changes should be checked for factual accuracy, accessibility and readability on small screens. Technical checks examine navigation, generated links, language versions and structured data where applicable.",
-                "A passing automated test does not establish that a page is error-free. Browser behavior, accessibility and calculations can still require manual review, especially when a new feature or formula is introduced.",
+                "A passing automated test is evidence for the cases tested, not proof that every possible input, browser, device or real-world situation has been independently verified. Browser behavior, accessibility and calculations can still require manual review, especially when a new feature or formula is introduced.",
                 "When a source is revised or a reported issue is confirmed, the relevant explanation and any affected example should be updated together. We avoid adding unsupported claims about external expert approval or the date of a review.",
-                "Visitors can independently reproduce many examples with the inputs and methods shown. Reports that include a specific page, input values and an expected outcome are more actionable than a general statement that a result looks wrong.",
+                "Visitors can independently reproduce many examples with the inputs and methods shown. Reports that include the page URL, exact input values and units, displayed result, expected result and steps to reproduce the issue are more actionable than a general statement that a result looks wrong. Please send correction reports to " + CONTACT_EMAIL + ".",
             ]
         elif path == "/affiliate-disclosure/":
             paras = [
