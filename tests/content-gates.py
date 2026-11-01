@@ -32,6 +32,11 @@ CASES = {
     "years-to-days-calculator": [
         "For 13 years, the simple result is 4,745 days, while the Gregorian-average result is 4,748.1525 days.",
         "For 29 years, the simple conversion is 29 x 365 = 10,585 days.",
+        "6 2,190 2,191.455",
+        "15 5,475 5,478.6375",
+        "25 9,125 9,131.0625",
+        "29 10,585 10,592.0325",
+        "30 10,950 10,957.275",
         "1,009 days is 2.76254817 years",
     ],
 }
