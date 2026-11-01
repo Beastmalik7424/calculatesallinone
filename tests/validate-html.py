@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the homepage and eight scoped HTML files with the Nu HTML Checker."""
+"""Validate the homepage and scoped HTML files with the Nu HTML Checker."""
 import email.utils
 import json
 import sys
@@ -19,6 +19,7 @@ FILES = [
     Path("public/discount-calculator/index.html"),
     Path("public/editorial-policy/index.html"),
     Path("public/health/index.html"),
+    Path("public/calorie-calculator/index.html"),
 ]
 ENDPOINT = "https://validator.w3.org/nu/?out=json"
 MAX_ATTEMPTS = 5
@@ -131,7 +132,7 @@ def main():
     if failed:
         print("Nu HTML Checker: FAIL")
         return 1
-    print("Nu HTML Checker: PASS (9 files, zero errors)")
+    print("Nu HTML Checker: PASS (10 files, zero errors)")
     return 0
 
 
