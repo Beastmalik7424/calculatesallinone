@@ -1102,6 +1102,43 @@ CAROUSEL_TOOLS = (
     ("date-calculator", "Date Difference Calculator", "Date"),
 )
 
+CAROUSEL_TRANSLATIONS = {
+    "ur": {
+        "zakat-calculator": "زکوٰۃ کیلکولیٹر", "bmi-calculator": "بی ایم آئی کیلکولیٹر",
+        "profit-loss-calculator": "منافع اور نقصان کیلکولیٹر", "discount-calculator": "ڈسکاؤنٹ کیلکولیٹر",
+        "age-calculator": "عمر کیلکولیٹر", "unit-converter": "یونٹ کنورٹر",
+        "standard-calculator": "معیاری اور سائنسی کیلکولیٹر", "tasbih-counter": "تسبیح کاؤنٹر",
+        "stopwatch": "آن لائن اسٹاپ واچ", "years-to-days-calculator": "سال سے دن کیلکولیٹر",
+        "query-calculator": "کوئری کیلکولیٹر", "emi-calculator": "قسط کیلکولیٹر",
+        "percentage-calculator": "فیصد کیلکولیٹر", "fraction-calculator": "کسر کیلکولیٹر",
+        "compound-interest-calculator": "مرکب سود کیلکولیٹر", "date-calculator": "تاریخوں کا فرق کیلکولیٹر",
+    },
+    "ar": {
+        "years-to-days-calculator": "حاسبة تحويل السنوات إلى أيام", "query-calculator": "حاسبة الاستعلام",
+        "emi-calculator": "حاسبة الأقساط", "percentage-calculator": "حاسبة النسبة المئوية",
+        "fraction-calculator": "حاسبة الكسور", "compound-interest-calculator": "حاسبة الفائدة المركبة",
+        "date-calculator": "حاسبة الفرق بين التواريخ",
+    },
+    "hi": {
+        "years-to-days-calculator": "वर्ष से दिन कैलकुलेटर", "query-calculator": "क्वेरी कैलकुलेटर",
+        "emi-calculator": "ईएमआई कैलकुलेटर", "percentage-calculator": "प्रतिशत कैलकुलेटर",
+        "fraction-calculator": "भिन्न कैलकुलेटर", "compound-interest-calculator": "चक्रवृद्धि ब्याज कैलकुलेटर",
+        "date-calculator": "तिथि अंतर कैलकुलेटर",
+    },
+    "es": {
+        "years-to-days-calculator": "Calculadora de años a días", "query-calculator": "Calculadora de consultas",
+        "emi-calculator": "Calculadora de EMI", "percentage-calculator": "Calculadora de porcentajes",
+        "fraction-calculator": "Calculadora de fracciones", "compound-interest-calculator": "Calculadora de interés compuesto",
+        "date-calculator": "Calculadora de diferencia de fechas",
+    },
+    "fr": {
+        "years-to-days-calculator": "Calculatrice années en jours", "query-calculator": "Calculatrice de requêtes",
+        "emi-calculator": "Calculatrice EMI", "percentage-calculator": "Calculatrice de pourcentage",
+        "fraction-calculator": "Calculatrice de fractions", "compound-interest-calculator": "Calculatrice d’intérêts composés",
+        "date-calculator": "Calculatrice de différence de dates",
+    },
+}
+
 CAROUSEL_SHORT_UR = {
     "zakat-calculator": "زکوٰۃ", "bmi-calculator": "BMI",
     "profit-loss-calculator": "منافع", "discount-calculator": "ڈسکاؤنٹ",
@@ -1119,19 +1156,14 @@ def calculator_carousel(lang="en", current_path=None):
         links = []
         for slug, english_name, short_name in CAROUSEL_TOOLS:
             if lang == "ur":
-                if slug not in URDU:
-                    continue
-                name = URDU[slug]["name"]
-                href = "/ur/" + slug + "/"
-                short = CAROUSEL_SHORT_UR.get(slug, name)
+                name = CAROUSEL_TRANSLATIONS["ur"][slug]
+                href = ("/ur/" if slug in URDU else "/") + slug + "/"
             elif lang in UI:
-                name = UI[lang].get("tools", {}).get(slug, english_name)
+                name = UI[lang].get("tools", {}).get(slug) or CAROUSEL_TRANSLATIONS.get(lang, {}).get(slug) or english_name
                 href = "/" + slug + "/"
-                short = short_name
             else:
                 name = english_name
                 href = "/" + slug + "/"
-                short = short_name
             active = ' aria-current="page"' if not duplicate and current_path == href else ""
             tabindex = ' tabindex="-1"' if duplicate else ""
             links.append(
