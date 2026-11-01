@@ -2002,7 +2002,7 @@ header nav:has(.ca-site-nav-topline) > div { min-width: 0; }
 }
 
 
-/* Header refinement: theme control stays at upper-left, while the tools slide
+/* Header refinement: theme control stays at upper-right, while the tools slide
    occupies its own full-width row on every page and viewport. */
 header nav:has(.ca-site-nav-topline) {
   width: 100% !important;
@@ -2019,7 +2019,7 @@ header nav:has(.ca-site-nav-topline) .ca-site-nav-topline {
   width: 100% !important;
   min-width: 0 !important;
   align-items: center !important;
-  justify-content: flex-end !important;
+  justify-content: space-between !important;
   gap: .75rem !important;
   direction: ltr !important;
 }
