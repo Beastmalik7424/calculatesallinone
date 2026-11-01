@@ -8,9 +8,15 @@
   const valueLabel=form.querySelector('label[for="value"]');
   const totalLabel=form.querySelector('label[for="total"]');
   const updatePercentageLabels=()=>{
-   const reverse=percentageMode.value==="share";
-   if(valueLabel)valueLabel.textContent=reverse?"Part":"Percentage (%)";
-   if(totalLabel)totalLabel.textContent=reverse?"Whole":"Number";
+   const labels={
+    of:["Percentage (%)","Number"],
+    share:["Part","Whole"],
+    change:["Starting value","New value"]
+   };
+   const selected=labels[percentageMode.value]||labels.of;
+   if(valueLabel)valueLabel.textContent=selected[0];
+   if(totalLabel)totalLabel.textContent=selected[1];
+   output.textContent="";
   };
   percentageMode.addEventListener("change",updatePercentageLabels);
   updatePercentageLabels();
@@ -25,6 +31,10 @@
     if(kind==="share"){
      const answer=window.ExtraCalculators.percentageShare(a,b);
      result="Answer: "+answer.toLocaleString("en-US",{maximumFractionDigits:8})+"% | Calculation: "+a+" ÷ "+b+" × 100";
+    }else if(kind==="change"){
+     const answer=window.ExtraCalculators.percentageChange(a,b);
+     const direction=answer>0?"Increase of ":answer<0?"Decrease of ":"No change: ";
+     result=direction+Math.abs(answer).toLocaleString("en-US",{maximumFractionDigits:8})+"% (from "+a+" to "+b+")";
     }else{
      const answer=window.ExtraCalculators.percentage(a,b);
      result="Answer: "+answer.toLocaleString("en-US",{maximumFractionDigits:8})+" | Calculation: "+b+" × "+a+" ÷ 100";
