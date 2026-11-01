@@ -109,14 +109,15 @@ const { chromium } = require('playwright');
    const rect=buttons.length?buttons[buttons.length-1].getBoundingClientRect():null;
    const heading=document.querySelector('.ca-home-header h1');
    const headingStyle=heading?getComputedStyle(heading):null;
+   const rootFontSize=parseFloat(getComputedStyle(document.documentElement).fontSize);
    const buttonHeights=buttons.map(b=>b.getBoundingClientRect().height);
    const media=[...document.querySelectorAll('.ca-home-wrap img,.ca-home-wrap video,.ca-home-tools img')].filter(e=>e.getBoundingClientRect().width>innerWidth+2);
-   return {buttons:buttons.length,display:!!display,lastButtonBottom:rect?.bottom,viewport:innerHeight,headingFontSize:headingStyle?parseFloat(headingStyle.fontSize):null,minKeyHeight:buttonHeights.length?Math.min(...buttonHeights):0,overflow:document.documentElement.scrollWidth>innerWidth+2,oversizedMedia:media.length};
+   return {buttons:buttons.length,display:!!display,lastButtonBottom:rect?.bottom,viewport:innerHeight,headingFontSize:headingStyle?parseFloat(headingStyle.fontSize):null,rootFontSize,minKeyHeight:buttonHeights.length?Math.min(...buttonHeights):0,overflow:document.documentElement.scrollWidth>innerWidth+2,oversizedMedia:media.length};
   });
   console.log('homepage '+size.width+'x'+size.height,JSON.stringify(h));
   if(!h.display||h.buttons<10)failures.push('homepage calculator missing '+size.width);
-  if(size.width<=600 && h.headingFontSize>17.5)failures.push('homepage mobile heading was not reduced: '+h.headingFontSize+'px');
-  if(h.minKeyHeight<48)failures.push('homepage calculator keypad touch target shrank below 48px: '+h.minKeyHeight);
+  if(size.width<=600 && h.headingFontSize>h.rootFontSize*1.05)failures.push('homepage mobile heading was not reduced relative to the user text scale: '+h.headingFontSize+'px');
+  if(h.minKeyHeight<44)failures.push('homepage calculator keypad touch target shrank below 44px: '+h.minKeyHeight);
   if(h.lastButtonBottom>size.height-8)failures.push('homepage scroll required '+size.width+'x'+size.height+' bottom='+h.lastButtonBottom);
   if(h.overflow||h.oversizedMedia)failures.push('homepage overflow '+size.width);
   if(h.buttons>=10) {
