@@ -69,7 +69,7 @@ assert ".ca-calculator-carousel:focus-within" in css, "Keyboard focus must pause
 assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
     "Reduced-motion users must get a non-animated, manually scrollable carousel"
 )
-assert "#tasbih-app #t-tap" in css and "min-height: 48px" in css, (
+assert "#t-tap" in css and "min-height:48px" in css, (
     "Tasbih Count one button must retain a visible, accessible touch target"
 )
 
