@@ -2,7 +2,7 @@ name: Build and smoke test
 
 on:
   push:
-    branches: ["main", "fix/**", "seo-seven-pages"]
+    branches: ["main", "fix/**", "seo-seven-pages", "feat/adult-calorie-calculator"]
   pull_request:
     branches: ["main"]
 
@@ -28,7 +28,8 @@ jobs:
       - name: Audit all dependencies including build-time packages
         run: npm audit --audit-level=moderate
       - name: Check JavaScript syntax
-        run: node --check static/app.js
+        run: |
+          node --check static/app.js
           node --check static/calorie-calculator.js
       - name: Test calculator behavior
         run: node tests/calculator-smoke.cjs
