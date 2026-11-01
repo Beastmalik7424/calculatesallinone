@@ -574,7 +574,7 @@ CATEGORIES = [
     {"slug": "health", "name": "Health", "desc": "Calculate adult BMI in metric or imperial units, review WHO weight categories, and understand what the screening result cannot tell you."},
     {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, and use a browser stopwatch for everyday timing with clear notes about date and timing limits."},
     {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages and fractions, use standard or scientific arithmetic, and convert weight, length and temperature with clear worked examples."},
-    {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
+    {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with 33, 99, 100 or custom targets and local count storage when available."},
 ]
 
 URDU = {
