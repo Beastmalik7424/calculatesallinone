@@ -63,8 +63,8 @@ def build_calorie_page(head, shell, write):
         '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">For a correction, use the <a class="underline text-sky-800 dark:text-sky-300" href="/contact/">Contact page</a>. Do not send medical records or other sensitive personal information.</p>'
     )
     schema = [
-        {"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": site + path, "description": description, "author": {"@id": site + "/#maintainer"}, "citation": [url for _, url, _ in sources], "inLanguage": "en"},
-        {"@context": "https://schema.org", "@type": "WebApplication", "name": "Adult Calorie Calculator", "url": site + path, "description": description, "applicationCategory": "HealthApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "author": {"@id": site + "/#maintainer"}, "publisher": {"@id": site + "/#organization"}, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "inLanguage": "en"},
+        {"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": site + path, "description": description, "publisher": {"@id": site + "/#organization"}, "citation": [url for _, url, _ in sources], "inLanguage": "en"},
+        {"@context": "https://schema.org", "@type": "WebApplication", "name": "Adult Calorie Calculator", "url": site + path, "description": description, "applicationCategory": "HealthApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "publisher": {"@id": site + "/#organization"}, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "inLanguage": "en"},
         {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": site + "/"},
             {"@type": "ListItem", "position": 2, "name": "Health", "item": site + "/health/"},
