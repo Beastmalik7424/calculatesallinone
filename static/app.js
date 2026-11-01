@@ -1536,9 +1536,10 @@
   function initQueryTime () {
     var form = $("query-time-form")
     if (!form) return
-    var factors = { year: 365 * 86400, day: 86400, week: 604800,
+    var factors = { year: 365 * 86400, month: (365.2425 / 12) * 86400, day: 86400, week: 604800,
       hour: 3600, minute: 60, second: 1 }
     var aliases = { years: "year", year: "year", saal: "year", sal: "year",
+      months: "month", month: "month", mahine: "month", mahinay: "month", mahina: "month", maheene: "month",
       days: "day", day: "day", din: "day",
       weeks: "week", week: "week", haftay: "week", hafta: "week",
       hours: "hour", hour: "hour", ghantay: "hour", ghanta: "hour",
@@ -1566,6 +1567,7 @@
         [/جمع|जोड़|जोड़|más|mas|plus|ajouté|ajoutés|اضافہ|إضافة/g, " plus "],
         [/منفی|घटा|घटाए|menos|moins|طرح|ناقص/g, " minus "],
         [/سال|साल|वर्ष|años|año|ans|années|سنوات|سنة/g, " year "],
+        [/مہینے|مہینہ|مہینوں|महीने|महीना|माह|meses|mes|mois|أشهر|شهر|mahine|mahinay|mahina|maheene/g, " month "],
         [/دن|दिन|días|día|jours|jour|أيام|يوم/g, " day "],
         [/ہفتے|ہفتہ|सप्ताह|semanas|semana|semaines|semaine|أسابيع|أسبوع/g, " week "],
         [/گھنٹے|گھنٹہ|घंटे|घंटा|horas|hora|heures|heure|ساعات|ساعة/g, " hour "],
@@ -1582,6 +1584,17 @@
         october: 10, oct: 10, november: 11, nov: 11, december: 12, dec: 12 }
       var namedDate = question.match(/(?:^|[^0-9])([0-9]{1,2})[ ,.-]+(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sep|october|oct|november|nov|december|dec)[ ,.-]+([0-9]{4})(?![0-9])/)
       if (!dateMatch && namedDate) dateMatch = [namedDate[0], namedDate[1], String(namedMonths[namedDate[2]]), namedDate[3]]
+      var pakistanIndependenceQuestion = /(?:pakistan|پاکستان)/.test(question) &&
+        /(?:independence|independent|azadi|azaadi|آزادی|آزادي)/.test(question)
+      if (!dateMatch && pakistanIndependenceQuestion) {
+        var asksSinceIndependence = /(?:since|ago|days|years|months|kitne|kitna|guzar|guzaar|how many)/.test(question)
+        if (asksSinceIndependence) {
+          dateMatch = ["14-08-1947", "14", "8", "1947"]
+        } else {
+          say("qt-result", "Pakistan's Independence Day is 14 August 1947.")
+          return
+        }
+      }
       var leapBirthday = /(?:29[ -]?(?:feb|february)|(?:feb|february)[ -]?29|29[ -]?(?:farwari|februari))/.test(question)
       var birthdayCountQuestion = /(?:birthday|birthdays|saalgirah|salgirah|bar|baar|times|kitni dafa)/.test(question)
       if (leapBirthday && dateMatch) {
@@ -1652,8 +1665,9 @@
         var todayText = String(now.getDate()).padStart(2, "0") + "-" +
           String(now.getMonth() + 1).padStart(2, "0") + "-" + now.getFullYear()
         var eventIsBirth = /(^|[^a-z])(birth|born|dob|paida|birthday)([^a-z]|$)/.test(question)
-        var subject = /(^|[^a-z])pakistan([^a-z]|$)/.test(question) ? "Pakistan" : "The subject"
-        var prefix = eventIsBirth ? "Birth date: " : "Start date: "
+        var eventIsPakistanIndependence = pakistanIndependenceQuestion
+        var subject = /(?:pakistan|پاکستان)/.test(question) ? "Pakistan" : "The subject"
+        var prefix = eventIsBirth ? "Birth date: " : eventIsPakistanIndependence ? "Independence date: " : "Start date: "
         var elapsedLabel = eventIsBirth ? " old" : " elapsed"
         say("qt-result", prefix + String(day).padStart(2, "0") + "-" +
           String(month).padStart(2, "0") + "-" + year +
@@ -1663,6 +1677,26 @@
           remainingDays + " days). Exact Gregorian calendar days.")
         return
       }
+      // Month conversions use 12 months per year. Day estimates use the
+      // Gregorian mean month (365.2425 / 12); exact days require a start date.
+      var monthAndYearsDays = question.match(/(?:^|\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\s+months?\b.*\byears?\b.*\bdays?\b/)
+      if (monthAndYearsDays) {
+        var monthValue = timeConversionNumber(monthAndYearsDays[1])
+        if (monthValue === null) {
+          say("qt-result", "Enter a nonnegative number of months up to 1,000,000.")
+          return
+        }
+        var wholeYears = Math.floor(monthValue / 12)
+        var remainingMonths = monthValue - wholeYears * 12
+        var approximateDays = Math.round(monthValue * 365.2425 / 12 * 100) / 100
+        say("qt-result", timeConversionFormat(monthValue) + " months = " +
+          wholeYears + " years and " + timeConversionFormat(remainingMonths) +
+          " months; approximately " + timeConversionFormat(approximateDays) +
+          " days using the Gregorian average month length of 30.436875 days. " +
+          "Exact calendar days depend on the starting date.")
+        return
+      }
+
       // Roman Urdu and English everyday arithmetic, evaluated left-to-right
       // only when each quantity's operation is explicit or contextually clear.
       var everydayNumbers = Array.from(question.matchAll(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g))
@@ -1696,7 +1730,7 @@
       var tokens = question.match(/[a-z]+/g) || []
       var units = tokens.filter(function (word) { return !!aliases[word] })
       if (numbers.length !== 1 || units.length !== 2) {
-        say("qt-result", "Please ask one time conversion, for example: 80 years mein kitne din hote hain?")
+        say("qt-result", "Please ask one supported time, date or arithmetic question, for example: 115 months in years and days, Pakistan independence date, or 80 years mein kitne din hote hain?")
         return
       }
       var value = timeConversionNumber(numbers[0])
@@ -1706,10 +1740,34 @@
       }
       var source = aliases[units[0]]
       var target = aliases[units[1]]
+      if (source === "month" && target === "year") {
+        var fullYears = Math.floor(value / 12)
+        var leftoverMonths = value - fullYears * 12
+        say("qt-result", timeConversionFormat(value) + " months = " +
+          fullYears + " years and " + timeConversionFormat(leftoverMonths) +
+          " months (" + timeConversionFormat(value / 12) + " years). Uses 12 months per year.")
+        return
+      }
+      if (source === "year" && target === "month") {
+        say("qt-result", timeConversionFormat(value) + " years = " +
+          timeConversionFormat(value * 12) + " months. Uses 12 months per year.")
+        return
+      }
       var result = value * factors[source] / factors[target]
-      say("qt-result", timeConversionFormat(value) + " " + source +
-        "(s) = " + timeConversionFormat(result) + " " + target +
-        "(s). Uses 365 days per year.")
+      if (source === "month" || target === "month") {
+        var averageResult = Math.round(result * 100) / 100
+        var sourceLabel = source + (value === 1 ? "" : "s")
+        var targetLabel = target + (averageResult === 1 ? "" : "s")
+        say("qt-result", timeConversionFormat(value) + " " + sourceLabel +
+          " ≈ " + timeConversionFormat(averageResult) + " " + targetLabel +
+          ". Uses the Gregorian average of 365.2425 days per year (30.436875 days per month); exact calendar totals depend on the dates.")
+        return
+      }
+      var sourceLabel = source + (value === 1 ? "" : "s")
+      var targetLabel = target + (result === 1 ? "" : "s")
+      say("qt-result", timeConversionFormat(value) + " " + sourceLabel +
+        " = " + timeConversionFormat(result) + " " + targetLabel +
+        ". Uses 365 days per year.")
     }
     form.addEventListener("submit", calculateQuery)
     $("qt-question").addEventListener("change", calculateQuery)

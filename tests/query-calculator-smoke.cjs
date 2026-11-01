@@ -31,6 +31,40 @@ vm.runInContext(js,ctx,{timeout:3000});
 assert.equal(typeof listeners.DOMContentLoaded,"function");
 listeners.DOMContentLoaded();
 assert.match(result.textContent,/15,580|15580/, "Leap-day birth to 26 October 2026 must be 15,580 days");
+input.value = "DOB 29-07-1984 age in months and days";
+listeners["form:submit"]({preventDefault(){}});
+assert.match(result.textContent,/15,429|15429/, "29 July 1984 to 26 October 2026 must be 15,429 days");
+assert.match(result.textContent,/42 years, 2 months, 27 days/, "DOB should report calendar years, months and days");
+const monthCases = [
+ ["115 months in years and days",/9 years and 7 months.*3,500\.24 days/],
+ ["115 mahine in years and days",/9 years and 7 months.*3,500\.24 days/],
+ ["115 مہینے سال اور دن",/9 years and 7 months.*3,500\.24 days/],
+ ["115 महीने साल और दिन",/9 years and 7 months.*3,500\.24 days/],
+ ["115 meses en años y días",/9 years and 7 months.*3,500\.24 days/],
+ ["115 mois en années et jours",/9 years and 7 months.*3,500\.24 days/],
+ ["115 شهر سنوات وأيام",/9 years and 7 months.*3,500\.24 days/],
+ ["115 months in days",/3,500\.24 days.*average/],
+ ["115 months in years",/9 years and 7 months/],
+ ["2 months in days",/60\.87 days.*average/]
+];
+for (const [q, expected] of monthCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+const independenceCases = [
+ ["Pakistan independence date",/14 August 1947/],
+ ["Pakistan ki azadi ki tareekh",/14 August 1947/],
+ ["پاکستان کی آزادی کی تاریخ",/14 August 1947/]
+];
+for (const [q, expected] of independenceCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+input.value = "How many days since Pakistan independence?";
+listeners["form:submit"]({preventDefault(){}});
+assert.match(result.textContent,/28,928 days elapsed for Pakistan/, "Pakistan independence elapsed days should use the Gregorian calendar");
 const cases = [
  ["Mer pass 99 packets hn 29 distribute kr die 19 chori ho gye baki kotny bach gye",/51/],
  ["मेरे पास 99 पैकेट हैं 29 बाँट दिए 19 चोरी हो गए कितने बचे",/51/],
@@ -45,4 +79,4 @@ for(const [q,expected] of cases){
  listeners["form:submit"]({preventDefault(){}});
  assert.match(result.textContent,expected,q+" => "+result.textContent);
 }
-console.log("Query Calculator DOM + six-language smoke tests PASS ("+(cases.length+1)+" cases)");
+console.log("Query Calculator DOM, multilingual month conversions, DOB, Pakistan date and arithmetic tests PASS");

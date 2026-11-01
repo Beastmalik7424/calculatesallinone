@@ -19,6 +19,11 @@ CASES = {
         "3 x 24 = 72 hours.",
         "72 x 60 = 4,320 minutes.",
         "Divide the answer by each factor used in the question, in reverse order.",
+        "115 months in years and days",
+        "115 months = 9 years and 7 months",
+        "Pakistan independence date",
+        "14 August 1947",
+        "exact calendar days require a start date",
     ],
     "stopwatch": [
         "A lap time of 83 seconds equals 1 minute and 23 seconds.",
