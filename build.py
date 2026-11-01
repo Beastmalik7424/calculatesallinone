@@ -1537,7 +1537,7 @@ def tool_page(t):
         "discount-calculator": [("percentage-calculator", "Percentage Calculator"), ("profit-loss-calculator", "Profit and Loss Calculator")],
         "standard-calculator": [("percentage-calculator", "Percentage Calculator"), ("fraction-calculator", "Fraction Calculator")],
         "age-calculator": [("date-calculator", "Date Difference Calculator"), ("years-to-days-calculator", "Years to Days Calculator")],
-        "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator")],
+        "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator"), ("query-calculator", "Query Calculator")],
         "query-calculator": [("years-to-days-calculator", "Years to Days Calculator"), ("age-calculator", "Age Calculator")],
     }
     related_items = related_map.get(t["slug"], [])
