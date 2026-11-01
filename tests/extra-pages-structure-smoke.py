@@ -76,7 +76,7 @@ def main():
         html = path.read_text(encoding="utf-8")
         assert '<nav aria-label="Breadcrumb"' in html, f"Missing visible breadcrumb: /{slug}/"
         assert f'href="/{spec["hub"]}/"' in html, f"Missing category hub path: /{slug}/"
-        assert '<h2 class="mt-8 text-xl font-semibold">Common questions</h2>' in html, f"Missing FAQ heading: /{slug}/"
+        assert '<h2 class="text-xl font-semibold">Common questions</h2>' in html, f"Missing FAQ heading: /{slug}/"
         for heading in spec["headings"]:
             assert f">{heading}</h2>" in html, f"Missing section heading {heading!r}: /{slug}/"
         for question in spec["questions"]:
