@@ -34,6 +34,12 @@ const { chromium } = require("playwright");
 
       const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight, buttonTop: document.querySelector("#cal-calculate").getBoundingClientRect().top, pageHeight: document.documentElement.scrollHeight }));
       console.log("CALORIE VIEWPORT", viewport.width, JSON.stringify(layout));
+      const geometry = await page.evaluate(() => {
+        const rect = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); return { top:r.top, bottom:r.bottom, height:r.height, display:getComputedStyle(el).display }; };
+        return { nav:rect("nav"), header:rect("header"), eligibility:rect('[role="note"]'), section:rect("#calorie-form").parentElement, form:rect("#calorie-form"), fields:Array.from(document.querySelector("#calorie-form").children).map(el=>({id:el.id,tag:el.tagName,top:el.getBoundingClientRect().top,bottom:el.getBoundingClientRect().bottom,height:el.getBoundingClientRect().height,display:getComputedStyle(el).display,grid:getComputedStyle(el).gridTemplateColumns})) };
+      });
+      console.log("CALORIE GEOMETRY", viewport.width, JSON.stringify(geometry));
+      await page.screenshot({ path: "/tmp/calorie-calculator-" + viewport.width + ".png", fullPage: false });
       console.log("Calorie calculator first-screen geometry", viewport.width, layout);
       assert.equal(layout.overflow, false, "No horizontal overflow at " + viewport.width + "px");
       assert.ok(layout.buttonBottom <= layout.viewportHeight, "Calculate action must be visible in first viewport at " + viewport.width + "px");
