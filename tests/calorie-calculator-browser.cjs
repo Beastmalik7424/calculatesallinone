@@ -27,8 +27,9 @@ const { chromium } = require("playwright");
       assert.equal(await page.locator("#calorie-error").getAttribute("role"), "alert");
       assert.equal(await page.getByLabel("Age (years)").count(), 1);
       assert.equal(await page.getByLabel("Equation coefficient").count(), 1);
-      assert.equal(await page.locator('label[for="cal-weight"]').count(), 1, "Weight input must have one explicit associated label");
       assert.equal(await page.locator("#cal-weight").count(), 1);
+      const associatedWeightLabels = await page.locator("#cal-weight").evaluate(el => Array.from(el.labels || []).map(label => label.textContent.trim()));
+      assert.equal(associatedWeightLabels.filter(label => label === "Weight").length, 1, "Weight input must have exactly one explicit, correctly named associated label");
       assert.equal(await page.getByLabel("Weight unit").count(), 1);
 
       const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight }));
