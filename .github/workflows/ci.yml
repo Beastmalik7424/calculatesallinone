@@ -29,12 +29,13 @@ jobs:
         run: npm audit --audit-level=moderate
       - name: Check JavaScript syntax
         run: node --check static/app.js
+          node --check static/calorie-calculator.js
       - name: Test calculator behavior
         run: node tests/calculator-smoke.cjs
       - name: Test input validation
         run: node tests/input-validation-smoke.cjs
       - name: Check Python syntax
-        run: python -m py_compile build.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
+        run: python -m py_compile build.py calorie_calculator.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
       - name: Build the site
         run: npm run build
       - name: Test percentage, fraction, compound interest and date engines
@@ -101,7 +102,8 @@ jobs:
           npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu" --only-categories=seo --output=json --output-path=/tmp/lighthouse-home.json
           npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/bmi-calculator/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu" --only-categories=seo --output=json --output-path=/tmp/lighthouse-bmi.json
           npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/zakat-calculator/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu" --only-categories=seo --output=json --output-path=/tmp/lighthouse-zakat.json
-          node -e 'const fs=require("node:fs"); for (const name of ["home","bmi","zakat"]) { const r=JSON.parse(fs.readFileSync("/tmp/lighthouse-"+name+".json","utf8")); const score=r.categories.seo.score; console.log("Lighthouse SEO "+name+": "+Math.round(score*100)+"/100"); if (score !== 1) process.exitCode=1; }'
+          npx --yes lighthouse@12.8.2 http://127.0.0.1:4173/calorie-calculator/ --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu" --only-categories=seo --output=json --output-path=/tmp/lighthouse-calorie.json
+          node -e 'const fs=require("node:fs"); for (const name of ["home","bmi","zakat","calorie"]) { const r=JSON.parse(fs.readFileSync("/tmp/lighthouse-"+name+".json","utf8")); const score=r.categories.seo.score; console.log("Lighthouse SEO "+name+": "+Math.round(score*100)+"/100"); if (score !== 1) process.exitCode=1; }'
       - name: Lighthouse SEO audit for eight scoped pages
         run: |
           python3 -m http.server 4175 --directory public >/tmp/calculateall-http-seven.log 2>&1 &
@@ -126,6 +128,7 @@ jobs:
           done
           node tests/seo-seven-pages-browser.cjs
           node tests/extra-calculators-browser.cjs
+          node tests/calorie-calculator-browser.cjs
       # Protected Vercel previews are verified separately through the authenticated Vercel connector.
       - name: Test safe monetization configuration
         run: python tests/monetization-smoke.py
