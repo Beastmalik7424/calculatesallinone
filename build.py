@@ -1336,7 +1336,7 @@ def shell(main_html, lang="en", current_path=None):
         '<div class="flex min-w-0 flex-1 items-center justify-end gap-2">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px] shrink-0">' + s["theme"] + '</button>'
         + calculator_carousel(lang, current_path)
-        + '</div></nav></header>\\n'
+        + '</div></nav></header>\n'
         '<main id="main" class="' + main_classes + '">' + main_html + '</main>\n'
         '<footer class="mt-12 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-t border-stone-200 dark:border-stone-700">'
         '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'
