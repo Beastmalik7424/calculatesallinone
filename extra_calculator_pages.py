@@ -88,6 +88,24 @@ FAQS = {
     ],
 }
 
+
+SOURCE_LINKS = {
+    "percentage-calculator": [
+        ("OpenStax: Percent applications and percent increase", "https://openstax.org/books/prealgebra-2e/pages/6-2-solve-general-applications-of-percent", "Textbook reference for percent applications, increase and decrease calculations."),
+    ],
+    "fraction-calculator": [
+        ("OpenStax: Add and subtract fractions with different denominators", "https://openstax.org/books/prealgebra/pages/4-5-add-and-subtract-fractions-with-different-denominators", "Explains common denominators and the worked 1/2 + 1/3 = 5/6 example."),
+        ("OpenStax: Fraction operations", "https://openstax.org/books/prealgebra-2e/pages/4-key-concepts", "Summarizes fraction multiplication, division, addition and subtraction."),
+    ],
+    "compound-interest-calculator": [
+        ("Investor.gov: Compound Interest Calculator", "https://www.investor.gov/financial-tools-calculators/calculators/compound-interest-calculator", "Official investor education reference for principal, annual rate, time and compounding frequency."),
+        ("Investor.gov: What is compound interest?", "https://www.investor.gov/additional-resources/information/youth/teachers-classroom-resources/what-compound-interest", "Explains how interest can accrue on both principal and previously earned interest."),
+    ],
+    "date-calculator": [
+        ("U.S. Naval Observatory: Leap Years", "https://aa.usno.navy.mil/faq/leap_years", "Authoritative explanation of the Gregorian leap-year rule, including century years and the 400-year exception."),
+    ],
+}
+
 def build_extra_pages(head,shell,write):
     entries=[]
     site="https://calculateallinone.vercel.app"
@@ -116,6 +134,10 @@ def build_extra_pages(head,shell,write):
         for question,answer in faq_items:
             body+='<details class="border-b border-stone-300 dark:border-stone-700 py-4"><summary class="cursor-pointer font-medium text-stone-900 dark:text-stone-100 min-h-[44px] flex items-center">'+html.escape(question)+'</summary><p class="mt-2 text-base text-stone-800 dark:text-stone-200">'+html.escape(answer)+'</p></details>'
         body+='</div></section>'
+        body+='<section class="mt-8"><h2 class="text-xl font-semibold">Sources and references</h2><ul class="mt-3 list-disc pl-6 space-y-2">'
+        for source_title,source_url,source_note in SOURCE_LINKS[slug]:
+            body+='<li><a class="text-sky-800 underline dark:text-sky-300" href="'+html.escape(source_url,quote=True)+'" target="_blank" rel="noopener noreferrer">'+html.escape(source_title)+'</a><p class="text-sm text-stone-700 dark:text-stone-300">'+html.escape(source_note)+'</p></li>'
+        body+='</ul></section>'
         body+='<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">More free calculators</h2><ul>'
         for other,other_title,*_ in PAGES:
             if other!=slug:
@@ -128,7 +150,7 @@ def build_extra_pages(head,shell,write):
         ]
         faq_entities=[{"@type":"Question","name":question,"acceptedAnswer":{"@type":"Answer","text":answer}} for question,answer in faq_items]
         schema=[
-            {"@context":"https://schema.org","@type":"WebPage","name":title,"url":site+path,"description":description,"inLanguage":"en"},
+            {"@context":"https://schema.org","@type":"WebPage","name":title,"url":site+path,"description":description,"citation":[source_url for source_title,source_url,source_note in SOURCE_LINKS[slug]],"inLanguage":"en"},
             {"@context":"https://schema.org","@type":"WebApplication","name":title,"url":site+path,"description":description,"applicationCategory":"FinanceApplication" if slug=="compound-interest-calculator" else "UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"inLanguage":"en"},
             {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":breadcrumb_items},
             {"@context":"https://schema.org","@type":"FAQPage","mainEntity":faq_entities},
