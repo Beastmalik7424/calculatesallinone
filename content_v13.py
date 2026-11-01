@@ -71,11 +71,11 @@ HUB_EXTRA = {
     ],
     "worship": [
         ("How to use the tasbih counter", [
-            "Press the large button once for each dhikr. Choose a target of 33, 100 or 1000, or choose unlimited. The line under the count shows how many are left to reach the target.",
-            "Press reset to start again from zero. The count stays on the same device and browser, so you can continue after closing the page.",
+            "Press the large button once for each dhikr. Choose a target of 33, 99 or 100, or set a custom whole-number target from 1 to 10,000. The line under the count shows how many are left to reach the target.",
+            "Press reset to start again from zero. The phrase, target and count are saved in this browser when storage is available. If storage is blocked, the counter works in memory only until you leave or reload the page.",
         ]),
         ("Privacy of your count", [
-            "The tasbih counter does not send your count to a server and does not create an account. Clearing your browser data removes the saved count, so press reset or keep a note if you want to keep a long record.",
+            "CalculatesAll does not send your count to a server and does not create an account. When browser storage is available, the count, phrase and target stay on this device. Private browsing, browser privacy settings or clearing site data can make saved values unavailable. Keep a separate note if you need a long-term record.",
         ]),
         ("Dhikr and your own practice", [
             "Choose the dhikr and the number that suit your own practice. For questions about the wording or the number of recitations, consult a knowledgeable teacher in your community.",
@@ -83,7 +83,7 @@ HUB_EXTRA = {
         ("Use a digital counter thoughtfully", [
             "A digital tasbih counter is a practical aid for keeping track of repeated recitations, especially when you want to focus on the words rather than remember the running total. Choose a target that fits your own practice, then tap once for each completed recitation. The displayed remainder can help you see progress without mental arithmetic.",
             "A counter records taps, not the spiritual quality or correctness of an act of worship. If you tap twice by mistake, lose count, or want to change your routine, reset the number or begin a fresh count in a way that feels appropriate to you. The tool does not prescribe a religious practice or decide which wording should be recited.",
-            "Your count is stored in local browser storage on the device. It may disappear if you clear browser data, use private browsing, change devices or switch browsers. If keeping a long-term record matters to you, write it down separately. For questions about religious wording or recommended counts, consult a trusted qualified teacher rather than treating the counter as a religious authority.",
+            "Your count is stored in local browser storage on the device when that feature is available. If storage is blocked, the counter works in memory only until you leave or reload the page. Saved values may also disappear if you clear browser data, use private browsing, change devices or switch browsers. If keeping a long-term record matters to you, write it down separately. For questions about religious wording or recommended counts, consult a trusted qualified teacher rather than treating the counter as a religious authority.",
         ]),
     ],
 }
