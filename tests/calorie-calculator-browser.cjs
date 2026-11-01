@@ -27,7 +27,7 @@ const { chromium } = require("playwright");
       assert.equal(await page.locator("#calorie-error").getAttribute("role"), "alert");
       assert.equal(await page.getByLabel("Age (years)").count(), 1);
       assert.equal(await page.getByLabel("Equation coefficient").count(), 1);
-      assert.equal(await page.getByLabel("Weight").count(), 1);
+      assert.equal(await page.getByLabel("Weight", { exact: true }).count(), 1);
       assert.equal(await page.getByLabel("Weight unit").count(), 1);
 
       const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight }));
