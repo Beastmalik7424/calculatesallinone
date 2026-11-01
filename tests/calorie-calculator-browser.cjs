@@ -54,7 +54,7 @@ const { chromium } = require("playwright");
       await page.screenshot({ path: "/tmp/calorie-calculator-" + viewport.width + ".png", fullPage: false });
       console.log("Calorie calculator first-screen geometry", viewport.width, layout);
       assert.equal(layout.overflow, false, "No horizontal overflow at " + viewport.width + "px");
-      assert.ok(layout.buttonBottom <= layout.viewportHeight, "Calculate action must be visible in first viewport at " + viewport.width + "px");
+      assert.ok(layout.buttonBottom <= layout.viewportHeight - 2, "Calculate action must be fully visible with a 2px viewport margin at " + viewport.width + "px");
       await page.locator("#cal-age").fill("30");
       await page.locator("#cal-coefficient").selectOption("male");
       await page.locator("#cal-weight").fill("70");
