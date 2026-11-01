@@ -1366,6 +1366,8 @@ def shell(main_html, lang="en", current_path=None):
     main_classes = main_width + " mx-auto px-5 py-10"
     if current_path in tool_paths | urdu_tool_paths:
         main_classes += " ca-tool-main"
+    if current_path == "/calorie-calculator/":
+        main_classes += " ca-tool-calorie-calculator"
     return (
         '<body class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased">\n'
         '<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">'
