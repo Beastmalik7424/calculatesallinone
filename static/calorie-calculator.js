@@ -2,11 +2,11 @@
 "use strict";
 var LB_TO_KG=0.45359237, IN_TO_CM=2.54;
 var ACTIVITY_PRESETS=Object.freeze([
-Object.freeze({id:"sedentary",label:"Sedentary",multiplier:1.2,description:"Mostly seated work and little planned movement."}),
-Object.freeze({id:"light",label:"Light activity",multiplier:1.375,description:"Some walking or light exercise, with mostly light daily movement."}),
-Object.freeze({id:"moderate",label:"Moderate activity",multiplier:1.55,description:"Regular moderate exercise and a generally active daily routine."}),
-Object.freeze({id:"very_active",label:"Very active",multiplier:1.725,description:"Frequent hard exercise or a physically demanding job."}),
-Object.freeze({id:"extra_active",label:"Extra active",multiplier:1.9,description:"Very demanding daily physical work or training."})
+Object.freeze({id:"sedentary",label:"Sedentary",multiplier:1.2,description:"Mostly seated work and little planned movement.",version:"1.0",source:"Application-defined consumer activity preset; not from the original Mifflin–St Jeor paper or FAO/WHO/UNU PAL categories.",limitations:"Approximate heuristic, not individually validated; actual activity and energy needs vary."}),
+Object.freeze({id:"light",label:"Light activity",multiplier:1.375,description:"Some walking or light exercise, with mostly light daily movement.,version:"1.0",source:"Application-defined consumer activity preset; not from the original Mifflin–St Jeor paper or FAO/WHO/UNU PAL categories.",limitations:"Approximate heuristic, not individually validated; actual activity and energy needs vary."}}),
+Object.freeze({id:"moderate",label:"Moderate activity",multiplier:1.55,description:"Regular moderate exercise and a generally active daily routine.,version:"1.0",source:"Application-defined consumer activity preset; not from the original Mifflin–St Jeor paper or FAO/WHO/UNU PAL categories.",limitations:"Approximate heuristic, not individually validated; actual activity and energy needs vary."}}),
+Object.freeze({id:"very_active",label:"Very active",multiplier:1.725,description:"Frequent hard exercise or a physically demanding job.,version:"1.0",source:"Application-defined consumer activity preset; not from the original Mifflin–St Jeor paper or FAO/WHO/UNU PAL categories.",limitations:"Approximate heuristic, not individually validated; actual activity and energy needs vary."}}),
+Object.freeze({id:"extra_active",label:"Extra active",multiplier:1.9,description:"Very demanding daily physical work or training.,version:"1.0",source:"Application-defined consumer activity preset; not from the original Mifflin–St Jeor paper or FAO/WHO/UNU PAL categories.",limitations:"Approximate heuristic, not individually validated; actual activity and energy needs vary."}})
 ]);
 function number(value,label){
  if(value===null||value===undefined||(typeof value==="string"&&value.trim()===""))throw new Error("Enter "+label+".");
@@ -65,11 +65,17 @@ function initialize(doc){
   try{
    var x=calculateMaintenanceCalories({age:byId("cal-age").value,weight:byId("cal-weight").value,weightUnit:byId("cal-weight-unit").value,heightUnit:unit.value,heightCm:cm.value,heightFeet:ft.value,heightInches:inch.value,coefficient:byId("cal-coefficient").value,activityId:byId("cal-activity").value,pregnancyStatus:byId("cal-eligibility").value});
    add("h3","text-lg font-semibold","Your estimated daily energy");
+   add("p","mt-1 text-sm","Equation: "+x.equation+".");
    add("p","mt-2","Estimated resting energy expenditure (REE): "+fmt(x.restingKcalPerDay)+" kcal/day.");
    add("p","mt-1 text-xl font-bold","Estimated maintenance calories: "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
    add("p","mt-2","Calculation: "+fmt(x.restingKcalPerDay)+" × "+x.activity.multiplier+" activity factor = "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
    add("p","mt-2 text-sm","Activity assumption: "+x.activity.label+". "+x.activity.description);
    if(x.outsideOriginalStudyAgeRange)add("p","mt-2 text-sm","Age-range note: the original Mifflin–St Jeor study sample was 19–78 years. Your entered age is outside that original sample range, so this result has an additional evidence limitation.");
+   add("p","mt-2 text-sm","Activity assumption version: "+x.activity.version+". "+x.activity.limitations);
+   var sourceLine=doc.createElement("p");sourceLine.className="mt-2 text-sm";
+   sourceLine.appendChild(doc.createTextNode("Equation source: "));
+   var sourceLink=doc.createElement("a");sourceLink.href="https://pubmed.ncbi.nlm.nih.gov/2305711/";sourceLink.target="_blank";sourceLink.rel="noopener noreferrer";sourceLink.textContent="Mifflin–St Jeor original paper (PubMed)";
+   sourceLine.appendChild(sourceLink);result.appendChild(sourceLine);
    add("p","mt-2 text-sm","This is a population-equation estimate, not a measured metabolic rate or a personalized medical prescription.");
    result.hidden=false;
   }catch(e){error.textContent=e&&e.message?e.message:"The estimate could not be calculated. Check the entries and try again.";}
