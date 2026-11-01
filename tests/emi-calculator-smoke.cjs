@@ -19,7 +19,9 @@ assert.equal(appSchema.url, "https://calculateallinone.vercel.app/emi-calculator
 assert.equal(appSchema.inLanguage, "en", "WebApplication schema language must match document language");
 
 // Regression guard: the standalone EMI page must retain global site navigation and a centered, responsive calculator column.
-assert.match(html, /<nav aria-label="Main" class="site-nav">[\s\S]*?<a href="\/#all-tools">All Tools<\/a>[\s\S]*?<\/nav>/, "EMI page must expose the shared All Tools navigation link");
+assert.match(html, /<nav aria-label="Main" class="site-nav">[\s\S]*?class="ca-calculator-carousel"[\s\S]*?data-tool-shortcut="emi-calculator"[\s\S]*?aria-current="page"[\s\S]*?<\/nav>/, "EMI page must expose the active calculator carousel in its existing navigation row");
+assert.match(html, /<a href="\/money\/">Money and Business<\/a>/, "EMI page must retain its Money and Business navigation link");
+assert.match(html, /<a href="\/standard-calculator\/">Standard Calculator<\/a>/, "EMI page must retain its Standard Calculator navigation link");
 assert.match(html, /<main class="emi-page-main">/, "EMI calculator must use the shared-width main content wrapper");
 assert.match(html, /\.emi-page-main\s*\{[^}]*max-width:\s*960px/s, "EMI main content must be capped to the intended centered tool width");
 
