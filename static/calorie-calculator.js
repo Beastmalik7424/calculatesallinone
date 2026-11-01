@@ -20,7 +20,7 @@ function calculateMaintenanceCalories(input){
  if(!Number.isInteger(age))throw new Error("Age must be a whole number of years.");
  if(age<18)throw new Error("This calculator is for adults aged 18 or older.");
  if(age>120)throw new Error("Enter an age from 18 to 120 years.");
- if(!input.pregnancyStatus)throw new Error("Select a pregnancy and breastfeeding status.");
+ if(!["no","pregnant","breastfeeding","both","prefer_not_to_say"].includes(input.pregnancyStatus))throw new Error("Select a pregnancy and breastfeeding status.");
  if(input.pregnancyStatus!=="no")throw new Error("This calculator is not intended for pregnancy or breastfeeding. It does not provide an ordinary maintenance estimate for these circumstances.");
  var coefficient=input.coefficient;
  if(coefficient!=="male"&&coefficient!=="female")throw new Error("Choose one of the published equation coefficients to continue.");
