@@ -1111,6 +1111,7 @@ CAROUSEL_TOOLS = (
     ("fraction-calculator", "Fraction Calculator", "Fraction"),
     ("compound-interest-calculator", "Compound Interest Calculator", "Compound"),
     ("date-calculator", "Date Difference Calculator", "Date"),
+    ("calorie-calculator", "Adult Calorie Calculator", "Calories"),
 )
 
 CAROUSEL_TRANSLATIONS = {
@@ -1123,30 +1124,35 @@ CAROUSEL_TRANSLATIONS = {
         "query-calculator": "کوئری کیلکولیٹر", "emi-calculator": "قسط کیلکولیٹر",
         "percentage-calculator": "فیصد کیلکولیٹر", "fraction-calculator": "کسر کیلکولیٹر",
         "compound-interest-calculator": "مرکب سود کیلکولیٹر", "date-calculator": "تاریخوں کا فرق کیلکولیٹر",
+        "calorie-calculator": "بالغ افراد کا کیلوری کیلکولیٹر",
     },
     "ar": {
         "years-to-days-calculator": "حاسبة تحويل السنوات إلى أيام", "query-calculator": "حاسبة الاستعلام",
         "emi-calculator": "حاسبة الأقساط", "percentage-calculator": "حاسبة النسبة المئوية",
         "fraction-calculator": "حاسبة الكسور", "compound-interest-calculator": "حاسبة الفائدة المركبة",
         "date-calculator": "حاسبة الفرق بين التواريخ",
+        "calorie-calculator": "حاسبة السعرات الحرارية للبالغين",
     },
     "hi": {
         "years-to-days-calculator": "वर्ष से दिन कैलकुलेटर", "query-calculator": "क्वेरी कैलकुलेटर",
         "emi-calculator": "ईएमआई कैलकुलेटर", "percentage-calculator": "प्रतिशत कैलकुलेटर",
         "fraction-calculator": "भिन्न कैलकुलेटर", "compound-interest-calculator": "चक्रवृद्धि ब्याज कैलकुलेटर",
         "date-calculator": "तिथि अंतर कैलकुलेटर",
+        "calorie-calculator": "वयस्क कैलोरी कैलकुलेटर",
     },
     "es": {
         "years-to-days-calculator": "Calculadora de años a días", "query-calculator": "Calculadora de consultas",
         "emi-calculator": "Calculadora de EMI", "percentage-calculator": "Calculadora de porcentajes",
         "fraction-calculator": "Calculadora de fracciones", "compound-interest-calculator": "Calculadora de interés compuesto",
         "date-calculator": "Calculadora de diferencia de fechas",
+        "calorie-calculator": "Calculadora de calorías para adultos",
     },
     "fr": {
         "years-to-days-calculator": "Calculatrice années en jours", "query-calculator": "Calculatrice de requêtes",
         "emi-calculator": "Calculatrice EMI", "percentage-calculator": "Calculatrice de pourcentage",
         "fraction-calculator": "Calculatrice de fractions", "compound-interest-calculator": "Calculatrice d’intérêts composés",
         "date-calculator": "Calculatrice de différence de dates",
+        "calorie-calculator": "Calculateur de calories pour adultes",
     },
 }
 
@@ -1377,12 +1383,13 @@ def shell(main_html, lang="en", current_path=None):
         '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
-        '<nav class="max-w-5xl mx-auto px-5 py-3 flex flex-wrap items-center justify-between gap-3" aria-label="' + s["main"] + '">'
-        '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
-        '<div class="flex min-w-0 flex-1 items-center justify-end gap-2">'
+        '<nav class="max-w-screen-2xl mx-auto w-full px-4 py-2 flex flex-col items-stretch gap-2" aria-label="' + s["main"] + '">'
+        '<div class="ca-site-nav-topline flex w-full items-center justify-between gap-3" dir="ltr">'
         '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px] shrink-0">' + s["theme"] + '</button>'
+        '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
+        '</div>'
         + calculator_carousel(lang, current_path)
-        + '</div></nav></header>\n'
+        + '</nav></header>\n'
         '<main id="main" class="' + main_classes + '">' + main_html + '</main>\n'
         '<footer class="mt-12 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-t border-stone-200 dark:border-stone-700">'
         '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'
