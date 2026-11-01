@@ -97,6 +97,37 @@ const {chromium}=require("playwright");
    await page.close();
   }
 
+  for(const width of [390,1366]){
+   const viewport={width,height:width===390?844:768};
+   const page=await browser.newPage({viewport});
+   const errors=[];page.on("pageerror",e=>errors.push(e.message));
+   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   page.on("dialog",dialog=>dialog.accept());
+   const response=await page.goto(base+"/tasbih-counter/");
+   if(!response||response.status()!==200)throw Error("Tasbih page HTTP failure at "+width+"px");
+   const order=await page.evaluate(()=>{
+    const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {top:r.top,bottom:r.bottom};};
+    return {count:rect("#t-count"),tap:rect("#t-tap"),actions:rect("#t-tap + .grid"),settings:rect(".ca-tasbih-settings"),undo:rect("#t-undo"),reset:rect("#t-reset"),overflow:document.documentElement.scrollWidth>innerWidth+2};
+   });
+   if(!(order.count.top<order.settings.top&&order.tap.top<order.settings.top&&order.actions.top<order.settings.top))throw Error("Tasbih count/actions must appear before optional settings at "+width+"px: "+JSON.stringify(order));
+   if(order.count.bottom>(width===390?844:768)||order.undo.bottom>(width===390?844:768)||order.reset.bottom>(width===390?844:768)||order.overflow)throw Error("Tasbih first-screen or overflow failure at "+width+"px: "+JSON.stringify(order));
+   for(let i=0;i<33;i++)await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="33")throw Error("Tasbih tap count should reach 33");
+   await page.locator("#t-undo").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="32")throw Error("Tasbih undo should return count to 32");
+   await page.locator("#t-reset").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih reset should return count to 0");
+   await page.locator("#t-phrase").selectOption("custom");
+   await page.locator("#t-custom-phrase").fill("Test dhikr");
+   if(await page.locator("#t-custom-phrase").isDisabled())throw Error("Tasbih custom phrase field should enable");
+   await page.locator("#t-target").selectOption("custom");
+   await page.locator("#t-custom-target").fill("33");
+   if(!(await page.locator("#t-custom-target-wrap").isVisible()))throw Error("Tasbih custom target field should become visible");
+   if(errors.length)throw Error("Tasbih browser errors: "+errors.join("; "));
+   console.log("Tasbih browser PASS "+width+"px: count/actions above settings, tap/undo/reset and custom phrase/target");
+   await page.close();
+  }
+
   for(const width of [320,360,390,1366]){
    for(const path of ["/","/percentage-calculator/","/fraction-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
     const page=await browser.newPage({viewport:{width,height:width===1366?768:844}});
