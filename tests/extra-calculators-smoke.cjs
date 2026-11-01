@@ -55,7 +55,7 @@ assert.match(extraSource,/Percentage change = \(new value minus old value\) divi
 assert.match(extraSource,/25% of 200 is 50/);
 assert.match(extraSource,/30 out of 120 is 25%/);
 assert.match(extraSource,/1,102\.50/);
-assert.match(extraSource,/February 28 to March 1 in 2024 spans two calendar days/);
+assert.match(extraSource,/28 February 2024 to 1 March 2024 there are two elapsed Gregorian calendar days/);
 const hubSource=fs2.readFileSync(require("node:path").join(__dirname,"..","content_v13.py"),"utf8");
 for(const phrase of ["PKR 4,500","PKR 3,600","net operating profit","advertised APY","8 + 3 × 4 = 20","1/2 + 1/3","25.4 millimetres"]){assert.ok(hubSource.includes(phrase),"Missing useful hub guidance: "+phrase);}
 console.log("AdSense content usefulness regression: PASS");
