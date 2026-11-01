@@ -14,8 +14,8 @@ math = page("math")
 
 for phrase in (
     "How is profit margin calculated?",
-    "40% gross margin",
-    "25% operating margin",
+    "gross margin is 40% of sales",
+    "operating margin is 25% of sales",
     "Does the EMI estimate include lender fees?",
     "fixed nominal annual rate",
     "Does the compound interest estimate include deposits or taxes?",
