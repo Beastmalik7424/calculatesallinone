@@ -19,6 +19,9 @@ const male = calculateMaintenanceCalories({
 assert.equal(male.restingKcalPerDay, 1648.75);
 assert.equal(male.maintenanceKcalPerDay, 1978.5);
 assert.equal(formatKcal(1648.75), "1,648.8");
+assert.equal(formatKcal(1648.7499999999986), "1,648.8", "Binary conversion noise must not flip an exact half-tenth display boundary");
+assert.equal(formatKcal(1648.74), "1,648.7", "Values below the rounding boundary must remain below it");
+assert.equal(formatKcal(1648.75), "1,648.8");
 assert.equal(formatKcal(1648.7499999999998), "1,648.8", "Imperial conversion floating-point drift must not change display rounding");
 assert.equal(formatKcal(1648.74), "1,648.7", "Values below the rounding boundary must remain below it");
 
