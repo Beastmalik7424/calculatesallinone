@@ -25,8 +25,8 @@ CASES = {
         "A total of 3,725 seconds equals 1 hour, 2 minutes and 5 seconds.",
     ],
     "years-to-days-calculator": [
-        "12 x 365 = 4,380 days.",
-        "12 x 365.2425 = 4,382.91 days.",
+        "For 13 years, the simple result is 4,745 days, while the Gregorian-average result is 4,748.1525 days.",
+        "For 29 years, the simple conversion is 29 x 365 = 10,585 days.",
         "1,009 days is 2.76254817 years",
     ],
 }

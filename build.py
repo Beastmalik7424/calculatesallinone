@@ -895,7 +895,6 @@ TOOLS.extend([
     }
 ])
 EXTRA.update({
-    "years-to-days-calculator": {"faq": [], "quick": "Days equal years multiplied by 365 for the simple method, or by 365.2425 for the Gregorian average. Example: 12 x 365 = 4,380 days by the simple method, or 12 x 365.2425 = 4,382.91 days by the Gregorian average."},
     "query-calculator": {"faq": [], "quick": "Each question is converted in steps using fixed factors. Example: 2 weeks to hours = 2 x 7 x 24 = 336 hours."},
 })
 
