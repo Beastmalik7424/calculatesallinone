@@ -882,32 +882,35 @@ TOOLS.extend([
     {
         "slug": "query-calculator", "category": "time",
         "name": "Query Calculator", "app": "UtilitiesApplication",
-        "description": "Ask a simple question in English or Roman Urdu about converting years, days, weeks, hours or minutes with clear supported units.",
-        "h1": "Query Calculator for Time Conversions",
-        "lead": "Ask a time conversion question such as 80 years mein kitne din hote hain? Supports exact birth-date age in days and conversions between years, days, weeks, hours, minutes and seconds.",
+        "description": "Ask supported questions in English, Roman Urdu, Urdu, Hindi, Arabic, Spanish or French about time conversions, months, birth dates and simple arithmetic.",
+        "h1": "Query Calculator for Time, Dates and Math",
+        "lead": "Ask a supported question such as 115 months in years and days, a DOB like 29-07-1984, Pakistan independence date, or 80 years mein kitne din. The calculator explains assumptions and refuses unsupported questions.",
         "ui": (
             '<form id="query-time-form" class="space-y-4" novalidate>'
             '<label class="@L@" for="qt-question">Your question</label>'
             '<input class="@I@" id="qt-question" type="text" maxlength="160" value="Ager birth date 29-07-1984 ho to age kitne days hogi?" required>'
-            '<p class="text-sm">Uses 365 days per year. Try: 2 weeks in hours, 3 days to minutes, 80 years mein kitne din.</p>'
+            '<p class="text-sm">Try: 115 months in years and days, DOB 29-07-1984 months and days, Pakistan independence date, or 2 weeks in hours. Exact month-to-day totals need a start date.</p>'
             '<button class="@B@" type="submit">Calculate Answer</button></form>'
             '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a question and tap Calculate Answer. If no result appears, refresh this page.</div>'
         ),
         "guide": [
-            ("How it works", ["The question parser recognizes one nonnegative number, a supported source unit and a supported target unit. It calculates using fixed time conversion factors and never guesses unsupported questions."]),
-            ("Examples", ["80 years to days = 29,200 days. 2 weeks to hours = 336 hours. 3 days to minutes = 4,320 minutes."]),
-            ("Limits", ["The parser supports time conversions and exact Gregorian birth-date-to-today calculations, not arbitrary arithmetic. Time conversion questions use 365 days per year."]),
-            ("Supported question patterns", ["Enter one numeric amount followed by a supported time unit and a target unit. For example, 2 weeks in hours, 3 days to minutes, and 80 years mein kitne din hote hain are supported. The parser recognizes year, years, day, days, din, week, weeks, hour, hours, minute, minutes, second and seconds, plus a few Roman Urdu alternatives. It does not use artificial intelligence or guess the meaning of unfamiliar terms. If a question is unclear, it asks for a simpler time conversion instead of giving a potentially misleading number."]),
-            ("Understanding answers", ["A year is treated as exactly 365 days in this calculator. A week is seven days, a day is 24 hours, an hour is 60 minutes and a minute is 60 seconds. This makes results repeatable and straightforward to check independently. Leap years and daylight-saving transitions are not inferred from a sentence. For a birth-date question, exact elapsed days are calculated through today using Gregorian calendar dates. Time-unit questions are not intended for legal deadlines, payroll or astronomy. For a different year convention, open the Years to Days Calculator and choose the Gregorian average method."])
+            ("How it works", ["The parser runs locally in your browser. It recognizes supported time-unit conversions, month-to-year and average month-to-day conversions, exact Gregorian birth-date ages, simple everyday arithmetic, and one verified Pakistan Independence Day date lookup. It does not send your question to a server or guess at unsupported questions."]),
+            ("Examples", ["80 years to days = 29,200 days using the 365-day method. 2 weeks to hours = 336 hours. 115 months = 9 years and 7 months, or about 3,500.24 average days. A DOB such as 29-07-1984 returns elapsed Gregorian age as of today. Pakistan independence date returns 14 August 1947."]),
+            ("Limits", ["Month-to-year conversion uses 12 months per year. Month-to-day results use the Gregorian average of 365.2425 days per year, or 30.436875 days per month; exact calendar days require a start date. Birth-date ages use exact Gregorian calendar dates. Everyday arithmetic is limited to clearly worded addition and subtraction, not full expression parsing."]),
+            ("Supported question patterns", ["Ask one number with two time units, a month amount with years and days, a date of birth in DD-MM-YYYY format, or a simple everyday addition/subtraction question. Examples include 115 months in years and days, 29-07-1984 DOB age in days, Pakistan independence date, 2 weeks in hours, and Roman Urdu questions. Defined unit and arithmetic terms are supported in English, Roman Urdu, Urdu, Hindi, Arabic, Spanish and French. Unrecognized or ambiguous wording is not guessed."]),
+            ("Understanding answers", ["Year-to-day questions use a 365-day year for a simple repeatable estimate. Month-to-year questions use 12 months per year. Month-to-day questions use an average Gregorian month and are labelled approximate because calendar months have different lengths. Birth-date questions calculate exact elapsed days and completed calendar years, months and days through today. The everyday arithmetic parser follows clear addition and subtraction wording and is not a substitute for the Standard Calculator for complex expressions."])
         ],
-        "faq": [("Can I ask in Roman Urdu?", "Yes, simple patterns such as 80 years mein kitne din hote hain are supported."),
-                ("Can I ask any mathematical question?", "No. This version supports time-unit conversion questions only.")],
-        "sources": "Fixed conversion factors: 1 day = 24 hours, 1 hour = 60 minutes, 1 minute = 60 seconds; simple year = 365 days."
+        "faq": [("Can I convert months to years and days?", "Yes. 12 months make one year, so 115 months is 9 years and 7 months. The day total is about 3,500.24 using the Gregorian average of 30.436875 days per month; exact calendar days require a start date."),
+                ("What is Pakistan's Independence Day?", "14 August 1947. The National Assembly of Pakistan records the transfer of power on 14 August 1947."),
+                ("Can I calculate age from a birth date?", "Yes. Enter a date such as 29-07-1984. The result shows elapsed Gregorian days and calendar years, months and days as of today."),
+                ("Can I ask in Roman Urdu or other languages?", "Yes. Defined question patterns are supported in English, Roman Urdu, Urdu, Hindi, Arabic, Spanish and French. The parser asks for simpler wording if a pattern is not recognized."),
+                ("Does it answer any question?", "No. It supports time conversions, month conversions, birth-date calculations, simple everyday arithmetic and the Pakistan Independence Day date lookup. It is not a general search engine or an AI assistant.")],
+        "sources": "Fixed conversions: 1 day = 24 hours, 1 hour = 60 minutes, 1 minute = 60 seconds; 12 months per year; Gregorian mean year = 365.2425 days. Pakistan date: National Assembly of Pakistan, Parliamentary History, https://na.gov.pk/en/content.php?id=75."
     }
 ])
 EXTRA.update({
     "years-to-days-calculator": {"faq": [], "quick": ""},
-    "query-calculator": {"faq": [], "quick": "Each question is converted in steps using fixed factors. Example: 2 weeks to hours = 2 x 7 x 24 = 336 hours."},
+    "query-calculator": {"faq": [], "quick": "Month conversions use 12 months per year and an average Gregorian month of 30.436875 days. Example: 115 months = 9 years and 7 months, about 3,500.24 average days; exact calendar days need a start date."},
 })
 
 for _t in TOOLS:
