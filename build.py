@@ -1128,7 +1128,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
             {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer",
              "name": "Muhammad Fayyaz Adeel", "alternateName": ["Malik Adeel Bhatti"],
              "description": "Maintainer of the CalculatesAll online calculator project.",
-             "url": SITE_URL + "/about/",
+             "url": SITE_URL + "/about/", "sameAs": ["https://github.com/Beastmalik7424"],
              "affiliation": {"@id": SITE_URL + "/#organization"}},
         ]
         for entity in shared_entities:
@@ -1755,7 +1755,7 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
         body += (
             '<section aria-labelledby="about-maintainer" class="mt-8">'
             '<h2 id="about-maintainer" class="' + H2 + '">Who maintains CalculatesAll?</h2>'
-            '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel, also known as Malik Adeel Bhatti. The maintainer looks after the calculator pages, site updates and reproducible correction reports. This identifies the person responsible for the project; it does not claim a regulated professional qualification or independent expert review.</p>'
+            '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel, also known as Malik Adeel Bhatti. The maintainer looks after the calculator pages, site updates and reproducible correction reports. See the <a class="' + LINK + '" href="https://github.com/Beastmalik7424" rel="noopener noreferrer">public GitHub profile</a> and <a class="' + LINK + '" href="https://github.com/Beastmalik7424/calculatesallinone" rel="noopener noreferrer">source repository</a>. This identifies project responsibility; it does not claim a regulated professional qualification or independent expert review.</p>'
             '</section>'
             '<section aria-labelledby="about-tools" class="mt-8">'
             '<h2 id="about-tools" class="' + H2 + '">What calculators and tools are available?</h2>'
@@ -1900,7 +1900,7 @@ def home_app_page(lang):
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas and browser-based tools."
         h1 = "Free Online Standard Calculator"
-        lead = "Fast, free, and private. Tap the buttons or use your keyboard to calculate."
+        lead = "CalculatesAll offers free browser calculators, including the Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up."
         more_h = "More free tools"
     trust = ""
     for i, label in enumerate(TRUST[lang]):
@@ -1929,7 +1929,7 @@ def home_app_page(lang):
     side_title = "Designed for quick answers" if not urdu else "فوری جواب کے لیے آسان ڈیزائن"
     side_desc = "Clear buttons, readable results, and useful everyday tools in one place." if not urdu else "آسان بٹن، واضح نتائج اور روزمرہ کے مفید ٹولز ایک جگہ۔"
     calc_title = "Standard Calculator" if not urdu else "معیاری کیلکولیٹر"
-    tool_intro = "Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
+    tool_intro = 'Choose a calculator, or browse the <a class="text-sky-800 dark:text-sky-300 underline" href="/money/">Money and Business</a> and <a class="text-sky-800 dark:text-sky-300 underline" href="/math/">Math and Converters</a> hubs.' if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
     free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
     hero_ui = CALC_UI
     if urdu:
