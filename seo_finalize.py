@@ -116,6 +116,14 @@ def normalize_meta(raw, path, lang):
     title = html.unescape(title_match.group(1).strip())
     title_overrides = {
         "/about/": "About CalculatesAll | Project, Methods & Privacy",
+        "/zakat-calculator/": "Zakat Calculator: Nisab Check & 2.5% Zakat | CalculatesAll",
+        "/query-calculator/": "Query Calculator: Ask Time Questions | CalculatesAll",
+        "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
+        "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
+        "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
+        "/date-calculator/": "Days Between Dates Calculator | CalculatesAll",
+        "/money/": "Money Calculators: EMI, Zakat, Profit | CalculatesAll",
+        "/math/": "Math Calculators and Unit Converters | CalculatesAll",
         "/contact/": "Contact CalculatesAll | Help and Feedback",
         "/health/": "Health Calculators and BMI Guide | CalculatesAll",
         "/terms/": "Terms of Use | CalculatesAll Free Tools",
