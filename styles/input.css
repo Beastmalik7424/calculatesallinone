@@ -1917,3 +1917,16 @@ header nav[aria-label="Main"] > div { min-width: 0; }
     line-height: 1.05 !important;
   }
 }
+
+/* Final narrow-phone spacing correction. Only the heading-to-card gap changes. */
+@media (max-width: 600px) {
+  #main .ca-home-header {
+    margin-bottom: 0 !important;
+  }
+  #main .ca-home-header h1 {
+    line-height: 1 !important;
+  }
+  #main .ca-home-layout {
+    gap: .1rem !important;
+  }
+}
