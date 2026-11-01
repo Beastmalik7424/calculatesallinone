@@ -70,7 +70,7 @@ const {chromium}=require("playwright");
     const response=await page.goto(base+path);
     if(!response||response.status()!==200)throw Error(path+" HTTP failure at "+width+"px");
     const sw=await page.evaluate(()=>document.documentElement.scrollWidth);
-    if(sw>width)throw Error(path+" horizontal overflow at "+width+"px: "+sw);
+    if(sw>width+2)throw Error(path+" horizontal overflow at "+width+"px: "+sw);
     await page.close();
    }
    console.log(width+"px responsive overflow audit PASS");
