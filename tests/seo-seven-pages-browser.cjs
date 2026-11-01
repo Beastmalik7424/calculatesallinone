@@ -141,17 +141,15 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
         emiErrors.forEach(error => console.log("  EMI " + viewport.width + "px " + error));
         failures.push("EMI " + viewport.width + "px: browser console/page errors detected");
       }
-      console.log("/emi-calculator/ layout/navigation passed (" + viewport.width + "px, All Tools visible, no console/page errors)");
+      console.log("/emi-calculator/ layout/navigation passed (" + viewport.width + "px, calculator carousel visible, no console/page errors)");
       if (viewport.width === 390) {
-        const allToolsNavigation = emiPage.waitForURL(url => {
-          const target = new URL(url);
-          return target.pathname === "/" && target.hash === "#all-tools";
-        }, { waitUntil: "domcontentloaded", timeout: 10000 });
-        await allToolsLink.click({ noWaitAfter: true });
-        await allToolsNavigation;
-        assert.equal(new URL(emiPage.url()).pathname, "/", "All Tools link must return to the homepage");
-        assert.equal(new URL(emiPage.url()).hash, "#all-tools", "All Tools link must jump to the homepage tools section");
-        assert.equal(await emiPage.locator("#all-tools").isVisible(), true, "All Tools anchor target must be visible after navigation");
+        const tasbihShortcut = calculatorCarousel.locator('[data-tool-shortcut="tasbih-counter"]').first();
+        assert.equal(await tasbihShortcut.isVisible(), true, "Tasbih Counter shortcut must be visible/selectable in the moving carousel");
+        const tasbihNavigation = emiPage.waitForURL(url => new URL(url).pathname === "/tasbih-counter/", { waitUntil: "domcontentloaded", timeout: 10000 });
+        await tasbihShortcut.click({ noWaitAfter: true });
+        await tasbihNavigation;
+        assert.equal(new URL(emiPage.url()).pathname, "/tasbih-counter/", "Selecting Tasbih Counter must open its calculator page");
+        assert.equal(await emiPage.locator("#t-tap").isVisible(), true, "Tasbih Count one button must remain visible after selecting it");
       }
       await emiPage.close();
     }
