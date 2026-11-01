@@ -33,6 +33,7 @@ const { chromium } = require("playwright");
       assert.equal(await page.getByLabel("Weight unit").count(), 1);
 
       const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight }));
+      console.log("Calorie calculator first-screen geometry", viewport.width, layout);
       assert.equal(layout.overflow, false, "No horizontal overflow at " + viewport.width + "px");
       assert.ok(layout.buttonBottom <= layout.viewportHeight, "Calculate action must be visible in first viewport at " + viewport.width + "px");
       await page.locator("#cal-age").fill("30");
