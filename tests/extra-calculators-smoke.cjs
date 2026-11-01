@@ -50,8 +50,8 @@ console.log("Extra calculator button visibility CSS regression: PASS");
 // Content and calculator capability must agree, and the money/math hubs must give actionable examples.
 const fs2=require("node:fs");
 const extraSource=fs2.readFileSync(require("node:path").join(__dirname,"..","extra_calculator_pages.py"),"utf8");
-assert.match(extraSource,/what percentage the part represents of another/);
-assert.match(extraSource,/Calculate a percentage of a number or find what percentage one amount is of another/);
+assert.match(extraSource,/Work out X% of a number, what percent one number is of another, or the percentage change between two values/);
+assert.match(extraSource,/Percentage change = \(new value minus old value\) divided by old value, multiplied by 100/);
 assert.match(extraSource,/18% of PKR 2,500/);
 assert.match(extraSource,/1,102\.50/);
 assert.match(extraSource,/28 February 2024 to 1 March 2024 is 2 days/);
