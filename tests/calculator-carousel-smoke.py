@@ -8,7 +8,7 @@ ENGLISH_TOOLS = {
     "standard-calculator", "tasbih-counter", "stopwatch",
     "years-to-days-calculator", "query-calculator", "emi-calculator",
     "percentage-calculator", "fraction-calculator",
-    "compound-interest-calculator", "date-calculator",
+    "compound-interest-calculator", "date-calculator", "calorie-calculator",
 }
 
 
@@ -74,6 +74,7 @@ urdu_found = set(re.findall(r'data-tool-shortcut="([^"]+)"', urdu_home_group))
 assert urdu_found == ENGLISH_TOOLS, "Urdu carousel must show all 16 calculators, including tools without Urdu pages"
 assert 'href="/years-to-days-calculator/"' in urdu_home_group, "Untranslated Urdu tool destinations must safely fall back to their existing English pages"
 assert "سال سے دن کیلکولیٹر" in urdu_home_group, "Urdu carousel must still show the Urdu calculator name"
+assert "بالغ افراد کا کیلوری کیلکولیٹر" in urdu_home_group, "Urdu carousel must include the adult calorie calculator"
 
 urdu = output_for("/ur/tasbih-counter/")
 urdu_group = primary_group(urdu, "/ur/tasbih-counter/")
@@ -88,11 +89,14 @@ assert 'id="t-tap"' in tasbih, "Tasbih Count one action must remain in generated
 css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 assert "@keyframes ca-calculator-marquee" in css, "Calculator shortcuts must auto-slide"
 assert ".ca-calculator-carousel:focus-within" in css, "Keyboard focus must pause the moving carousel"
-assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
+assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must be in the upper header row before the full-width tools slide"
+    assert "ca-site-nav-topline" in markup, "Header must separate the top controls from the full-width tools slide"
+    assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
     "Reduced-motion users must get a non-animated, manually scrollable carousel"
 )
 assert "#t-tap" in css and "min-height:48px" in css, (
     "Tasbih Count one button must retain a visible, accessible touch target"
 )
 
-print("Calculator carousel, active links, reduced-motion support and Tasbih action smoke tests PASS")
+assert ".ca-calculator-carousel" in css and "width: 100%" in css, "Tools slide must span the full available header row"
+print("Calculator carousel, all 17 tools, header layout, reduced-motion support and Tasbih action smoke tests PASS")
