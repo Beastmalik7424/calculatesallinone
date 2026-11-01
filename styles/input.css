@@ -1614,7 +1614,7 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
     min-width: 0 !important;
     font-size: .95rem !important;
   }
-  body:has(#main .ca-home-calculator) header nav[aria-label="Main"] > div {
+  body:has(#main .ca-home-calculator) header nav:has(.ca-site-nav-topline) > div {
     min-width: 0 !important;
     gap: .2rem !important;
   }
@@ -1733,17 +1733,17 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
 
 /* Short-phone first-screen fit for the two compact standalone calculators. */
 @media (max-width: 360px) and (max-height: 640px) {
-  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] {
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav:has(.ca-site-nav-topline) {
     flex-wrap: wrap !important;
     gap: .25rem !important;
     padding-block: .2rem !important;
   }
-  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] > a {
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav:has(.ca-site-nav-topline) > a {
     min-height: 36px !important;
     font-size: .95rem !important;
     white-space: nowrap !important;
   }
-  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] > div {
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav:has(.ca-site-nav-topline) > div {
     gap: .2rem !important;
   }
   #main:has(#extra-calculator-form.ca-compact-calculator-form) {
@@ -1783,7 +1783,7 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
 }
 
 /* Shared calculator shortcut carousel: fits inside the existing header row. */
-header nav[aria-label="Main"] > div { min-width: 0; }
+header nav:has(.ca-site-nav-topline) > div { min-width: 0; }
 .ca-calculator-carousel {
   flex: 1 1 180px;
   min-width: 88px;
@@ -1851,21 +1851,21 @@ header nav[aria-label="Main"] > div { min-width: 0; }
   to { transform: translateX(-50%); }
 }
 @media (max-width: 420px) {
-  header nav[aria-label="Main"] {
+  header nav:has(.ca-site-nav-topline) {
     gap: .35rem !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
   }
-  header nav[aria-label="Main"] > a {
+  header nav:has(.ca-site-nav-topline) > a {
     gap: .25rem !important;
     font-size: 1rem !important;
   }
-  header nav[aria-label="Main"] > div {
+  header nav:has(.ca-site-nav-topline) > div {
     min-width: 0 !important;
     flex: 1 1 auto;
     gap: .35rem !important;
   }
-  header nav[aria-label="Main"] #theme-toggle {
+  header nav:has(.ca-site-nav-topline) #theme-toggle {
     padding: .35rem .45rem !important;
     font-size: .72rem !important;
   }
@@ -2004,7 +2004,7 @@ header nav[aria-label="Main"] > div { min-width: 0; }
 
 /* Header refinement: theme control stays at upper-left, while the tools slide
    occupies its own full-width row on every page and viewport. */
-header nav[aria-label="Main"] {
+header nav:has(.ca-site-nav-topline) {
   width: 100% !important;
   max-width: 80rem !important;
   display: flex !important;
@@ -2013,7 +2013,7 @@ header nav[aria-label="Main"] {
   justify-content: flex-start !important;
   gap: .5rem !important;
 }
-header nav[aria-label="Main"] .ca-site-nav-topline {
+header nav:has(.ca-site-nav-topline) .ca-site-nav-topline {
   display: flex !important;
   flex: 0 0 auto !important;
   width: 100% !important;
@@ -2023,7 +2023,7 @@ header nav[aria-label="Main"] .ca-site-nav-topline {
   gap: .75rem !important;
   direction: ltr !important;
 }
-header nav[aria-label="Main"] .ca-calculator-carousel {
+header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
   display: block !important;
   flex: 0 0 auto !important;
   width: 100% !important;
@@ -2033,19 +2033,19 @@ header nav[aria-label="Main"] .ca-calculator-carousel {
   min-height: 44px !important;
 }
 @media (max-width: 420px) {
-  header nav[aria-label="Main"] {
+  header nav:has(.ca-site-nav-topline) {
     padding: .4rem .6rem !important;
     gap: .4rem !important;
   }
-  header nav[aria-label="Main"] .ca-site-nav-topline {
+  header nav:has(.ca-site-nav-topline) .ca-site-nav-topline {
     gap: .5rem !important;
   }
-  header nav[aria-label="Main"] #theme-toggle {
+  header nav:has(.ca-site-nav-topline) #theme-toggle {
     min-height: 40px !important;
     padding: .3rem .55rem !important;
     font-size: .78rem !important;
   }
-  header nav[aria-label="Main"] .ca-calculator-carousel {
+  header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
     width: 100% !important;
     max-width: none !important;
     min-width: 0 !important;
