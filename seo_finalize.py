@@ -154,7 +154,7 @@ def normalize_meta(raw, path, lang):
     "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",
     "/stopwatch/": "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app.",
     "/years-to-days-calculator/": "Convert years to days or days to years with 365-day, Gregorian-average or exact calendar-date methods. Also derive weeks, hours and minutes.",
-    "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
+    "/worship/": "Use a browser-based tasbih counter for dhikr with 33, 99, 100 or custom targets. Count, phrase and target are stored locally when browser storage is available.",
     "/zakat-calculator/": "Calculate 2.5 percent Zakat on net wealth, check the silver Nisab threshold and lunar-year condition. Confirm personal rulings with a qualified scholar."
 }
     urdu_description_overrides = {
