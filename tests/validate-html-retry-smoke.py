@@ -68,6 +68,15 @@ def test_primary_service_failure_falls_back_to_alternate_checker():
     assert attempts[-1].startswith("https://html5.validator.nu/"), attempts
 
 
+def test_retry_after_is_bounded():
+    error = urllib.error.HTTPError(
+        MODULE.ENDPOINT, 429, "Too Many Requests",
+        {"Retry-After": "999"}, io.BytesIO(b"rate limited")
+    )
+    assert MODULE.retry_delay(error, 0) == MODULE.MAX_RETRY_AFTER_SECONDS
+    assert MODULE.MAX_RETRY_AFTER_SECONDS == 30
+
+
 def test_non_retryable_http_error_fails_without_waiting():
     sleeps = []
 
@@ -92,5 +101,6 @@ def test_non_retryable_http_error_fails_without_waiting():
 if __name__ == "__main__":
     test_429_respects_retry_after_and_recovers()
     test_primary_service_failure_falls_back_to_alternate_checker()
+    test_retry_after_is_bounded()
     test_non_retryable_http_error_fails_without_waiting()
     print("Nu HTML Checker retry regression: PASS")
