@@ -1729,3 +1729,55 @@ header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
     line-height: 1.2;
   }
 }
+
+
+/* Short-phone first-screen fit for the two compact standalone calculators. */
+@media (max-width: 360px) and (max-height: 640px) {
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] {
+    flex-wrap: nowrap !important;
+    gap: .25rem !important;
+    padding-block: .2rem !important;
+  }
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] > a {
+    min-height: 36px !important;
+    font-size: .95rem !important;
+    white-space: nowrap !important;
+  }
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] > div {
+    gap: .2rem !important;
+  }
+  #main:has(#extra-calculator-form.ca-compact-calculator-form) {
+    padding-top: .15rem !important;
+  }
+  #main:has(#extra-calculator-form.ca-compact-calculator-form) > nav[aria-label="Breadcrumb"] {
+    margin-bottom: .1rem !important;
+    font-size: .68rem !important;
+    line-height: 1.05 !important;
+  }
+  #main:has(#extra-calculator-form.ca-compact-calculator-form) > section:first-of-type {
+    padding: .45rem !important;
+  }
+  #main:has(#extra-calculator-form.ca-compact-calculator-form) > section:first-of-type h1 {
+    font-size: 1.12rem !important;
+    line-height: 1.05 !important;
+    margin-bottom: .1rem !important;
+  }
+  #main:has(#extra-calculator-form.ca-compact-calculator-form) > section:first-of-type > p {
+    font-size: .74rem !important;
+    line-height: 1.12 !important;
+    margin-top: .1rem !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+  }
+  #extra-calculator-form.ca-compact-calculator-form {
+    gap: .2rem !important;
+    row-gap: .2rem !important;
+    margin-top: .2rem !important;
+  }
+  #extra-calculator-form.ca-compact-calculator-form > div > label {
+    font-size: .72rem !important;
+    line-height: 1.05 !important;
+  }
+}
