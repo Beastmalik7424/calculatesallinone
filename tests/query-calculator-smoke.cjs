@@ -36,16 +36,16 @@ listeners["form:submit"]({preventDefault(){}});
 assert.match(result.textContent,/15,429|15429/, "29 July 1984 to 26 October 2026 must be 15,429 days");
 assert.match(result.textContent,/42 years, 2 months, 27 days/, "DOB should report calendar years, months and days");
 const monthCases = [
- ["115 months in years and days",/9 years and 7 months.*3,500\\.24 days/],
- ["115 mahine in years and days",/9 years and 7 months.*3,500\\.24 days/],
- ["115 مہینے سال اور دن",/9 years and 7 months.*3,500\\.24 days/],
- ["115 महीने साल और दिन",/9 years and 7 months.*3,500\\.24 days/],
- ["115 meses en años y días",/9 years and 7 months.*3,500\\.24 days/],
- ["115 mois en années et jours",/9 years and 7 months.*3,500\\.24 days/],
- ["115 شهر سنوات وأيام",/9 years and 7 months.*3,500\\.24 days/],
- ["115 months in days",/3,500\\.24 days.*average/],
+ ["115 months in years and days",/9 years and 7 months.*3,500\.24 days/],
+ ["115 mahine in years and days",/9 years and 7 months.*3,500\.24 days/],
+ ["115 مہینے سال اور دن",/9 years and 7 months.*3,500\.24 days/],
+ ["115 महीने साल और दिन",/9 years and 7 months.*3,500\.24 days/],
+ ["115 meses en años y días",/9 years and 7 months.*3,500\.24 days/],
+ ["115 mois en années et jours",/9 years and 7 months.*3,500\.24 days/],
+ ["115 شهر سنوات وأيام",/9 years and 7 months.*3,500\.24 days/],
+ ["115 months in days",/3,500\.24 days.*average/],
  ["115 months in years",/9 years and 7 months/],
- ["2 months in days",/60\\.87 days.*average/]
+ ["2 months in days",/60\.87 days.*average/]
 ];
 for (const [q, expected] of monthCases) {
  input.value = q;
