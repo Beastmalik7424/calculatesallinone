@@ -1685,3 +1685,31 @@ header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
 #main #tasbih-app #t-tap{order:4!important}
 #main #tasbih-app #t-tap+.grid{order:5!important}
 #main #tasbih-app>p:not(#t-progress):not(#t-storage-note){order:6!important}
+
+/* Fit the four-field compound-interest form on short 320px screens without shrinking controls below 40px. */
+@media (max-width: 360px) {
+  body:has(#extra-calculator-form[data-calculator="compound"]) #main { padding-top: .2rem !important; }
+  #main:has(#extra-calculator-form[data-calculator="compound"]) > nav[aria-label="Breadcrumb"] {
+    margin-bottom: .2rem !important; font-size: .72rem !important; line-height: 1.1 !important;
+  }
+  #main:has(#extra-calculator-form[data-calculator="compound"]) > section:first-of-type { padding: .6rem !important; }
+  #main:has(#extra-calculator-form[data-calculator="compound"]) > section:first-of-type h1 {
+    font-size: 1.35rem !important; line-height: 1.12 !important; margin-bottom: .1rem !important;
+  }
+  #main:has(#extra-calculator-form[data-calculator="compound"]) > section:first-of-type > p {
+    font-size: .8rem !important; line-height: 1.2 !important; margin-top: .25rem !important;
+  }
+  #main:has(#extra-calculator-form[data-calculator="compound"]) #extra-calculator-form {
+    gap: .3rem !important; margin-top: .35rem !important;
+  }
+  #main:has(#extra-calculator-form[data-calculator="compound"]) #extra-calculator-form label {
+    font-size: .78rem !important; line-height: 1.1 !important;
+  }
+  #main:has(#extra-calculator-form[data-calculator="compound"]) #extra-calculator-form input,
+  #main:has(#extra-calculator-form[data-calculator="compound"]) #extra-calculator-form select {
+    min-height: 40px !important; height: 40px !important; padding: .3rem !important; font-size: .9rem !important;
+  }
+  #main:has(#extra-calculator-form[data-calculator="compound"]) #extra-calculator-form button {
+    min-height: 44px !important; padding: .4rem !important;
+  }
+}
