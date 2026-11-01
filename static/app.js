@@ -1679,13 +1679,9 @@
       }
       // Month conversions use 12 months per year. Day estimates use the
       // Gregorian mean month (365.2425 / 12); exact days require a start date.
-      var monthNumbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
-      var monthTokens = question.match(/[a-z]+/g) || []
-      var monthUnits = monthTokens.filter(function (word) { return !!aliases[word] })
-      if (monthNumbers.length === 1 && monthUnits.length === 3 &&
-          monthUnits[0] === "month" && monthUnits.indexOf("year") !== -1 &&
-          monthUnits.indexOf("day") !== -1) {
-        var monthValue = timeConversionNumber(monthNumbers[0])
+      var monthAndYearsDays = question.match(/(?:^|\\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\\s+months?\\b.*\\byears?\\b.*\\bdays?\\b/)
+      if (monthAndYearsDays) {
+        var monthValue = timeConversionNumber(monthAndYearsDays[1])
         if (monthValue === null) {
           say("qt-result", "Enter a nonnegative number of months up to 1,000,000.")
           return
