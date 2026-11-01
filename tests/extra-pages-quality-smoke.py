@@ -63,6 +63,7 @@ for slug, spec in CASES.items():
     assert '<meta name="robots" content="index, follow">' in source, f"Unexpected indexability: {slug}"
     assert f'href="{spec["category"]}"' in source, f"Missing category breadcrumb: {slug}"
     assert 'id="extra-calculator-form"' in source and ">Calculate</button>" in source, f"Missing calculator form: {slug}"
+    assert "Maintained by" in source and "Muhammad Fayyaz Adeel" in source and 'href="/about/"' in source, f"Missing honest maintainer byline: {slug}"
     assert source.count("<details") >= 4, f"Expected four useful FAQs: {slug}"
     assert source.count("<h2") >= 7, f"Missing explanatory sections: {slug}"
     for phrase in spec["phrases"]:
@@ -71,6 +72,7 @@ for slug, spec in CASES.items():
     schemas = [json.loads(item) for item in scripts]
     types = {schema.get("@type") for schema in schemas}
     assert "WebApplication" in types, f"Missing WebApplication schema: {slug}"
+    assert any(schema.get("@type") == "WebApplication" and schema.get("author", {}).get("@id") == "https://calculateallinone/#maintainer" and schema.get("publisher", {}).get("@id") == "https://calculateallinone/#organization" for schema in schemas), f"Missing truthful author/publisher entity links: {slug}"
     assert "BreadcrumbList" in types, f"Missing breadcrumb schema: {slug}"
     expected_domain = {
         "percentage-calculator": "openstax.org",
