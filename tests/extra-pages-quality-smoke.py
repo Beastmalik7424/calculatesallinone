@@ -65,6 +65,9 @@ for slug, spec in CASES.items():
     assert 'id="extra-calculator-form"' in source and ">Calculate</button>" in source, f"Missing calculator form: {slug}"
     assert "Maintained by" in source and "Muhammad Fayyaz Adeel" in source and 'href="/about/"' in source, f"Missing honest maintainer byline: {slug}"
     assert "representative results and invalid inputs are covered by automated tests" in source and "not an independent professional review" in source, f"Missing accurate verification disclosure: {slug}"
+    if slug in ("fraction-calculator", "compound-interest-calculator"):
+        assert source.index('id="extra-calculator-form"') < source.index("Maintained by"), f"Compact form must precede trust notes: {slug}"
+        assert "grid-cols-2" in source, f"Missing compact two-column form: {slug}"
     assert "Report this calculator" in source and 'href="/contact/"' in source, f"Missing calculator-specific feedback path: {slug}"
     assert source.count("<details") >= 4, f"Expected four useful FAQs: {slug}"
     assert source.count("<h2") >= 7, f"Missing explanatory sections: {slug}"
