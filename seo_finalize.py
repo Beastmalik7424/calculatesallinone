@@ -125,7 +125,7 @@ def normalize_meta(raw, path, lang):
         "/compound-interest-calculator/": "Compound Interest Calculator | CalculatesAll",
         "/date-calculator/": "Days Between Dates Calculator | CalculatesAll",
         "/query-calculator/": "Query Calculator: Time & Date Questions | CalculatesAll",
-        "/years-to-days-calculator/": "Years to Days Calculator | CalculatesAll",
+        "/years-to-days-calculator/": "Years to Days & Days to Years Calculator",
         "/zakat-calculator/": "Zakat Calculator: 2.5% on Net Wealth | CalculatesAll",
         "/terms/": "Terms of Use | CalculatesAll Free Tools",
         "/time/": "Date and Time Calculators | CalculatesAll",
