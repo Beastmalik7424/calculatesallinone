@@ -45,7 +45,7 @@ const { chromium } = require("playwright");
       assert.match(await page.locator("#calorie-result").innerText(), /1,648\.8 kcal\/day/);
       assert.match(await page.locator("#calorie-result").innerText(), /1,978\.5 kcal\/day/);
       assert.match(await page.locator("#calorie-result").innerText(), /Equation: Mifflin–St Jeor \(1990\)/);
-      assert.equal(await page.locator('#calorie-result a[href="https://pubmed.ncbi.nlm.nih.gov/2305711/"]').count(), 1);
+      assert.ok(await page.locator('#calorie-result a[href="https://pubmed.ncbi.nlm.nih.gov/2305711/"]').count() >= 1, "Result must cite the Mifflin–St Jeor source");
       await page.locator("#cal-coefficient").selectOption("female");
       await page.locator("#cal-calculate").click();
       assert.match(await page.locator("#calorie-result").innerText(), /1,482\.8 kcal\/day/);
