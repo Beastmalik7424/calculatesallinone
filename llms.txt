@@ -1,22 +1,73 @@
 # CalculatesAll
 
-CalculatesAll provides free browser-based calculators and utility tools. Calculator inputs are processed in the user's browser. Results are estimates where the page states assumptions or limitations.
+CalculatesAll is a free collection of browser-based calculators and everyday utility tools. Calculator inputs are processed in the browser. Results depend on the inputs, units, formulas and limitations stated on each page.
 
-## Main pages
+This index helps automated systems discover the site's pages. It is not a replacement for the individual calculator explanations or their cited sources.
 
-- Homepage: https://calculateallinone.vercel.app/
-- EMI and loan repayment calculator: https://calculateallinone.vercel.app/emi-calculator/
-- Zakat calculator: https://calculateallinone.vercel.app/zakat-calculator/
-- Adult BMI calculator: https://calculateallinone.vercel.app/bmi-calculator/
-- Discount calculator: https://calculateallinone.vercel.app/discount-calculator/
-- Profit and loss calculator: https://calculateallinone.vercel.app/profit-loss-calculator/
-- Age calculator: https://calculateallinone.vercel.app/age-calculator/
-- Unit converter: https://calculateallinone.vercel.app/unit-converter/
-- Calculation methodology: https://calculateallinone.vercel.app/methodology/
-- About: https://calculateallinone.vercel.app/about/
-- Editorial policy: https://calculateallinone.vercel.app/editorial-policy/
-- Privacy policy: https://calculateallinone.vercel.app/privacy/
+## Main entry points
 
-## Usage notes
+- [Homepage](https://calculateallinone.vercel.app/): Overview of the available tools.
+- [About CalculatesAll](https://calculateallinone.vercel.app/about/): Maintainer, purpose, tools, methods, privacy and limitations.
+- [Calculation methodology](https://calculateallinone.vercel.app/methodology/): Formulas, conversion factors, worked examples and assumptions.
+- [Editorial policy](https://calculateallinone.vercel.app/editorial-policy/): How content is researched, checked, corrected and updated.
+- [Contact](https://calculateallinone.vercel.app/contact/): Report calculation, accessibility or translation issues.
+- [Privacy policy](https://calculateallinone.vercel.app/privacy/): Browser processing, technical data and advertising disclosures.
+- [Terms of use](https://calculateallinone.vercel.app/terms/): Scope and limitations of the tools.
+- [Advertising disclosure](https://calculateallinone.vercel.app/affiliate-disclosure/): Advertising and commercial relationship disclosure.
 
-The EMI calculator is a planning estimate and is not a bank offer or approval. Zakat calculations use the stated silver Nisab method and may not cover every scholarly view. BMI is a screening measure for adults, not a diagnosis. Read each tool's formula, assumptions, and limitations before relying on its result.
+## Calculator categories
+
+- [Money and Business](https://calculateallinone.vercel.app/money/): EMI, Zakat, profit and loss, discounts and compound interest, with worked examples and assumptions.
+- [Math and Converters](https://calculateallinone.vercel.app/math/): Standard and scientific arithmetic, percentages, fractions and unit conversion.
+- [Date and Time](https://calculateallinone.vercel.app/time/): Age, years-to-days, date difference and stopwatch tools.
+- [Health](https://calculateallinone.vercel.app/health/): Adult BMI screening information and limitations.
+- [Worship](https://calculateallinone.vercel.app/worship/): Tasbih and Zakat tools, with stated method and limitations.
+
+## Money calculators
+
+- [EMI Calculator](https://calculateallinone.vercel.app/emi-calculator/): Monthly instalment estimate, repayment schedule and prepayment scenarios. Not a bank offer or loan approval.
+- [Zakat Calculator](https://calculateallinone.vercel.app/zakat-calculator/): Arithmetic using the silver Nisab method stated on the page. Not a religious ruling for every school or circumstance.
+- [Profit and Loss Calculator](https://calculateallinone.vercel.app/profit-loss-calculator/): Business gross/net operating profit and product profit calculations.
+- [Discount Calculator](https://calculateallinone.vercel.app/discount-calculator/): Discount amount and reduced price.
+- [Compound Interest Calculator](https://calculateallinone.vercel.app/compound-interest-calculator/): Growth from a starting balance, nominal annual rate, duration and compounding frequency. Excludes recurring deposits, withdrawals, fees and tax unless stated otherwise.
+
+## Math and conversion calculators
+
+- [Standard Calculator](https://calculateallinone.vercel.app/standard-calculator/): Everyday arithmetic and scientific mode.
+- [Percentage Calculator](https://calculateallinone.vercel.app/percentage-calculator/): Percentage of a number, percentage share and percentage increase/decrease.
+- [Fraction Calculator](https://calculateallinone.vercel.app/fraction-calculator/): Add, subtract, multiply and divide fractions with simplified results.
+- [Unit Converter](https://calculateallinone.vercel.app/unit-converter/): Weight, length and temperature conversions with stated factors.
+
+## Date and time calculators
+
+- [Age Calculator](https://calculateallinone.vercel.app/age-calculator/): Age in years, months and days and total elapsed days.
+- [Years to Days Calculator](https://calculateallinone.vercel.app/years-to-days-calculator/): Convert years to days or days to years using simple 365-day, Gregorian-average or exact calendar-year methods.
+- [Date Difference Calculator](https://calculateallinone.vercel.app/date-calculator/): Elapsed Gregorian calendar days between two dates, including leap days.
+- [Stopwatch](https://calculateallinone.vercel.app/stopwatch/): Browser-based elapsed-time tool for everyday timing.
+
+## Other tools
+
+- [Query Calculator](https://calculateallinone.vercel.app/query-calculator/): Supported natural-language arithmetic and time-conversion questions. It does not answer arbitrary questions.
+- [Adult BMI Calculator](https://calculateallinone.vercel.app/bmi-calculator/): Adult BMI screening calculation. It is not a diagnosis.
+- [Tasbih Counter](https://calculateallinone.vercel.app/tasbih-counter/): Browser-based count, undo, reset and target controls.
+
+## Urdu tools
+
+- [Urdu Age Calculator](https://calculateallinone.vercel.app/ur/age-calculator/)
+- [Urdu BMI Calculator](https://calculateallinone.vercel.app/ur/bmi-calculator/)
+- [Urdu Discount Calculator](https://calculateallinone.vercel.app/ur/discount-calculator/)
+- [Urdu Profit and Loss Calculator](https://calculateallinone.vercel.app/ur/profit-loss-calculator/)
+- [Urdu Standard Calculator](https://calculateallinone.vercel.app/ur/standard-calculator/)
+- [Urdu Stopwatch](https://calculateallinone.vercel.app/ur/stopwatch/)
+- [Urdu Tasbih Counter](https://calculateallinone.vercel.app/ur/tasbih-counter/)
+- [Urdu Unit Converter](https://calculateallinone.vercel.app/ur/unit-converter/)
+- [Urdu Zakat Calculator](https://calculateallinone.vercel.app/ur/zakat-calculator/)
+
+## Usage and accuracy notes
+
+- Check the units, percentage basis, conversion factor and exclusions shown on the relevant page.
+- Money tools provide estimates, not tax, investment, lending or accounting advice.
+- Adult BMI is a screening measure, not a diagnosis.
+- Zakat output follows the method stated on its page and is not a religious ruling.
+- Date calculations use Gregorian calendar dates. Business days and public holidays are not inferred unless a page explicitly says so.
+- Read each page's worked examples, formula, assumptions, limitations and source references before relying on a result.

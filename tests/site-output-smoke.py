@@ -53,14 +53,17 @@ def output_for_url(url):
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
-for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "free browser-based calculators"):
+for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "tasbih calculator", "days to years calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
 assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
+assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
+assert "<h1>Free Online Standard Calculator</h1>" in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." in home_html, "Homepage should answer what the site offers and name core tools in its opening copy"
 assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
+assert "https://github.com/Beastmalik7424" in about_html and "source repository" in about_html, "About page should expose the verified public maintainer profile and source repository"
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
 about_main_match = re.search(r"<main\b[^>]*>(.*?)</main>", about_html, re.S)
@@ -74,7 +77,7 @@ about_headings = ["Who maintains CalculatesAll?", "What calculators and tools ar
 assert all(heading in about_html for heading in about_headings), "About page should have distinct, question-led sections that answer reader questions"
 assert "The Query Calculator accepts supported plain-language time-conversion questions" in about_html, "About page should describe the Query Calculator accurately and state its scope"
 assert about_html.index("Who maintains CalculatesAll?") < about_html.index("What calculators and tools are available?") < about_html.index("How are calculator methods and changes checked?") < about_html.index("What happens to calculator inputs?") < about_html.index("What are the limits of these tools?") < about_html.index("How can a calculation issue be reported?"), "About sections should follow a clear reader-first sequence"
-for href in ("/profit-loss-calculator/", "/discount-calculator/", "/emi-calculator/", "/age-calculator/", "/years-to-days-calculator/", "/query-calculator/", "/unit-converter/", "/bmi-calculator/", "/zakat-calculator/", "/methodology/", "/editorial-policy/", "/privacy/", "/contact/"):
+for href in ("/profit-loss-calculator/", "/discount-calculator/", "/emi-calculator/", "/age-calculator/", "/years-to-days-calculator/", "/query-calculator/", "/unit-converter/", "/bmi-calculator/", "/zakat-calculator/", "/methodology/", "/editorial-policy/", "/privacy/", "/contact/", "/money/", "/math/", "/time/", "/health/", "/worship/"):
     assert 'href="' + href + '"' in about_html, f"About page should link to the relevant site resource: {href}"
 for href in ("https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "https://www.nist.gov/pml/owm/si-units-length", "https://openstax.org/books/principles-finance/pages/5-1-the-income-statement", "https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"):
     assert 'href="' + href + '"' in about_html and 'rel="noopener noreferrer"' in about_html, f"About source links should be explicit and safe: {href}"
@@ -97,6 +100,7 @@ home_sites = [node for node in home_nodes if node.get("@type") == "WebSite" and 
 assert len(home_sites) == 1 and home_sites[0].get("@id") == SITE + "/#website", "Homepage must expose exactly one canonical WebSite entity"
 home_people = [node for node in home_nodes if node.get("@type") == "Person" and node.get("name") == "Muhammad Fayyaz Adeel"]
 assert len(home_people) == 1 and home_people[0].get("@id") == SITE + "/#maintainer", "Homepage must expose exactly one canonical maintainer entity"
+assert home_people[0].get("sameAs") == ["https://github.com/Beastmalik7424"], "Maintainer entity should link only to the verified public GitHub profile"
 assert "CalculatesAll is a free online calculator" in home_html, "Homepage should state its free online calculator purpose in visible content"
 about_nodes = jsonld_nodes(about_html)
 about_pages = [node for node in about_nodes if node.get("@type") == "AboutPage"]
@@ -142,13 +146,18 @@ urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days &amp; Days to Years Calculator</title>" in years_html, "Years-to-Days title should identify both conversion directions"
-assert 'name="description" content="Convert years to days or days to years using 365 or 365.2425 days per year. Exact mode counts leap days from a start date."' in years_html, "Years-to-Days meta description should explain both directions and exact-mode limits"
-assert "Days to years" in years_html and "1,009 days" in years_html, "Years-to-Days page should explain the reverse conversion example"
+assert 'name="description" content="Convert years to days or days to years with 365-day, Gregorian-average or exact calendar-date methods. Also derive weeks, hours and minutes."' in years_html, "Years-to-Days meta description should explain conversions and derived time units"
+assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 5 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
 assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"
 assert "How many days are in 20 years?" in years_html and "7,300" in years_html and "7,304.85" in years_html, "The Google Search Console 20-year query should have a checkable answer"
 assert "How many days are in 50 years?" in years_html and "18,250" in years_html and "18,262.125" in years_html, "The Google Search Console 50-year query should have a checkable answer"
+assert "How many hours and minutes are in 10 years?" in years_html and "87,600 hours" in years_html and "5,259,492 minutes" in years_html, "The exposed 10-year hours/minutes query should explain both year methods"
+assert "How do I convert days to years?" in years_html and "191.78 years" in years_html and "191.65 years" in years_html, "Reverse conversion guidance should include a checkable real search example"
+assert "How many years and days are in 115 months?" in years_html and "9 years and 7 months" in years_html and "3,500.24 days" in years_html, "The exposed 115-month query should explain its average-month assumption"
+assert "How many years and months are in 504 days?" in years_html and "1 year, 4 months and 17 days" in years_html, "The exposed 504-day query should explain its average-month assumption"
+assert all(value in years_html for value in ("1,460", "1,460.97", "4,015", "4,017.6675", "4,745", "4,748.1525")), "Quick reference table should include the exposed 11- and 13-year conversions"
 assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
@@ -664,6 +673,7 @@ assert "eval(" not in app_js and "new Function" not in app_js, "Dynamic code exe
 emi_html = (ROOT / "emi-calculator" / "index.html").read_text(encoding="utf-8")
 assert '<link rel="canonical" href="https://calculateallinone.vercel.app/emi-calculator/">' in emi_html, "EMI canonical must use the slash URL"
 assert '<a href="/">Browse all free calculators</a>' in emi_html, "EMI page must link back to the calculator hub"
+assert '<a href="/money/">Money and Business</a>' in emi_html, "EMI page must link to its Money category hub"
 for related in ("/zakat-calculator/", "/bmi-calculator/", "/discount-calculator/", "/profit-loss-calculator/", "/methodology/", "/about/"):
     assert 'href="' + related + '"' in emi_html, "EMI page is missing crawlable related link: " + related
 assert 'aria-label="Related calculators"' in emi_html, "EMI related links must be grouped in a labelled navigation region"
@@ -733,7 +743,7 @@ assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-m
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
 assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
 assert "<h1>Free Online Standard Calculator</h1>" in home_html, "Homepage H1 must identify the primary calculator"
-assert "Fast, free, and private. Tap the buttons or use your keyboard to calculate." in home_html, "Homepage opening paragraph must be concise and action-oriented"
+# The opening-copy requirement is covered by the core-tools summary assertion above.
 # The standard calculator landing page now explicitly describes its scientific mode.
 scientific_url = SITE + "/standard-calculator/"
 assert "Scientific" in titles[scientific_url], "Calculator page title must identify the scientific mode"

@@ -841,9 +841,9 @@ TOOLS.extend([
     {
         "slug": "years-to-days-calculator", "category": "time",
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
-        "description": "Convert years to days or days to years using a 365-day year, the Gregorian average, or exact calendar dates for years-to-days calculations.",
+        "description": "Convert years to days or days to years with 365-day, Gregorian-average or exact calendar-date methods. Also derive weeks, hours and minutes.",
         "h1": "Years to Days Calculator",
-        "lead": "Convert in either direction. Choose a 365-day or Gregorian-average year, or enter a start date for an exact leap-year-aware years-to-days result.",
+        "lead": "Convert in either direction and view derived weeks, hours, minutes and seconds. Choose a 365-day or Gregorian-average year, or enter a start date for an exact leap-year-aware years-to-days result.",
         "ui": (
             '<form id="years-days-form" class="space-y-3" novalidate>'
             '<div class="grid grid-cols-2 gap-3">'
@@ -871,11 +871,15 @@ TOOLS.extend([
         "faq": [("How many days are in 80 years?", "29,200 with the simple method, or 29,219.4 with the Gregorian-average method."),
                 ("Does this account for leap years?", "Yes in Exact calendar years mode, which uses a start date and counts actual February 29 dates. The average method only approximates leap-year frequency."),
                 ("Can I convert days to years?", "Yes. Select Days to years and choose a 365-day year or the 365.2425-day Gregorian average. Exact calendar mode is only available for converting whole years to days from a start date."),
-                ("How many years is 1,009 days?", "About 2.76 years using the Gregorian average of 365.2425 days per year. For an exact elapsed calendar age, use actual start and end dates because calendar years contain 365 or 366 days."),
+                ("How many years is 1,009 days?", "About 2.76 years, or roughly 2 years, 9 months and 5 days using an average Gregorian month of 30.436875 days. This is an estimate; exact calendar age requires actual start and end dates."),
+                ("How many years and months are in 504 days?", "About 1 year, 4 months and 17 days using an average Gregorian month of 30.436875 days. This is an estimate; exact calendar age requires actual start and end dates."),
                 ("How many days are in one year?", "A common year has 365 days and a leap year has 366. Averaged over the 400-year Gregorian cycle, one year is 365.2425 days."),
                 ("How many days are in 10 years?", "3,650 using the simple method or 3,652.425 using the Gregorian average. A real calendar span may contain two or three leap days depending on its start and end dates."),
                 ("How many days are in 20 years?", "7,300 with the simple 365-day method, or 7,304.85 with the Gregorian average. The exact calendar total depends on the start and end dates."),
                 ("How many days are in 50 years?", "18,250 with the simple 365-day method, or 18,262.125 with the Gregorian average. The exact calendar total depends on the start and end dates."),
+                ("How many hours and minutes are in 10 years?", "Using 365 days per year, 10 years are 87,600 hours or 5,256,000 minutes. Using the 365.2425-day Gregorian average, they are 87,658.2 hours or 5,259,492 minutes."),
+                ("How do I convert days to years?", "Divide the number of days by 365 or by 365.2425 for the Gregorian average. For example, 70,000 days is about 191.78 years or 191.65 years respectively. These are decimal-year estimates, not calendar ages."),
+                ("How many years and days are in 115 months?", "115 months is 9 years and 7 months. Using an average month of 30.436875 days, that is about 3,500.24 days. Exact elapsed days depend on the actual start date and calendar months. Use the Query Calculator for the month estimate."),
                 ("80 saal mein kitne din hote hain?", "29,200 using 365 days per year, or 29,219.4 using the Gregorian average of 365.2425 days per year. An exact calendar total depends on the start and end dates.")],
         "sources": "Gregorian mean year: 365.2425 days over the 400-year Gregorian calendar cycle."
     },
@@ -1124,7 +1128,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
             {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer",
              "name": "Muhammad Fayyaz Adeel", "alternateName": ["Malik Adeel Bhatti"],
              "description": "Maintainer of the CalculatesAll online calculator project.",
-             "url": SITE_URL + "/about/",
+             "url": SITE_URL + "/about/", "sameAs": ["https://github.com/Beastmalik7424"],
              "affiliation": {"@id": SITE_URL + "/#organization"}},
         ]
         for entity in shared_entities:
@@ -1337,8 +1341,11 @@ def years_to_days_reference_html():
         (1, "365", "365.2425"),
         (2, "730", "730.485"),
         (3, "1,095", "1,095.7275"),
+        (4, "1,460", "1,460.97"),
         (5, "1,825", "1,826.2125"),
         (10, "3,650", "3,652.425"),
+        (11, "4,015", "4,017.6675"),
+        (13, "4,745", "4,748.1525"),
         (20, "7,300", "7,304.85"),
         (50, "18,250", "18,262.125"),
         (80, "29,200", "29,219.4"),
@@ -1532,7 +1539,7 @@ def tool_page(t):
         "discount-calculator": [("percentage-calculator", "Percentage Calculator"), ("profit-loss-calculator", "Profit and Loss Calculator")],
         "standard-calculator": [("percentage-calculator", "Percentage Calculator"), ("fraction-calculator", "Fraction Calculator")],
         "age-calculator": [("date-calculator", "Date Difference Calculator"), ("years-to-days-calculator", "Years to Days Calculator")],
-        "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator")],
+        "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator"), ("query-calculator", "Query Calculator")],
         "query-calculator": [("years-to-days-calculator", "Years to Days Calculator"), ("age-calculator", "Age Calculator")],
     }
     related_items = related_map.get(t["slug"], [])
@@ -1679,7 +1686,7 @@ def category_page(c):
     for t in TOOLS:
         if t["category"] == c["slug"]:
             items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
-                      '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + t["slug"] + '">' + t["name"] + "</a>"
+                      '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + t["slug"] + '/">' + t["name"] + "</a>"
                       '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + t["description"] + "</p></li>")
     if c["slug"] == "money":
         items += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
@@ -1748,13 +1755,14 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
         body += (
             '<section aria-labelledby="about-maintainer" class="mt-8">'
             '<h2 id="about-maintainer" class="' + H2 + '">Who maintains CalculatesAll?</h2>'
-            '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel, also known as Malik Adeel Bhatti. The maintainer looks after the calculator pages, site updates and reproducible correction reports. This identifies the person responsible for the project; it does not claim a regulated professional qualification or independent expert review.</p>'
+            '<p class="' + P + '">CalculatesAll is maintained by Muhammad Fayyaz Adeel, also known as Malik Adeel Bhatti. The maintainer looks after the calculator pages, site updates and reproducible correction reports. See the <a class="' + LINK + '" href="https://github.com/Beastmalik7424" rel="noopener noreferrer">public GitHub profile</a> and <a class="' + LINK + '" href="https://github.com/Beastmalik7424/calculatesallinone" rel="noopener noreferrer">source repository</a>. This identifies project responsibility; it does not claim a regulated professional qualification or independent expert review.</p>'
             '</section>'
             '<section aria-labelledby="about-tools" class="mt-8">'
             '<h2 id="about-tools" class="' + H2 + '">What calculators and tools are available?</h2>'
-            '<p class="' + P + '">The money tools include the <a class="' + LINK + '" href="/profit-loss-calculator/">Profit and Loss Calculator</a>, <a class="' + LINK + '" href="/discount-calculator/">Discount Calculator</a>, <a class="' + LINK + '" href="/emi-calculator/">EMI Calculator</a> and <a class="' + LINK + '" href="/zakat-calculator/">Zakat Calculator</a>. Date and measurement tools include the <a class="' + LINK + '" href="/age-calculator/">Age Calculator</a>, <a class="' + LINK + '" href="/years-to-days-calculator/">Years to Days Calculator</a>, <a class="' + LINK + '" href="/query-calculator/">Query Calculator</a> and <a class="' + LINK + '" href="/unit-converter/">Unit Converter</a>.</p>'
+            '<p class="' + P + '">The money tools include the <a class="' + LINK + '" href="/profit-loss-calculator/">Profit and Loss Calculator</a>, <a class="' + LINK + '" href="/discount-calculator/">Discount Calculator</a>, <a class="' + LINK + '" href="/emi-calculator/">EMI Calculator</a>, <a class="' + LINK + '" href="/zakat-calculator/">Zakat Calculator</a> and <a class="' + LINK + '" href="/compound-interest-calculator/">Compound Interest Calculator</a>. Date and measurement tools include the <a class="' + LINK + '" href="/age-calculator/">Age Calculator</a>, <a class="' + LINK + '" href="/years-to-days-calculator/">Years to Days Calculator</a>, <a class="' + LINK + '" href="/date-calculator/">Date Difference Calculator</a>, <a class="' + LINK + '" href="/query-calculator/">Query Calculator</a> and <a class="' + LINK + '" href="/unit-converter/">Unit Converter</a>.</p>'
+            '<p class="' + P + '">Browse the <a class="' + LINK + '" href="/money/">Money and Business</a>, <a class="' + LINK + '" href="/math/">Math and Converters</a>, <a class="' + LINK + '" href="/time/">Date and Time</a>, <a class="' + LINK + '" href="/health/">Health</a> and <a class="' + LINK + '" href="/worship/">Worship and Daily Use</a> categories to find related tools and their stated scope.</p>'
             '<p class="' + P + '">The Query Calculator accepts supported plain-language time-conversion questions, such as asking how many days are in 80 years; it does not try to answer arbitrary questions.</p>'
-            '<p class="' + P + '">Everyday tools include the <a class="' + LINK + '" href="/standard-calculator/">Standard Calculator</a>, <a class="' + LINK + '" href="/bmi-calculator/">adult BMI calculator</a>, <a class="' + LINK + '" href="/tasbih-counter/">Tasbih Counter</a> and <a class="' + LINK + '" href="/stopwatch/">Stopwatch</a>.</p>'
+            '<p class="' + P + '">Math tools include the <a class="' + LINK + '" href="/percentage-calculator/">Percentage Calculator</a> and <a class="' + LINK + '" href="/fraction-calculator/">Fraction Calculator</a>. Everyday tools include the <a class="' + LINK + '" href="/standard-calculator/">Standard Calculator</a>, <a class="' + LINK + '" href="/bmi-calculator/">adult BMI calculator</a>, <a class="' + LINK + '" href="/tasbih-counter/">Tasbih Counter</a> and <a class="' + LINK + '" href="/stopwatch/">Stopwatch</a>.</p>'
             '</section>'
             '<section aria-labelledby="about-checks" class="mt-8">'
             '<h2 id="about-checks" class="' + H2 + '">How are calculator methods and changes checked?</h2>'
@@ -1798,7 +1806,7 @@ def home_page(lang="en"):
         for t in TOOLS:
             if t["slug"] in URDU:
                 cards += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
-                          '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/ur/' + t["slug"] + '">' + URDU[t["slug"]]["name"] + "</a>"
+                          '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/ur/' + t["slug"] + '/">' + URDU[t["slug"]]["name"] + "</a>"
                           '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + URDU[t["slug"]]["description"] + "</p></li>")
     else:
         path = "/"
@@ -1892,7 +1900,7 @@ def home_app_page(lang):
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas and browser-based tools."
         h1 = "Free Online Standard Calculator"
-        lead = "Fast, free, and private. Tap the buttons or use your keyboard to calculate."
+        lead = "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up."
         more_h = "More free tools"
     trust = ""
     for i, label in enumerate(TRUST[lang]):
@@ -1921,7 +1929,7 @@ def home_app_page(lang):
     side_title = "Designed for quick answers" if not urdu else "فوری جواب کے لیے آسان ڈیزائن"
     side_desc = "Clear buttons, readable results, and useful everyday tools in one place." if not urdu else "آسان بٹن، واضح نتائج اور روزمرہ کے مفید ٹولز ایک جگہ۔"
     calc_title = "Standard Calculator" if not urdu else "معیاری کیلکولیٹر"
-    tool_intro = "Choose a tool to get started." if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
+    tool_intro = 'Choose a calculator, or browse the <a class="text-sky-800 dark:text-sky-300 underline" href="/money/">Money and Business</a> and <a class="text-sky-800 dark:text-sky-300 underline" href="/math/">Math and Converters</a> hubs.' if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
     free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
     hero_ui = CALC_UI
     if urdu:

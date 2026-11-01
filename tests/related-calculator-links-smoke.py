@@ -6,7 +6,7 @@ checks = {
     "discount-calculator": ["percentage-calculator", "profit-loss-calculator"],
     "standard-calculator": ["percentage-calculator", "fraction-calculator"],
     "age-calculator": ["date-calculator", "years-to-days-calculator"],
-    "years-to-days-calculator": ["date-calculator", "age-calculator"],
+    "years-to-days-calculator": ["date-calculator", "age-calculator", "query-calculator"],
     "query-calculator": ["years-to-days-calculator", "age-calculator"],
 }
 for page, slugs in checks.items():
