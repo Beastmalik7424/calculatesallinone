@@ -10,10 +10,10 @@ def visible(slug):
     path = ROOT / slug / "index.html"
     assert path.is_file(), f"Missing generated /{slug}/ page"
     source = path.read_text(encoding="utf-8")
-    main = re.search(r"<main\\b[^>]*>(.*?)</main>", source, re.S)
+    main = re.search(r"<main\b[^>]*>(.*?)</main>", source, re.S)
     assert main, f"Missing main content on /{slug}/"
-    text = re.sub(r"(?is)<(script|style|nav)\\b.*?</\\1>", " ", main.group(1))
-    return re.sub(r"\\s+", " ", unescape(re.sub(r"<[^>]+>", " ", text))).strip()
+    text = re.sub(r"(?is)<(script|style|nav)\b.*?</\1>", " ", main.group(1))
+    return re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", " ", text))).strip()
 
 method = visible("methodology")
 for phrase in (
