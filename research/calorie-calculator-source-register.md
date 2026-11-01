@@ -15,7 +15,7 @@ Publication scope: English adult maintenance estimate only
 ## Application-defined assumptions
 
 | Identifier | Version | Multiplier | Display label | Source | Limitation |
-|---|---:|---|---|---|
+|---|---:|---:|---|---|---|
 | sedentary | 1.0 | 1.2 | Sedentary | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
 | light | 1.0 | 1.375 | Light activity | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
 | moderate | 1.0 | 1.55 | Moderate activity | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
