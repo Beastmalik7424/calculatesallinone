@@ -141,7 +141,9 @@ urdu_age_html = output_for_url(SITE + "/ur/age-calculator/").read_text(encoding=
 urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
-assert "<title>Years to Days Calculator | Exact and Average</title>" in years_html, "Years-to-Days title should describe exact and average methods"
+assert "<title>Years to Days &amp; Days to Years Calculator</title>" in years_html, "Years-to-Days title should identify both conversion directions"
+assert 'name="description" content="Convert years to days or days to years using 365 or 365.2425 days per year. Exact mode counts leap days from a start date."' in years_html, "Years-to-Days meta description should explain both directions and exact-mode limits"
+assert "Days to years" in years_html and "1,009 days" in years_html, "Years-to-Days page should explain the reverse conversion example"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
 assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"

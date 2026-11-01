@@ -1455,23 +1455,47 @@
   function initYearsDays () {
     var form = $("years-days-form")
     if (!form) return
+    var direction = $("yd-direction")
     var method = $("yd-method")
+    var calendarOption = $("yd-calendar-option")
+    var valueLabel = $("yd-value-label")
+    var submitButton = $("yd-submit")
     var dateInput = $("yd-start-date")
     var dateFields = $("yd-exact-fields")
     function setDateVisibility () {
-      var exact = method.value === "calendar"
+      var exact = direction.value === "years-to-days" && method.value === "calendar"
       dateFields.hidden = !exact
       dateInput.disabled = !exact
+    }
+    function setDirection () {
+      var reverse = direction.value === "days-to-years"
+      calendarOption.disabled = reverse
+      if (reverse && method.value === "calendar") method.value = "365.2425"
+      valueLabel.textContent = reverse ? "Number of days" : "Number of years"
+      submitButton.textContent = reverse ? "Convert Days" : "Convert Years"
+      setDateVisibility()
     }
     var today = new Date()
     dateInput.value = String(today.getFullYear()).padStart(4, "0") + "-" +
       String(today.getMonth() + 1).padStart(2, "0") + "-" +
       String(today.getDate()).padStart(2, "0")
+    direction.addEventListener("change", setDirection)
     method.addEventListener("change", setDateVisibility)
-    setDateVisibility()
+    setDirection()
     form.addEventListener("submit", function (event) {
       event.preventDefault()
       var value = timeConversionNumber($("yd-value").value)
+      if (direction.value === "days-to-years") {
+        var reverseFactor = Number(method.value)
+        if (value === null || (reverseFactor !== 365 && reverseFactor !== 365.2425)) {
+          say("yd-result", "Enter a number of days from 0 to 1,000,000 and choose a 365-day or Gregorian-average year.")
+          return
+        }
+        say("yd-result", timeConversionFormat(value) + " days = " +
+          timeConversionFormat(value / reverseFactor) + " years. Method: " +
+          reverseFactor + " days per year. This is a decimal-year estimate, not an exact calendar anniversary.")
+        return
+      }
       if (method.value === "calendar") {
         if (value === null || !Number.isSafeInteger(value)) {
           say("yd-result", "Enter a whole number of years from 0 to 1,000,000 for exact calendar calculation.")
