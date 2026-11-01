@@ -1760,14 +1760,18 @@
       var result = value * factors[source] / factors[target]
       if (source === "month" || target === "month") {
         var averageResult = Math.round(result * 100) / 100
-        say("qt-result", timeConversionFormat(value) + " " + source +
-          "(s) ≈ " + timeConversionFormat(averageResult) + " " + target +
-          "(s). Uses the Gregorian average of 365.2425 days per year (30.436875 days per month); exact calendar totals depend on the dates.")
+        var sourceLabel = source + (value === 1 ? "" : "s")
+        var targetLabel = target + (averageResult === 1 ? "" : "s")
+        say("qt-result", timeConversionFormat(value) + " " + sourceLabel +
+          " ≈ " + timeConversionFormat(averageResult) + " " + targetLabel +
+          ". Uses the Gregorian average of 365.2425 days per year (30.436875 days per month); exact calendar totals depend on the dates.")
         return
       }
-      say("qt-result", timeConversionFormat(value) + " " + source +
-        "(s) = " + timeConversionFormat(result) + " " + target +
-        "(s). Uses 365 days per year.")
+      var sourceLabel = source + (value === 1 ? "" : "s")
+      var targetLabel = target + (result === 1 ? "" : "s")
+      say("qt-result", timeConversionFormat(value) + " " + sourceLabel +
+        " = " + timeConversionFormat(result) + " " + targetLabel +
+        ". Uses 365 days per year.")
     }
     form.addEventListener("submit", calculateQuery)
     $("qt-question").addEventListener("change", calculateQuery)
