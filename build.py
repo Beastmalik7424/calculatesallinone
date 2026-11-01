@@ -1082,14 +1082,115 @@ def nav_items(lang="en"):
 
 
 
+
+CAROUSEL_TOOLS = (
+    ("zakat-calculator", "Zakat Calculator", "Zakat"),
+    ("bmi-calculator", "BMI Calculator", "BMI"),
+    ("profit-loss-calculator", "Profit and Loss Calculator", "Profit/Loss"),
+    ("discount-calculator", "Discount Calculator", "Discount"),
+    ("age-calculator", "Age Calculator", "Age"),
+    ("unit-converter", "Unit Converter", "Units"),
+    ("standard-calculator", "Standard and Scientific Calculator", "Standard"),
+    ("tasbih-counter", "Tasbih Counter", "Tasbih"),
+    ("stopwatch", "Online Stopwatch", "Stopwatch"),
+    ("years-to-days-calculator", "Years to Days Calculator", "Years→Days"),
+    ("query-calculator", "Query Calculator", "Query"),
+    ("emi-calculator", "EMI Calculator", "EMI"),
+    ("percentage-calculator", "Percentage Calculator", "Percent"),
+    ("fraction-calculator", "Fraction Calculator", "Fraction"),
+    ("compound-interest-calculator", "Compound Interest Calculator", "Compound"),
+    ("date-calculator", "Date Difference Calculator", "Date"),
+)
+
+CAROUSEL_TRANSLATIONS = {
+    "ur": {
+        "zakat-calculator": "زکوٰۃ کیلکولیٹر", "bmi-calculator": "بی ایم آئی کیلکولیٹر",
+        "profit-loss-calculator": "منافع اور نقصان کیلکولیٹر", "discount-calculator": "ڈسکاؤنٹ کیلکولیٹر",
+        "age-calculator": "عمر کیلکولیٹر", "unit-converter": "یونٹ کنورٹر",
+        "standard-calculator": "معیاری اور سائنسی کیلکولیٹر", "tasbih-counter": "تسبیح کاؤنٹر",
+        "stopwatch": "آن لائن اسٹاپ واچ", "years-to-days-calculator": "سال سے دن کیلکولیٹر",
+        "query-calculator": "کوئری کیلکولیٹر", "emi-calculator": "قسط کیلکولیٹر",
+        "percentage-calculator": "فیصد کیلکولیٹر", "fraction-calculator": "کسر کیلکولیٹر",
+        "compound-interest-calculator": "مرکب سود کیلکولیٹر", "date-calculator": "تاریخوں کا فرق کیلکولیٹر",
+    },
+    "ar": {
+        "years-to-days-calculator": "حاسبة تحويل السنوات إلى أيام", "query-calculator": "حاسبة الاستعلام",
+        "emi-calculator": "حاسبة الأقساط", "percentage-calculator": "حاسبة النسبة المئوية",
+        "fraction-calculator": "حاسبة الكسور", "compound-interest-calculator": "حاسبة الفائدة المركبة",
+        "date-calculator": "حاسبة الفرق بين التواريخ",
+    },
+    "hi": {
+        "years-to-days-calculator": "वर्ष से दिन कैलकुलेटर", "query-calculator": "क्वेरी कैलकुलेटर",
+        "emi-calculator": "ईएमआई कैलकुलेटर", "percentage-calculator": "प्रतिशत कैलकुलेटर",
+        "fraction-calculator": "भिन्न कैलकुलेटर", "compound-interest-calculator": "चक्रवृद्धि ब्याज कैलकुलेटर",
+        "date-calculator": "तिथि अंतर कैलकुलेटर",
+    },
+    "es": {
+        "years-to-days-calculator": "Calculadora de años a días", "query-calculator": "Calculadora de consultas",
+        "emi-calculator": "Calculadora de EMI", "percentage-calculator": "Calculadora de porcentajes",
+        "fraction-calculator": "Calculadora de fracciones", "compound-interest-calculator": "Calculadora de interés compuesto",
+        "date-calculator": "Calculadora de diferencia de fechas",
+    },
+    "fr": {
+        "years-to-days-calculator": "Calculatrice années en jours", "query-calculator": "Calculatrice de requêtes",
+        "emi-calculator": "Calculatrice EMI", "percentage-calculator": "Calculatrice de pourcentage",
+        "fraction-calculator": "Calculatrice de fractions", "compound-interest-calculator": "Calculatrice d’intérêts composés",
+        "date-calculator": "Calculatrice de différence de dates",
+    },
+}
+
+CAROUSEL_SHORT_UR = {
+    "zakat-calculator": "زکوٰۃ", "bmi-calculator": "BMI",
+    "profit-loss-calculator": "منافع", "discount-calculator": "ڈسکاؤنٹ",
+    "age-calculator": "عمر", "unit-converter": "اکائیاں",
+    "standard-calculator": "معیاری", "tasbih-counter": "تسبیح",
+    "stopwatch": "اسٹاپ واچ", "years-to-days-calculator": "سال→دن",
+    "query-calculator": "سوال", "emi-calculator": "EMI",
+}
+
+
+def calculator_carousel(lang="en", current_path=None):
+    s = shell_strings(lang)
+    groups = []
+    for group_name, duplicate in (("primary", False), ("duplicate", True)):
+        links = []
+        for slug, english_name, short_name in CAROUSEL_TOOLS:
+            if lang == "ur":
+                name = CAROUSEL_TRANSLATIONS["ur"][slug]
+                href = ("/ur/" if slug in URDU else "/") + slug + "/"
+            elif lang in UI:
+                name = UI[lang].get("tools", {}).get(slug) or CAROUSEL_TRANSLATIONS.get(lang, {}).get(slug) or english_name
+                href = "/" + slug + "/"
+            else:
+                name = english_name
+                href = "/" + slug + "/"
+            active = ' aria-current="page"' if not duplicate and current_path == href else ""
+            tabindex = ' tabindex="-1"' if duplicate else ""
+            links.append(
+                '<a class="ca-calculator-link" data-tool-shortcut="' + slug
+                + '" href="' + href + '" aria-label="' + html.escape(name, quote=True)
+                + '" title="' + html.escape(name, quote=True) + '"' + active + tabindex + '>'
+                + html.escape(name) + '</a>'
+            )
+        hidden = ' aria-hidden="true"' if duplicate else ""
+        groups.append(
+            '<div class="ca-calculator-group" data-tool-set="' + group_name + '"' + hidden + '>'
+            + "".join(links) + '</div>'
+        )
+    return (
+        '<div class="ca-calculator-carousel" role="region" aria-label="' + s["calculators"] + '">'
+        '<div class="ca-calculator-track">' + "".join(groups) + '</div></div>'
+    )
+
+
 LANG_LOCALE = {"en": "en_US", "ur": "ur_PK", "ar": "ar_AR", "hi": "hi_IN", "es": "es_ES", "fr": "fr_FR"}
 RTL_LANGS = ("ur", "ar")
 SHELL_EN = {"menu": "All tools", "skip": "Skip to content", "about": "About", "privacy": "Privacy", "contact": "Contact",
             "methodology": "Methodology", "editorial": "Editorial policy", "tag": "© CalculatesAll. Free tools that run in your browser.",
-            "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Advertising disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE", "discount": "Discount Calculator", "health_link": "Health"}
+            "theme": "Dark mode", "calculators": "Calculator shortcuts", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Advertising disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE", "discount": "Discount Calculator", "health_link": "Health"}
 SHELL_UR = {"menu": "تمام ٹولز", "skip": "مرکزی مواد پر جائیں", "about": "ہمارے بارے میں", "privacy": "رازداری", "contact": "رابطہ",
             "methodology": "طریقہ کار", "editorial": "ادارتی پالیسی", "tag": "© CalculatesAll۔ مفت ٹولز جو آپ کے براؤزر میں چلتے ہیں۔",
-            "theme": "ڈارک موڈ", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت", "discount": "ڈسکاؤنٹ کیلکولیٹر", "health_link": "صحت"}
+            "theme": "ڈارک موڈ", "calculators": "کیلکولیٹر منتخب کریں", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت", "discount": "ڈسکاؤنٹ کیلکولیٹر", "health_link": "صحت"}
 THEME_LABEL = {"ar": "الوضع الداكن", "hi": "डार्क मोड", "es": "Modo oscuro", "fr": "Mode sombre"}
 
 
@@ -1104,6 +1205,7 @@ def shell_strings(lang):
     merged["lang"] = {"ar": "اللغات", "hi": "भाषाएँ", "es": "Idiomas", "fr": "Langues"}[lang]
     merged["discount"] = UI[lang]["tools"]["discount-calculator"]
     merged["health_link"] = UI[lang]["cats"]["health"]
+    merged["calculators"] = {"ar": "اختصارات الحاسبات", "hi": "कैलकुलेटर शॉर्टकट", "es": "Accesos a calculadoras", "fr": "Raccourcis calculatrice"}[lang]
     return merged
 
 
@@ -1264,12 +1366,10 @@ def shell(main_html, lang="en", current_path=None):
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
         '<nav class="max-w-5xl mx-auto px-5 py-3 flex flex-wrap items-center justify-between gap-3" aria-label="' + s["main"] + '">'
         '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
-        '<div class="flex items-center gap-3">'
-        '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
-        '<details class="relative"><summary class="cursor-pointer text-base min-h-[44px] inline-flex items-center px-2">' + s["menu"] + '</summary>'
-        '<ul class="absolute ' + menu_position + ' mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-x-hidden break-words bg-white border border-stone-300 rounded-lg p-3 space-y-2 text-base shadow-lg z-10" style="max-width:calc(100vw - 2rem);overflow-wrap:anywhere;box-sizing:border-box">'
-        + nav_items(lang)
-        + '</ul></details></div></nav></header>\n'
+        '<div class="flex min-w-0 flex-1 items-center justify-end gap-2">'
+        '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px] shrink-0">' + s["theme"] + '</button>'
+        + calculator_carousel(lang, current_path)
+        + '</div></nav></header>\n'
         '<main id="main" class="' + main_classes + '">' + main_html + '</main>\n'
         '<footer class="mt-12 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-t border-stone-200 dark:border-stone-700">'
         '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'

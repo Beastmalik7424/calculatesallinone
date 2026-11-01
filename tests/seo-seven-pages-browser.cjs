@@ -123,9 +123,13 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       const emiResponse = await emiPage.goto(base + "/emi-calculator/", { waitUntil: "domcontentloaded", timeout: 30000 });
       assert.equal(emiResponse && emiResponse.status(), 200, "EMI page should return HTTP 200");
       const globalNav = emiPage.locator('nav.site-nav[aria-label="Main"]');
-      const allToolsLink = globalNav.getByRole("link", { name: "All Tools" });
+      const calculatorCarousel = globalNav.locator(".ca-calculator-carousel");
+      const emiShortcut = calculatorCarousel.locator('[data-tool-shortcut="emi-calculator"][aria-current="page"]');
+      const primaryShortcuts = calculatorCarousel.locator('[data-tool-set="primary"] [data-tool-shortcut]');
       assert.equal(await globalNav.isVisible(), true, "EMI page global navigation must remain visible");
-      assert.equal(await allToolsLink.isVisible(), true, "EMI page All Tools option must remain visible");
+      assert.equal(await calculatorCarousel.isVisible(), true, "EMI calculator shortcut carousel must remain visible");
+      assert.equal(await primaryShortcuts.count(), 16, "EMI carousel must expose all 16 calculator destinations");
+      assert.equal(await emiShortcut.isVisible(), true, "EMI calculator must be highlighted as the active tool");
       const emiMain = await emiPage.locator("main.emi-page-main").boundingBox();
       assert.ok(emiMain, "EMI main calculator column must exist");
       assert.ok(emiMain.width <= 961, "EMI calculator content must stay centered within the 960px desktop width cap");
@@ -137,17 +141,45 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
         emiErrors.forEach(error => console.log("  EMI " + viewport.width + "px " + error));
         failures.push("EMI " + viewport.width + "px: browser console/page errors detected");
       }
-      console.log("/emi-calculator/ layout/navigation passed (" + viewport.width + "px, All Tools visible, no console/page errors)");
+      console.log("/emi-calculator/ layout/navigation passed (" + viewport.width + "px, calculator carousel visible, no console/page errors)");
       if (viewport.width === 390) {
-        const allToolsNavigation = emiPage.waitForURL(url => {
-          const target = new URL(url);
-          return target.pathname === "/" && target.hash === "#all-tools";
-        }, { waitUntil: "domcontentloaded", timeout: 10000 });
-        await allToolsLink.click({ noWaitAfter: true });
-        await allToolsNavigation;
-        assert.equal(new URL(emiPage.url()).pathname, "/", "All Tools link must return to the homepage");
-        assert.equal(new URL(emiPage.url()).hash, "#all-tools", "All Tools link must jump to the homepage tools section");
-        assert.equal(await emiPage.locator("#all-tools").isVisible(), true, "All Tools anchor target must be visible after navigation");
+        const marquee = calculatorCarousel.locator(".ca-calculator-track");
+        // Verify real motion, not just the presence of an animation declaration.
+        await emiPage.mouse.move(viewport.width - 1, viewport.height - 1);
+        const initialMotion = await marquee.evaluate(el => ({
+          name: getComputedStyle(el).animationName,
+          state: getComputedStyle(el).animationPlayState,
+          transform: getComputedStyle(el).transform
+        }));
+        assert.equal(initialMotion.name, "ca-calculator-marquee", "calculator carousel must use its marquee animation");
+        assert.equal(initialMotion.state, "running", "calculator marquee must run when the pointer is outside the carousel");
+        await emiPage.waitForTimeout(500);
+        const advancedTransform = await marquee.evaluate(el => getComputedStyle(el).transform);
+        assert.notEqual(advancedTransform, initialMotion.transform, "calculator marquee must visibly advance over time");
+
+        const tasbihShortcut = calculatorCarousel.locator('[data-tool-set="primary"] [data-tool-shortcut="tasbih-counter"]');
+        assert.equal(await tasbihShortcut.isVisible(), true, "Tasbih Counter shortcut must exist in the primary carousel group");
+
+        // Hover must pause the marquee so a user can select a moving shortcut.
+        await calculatorCarousel.hover();
+        assert.equal(await marquee.evaluate(el => getComputedStyle(el).animationPlayState), "paused", "hovering the carousel must pause its movement");
+        await tasbihShortcut.evaluate(el => el.scrollIntoView({ block: "nearest", inline: "center" }));
+        await emiPage.waitForFunction(() => {
+          const carousel = document.querySelector('nav.site-nav[aria-label="Main"] .ca-calculator-carousel');
+          const link = carousel && carousel.querySelector('[data-tool-set="primary"] [data-tool-shortcut="tasbih-counter"]');
+          if (!carousel || !link) return false;
+          const clip = carousel.getBoundingClientRect();
+          const rect = link.getBoundingClientRect();
+          const visibleWidth = Math.min(clip.right, rect.right) - Math.max(clip.left, rect.left);
+          const visibleHeight = Math.min(clip.bottom, rect.bottom) - Math.max(clip.top, rect.top);
+          return visibleWidth >= Math.min(44, rect.width * 0.5) && visibleHeight >= Math.min(24, rect.height * 0.75);
+        }, null, { timeout: 10000 });
+
+        const tasbihNavigation = emiPage.waitForURL(url => new URL(url).pathname === "/tasbih-counter/", { waitUntil: "domcontentloaded", timeout: 10000 });
+        await tasbihShortcut.click({ timeout: 10000 });
+        await tasbihNavigation;
+        assert.equal(new URL(emiPage.url()).pathname, "/tasbih-counter/", "Selecting Tasbih Counter must open its calculator page");
+        assert.equal(await emiPage.locator("#t-tap").isVisible(), true, "Tasbih Count one button must remain visible after selecting it");
       }
       await emiPage.close();
     }

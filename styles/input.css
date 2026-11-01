@@ -1439,8 +1439,8 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
 #main .ca-tool-bmi-calculator #bmi-imperial{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
-/* Small screens: keep header controls on one line instead of wrapping "Dark mode" and "All tools". */
-header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
+/* Keep the shared header controls and calculator shortcut labels legible on small screens. */
+header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowrap; }
 @media (max-width: 420px) {
   header nav { padding-left: 12px !important; padding-right: 12px !important; gap: 8px !important; }
   header nav > a { font-size: 1.05rem !important; }
@@ -1779,5 +1779,161 @@ header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
   #extra-calculator-form.ca-compact-calculator-form > div > label {
     font-size: .72rem !important;
     line-height: 1.05 !important;
+  }
+}
+
+/* Shared calculator shortcut carousel: fits inside the existing header row. */
+header nav[aria-label="Main"] > div { min-width: 0; }
+.ca-calculator-carousel {
+  flex: 1 1 180px;
+  min-width: 88px;
+  max-width: 460px;
+  height: 44px;
+  min-height: 44px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: .8rem;
+  background: rgba(255,255,255,.86);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.ca-calculator-carousel::-webkit-scrollbar { display: none; }
+.ca-calculator-track {
+  display: flex;
+  width: max-content;
+  min-width: max-content;
+  height: 100%;
+  animation: ca-calculator-marquee 48s linear infinite;
+}
+.ca-calculator-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: .35rem;
+  padding: 0 .35rem;
+}
+.ca-calculator-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: .25rem .55rem;
+  border: 1px solid #cbd5e1;
+  border-radius: .65rem;
+  background: #fff;
+  color: #164e63 !important;
+  font-size: .78rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.ca-calculator-link:hover { background: #e0f2fe; }
+.ca-calculator-link[aria-current="page"] {
+  border-color: #0f766e;
+  background: #0f766e;
+  color: #fff !important;
+  box-shadow: 0 0 0 2px rgba(15,118,110,.18);
+}
+.ca-calculator-link:focus-visible {
+  outline: 3px solid #0369a1;
+  outline-offset: 1px;
+}
+.ca-calculator-carousel:hover .ca-calculator-track,
+.ca-calculator-carousel:focus-within .ca-calculator-track,
+.ca-calculator-carousel:active .ca-calculator-track {
+  animation-play-state: paused;
+}
+@keyframes ca-calculator-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (max-width: 420px) {
+  header nav[aria-label="Main"] {
+    gap: .35rem !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  header nav[aria-label="Main"] > a {
+    gap: .25rem !important;
+    font-size: 1rem !important;
+  }
+  header nav[aria-label="Main"] > div {
+    min-width: 0 !important;
+    flex: 1 1 auto;
+    gap: .35rem !important;
+  }
+  header nav[aria-label="Main"] #theme-toggle {
+    padding: .35rem .45rem !important;
+    font-size: .72rem !important;
+  }
+  .ca-calculator-carousel { min-width: 88px; max-width: none; flex: 1 1 88px; }
+  .ca-calculator-link { padding: .25rem .4rem; font-size: .72rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ca-calculator-track { animation: none !important; transform: none !important; }
+  .ca-calculator-group[data-tool-set="duplicate"] { display: none !important; }
+  .ca-calculator-carousel { scrollbar-width: thin; }
+}
+
+/* Tasbih action visibility guard. Preserve its existing order and dimensions. */
+#main .ca-tool-tasbih-counter #t-tap {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 1 !important;
+  width: 100% !important;
+}
+
+
+/* Compact only the mobile homepage title block. Keep the calculator card,
+   display, keypad grid, button sizes and internal spacing unchanged. */
+@media (max-width: 600px) {
+  .ca-home-header {
+    margin-bottom: .1rem !important;
+  }
+  .ca-home-header h1 {
+    margin-bottom: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1.05 !important;
+  }
+  .ca-home-layout {
+    gap: .25rem !important;
+  }
+}
+
+/* Higher-specificity override for the legacy compact-home rules on small phones. */
+@media (max-width: 600px) {
+  #main .ca-home-header {
+    margin-bottom: .1rem !important;
+  }
+  #main .ca-home-header h1 {
+    margin: 0 !important;
+    font-size: 1rem !important;
+    line-height: 1.05 !important;
+  }
+}
+
+/* Final narrow-phone spacing correction. Only the heading-to-card gap changes. */
+@media (max-width: 600px) {
+  #main .ca-home-header {
+    margin-bottom: 0 !important;
+  }
+  #main .ca-home-header h1 {
+    line-height: 1 !important;
+  }
+  #main .ca-home-layout {
+    gap: 0 !important;
+  }
+}
+
+/* Sub-pixel first-fold clearance only; keypad and calculator-card geometry stay intact. */
+@media (max-width: 600px) {
+  #main:has(.ca-home-wrap) {
+    padding-top: .2rem !important;
   }
 }

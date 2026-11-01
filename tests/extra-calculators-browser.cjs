@@ -107,9 +107,15 @@ const {chromium}=require("playwright");
    if(!response||response.status()!==200)throw Error("Tasbih page HTTP failure at "+width+"px");
    const order=await page.evaluate(()=>{
     const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {top:r.top,bottom:r.bottom};};
-    return {count:rect("#t-count"),tap:rect("#t-tap"),actions:rect("#t-tap + .grid"),settings:rect(".ca-tasbih-settings"),phrase:rect("#t-phrase"),target:rect("#t-target"),undo:rect("#t-undo"),reset:rect("#t-reset"),overflow:document.documentElement.scrollWidth>innerWidth+2};
+    const tap=document.querySelector("#t-tap");
+    const tapStyle=getComputedStyle(tap);
+    const carousel=document.querySelector(".ca-calculator-carousel");
+    const primary=carousel?.querySelector('[data-tool-set="primary"]');
+    return {count:rect("#t-count"),tap:rect("#t-tap"),tapDisplay:tapStyle.display,tapVisibility:tapStyle.visibility,tapOpacity:tapStyle.opacity,tapPointerEvents:tapStyle.pointerEvents,actions:rect("#t-tap + .grid"),settings:rect(".ca-tasbih-settings"),phrase:rect("#t-phrase"),target:rect("#t-target"),undo:rect("#t-undo"),reset:rect("#t-reset"),carouselLinks:primary?.querySelectorAll("[data-tool-shortcut]").length||0,activeHref:primary?.querySelector('a[aria-current="page"]')?.getAttribute("href"),overflow:document.documentElement.scrollWidth>innerWidth+2};
    });
    if(!(order.count.top<order.settings.top&&order.settings.top<order.tap.top&&order.tap.top<order.actions.top))throw Error("Tasbih count, phrase/target settings, tap and reset must follow the intended first-screen order at "+width+"px: "+JSON.stringify(order));
+   if(order.tap.bottom<=order.tap.top||order.tapDisplay==="none"||order.tapVisibility!=="visible"||Number(order.tapOpacity)===0||order.tapPointerEvents==="none")throw Error("Tasbih Count one button is not visibly clickable: "+JSON.stringify(order));
+   if(order.carouselLinks<8||order.activeHref!=="/tasbih-counter/")throw Error("Tasbih page carousel is incomplete or current tool is not active: "+JSON.stringify(order));
    if(order.settings.bottom>(width===390?844:768)||order.phrase.bottom>(width===390?844:768)||order.target.bottom>(width===390?844:768)||order.count.bottom>(width===390?844:768)||order.undo.bottom>(width===390?844:768)||order.reset.bottom>(width===390?844:768)||order.overflow)throw Error("Tasbih count, phrase/target and primary actions must fit the first viewport at "+width+"px: "+JSON.stringify(order));
    for(let i=0;i<33;i++)await page.locator("#t-tap").click();
    if((await page.locator("#t-count").innerText()).trim()!=="33")throw Error("Tasbih tap count should reach 33");
