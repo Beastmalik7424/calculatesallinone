@@ -895,6 +895,7 @@ TOOLS.extend([
     }
 ])
 EXTRA.update({
+    "years-to-days-calculator": {"faq": [], "quick": ""},
     "query-calculator": {"faq": [], "quick": "Each question is converted in steps using fixed factors. Example: 2 weeks to hours = 2 x 7 x 24 = 336 hours."},
 })
 
