@@ -1138,7 +1138,7 @@ def calculator_carousel(lang="en", current_path=None):
                 '<a class="ca-calculator-link" data-tool-shortcut="' + slug
                 + '" href="' + href + '" aria-label="' + html.escape(name, quote=True)
                 + '" title="' + html.escape(name, quote=True) + '"' + active + tabindex + '>'
-                + html.escape(short) + '</a>'
+                + html.escape(name) + '</a>'
             )
         hidden = ' aria-hidden="true"' if duplicate else ""
         groups.append(
