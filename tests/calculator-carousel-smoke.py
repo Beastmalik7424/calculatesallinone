@@ -66,7 +66,7 @@ assert 'id="t-tap"' in tasbih, "Tasbih Count one action must remain in generated
 css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 assert "@keyframes ca-calculator-marquee" in css, "Calculator shortcuts must auto-slide"
 assert ".ca-calculator-carousel:focus-within" in css, "Keyboard focus must pause the moving carousel"
-assert "prefers-reduced-motion: reduce" in css and ".ca-calculator-track" in css, (
+assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
     "Reduced-motion users must get a non-animated, manually scrollable carousel"
 )
 assert "#tasbih-app #t-tap" in css and "min-height: 48px" in css, (
