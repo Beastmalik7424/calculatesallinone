@@ -10,9 +10,17 @@
  function percentageChange(start,end){
   finite(start,end);
   if(start<=0)throw Error("The starting value must be greater than zero");
-  const scale=Math.max(Math.abs(start),Math.abs(end),1);
-  const base=start/scale;
-  const result=((end/scale-base)/base)*100;
+  const difference=end-start;
+  let result;
+  if(Number.isFinite(difference)){
+   const direct=(difference/start)*100;
+   if(Number.isFinite(direct))result=direct;
+  }
+  if(result===undefined){
+   const scale=Math.max(Math.abs(start),Math.abs(end),1);
+   const base=start/scale;
+   result=((end/scale-base)/base)*100;
+  }
   if(!Number.isFinite(result))throw Error("Result exceeds supported range");
   return result;
  }
