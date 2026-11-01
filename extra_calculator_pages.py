@@ -64,6 +64,7 @@ FAQS = {
     "percentage-calculator": [
         ("What is 25% of 200?", "50. Multiply 200 by 25 and divide by 100."),
         ("What percentage is 45 of 250?", "18%. Divide 45 by 250 and multiply by 100."),
+        ("What percentage is 30 out of 120?", "25%. Divide 30 by 120 and multiply by 100."),
         ("What is the percentage change from 80 to 100?", "A 25% increase. The change is 20, and 20 divided by the starting value 80 is 0.25."),
         ("Why does a 20% rise followed by a 20% fall not return to the starting amount?", "Starting from 100, a 20% rise gives 120. A 20% fall from 120 is 24, leaving 96."),
     ],
