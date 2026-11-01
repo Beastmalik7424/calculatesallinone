@@ -26,7 +26,7 @@ ALTERNATE_ENDPOINT = "https://html5.validator.nu/?out=json"
 PRIMARY_ATTEMPTS = 2
 ALTERNATE_ATTEMPTS = 2
 REQUEST_TIMEOUT_SECONDS = 20
-MAX_ATTEMPTS = 5
+TOTAL_ATTEMPTS = PRIMARY_ATTEMPTS + ALTERNATE_ATTEMPTS
 BASE_RETRY_SECONDS = 5
 MAX_RETRY_SECONDS = 20
 MAX_RETRY_AFTER_SECONDS = 30
@@ -103,10 +103,10 @@ def main():
         else:
             try:
                 result = fetch_validator_result(path)
-            except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, json.JSONDecodeError, RuntimeError) as exc:
                 print(
                     f"HTML VALIDATION ERROR {path}: validator request failed "
-                    f"after {MAX_ATTEMPTS} attempts: {exc}"
+                    f"after {TOTAL_ATTEMPTS} bounded attempts: {exc}"
                 )
                 failed = True
             else:
