@@ -1930,3 +1930,10 @@ header nav[aria-label="Main"] > div { min-width: 0; }
     gap: 0 !important;
   }
 }
+
+/* Sub-pixel first-fold clearance only; keypad and calculator-card geometry stay intact. */
+@media (max-width: 600px) {
+  #main:has(.ca-home-wrap) {
+    padding-top: .2rem !important;
+  }
+}
