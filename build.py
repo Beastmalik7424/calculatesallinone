@@ -1900,7 +1900,7 @@ def home_app_page(lang):
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas and browser-based tools."
         h1 = "Free Online Standard Calculator"
-        lead = "Fast, free, and private. Tap the buttons or use your keyboard to calculate."
+        lead = "CalculatesAll offers free browser-based calculators for math, money, time and daily tools. No sign-up."
         more_h = "More free tools"
     trust = ""
     for i, label in enumerate(TRUST[lang]):
