@@ -117,6 +117,7 @@ invalid({
 
 const html = fs.readFileSync(pagePath, "utf8");
 assert.match(html, /<html lang="en"/);
+assert.match(html, /<form id="calorie-form"/i, "Calculator controls must use a semantic HTML form element");
 assert.match(html, /<h1[^>]*>Adult Calorie Calculator<\/h1>/);
 assert.match(html, /Mifflin–St Jeor/);
 assert.match(html, /498 healthy adults/);
