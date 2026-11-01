@@ -56,6 +56,7 @@ function initialize(doc){
  function clear(){error.textContent="";result.hidden=true;result.replaceChildren();}
  function updateHeight(){
   var imp=unit.value==="ft-in";metric.hidden=imp;imperial.hidden=!imp;
+  metric.style.display=imp?"none":"block";imperial.style.display=imp?"grid":"none";
   heightLabel.textContent=imp?"Height (ft / in)":"Height (cm)";
   heightLabel.htmlFor=imp?"cal-height-ft":"cal-height-cm";
   cm.disabled=imp;ft.disabled=!imp;inch.disabled=!imp;clear();
