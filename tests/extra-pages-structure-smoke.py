@@ -59,7 +59,7 @@ PAGES = {
 
 def schemas_in(html):
     result = []
-    for raw in re.findall(r'<script type="application/ld\\+json">(.*?)</script>', html, re.S):
+    for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
         data = json.loads(raw)
         if isinstance(data, list):
             result.extend(data)
