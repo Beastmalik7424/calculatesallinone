@@ -743,11 +743,11 @@ assert money_list_match, "Money and Business hub must render its calculator list
 money_list_html = money_list_match.group(1)
 assert money_list_html.count('href="/emi-calculator/"') == 1, "Money and Business hub must contain exactly one EMI Calculator link"
 assert "EMI Calculator" in money_list_html, "Money and Business hub must visibly label the EMI Calculator"
-all_tools_match = re.search(r'<details[^>]*><summary[^>]*>All tools</summary>.*?<ul[^>]*>(.*?)</ul></details>', home_html, re.S)
-assert all_tools_match, "Homepage must render the expandable All tools menu"
+all_tools_match = re.search(r'<div class="ca-calculator-group" data-tool-set="primary">(.*?)</div>', home_html, re.S)
+assert all_tools_match, "Homepage must render the primary calculator carousel group"
 all_tools_html = all_tools_match.group(1)
-assert all_tools_html.count('href="/emi-calculator/"') == 1, "All tools menu must contain exactly one EMI Calculator link"
-assert "EMI Calculator" in all_tools_html, "All tools menu must visibly label the EMI Calculator"
+assert all_tools_html.count('href="/emi-calculator/"') == 1, "Calculator carousel must contain exactly one EMI Calculator link"
+assert "EMI Calculator" in all_tools_html, "Calculator carousel must visibly label the EMI Calculator"
 assert "<h2" in home_html and "What can you calculate with these free tools?" in home_html, "Homepage must include a clear, question-formatted explanatory heading"
 assert "Frequently asked questions: Are these calculators free, private, and reliable?" in home_html, "Homepage must include a clear FAQ section heading"
 assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage worked example must remain present"
