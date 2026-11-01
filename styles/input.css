@@ -1894,14 +1894,14 @@ header nav[aria-label="Main"] > div { min-width: 0; }
    display, keypad grid, button sizes and internal spacing unchanged. */
 @media (max-width: 600px) {
   .ca-home-header {
-    margin-bottom: .15rem !important;
+    margin-bottom: .1rem !important;
   }
   .ca-home-header h1 {
-    margin-bottom: .05rem !important;
+    margin-bottom: 0 !important;
     font-size: 1rem !important;
     line-height: 1.05 !important;
   }
   .ca-home-layout {
-    gap: .4rem !important;
+    gap: .25rem !important;
   }
 }
