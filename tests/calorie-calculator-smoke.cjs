@@ -65,6 +65,8 @@ const imperial = calculateMaintenanceCalories({
 });
 assert.ok(Math.abs(imperial.restingKcalPerDay - male.restingKcalPerDay) < 0.000001);
 assert.ok(Math.abs(imperial.maintenanceKcalPerDay - male.maintenanceKcalPerDay) < 0.000001);
+assert.equal(formatKcal(imperial.restingKcalPerDay), "1,648.8", "Actual imperial conversion noise must not change the REE display rounding");
+assert.equal(formatKcal(imperial.maintenanceKcalPerDay), "1,978.5", "Actual imperial conversion noise must not change maintenance display rounding");
 
 const age18 = calculateMaintenanceCalories({
   age: 18, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175,
