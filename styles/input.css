@@ -1677,11 +1677,11 @@ header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
 
 
 /* Final Tasbih first-screen order: show count and action buttons before optional settings. */
-#tasbih-app{display:flex!important;flex-direction:column!important;gap:.3rem!important}
-#tasbih-app #t-count{order:0!important}
-#tasbih-app #t-progress{order:1!important}
-#tasbih-app #t-storage-note{order:2!important}
-#tasbih-app #t-tap{order:3!important}
-#tasbih-app #t-tap+.grid{order:4!important}
-#tasbih-app>p:not(#t-progress):not(#t-storage-note){order:5!important}
-#tasbih-app .ca-tasbih-settings{order:6!important}
+#main #tasbih-app{display:flex!important;flex-direction:column!important;gap:.3rem!important}
+#main #tasbih-app #t-count{order:0!important}
+#main #tasbih-app #t-progress{order:1!important}
+#main #tasbih-app #t-storage-note{order:2!important}
+#main #tasbih-app #t-tap{order:3!important}
+#main #tasbih-app #t-tap+.grid{order:4!important}
+#main #tasbih-app>p:not(#t-progress):not(#t-storage-note){order:5!important}
+#main #tasbih-app .ca-tasbih-settings{order:6!important}
