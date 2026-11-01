@@ -2018,7 +2018,7 @@ def home_app_page(lang):
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for adult maintenance calories, EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas."
         h1 = "Free Online Standard Calculator"
-        lead = "Free browser calculators: adult calorie estimates, Tasbih Calculator, Days to Years and EMI. No sign-up."
+        lead = "Free browser calculators: adult calorie estimates, Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up."
         more_h = "More free tools"
     trust = ""
     for i, label in enumerate(TRUST[lang]):
