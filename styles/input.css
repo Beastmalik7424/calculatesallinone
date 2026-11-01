@@ -1605,12 +1605,12 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
 
 /* The 320x568 viewport is a short-phone edge case. Keep the homepage keypad usable above the fold. */
 @media (max-width: 340px) and (max-height: 640px) {
-  body:has(#main .ca-home-calculator) header nav[aria-label="Main"] {
+  body:has(#main .ca-home-calculator) header nav.ca-site-nav {
     flex-wrap: nowrap !important;
     gap: .25rem !important;
     padding: .3rem .4rem !important;
   }
-  body:has(#main .ca-home-calculator) header nav[aria-label="Main"] > a {
+  body:has(#main .ca-home-calculator) header nav.ca-site-nav > a {
     min-width: 0 !important;
     font-size: .95rem !important;
   }
@@ -2019,7 +2019,7 @@ header nav[aria-label="Main"] .ca-site-nav-topline {
   width: 100% !important;
   min-width: 0 !important;
   align-items: center !important;
-  justify-content: space-between !important;
+  justify-content: flex-end !important;
   gap: .75rem !important;
   direction: ltr !important;
 }
