@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression tests for transient Nu HTML Checker failures."""
+"""Regression tests for online Nu HTML Checker failover."""
 import importlib.util
 import io
 import urllib.error
@@ -25,82 +25,63 @@ class FakeResponse:
         return self.body
 
 
-def test_429_respects_retry_after_and_recovers():
-    attempts = []
-    sleeps = []
-
-    def opener(request, timeout):
-        attempts.append((request, timeout))
-        if len(attempts) == 1:
-            raise urllib.error.HTTPError(
-                request.full_url,
-                429,
-                "Too Many Requests",
-                {"Retry-After": "7"},
-                io.BytesIO(b"rate limited"),
-            )
-        return FakeResponse(b'{"messages":[]}')
-
-    result = MODULE.fetch_validator_result(SCRIPT, opener=opener, sleep_fn=sleeps.append)
-    assert result == {"messages": []}, result
-    assert len(attempts) == 2, len(attempts)
-    assert sleeps == [7.0], sleeps
+def unavailable(request, code):
+    return urllib.error.HTTPError(
+        request.full_url, code, "Service Unavailable", {}, io.BytesIO(b"unavailable")
+    )
 
 
-def test_primary_service_failure_falls_back_to_alternate_checker():
+def test_primary_rate_limit_falls_back_to_alternate():
     attempts = []
 
     def opener(request, timeout):
         attempts.append(request.full_url)
-        if request.full_url.startswith("https://validator.w3.org/nu/"):
+        if request.full_url.startswith(MODULE.ENDPOINT):
             raise urllib.error.HTTPError(
-                request.full_url,
-                503,
-                "Service Unavailable",
-                {"Retry-After": "1"},
-                io.BytesIO(b"primary checker unavailable"),
+                request.full_url, 429, "Too Many Requests",
+                {"Retry-After": "120"}, io.BytesIO(b"rate limited")
             )
         return FakeResponse(b'{"messages":[]}')
 
-    result = MODULE.fetch_validator_result(SCRIPT, opener=opener, sleep_fn=lambda _: None)
-    assert result == {"messages": []}, result
-    assert len(attempts) == 3, attempts
-    assert attempts[-1].startswith("https://html5.validator.nu/"), attempts
+    result = MODULE.fetch_validator_result(SCRIPT, opener=opener)
+    assert result == {"messages": []}
+    assert attempts == [MODULE.ENDPOINT, MODULE.ALTERNATE_ENDPOINT], attempts
 
 
-def test_retry_after_is_bounded():
-    error = urllib.error.HTTPError(
-        MODULE.ENDPOINT, 429, "Too Many Requests",
-        {"Retry-After": "999"}, io.BytesIO(b"rate limited")
-    )
-    assert MODULE.retry_delay(error, 0) == MODULE.MAX_RETRY_AFTER_SECONDS
-    assert MODULE.MAX_RETRY_AFTER_SECONDS == 30
-
-
-def test_non_retryable_http_error_fails_without_waiting():
-    sleeps = []
+def test_primary_and_alternate_outage_falls_back_to_third_checker():
+    attempts = []
 
     def opener(request, timeout):
+        attempts.append(request.full_url)
+        if request.full_url == MODULE.THIRD_ENDPOINT:
+            return FakeResponse(b'{"messages":[]}')
+        raise unavailable(request, 503)
+
+    result = MODULE.fetch_validator_result(SCRIPT, opener=opener)
+    assert result == {"messages": []}
+    assert attempts == list(MODULE.VALIDATOR_ENDPOINTS), attempts
+
+
+def test_non_retryable_http_error_fails_without_fallback():
+    attempts = []
+
+    def opener(request, timeout):
+        attempts.append(request.full_url)
         raise urllib.error.HTTPError(
-            request.full_url,
-            400,
-            "Bad Request",
-            {},
-            io.BytesIO(b"invalid request"),
+            request.full_url, 400, "Bad Request", {}, io.BytesIO(b"invalid request")
         )
 
     try:
-        MODULE.fetch_validator_result(SCRIPT, opener=opener, sleep_fn=sleeps.append)
+        MODULE.fetch_validator_result(SCRIPT, opener=opener)
     except urllib.error.HTTPError as exc:
         assert exc.code == 400, exc.code
     else:
-        raise AssertionError("HTTP 400 must not be retried or accepted")
-    assert sleeps == [], sleeps
+        raise AssertionError("HTTP 400 must fail without accepting a fallback result")
+    assert attempts == [MODULE.ENDPOINT], attempts
 
 
 if __name__ == "__main__":
-    test_429_respects_retry_after_and_recovers()
-    test_primary_service_failure_falls_back_to_alternate_checker()
-    test_retry_after_is_bounded()
-    test_non_retryable_http_error_fails_without_waiting()
-    print("Nu HTML Checker retry regression: PASS")
+    test_primary_rate_limit_falls_back_to_alternate()
+    test_primary_and_alternate_outage_falls_back_to_third_checker()
+    test_non_retryable_http_error_fails_without_fallback()
+    print("Nu HTML Checker online failover regression: PASS")
