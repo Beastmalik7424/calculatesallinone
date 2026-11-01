@@ -150,7 +150,7 @@ def normalize_meta(raw, path, lang):
     "/money/": "Estimate EMI, Zakat, discounts, profit and compound interest using stated formulas, examples and assumptions.",
     "/percentage-calculator/": "Calculate a percentage of a number, find what percent one value is of another, or measure percentage change with clear formulas.",
     "/query-calculator/": "Ask time and date questions in plain English or Roman Urdu, such as converting 2 weeks into hours or 80 years into days.",
-    "/years-to-days-calculator/": "Convert years into days, weeks, hours, minutes and seconds using a 365-day year or 365.2425-day Gregorian average.",
+    "/years-to-days-calculator/": "Convert years to days or days to years using 365 or 365.2425 days per year. Exact mode counts leap days from a start date.",
     "/affiliate-disclosure/": "Learn how CalculatesAll is funded, how advertisements are labelled, and how future affiliate links will be disclosed without influencing calculator results.",
     "/compound-interest-calculator/": "Estimate compound interest from your starting balance, annual rate, time and compounding frequency. Review the formula and see how growth accumulates.",
     "/contact/": "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review.",
