@@ -53,6 +53,29 @@ CATEGORY = {
     "date-calculator": ("/time/", "Date and Time"),
 }
 
+RELATED_LINKS = {
+    "percentage-calculator": [
+        ("/discount-calculator/", "Discount Calculator"),
+        ("/profit-loss-calculator/", "Profit and Loss Calculator"),
+        ("/fraction-calculator/", "Fraction Calculator"),
+    ],
+    "fraction-calculator": [
+        ("/percentage-calculator/", "Percentage Calculator"),
+        ("/standard-calculator/", "Standard & Scientific Calculator"),
+        ("/unit-converter/", "Unit Converter"),
+    ],
+    "compound-interest-calculator": [
+        ("/emi-calculator/", "EMI Calculator"),
+        ("/profit-loss-calculator/", "Profit and Loss Calculator"),
+        ("/discount-calculator/", "Discount Calculator"),
+    ],
+    "date-calculator": [
+        ("/age-calculator/", "Age Calculator"),
+        ("/years-to-days-calculator/", "Years to Days Calculator"),
+        ("/query-calculator/", "Query Calculator"),
+    ],
+}
+
 SECTION_HEADINGS = {
     "percentage-calculator": ["Worked percentage examples", "Discounts and tax", "Percentage increase and decrease", "Input limits and rounding", "Finding a percentage share", "How percentage change is measured"],
     "fraction-calculator": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero denominators", "Large numbers and decimal inputs", "Check the result", "Compare equivalent fractions"],
@@ -139,9 +162,8 @@ def build_extra_pages(head,shell,write):
             body+='<li><a class="text-sky-800 underline dark:text-sky-300" href="'+html.escape(source_url,quote=True)+'" target="_blank" rel="noopener noreferrer">'+html.escape(source_title)+'</a><p class="text-sm text-stone-700 dark:text-stone-300">'+html.escape(source_note)+'</p></li>'
         body+='</ul></section>'
         body+='<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">More free calculators</h2><ul>'
-        for other,other_title,*_ in PAGES:
-            if other!=slug:
-                body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="/'+other+'/">'+html.escape(other_title)+'</a></li>'
+        for related_path,related_title in RELATED_LINKS[slug]:
+            body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="'+related_path+'">'+html.escape(related_title)+'</a></li>'
         body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="'+category_path+'">All '+html.escape(category_name)+' tools</a></li></ul></nav>'
         breadcrumb_items=[
             {"@type":"ListItem","position":1,"name":"Home","item":site+"/"},
