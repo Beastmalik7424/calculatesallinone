@@ -7,10 +7,18 @@ const { chromium } = require("playwright");
   try {
     for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 1366, height: 768 }]) {
       const page = await browser.newPage({ viewport });
-      const errors = [], nonGetRequests = [];
+      const errors = [], nonGetRequests = [], measurementLeaks = [];
       page.on("pageerror", error => errors.push(error.message));
       page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
-      page.on("request", request => { if (request.method() !== "GET") nonGetRequests.push(request.method() + " " + request.url()); });
+      page.on("request", request => {
+        if (request.method() !== "GET") nonGetRequests.push(request.method() + " " + request.url());
+        const queryKeys = Array.from(new URL(request.url()).searchParams.keys());
+        const postData = request.postData() || "";
+        const sensitiveKeys = /(?:^|[?&,"'])(?:age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)["']?\s*[:=]/i;
+        if (queryKeys.some(key => /^(age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)$/i.test(key)) || sensitiveKeys.test(postData)) {
+          measurementLeaks.push(request.method() + " " + request.url());
+        }
+      });
       const response = await page.goto("http://127.0.0.1:4174/calorie-calculator/", { waitUntil: "domcontentloaded" });
       assert.equal(response && response.status(), 200);
       assert.equal(await page.locator("#calorie-form").isVisible(), true);
@@ -70,10 +78,13 @@ const { chromium } = require("playwright");
       assert.equal(await page.locator("#cal-age").evaluate(el => el === document.activeElement), true, "Reset should return focus to age");
       await page.waitForTimeout(100);
       assert.deepEqual(nonGetRequests, [], "Calculations must not send network requests");
-      const privacy = await page.evaluate(() => ({ query: location.search, hash: location.hash, keys: Object.keys(localStorage).filter(key => /calorie|weight|height|age/i.test(key)) }));
+      assert.deepEqual(measurementLeaks, [], "Measurements and calculated results must not appear in analytics or other request payloads");
+      const privacy = await page.evaluate(() => ({ query: location.search, hash: location.hash, keys: Object.keys(localStorage).filter(key => /calorie|weight|height|age/i.test(key)), sessionKeys: Object.keys(sessionStorage).filter(key => /calorie|weight|height|age/i.test(key)), cookie: document.cookie }));
       assert.equal(privacy.query, "");
       assert.equal(privacy.hash, "");
       assert.deepEqual(privacy.keys, []);
+      assert.deepEqual(privacy.sessionKeys, []);
+      assert.doesNotMatch(privacy.cookie, /calorie|weight|height|age/i);
       assert.deepEqual(errors, [], "No browser console or page errors at " + viewport.width + "px");
       console.log("Calorie calculator browser checks PASS at " + viewport.width + "x" + viewport.height);
       await page.close();
