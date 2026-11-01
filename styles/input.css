@@ -1439,8 +1439,8 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
 #main .ca-tool-bmi-calculator #bmi-imperial{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
-/* Small screens: keep header controls on one line instead of wrapping "Dark mode" and "All tools". */
-header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
+/* Keep the shared header controls and calculator shortcut labels legible on small screens. */
+header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowrap; }
 @media (max-width: 420px) {
   header nav { padding-left: 12px !important; padding-right: 12px !important; gap: 8px !important; }
   header nav > a { font-size: 1.05rem !important; }
