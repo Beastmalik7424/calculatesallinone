@@ -53,6 +53,28 @@ for path in ("/", "/bmi-calculator/", "/tasbih-counter/", "/percentage-calculato
             group
         ), f"Current calculator must be visibly and accessibly active on {path}"
 
+# Every shipped language homepage must render all 16 calculator names in its own language.
+LANGUAGE_LABELS = {
+    "ar": ["حاسبة تحويل السنوات إلى أيام", "حاسبة النسبة المئوية", "حاسبة الكسور", "حاسبة الفائدة المركبة", "حاسبة الفرق بين التواريخ"],
+    "hi": ["वर्ष से दिन कैलकुलेटर", "प्रतिशत कैलकुलेटर", "भिन्न कैलकुलेटर", "चक्रवृद्धि ब्याज कैलकुलेटर", "तिथि अंतर कैलकुलेटर"],
+    "es": ["Calculadora de años a días", "Calculadora de porcentajes", "Calculadora de fracciones", "Calculadora de interés compuesto", "Calculadora de diferencia de fechas"],
+    "fr": ["Calculatrice années en jours", "Calculatrice de pourcentage", "Calculatrice de fractions", "Calculatrice d’intérêts composés", "Calculatrice de différence de dates"],
+}
+for lang, required_labels in LANGUAGE_LABELS.items():
+    markup = output_for("/" + lang + "/")
+    group = primary_group(markup, "/" + lang + "/")
+    found = set(re.findall(r'data-tool-shortcut="([^"]+)"', group))
+    assert found == ENGLISH_TOOLS, f"{lang} carousel must include all 16 calculators"
+    for label in required_labels:
+        assert label in group, f"{lang} carousel missing translated full calculator name: {label}"
+
+urdu_home = output_for("/ur/")
+urdu_home_group = primary_group(urdu_home, "/ur/")
+urdu_found = set(re.findall(r'data-tool-shortcut="([^"]+)"', urdu_home_group))
+assert urdu_found == ENGLISH_TOOLS, "Urdu carousel must show all 16 calculators, including tools without Urdu pages"
+assert 'href="/years-to-days-calculator/"' in urdu_home_group, "Untranslated Urdu tool destinations must safely fall back to their existing English pages"
+assert "سال سے دن کیلکولیٹر" in urdu_home_group, "Urdu carousel must still show the Urdu calculator name"
+
 urdu = output_for("/ur/tasbih-counter/")
 urdu_group = primary_group(urdu, "/ur/tasbih-counter/")
 assert 'data-tool-shortcut="tasbih-counter"' in urdu_group
