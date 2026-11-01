@@ -1173,6 +1173,7 @@ def shell_strings(lang):
     merged["lang"] = {"ar": "اللغات", "hi": "भाषाएँ", "es": "Idiomas", "fr": "Langues"}[lang]
     merged["discount"] = UI[lang]["tools"]["discount-calculator"]
     merged["health_link"] = UI[lang]["cats"]["health"]
+    merged["calculators"] = {"ar": "اختصارات الحاسبات", "hi": "कैलकुलेटर शॉर्टकट", "es": "Accesos a calculadoras", "fr": "Raccourcis calculatrice"}[lang]
     return merged
 
 
