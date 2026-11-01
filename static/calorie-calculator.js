@@ -44,7 +44,12 @@ function calculateMaintenanceCalories(input){
  if(!Number.isFinite(resting)||!Number.isFinite(maintenance)||resting<=0||maintenance<=0)throw new Error("These entries do not produce a usable estimate. Check the values and units.");
  return Object.freeze({age:age,weightKg:weightKg,heightCm:heightCm,coefficient:coefficient,equation:"Mifflin–St Jeor (1990)",restingKcalPerDay:resting,maintenanceKcalPerDay:maintenance,activity:activity,outsideOriginalStudyAgeRange:age<19||age>78});
 }
-var api=Object.freeze({LB_TO_KG:LB_TO_KG,IN_TO_CM:IN_TO_CM,ACTIVITY_PRESETS:ACTIVITY_PRESETS,calculateMaintenanceCalories:calculateMaintenanceCalories});
+function formatKcal(value){
+ var scale=Math.max(1,Math.abs(value));
+ var rounded=Math.round((value+Number.EPSILON*scale)*10)/10;
+ return new Intl.NumberFormat("en-US",{minimumFractionDigits:1,maximumFractionDigits:1}).format(rounded);
+}
+var api=Object.freeze({LB_TO_KG:LB_TO_KG,IN_TO_CM:IN_TO_CM,ACTIVITY_PRESETS:ACTIVITY_PRESETS,calculateMaintenanceCalories:calculateMaintenanceCalories,formatKcal:formatKcal});
 if(typeof module!=="undefined"&&module.exports)module.exports=api;
 root.CalorieCalculator=api;
 function initialize(doc){
@@ -61,7 +66,7 @@ function initialize(doc){
   heightLabel.htmlFor=imp?"cal-height-ft":"cal-height-cm";
   cm.disabled=imp;ft.disabled=!imp;inch.disabled=!imp;clear();
  }
- function fmt(v){return new Intl.NumberFormat("en-US",{maximumFractionDigits:1}).format(v);}
+ function fmt(v){return formatKcal(v);}
  function add(tag,cls,value){var el=doc.createElement(tag);if(cls)el.className=cls;el.textContent=value;result.appendChild(el);}
  function calculate(){
   clear();
