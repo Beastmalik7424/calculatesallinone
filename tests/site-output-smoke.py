@@ -224,6 +224,26 @@ for url in urls:
     assert html.count("<h1") == 1, f"Expected exactly one primary heading: {url}"
     assert f'<link rel="canonical" href="{url}">' in html, f"Canonical mismatch: {url}"
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
+# Keep titles specific to each calculator's actual job, without promising unsupported features.
+EXPECTED_INTENT_TITLES = {
+    "/zakat-calculator/": "Zakat Calculator: Nisab Check & 2.5% Zakat | CalculatesAll",
+    "/query-calculator/": "Query Calculator: Ask Time Questions | CalculatesAll",
+    "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
+    "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
+    "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
+    "/date-calculator/": "Days Between Dates Calculator | CalculatesAll",
+    "/money/": "Money Calculators: EMI, Zakat, Profit | CalculatesAll",
+    "/math/": "Math Calculators and Unit Converters | CalculatesAll",
+}
+for path, expected_title in EXPECTED_INTENT_TITLES.items():
+    page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
+    title = re.search(r"<title>(.*?)</title>", page_html, re.S)
+    assert title and html_lib.unescape(title.group(1)) == expected_title, f"Search-intent title mismatch: {path}"
+    assert len(expected_title) <= 59, f"Search-intent title too long: {path}"
+    for attr, name in (("property", "og:title"), ("name", "twitter:title")):
+        social = re.search('<meta ' + attr + '="' + name + '" content="([^"]*)"', page_html)
+        assert social and html_lib.unescape(social.group(1)) == expected_title, f"Stale {name}: {path}"
+
 # Important calculator controls need stable form names for native form semantics and progressive fallback.
 age_html = output_for_url(SITE + "/age-calculator/").read_text(encoding="utf-8")
 assert 'id="a-dob" name="dob" type="date"' in age_html, "Age input must expose a stable form name"
