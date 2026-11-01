@@ -1082,14 +1082,83 @@ def nav_items(lang="en"):
 
 
 
+
+CAROUSEL_TOOLS = (
+    ("zakat-calculator", "Zakat Calculator", "Zakat"),
+    ("bmi-calculator", "BMI Calculator", "BMI"),
+    ("profit-loss-calculator", "Profit and Loss Calculator", "Profit/Loss"),
+    ("discount-calculator", "Discount Calculator", "Discount"),
+    ("age-calculator", "Age Calculator", "Age"),
+    ("unit-converter", "Unit Converter", "Units"),
+    ("standard-calculator", "Standard and Scientific Calculator", "Standard"),
+    ("tasbih-counter", "Tasbih Counter", "Tasbih"),
+    ("stopwatch", "Online Stopwatch", "Stopwatch"),
+    ("years-to-days-calculator", "Years to Days Calculator", "Years→Days"),
+    ("query-calculator", "Query Calculator", "Query"),
+    ("emi-calculator", "EMI Calculator", "EMI"),
+    ("percentage-calculator", "Percentage Calculator", "Percent"),
+    ("fraction-calculator", "Fraction Calculator", "Fraction"),
+    ("compound-interest-calculator", "Compound Interest Calculator", "Compound"),
+    ("date-calculator", "Date Difference Calculator", "Date"),
+)
+
+CAROUSEL_SHORT_UR = {
+    "zakat-calculator": "زکوٰۃ", "bmi-calculator": "BMI",
+    "profit-loss-calculator": "منافع", "discount-calculator": "ڈسکاؤنٹ",
+    "age-calculator": "عمر", "unit-converter": "اکائیاں",
+    "standard-calculator": "معیاری", "tasbih-counter": "تسبیح",
+    "stopwatch": "اسٹاپ واچ", "years-to-days-calculator": "سال→دن",
+    "query-calculator": "سوال", "emi-calculator": "EMI",
+}
+
+
+def calculator_carousel(lang="en", current_path=None):
+    s = shell_strings(lang)
+    groups = []
+    for group_name, duplicate in (("primary", False), ("duplicate", True)):
+        links = []
+        for slug, english_name, short_name in CAROUSEL_TOOLS:
+            if lang == "ur":
+                if slug not in URDU:
+                    continue
+                name = URDU[slug]["name"]
+                href = "/ur/" + slug + "/"
+                short = CAROUSEL_SHORT_UR.get(slug, name)
+            elif lang in UI:
+                name = UI[lang].get("tools", {}).get(slug, english_name)
+                href = "/" + slug + "/"
+                short = short_name
+            else:
+                name = english_name
+                href = "/" + slug + "/"
+                short = short_name
+            active = ' aria-current="page"' if not duplicate and current_path == href else ""
+            tabindex = ' tabindex="-1"' if duplicate else ""
+            links.append(
+                '<a class="ca-calculator-link" data-tool-shortcut="' + slug
+                + '" href="' + href + '" aria-label="' + html.escape(name, quote=True)
+                + '" title="' + html.escape(name, quote=True) + '"' + active + tabindex + '>'
+                + html.escape(short) + '</a>'
+            )
+        hidden = ' aria-hidden="true"' if duplicate else ""
+        groups.append(
+            '<div class="ca-calculator-group" data-tool-set="' + group_name + '"' + hidden + '>'
+            + "".join(links) + '</div>'
+        )
+    return (
+        '<div class="ca-calculator-carousel" role="region" aria-label="' + s["calculators"] + '">'
+        '<div class="ca-calculator-track">' + "".join(groups) + '</div></div>'
+    )
+
+
 LANG_LOCALE = {"en": "en_US", "ur": "ur_PK", "ar": "ar_AR", "hi": "hi_IN", "es": "es_ES", "fr": "fr_FR"}
 RTL_LANGS = ("ur", "ar")
 SHELL_EN = {"menu": "All tools", "skip": "Skip to content", "about": "About", "privacy": "Privacy", "contact": "Contact",
             "methodology": "Methodology", "editorial": "Editorial policy", "tag": "© CalculatesAll. Free tools that run in your browser.",
-            "theme": "Dark mode", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Advertising disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE", "discount": "Discount Calculator", "health_link": "Health"}
+            "theme": "Dark mode", "calculators": "Calculator shortcuts", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Advertising disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE", "discount": "Discount Calculator", "health_link": "Health"}
 SHELL_UR = {"menu": "تمام ٹولز", "skip": "مرکزی مواد پر جائیں", "about": "ہمارے بارے میں", "privacy": "رازداری", "contact": "رابطہ",
             "methodology": "طریقہ کار", "editorial": "ادارتی پالیسی", "tag": "© CalculatesAll۔ مفت ٹولز جو آپ کے براؤزر میں چلتے ہیں۔",
-            "theme": "ڈارک موڈ", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت", "discount": "ڈسکاؤنٹ کیلکولیٹر", "health_link": "صحت"}
+            "theme": "ڈارک موڈ", "calculators": "کیلکولیٹر منتخب کریں", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت", "discount": "ڈسکاؤنٹ کیلکولیٹر", "health_link": "صحت"}
 THEME_LABEL = {"ar": "الوضع الداكن", "hi": "डार्क मोड", "es": "Modo oscuro", "fr": "Mode sombre"}
 
 
@@ -1264,12 +1333,10 @@ def shell(main_html, lang="en", current_path=None):
         '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
         '<nav class="max-w-5xl mx-auto px-5 py-3 flex flex-wrap items-center justify-between gap-3" aria-label="' + s["main"] + '">'
         '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
-        '<div class="flex items-center gap-3">'
-        '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px]">' + s["theme"] + '</button>'
-        '<details class="relative"><summary class="cursor-pointer text-base min-h-[44px] inline-flex items-center px-2">' + s["menu"] + '</summary>'
-        '<ul class="absolute ' + menu_position + ' mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-x-hidden break-words bg-white border border-stone-300 rounded-lg p-3 space-y-2 text-base shadow-lg z-10" style="max-width:calc(100vw - 2rem);overflow-wrap:anywhere;box-sizing:border-box">'
-        + nav_items(lang)
-        + '</ul></details></div></nav></header>\n'
+        '<div class="flex min-w-0 flex-1 items-center justify-end gap-2">'
+        '<button id="theme-toggle" type="button" class="' + S + ' min-h-[44px] shrink-0">' + s["theme"] + '</button>'
+        + calculator_carousel(lang, current_path)
+        + '</div></nav></header>\\n'
         '<main id="main" class="' + main_classes + '">' + main_html + '</main>\n'
         '<footer class="mt-12 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-t border-stone-200 dark:border-stone-700">'
         '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'
