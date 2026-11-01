@@ -220,6 +220,26 @@ GUIDE_EXTRA["tasbih-counter"].append(
     ])
 )
 
+
+# Original worked examples for query and stopwatch tools.
+GUIDE_EXTRA["query-calculator"] = [
+    ("Worked examples", [
+        "Question: 2 weeks in hours. Step 1: 2 x 7 = 14 days. Step 2: 14 x 24 = 336 hours. Result: 336 hours.",
+        "Question: 3 days to minutes. Step 1: 3 x 24 = 72 hours. Step 2: 72 x 60 = 4,320 minutes. Result: 4,320 minutes.",
+        "The same chain works in reverse. For a question such as 336 hours to days, each step divides by the same factor instead of multiplying: 336 / 24 = 14 days, and 14 / 7 = 2 weeks.",
+    ]),
+    ("Checking an answer by hand", [
+        "Divide the answer by each factor used in the question, in reverse order. For 4,320 minutes, dividing by 60 gives 72 hours, and dividing by 24 gives 3 days. This check confirms the unit chain and the arithmetic, using the same fixed factors the calculator uses.",
+        "Questions about years use 365 days per year in this calculator. A birth-date question counts exact Gregorian calendar days between the two dates you enter, so the two methods can differ by a few days over long periods.",
+    ]),
+]
+GUIDE_EXTRA["stopwatch"].append(
+    ("Worked examples", [
+        "A lap time of 83 seconds equals 1 minute and 23 seconds. Step 1: 1 x 60 = 60 seconds. Step 2: 60 + 23 = 83 seconds.",
+        "A total of 3,725 seconds equals 1 hour, 2 minutes and 5 seconds. Step 1: 1 x 3,600 = 3,600 seconds. Step 2: 3,725 - 3,600 = 125 seconds. Step 3: 2 x 60 = 120 seconds, leaving 125 - 120 = 5 seconds.",
+    ])
+)
+
 HOME_EXTRA = {
     "en": {
         "heading": "What can you calculate with these free tools?",
