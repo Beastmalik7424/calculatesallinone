@@ -227,7 +227,7 @@ for url in urls:
 # Keep titles specific to each calculator's actual job, without promising unsupported features.
 EXPECTED_INTENT_TITLES = {
     "/zakat-calculator/": "Zakat Calculator: Nisab Check & 2.5% Zakat | CalculatesAll",
-    "/query-calculator/": "Query Calculator: Ask Time Questions | CalculatesAll",
+    "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
     "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
     "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
     "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
@@ -243,6 +243,11 @@ for path, expected_title in EXPECTED_INTENT_TITLES.items():
     for attr, name in (("property", "og:title"), ("name", "twitter:title")):
         social = re.search('<meta ' + attr + '="' + name + '" content="([^"]*)"', page_html)
         assert social and html_lib.unescape(social.group(1)) == expected_title, f"Stale {name}: {path}"
+
+query_page = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
+assert "115 months in years and days" in query_page, "Query Calculator should show the month conversion example"
+assert "Pakistan's Independence Day" in query_page and "14 August 1947" in query_page, "Query Calculator should explain the supported Pakistan date lookup"
+assert "exact calendar days require a start date" in query_page, "Month-to-day estimates must disclose the calendar limitation"
 
 # Important calculator controls need stable form names for native form semantics and progressive fallback.
 age_html = output_for_url(SITE + "/age-calculator/").read_text(encoding="utf-8")
