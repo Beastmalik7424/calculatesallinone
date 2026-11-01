@@ -46,7 +46,7 @@ for phrase in (
     "We do not invent expert reviewers",
     "A passing automated test is evidence for the cases tested",
     "qualified scholar's ruling",
-    "report the page URL",
+    "include the page URL",
 ):
     assert phrase.lower() in editorial.lower(), f"Editorial policy missing transparency detail: {phrase}"
 
