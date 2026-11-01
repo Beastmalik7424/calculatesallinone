@@ -90,8 +90,8 @@ css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 assert "@keyframes ca-calculator-marquee" in css, "Calculator shortcuts must auto-slide"
 assert ".ca-calculator-carousel:focus-within" in css, "Keyboard focus must pause the moving carousel"
 assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must be in the upper header row before the full-width tools slide"
-    assert "ca-site-nav-topline" in markup, "Header must separate the top controls from the full-width tools slide"
-    assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
+assert "ca-site-nav-topline" in markup, "Header must separate the top controls from the full-width tools slide"
+assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
     "Reduced-motion users must get a non-animated, manually scrollable carousel"
 )
 assert "#t-tap" in css and "min-height:48px" in css, (
