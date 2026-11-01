@@ -873,7 +873,10 @@ TOOLS.extend([
                 ("Can I convert days to years?", "Yes. Select Days to years and choose a 365-day year or the 365.2425-day Gregorian average. Exact calendar mode is only available for converting whole years to days from a start date."),
                 ("How many years is 1,009 days?", "About 2.76 years using the Gregorian average of 365.2425 days per year. For an exact elapsed calendar age, use actual start and end dates because calendar years contain 365 or 366 days."),
                 ("How many days are in one year?", "A common year has 365 days and a leap year has 366. Averaged over the 400-year Gregorian cycle, one year is 365.2425 days."),
-                ("How many days are in 10 years?", "3,650 using the simple method or 3,652.425 using the Gregorian average. A real calendar span may contain two or three leap days depending on its start and end dates.")],
+                ("How many days are in 10 years?", "3,650 using the simple method or 3,652.425 using the Gregorian average. A real calendar span may contain two or three leap days depending on its start and end dates."),
+                ("How many days are in 20 years?", "7,300 with the simple 365-day method, or 7,304.85 with the Gregorian average. The exact calendar total depends on the start and end dates."),
+                ("How many days are in 50 years?", "18,250 with the simple 365-day method, or 18,262.125 with the Gregorian average. The exact calendar total depends on the start and end dates."),
+                ("80 saal mein kitne din hote hain?", "29,200 using 365 days per year, or 29,219.4 using the Gregorian average of 365.2425 days per year. An exact calendar total depends on the start and end dates.")],
         "sources": "Gregorian mean year: 365.2425 days over the 400-year Gregorian calendar cycle."
     },
     {

@@ -147,6 +147,9 @@ assert "Days to years" in years_html and "1,009 days" in years_html, "Years-to-D
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
 assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"
+assert "How many days are in 20 years?" in years_html and "7,300" in years_html and "7,304.85" in years_html, "The Google Search Console 20-year query should have a checkable answer"
+assert "How many days are in 50 years?" in years_html and "18,250" in years_html and "18,262.125" in years_html, "The Google Search Console 50-year query should have a checkable answer"
+assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
 assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
