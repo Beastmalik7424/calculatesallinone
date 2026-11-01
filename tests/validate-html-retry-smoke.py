@@ -47,6 +47,27 @@ def test_429_respects_retry_after_and_recovers():
     assert sleeps == [7.0], sleeps
 
 
+def test_primary_service_failure_falls_back_to_alternate_checker():
+    attempts = []
+
+    def opener(request, timeout):
+        attempts.append(request.full_url)
+        if request.full_url.startswith("https://validator.w3.org/nu/"):
+            raise urllib.error.HTTPError(
+                request.full_url,
+                503,
+                "Service Unavailable",
+                {"Retry-After": "1"},
+                io.BytesIO(b"primary checker unavailable"),
+            )
+        return FakeResponse(b'{"messages":[]}')
+
+    result = MODULE.fetch_validator_result(SCRIPT, opener=opener, sleep_fn=lambda _: None)
+    assert result == {"messages": []}, result
+    assert len(attempts) == 3, attempts
+    assert attempts[-1].startswith("https://html5.validator.nu/"), attempts
+
+
 def test_non_retryable_http_error_fails_without_waiting():
     sleeps = []
 
@@ -70,5 +91,6 @@ def test_non_retryable_http_error_fails_without_waiting():
 
 if __name__ == "__main__":
     test_429_respects_retry_after_and_recovers()
+    test_primary_service_failure_falls_back_to_alternate_checker()
     test_non_retryable_http_error_fails_without_waiting()
     print("Nu HTML Checker retry regression: PASS")
