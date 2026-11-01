@@ -28,7 +28,7 @@ REQUEST_INTERVAL_SECONDS = 5
 RETRYABLE_HTTP_CODES = {429, 500, 502, 503, 504}
 
 
-def fetch_validator_result(path, opener=None, sleep_fn=time.sleep):
+def fetch_validator_result(path, opener=None):
     """Try three independent online Nu checker instances, failing over on transient outages."""
     open_url = opener or urllib.request.urlopen
     last_error = None
