@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 import re
 
 def page(slug):
@@ -7,6 +8,14 @@ def page(slug):
     html = path.read_text(encoding="utf-8")
     assert re.search(r'<link rel="canonical" href="https://calculateallinone\.vercel\.app/' + slug + r'/">', html), slug
     assert re.search(r'<meta name="robots" content="index, follow">', html), slug
+    assert '<nav aria-label="Breadcrumb"' in html, f"Missing visible breadcrumb on /{slug}/"
+    assert '<a class="underline text-sky-800 dark:text-sky-300 hover:text-sky-950" href="/">Home</a>' in html, f"Missing Home breadcrumb link on /{slug}/"
+    schemas = [json.loads(raw) for raw in re.findall(r'<script type="application/ld\\+json">(.*?)</script>', html, re.S)]
+    nodes = [node for item in schemas for node in (item.get("@graph", []) if isinstance(item, dict) and "@graph" in item else [item])]
+    crumbs = [node for node in nodes if node.get("@type") == "BreadcrumbList"]
+    assert len(crumbs) == 1, f"Expected one BreadcrumbList on /{slug}/"
+    items = crumbs[0].get("itemListElement", [])
+    assert len(items) == 2 and items[0].get("item") == "https://calculateallinone.vercel.app/" and items[1].get("item") == f"https://calculateallinone.vercel.app/{slug}/", f"Invalid breadcrumb schema on /{slug}/"
     return html
 
 money = page("money")
