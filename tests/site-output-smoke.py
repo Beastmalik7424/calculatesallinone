@@ -664,6 +664,7 @@ assert "eval(" not in app_js and "new Function" not in app_js, "Dynamic code exe
 emi_html = (ROOT / "emi-calculator" / "index.html").read_text(encoding="utf-8")
 assert '<link rel="canonical" href="https://calculateallinone.vercel.app/emi-calculator/">' in emi_html, "EMI canonical must use the slash URL"
 assert '<a href="/">Browse all free calculators</a>' in emi_html, "EMI page must link back to the calculator hub"
+assert '<a href="/money/">Money and Business</a>' in emi_html, "EMI page must link to its Money category hub"
 for related in ("/zakat-calculator/", "/bmi-calculator/", "/discount-calculator/", "/profit-loss-calculator/", "/methodology/", "/about/"):
     assert 'href="' + related + '"' in emi_html, "EMI page is missing crawlable related link: " + related
 assert 'aria-label="Related calculators"' in emi_html, "EMI related links must be grouped in a labelled navigation region"
