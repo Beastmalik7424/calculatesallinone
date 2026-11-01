@@ -528,11 +528,14 @@ TOOLS = [
 
 HUB_CONTENT = {
     "money": {
-        "intro": "These tools cover common money questions: how to estimate a loan's monthly EMI and repayment interest, how much Zakat is due, whether a sale made a profit or loss, and how much a discount saves. Each calculator explains its method and assumptions, so you can check the result yourself.",
+        "intro": "Compare loan instalments, Zakat arithmetic, business profit, discounts and compound growth. Each tool states the inputs and method it uses. The worked examples below show how to check the arithmetic and where a calculator estimate differs from a lender quote, tax calculation or religious ruling.",
         "faq": [
-            ("What does the EMI calculator estimate?", "It estimates the monthly installment, total interest and repayment schedule from the loan amount, annual rate and term. Lender fees and contract-specific charges can change the amount quoted by a lender."),
-            ("Are these tools accurate for business accounts?", "They calculate the arithmetic correctly for the inputs you give. They do not replace an accountant, and tax rules are not included."),
-            ("Does the Zakat calculator give a religious ruling?", "No. It applies the silver Nisab method and shows the rules it uses. For a ruling on your situation, consult a qualified scholar."),
+            ("What does the EMI calculator estimate?", "It estimates the monthly instalment, total interest and repayment schedule from the loan amount, annual rate and term. Lender fees, insurance and contract-specific charges can change the amount quoted by a lender."),
+            ("How is profit margin calculated?", "Gross margin = gross profit divided by sales revenue, multiplied by 100. With PKR 40,000 gross profit on PKR 100,000 sales, the gross margin is 40% gross margin. If operating profit is PKR 25,000, operating margin is 25% operating margin. These measures use different profit figures and should not be confused."),
+            ("Does the EMI estimate include lender fees?", "No. The EMI estimate uses the principal, annual interest rate and repayment term entered. Processing fees, insurance, variable-rate clauses, taxes and payment-date rules may change the lender's actual quotation."),
+            ("Does the compound interest estimate include deposits or taxes?", "No. It assumes a fixed starting principal, a fixed nominal annual rate and the compounding frequency entered. It excludes additional deposits, withdrawals, fees, taxes and inflation. Check whether a provider quotes a nominal rate or an effective annual yield before comparing results."),
+            ("Are these tools accurate for business accounts?", "They calculate the arithmetic for the inputs you give, but they do not replace an accountant. Tax rules, inventory valuation, payment fees and accounting policies are not included."),
+            ("Does the Zakat calculator give a religious ruling?", "No. It applies the silver Nisab method described on its page and shows the rules it uses. Scholarly views can differ, so consult a qualified scholar about your circumstances."),
         ],
     },
     "health": {
@@ -548,9 +551,14 @@ HUB_CONTENT = {
         ],
     },
     "math": {
-        "intro": "Math and converter tools cover everyday arithmetic and unit conversion. The unit converter uses fixed conversion factors for weight, length and temperature, and rejects values that cannot exist in the physical world.",
+        "intro": "Choose the right tool for the calculation: standard or scientific arithmetic, percentage questions, exact fraction operations, or a unit conversion. The examples explain the steps, while the limits clarify when a result needs more precision or a different measurement method.",
         "faq": [
-            ("Does the standard calculator run on a server?", "No. All arithmetic runs in your browser, and your numbers are not sent anywhere."),
+            ("Does the standard calculator run on a server?", "No. The arithmetic runs in your browser. Calculator entries are not sent to our server."),
+            ("What is 25% of 200?", "50. Multiply 200 by 25 and divide by 100: 200 × 25 ÷ 100 = 50. 25% of 200 is 50."),
+            ("What is 1/2 + 1/3?", "5/6. Convert both fractions to sixths: 1/2 = 3/6 and 1/3 = 2/6, then add 3/6 + 2/6 = 5/6."),
+            ("Can I convert kilograms to pounds?", "Yes. Select the weight category, enter the kilogram value and choose pounds as the target unit. Convert only between units that measure the same physical quantity."),
+            ("Why can the denominator not be zero?", "A fraction with a zero denominator is undefined because division by zero has no finite result. The fraction calculator rejects it instead of displaying a misleading value."),
+            ("When should I use scientific mode?", "Use scientific mode for supported functions such as powers, roots and trigonometric calculations. Check the displayed angle mode and input units before relying on a trigonometric result."),
         ],
     },
     "worship": {
@@ -562,10 +570,10 @@ HUB_CONTENT = {
 }
 
 CATEGORIES = [
-    {"slug": "money", "name": "Money and Business", "desc": "Money calculators for EMI, Zakat, profit and loss, and discounts, with worked examples and clear limits for everyday decisions."},
+    {"slug": "money", "name": "Money and Business", "desc": "Compare EMI, Zakat, profit and loss, discounts and compound interest with worked examples, formulas and clear assumptions."},
     {"slug": "health", "name": "Health", "desc": "Calculate adult BMI in metric or imperial units, review WHO weight categories, and understand what the screening result cannot tell you."},
     {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, and use a browser stopwatch for everyday timing with clear notes about date and timing limits."},
-    {"slug": "math", "name": "Math and Converters", "desc": "Use a standard calculator and convert weight, length and temperature with validation for invalid or physically impossible values."},
+    {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages and fractions, use standard or scientific arithmetic, and convert weight, length and temperature with clear worked examples."},
     {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
 ]
 
