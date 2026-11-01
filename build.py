@@ -924,7 +924,7 @@ for _t in TOOLS:
         _t["ui"] = CALC_UI
         _t["guide"] += [
             ("How to use the online standard and scientific calculator", [
-                "CalculateAllInOne is a free online calculator for everyday arithmetic and more advanced scientific calculations. Use the standard keypad for addition, subtraction, multiplication, division, percentages and brackets. Select Scientific Mode when you need trigonometry, powers, roots, logarithms, factorials, combinations or permutations. The calculator works in a modern browser on desktop and mobile, with large, touch-friendly keys.",
+                "CalculatesAll is a free online calculator for everyday arithmetic and more advanced scientific calculations. Use the standard keypad for addition, subtraction, multiplication, division, percentages and brackets. Select Scientific Mode when you need trigonometry, powers, roots, logarithms, factorials, combinations or permutations. The calculator works in a modern browser on desktop and mobile, with large, touch-friendly keys.",
                 "Enter an expression in the same order you would write it on paper. Brackets are evaluated first, then powers, multiplication and division, and finally addition and subtraction. For example, 2 + 3 × 4 equals 14 because multiplication takes priority. Use parentheses in (2 + 3) × 4 to make the result 20. Press clear to start again, or use backspace to remove the last character.",
             ]),
             ("Scientific calculator functions and angle modes", [
@@ -933,7 +933,7 @@ for _t in TOOLS:
             ]),
             ("Who can use this free online calculator", [
                 "Students can check arithmetic and practise algebra or trigonometry. Teachers and tutors can demonstrate order of operations, powers and angle conversion. Households can work out percentages, discounts and everyday totals, while office users can verify figures before entering them into a spreadsheet. These examples describe common uses, not a guarantee that a result is suitable for every professional task.",
-                "CalculateAllInOne performs calculations in the browser and is designed for quick access without installing an app. It is a practical calculation aid, not a substitute for independently checking high-stakes engineering, financial, medical or scientific work. For important results, verify the formula, units, rounding and assumptions with an authoritative source or qualified professional. If an answer seems unexpected, split the expression into smaller steps and compare the intermediate values.",
+                "CalculatesAll performs calculations in the browser and is designed for quick access without installing an app. It is a practical calculation aid, not a substitute for independently checking high-stakes engineering, financial, medical or scientific work. For important results, verify the formula, units, rounding and assumptions with an authoritative source or qualified professional. If an answer seems unexpected, split the expression into smaller steps and compare the intermediate values.",
             ]),
         ]
 
