@@ -22,6 +22,8 @@ FILES = [
     Path("public/calorie-calculator/index.html"),
 ]
 ENDPOINT = "https://validator.w3.org/nu/?out=json"
+ALTERNATE_ENDPOINT = "https://html5.validator.nu/?out=json"
+PRIMARY_ATTEMPTS = 2
 MAX_ATTEMPTS = 5
 BASE_RETRY_SECONDS = 5
 MAX_RETRY_SECONDS = 60
@@ -50,40 +52,44 @@ def retry_delay(error, attempt):
 
 
 def fetch_validator_result(path, opener=None, sleep_fn=time.sleep):
-    """POST one HTML document, retrying transient HTTP and transport failures."""
+    """Use Nu HTML Checker, then a separate Nu-compatible endpoint on transient outage."""
     open_url = opener or urllib.request.urlopen
-    request = urllib.request.Request(
-        ENDPOINT,
-        data=path.read_bytes(),
-        headers={
-            "Content-Type": "text/html; charset=utf-8",
-            "User-Agent": "CalculateAllInOne-SEO-Validation/1.0",
-        },
-        method="POST",
+    last_error = None
+    for endpoint, attempts in ((ENDPOINT, PRIMARY_ATTEMPTS), (ALTERNATE_ENDPOINT, MAX_ATTEMPTS)):
+        request = urllib.request.Request(
+            endpoint,
+            data=path.read_bytes(),
+            headers={
+                "Content-Type": "text/html; charset=utf-8",
+                "User-Agent": "CalculateAllInOne-SEO-Validation/1.0",
+            },
+            method="POST",
+        )
+        for attempt in range(attempts):
+            try:
+                with open_url(request, timeout=45) as response:
+                    return json.loads(response.read().decode("utf-8"))
+            except urllib.error.HTTPError as exc:
+                if exc.code not in RETRYABLE_HTTP_CODES:
+                    raise
+                last_error = exc
+            except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, json.JSONDecodeError, RuntimeError) as exc:
+                last_error = exc
+            if attempt < attempts - 1:
+                delay = retry_delay(last_error, attempt)
+                print(
+                    f"HTML VALIDATION RETRY {path}: {endpoint} returned {last_error}; "
+                    f"waiting {delay:g}s before attempt {attempt + 2}/{attempts}"
+                )
+                sleep_fn(delay)
+        if endpoint == ENDPOINT:
+            print(
+                f"HTML VALIDATION FALLBACK {path}: primary Nu endpoint unavailable "
+                f"after {attempts} attempts; switching to {ALTERNATE_ENDPOINT}"
+            )
+    raise RuntimeError(
+        f"both Nu HTML Checker endpoints failed after bounded retries for {path}: {last_error}"
     )
-    for attempt in range(MAX_ATTEMPTS):
-        try:
-            with open_url(request, timeout=45) as response:
-                return json.loads(response.read().decode("utf-8"))
-        except urllib.error.HTTPError as exc:
-            if exc.code not in RETRYABLE_HTTP_CODES or attempt == MAX_ATTEMPTS - 1:
-                raise
-            delay = retry_delay(exc, attempt)
-            print(
-                f"HTML VALIDATION RETRY {path}: HTTP {exc.code}; "
-                f"waiting {delay:g}s before attempt {attempt + 2}/{MAX_ATTEMPTS}"
-            )
-            sleep_fn(delay)
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-            if attempt == MAX_ATTEMPTS - 1:
-                raise
-            delay = retry_delay(exc, attempt)
-            print(
-                f"HTML VALIDATION RETRY {path}: {exc}; "
-                f"waiting {delay:g}s before attempt {attempt + 2}/{MAX_ATTEMPTS}"
-            )
-            sleep_fn(delay)
-    raise RuntimeError(f"validator did not return a result after {MAX_ATTEMPTS} attempts: {path}")
 
 
 def main():
