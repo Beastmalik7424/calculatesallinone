@@ -277,11 +277,11 @@ for control_name in ("bmi-height-unit", "bmi-weight-unit", "b-kg", "b-lb", "b-cm
     assert 'name="' + control_name + '"' in urdu_bmi_html, f"Urdu BMI control missing form name: {control_name}"
 assert 'id="b-lb"' in urdu_bmi_html and 'id="bmi-weight-lb"' in urdu_bmi_html, "Urdu BMI page must offer pounds alongside kilograms"
 assert "BMI ایک عمومی اسکریننگ پیمانہ ہے" in urdu_bmi_html, "Urdu BMI disclaimer is required"
-# RTL dropdown must anchor to the left edge and stay within viewport bounds.
-assert 'class="absolute left-0 right-auto mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-x-hidden break-words' in urdu_bmi_html, "Urdu RTL tools menu must use left anchoring and bounded width"
-assert 'style="max-width:calc(100vw - 2rem);overflow-wrap:anywhere;box-sizing:border-box"' in urdu_bmi_html, "Urdu tools menu must prevent viewport overflow"
+# Calculator shortcuts now use the shared in-header carousel rather than a dropdown.
+assert 'class="ca-calculator-carousel"' in urdu_bmi_html, "Urdu pages must expose the calculator shortcut carousel"
 english_menu_html = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
-assert 'class="absolute right-0 mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-x-hidden break-words' in english_menu_html, "English tools menu must retain right anchoring and bounded width"
+assert 'class="ca-calculator-carousel"' in english_menu_html, "English pages must expose the calculator shortcut carousel"
+assert 'data-tool-shortcut="bmi-calculator"' in english_menu_html, "Current calculator shortcut must remain available"
 assert len(titles.values()) == len(set(titles.values())), "Duplicate page titles found: " + repr(titles)
 assert len(descriptions.values()) == len(set(descriptions.values())), "Duplicate meta descriptions found: " + repr(descriptions)
 # The root URL is the site homepage, not a duplicate Standard Calculator landing page.
