@@ -89,4 +89,13 @@ percentage_html = (ROOT / "percentage-calculator" / "index.html").read_text(enco
 for value in (r'value=["\']of["\']', r'value=["\']share["\']', r'value=["\']change["\']', r'id=["\']percentage-mode["\']'):
     assert re.search(value, percentage_html), f"Missing percentage mode control: {value}"
 
-print("Extra calculator content, metadata, breadcrumb, schema and mode quality checks: PASS")
+about_html = (ROOT / "about" / "index.html").read_text(encoding="utf-8")
+for href in (
+    "/compound-interest-calculator/",
+    "/date-calculator/",
+    "/percentage-calculator/",
+    "/fraction-calculator/",
+):
+    assert f'href="{href}"' in about_html, f"Missing About-page link: {href}"
+
+print("Extra calculator content, metadata, breadcrumb, schema, mode and About-page link checks: PASS")
