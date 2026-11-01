@@ -1679,7 +1679,7 @@
       }
       // Month conversions use 12 months per year. Day estimates use the
       // Gregorian mean month (365.2425 / 12); exact days require a start date.
-      var monthAndYearsDays = question.match(/(?:^|\\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\\s+months?\\b.*\\byears?\\b.*\\bdays?\\b/)
+      var monthAndYearsDays = question.match(/(?:^|\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\s+months?\b.*\byears?\b.*\bdays?\b/)
       if (monthAndYearsDays) {
         var monthValue = timeConversionNumber(monthAndYearsDays[1])
         if (monthValue === null) {
