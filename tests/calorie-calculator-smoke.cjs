@@ -116,7 +116,7 @@ assert.match(html, /<h1[^>]*>Adult Calorie Calculator<\/h1>/);
 assert.match(html, /Mifflin–St Jeor/);
 assert.match(html, /498 healthy adults/);
 assert.match(html, /pregnancy and breastfeeding/);
-assert.match(html, /not medically reviewed/i);
+assert.match(html, /has not been medically reviewed/i);
 assert.match(html, /activity multipliers are consumer estimates/i);
 assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/2305711\//);
 assert.match(html, /https:\/\/www\.fao\.org\/4\/y5686e\/y5686e07\.htm/);
