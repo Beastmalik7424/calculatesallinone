@@ -40,16 +40,18 @@ These activity values are configuration assumptions supplied for a consumer esti
 ## Review and release status
 
 - Source links and claims checked: 2026-11-02.
-- Core code/build/monetization checks: **PASS** on commit `c21003832efafe4c41db69034bc6eca3ebe1e535`, GitHub Actions run `41354964910`.
-- Responsive browser, calculator interaction, accessibility-label, keyboard and measurement-privacy checks: **PASS** on the same commit, GitHub Actions run `41354964955`. Chromium verified 320×568, 390×844 and 1366×768.
-- Formula, conversion, rounding and input-validation smoke tests: **PASS** in the successful site-build/monetization workflow.
-- Extended Lighthouse SEO workflow: still running at the time of this update. Separate HTML validation, sitemap/internal-link checks and online desktop PageSpeed checks provide additional evidence. No Lighthouse score is claimed.
-- Vercel preview: deployment `dpl_BogmEDF2PAowNmp52rj4ZGgG14f2` is READY for older commit `5edbce344472202fba62e3e4d935f60a9f881c63`. The current branch adds a one-decimal floating-point display correction and a clearer coefficient placeholder after that preview. This older preview is not treated as final preview verification.
-- Latest preview verification: pending. Vercel's Hobby deployment quota has been reached. No quota bypass or unrelated project was used.
-- Production verification: not performed. Production domain and `main` branch remain unchanged.
+- Core site build, content gates, sitemap coverage and monetization checks: **PASS** on commit `17ec997e6c32150be52a87794a145c6446c72518`, GitHub Actions run `41355354183`.
+- Responsive browser, calculator interaction, keyboard, privacy-request and console checks: **PASS** on the same commit, GitHub Actions run `41355354175`. Chromium verified 320×568, 390×844 and 1366×768.
+- Formula, conversion, rounding and input-validation smoke tests: **PASS** on commit `c21003832efafe4c41db69034bc6eca3ebe1e535`, GitHub Actions run `41354964910`.
+- Lighthouse SEO on the GitHub-hosted build: **100/100** for home, BMI, Zakat, calorie, About, Contact, Discount and Editorial Policy pages. The Health hub also scored 100/100. The intentionally noindex `/ar/`, `/es/` and `/fr/` pages scored 66/100 only because the expected `is-crawlable` audit fails. No production Lighthouse score is claimed.
+- Nu HTML Checker: **PASS**, 10 generated HTML files, zero errors and zero warnings. Sitemap and internal-link checks: **PASS**, 39 unique sitemap URLs.
+- Existing calculator regressions: **PASS** for Fraction, Compound Interest, Date, Percentage, BMI, EMI and Tasbih browser checks. Responsive overflow checks passed at 320, 360, 390 and 1366 px.
+- Vercel preview: deployment `dpl_BogmEDF2PAowNmp52rj4ZGgG14f2` is READY for older commit `5edbce344472202fba62e3e4d935f60a9f881c63`. The final branch includes the later display-rounding correction and is not represented by that preview.
+- Latest preview verification: **NOT VERIFIED**. Vercel returned HTTP 402 because the Hobby team's deployment API quota exceeded 100 deployments for the day, with retry after 24 hours. The Vercel CLI is not installed or authenticated in this execution environment. No quota bypass or unrelated project was used.
+- Production verification: **NOT PERFORMED**. Production domain and `main` branch remain unchanged.
 - Qualified clinical review: not performed.
 - Medical certification or endorsement: none claimed.
-- English page: implementation and tests ready on the feature branch; not production-published.
+- English page: implemented and tested on the feature branch; not production-published.
 - Other locales: planned; no translated pages are published by this feature.
 - GEO/AI visibility: not measured. No ranking, indexing or AI-citation outcome is claimed.
 
