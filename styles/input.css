@@ -1605,16 +1605,16 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
 
 /* The 320x568 viewport is a short-phone edge case. Keep the homepage keypad usable above the fold. */
 @media (max-width: 340px) and (max-height: 640px) {
-  body:has(#main .ca-home-calculator) header nav[aria-label="Main"] {
+  body:has(#main .ca-home-calculator) header nav.ca-site-nav {
     flex-wrap: nowrap !important;
     gap: .25rem !important;
     padding: .3rem .4rem !important;
   }
-  body:has(#main .ca-home-calculator) header nav[aria-label="Main"] > a {
+  body:has(#main .ca-home-calculator) header nav.ca-site-nav > a {
     min-width: 0 !important;
     font-size: .95rem !important;
   }
-  body:has(#main .ca-home-calculator) header nav[aria-label="Main"] > div {
+  body:has(#main .ca-home-calculator) header nav:has(.ca-site-nav-topline) > div {
     min-width: 0 !important;
     gap: .2rem !important;
   }
@@ -1733,17 +1733,17 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
 
 /* Short-phone first-screen fit for the two compact standalone calculators. */
 @media (max-width: 360px) and (max-height: 640px) {
-  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] {
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav:has(.ca-site-nav-topline) {
     flex-wrap: wrap !important;
     gap: .25rem !important;
     padding-block: .2rem !important;
   }
-  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] > a {
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav:has(.ca-site-nav-topline) > a {
     min-height: 36px !important;
     font-size: .95rem !important;
     white-space: nowrap !important;
   }
-  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] > div {
+  body:has(#extra-calculator-form.ca-compact-calculator-form) header nav:has(.ca-site-nav-topline) > div {
     gap: .2rem !important;
   }
   #main:has(#extra-calculator-form.ca-compact-calculator-form) {
@@ -1783,7 +1783,7 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
 }
 
 /* Shared calculator shortcut carousel: fits inside the existing header row. */
-header nav[aria-label="Main"] > div { min-width: 0; }
+header nav:has(.ca-site-nav-topline) > div { min-width: 0; }
 .ca-calculator-carousel {
   flex: 1 1 180px;
   min-width: 88px;
@@ -1851,21 +1851,21 @@ header nav[aria-label="Main"] > div { min-width: 0; }
   to { transform: translateX(-50%); }
 }
 @media (max-width: 420px) {
-  header nav[aria-label="Main"] {
+  header nav:has(.ca-site-nav-topline) {
     gap: .35rem !important;
     padding-left: 20px !important;
     padding-right: 20px !important;
   }
-  header nav[aria-label="Main"] > a {
+  header nav:has(.ca-site-nav-topline) > a {
     gap: .25rem !important;
     font-size: 1rem !important;
   }
-  header nav[aria-label="Main"] > div {
+  header nav:has(.ca-site-nav-topline) > div {
     min-width: 0 !important;
     flex: 1 1 auto;
     gap: .35rem !important;
   }
-  header nav[aria-label="Main"] #theme-toggle {
+  header nav:has(.ca-site-nav-topline) #theme-toggle {
     padding: .35rem .45rem !important;
     font-size: .72rem !important;
   }
@@ -1935,5 +1935,119 @@ header nav[aria-label="Main"] > div { min-width: 0; }
 @media (max-width: 600px) {
   #main:has(.ca-home-wrap) {
     padding-top: .2rem !important;
+  }
+}
+
+/* Adult calorie calculator: fit all inputs and the action on short phones.
+   Scoped to this page so no existing calculator layout is changed. */
+@media (max-width: 340px) and (max-height: 640px) {
+  body:has(#main.ca-tool-calorie-calculator) header nav[aria-label] {
+    padding: .2rem .45rem !important;
+    gap: .25rem !important;
+  }
+  body:has(#main.ca-tool-calorie-calculator) header .ca-calculator-carousel {
+    display: none !important;
+  }
+  #main.ca-tool-calorie-calculator {
+    padding-top: .25rem !important;
+    padding-bottom: .5rem !important;
+  }
+  #main.ca-tool-calorie-calculator > header {
+    margin-bottom: .2rem !important;
+  }
+  #main.ca-tool-calorie-calculator > header p:first-child {
+    font-size: .62rem !important;
+    line-height: 1.1 !important;
+    margin-bottom: .1rem !important;
+  }
+  #main.ca-tool-calorie-calculator > header h1 {
+    font-size: 1.1rem !important;
+    line-height: 1.1 !important;
+    margin-top: .1rem !important;
+  }
+  #main.ca-tool-calorie-calculator > header p:last-child {
+    font-size: .68rem !important;
+    line-height: 1.2 !important;
+    margin-top: .15rem !important;
+  }
+  #main.ca-tool-calorie-calculator > aside {
+    font-size: .68rem !important;
+    line-height: 1.2 !important;
+    padding: .35rem .45rem !important;
+    margin-bottom: .35rem !important;
+  }
+  #main.ca-tool-calorie-calculator > section:first-of-type {
+    padding: .45rem !important;
+  }
+  #main.ca-tool-calorie-calculator #calorie-form {
+    margin-top: .25rem !important;
+    row-gap: .1rem !important;
+  }
+  #main.ca-tool-calorie-calculator #calorie-form label {
+    font-size: .68rem !important;
+    line-height: 1.1 !important;
+    margin-bottom: .1rem !important;
+  }
+  #main.ca-tool-calorie-calculator #calorie-form input,
+  #main.ca-tool-calorie-calculator #calorie-form select {
+    min-height: 36px !important;
+    height: 36px !important;
+    padding: .15rem .3rem !important;
+    font-size: 16px !important;
+  }
+  #main.ca-tool-calorie-calculator #calorie-form button {
+    min-height: 44px !important;
+    padding: .3rem .5rem !important;
+  }
+}
+
+
+/* Header refinement: theme control stays at upper-right, while the tools slide
+   occupies its own full-width row on every page and viewport. */
+header nav:has(.ca-site-nav-topline) {
+  width: 100% !important;
+  max-width: 80rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: .5rem !important;
+}
+header nav:has(.ca-site-nav-topline) .ca-site-nav-topline {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: .75rem !important;
+  direction: ltr !important;
+}
+header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
+  display: block !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: 44px !important;
+  min-height: 44px !important;
+}
+@media (max-width: 420px) {
+  header nav:has(.ca-site-nav-topline) {
+    padding: .4rem .6rem !important;
+    gap: .4rem !important;
+  }
+  header nav:has(.ca-site-nav-topline) .ca-site-nav-topline {
+    gap: .5rem !important;
+  }
+  header nav:has(.ca-site-nav-topline) #theme-toggle {
+    min-height: 40px !important;
+    padding: .3rem .55rem !important;
+    font-size: .78rem !important;
+  }
+  header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
   }
 }

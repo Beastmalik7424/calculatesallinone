@@ -20,7 +20,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 - [Money and Business](https://calculateallinone.vercel.app/money/): EMI, Zakat, profit and loss, discounts and compound interest, with worked examples and assumptions.
 - [Math and Converters](https://calculateallinone.vercel.app/math/): Standard and scientific arithmetic, percentages, fractions and unit conversion.
 - [Date and Time](https://calculateallinone.vercel.app/time/): Age, years-to-days, date difference and stopwatch tools.
-- [Health](https://calculateallinone.vercel.app/health/): Adult BMI screening information and limitations.
+- [Health](https://calculateallinone.vercel.app/health/): Adult BMI screening, maintenance-calorie estimates and their limitations.
 - [Worship](https://calculateallinone.vercel.app/worship/): Tasbih and Zakat tools, with stated method and limitations.
 
 ## Money calculators
@@ -45,10 +45,14 @@ This index helps automated systems discover the site's pages. It is not a replac
 - [Date Difference Calculator](https://calculateallinone.vercel.app/date-calculator/): Elapsed Gregorian calendar days between two dates, including leap days.
 - [Stopwatch](https://calculateallinone.vercel.app/stopwatch/): Browser-based elapsed-time tool for everyday timing.
 
+## Health tools
+
+- [Adult Calorie Calculator](https://calculateallinone.vercel.app/calorie-calculator/): Browser-based adult maintenance-calorie estimate using the Mifflin–St Jeor resting-energy equation and an explicitly stated consumer activity assumption. Not a medical prescription or a dynamic weight-loss model.
+- [Adult BMI Calculator](https://calculateallinone.vercel.app/bmi-calculator/): Adult BMI screening calculation. It is not a diagnosis.
+
 ## Other tools
 
 - [Query Calculator](https://calculateallinone.vercel.app/query-calculator/): Supported natural-language arithmetic and time-conversion questions. It does not answer arbitrary questions.
-- [Adult BMI Calculator](https://calculateallinone.vercel.app/bmi-calculator/): Adult BMI screening calculation. It is not a diagnosis.
 - [Tasbih Counter](https://calculateallinone.vercel.app/tasbih-counter/): Browser-based count, undo, reset and target controls.
 
 ## Urdu tools

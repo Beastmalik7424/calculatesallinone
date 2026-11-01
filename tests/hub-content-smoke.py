@@ -46,5 +46,6 @@ for phrase in (
 
 for slug in ("percentage-calculator", "fraction-calculator"):
     assert f'href="/{slug}/"' in math, slug
+assert 'href="/calorie-calculator/"' in page("health"), "Health hub must link to the adult calorie calculator"
 assert 'href="/compound-interest-calculator/"' in money
 print("Money and Math hub content, canonical/indexability and contextual links verified")

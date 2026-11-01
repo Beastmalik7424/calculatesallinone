@@ -8,7 +8,7 @@ ENGLISH_TOOLS = {
     "standard-calculator", "tasbih-counter", "stopwatch",
     "years-to-days-calculator", "query-calculator", "emi-calculator",
     "percentage-calculator", "fraction-calculator",
-    "compound-interest-calculator", "date-calculator",
+    "compound-interest-calculator", "date-calculator", "calorie-calculator",
 }
 
 
@@ -35,7 +35,7 @@ for path in ("/", "/bmi-calculator/", "/tasbih-counter/", "/percentage-calculato
     group = primary_group(markup, path)
     found = set(re.findall(r'data-tool-shortcut="([^"]+)"', group))
     assert found == ENGLISH_TOOLS, (
-        f"Carousel must expose all 16 calculator destinations on {path}. "
+        f"Carousel must expose all 17 calculator destinations on {path}. "
         f"Missing={sorted(ENGLISH_TOOLS-found)}, extra={sorted(found-ENGLISH_TOOLS)}"
     )
     if path == "/emi-calculator/":
@@ -53,27 +53,28 @@ for path in ("/", "/bmi-calculator/", "/tasbih-counter/", "/percentage-calculato
             group
         ), f"Current calculator must be visibly and accessibly active on {path}"
 
-# Every shipped language homepage must render all 16 calculator names in its own language.
+# Every shipped language homepage must render all 17 calculator names in its own language.
 LANGUAGE_LABELS = {
-    "ar": ["حاسبة تحويل السنوات إلى أيام", "حاسبة الاستعلام", "حاسبة الأقساط", "حاسبة النسبة المئوية", "حاسبة الكسور", "حاسبة الفائدة المركبة", "حاسبة الفرق بين التواريخ"],
-    "hi": ["वर्ष से दिन कैलकुलेटर", "क्वेरी कैलकुलेटर", "ईएमआई कैलकुलेटर", "प्रतिशत कैलकुलेटर", "भिन्न कैलकुलेटर", "चक्रवृद्धि ब्याज कैलकुलेटर", "तिथि अंतर कैलकुलेटर"],
-    "es": ["Calculadora de años a días", "Calculadora de consultas", "Calculadora de EMI", "Calculadora de porcentajes", "Calculadora de fracciones", "Calculadora de interés compuesto", "Calculadora de diferencia de fechas"],
-    "fr": ["Calculatrice années en jours", "Calculatrice de requêtes", "Calculatrice EMI", "Calculatrice de pourcentage", "Calculatrice de fractions", "Calculatrice d’intérêts composés", "Calculatrice de différence de dates"],
+    "ar": ["حاسبة تحويل السنوات إلى أيام", "حاسبة الاستعلام", "حاسبة الأقساط", "حاسبة النسبة المئوية", "حاسبة الكسور", "حاسبة الفائدة المركبة", "حاسبة الفرق بين التواريخ", "حاسبة السعرات الحرارية للبالغين"],
+    "hi": ["वर्ष से दिन कैलकुलेटर", "क्वेरी कैलकुलेटर", "ईएमआई कैलकुलेटर", "प्रतिशत कैलकुलेटर", "भिन्न कैलकुलेटर", "चक्रवृद्धि ब्याज कैलकुलेटर", "तिथि अंतर कैलकुलेटर", "वयस्क कैलोरी कैलकुलेटर"],
+    "es": ["Calculadora de años a días", "Calculadora de consultas", "Calculadora de EMI", "Calculadora de porcentajes", "Calculadora de fracciones", "Calculadora de interés compuesto", "Calculadora de diferencia de fechas", "Calculadora de calorías para adultos"],
+    "fr": ["Calculatrice années en jours", "Calculatrice de requêtes", "Calculatrice EMI", "Calculatrice de pourcentage", "Calculatrice de fractions", "Calculatrice d’intérêts composés", "Calculatrice de différence de dates", "Calculateur de calories pour adultes"],
 }
 for lang, required_labels in LANGUAGE_LABELS.items():
     markup = output_for("/" + lang + "/")
     group = primary_group(markup, "/" + lang + "/")
     found = set(re.findall(r'data-tool-shortcut="([^"]+)"', group))
-    assert found == ENGLISH_TOOLS, f"{lang} carousel must include all 16 calculators"
+    assert found == ENGLISH_TOOLS, f"{lang} carousel must include all 17 calculators"
     for label in required_labels:
         assert label in group, f"{lang} carousel missing translated full calculator name: {label}"
 
 urdu_home = output_for("/ur/")
 urdu_home_group = primary_group(urdu_home, "/ur/")
 urdu_found = set(re.findall(r'data-tool-shortcut="([^"]+)"', urdu_home_group))
-assert urdu_found == ENGLISH_TOOLS, "Urdu carousel must show all 16 calculators, including tools without Urdu pages"
+assert urdu_found == ENGLISH_TOOLS, "Urdu carousel must show all 17 calculators, including tools without Urdu pages"
 assert 'href="/years-to-days-calculator/"' in urdu_home_group, "Untranslated Urdu tool destinations must safely fall back to their existing English pages"
 assert "سال سے دن کیلکولیٹر" in urdu_home_group, "Urdu carousel must still show the Urdu calculator name"
+assert "بالغ افراد کا کیلوری کیلکولیٹر" in urdu_home_group, "Urdu carousel must include the adult calorie calculator"
 
 urdu = output_for("/ur/tasbih-counter/")
 urdu_group = primary_group(urdu, "/ur/tasbih-counter/")
@@ -88,6 +89,8 @@ assert 'id="t-tap"' in tasbih, "Tasbih Count one action must remain in generated
 css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 assert "@keyframes ca-calculator-marquee" in css, "Calculator shortcuts must auto-slide"
 assert ".ca-calculator-carousel:focus-within" in css, "Keyboard focus must pause the moving carousel"
+assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must be in the upper header row before the full-width tools slide"
+assert "ca-site-nav-topline" in markup, "Header must separate the top controls from the full-width tools slide"
 assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
     "Reduced-motion users must get a non-animated, manually scrollable carousel"
 )
@@ -95,4 +98,6 @@ assert "#t-tap" in css and "min-height:48px" in css, (
     "Tasbih Count one button must retain a visible, accessible touch target"
 )
 
-print("Calculator carousel, active links, reduced-motion support and Tasbih action smoke tests PASS")
+assert ".ca-calculator-carousel" in css and re.search(r"\.ca-calculator-carousel[^{}]*\{[^}]*width:\s*100%", css), "Tools slide must span the full available header row"
+assert "ca-site-nav-topline" in css and "justify-content:space-between" in css.replace(" ", ""), "Theme control and brand must stay on opposite ends of the top row"
+print("Calculator carousel, all 17 tools, header layout, reduced-motion support and Tasbih action smoke tests PASS")
