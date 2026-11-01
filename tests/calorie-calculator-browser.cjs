@@ -32,7 +32,8 @@ const { chromium } = require("playwright");
       assert.equal(associatedWeightLabels.filter(label => label === "Weight").length, 1, "Weight input must have exactly one explicit, correctly named associated label");
       assert.equal(await page.getByLabel("Weight unit").count(), 1);
 
-      const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight }));
+      const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight, buttonTop: document.querySelector("#cal-calculate").getBoundingClientRect().top, pageHeight: document.documentElement.scrollHeight }));
+      console.log("CALORIE VIEWPORT", viewport.width, JSON.stringify(layout));
       console.log("Calorie calculator first-screen geometry", viewport.width, layout);
       assert.equal(layout.overflow, false, "No horizontal overflow at " + viewport.width + "px");
       assert.ok(layout.buttonBottom <= layout.viewportHeight, "Calculate action must be visible in first viewport at " + viewport.width + "px");
