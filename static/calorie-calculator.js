@@ -51,11 +51,13 @@ function initialize(doc){
  var rootNode=doc.getElementById("calorie-form");if(!rootNode)return;
  var byId=function(id){return doc.getElementById(id);};
  var unit=byId("cal-height-unit"),metric=byId("cal-height-metric"),imperial=byId("cal-height-imperial");
- var cm=byId("cal-height-cm"),ft=byId("cal-height-ft"),inch=byId("cal-height-in");
+ var cm=byId("cal-height-cm"),ft=byId("cal-height-ft"),inch=byId("cal-height-in"),heightLabel=byId("cal-height-label");
  var error=byId("calorie-error"),result=byId("calorie-result");
  function clear(){error.textContent="";result.hidden=true;result.replaceChildren();}
  function updateHeight(){
   var imp=unit.value==="ft-in";metric.hidden=imp;imperial.hidden=!imp;
+  heightLabel.textContent=imp?"Height (ft / in)":"Height (cm)";
+  heightLabel.htmlFor=imp?"cal-height-ft":"cal-height-cm";
   cm.disabled=imp;ft.disabled=!imp;inch.disabled=!imp;clear();
  }
  function fmt(v){return new Intl.NumberFormat("en-US",{maximumFractionDigits:1}).format(v);}
