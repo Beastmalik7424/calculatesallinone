@@ -346,6 +346,9 @@ for page in ROOT.rglob("index.html"):
 indexable_paths = [line.strip() for line in Path("indexable.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
 noindex_paths = [line.strip() for line in Path("noindex.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
 assert {SITE + path for path in indexable_paths} == sitemap_urls, "indexable.txt must exactly match sitemap URLs"
+seo_report = Path("seo-build-report.txt").read_text(encoding="utf-8")
+assert "Indexable pages: " + str(len(indexable_paths)) in seo_report, "SEO build report indexable count must match indexable.txt"
+assert "Sitemap URLs: " + str(len(sitemap_urls)) in seo_report, "SEO build report sitemap count must match sitemap.xml"
 assert not ({SITE + path for path in noindex_paths} & sitemap_urls), "noindex URLs must not appear in sitemap"
 assert {SITE + path for path in indexable_paths + noindex_paths} == generated, (
     "Manifest/page mismatch. Missing manifests: " + repr(sorted(generated - {SITE + path for path in indexable_paths + noindex_paths})) +
