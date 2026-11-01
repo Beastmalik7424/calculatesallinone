@@ -140,6 +140,7 @@ def build_extra_pages(head,shell,write):
         body+='<h1 class="text-2xl font-bold text-stone-900 dark:text-white">'+html.escape(title)+'</h1>'
         body+='<p class="mt-2 text-base text-stone-700 dark:text-stone-200">'+html.escape(description)+'</p>'
         body+='<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="text-sky-800 underline dark:text-sky-300" href="/about/">Muhammad Fayyaz Adeel</a>. See the method, references and limitations below.</p>'
+        body+='<p class="mt-1 text-xs text-stone-600 dark:text-stone-400">Verification: representative results and invalid inputs are covered by automated tests. This is not an independent professional review.</p>'
         body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2 min-w-0">'
         if slug=="percentage-calculator":
             body+="<div class='sm:col-span-2 mt-1'><label for='percentage-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='percentage-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='of'>What is X% of a number?</option><option value='share'>What percentage is one number of another?</option><option value='change'>What is the percentage change?</option></select></div>"
