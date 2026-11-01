@@ -55,6 +55,7 @@ def build_calorie_page(head, shell, write):
         '<section class="mt-6"><h2 class="text-xl font-semibold">Frequently asked questions</h2><div class="mt-2">'
         + "".join('<details class="border-b border-stone-300 py-3 dark:border-stone-700"><summary class="min-h-[44px] cursor-pointer font-medium">' + html.escape(question) + '</summary><p class="mt-2 leading-7">' + html.escape(answer) + '</p></details>' for question, answer in faq)
         + '</div></section>'
+        '<section class="mt-6"><h2 class="text-xl font-semibold">Page ownership and review</h2><p class="mt-2 leading-7">Site maintainer: Muhammad Fayyaz Adeel. No qualified medical professional has reviewed this calculator or its implementation. The cited research supports the described equation and context, not medical certification or endorsement of this website.</p></section>'
         '<section class="mt-6"><h2 class="text-xl font-semibold">Sources and references</h2><ul class="mt-2 list-disc space-y-3 pl-6">'
         + "".join('<li><a class="underline text-sky-800 dark:text-sky-300" href="' + html.escape(url, quote=True) + '" target="_blank" rel="noopener noreferrer">' + html.escape(source_title) + '</a><p class="text-sm leading-6">' + html.escape(note) + '</p></li>' for source_title, url, note in sources)
         + '</ul></section>'
