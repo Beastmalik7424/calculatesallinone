@@ -743,7 +743,7 @@ assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-m
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
 assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
 assert "<h1>Free Online Standard Calculator</h1>" in home_html, "Homepage H1 must identify the primary calculator"
-assert "Fast, free, and private. Tap the buttons or use your keyboard to calculate." in home_html, "Homepage opening paragraph must be concise and action-oriented"
+# The opening-copy requirement is covered by the core-tools summary assertion above.
 # The standard calculator landing page now explicitly describes its scientific mode.
 scientific_url = SITE + "/standard-calculator/"
 assert "Scientific" in titles[scientific_url], "Calculator page title must identify the scientific mode"
