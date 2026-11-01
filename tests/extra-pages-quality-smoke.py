@@ -73,7 +73,7 @@ for slug, spec in CASES.items():
     schemas = [json.loads(item) for item in scripts]
     types = {schema.get("@type") for schema in schemas}
     assert "WebApplication" in types, f"Missing WebApplication schema: {slug}"
-    assert any(schema.get("@type") == "WebApplication" and schema.get("author", {}).get("@id") == "https://calculateallinone/#maintainer" and schema.get("publisher", {}).get("@id") == "https://calculateallinone/#organization" for schema in schemas), f"Missing truthful author/publisher entity links: {slug}"
+    assert any(schema.get("@type") == "WebApplication" and schema.get("author", {}).get("@id") == "https://calculateallinone.vercel.app/#maintainer" and schema.get("publisher", {}).get("@id") == "https://calculateallinone.vercel.app/#organization" for schema in schemas), f"Missing truthful author/publisher entity links: {slug}"
     assert "BreadcrumbList" in types, f"Missing breadcrumb schema: {slug}"
     expected_domain = {
         "percentage-calculator": "openstax.org",
