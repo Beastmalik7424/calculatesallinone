@@ -64,6 +64,7 @@ for slug, spec in CASES.items():
     assert f'href="{spec["category"]}"' in source, f"Missing category breadcrumb: {slug}"
     assert 'id="extra-calculator-form"' in source and ">Calculate</button>" in source, f"Missing calculator form: {slug}"
     assert "Maintained by" in source and "Muhammad Fayyaz Adeel" in source and 'href="/about/"' in source, f"Missing honest maintainer byline: {slug}"
+    assert "Report this calculator" in source and 'href="/contact/"' in source, f"Missing calculator-specific feedback path: {slug}"
     assert source.count("<details") >= 4, f"Expected four useful FAQs: {slug}"
     assert source.count("<h2") >= 7, f"Missing explanatory sections: {slug}"
     for phrase in spec["phrases"]:
