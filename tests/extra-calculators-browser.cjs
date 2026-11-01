@@ -3,7 +3,7 @@ const {chromium}=require("playwright");
 (async()=>{
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
  const base="http://127.0.0.1:4174";
- const viewports=[{width:390,height:844},{width:1366,height:768}];
+ const viewports=[{width:320,height:568},{width:390,height:844},{width:1366,height:768}];
  try{
   for(const viewport of viewports){
    const page=await browser.newPage({viewport});
