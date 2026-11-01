@@ -76,7 +76,7 @@ jobs:
         run: python tests/site-output-smoke.py
       - name: Audit the seven scoped SEO pages
         run: python3 tests/seo-seven-pages.py
-      - name: Test Nu HTML validator retry handling
+      - name: Test Nu HTML validator failover handling
         run: python3 tests/validate-html-retry-smoke.py
       - name: Validate HTML for homepage and seven scoped pages
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
