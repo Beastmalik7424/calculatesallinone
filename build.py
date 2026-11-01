@@ -571,7 +571,7 @@ HUB_CONTENT = {
 
 CATEGORIES = [
     {"slug": "money", "name": "Money and Business", "desc": "Compare EMI, Zakat, profit and loss, discounts and compound interest with worked examples, formulas and clear assumptions."},
-    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI in metric or imperial units, review WHO weight categories, and understand what the screening result cannot tell you."},
+    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI and estimated maintenance calories in metric or imperial units, with clear methods and limitations."},
     {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, and use a browser stopwatch for everyday timing with clear notes about date and timing limits."},
     {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages and fractions, use standard or scientific arithmetic, and convert weight, length and temperature with clear worked examples."},
     {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
@@ -917,6 +917,17 @@ EXTRA.update({
     "query-calculator": {"faq": [], "quick": "Month conversions use 12 months per year and an average Gregorian month of 30.436875 days. Example: 115 months = 9 years and 7 months, about 3,500.24 average days; exact calendar days need a start date."},
 })
 
+TOOLS.append({
+    "slug": "calorie-calculator",
+    "category": "health",
+    "name": "Adult Calorie Calculator",
+    "app": "HealthApplication",
+    "description": "Estimate adult maintenance calories using the Mifflin–St Jeor resting-energy equation and a clearly stated consumer activity assumption. Results are estimates, not medical advice.",
+    "h1": "Adult Calorie Calculator",
+    "lead": "Estimate adult daily maintenance calories from resting energy expenditure and an explicit activity assumption.",
+    "guide": [],
+    "sources": "",
+})
 for _t in TOOLS:
     _t["guide"] = _t["guide"] + GUIDE_EXTRA.get(_t["slug"], [])
     _t["sources"] = _t["sources"] + " " + REVIEW_STATUS.get(_t["slug"], "")
@@ -1953,6 +1964,7 @@ TILE_GRAD = {
     "bmi-calculator": "bg-gradient-to-br from-rose-700 to-pink-700",
     "profit-loss-calculator": "bg-gradient-to-br from-sky-700 to-blue-800",
     "discount-calculator": "bg-gradient-to-br from-orange-700 to-amber-700",
+    "calorie-calculator": "bg-gradient-to-br from-orange-700 to-rose-800",
     "age-calculator": "bg-gradient-to-br from-violet-700 to-purple-800",
     "unit-converter": "bg-gradient-to-br from-indigo-700 to-blue-800",
     "stopwatch": "bg-gradient-to-br from-cyan-700 to-teal-800",
@@ -1963,6 +1975,7 @@ TILE_ICON = {
     "query-calculator": "🔎",
     "zakat-calculator": "🤲",
     "bmi-calculator": "⚖️",
+    "calorie-calculator": "⚡",
     "profit-loss-calculator": "📈",
     "discount-calculator": "🏷️",
     "age-calculator": "🎂",
@@ -2003,9 +2016,9 @@ def home_app_page(lang):
         more_h = "دوسرے ٹولز"
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
-        desc = "Free online calculators for EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas and browser-based tools."
+        desc = "Free online calculators for adult maintenance calories, EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas."
         h1 = "Free Online Standard Calculator"
-        lead = "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up."
+        lead = "Free browser calculators: adult calorie estimates, Tasbih Counter, Days to Years and EMI. No sign-up."
         more_h = "More free tools"
     trust = ""
     for i, label in enumerate(TRUST[lang]):
@@ -2291,7 +2304,11 @@ def main():
     for c in CATEGORIES:
         entries.append((category_page(c), []))
     for t in TOOLS:
-        path = tool_page(t)
+        if t["slug"] == "calorie-calculator":
+            from calorie_calculator import build_calorie_page
+            path = build_calorie_page(head, shell, write)
+        else:
+            path = tool_page(t)
         if t["slug"] in URDU:
             alts = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
             entries.append((path, alts))
