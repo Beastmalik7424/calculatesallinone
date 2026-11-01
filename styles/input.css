@@ -1734,7 +1734,7 @@ header nav #theme-toggle, header nav details > summary { white-space: nowrap; }
 /* Short-phone first-screen fit for the two compact standalone calculators. */
 @media (max-width: 360px) and (max-height: 640px) {
   body:has(#extra-calculator-form.ca-compact-calculator-form) header nav[aria-label="Main"] {
-    flex-wrap: nowrap !important;
+    flex-wrap: wrap !important;
     gap: .25rem !important;
     padding-block: .2rem !important;
   }
