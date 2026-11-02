@@ -109,10 +109,14 @@ const { chromium } = require("playwright");
       assert.match(await page.locator("#calorie-result").innerText(), /1,648\.8 kcal\/day/, "Metric/imperial conversion must preserve the rounded REE display");
       assert.match(await page.locator("#calorie-result").innerText(), /2,555\.6 kcal\/day/, "Metric/imperial conversion must preserve the activity-adjusted maintenance display");
       await page.locator("#cal-coefficient").selectOption("female");
-      await page.locator("#cal-eligibility").selectOption("pregnant");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-error").innerText(), /not intended for pregnancy or breastfeeding/i);
-      assert.equal(await page.locator("#calorie-result").isVisible(), false);
+      for (const status of ["pregnant", "breastfeeding", "both"]) {
+        await page.locator("#cal-eligibility").selectOption(status);
+        await page.locator("#cal-calculate").click();
+        assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", status + " must show safe alternative guidance rather than a generic error");
+        assert.equal(await page.locator("#calorie-result").isVisible(), true, status + " must display a clear next step");
+        assert.match(await page.locator("#calorie-result").innerText(), /pregnancy and breastfeeding need a different estimate/i);
+        assert.equal(await page.locator('#calorie-result a[href="https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator"]').count(), 1, "Pregnancy and breastfeeding must link to the official DRI calculator");
+      }
       await page.locator("#cal-eligibility").selectOption("prefer_not_to_say");
       assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Changing eligibility after a blocked calculation must clear the stale pregnancy warning");
       assert.equal(await page.locator("#calorie-result").isVisible(), false, "Changing inputs must not leave a stale result visible");
