@@ -25,6 +25,14 @@ const { chromium } = require("playwright");
       assert.equal(await page.locator("#calorie-form").evaluate(el => el.tagName), "FORM");
       assert.equal(await page.locator("#calorie-result").getAttribute("role"), "status");
       assert.equal(await page.locator("#calorie-error").getAttribute("role"), "alert");
+      const eligibilityNotice = page.locator('aside[role="note"]');
+      assert.match(await eligibilityNotice.innerText(), /Adults 18\+ only\. Not for pregnancy or breastfeeding\./);
+      const noticeClasses = await eligibilityNotice.getAttribute("class");
+      assert.match(noticeClasses, /border-sky-300/);
+      assert.match(noticeClasses, /bg-sky-50/);
+      assert.doesNotMatch(noticeClasses, /amber/);
+      assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Fresh page load must not show a validation error");
+      assert.equal(await page.locator("#calorie-error").isVisible(), false, "Empty validation region must not occupy visible space on initial load");
       assert.equal(await page.getByLabel("Age (years)").count(), 1);
       assert.equal(await page.getByLabel("Equation coefficient").count(), 1);
       for (const id of ["cal-age", "cal-coefficient", "cal-weight", "cal-activity"]) {
