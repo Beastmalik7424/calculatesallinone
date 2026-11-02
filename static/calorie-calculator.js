@@ -21,6 +21,7 @@ function calculateMaintenanceCalories(input){
  if(age<18)throw new Error("This calculator is for adults aged 18 or older.");
  if(age>120)throw new Error("Enter an age from 18 to 120 years.");
  if(!["no","pregnant","breastfeeding","both","prefer_not_to_say"].includes(input.pregnancyStatus))throw new Error("Select a pregnancy and breastfeeding status.");
+ if(input.pregnancyStatus==="prefer_not_to_say")throw new Error("To continue, select “Neither applies”. If you prefer not to disclose, no estimate will be calculated.");
  if(input.pregnancyStatus!=="no")throw new Error("This calculator is not intended for pregnancy or breastfeeding. It does not provide an ordinary maintenance estimate for these circumstances.");
  var coefficient=input.coefficient;
  if(coefficient!=="male"&&coefficient!=="female")throw new Error("Choose one of the published equation coefficients to continue.");
@@ -89,6 +90,10 @@ function initialize(doc){
   }catch(e){error.textContent=e&&e.message?e.message:"The estimate could not be calculated. Check the entries and try again.";}
  }
  unit.addEventListener("change",updateHeight);
+ rootNode.querySelectorAll("input, select").forEach(function(control){
+  control.addEventListener("input",clear);
+  control.addEventListener("change",clear);
+ });
  byId("cal-calculate").addEventListener("click",calculate);
  byId("cal-reset").addEventListener("click",function(){
   ["cal-age","cal-weight","cal-height-cm","cal-height-ft","cal-height-in"].forEach(function(id){byId(id).value="";});
