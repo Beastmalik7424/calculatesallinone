@@ -191,8 +191,8 @@ assert.match(html, /not calibrated or validated for Pakistan/i, "Page must not i
 assert.match(html, /CDC pregnancy guidance/i, "Page must include independent CDC pregnancy context");
 assert.match(html, /CDC breastfeeding guidance/i, "Page must include independent CDC breastfeeding context");
 assert.match(html, /not interchangeable with the equations/i, "Page must distinguish CDC public guidance from the DRI equation outputs");
-assert.match(html, /330 to 400 kilocalories/i, "Page must accurately cite CDC breastfeeding context");
-assert.match(html, /340 additional calories.*450 additional calories/i, "Page must accurately cite CDC pregnancy context");
+assert.match(html, /330–400 additional kcal\/day/i, "Page must accurately cite CDC breastfeeding context");
+assert.match(html, /340 additional kcal\/day.*450 additional kcal\/day/i, "Page must accurately cite CDC pregnancy context");
 const calculatorJs = fs.readFileSync(path.join(__dirname, "..", "static", "calorie-calculator.js"), "utf8");
 assert.match(calculatorJs, /eligibility\.addEventListener\("change",updateEligibility\)/,
   "Changing pregnancy/breastfeeding status must reveal the correct stage-specific inputs");
