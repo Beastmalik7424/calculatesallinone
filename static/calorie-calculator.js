@@ -222,6 +222,7 @@ function initialize(doc){
  }
  unit.addEventListener("change",updateHeight);
  coefficient.addEventListener("change",updateEligibility);
+ eligibility.addEventListener("change",updateEligibility);
  rootNode.querySelectorAll("input, select").forEach(function(control){
   control.addEventListener("input",clear);
   control.addEventListener("change",clear);
