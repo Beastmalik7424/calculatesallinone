@@ -188,6 +188,8 @@ assert.match(html, /This is not a combined calorie target/);
 assert.match(html, /US and Canadian reference populations/);
 assert.match(html, /excluded studies from non-high-income countries/i, "Page must disclose the National Academies evidence-population exclusion");
 assert.match(html, /not calibrated or validated for Pakistan/i, "Page must not imply that the US/Canada DRI model is validated for Pakistan");
+assert.match(html, /Type 1 and Type 2 diabetes/i, "Page must disclose source exclusion of chronic disease participants");
+assert.match(html, /do not rely on this estimate for treatment or dietary decisions/i, "Page must warn against clinical reliance for chronic conditions");
 assert.match(html, /CDC pregnancy guidance/i, "Page must include independent CDC pregnancy context");
 assert.match(html, /CDC breastfeeding guidance/i, "Page must include independent CDC breastfeeding context");
 assert.match(html, /not interchangeable with the equations/i, "Page must distinguish CDC public guidance from the DRI equation outputs");
