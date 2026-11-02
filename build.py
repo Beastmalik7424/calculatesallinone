@@ -1489,6 +1489,23 @@ def years_to_days_reference_html():
     return out
 
 
+def days_to_years_reference_html():
+    day_counts = [724, 1145, 1476, 2436, 7200, 27375, 28000, 42069]
+    out = ('<section class="mt-10"><h2 class="' + H2 + '">Worked reference: days to years</h2>'
+           '<p class="' + P + '">Convert a day count to decimal years by dividing by 365 for the fixed-year method or 365.2425 for the Gregorian average. Values below are rounded to four decimal places; they are duration estimates, not calendar ages.</p>'
+           '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
+           '<caption class="sr-only">Example day counts converted to decimal years using 365-day and Gregorian-average year lengths</caption>'
+           '<thead><tr><th scope="col" class="border-b p-3">Days</th><th scope="col" class="border-b p-3">365-day year</th><th scope="col" class="border-b p-3">Gregorian average (365.2425)</th></tr></thead><tbody>')
+    for days in day_counts:
+        simple = format(days / 365, ".4f")
+        average = format(days / 365.2425, ".4f")
+        out += ('<tr><th scope="row" class="border-b p-3">' + format(days, ",") + '</th>'
+                '<td class="border-b p-3">' + simple + '</td>'
+                '<td class="border-b p-3">' + average + '</td></tr>')
+    out += ('</tbody></table></div><p class="' + P + '">A decimal-year result does not identify the exact calendar age or elapsed years. For an exact interval, enter the actual start and end dates in the Date Difference Calculator.</p></section>')
+    return out
+
+
 def guide_html(sections):
     out = ""
     for heading, paras in sections:
@@ -1721,7 +1738,7 @@ def tool_page(t):
             + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>')
            if EXTRA[t["slug"]]["quick"].strip() else "")
         + profit_reference_table
-        + (guide_html(guide[:2]) + years_to_days_reference_html() + guide_html(guide[2:])
+        + (guide_html(guide[:2]) + years_to_days_reference_html() + guide_html(guide[2:]) + days_to_years_reference_html()
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
