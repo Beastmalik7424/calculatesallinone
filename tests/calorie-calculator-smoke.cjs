@@ -10,7 +10,8 @@ const {
   calculateMaintenanceCalories,
   ACTIVITY_PRESETS,
   formatKcal,
-  formatEquationKcal
+  formatEquationKcal,
+  calculateLifeStageCalories
 } = require("../static/calorie-calculator.js");
 
 const male = calculateMaintenanceCalories({
@@ -116,9 +117,36 @@ invalid({ ...base, heightCm: 99 }, /height/i);
 invalid({ ...base, heightCm: 251 }, /height/i);
 invalid({ ...base, coefficient: "other" }, /coefficient/i);
 invalid({ ...base, activityId: "unknown" }, /activity/i);
-invalid({ ...base, coefficient: "female", pregnancyStatus: "pregnant" }, /pregnancy or breastfeeding/i);
-invalid({ ...base, coefficient: "female", pregnancyStatus: "breastfeeding" }, /pregnancy or breastfeeding/i);
-invalid({ ...base, coefficient: "female", pregnancyStatus: "both" }, /pregnancy or breastfeeding/i);
+const lifeStageBase = {
+  age: 30, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175,
+  coefficient: "female", lifeStageActivityId: "inactive",
+  pregnancyWeeks: 20, prePregnancyWeight: 70, breastfeedingStage: "exclusive_0_6"
+};
+const bothLifeStages = calculateLifeStageCalories({ ...lifeStageBase, pregnancyStatus: "both" });
+assert.equal(bothLifeStages.pregnancy.eerKcalPerDay, 2363.2,
+  "Pregnancy estimate must use the 2023 National Academies second-trimester equation and normal pre-pregnancy BMI deposition");
+assert.equal(bothLifeStages.breastfeeding.eerKcalPerDay, 2595.3,
+  "Exclusive breastfeeding estimate must use the 2023 National Academies 0–6 month equation");
+assert.equal(bothLifeStages.pregnancy.method, "National Academies DRI 2023, Table 5-17");
+assert.equal(bothLifeStages.breastfeeding.method, "National Academies DRI 2023, Table 5-18");
+assert.equal(bothLifeStages.combinedTargetKcalPerDay, null,
+  "Separate pregnancy and breastfeeding estimates must never be added into an unsupported combined target");
+const firstTrimester = calculateLifeStageCalories({ ...lifeStageBase, pregnancyStatus: "pregnant", pregnancyWeeks: 10 });
+assert.equal(firstTrimester.pregnancy.eerKcalPerDay, 2195.3,
+  "First trimester must use the non-pregnant adult female TEE equation without a pregnancy increment");
+const thirdTrimester = calculateLifeStageCalories({ ...lifeStageBase, pregnancyStatus: "pregnant", pregnancyWeeks: 32 });
+assert.equal(thirdTrimester.pregnancy.eerKcalPerDay, 2473.12);
+const laterBreastfeeding = calculateLifeStageCalories({ ...lifeStageBase, pregnancyStatus: "breastfeeding", breastfeedingStage: "partial_7_12" });
+assert.equal(laterBreastfeeding.breastfeeding.eerKcalPerDay, 2575.3,
+  "Partial breastfeeding 7–12 months must use the 380 kcal/day increment");
+invalidLifeStage({ ...lifeStageBase, age: 18, pregnancyStatus: "pregnant" }, /19 years or older/);
+invalidLifeStage({ ...lifeStageBase, pregnancyStatus: "pregnant", pregnancyWeeks: 0 }, /pregnancy weeks/i);
+invalidLifeStage({ ...lifeStageBase, pregnancyStatus: "pregnant", prePregnancyWeight: 0 }, /pre-pregnancy weight/i);
+invalidLifeStage({ ...lifeStageBase, pregnancyStatus: "breastfeeding", breastfeedingStage: "" }, /breastfeeding stage/i);
+invalidLifeStage({ ...lifeStageBase, pregnancyStatus: "both", lifeStageActivityId: "extra_active" }, /activity category/i);
+function invalidLifeStage(input, pattern) {
+  assert.throws(() => calculateLifeStageCalories(input), pattern);
+}
 invalid({ ...base, coefficient: "female", pregnancyStatus: "prefer_not_to_say" }, /select “Neither applies”/i);
 invalid({ ...base, coefficient: "female", pregnancyStatus: "not_selected" }, /select/i);
 invalid({ ...base, coefficient: "female", pregnancyStatus: undefined }, /select a pregnancy and breastfeeding status/i);
@@ -145,11 +173,16 @@ assert.ok(html.includes("How many calories do I need to maintain my weight?"), "
 assert.ok(html.includes("https://www.ncbi.nlm.nih.gov/books/NBK591031/"), "Page must cite the National Academies energy-expenditure definitions");
 assert.match(html, /Mifflin–St Jeor/);
 assert.match(html, /498 healthy adults/);
-assert.match(html, /pregnancy or breastfeeding/);
+assert.match(html, /pregnancy and breastfeeding estimates use separate/i);
+assert.match(html, /National Academies DRI 2023/);
+assert.match(html, /not a combined calorie target/i);
 assert.match(html, /competitive athletes/i, "Page must explain the limitations for competitive athletes");
 assert.match(html, /metabolic conditions/i, "Page must explain the limitations for metabolic conditions");
 assert.match(html, /https:\/\/www\.mayoclinic\.org\/healthy-lifestyle\/weight-loss\/in-depth\/calorie-calculator\/itt-20402304/, "Page must cite Mayo Clinic safety guidance");
 assert.match(html, /https:\/\/www\.nal\.usda\.gov\/human-nutrition-and-food-safety\/dri-calculator/, "Page must link to the official DRI calculator reference");
+assert.match(html, /https:\/\/www\.nationalacademies\.org\/read\/26818\/chapter\/7/);
+assert.match(html, /cal-pregnancy-weeks/);
+assert.match(html, /cal-breastfeeding-stage/);
 assert.match(html, /has not been medically reviewed/i);
 assert.match(html, /Site maintainer: Muhammad Fayyaz Adeel/);
 assert.match(html, /No qualified medical professional has reviewed this calculator or its implementation/);
