@@ -18,6 +18,10 @@ HUB_EXTRA = {
         ])
     ],
     "health": [
+        ("Daily calorie estimates", [
+            "Use the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/calorie-calculator/\">Adult Calorie Calculator</a> to estimate maintenance calories from the Mifflin–St Jeor resting-energy equation and an explicitly stated consumer activity assumption. It is an estimate, not a measured metabolic rate or a medical prescription.",
+            "The calorie tool is for adults 18 and older and is not intended for pregnancy or breastfeeding. It estimates maintenance only and does not prescribe a calorie deficit, surplus or weight-change target.",
+        ]),
         ("How to use the health tool", [
             "The BMI calculator asks for weight and height and gives one screening number for adults. You can enter values in metric or imperial units. Choose the unit first, then enter the numbers.",
             "Measure your weight in the morning in light clothes and your height without shoes. Use the same method each time you check, so the numbers can be compared fairly.",

@@ -29,6 +29,17 @@ CASES = {
         "A lap time of 83 seconds equals 1 minute and 23 seconds.",
         "A total of 3,725 seconds equals 1 hour, 2 minutes and 5 seconds.",
     ],
+    "calorie-calculator": [
+        "resting energy expenditure (REE)",
+        "1,648.75 kcal/day REE",
+        "1,978.5 kcal/day",
+        "498 healthy adults aged 19–78",
+        "activity multipliers are consumer estimates",
+        "not intended for pregnancy or breastfeeding",
+        "has not been medically reviewed",
+        "REE is not a universal minimum safe calorie intake",
+        "does not implement the NIDDK dynamic weight-change model",
+    ],
     "years-to-days-calculator": [
         "For 13 years, the simple result is 4,745 days, while the Gregorian-average result is 4,748.1525 days.",
         "For 29 years, the simple conversion is 29 x 365 = 10,585 days.",

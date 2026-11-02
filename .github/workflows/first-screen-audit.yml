@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - 'build.py'
+      - 'calorie_calculator.py'
+      - 'static/calorie-calculator.js'
+      - 'tests/calorie-calculator-browser.cjs'
       - 'emi-calculator.html'
       - 'tests/emi-viewport-audit.cjs'
       - 'styles/input.css'
@@ -31,6 +34,13 @@ jobs:
           python3 -m http.server 8123 --directory public >/tmp/site-server.log 2>&1 &
           node tests/viewport-audit.cjs
           node tests/emi-viewport-audit.cjs
+          python3 -m http.server 4174 --directory public >/tmp/calorie-browser-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null
+          node tests/calorie-calculator-browser.cjs
       - name: Save actual first-screen screenshots
         if: always()
         uses: actions/upload-artifact@v7
