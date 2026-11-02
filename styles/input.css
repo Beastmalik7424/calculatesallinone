@@ -1484,17 +1484,19 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
     line-height: 1.12 !important;
     margin: .1rem 0 .25rem !important;
   }
+  #main:has(.ca-tool-zakat-calculator) > p { display: none !important; }
+  #main .ca-tool-zakat-calculator #zakat-form p.text-sm { font-size: .64rem !important; line-height: 1.05 !important; }
   #main .ca-tool-zakat-calculator {
     margin-top: .2rem !important;
     padding: .45rem !important;
     border-radius: .75rem !important;
   }
   #main .ca-tool-zakat-calculator #zakat-form.space-y-5 > :not([hidden]) ~ :not([hidden]) {
-    margin-top: .35rem !important;
+    margin-top: .2rem !important;
   }
   #main .ca-tool-zakat-calculator #zakat-form > .grid {
     grid-template-columns: repeat(2,minmax(0,1fr)) !important;
-    gap: .35rem .45rem !important;
+    gap: .25rem .35rem !important;
   }
   #main .ca-tool-zakat-calculator #zakat-form label.block {
     font-size: .72rem !important;
