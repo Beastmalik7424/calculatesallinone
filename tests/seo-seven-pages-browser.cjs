@@ -128,7 +128,7 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       const primaryShortcuts = calculatorCarousel.locator('[data-tool-set="primary"] [data-tool-shortcut]');
       assert.equal(await globalNav.isVisible(), true, "EMI page global navigation must remain visible");
       assert.equal(await calculatorCarousel.isVisible(), true, "EMI calculator shortcut carousel must remain visible");
-      assert.equal(await primaryShortcuts.count(), 16, "EMI carousel must expose all 16 calculator destinations");
+      assert.equal(await primaryShortcuts.count(), 17, "EMI carousel must expose all 17 calculator destinations");
       assert.equal(await emiShortcut.isVisible(), true, "EMI calculator must be highlighted as the active tool");
       const emiMain = await emiPage.locator("main.emi-page-main").boundingBox();
       assert.ok(emiMain, "EMI main calculator column must exist");

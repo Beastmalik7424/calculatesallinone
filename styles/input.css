@@ -1632,6 +1632,7 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
   #main .ca-home-header p { font-size: .78rem !important; line-height: 1.15 !important; margin: .15rem 0 !important; }
   #main .ca-home-side { display: none !important; }
   #main .ca-home-calculator { padding: .25rem !important; margin-top: .1rem !important; }
+  #main .ca-home-calculator .ca-home-kicker { display: none !important; }
   #main .ca-home-calculator #calc-display {
     min-height: 3rem !important;
     height: 3rem !important;
@@ -1655,6 +1656,20 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
     height: 44px !important;
     padding: .1rem !important;
     font-size: 1.05rem !important;
+  }
+}
+
+/* Keep the Zakat action visible on common laptop-height screens without reducing touch targets. */
+@media (min-width: 761px) and (max-height: 820px) {
+  #main .ca-tool-zakat-calculator #zakat-form.space-y-5 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: .8rem !important;
+  }
+  #main .ca-tool-zakat-calculator #zakat-form > .grid {
+    gap: .75rem 1rem !important;
+  }
+  #main .ca-tool-zakat-calculator #zakat-form input[type="number"] {
+    min-height: 46px !important;
+    height: 46px !important;
   }
 }
 
