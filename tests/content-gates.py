@@ -49,14 +49,23 @@ CASES = {
         "29 10,585 10,592.0325",
         "30 10,950 10,957.275",
         "1,009 days is 2.76254817 years",
+        "Worked reference: days to years",
+        "724 1.9836 1.9822",
+        "1,145 3.1370 3.1349",
+        "1,476 4.0438 4.0412",
+        "2,436 6.6740 6.6695",
+        "7,200 19.7260 19.7129",
+        "27,375 75.0000 74.9502",
+        "28,000 76.7123 76.6614",
+        "42,069 115.2575 115.1810",
     ],
 }
 
 def visible_text(path):
     source = path.read_text(encoding="utf-8")
-    source = re.sub(r"(?is)<(script|style|nav)\b.*?</\1>", " ", source)
+    source = re.sub(r"(?is)<(script|style|nav)\\b.*?</\\1>", " ", source)
     source = re.sub(r"<[^>]+>", " ", source)
-    return re.sub(r"\s+", " ", html.unescape(source)).strip()
+    return re.sub(r"\\s+", " ", html.unescape(source)).strip()
 
 def main():
     failures = []
