@@ -135,6 +135,10 @@ assert.ok(html.includes("https://www.ncbi.nlm.nih.gov/books/NBK591031/"), "Page 
 assert.match(html, /Mifflin–St Jeor/);
 assert.match(html, /498 healthy adults/);
 assert.match(html, /pregnancy or breastfeeding/);
+assert.match(html, /competitive athletes/i, "Page must explain the limitations for competitive athletes");
+assert.match(html, /metabolic conditions/i, "Page must explain the limitations for metabolic conditions");
+assert.match(html, /https:\/\/www\.mayoclinic\.org\/healthy-lifestyle\/weight-loss\/in-depth\/calorie-calculator\/itt-20402304/, "Page must cite Mayo Clinic safety guidance");
+assert.match(html, /https:\/\/www\.nal\.usda\.gov\/human-nutrition-and-food-safety\/dri-calculator/, "Page must link to the official DRI calculator reference");
 assert.match(html, /has not been medically reviewed/i);
 assert.match(html, /Site maintainer: Muhammad Fayyaz Adeel/);
 assert.match(html, /No qualified medical professional has reviewed this calculator or its implementation/);
