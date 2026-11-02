@@ -9,7 +9,8 @@ assert.ok(fs.existsSync(pagePath), "Adult Calorie Calculator page must be genera
 const {
   calculateMaintenanceCalories,
   ACTIVITY_PRESETS,
-  formatKcal
+  formatKcal,
+  formatEquationKcal
 } = require("../static/calorie-calculator.js");
 
 const male = calculateMaintenanceCalories({
