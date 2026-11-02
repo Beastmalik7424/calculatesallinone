@@ -34,6 +34,10 @@ for path in ("/", "/bmi-calculator/", "/tasbih-counter/", "/percentage-calculato
     markup = output_for(path)
     group = primary_group(markup, path)
     found = set(re.findall(r'data-tool-shortcut="([^"]+)"', group))
+    first_shortcut = re.search(r'data-tool-shortcut="([^"]+)"', group)
+    assert first_shortcut and first_shortcut.group(1) == "calorie-calculator", (
+        f"Adult Calorie Calculator must be the first visible carousel shortcut on {path}"
+    )
     assert found == ENGLISH_TOOLS, (
         f"Carousel must expose all 17 calculator destinations on {path}. "
         f"Missing={sorted(ENGLISH_TOOLS-found)}, extra={sorted(found-ENGLISH_TOOLS)}"

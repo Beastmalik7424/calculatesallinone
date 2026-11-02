@@ -1095,6 +1095,7 @@ def nav_items(lang="en"):
 
 
 CAROUSEL_TOOLS = (
+    ("calorie-calculator", "Adult Calorie Calculator", "Calories"),
     ("zakat-calculator", "Zakat Calculator", "Zakat"),
     ("bmi-calculator", "BMI Calculator", "BMI"),
     ("profit-loss-calculator", "Profit and Loss Calculator", "Profit/Loss"),
@@ -1111,7 +1112,6 @@ CAROUSEL_TOOLS = (
     ("fraction-calculator", "Fraction Calculator", "Fraction"),
     ("compound-interest-calculator", "Compound Interest Calculator", "Compound"),
     ("date-calculator", "Date Difference Calculator", "Date"),
-    ("calorie-calculator", "Adult Calorie Calculator", "Calories"),
 )
 
 CAROUSEL_TRANSLATIONS = {
