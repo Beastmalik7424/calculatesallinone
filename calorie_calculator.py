@@ -3,16 +3,19 @@ import html
 def build_calorie_page(head, shell, write):
     path = "/calorie-calculator/"
     site = "https://calculateallinone.vercel.app"
-    title = "Adult Calorie Calculator | CalculatesAll"
-    description = "Estimate adult maintenance calories from the Mifflin–St Jeor equation and a stated activity factor. Review assumptions and limitations."
+    title = "Calorie Calculator for Adults | Maintenance & TDEE | CalculatesAll"
+    description = "Estimate adult daily calorie needs and maintenance calories (TDEE) from age, weight, height and activity using Mifflin–St Jeor. Review assumptions."
     sources = [
         ("Mifflin–St Jeor original paper (1990)", "https://pubmed.ncbi.nlm.nih.gov/2305711/", "Original equation study. It included 498 healthy adults aged 19–78; the equation predicts resting energy expenditure and does not guarantee an individual's measured value."),
+        ("National Academies: Dietary Reference Intakes for Energy (2023)", "https://www.ncbi.nlm.nih.gov/books/NBK591031/", "Explains total energy expenditure as including resting energy expenditure, the thermic effect of food and physical activity, and discusses individual variability in energy-expenditure estimates."),
         ("FAO/WHO/UNU: Human Energy Requirements", "https://www.fao.org/4/y5686e/y5686e00.htm", "Reference framework for human energy requirements, basal metabolic rate and physical activity level. Its PAL framework is distinct from this page's consumer activity multipliers."),
         ("FAO/WHO/UNU: Adult energy requirements", "https://www.fao.org/4/y5686e/y5686e07.htm", "Adult energy-requirement chapter. It is cited for context, not as the source of the Mifflin equation or the consumer multipliers below."),
         ("NIDDK: About the Body Weight Planner", "https://www.niddk.nih.gov/health-information/weight-management/body-weight-planner", "States that its adult planner is not intended for people under 18 or for pregnant or breastfeeding women. This calculator does not implement the NIDDK dynamic weight-change model."),
     ]
     faq = [
         ("What does this calorie calculator estimate?", "It estimates resting energy expenditure with the Mifflin–St Jeor equation, then multiplies that estimate by a selected activity assumption to approximate total daily energy expenditure (TDEE) and maintenance calories. It does not measure metabolism."),
+        ("How many calories do I need to maintain my weight?", "There is no single daily calorie number that applies to every adult. This calculator estimates your maintenance calories from the age, weight, height, equation coefficient and activity assumption you enter. The result is a starting estimate, not a measured requirement or personal dietary instruction."),
+        ("Are maintenance calories the same as TDEE?", "Maintenance calories are commonly used to describe the daily energy level associated with maintaining body weight. TDEE means total daily energy expenditure. This calculator approximates TDEE by multiplying estimated resting energy expenditure by a selected activity factor. The result is not a direct measurement, and individual needs vary."),
         ("Is resting energy expenditure the same as BMR or RMR?", "No. Resting energy expenditure (REE), basal metabolic rate (BMR) and resting metabolic rate (RMR) are related but distinct terms with different measurement conditions. This page labels the equation output as REE and does not claim that the terms are interchangeable."),
         ("Where do the activity multipliers come from?", "The five multipliers are consumer-calculator assumptions stored by this site. They are not coefficients from the original Mifflin–St Jeor paper and are not FAO/WHO/UNU PAL categories. Real activity varies, so the selected factor can overestimate or underestimate an individual's needs."),
         ("Should I add exercise calories separately?", "Do not add exercise calories again when your selected activity assumption already represents that movement. Consider your full day, including work, walking and routine movement, rather than gym sessions alone."),
