@@ -63,9 +63,9 @@ CASES = {
 
 def visible_text(path):
     source = path.read_text(encoding="utf-8")
-    source = re.sub(r"(?is)<(script|style|nav)\\b.*?</\\1>", " ", source)
+    source = re.sub(r"(?is)<(script|style|nav)\b.*?</\1>", " ", source)
     source = re.sub(r"<[^>]+>", " ", source)
-    return re.sub(r"\\s+", " ", html.unescape(source)).strip()
+    return re.sub(r"\s+", " ", html.unescape(source)).strip()
 
 def main():
     failures = []
