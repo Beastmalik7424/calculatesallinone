@@ -28,6 +28,13 @@ assert.equal(formatKcal(1648.75), "1,648.8");
 assert.equal(formatKcal(1648.7499999999998), "1,648.8", "Imperial conversion floating-point drift must not change display rounding");
 assert.equal(formatKcal(1648.74), "1,648.7", "Values below the rounding boundary must remain below it");
 
+const maleWithoutPregnancyStatus = calculateMaintenanceCalories({
+  age: 30, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175,
+  coefficient: "male", activityId: "sedentary"
+});
+assert.equal(maleWithoutPregnancyStatus.maintenanceKcalPerDay, 1978.5,
+  "Male coefficient must not require a pregnancy/breastfeeding status");
+
 const female = calculateMaintenanceCalories({
   age: 30, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175,
   coefficient: "female", activityId: "sedentary", pregnancyStatus: "no"
@@ -114,6 +121,7 @@ invalid({ ...base, pregnancyStatus: "breastfeeding" }, /pregnancy or breastfeedi
 invalid({ ...base, pregnancyStatus: "both" }, /pregnancy or breastfeeding/i);
 invalid({ ...base, pregnancyStatus: "prefer_not_to_say" }, /select “Neither applies”/i);
 invalid({ ...base, pregnancyStatus: "not_selected" }, /select/i);
+invalid({ ...base, coefficient: "female", pregnancyStatus: undefined }, /select a pregnancy and breastfeeding status/i);
 invalid({ ...base, weightUnit: "stone" }, /weight unit/i);
 invalid({ ...base, heightUnit: "inches" }, /height unit/i);
 invalid({ ...base, weightUnit: "lb", weight: 1103 }, /weight/i);
