@@ -165,6 +165,8 @@ function initialize(doc){
   breastfeedingFields.hidden=!showBreastfeeding;breastfeedingFields.style.display=showBreastfeeding?"block":"none";
   standardActivity.hidden=lifeStage;standardActivity.style.display=lifeStage?"none":"block";
   lifeActivity.hidden=!lifeStage;lifeActivity.style.display=lifeStage?"block":"none";
+  byId("calorie-form-title").textContent=lifeStage?(status==="both"?"Pregnancy and breastfeeding estimates":status==="pregnant"?"Pregnancy energy estimate":"Breastfeeding energy estimate"):"Daily maintenance estimate";
+  byId("cal-calculate").textContent=lifeStage?"Calculate estimate":"Calculate maintenance";
   clear();
  }
  function fmt(v){return formatKcal(v);}
