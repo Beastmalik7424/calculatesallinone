@@ -1,3 +1,4 @@
+import hashlib
 import html
 
 def build_calorie_page(head, shell, write):
@@ -79,6 +80,7 @@ def build_calorie_page(head, shell, write):
         ]},
     ]
     document = head(title, description, path, schema) + shell(body, current_path=path)
-    document = document.replace("</body>", '<script defer src="/assets/calorie-calculator.js"></script></body>')
+    script_version = hashlib.sha256(open("static/calorie-calculator.js", "rb").read()).hexdigest()[:12]
+    document = document.replace("</body>", f'<script defer src="/assets/calorie-calculator.js?v={script_version}"></script></body>')
     write(path, document)
     return path
