@@ -140,6 +140,7 @@ const { chromium } = require("playwright");
       assert.match(bothText, /National Academies DRI 2023, Table 5-18/);
       assert.match(bothText, /Do not add them together/);
       assert.match(bothText, /not validated as a combined target/);
+      assert.match(bothText, /US and Canadian reference populations/);
       assert.equal(await page.locator('#calorie-result a[href="https://www.nationalacademies.org/read/26818/chapter/7"]').count(), 1, "Both results must cite the primary National Academies source");
       await page.locator("#cal-eligibility").selectOption("pregnant");
       assert.equal(await page.locator("#cal-pregnancy-fields").isVisible(), true);
