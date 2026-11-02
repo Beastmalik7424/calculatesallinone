@@ -185,6 +185,7 @@ assert.match(html, /cal-pregnancy-weeks/);
 assert.match(html, /cal-breastfeeding-stage/);
 assert.match(html, /PAL 1\.00–&lt;1\.53/);
 assert.match(html, /This is not a combined calorie target/);
+assert.match(html, /US and Canadian reference populations/);
 const calculatorJs = fs.readFileSync(path.join(__dirname, "..", "static", "calorie-calculator.js"), "utf8");
 assert.match(calculatorJs, /eligibility\.addEventListener\("change",updateEligibility\)/,
   "Changing pregnancy/breastfeeding status must reveal the correct stage-specific inputs");
