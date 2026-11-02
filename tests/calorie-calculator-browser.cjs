@@ -148,7 +148,7 @@ const { chromium } = require("playwright");
       assert.match(bothText, /US and Canadian reference populations/);
       assert.match(bothText, /excluded studies from non-high-income countries/i,
         "Life-stage results must disclose the source evidence population limitation");
-      assert.match(bothText, /not calibrated or validated for Pakistan/i,
+      assert.match(bothText, /not validated for Pakistan/i,
         "Life-stage results must not imply Pakistan-specific validation");
       assert.match(bothText, /cannot be guaranteed 100% accurate/i,
         "Life-stage results must not imply perfect individual accuracy");
