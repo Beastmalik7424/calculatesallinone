@@ -101,7 +101,22 @@ function initialize(doc){
    sourceLine.appendChild(sourceLink);result.appendChild(sourceLine);
    add("p","mt-2 text-sm","This is a population-equation estimate, not a measured metabolic rate or a personalized medical prescription.");
    result.hidden=false;
-  }catch(e){error.textContent=e&&e.message?e.message:"The estimate could not be calculated. Check the entries and try again.";}
+  }catch(e){
+   var message=e&&e.message?e.message:"The estimate could not be calculated. Check the entries and try again.";
+   if(/not intended for pregnancy or breastfeeding/i.test(message)){
+    add("h3","text-lg font-semibold","Pregnancy and breastfeeding need a different estimate");
+    add("p","mt-2 text-sm","This adult Mifflin–St Jeor calculator does not calculate energy needs during pregnancy or breastfeeding.");
+    add("p","mt-2 text-sm","The USDA National Agricultural Library DRI Calculator includes pregnancy and breastfeeding inputs. It is designed for healthcare professionals, so use it with a qualified healthcare professional.");
+    var guidanceLink=doc.createElement("a");
+    guidanceLink.href="https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator";
+    guidanceLink.target="_blank";
+    guidanceLink.rel="noopener noreferrer";
+    guidanceLink.className="mt-3 inline-flex min-h-[40px] items-center rounded-lg bg-sky-800 px-3 py-2 text-sm font-semibold text-white underline";
+    guidanceLink.textContent="Open USDA DRI Calculator";
+    result.appendChild(guidanceLink);
+    result.hidden=false;
+   }else{error.textContent=message;}
+  }
  }
  unit.addEventListener("change",updateHeight);
  coefficient.addEventListener("change",updateEligibility);
