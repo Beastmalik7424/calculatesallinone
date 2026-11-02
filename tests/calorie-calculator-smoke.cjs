@@ -183,6 +183,13 @@ assert.match(html, /https:\/\/www\.nal\.usda\.gov\/human-nutrition-and-food-safe
 assert.match(html, /https:\/\/www\.nationalacademies\.org\/read\/26818\/chapter\/7/);
 assert.match(html, /cal-pregnancy-weeks/);
 assert.match(html, /cal-breastfeeding-stage/);
+assert.match(html, /PAL 1\.00–&lt;1\.53/);
+assert.match(html, /This is not a combined calorie target/);
+const calculatorJs = fs.readFileSync(path.join(__dirname, "..", "static", "calorie-calculator.js"), "utf8");
+assert.match(calculatorJs, /eligibility\.addEventListener\("change",updateEligibility\)/,
+  "Changing pregnancy/breastfeeding status must reveal the correct stage-specific inputs");
+assert.match(calculatorJs, /combinedTargetKcalPerDay:null/,
+  "The life-stage calculator must never expose an unsupported combined target");
 assert.match(html, /has not been medically reviewed/i);
 assert.match(html, /Site maintainer: Muhammad Fayyaz Adeel/);
 assert.match(html, /No qualified medical professional has reviewed this calculator or its implementation/);
