@@ -146,6 +146,12 @@ const { chromium } = require("playwright");
       assert.match(bothText, /Do not add them together/);
       assert.match(bothText, /not validated as a combined target/);
       assert.match(bothText, /US and Canadian reference populations/);
+      assert.match(bothText, /excluded studies from non-high-income countries/i,
+        "Life-stage results must disclose the source evidence population limitation");
+      assert.match(bothText, /not calibrated or validated for Pakistan/i,
+        "Life-stage results must not imply Pakistan-specific validation");
+      assert.match(bothText, /cannot be guaranteed 100% accurate/i,
+        "Life-stage results must not imply perfect individual accuracy");
       assert.equal(await page.locator('#calorie-result a[href="https://www.nationalacademies.org/read/26818/chapter/7"]').count(), 1, "Both results must cite the primary National Academies source");
       await page.locator("#cal-eligibility").selectOption("pregnant");
       assert.equal(await page.locator("#cal-pregnancy-fields").isVisible(), true);

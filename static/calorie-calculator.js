@@ -194,7 +194,7 @@ function initialize(doc){
     }
     add("p","mt-3 text-sm font-semibold","These are separate life-stage reference estimates. Do not add them together or treat either as a personal prescription.");
     add("p","mt-1 text-sm","The 2023 equations were not validated as a combined target for someone who is simultaneously pregnant and breastfeeding. Discuss concurrent needs, weight trends and medical circumstances with a qualified healthcare professional.");
-    add("p","mt-1 text-sm","These DRI equations were developed for US and Canadian reference populations. They have not been validated for every country or individual, including Pakistan.");
+    add("p","mt-1 text-sm","These DRI equations were developed for US and Canadian reference populations. The National Academies report excluded studies from non-high-income countries because living, healthcare, physical-activity and food-availability environments may differ. This model is not calibrated or validated for Pakistan or every population. Individual energy needs vary, so this estimate cannot be guaranteed 100% accurate for a particular person.");
     var dLink=doc.createElement("a");dLink.href=life.sourceUrl;dLink.target="_blank";dLink.rel="noopener noreferrer";dLink.className="mt-3 inline-flex min-h-[40px] items-center rounded-lg bg-sky-800 px-3 py-2 text-sm font-semibold text-white underline";dLink.textContent="View National Academies 2023 DRI source";result.appendChild(dLink);
     result.hidden=false;return;
    }
