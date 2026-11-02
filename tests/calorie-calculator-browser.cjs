@@ -129,6 +129,8 @@ const { chromium } = require("playwright");
       assert.equal(await page.locator("#cal-pregnancy-fields").isVisible(), true, "Both must reveal pregnancy-specific inputs");
       assert.equal(await page.locator("#cal-breastfeeding-fields").isVisible(), true, "Both must reveal breastfeeding-stage input");
       assert.equal(await page.locator("#cal-life-stage-activity-field").isVisible(), true, "Life-stage estimates must use official DRI activity categories");
+      assert.equal(await page.locator("#calorie-form-title").innerText(), "Pregnancy and breastfeeding estimates");
+      assert.equal(await page.locator("#cal-calculate").innerText(), "Calculate estimate");
       assert.equal(await page.locator("#cal-standard-activity-field").isVisible(), false, "Consumer activity multipliers must not be used for DRI estimates");
       await page.locator("#cal-life-stage-activity").selectOption("inactive");
       await page.locator("#cal-pregnancy-weeks").fill("20");
@@ -179,6 +181,8 @@ const { chromium } = require("playwright");
       assert.match(await page.locator("#calorie-error").innerText(), /select “Neither applies”|select.*Neither applies/i,
         "Prefer not to say must receive a privacy-respecting explanation");
       await page.locator("#cal-eligibility").selectOption("no");
+      assert.equal(await page.locator("#calorie-form-title").innerText(), "Daily maintenance estimate");
+      assert.equal(await page.locator("#cal-calculate").innerText(), "Calculate maintenance");
       assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Selecting an eligible option must clear the previous validation message");
       await page.locator("#cal-eligibility").selectOption("prefer_not_to_say");
       assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Changing eligibility after a blocked calculation must clear the stale pregnancy warning");
