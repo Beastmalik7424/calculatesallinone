@@ -109,7 +109,7 @@ invalid({ ...base, activityId: "unknown" }, /activity/i);
 invalid({ ...base, pregnancyStatus: "pregnant" }, /pregnancy or breastfeeding/i);
 invalid({ ...base, pregnancyStatus: "breastfeeding" }, /pregnancy or breastfeeding/i);
 invalid({ ...base, pregnancyStatus: "both" }, /pregnancy or breastfeeding/i);
-invalid({ ...base, pregnancyStatus: "prefer_not_to_say" }, /pregnancy or breastfeeding/i);
+invalid({ ...base, pregnancyStatus: "prefer_not_to_say" }, /select “Neither applies”/i);
 invalid({ ...base, pregnancyStatus: "not_selected" }, /select/i);
 invalid({ ...base, weightUnit: "stone" }, /weight unit/i);
 invalid({ ...base, heightUnit: "inches" }, /height unit/i);
