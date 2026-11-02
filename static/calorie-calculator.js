@@ -153,11 +153,18 @@ function initialize(doc){
   if(!female)eligibility.value="";
   var status=eligibility.value;
   var lifeStage=female&&["pregnant","breastfeeding","both"].includes(status);
-  byId("cal-life-stage-fields").hidden=!lifeStage;
-  byId("cal-pregnancy-fields").hidden=!(lifeStage&&(status==="pregnant"||status==="both"));
-  byId("cal-breastfeeding-fields").hidden=!(lifeStage&&(status==="breastfeeding"||status==="both"));
-  byId("cal-standard-activity-field").hidden=lifeStage;
-  byId("cal-life-stage-activity-field").hidden=!lifeStage;
+  var lifeFields=byId("cal-life-stage-fields");
+  var showPregnancy=lifeStage&&(status==="pregnant"||status==="both");
+  var showBreastfeeding=lifeStage&&(status==="breastfeeding"||status==="both");
+  var pregnancyFields=byId("cal-pregnancy-fields");
+  var breastfeedingFields=byId("cal-breastfeeding-fields");
+  var standardActivity=byId("cal-standard-activity-field");
+  var lifeActivity=byId("cal-life-stage-activity-field");
+  lifeFields.hidden=!lifeStage;lifeFields.style.display=lifeStage?"grid":"none";
+  pregnancyFields.hidden=!showPregnancy;pregnancyFields.style.display=showPregnancy?"grid":"none";
+  breastfeedingFields.hidden=!showBreastfeeding;breastfeedingFields.style.display=showBreastfeeding?"block":"none";
+  standardActivity.hidden=lifeStage;standardActivity.style.display=lifeStage?"none":"block";
+  lifeActivity.hidden=!lifeStage;lifeActivity.style.display=lifeStage?"block":"none";
   clear();
  }
  function fmt(v){return formatKcal(v);}
