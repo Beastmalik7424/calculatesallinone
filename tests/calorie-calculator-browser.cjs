@@ -27,6 +27,11 @@ const { chromium } = require("playwright");
       assert.equal(await page.locator("#calorie-error").getAttribute("role"), "alert");
       assert.equal(await page.getByLabel("Age (years)").count(), 1);
       assert.equal(await page.getByLabel("Equation coefficient").count(), 1);
+      for (const id of ["cal-age", "cal-coefficient", "cal-weight", "cal-activity", "cal-eligibility"]) {
+        const label = page.locator("label[for=\"" + id + "\"]").first();
+        assert.equal(await label.isVisible(), true, "Primary field label must be visible at " + viewport.width + "px: " + id);
+      }
+      assert.equal(await page.locator("#cal-height-label").isVisible(), true, "Height label must be visible at " + viewport.width + "px");
       const weightElements = await page.locator("#cal-weight").evaluateAll(elements => elements.map(element => ({ tag: element.tagName, html: element.outerHTML, parent: element.parentElement && element.parentElement.outerHTML.slice(0, 700) })));
       assert.equal(weightElements.length, 1, "Expected exactly one weight input, found: " + JSON.stringify(weightElements));
       const associatedWeightLabels = await page.locator("#cal-weight").evaluate(el => Array.from(el.labels || []).map(label => label.textContent.trim()));
