@@ -19,6 +19,8 @@ const male = calculateMaintenanceCalories({
 assert.equal(male.restingKcalPerDay, 1648.75);
 assert.equal(male.maintenanceKcalPerDay, 1978.5);
 assert.equal(formatKcal(1648.75), "1,648.8");
+assert.equal(formatEquationKcal(1648.75), "1,648.75", "Calculation working must show the unrounded REE value used by the formula");
+assert.equal(formatEquationKcal(1482.75), "1,482.75", "Female coefficient calculation working must retain full source precision");
 assert.equal(formatKcal(1648.7499999999986), "1,648.8", "Binary conversion noise must not flip an exact half-tenth display boundary");
 assert.equal(formatKcal(1648.74), "1,648.7", "Values below the rounding boundary must remain below it");
 assert.equal(formatKcal(1648.75), "1,648.8");
