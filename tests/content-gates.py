@@ -35,7 +35,7 @@ CASES = {
         "1,978.5 kcal/day",
         "498 healthy adults aged 19–78",
         "activity multipliers are consumer estimates",
-        "not intended for pregnancy or breastfeeding",
+        "Pregnancy and breastfeeding estimates are available only for ages 19+",
         "has not been medically reviewed",
         "REE is not a universal minimum safe calorie intake",
         "does not implement the NIDDK dynamic weight-change model",
