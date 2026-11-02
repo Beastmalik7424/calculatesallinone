@@ -48,6 +48,9 @@ const { chromium } = require("playwright");
       }
       assert.equal(await page.locator("#cal-eligibility-field").isVisible(), false, "Pregnancy/breastfeeding field must be hidden until female coefficient is selected");
       assert.equal(await page.locator("#cal-eligibility").isDisabled(), true, "Eligibility control must be disabled for male/default coefficient");
+      for (const id of ["cal-life-stage-fields", "cal-pregnancy-fields", "cal-breastfeeding-fields", "cal-life-stage-activity-field"]) {
+        assert.equal(await page.locator("#" + id).isVisible(), false, "Life-stage controls must stay hidden until the relevant status is selected: " + id);
+      }
       assert.equal(await page.locator("#cal-height-label").isVisible(), true, "Height label must be visible at " + viewport.width + "px");
       const weightElements = await page.locator("#cal-weight").evaluateAll(elements => elements.map(element => ({ tag: element.tagName, html: element.outerHTML, parent: element.parentElement && element.parentElement.outerHTML.slice(0, 700) })));
       assert.equal(weightElements.length, 1, "Expected exactly one weight input, found: " + JSON.stringify(weightElements));
