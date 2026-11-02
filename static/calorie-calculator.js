@@ -20,11 +20,13 @@ function calculateMaintenanceCalories(input){
  if(!Number.isInteger(age))throw new Error("Age must be a whole number of years.");
  if(age<18)throw new Error("This calculator is for adults aged 18 or older.");
  if(age>120)throw new Error("Enter an age from 18 to 120 years.");
- if(!["no","pregnant","breastfeeding","both","prefer_not_to_say"].includes(input.pregnancyStatus))throw new Error("Select a pregnancy and breastfeeding status.");
- if(input.pregnancyStatus==="prefer_not_to_say")throw new Error("To continue, select “Neither applies”. If you prefer not to disclose, no estimate will be calculated.");
- if(input.pregnancyStatus!=="no")throw new Error("This calculator is not intended for pregnancy or breastfeeding. It does not provide an ordinary maintenance estimate for these circumstances.");
  var coefficient=input.coefficient;
  if(coefficient!=="male"&&coefficient!=="female")throw new Error("Choose one of the published equation coefficients to continue.");
+ if(coefficient==="female"){
+  if(!["no","pregnant","breastfeeding","both","prefer_not_to_say"].includes(input.pregnancyStatus))throw new Error("Select a pregnancy and breastfeeding status.");
+  if(input.pregnancyStatus==="prefer_not_to_say")throw new Error("To continue, select “Neither applies”. If you prefer not to disclose, no estimate will be calculated.");
+  if(input.pregnancyStatus!=="no")throw new Error("This calculator is not intended for pregnancy or breastfeeding. It does not provide an ordinary maintenance estimate for these circumstances.");
+ }
  if(input.weightUnit!=="kg"&&input.weightUnit!=="lb")throw new Error("Choose a supported weight unit (kg or lb).");
  var weight=number(input.weight,"weight");
  var weightKg=input.weightUnit==="lb"?weight*LB_TO_KG:weight;
@@ -62,6 +64,7 @@ function initialize(doc){
  var unit=byId("cal-height-unit"),metric=byId("cal-height-metric"),imperial=byId("cal-height-imperial");
  var cm=byId("cal-height-cm"),ft=byId("cal-height-ft"),inch=byId("cal-height-in"),heightLabel=byId("cal-height-label");
  var error=byId("calorie-error"),result=byId("calorie-result");
+ var coefficient=byId("cal-coefficient"),eligibilityField=byId("cal-eligibility-field"),eligibility=byId("cal-eligibility");
  function clear(){error.textContent="";result.hidden=true;result.replaceChildren();}
  function updateHeight(){
   var imp=unit.value==="ft-in";metric.hidden=imp;imperial.hidden=!imp;
@@ -69,6 +72,14 @@ function initialize(doc){
   heightLabel.textContent=imp?"Height (ft / in)":"Height (cm)";
   heightLabel.htmlFor=imp?"cal-height-ft":"cal-height-cm";
   cm.disabled=imp;ft.disabled=!imp;inch.disabled=!imp;clear();
+ }
+ function updateEligibility(){
+  var female=coefficient.value==="female";
+  eligibilityField.hidden=!female;
+  eligibility.disabled=!female;
+  eligibility.required=female;
+  if(!female)eligibility.value="";
+  clear();
  }
  function fmt(v){return formatKcal(v);}
  function add(tag,cls,value){var el=doc.createElement(tag);if(cls)el.className=cls;el.textContent=value;result.appendChild(el);}
@@ -93,6 +104,7 @@ function initialize(doc){
   }catch(e){error.textContent=e&&e.message?e.message:"The estimate could not be calculated. Check the entries and try again.";}
  }
  unit.addEventListener("change",updateHeight);
+ coefficient.addEventListener("change",updateEligibility);
  rootNode.querySelectorAll("input, select").forEach(function(control){
   control.addEventListener("input",clear);
   control.addEventListener("change",clear);
@@ -101,10 +113,11 @@ function initialize(doc){
  byId("cal-reset").addEventListener("click",function(){
   ["cal-age","cal-weight","cal-height-cm","cal-height-ft","cal-height-in"].forEach(function(id){byId(id).value="";});
   byId("cal-weight-unit").value="kg";unit.value="cm";byId("cal-coefficient").value="";byId("cal-activity").value="";byId("cal-eligibility").value="";
-  updateHeight();clear();byId("cal-age").focus();
+  updateHeight();updateEligibility();clear();byId("cal-age").focus();
  });
  rootNode.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target&&e.target.tagName==="INPUT"){e.preventDefault();calculate();}});
  updateHeight();
+ updateEligibility();
 }
 if(typeof document!=="undefined")initialize(document);
 })(typeof globalThis!=="undefined"?globalThis:this);
