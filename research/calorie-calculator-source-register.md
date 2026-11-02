@@ -39,25 +39,70 @@ These activity values are configuration assumptions supplied for a consumer esti
 
 ## Review and release status
 
-- Source links and claims checked: 2026-11-02.
-- Core site build, content gates, sitemap coverage and monetization checks: **PASS** on commit `17ec997e6c32150be52a87794a145c6446c72518`, GitHub Actions run `41355354183`.
-- Responsive browser, calculator interaction, keyboard, privacy-request and console checks: **PASS** on the same commit, GitHub Actions run `41355354175`. Chromium verified 320×568, 390×844 and 1366×768.
-- Formula, conversion, rounding and input-validation smoke tests: **PASS** on commit `c21003832efafe4c41db69034bc6eca3ebe1e535`, GitHub Actions run `41354964910`.
-- Lighthouse SEO on the GitHub-hosted build: **100/100** for home, BMI, Zakat, calorie, About, Contact, Discount and Editorial Policy pages. The Health hub also scored 100/100. The intentionally noindex `/ar/`, `/es/` and `/fr/` pages scored 66/100 only because the expected `is-crawlable` audit fails. No production Lighthouse score is claimed.
-- Nu HTML Checker: **PASS**, 10 generated HTML files, zero errors and zero warnings. Sitemap and internal-link checks: **PASS**, 39 unique sitemap URLs.
-- Existing calculator regressions: **PASS** for Fraction, Compound Interest, Date, Percentage, BMI, EMI and Tasbih browser checks. Responsive overflow checks passed at 320, 360, 390 and 1366 px.
-- Vercel preview: deployment `dpl_BogmEDF2PAowNmp52rj4ZGgG14f2` is READY for older commit `5edbce344472202fba62e3e4d935f60a9f881c63`. The final branch includes the later display-rounding correction and is not represented by that preview.
-- Latest preview verification: **NOT VERIFIED**. Vercel returned HTTP 402 because the Hobby team's deployment API quota exceeded 100 deployments for the day, with retry after 24 hours. The Vercel CLI is not installed or authenticated in this execution environment. No quota bypass or unrelated project was used.
-- Production verification: **NOT PERFORMED**. Production domain and `main` branch remain unchanged.
-- Qualified clinical review: not performed.
-- Medical certification or endorsement: none claimed.
-- English page: implemented and tested on the feature branch; not production-published.
-- Other locales: planned; no translated pages are published by this feature.
-- GEO/AI visibility: not measured. No ranking, indexing or AI-citation outcome is claimed.
+Evidence date: 2026-11-02. Feature branch head at verification: `8d55ff38774072a42a092ff2c88db049fc55c3f4`.
+
+- PR #146 is open, draft and unmerged at the time of this evidence capture.
+- GitHub Actions **Build and smoke test**, run [41384307763](https://github.com/Beastmalik7424/calculatesallinone/actions/runs/41384307763): **PASS**. Dependency audit reported zero vulnerabilities. Lighthouse SEO was 100/100 on home, BMI, Zakat and calorie pages. The additional scoped-page Lighthouse audit passed; only the expected crawlability finding appeared on intentionally noindex Arabic, Spanish and French pages.
+- GitHub Actions **Site build and monetization checks**, run [41384307818](https://github.com/Beastmalik7424/calculatesallinone/actions/runs/41384307818): **PASS**. Content gates, 39-URL sitemap coverage, canonical/internal-link checks, JSON-LD, AdSense gating and existing calculator smoke checks passed.
+- Nu HTML Checker: **PASS**, 10 generated HTML files, zero errors and zero warnings. The primary validator returned rate-limit/service errors during this run, so the test used its independent online fallback. The bounded fallback regression test also passed.
+- GitHub Actions **First-screen calculator browser audit**, run [41384307764](https://github.com/Beastmalik7424/calculatesallinone/actions/runs/41384307764): **PASS**. Chromium checks passed at 320×568, 390×844 and 1366×768 for the calorie page. The calculate control remained inside the viewport and no horizontal overflow or browser errors were reported. Existing calculator viewport and interaction checks also passed.
+- Calorie browser acceptance checks verified the Mifflin–St Jeor example, both coefficient outputs, activity-factor output, metric/imperial equivalence, age and pregnancy/breastfeeding exclusions, keyboard operation, reset behavior, and absence of non-GET requests or measurement values in URLs, request payloads, cookies, localStorage or sessionStorage.
+- Vercel preview deployment `dpl_9VeAhJ9gj2gPBwewqC1Rsvqkzkwu` is **READY** for this exact feature-branch head. Authenticated Vercel fetch returned HTTP 200 for `/calorie-calculator/`, `/health/` and `/sitemap.xml`. The preview has Vercel's expected `X-Robots-Tag: noindex`; its page canonical points to the production host.
+- Sitemap comparison: current production contains 38 URLs; the preview contains 39. No existing production sitemap URL was removed or changed. The only addition is `/calorie-calculator/`.
+- Production publication has not yet occurred at this evidence capture.
+- Qualified clinical review: not performed. Medical certification or endorsement: none claimed.
+- Other locales: the calculator page remains English-only. Translated carousel labels do not represent translated calculator content.
+- GEO/AI citation visibility and post-publication Google indexing have not yet been measured.
+
+## Market demand and competitor evidence
+
+### Search-demand measurement
+
+Keyword Tool Guest was queried on 2026-11-02 using Google, Global / Worldwide, English. The following are the provider's cached monthly search-volume estimates for the selected terms. They are third-party estimates, not CalculateAll GSC impressions, guaranteed traffic, or independently measured visits. Only cached rows returned numeric metrics. The reported competition field is not an organic SEO difficulty score; top-of-page bid is an advertising metric.
+
+| Keyword | Reported global monthly volume | Reported trend | Reported competition field | Google top-of-page bid range |
+|---|---:|---:|---:|---:|
+| calorie calculator | 1,830,000 | +49% | 0.05 | $0.08–$1.23 |
+| maintenance calorie calculator | 201,000 | +22% | 0.16 | $0.01–$0.32 |
+| TDEE calculator | 1,500,000 | 0% | 0.17 | $0.04–$0.77 |
+| BMR calculator | 450,000 | −18% | 0.07 | $0.01–$0.36 |
+| calorie deficit calculator | 550,000 | 0% | 0.30 | $0.06–$1.31 |
+| body fat calculator | 201,000 | +22% | 0.03 | $0.18–$1.24 |
+| GPA calculator | 1,220,000 | −45% | 0.00 | $0.17–$3.88 |
+| mortgage calculator | 4,090,000 | −18% | 0.35 | $0.17–$2.05 |
+
+The guest tool returned autocomplete suggestions but no cached numeric volume for `years to days calculator`, `profit and loss calculator`, `standard deviation calculator`, `Pakistan electricity bill calculator`, `matric marks calculator` and `FBR salary tax calculator`. No volume is claimed for those terms.
+
+### First-party Google Search Console evidence
+
+For `https://calculateallinone.vercel.app/`, the 90-day window 2026-08-02 to 2026-10-30 reported 28 clicks, 396 impressions, 7.07% CTR and average position 34.3. Page-level examples:
+
+| Production page | Clicks | Impressions | CTR | Average position |
+|---|---:|---:|---:|---:|
+| `/years-to-days-calculator/` | 0 | 220 | 0% | 44.7 |
+| `/profit-loss-calculator/` | 1 | 54 | 1.85% | 17.1 |
+| `/tasbih-counter/` | 1 | 40 | 2.50% | 13.3 |
+| `/standard-calculator/` | 0 | 40 | 0% | 16.6 |
+
+Search Console omits some rare queries for privacy, so query rows do not sum to the site's page-level totals. The calorie page is not yet on production and therefore has no first-party Search Console demand data.
+
+### Competitor coverage and strategy
+
+- [Calculator.net's homepage](https://www.calculator.net/) reports around 200 calculators across financial, fitness/health, math and other categories. Its [About Us page](https://www.calculator.net/about-us.html) says its calculators are developed in-house, more than 90% use established textbook formulas, financial results are reviewed by financial advisers, and health results are reviewed by local doctors. Its [Calorie Calculator](https://www.calculator.net/calorie-calculator.html) offers Mifflin–St Jeor, Revised Harris–Benedict and Katch–McArdle formula options, activity factors, a food-energy converter and links to BMI, body-fat and ideal-weight tools.
+- [Omni's live homepage](https://www.omnicalculator.com/) lists 3,938 calculators in 14 categories. Its [Omni by the Numbers page](https://www.omnicalculator.com/omni-by-the-numbers) self-reports 8 million monthly unique users, up to 20 million visits and an average of one new calculator per day. Its [Calorie Calculator](https://www.omnicalculator.com/health/calorie) and [TDEE Calculator](https://www.omnicalculator.com/health/tdee) combine formula explanations, activity assumptions, worked examples and related BMR, calorie-deficit, weight-gain and meal-calculator journeys.
+
+### Opportunity assessment
+
+- The new adult maintenance calculator addresses a measured global keyword cluster, especially `maintenance calorie calculator` and `TDEE calculator`. The feature deliberately competes on transparent assumptions, primary-source citation, adult eligibility boundaries, browser-local calculation and no weight-loss/gain prescription, rather than matching the competitors' broader diet-planning scope.
+- Body-fat calculation has a reported 201,000 global monthly searches, but it is health/YMYL content. Defer it until the formula, measurement instructions and qualified review can be independently validated.
+- GPA has a reported 1,220,000 global monthly searches, but the provider trend is −45%. Regional variants appeared as autocomplete suggestions, but no numeric volume was returned for them. Do not treat the broad global term as proof of demand for a Pakistan-specific GPA tool.
+- Mortgage has a reported 4,090,000 global monthly searches, but it is a broad, mature category already covered extensively by competitors. It is not the next low-competition target.
+- Pakistan electricity-bill and salary-tax ideas surfaced in autocomplete, but numeric volume was unavailable. These topics also require current official tariff or tax-year data and frequent maintenance. Do not implement them without a primary-source update process and stronger demand evidence.
+- The clearest first-party content opportunity remains the already indexed years-to-days page: 220 impressions and average position 44.7 in the measured window. Keep its URL stable and use the query/page evidence for a focused content and internal-link review after the new release. The next project priority is the GSC indexing backlog for the Health, Money and Math hubs, not another generic calculator.
 
 ## Query-to-page map
 
-Search-volume status: not measured. The phrases below are user-intent seeds, not keyword-volume or ranking claims. No permutation pages are created.
+Search-volume status: partial cached global Google keyword metrics are recorded above. Terms without a returned cached metric remain unquantified. These figures are not GSC data, organic difficulty scores, ranking claims or traffic guarantees. No permutation pages are created.
 
 | Query seed / primary intent | Related questions served | Destination | Evidence needed | Existing content coverage | Publication status |
 |---|---|---|---|---|---|
