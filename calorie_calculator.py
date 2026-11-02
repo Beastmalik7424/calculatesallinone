@@ -3,7 +3,7 @@ import html
 def build_calorie_page(head, shell, write):
     path = "/calorie-calculator/"
     site = "https://calculateallinone.vercel.app"
-    title = "Calorie Calculator for Adults | Maintenance & TDEE | CalculatesAll"
+    title = "Calorie Calculator | Maintenance & TDEE | CalculatesAll"
     description = "Estimate adult daily calorie needs and maintenance calories (TDEE) from age, weight, height and activity using Mifflin–St Jeor. Review assumptions."
     sources = [
         ("Mifflin–St Jeor original paper (1990)", "https://pubmed.ncbi.nlm.nih.gov/2305711/", "Original equation study. It included 498 healthy adults aged 19–78; the equation predicts resting energy expenditure and does not guarantee an individual's measured value."),
