@@ -45,12 +45,15 @@ function calculateMaintenanceCalories(input){
  if(!Number.isFinite(resting)||!Number.isFinite(maintenance)||resting<=0||maintenance<=0)throw new Error("These entries do not produce a usable estimate. Check the values and units.");
  return Object.freeze({age:age,weightKg:weightKg,heightCm:heightCm,coefficient:coefficient,equation:"Mifflin–St Jeor (1990)",restingKcalPerDay:resting,maintenanceKcalPerDay:maintenance,activity:activity,outsideOriginalStudyAgeRange:age<19||age>78});
 }
+function formatEquationKcal(value){
+ return new Intl.NumberFormat("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}).format(value);
+}
 function formatKcal(value){
  var scale=Math.max(1,Math.abs(value));
  var rounded=Math.round((value+Number.EPSILON*scale*8)*10)/10;
  return new Intl.NumberFormat("en-US",{minimumFractionDigits:1,maximumFractionDigits:1}).format(rounded);
 }
-var api=Object.freeze({LB_TO_KG:LB_TO_KG,IN_TO_CM:IN_TO_CM,ACTIVITY_PRESETS:ACTIVITY_PRESETS,calculateMaintenanceCalories:calculateMaintenanceCalories,formatKcal:formatKcal});
+var api=Object.freeze({LB_TO_KG:LB_TO_KG,IN_TO_CM:IN_TO_CM,ACTIVITY_PRESETS:ACTIVITY_PRESETS,calculateMaintenanceCalories:calculateMaintenanceCalories,formatKcal:formatKcal,formatEquationKcal:formatEquationKcal});
 if(typeof module!=="undefined"&&module.exports)module.exports=api;
 root.CalorieCalculator=api;
 function initialize(doc){
@@ -77,7 +80,7 @@ function initialize(doc){
    add("p","mt-1 text-sm","Equation: "+x.equation+".");
    add("p","mt-2","Estimated resting energy expenditure (REE): "+fmt(x.restingKcalPerDay)+" kcal/day.");
    add("p","mt-1 text-xl font-bold","Estimated maintenance calories: "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
-   add("p","mt-2","Calculation: "+fmt(x.restingKcalPerDay)+" × "+x.activity.multiplier+" activity factor = "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
+   add("p","mt-2","Calculation: "+formatEquationKcal(x.restingKcalPerDay)+" × "+x.activity.multiplier+" activity factor = "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
    add("p","mt-2 text-sm","Activity assumption: "+x.activity.label+". "+x.activity.description);
    if(x.outsideOriginalStudyAgeRange)add("p","mt-2 text-sm","Age-range note: the original Mifflin–St Jeor study sample was 19–78 years. Your entered age is outside that original sample range, so this result has an additional evidence limitation.");
    add("p","mt-2 text-sm","Activity assumption version: "+x.activity.version+". "+x.activity.limitations);
