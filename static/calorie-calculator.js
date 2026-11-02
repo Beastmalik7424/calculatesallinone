@@ -113,7 +113,7 @@ function initialize(doc){
  byId("cal-reset").addEventListener("click",function(){
   ["cal-age","cal-weight","cal-height-cm","cal-height-ft","cal-height-in"].forEach(function(id){byId(id).value="";});
   byId("cal-weight-unit").value="kg";unit.value="cm";byId("cal-coefficient").value="";byId("cal-activity").value="";byId("cal-eligibility").value="";
-  updateHeight();clear();byId("cal-age").focus();
+  updateHeight();updateEligibility();clear();byId("cal-age").focus();
  });
  rootNode.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target&&e.target.tagName==="INPUT"){e.preventDefault();calculate();}});
  updateHeight();
