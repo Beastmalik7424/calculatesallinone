@@ -60,7 +60,7 @@ const document = {
 class FakeMutationObserver { constructor(callback) { this.callback = callback; observers.push(this); } observe(target) { this.target = target; } disconnect() {} }
 const window = { location: { href: "https://calculateallinone.vercel.app/bmi-calculator/" }, navigator: { async share(data) { window.sharedData = data; } , clipboard: { async writeText(text) { window.copiedText = text; } } }, localStorage: { getItem(k) { return storage.has(k) ? storage.get(k) : null; }, setItem(k,v) { storage.set(k,String(v)); } } };
 const context = {
-  document, window, console, isFinite, Number, String, Math, Date: FixedDate, MutationObserver: FakeMutationObserver, MutationObserver: FakeMutationObserver,
+  document, window, console, isFinite, Number, String, Math, Date: FixedDate, MutationObserver: FakeMutationObserver,
   setInterval(fn) { handlers.interval = fn; return 1; },
   clearInterval() {},
   performance: { now: () => clock }
@@ -309,7 +309,7 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   assert.match(generated, /id="yd-start-date"/);
   assert.match(generated, /id="yd-calendar-option" value="calendar"/);
   assert.match(generated, /href="https:\/\/calculateallinone\.vercel\.app\/years-to-days-calculator\/"/);
-  assert.match(generated, /20261030-exact-years-1/);
+  assert.match(generated, /20261103-result-sharing-1/);
   console.log("PASS: exact calendar day count, leap years, invalid dates and generated controls");
 }
 
@@ -320,6 +320,9 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   const zakatShare = insertedShareButtons.find(button => button.attributes["data-share-result-for"] === "zakat-result");
   assert.ok(bmiShare, "BMI result must have a share button");
   assert.ok(zakatShare, "Zakat result must have a share button");
+  assert.ok(insertedShareButtons.some(button => button.attributes["data-share-result-for"] === "extra-result"), "Extra calculator result must have a share button");
+  assert.ok(insertedShareButtons.some(button => button.attributes["data-share-result-for"] === "calorie-result"), "Calorie calculator result must have a share button");
+  assert.ok(insertedShareButtons.some(button => button.attributes["data-share-result-for"] === "qt-result"), "Query calculator result must have a share button");
   assert.equal(bmiShare.hidden, true, "Share button stays hidden before a result exists");
   const bmiObserver = observers.find(observer => observer.target === elements["bmi-result"]);
   assert.ok(bmiObserver, "BMI result must be observed for result changes");
