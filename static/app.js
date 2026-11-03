@@ -17,6 +17,10 @@
       bmiInError: "Enter inches from 0 to 11.99 using digits and an optional decimal point.",
       bmiStrictResult: "Your BMI is {bmi}. Based on the rounded result, this is in the {label} category for adults (WHO).",
       bmiDisclaimer: "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor.",
+      shareResult: "Share result",
+      shareSuccess: "Result shared successfully.",
+      shareCopied: "Result and page link copied.",
+      shareFailed: "Could not share or copy. Please select and copy the result.",
       bmiCalcError: "We could not calculate a valid BMI from those values. Check your entries and try again.",
       bmiResult: "Your BMI is {bmi}, which is in the {label} range for adults (WHO). BMI is a screening measure, not a diagnosis.",
       bmiUnder: "underweight",
@@ -75,6 +79,10 @@
       bmiInError: "انچ 0 سے 11.99 کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
       bmiStrictResult: "آپ کا BMI {bmi} ہے۔ گول کی گئی قدر کے مطابق یہ بالغوں میں {label} کی حد میں آتا ہے (WHO)۔",
       bmiDisclaimer: "BMI ایک عمومی اسکریننگ پیمانہ ہے۔ یہ جسمانی چربی کو براہ راست نہیں ناپتا اور ڈاکٹر کے مشورے کا متبادل نہیں۔",
+      shareResult: "نتیجہ شیئر کریں",
+      shareSuccess: "نتیجہ کامیابی سے شیئر ہو گیا۔",
+      shareCopied: "نتیجہ اور صفحے کا لنک کاپی ہو گیا۔",
+      shareFailed: "شیئر یا کاپی نہیں ہو سکا۔ نتیجہ منتخب کر کے کاپی کریں۔",
       bmiCalcError: "ان قدروں سے درست BMI نہیں نکالا جا سکا۔ اندراجات چیک کر کے دوبارہ کوشش کریں۔",
       bmiResult: "آپ کا BMI {bmi} ہے، جو بالغوں کے لیے WHO کے مطابق {label} کی حد میں ہے۔ BMI ایک اسکریننگ پیمانہ ہے، تشخیص نہیں۔",
       bmiUnder: "کم وزن",
@@ -333,6 +341,115 @@
   function fmt (n) {
     return n.toLocaleString(MSG[lang()].numeric, { maximumFractionDigits: 2 })
   }
+
+  function legacyCopyShareText (text) {
+    return new Promise(function (resolve, reject) {
+      if (!document.body || !document.execCommand) {
+        reject(new Error("Clipboard is unavailable"))
+        return
+      }
+      var field = document.createElement("textarea")
+      field.value = text
+      field.setAttribute("readonly", "")
+      field.style.position = "fixed"
+      field.style.opacity = "0"
+      document.body.appendChild(field)
+      field.select()
+      var copied = false
+      try { copied = document.execCommand("copy") } catch (error) {}
+      document.body.removeChild(field)
+      if (copied) resolve()
+      else reject(new Error("Clipboard copy failed"))
+    })
+  }
+
+  function copyShareText (text) {
+    var clipboard = window.navigator && window.navigator.clipboard
+    if (clipboard && typeof clipboard.writeText === "function") {
+      return clipboard.writeText(text).catch(function () {
+        return legacyCopyShareText(text)
+      })
+    }
+    return legacyCopyShareText(text)
+  }
+
+  function initResultSharing () {
+    // EMI already has its own Share Link and Copy Summary controls.
+    if (document.getElementById("share")) return
+    var outputs = document.querySelectorAll ? document.querySelectorAll('[id$="-result"]') : []
+    // The homepage calculator is a compact widget; only the full standard-calculator page gets sharing.
+    var standardDisplay = document.querySelector ? document.querySelector('#tool-calculator #calc-display') : null
+    if (standardDisplay) outputs = Array.prototype.slice.call(outputs).concat([standardDisplay])
+    Array.prototype.forEach.call(outputs, function (result) {
+      if (!result || !result.id || !result.parentNode ||
+          result.getAttribute("data-result-sharing-ready") === "true") return
+      result.setAttribute("data-result-sharing-ready", "true")
+      var button = document.createElement("button")
+      button.type = "button"
+      button.className = "mt-3 inline-flex min-h-[44px] items-center rounded-lg border border-stone-500 px-4 py-2 text-sm font-semibold text-stone-900 dark:border-stone-400 dark:text-stone-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
+      button.textContent = t("shareResult")
+      var hasShareableResult = function () {
+        var value = String(result.textContent || "").trim()
+        return !!value && !(result.id === "calc-display" && value === "0")
+      }
+      button.hidden = !hasShareableResult()
+      button.setAttribute("data-share-result-for", result.id)
+      var status = document.createElement("span")
+      status.className = "ml-3 text-sm text-stone-700 dark:text-stone-300"
+      status.setAttribute("role", "status")
+      status.setAttribute("aria-live", "polite")
+      if (result.id === "calc-display") {
+        // Keep the standard calculator keypad in its original position.
+        result.parentNode.appendChild(button)
+        result.parentNode.appendChild(status)
+      } else {
+        result.parentNode.insertBefore(button, result.nextSibling)
+        result.parentNode.insertBefore(status, button.nextSibling)
+      }
+
+      button.addEventListener("click", async function () {
+        var resultText = String(result.innerText || result.textContent || "").trim()
+        if (!resultText) {
+          button.hidden = true
+          return
+        }
+        var url = window.location && window.location.href ? window.location.href : ""
+        var payload = {
+          title: document.title || "CalculatesAll",
+          text: resultText + (url ? "\n" + url : ""),
+          url: url
+        }
+        button.disabled = true
+        status.textContent = ""
+        try {
+          if (window.navigator && typeof window.navigator.share === "function") {
+            try {
+              await window.navigator.share(payload)
+              status.textContent = t("shareSuccess")
+              return
+            } catch (error) {
+              if (error && error.name === "AbortError") return
+            }
+          }
+          await copyShareText(payload.text)
+          status.textContent = t("shareCopied")
+        } catch (error) {
+          status.textContent = t("shareFailed")
+        } finally {
+          button.disabled = false
+        }
+      })
+
+      if (typeof MutationObserver === "function") {
+        var observer = new MutationObserver(function () {
+          button.hidden = !hasShareableResult()
+          if (button.hidden) status.textContent = ""
+        })
+        observer.observe(result, { childList: true, subtree: true, characterData: true })
+      }
+    })
+  }
+
 
   /* Zakat: Nisab is 612.36 g of silver. The amount is shown only after the Nisab and hawl checks. */
   function initZakat () {
@@ -1776,6 +1893,7 @@
 
   function initializeCalculators () {
     // Initialize the query answer independently before any other calculator.
+    initResultSharing()
     try { initQueryTime() } catch (err) {
       say("qt-result", "Calculation failed to start. Please refresh this page.")
       if (typeof console !== "undefined") console.error("Query Calculator:", err)

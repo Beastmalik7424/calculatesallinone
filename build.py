@@ -36,6 +36,49 @@ H2 = "text-2xl font-bold text-indigo-800 dark:text-indigo-200 mt-12"
 P = "mt-3 text-base leading-relaxed text-stone-800 dark:text-stone-200"
 LINK = "underline text-sky-800 dark:text-sky-300 hover:text-sky-950"
 
+NOTICE_BADGES = {
+    ("en", "bmi-calculator"): (
+        "Not a diagnosis",
+        "BMI is a screening measure, not a diagnosis. It does not directly measure body fat. See CDC guidance."
+    ),
+    ("ur", "bmi-calculator"): (
+        "تشخیص نہیں",
+        "BMI صرف اسکریننگ ہے، تشخیص نہیں۔ یہ جسمانی چربی براہِ راست نہیں ناپتا۔"
+    ),
+    ("en", "zakat-calculator"): (
+        "Silver 612.36g · 2.5%",
+        "This calculator uses the silver Nisab of 612.36 g and a 2.5% rate. Gold Nisab and some rulings differ by madhhab. It is not a fatwa. Ask a qualified scholar."
+    ),
+    ("ur", "zakat-calculator"): (
+        "چاندی 612.36g · 2.5٪",
+        "یہ کیلکولیٹر چاندی کا نصاب 612.36 گرام اور 2.5 فیصد شرح استعمال کرتا ہے۔ سونے کے نصاب اور بعض احکام میں فقہی اختلاف ہے۔ مستند عالم سے رجوع کریں۔"
+    ),
+}
+
+
+def notice_badge(slug, language):
+    notice = NOTICE_BADGES.get((language, slug))
+    if not notice:
+        return ""
+    label, detail = notice
+    return (
+        '<span class="ml-2 inline-block whitespace-nowrap rounded-full border border-amber-300 bg-amber-50 px-1.5 py-0.5 text-[10px] leading-none font-semibold text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100" role="note" aria-label="'
+        + html.escape(detail, quote=True) + '" title="' + html.escape(detail, quote=True) + '">'
+        + label + "</span>"
+    )
+
+
+def attach_notice_badge(ui, slug, language):
+    badge = notice_badge(slug, language)
+    if not badge:
+        return ui
+    if slug == "bmi-calculator":
+        return ui.replace("</legend>", badge + "</legend>", 1)
+    if slug == "zakat-calculator":
+        return ui.replace('</label><input id="z-cash"', badge + '</label><input id="z-cash"', 1)
+    return ui
+
+
 
 def field(fid, label, step="0.01", hint=""):
     h = ""
@@ -1409,7 +1452,7 @@ def shell(main_html, lang="en", current_path=None):
         '</nav></div>'
         + lang_links(lang, s, current_path) +
         '</div></footer>\n'
-        '<script src="/assets/app.js?v=20261030-exact-years-1" defer></script>\n'
+        '<script src="/assets/app.js?v=20261103-result-sharing-1" defer></script>\n'
         '</body>\n</html>\n'
     )
 
@@ -1663,6 +1706,7 @@ def tool_page(t):
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
+    ui = attach_notice_badge(ui, t["slug"], "en")
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": t["name"], "url": url,
          "description": desc, "applicationCategory": t["app"], "operatingSystem": "Any",
@@ -1775,6 +1819,7 @@ def urdu_tool_page(t):
         ui = ui.replace("Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.", "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے۔ آپ کی گنتی اس صفحے کو چھوڑنے یا دوبارہ لوڈ کرنے تک عارضی طور پر محفوظ رہے گی۔")
         ui = ui.replace('<label class="', '<label lang="ur" class="')
         ui = ui.replace('id="t-lifetime-label">', 'id="t-lifetime-label" lang="ur">')
+    ui = attach_notice_badge(ui, t["slug"], "ur")
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     cat_ur = {"money": "پیسہ اور کاروبار", "health": "صحت", "time": "تاریخ اور وقت", "math": "ریاضی اور اکائیاں", "worship": "عبادت اور روزمرہ"}[cat["slug"]]
     schema = [

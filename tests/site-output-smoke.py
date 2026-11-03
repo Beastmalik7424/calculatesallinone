@@ -1018,3 +1018,15 @@ _ur_standard = output_for_url(SITE + "/ur/standard-calculator/").read_text(encod
 assert 'id="tool-calculator" class="ca-tool-standard-calculator mt-4"' in _ur_standard, (
     "Urdu Standard Calculator must use the standard calculator responsive layout"
 )
+
+
+# Health and religious-method notices must be visible before the calculator inputs.
+for page_path, input_id, notice in (
+    ("/bmi-calculator/", 'id="b-kg"', "Not a diagnosis"),
+    ("/ur/bmi-calculator/", 'id="b-kg"', "تشخیص نہیں"),
+    ("/zakat-calculator/", 'id="z-cash"', "Silver 612.36g · 2.5%"),
+    ("/ur/zakat-calculator/", 'id="z-cash"', "چاندی 612.36g · 2.5٪"),
+):
+    page_html = output_for_url(SITE + page_path).read_text(encoding="utf-8")
+    assert notice in page_html, f"Missing prominent method/safety notice on {page_path}"
+    assert page_html.index(notice) < page_html.index(input_id), f"Notice must appear before the first calculator input on {page_path}"
