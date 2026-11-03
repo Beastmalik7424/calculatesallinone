@@ -1999,7 +1999,7 @@ def home_page(lang="en"):
         path = "/"
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for Zakat, BMI, profit and loss, age, discounts, unit conversion, a standard calculator, tasbih counter and stopwatch."
-        h1 = "Free Online Standard Calculator"
+        h1 = "EMI, BMI and Zakat Calculators"
         lead = "CalculatesAll is a free online calculator for everyday maths. Tap the buttons or use your keyboard."
         cards = ""
         for c in CATEGORIES:
