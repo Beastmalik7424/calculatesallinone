@@ -2110,6 +2110,27 @@ def home_app_page(lang):
         tiles += ('<li><a href="/emi-calculator/" class="' + TILE_BASE + ' bg-gradient-to-br from-cyan-700 to-blue-800">'
                   '<span class="text-4xl" aria-hidden="true">💳</span>'
                   '<span>EMI Calculator</span></a></li>')
+    all_tool_links = ""
+    for slug, english_name, _short_name in CAROUSEL_TOOLS:
+        if urdu:
+            tool_name = CAROUSEL_TRANSLATIONS["ur"][slug]
+            tool_href = ("/ur/" if slug in URDU else "/") + slug + "/"
+        else:
+            tool_name = english_name
+            tool_href = "/" + slug + "/"
+        all_tool_links += (
+            '<li><a class="flex min-h-[44px] items-center rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 font-semibold text-slate-900 hover:bg-sky-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700" href="'
+            + tool_href + '">' + html.escape(tool_name) + '</a></li>'
+        )
+    all_tools_menu = (
+        '<details id="ca-all-tools-menu" class="mb-4 rounded-xl border border-slate-300 bg-white/95 shadow-sm dark:border-slate-700 dark:bg-stone-900/95">'
+        '<summary class="flex min-h-[48px] cursor-pointer list-none items-center justify-between rounded-xl bg-slate-900 px-4 py-3 font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-slate-100 dark:text-slate-950">'
+        + ("تمام ٹولز" if urdu else "All Tools")
+        + '<span aria-hidden="true">⌄</span></summary>'
+        '<div class="border-t border-slate-200 p-3 dark:border-slate-700">'
+        '<ul class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">' + all_tool_links + '</ul>'
+        '</div></details>'
+    )
     cats = ""
     if not urdu:
         for c in CATEGORIES:
@@ -2147,6 +2168,7 @@ def home_app_page(lang):
         + hero
         + '<aside id="all-tools" class="ca-home-tools">'
         + '<div class="ca-home-tools-heading"><div><p class="ca-home-side-eyebrow">' + s["many"] + '</p><h2>' + more_h + '</h2></div><span class="ca-home-free">' + s["free"] + '</span></div>'
+        + all_tools_menu
         + '<p class="ca-home-tools-copy">' + tool_intro + '</p>'
         + '<ul class="ca-home-tool-grid">' + tiles + '</ul></aside>'
         '</div>'
