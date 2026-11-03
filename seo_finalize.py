@@ -234,10 +234,14 @@ def main():
     titles, descriptions = {}, {}
     for path, file in paths.items():
         raw = file.read_text(encoding="utf-8")
-        # Bing Webmaster Tools ownership verification belongs on the homepage only.
-        if path == "/" and not re.search(r'<meta\s+name=["\']msvalidate\.01["\']', raw, re.I):
+        # Keep Bing verification on the homepage, immediately after the UTF-8 declaration.
+        if path == "/":
             verification_tag = '<meta name="msvalidate.01" content="07D62A8BA67BA474B5A13A27E6770782" />'
-            raw = re.sub(r"<head([^>]*)>", lambda match: match.group(0) + "\n    " + verification_tag, raw, count=1, flags=re.I)
+            raw = re.sub(r'<meta\b(?=[^>]*\bname=["\']msvalidate\.01["\'])[^>]*>\s*', "", raw, count=1, flags=re.I)
+            charset_match = re.search(r'(<meta\b[^>]*\bcharset\s*=\s*["\'][^"\']+["\'][^>]*>)', raw, re.I)
+            if not charset_match:
+                raise SystemExit("Homepage is missing its UTF-8 charset declaration")
+            raw = raw[:charset_match.end()] + "\n" + verification_tag + raw[charset_match.end():]
         canonical = SITE + path
         raw = re.sub(r'<link rel="canonical" href="[^"]*">', '<link rel="canonical" href="' + canonical + '">', raw, count=1)
         def keep_alternate(match):
@@ -251,6 +255,14 @@ def main():
             raw = re.sub(alternate_pattern, keep_alternate, raw)
         robot_value = "noindex, follow" if path in noindex else "index, follow"
         raw = re.sub(r'<meta name="robots" content="[^"]*"', '<meta name="robots" content="' + robot_value + '"', raw, count=1)
+        # Clean only the two audited pages. Preserve all tags, script data, CSS, and their order.
+        if path in ("/", "/emi-calculator/"):
+            def normalize_audited_head(match):
+                inner = re.sub(r"\\n[ \\t]*\\n+", "\\n", match.group(2)).strip("\\n")
+                return match.group(1) + "\\n" + inner + "\\n" + match.group(3)
+            raw, head_count = re.subn(r"(<head\\b[^>]*>)(.*?)(</head>)", normalize_audited_head, raw, count=1, flags=re.S | re.I)
+            if head_count != 1:
+                raise SystemExit("Missing or malformed head element: " + path)
         if path in noindex:
             file.write_text(raw, encoding="utf-8")
             continue
