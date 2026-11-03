@@ -27,7 +27,7 @@ assert.equal(appSchema.inLanguage, "en", "WebApplication schema language must ma
 assert.match(html, /<nav aria-label="Main" class="site-nav">[\s\S]*?class="ca-calculator-carousel"[\s\S]*?data-tool-shortcut="emi-calculator"[\s\S]*?aria-current="page"[\s\S]*?<\/nav>/, "EMI page must expose the active calculator carousel in its existing navigation row");
 assert.match(html, /<a href="\/money\/">Money and Business<\/a>/, "EMI page must retain its Money and Business navigation link");
 assert.match(html, /<a href="\/standard-calculator\/">Standard Calculator<\/a>/, "EMI page must retain its Standard Calculator navigation link");
-assert.match(html, /<main\\b(?=[^>]*\\bid="main")(?=[^>]*\\bclass="emi-page-main")[^>]*>/, "EMI calculator must use the shared-width main content wrapper and stable main landmark ID");
+assert.match(html, /<main id="main" class="emi-page-main">/, "EMI calculator must use the shared-width main content wrapper and stable main landmark ID");
 assert.match(html, /\.emi-page-main\s*\{[^}]*max-width:\s*960px/s, "EMI main content must be capped to the intended centered tool width");
 
 const match = html.match(/const Engine=\(\(\)=>\{[\s\S]*?\n\}\)\(\);/);
