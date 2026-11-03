@@ -50,11 +50,17 @@ for slug in ("percentage-calculator", "fraction-calculator"):
 assert 'href="/calorie-calculator/"' in page("health"), "Health hub must link to the adult calorie calculator"
 assert 'href="/compound-interest-calculator/"' in money
 for phrase in (
-    "Use age, date-difference and years-to-days calculators",
+    "calculate age from calendar dates",
     "find the days between two dates",
-    "fixed-year or exact calendar methods",
+    "convert years to days with a 365-day year, the Gregorian average or an exact start-date method",
+    "convert days to years using a selected year length",
     "Query Calculator also answers supported date, month and time-conversion questions",
 ):
     assert phrase.lower() in time.lower(), ("time", phrase)
+
+years_to_days = (Path("public") / "years-to-days-calculator" / "index.html").read_text(encoding="utf-8")
+description_line = next((line for line in years_to_days.splitlines() if '<meta name="description"' in line), "")
+assert "Exact start-date conversion is available for years to days only." in description_line, "Years-to-days metadata must state the exact-date mode limitation"
+assert "Exact calendar years (years to days only)" in years_to_days, "Years-to-days UI must keep the exact-mode direction limitation visible"
 
 print("Money, Math and Time hub content, canonical/indexability and contextual links verified")
