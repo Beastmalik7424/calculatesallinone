@@ -323,9 +323,9 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   assert.equal(bmiShare.hidden, true, "Share button stays hidden before a result exists");
   const bmiObserver = observers.find(observer => observer.target === elements["bmi-result"]);
   assert.ok(bmiObserver, "BMI result must be observed for result changes");
+  elements["bmi-result"].textContent = "BMI result: 24.2 normal weight";
   bmiObserver.callback();
   assert.equal(bmiShare.hidden, false, "Share button appears after a result is available");
-  elements["bmi-result"].textContent = "BMI result: 24.2 normal weight";
   await bmiShare._handlers.click();
   assert.equal(window.sharedData.title, "CalculatesAll Test");
   assert.match(window.sharedData.text, /BMI result: 24.2 normal weight/);
