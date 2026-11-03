@@ -376,7 +376,7 @@
   function initResultSharing () {
     // EMI already has its own Share Link and Copy Summary controls.
     if (document.getElementById("share")) return
-    var outputs = document.querySelectorAll('[id$="-result"]')
+    var outputs = document.querySelectorAll('[id$="-result"], #calc-display')
     Array.prototype.forEach.call(outputs, function (result) {
       if (!result || !result.id || !result.parentNode ||
           result.getAttribute("data-result-sharing-ready") === "true") return
@@ -385,7 +385,11 @@
       button.type = "button"
       button.className = "mt-3 inline-flex min-h-[44px] items-center rounded-lg border border-stone-500 px-4 py-2 text-sm font-semibold text-stone-900 dark:border-stone-400 dark:text-stone-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
       button.textContent = t("shareResult")
-      button.hidden = !String(result.textContent || "").trim()
+      var hasShareableResult = function () {
+        var value = String(result.textContent || "").trim()
+        return !!value && !(result.id === "calc-display" && value === "0")
+      }
+      button.hidden = !hasShareableResult()
       button.setAttribute("data-share-result-for", result.id)
       var status = document.createElement("span")
       status.className = "ml-3 text-sm text-stone-700 dark:text-stone-300"
@@ -429,7 +433,7 @@
 
       if (typeof MutationObserver === "function") {
         var observer = new MutationObserver(function () {
-          button.hidden = !String(result.textContent || "").trim()
+          button.hidden = !hasShareableResult()
           if (button.hidden) status.textContent = ""
         })
         observer.observe(result, { childList: true, subtree: true, characterData: true })
