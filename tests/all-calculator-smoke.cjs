@@ -30,7 +30,7 @@ function element(id, value = "") {
   "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
   "conv-form","u-cat","u-val","u-from","u-to","conv-result","t-count","t-target","t-progress","t-tap","t-reset",
   "sw-display","sw-start","sw-stop","sw-reset",
-  "years-days-form","yd-direction","yd-value","yd-value-label","yd-method","yd-calendar-option","yd-exact-fields","yd-start-date","yd-submit","yd-result","extra-result","calorie-result","qt-result"
+  "years-days-form","yd-direction","yd-value","yd-value-label","yd-method","yd-calendar-option","yd-exact-fields","yd-start-date","yd-submit","yd-result","extra-result","calorie-result","qt-result","calc-display"
 ].forEach(id => element(id));
 elements["u-cat"].value = "weight";
 elements["bmi-unit"].value = "metric";
@@ -53,7 +53,7 @@ const document = {
   documentElement: { lang: "en", classList: { contains: () => false, toggle() {} } },
   addEventListener(type, fn) { if (type === "DOMContentLoaded") handlers.ready = fn; },
   getElementById(id) { return elements[id] || null; },
-  querySelectorAll(selector) { return selector && selector.includes("-result") ? Object.values(elements).filter(el => el.id && el.id.endsWith("-result")) : []; },
+  querySelectorAll(selector) { return selector && (selector.includes("-result") || selector.includes("#calc-display")) ? Object.values(elements).filter(el => el.id && (el.id.endsWith("-result") || el.id === "calc-display")) : []; },
   title: "CalculatesAll Test",
   createElement(tag) { return { tag, value: "", textContent: "", hidden: false, attributes: {}, _handlers: {}, className: "", style: {}, addEventListener(type, fn) { this._handlers[type] = fn; }, setAttribute(name, value) { this.attributes[name] = String(value); }, select() {} }; },
   body: { appendChild(node) { node.parentNode = this; }, removeChild(node) { node.parentNode = null; } },
@@ -61,6 +61,7 @@ const document = {
 };
 class FakeMutationObserver { constructor(callback) { this.callback = callback; observers.push(this); } observe(target) { this.target = target; } disconnect() {} }
 const window = { location: { href: "https://calculateallinone.vercel.app/bmi-calculator/" }, navigator: { async share(data) { window.sharedData = data; } , clipboard: { async writeText(text) { window.copiedText = text; } } }, localStorage: { getItem(k) { return storage.has(k) ? storage.get(k) : null; }, setItem(k,v) { storage.set(k,String(v)); } } };
+elements["calc-display"].textContent = "0";
 const context = {
   document, window, console, isFinite, Number, String, Math, Date: FixedDate, MutationObserver: FakeMutationObserver,
   setInterval(fn) { handlers.interval = fn; return 1; },
@@ -325,7 +326,14 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   assert.ok(insertedShareButtons.some(button => button.attributes["data-share-result-for"] === "extra-result"), "Extra calculator result must have a share button");
   assert.ok(insertedShareButtons.some(button => button.attributes["data-share-result-for"] === "calorie-result"), "Calorie calculator result must have a share button");
   assert.ok(insertedShareButtons.some(button => button.attributes["data-share-result-for"] === "qt-result"), "Query calculator result must have a share button");
+  const standardShare = insertedShareButtons.find(button => button.attributes["data-share-result-for"] === "calc-display");
+  assert.ok(standardShare, "Standard calculator display must have a share button");
+  assert.equal(standardShare.hidden, true, "Standard calculator share stays hidden at the initial zero display");
   assert.equal(bmiShare.hidden, true, "Share button stays hidden before a result exists");
+  const standardObserver = observers.find(observer => observer.target === elements["calc-display"]);
+  elements["calc-display"].textContent = "12";
+  standardObserver.callback();
+  assert.equal(standardShare.hidden, false, "Standard calculator share appears after a value is entered");
   const bmiObserver = observers.find(observer => observer.target === elements["bmi-result"]);
   assert.ok(bmiObserver, "BMI result must be observed for result changes");
   elements["bmi-result"].textContent = "BMI result: 24.2 normal weight";
