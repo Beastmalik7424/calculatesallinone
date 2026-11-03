@@ -23,6 +23,7 @@ for slug in ("money", "math", "health", "time", "worship"):
 
 money = page("money")
 math = page("math")
+time = page("time")
 
 for phrase in (
     "How is profit margin calculated?",
@@ -48,4 +49,12 @@ for slug in ("percentage-calculator", "fraction-calculator"):
     assert f'href="/{slug}/"' in math, slug
 assert 'href="/calorie-calculator/"' in page("health"), "Health hub must link to the adult calorie calculator"
 assert 'href="/compound-interest-calculator/"' in money
-print("Money and Math hub content, canonical/indexability and contextual links verified")
+for phrase in (
+    "Use age, date-difference and years-to-days calculators",
+    "find the days between two dates",
+    "fixed-year or exact calendar methods",
+    "Query Calculator also answers supported date, month and time-conversion questions",
+):
+    assert phrase.lower() in time.lower(), ("time", phrase)
+
+print("Money, Math and Time hub content, canonical/indexability and contextual links verified")
