@@ -588,7 +588,7 @@ HUB_CONTENT = {
         ],
     },
     "time": {
-        "intro": "Date and time tools help you measure exact age in years, months and days, and time an activity with a browser stopwatch. Age is calculated from calendar dates, so the time of day does not change the result.",
+        "intro": "Choose the right date or time tool: calculate age from calendar dates, find the days between two dates, convert years and days using fixed-year or exact calendar methods, or time an activity with the browser stopwatch. Query Calculator also answers supported date, month and time-conversion questions in several languages. Each tool states its method and limits.",
         "faq": [
             ("Does the age calculator use my time zone?", "No. It compares calendar dates only."),
         ],
@@ -615,7 +615,7 @@ HUB_CONTENT = {
 CATEGORIES = [
     {"slug": "money", "name": "Money and Business", "desc": "Compare EMI, Zakat, profit and loss, discounts and compound interest with worked examples, formulas and clear assumptions."},
     {"slug": "health", "name": "Health", "desc": "Calculate adult BMI and estimated maintenance calories in metric or imperial units, with clear methods and limitations."},
-    {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, and use a browser stopwatch for everyday timing with clear notes about date and timing limits."},
+    {"slug": "time", "name": "Date and Time", "desc": "Use age, date-difference and years-to-days calculators, plus a browser stopwatch, to check calendar spans, time conversions and everyday timing."},
     {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages and fractions, use standard or scientific arithmetic, and convert weight, length and temperature with clear worked examples."},
     {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
 ]
