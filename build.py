@@ -1439,7 +1439,7 @@ def shell(main_html, lang="en", current_path=None):
         '</nav></div>'
         + lang_links(lang, s, current_path) +
         '</div></footer>\n'
-        '<script src="/assets/app.js?v=20261030-exact-years-1" defer></script>\n'
+        '<script src="/assets/app.js?v=20261103-result-sharing-1" defer></script>\n'
         '</body>\n</html>\n'
     )
 
