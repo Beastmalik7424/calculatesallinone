@@ -38,31 +38,37 @@ LINK = "underline text-sky-800 dark:text-sky-300 hover:text-sky-950"
 
 NOTICE_COPY = {
     ("en", "bmi-calculator"): (
-        'BMI is a screening tool, not a diagnosis. It does not directly measure body fat. '
+        "BMI is a screening tool, not a diagnosis.",
+        'It does not directly measure body fat. Consider BMI with other health information. '
         '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">CDC guidance</a>.'
     ),
     ("ur", "bmi-calculator"): (
-        'BMI ابتدائی اسکریننگ ہے، تشخیص نہیں۔ یہ جسمانی چربی براہِ راست نہیں ناپتا۔ '
+        "BMI ابتدائی اسکریننگ ہے، تشخیص نہیں۔",
+        'یہ جسمانی چربی براہِ راست نہیں ناپتا۔ اسے صحت کی دوسری معلومات کے ساتھ سمجھیں۔ '
         '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">CDC رہنمائی</a>۔'
     ),
     ("en", "zakat-calculator"): (
-        'Silver Nisab: 612.36 g. Rate: 2.5%. Gold Nisab and some rulings differ by madhhab. This is not a fatwa. Ask a scholar. '
+        "Silver Nisab: 612.36 g. Rate: 2.5%.",
+        'Gold Nisab and some asset rulings differ by madhhab. This is not a fatwa. Ask a qualified scholar. '
         '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">Nisab guidance</a>.'
     ),
     ("ur", "zakat-calculator"): (
-        'چاندی کا نصاب 612.36 گرام، شرح 2.5% ہے۔ سونے کے نصاب اور بعض احکام میں فقہی اختلاف ہے۔ یہ فتویٰ نہیں، عالم سے رجوع کریں۔ '
+        "چاندی کا نصاب 612.36 گرام، شرح 2.5٪۔",
+        'سونے کے نصاب اور بعض اثاثوں کے احکام میں فقہی اختلاف ہے۔ یہ فتویٰ نہیں، مستند عالم سے رجوع کریں۔ '
         '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">نصاب کی رہنمائی</a>۔'
     ),
 }
 
 
 def prominent_notice(slug, language):
-    content = NOTICE_COPY.get((language, slug), "")
-    if not content:
+    notice = NOTICE_COPY.get((language, slug))
+    if not notice:
         return ""
+    summary, detail = notice
     return (
-        '<aside class="mt-2 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 px-2 py-1 text-xs leading-4 text-amber-950 dark:text-amber-100" role="note">'
-        + content + "</aside>"
+        '<details class="rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 px-2 py-0.5 text-xs leading-4 text-amber-950 dark:text-amber-100" role="note">'
+        '<summary class="cursor-pointer font-semibold">' + summary + '</summary>'
+        '<p class="mt-1">' + detail + '</p></details>'
     )
 
 
@@ -1728,14 +1734,15 @@ def tool_page(t):
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
     updated_date = LASTMOD.get(path)
     updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + ". " + t["sources"] + "</p>") if updated_date else ""
+    notice_html = prominent_notice(t["slug"], "en")
+    tool_section_spacing = "mt-0" if t["slug"] in ("bmi-calculator", "zakat-calculator") else "mt-4"
     calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
+        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' ' + tool_section_spacing + ' rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
          if t["slug"] != "standard-calculator" else
          '<section id="tool-calculator" class="ca-tool-standard-calculator mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="Calculator">')
-        + ui + '</section>'
+        + notice_html + ui + '</section>'
     )
     answer_note = answer_block(t["slug"], "en")
-    notice_html = prominent_notice(t["slug"], "en")
     primary_tool_content = calculator_section + answer_note
     breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
@@ -1760,7 +1767,7 @@ def tool_page(t):
     body = (
         ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
         + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
-        + (notice_html + primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
+        + (primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
            if t["slug"] in {tool["slug"] for tool in TOOLS}
            else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
         + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "")
@@ -1822,14 +1829,15 @@ def urdu_tool_page(t):
     for p in u["how"]:
         how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
+    notice_html = prominent_notice(t["slug"], "ur")
+    tool_section_spacing = "mt-0" if t["slug"] in ("bmi-calculator", "zakat-calculator") else "mt-4"
     calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4" aria-label="کیلکولیٹر">'
+        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' ' + tool_section_spacing + '" aria-label="کیلکولیٹر">'
          if t["slug"] != "standard-calculator" else
          '<section id="tool-calculator" class="ca-tool-standard-calculator mt-4" aria-label="کیلکولیٹر">')
-        + ui + '</section>'
+        + notice_html + ui + '</section>'
     )
     answer_note = "" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur")
-    notice_html = prominent_notice(t["slug"], "ur")
     primary_tool_content = calculator_section + answer_note
     body = (
         '<nav aria-label="صفحہ کی ترتیب" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
@@ -1842,7 +1850,7 @@ def urdu_tool_page(t):
     if t["slug"] == "standard-calculator":
         body += primary_tool_content + _urdu_lead
     else:
-        body += _urdu_lead + notice_html + primary_tool_content
+        body += _urdu_lead + primary_tool_content
     body += (
         '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
