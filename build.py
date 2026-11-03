@@ -588,7 +588,7 @@ HUB_CONTENT = {
         ],
     },
     "time": {
-        "intro": "Date and time tools help you measure exact age in years, months and days, and time an activity with a browser stopwatch. Age is calculated from calendar dates, so the time of day does not change the result.",
+        "intro": "Choose a date or time tool: calculate age from calendar dates, find the days between two dates, convert years to days with a 365-day year, the Gregorian average or an exact start-date method, or convert days to years using a selected year length. Use the browser stopwatch for timing. Query Calculator also answers supported date, month and time-conversion questions in several languages.",
         "faq": [
             ("Does the age calculator use my time zone?", "No. It compares calendar dates only."),
         ],
@@ -615,7 +615,7 @@ HUB_CONTENT = {
 CATEGORIES = [
     {"slug": "money", "name": "Money and Business", "desc": "Compare EMI, Zakat, profit and loss, discounts and compound interest with worked examples, formulas and clear assumptions."},
     {"slug": "health", "name": "Health", "desc": "Calculate adult BMI and estimated maintenance calories in metric or imperial units, with clear methods and limitations."},
-    {"slug": "time", "name": "Date and Time", "desc": "Calculate age in years, months and days, and use a browser stopwatch for everyday timing with clear notes about date and timing limits."},
+    {"slug": "time", "name": "Date and Time", "desc": "Use age, date-difference and years-to-days calculators, plus a browser stopwatch, to check calendar spans, time conversions and everyday timing."},
     {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages and fractions, use standard or scientific arithmetic, and convert weight, length and temperature with clear worked examples."},
     {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
 ]
@@ -884,7 +884,7 @@ TOOLS.extend([
     {
         "slug": "years-to-days-calculator", "category": "time",
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
-        "description": "Convert years to days or days to years with 365-day, Gregorian-average or exact calendar-date methods. Also derive weeks, hours and minutes.",
+        "description": "Convert years to days or days to years using a 365-day or Gregorian-average year. Exact start-date conversion is available for years to days only.",
         "h1": "Years to Days Calculator",
         "lead": "Convert in either direction and view derived weeks, hours, minutes and seconds. Choose a 365-day or Gregorian-average year, or enter a start date for an exact leap-year-aware years-to-days result.",
         "ui": (
@@ -918,6 +918,7 @@ TOOLS.extend([
                 ("How many years and months are in 504 days?", "About 1 year, 4 months and 17 days using an average Gregorian month of 30.436875 days. This is an estimate; exact calendar age requires actual start and end dates."),
                 ("How many days are in one year?", "A common year has 365 days and a leap year has 366. Averaged over the 400-year Gregorian cycle, one year is 365.2425 days."),
                 ("How many days are in 10 years?", "3,650 using the simple method or 3,652.425 using the Gregorian average. A real calendar span may contain two or three leap days depending on its start and end dates."),
+                ("How many days are in 6 years?", "Using the 365-day method, 6 years are 2,190 days. Using the Gregorian average, they are 2,191.455 days. Exact calendar days depend on the start date and leap days."),
                 ("How many days are in 20 years?", "7,300 with the simple 365-day method, or 7,304.85 with the Gregorian average. The exact calendar total depends on the start and end dates."),
                 ("How many days are in 50 years?", "18,250 with the simple 365-day method, or 18,262.125 with the Gregorian average. The exact calendar total depends on the start and end dates."),
                 ("How many hours and minutes are in 10 years?", "Using 365 days per year, 10 years are 87,600 hours or 5,256,000 minutes. Using the 365.2425-day Gregorian average, they are 87,658.2 hours or 5,259,492 minutes."),
@@ -1673,7 +1674,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "years-to-days-calculator":
         title = "Years to Days & Days to Years Calculator"
-        desc = "Convert years to days or days to years using 365 or 365.2425 days per year. Exact mode counts leap days from a start date."
+        desc = "Convert years to days or days to years using 365 or 365.2425 days per year. Exact start-date conversion applies to years to days only."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
