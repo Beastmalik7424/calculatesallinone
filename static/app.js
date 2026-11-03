@@ -378,7 +378,7 @@
     if (document.getElementById("share")) return
     var outputs = document.querySelectorAll('[id$="-result"]')
     // The homepage calculator is a compact widget; only the full standard-calculator page gets sharing.
-    var standardDisplay = document.querySelector('#tool-calculator #calc-display')
+    var standardDisplay = document.querySelector ? document.querySelector('#tool-calculator #calc-display') : null
     if (standardDisplay) outputs = Array.prototype.slice.call(outputs).concat([standardDisplay])
     Array.prototype.forEach.call(outputs, function (result) {
       if (!result || !result.id || !result.parentNode ||
