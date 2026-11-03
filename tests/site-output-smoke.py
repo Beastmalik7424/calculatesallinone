@@ -1011,8 +1011,7 @@ for _field_id in ("z-cash", "z-gold", "z-silver", "z-stock", "z-recv", "z-debts"
 for _slug in ("age-calculator", "bmi-calculator", "discount-calculator", "profit-loss-calculator",
               "stopwatch", "tasbih-counter", "unit-converter", "zakat-calculator"):
     _html = output_for_url(SITE + "/ur/" + _slug + "/").read_text(encoding="utf-8")
-    _spacing = "mt-0" if _slug in ("bmi-calculator", "zakat-calculator") else "mt-4"
-    assert 'id="tool-calculator" class="ca-tool-calculator ca-tool-' + _slug + ' ' + _spacing + '"' in _html, (
+    assert 'id="tool-calculator" class="ca-tool-calculator ca-tool-' + _slug + ' mt-4"' in _html, (
         "Urdu calculator lost its page-specific responsive class: " + _slug
     )
 _ur_standard = output_for_url(SITE + "/ur/standard-calculator/").read_text(encoding="utf-8")
@@ -1023,10 +1022,10 @@ assert 'id="tool-calculator" class="ca-tool-standard-calculator mt-4"' in _ur_st
 
 # Health and religious-method notices must be visible before the calculator inputs.
 for page_path, form_id, notice in (
-    ("/bmi-calculator/", 'id="bmi-form"', "BMI is a screening tool, not a diagnosis."),
-    ("/ur/bmi-calculator/", 'id="bmi-form"', "BMI ابتدائی اسکریننگ ہے، تشخیص نہیں۔"),
-    ("/zakat-calculator/", 'id="zakat-form"', "Silver Nisab: 612.36 g. Rate: 2.5%"),
-    ("/ur/zakat-calculator/", 'id="zakat-form"', "چاندی کا نصاب 612.36 گرام، شرح 2.5٪"),
+    ("/bmi-calculator/", 'id="bmi-form"', "Not a diagnosis"),
+    ("/ur/bmi-calculator/", 'id="bmi-form"', "تشخیص نہیں"),
+    ("/zakat-calculator/", 'id="zakat-form"', "Silver 612.36g · 2.5%"),
+    ("/ur/zakat-calculator/", 'id="zakat-form"', "چاندی 612.36g · 2.5٪"),
 ):
     page_html = output_for_url(SITE + page_path).read_text(encoding="utf-8")
     assert notice in page_html, f"Missing prominent method/safety notice on {page_path}"
