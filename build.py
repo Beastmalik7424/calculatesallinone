@@ -36,40 +36,47 @@ H2 = "text-2xl font-bold text-indigo-800 dark:text-indigo-200 mt-12"
 P = "mt-3 text-base leading-relaxed text-stone-800 dark:text-stone-200"
 LINK = "underline text-sky-800 dark:text-sky-300 hover:text-sky-950"
 
-NOTICE_COPY = {
+NOTICE_BADGES = {
     ("en", "bmi-calculator"): (
-        "BMI is a screening tool, not a diagnosis.",
-        'It does not directly measure body fat. Consider BMI with other health information. '
-        '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">CDC guidance</a>.'
+        "Not a diagnosis",
+        "BMI is a screening measure, not a diagnosis. It does not directly measure body fat. See CDC guidance."
     ),
     ("ur", "bmi-calculator"): (
-        "BMI ابتدائی اسکریننگ ہے، تشخیص نہیں۔",
-        'یہ جسمانی چربی براہِ راست نہیں ناپتا۔ اسے صحت کی دوسری معلومات کے ساتھ سمجھیں۔ '
-        '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">CDC رہنمائی</a>۔'
+        "تشخیص نہیں",
+        "BMI صرف اسکریننگ ہے، تشخیص نہیں۔ یہ جسمانی چربی براہِ راست نہیں ناپتا۔"
     ),
     ("en", "zakat-calculator"): (
-        "Silver Nisab: 612.36 g. Rate: 2.5%.",
-        'Gold Nisab and some asset rulings differ by madhhab. This is not a fatwa. Ask a qualified scholar. '
-        '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">Nisab guidance</a>.'
+        "Silver 612.36g · 2.5%",
+        "This calculator uses the silver Nisab of 612.36 g and a 2.5% rate. Gold Nisab and some rulings differ by madhhab. It is not a fatwa. Ask a qualified scholar."
     ),
     ("ur", "zakat-calculator"): (
-        "چاندی کا نصاب 612.36 گرام، شرح 2.5٪۔",
-        'سونے کے نصاب اور بعض اثاثوں کے احکام میں فقہی اختلاف ہے۔ یہ فتویٰ نہیں، مستند عالم سے رجوع کریں۔ '
-        '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">نصاب کی رہنمائی</a>۔'
+        "چاندی 612.36g · 2.5٪",
+        "یہ کیلکولیٹر چاندی کا نصاب 612.36 گرام اور 2.5 فیصد شرح استعمال کرتا ہے۔ سونے کے نصاب اور بعض احکام میں فقہی اختلاف ہے۔ مستند عالم سے رجوع کریں۔"
     ),
 }
 
 
-def prominent_notice(slug, language):
-    notice = NOTICE_COPY.get((language, slug))
+def notice_badge(slug, language):
+    notice = NOTICE_BADGES.get((language, slug))
     if not notice:
         return ""
-    summary, detail = notice
+    label, detail = notice
     return (
-        '<details class="rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 px-2 py-0.5 text-xs leading-4 text-amber-950 dark:text-amber-100" role="note">'
-        '<summary class="cursor-pointer font-semibold">' + summary + '</summary>'
-        '<p class="mt-1">' + detail + '</p></details>'
+        '<span class="ml-2 inline-block whitespace-nowrap rounded-full border border-amber-300 bg-amber-50 px-1.5 py-0.5 text-[10px] leading-none font-semibold text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100" role="note" aria-label="'
+        + html.escape(detail, quote=True) + '" title="' + html.escape(detail, quote=True) + '">'
+        + label + "</span>"
     )
+
+
+def attach_notice_badge(ui, slug, language):
+    badge = notice_badge(slug, language)
+    if not badge:
+        return ui
+    if slug == "bmi-calculator":
+        return ui.replace("</legend>", badge + "</legend>", 1)
+    if slug == "zakat-calculator":
+        return ui.replace('</label><input id="z-cash"', badge + '</label><input id="z-cash"', 1)
+    return ui
 
 
 
@@ -1699,6 +1706,7 @@ def tool_page(t):
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
+    ui = attach_notice_badge(ui, t["slug"], "en")
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": t["name"], "url": url,
          "description": desc, "applicationCategory": t["app"], "operatingSystem": "Any",
@@ -1734,13 +1742,11 @@ def tool_page(t):
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
     updated_date = LASTMOD.get(path)
     updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + ". " + t["sources"] + "</p>") if updated_date else ""
-    notice_html = prominent_notice(t["slug"], "en")
-    tool_section_spacing = "mt-0" if t["slug"] in ("bmi-calculator", "zakat-calculator") else "mt-4"
     calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' ' + tool_section_spacing + ' rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
+        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
          if t["slug"] != "standard-calculator" else
          '<section id="tool-calculator" class="ca-tool-standard-calculator mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="Calculator">')
-        + notice_html + ui + '</section>'
+        + ui + '</section>'
     )
     answer_note = answer_block(t["slug"], "en")
     primary_tool_content = calculator_section + answer_note
@@ -1813,6 +1819,7 @@ def urdu_tool_page(t):
         ui = ui.replace("Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.", "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے۔ آپ کی گنتی اس صفحے کو چھوڑنے یا دوبارہ لوڈ کرنے تک عارضی طور پر محفوظ رہے گی۔")
         ui = ui.replace('<label class="', '<label lang="ur" class="')
         ui = ui.replace('id="t-lifetime-label">', 'id="t-lifetime-label" lang="ur">')
+    ui = attach_notice_badge(ui, t["slug"], "ur")
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     cat_ur = {"money": "پیسہ اور کاروبار", "health": "صحت", "time": "تاریخ اور وقت", "math": "ریاضی اور اکائیاں", "worship": "عبادت اور روزمرہ"}[cat["slug"]]
     schema = [
@@ -1829,13 +1836,11 @@ def urdu_tool_page(t):
     for p in u["how"]:
         how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
-    notice_html = prominent_notice(t["slug"], "ur")
-    tool_section_spacing = "mt-0" if t["slug"] in ("bmi-calculator", "zakat-calculator") else "mt-4"
     calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' ' + tool_section_spacing + '" aria-label="کیلکولیٹر">'
+        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4" aria-label="کیلکولیٹر">'
          if t["slug"] != "standard-calculator" else
          '<section id="tool-calculator" class="ca-tool-standard-calculator mt-4" aria-label="کیلکولیٹر">')
-        + notice_html + ui + '</section>'
+        + ui + '</section>'
     )
     answer_note = "" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur")
     primary_tool_content = calculator_section + answer_note
