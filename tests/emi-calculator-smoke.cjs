@@ -8,6 +8,11 @@ const html = fs.readFileSync("emi-calculator.html", "utf8");
 // Guard the standalone page metadata because it bypasses the shared page-head builder.
 assert.match(html, /<html lang="en" dir="ltr">/, "EMI page must declare its language and text direction");
 assert.match(html, /name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/, "EMI viewport must match the site safe-area behavior");
+const scheduleRegion = html.match(/<div class="table-wrap"([^>]*)>/);
+assert.ok(scheduleRegion, "EMI repayment schedule must have a scrollable table region");
+assert.match(scheduleRegion[1], /\btabindex="0"/, "Scrollable EMI schedule must be keyboard focusable");
+assert.match(scheduleRegion[1], /\brole="region"/, "Scrollable EMI schedule must expose a named region landmark");
+assert.match(scheduleRegion[1], /\baria-label="Repayment schedule"/, "Scrollable EMI schedule must have an accessible name");
 assert.ok(html.includes('property="og:image" content="https://calculateallinone.vercel.app/assets/og-image.png"'), "EMI page must use the generated canonical social preview image");
 assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "EMI page must expose a large social preview");
 assert.equal((html.match(/"@type":"FAQPage"/g) || []).length, 1, "EMI page must contain exactly one FAQPage schema block");
