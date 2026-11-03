@@ -38,20 +38,20 @@ LINK = "underline text-sky-800 dark:text-sky-300 hover:text-sky-950"
 
 NOTICE_COPY = {
     ("en", "bmi-calculator"): (
-        'Important: BMI is a screening measure, not a diagnosis. It does not directly measure body fat and should be considered with other health information. This calculator is for adults. '
-        '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">Read CDC BMI guidance</a>.'
+        'BMI is a screening tool, not a diagnosis. It does not directly measure body fat. '
+        '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">CDC guidance</a>.'
     ),
     ("ur", "bmi-calculator"): (
-        'اہم وضاحت: BMI صرف ابتدائی اسکریننگ پیمانہ ہے، تشخیص نہیں۔ یہ جسمانی چربی کو براہِ راست نہیں ناپتا اور اسے صحت کی دوسری معلومات کے ساتھ سمجھنا چاہیے۔ یہ کیلکولیٹر صرف بالغ افراد کے لیے ہے۔ '
-        '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">CDC کی BMI رہنمائی پڑھیں</a>۔'
+        'BMI ابتدائی اسکریننگ ہے، تشخیص نہیں۔ یہ جسمانی چربی براہِ راست نہیں ناپتا۔ '
+        '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">CDC رہنمائی</a>۔'
     ),
     ("en", "zakat-calculator"): (
-        'Method note: This calculator uses the silver Nisab of 612.36 grams and applies 2.5% to net zakatable wealth after its Nisab and lunar-year checks. Gold-based Nisab is also used, and rulings on some assets and debts differ between schools of law. This is an arithmetic aid, not a fatwa. Confirm your circumstances with a qualified scholar. '
-        '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">Read scholar-reviewed Nisab guidance</a>.'
+        'Silver Nisab: 612.36 g. Rate: 2.5%. Gold Nisab and some rulings differ by madhhab. This is not a fatwa. Ask a scholar. '
+        '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">Nisab guidance</a>.'
     ),
     ("ur", "zakat-calculator"): (
-        'طریقۂ حساب کی وضاحت: یہ کیلکولیٹر 612.36 گرام چاندی کے نصاب اور نصاب و قمری سال کی شرائط پوری ہونے پر خالص قابلِ زکوٰۃ مال کے 2.5 فیصد کا حساب کرتا ہے۔ سونے کے نصاب کا طریقہ بھی رائج ہے، اور بعض اثاثوں اور قرضوں کے احکام فقہی مذاہب کے مطابق مختلف ہو سکتے ہیں۔ یہ حسابی سہولت ہے، شرعی فتویٰ نہیں۔ اپنے معاملے کی تصدیق مستند عالم سے کریں۔ '
-        '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">مستند نصاب کی رہنمائی پڑھیں</a>۔'
+        'چاندی کا نصاب 612.36 گرام، شرح 2.5% ہے۔ سونے کے نصاب اور بعض احکام میں فقہی اختلاف ہے۔ یہ فتویٰ نہیں، عالم سے رجوع کریں۔ '
+        '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">نصاب کی رہنمائی</a>۔'
     ),
 }
 
@@ -61,7 +61,7 @@ def prominent_notice(slug, language):
     if not content:
         return ""
     return (
-        '<aside class="mt-4 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 p-4 text-sm leading-relaxed text-amber-950 dark:text-amber-100" role="note">'
+        '<aside class="mt-2 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 px-2 py-1 text-xs leading-4 text-amber-950 dark:text-amber-100" role="note">'
         + content + "</aside>"
     )
 
