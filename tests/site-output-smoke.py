@@ -1025,7 +1025,7 @@ for page_path, form_id, notice in (
     ("/bmi-calculator/", 'id="bmi-form"', "BMI is a screening tool, not a diagnosis."),
     ("/ur/bmi-calculator/", 'id="bmi-form"', "BMI ابتدائی اسکریننگ ہے، تشخیص نہیں۔"),
     ("/zakat-calculator/", 'id="zakat-form"', "Silver Nisab: 612.36 g. Rate: 2.5%"),
-    ("/ur/zakat-calculator/", 'id="zakat-form"', "چاندی کا نصاب 612.36 گرام، شرح 2.5%"),
+    ("/ur/zakat-calculator/", 'id="zakat-form"', "چاندی کا نصاب 612.36 گرام، شرح 2.5٪"),
 ):
     page_html = output_for_url(SITE + page_path).read_text(encoding="utf-8")
     assert notice in page_html, f"Missing prominent method/safety notice on {page_path}"
