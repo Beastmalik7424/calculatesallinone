@@ -258,7 +258,7 @@ def main():
         # Clean only the two audited pages. Preserve all tags, script data, CSS, and their order.
         if path in ("/", "/emi-calculator/"):
             def normalize_audited_head(match):
-                inner = re.sub(r"\n[ \t]*\n+", "\n", match.group(2)).strip("\n")
+                inner = re.sub(r"\r?\n[ \t\r]*\r?\n+", "\n", match.group(2)).strip("\r\n")
                 return match.group(1) + "\n" + inner + "\n" + match.group(3)
             raw, head_count = re.subn(r"(<head\b[^>]*>)(.*?)(</head>)", normalize_audited_head, raw, count=1, flags=re.S | re.I)
             if head_count != 1:
