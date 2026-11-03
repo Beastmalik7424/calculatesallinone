@@ -376,7 +376,10 @@
   function initResultSharing () {
     // EMI already has its own Share Link and Copy Summary controls.
     if (document.getElementById("share")) return
-    var outputs = document.querySelectorAll('[id$="-result"], #calc-display')
+    var outputs = document.querySelectorAll('[id$="-result"]')
+    // The homepage calculator is a compact widget; only the full standard-calculator page gets sharing.
+    var standardDisplay = document.querySelector('#tool-calculator #calc-display')
+    if (standardDisplay) outputs = Array.prototype.slice.call(outputs).concat([standardDisplay])
     Array.prototype.forEach.call(outputs, function (result) {
       if (!result || !result.id || !result.parentNode ||
           result.getAttribute("data-result-sharing-ready") === "true") return
