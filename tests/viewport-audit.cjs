@@ -16,7 +16,7 @@ const { chromium } = require('playwright');
       || document.querySelector('#main form')
       || document.querySelector('#main');
     const visible=(e)=>e && getComputedStyle(e).display!=='none' && getComputedStyle(e).visibility!=='hidden' && e.getBoundingClientRect().height>0;
-    const buttons=section ? [...section.querySelectorAll('button,input[type="submit"]')].filter(visible) : [];
+    const buttons=section ? [...section.querySelectorAll('button,input[type="submit"]')].filter(e=>visible(e)&&!e.hasAttribute('data-share-result-for')) : [];
     const submit=section?.querySelector('button[type="submit"],input[type="submit"]');
     const last=visible(submit) ? submit : buttons[buttons.length-1];
     const r=last?.getBoundingClientRect();
