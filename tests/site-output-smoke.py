@@ -162,6 +162,7 @@ assert "Days to years" in years_html and "1,009 days" in years_html and "2 years
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
 assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"
+assert "How many days are in 6 years?" in years_html and "2,190" in years_html and "2,191.455" in years_html, "The Google Search Console six-year conversion query should have a checkable answer"
 assert "How many days are in 20 years?" in years_html and "7,300" in years_html and "7,304.85" in years_html, "The Google Search Console 20-year query should have a checkable answer"
 assert "How many days are in 50 years?" in years_html and "18,250" in years_html and "18,262.125" in years_html, "The Google Search Console 50-year query should have a checkable answer"
 assert "How many hours and minutes are in 10 years?" in years_html and "87,600 hours" in years_html and "5,259,492 minutes" in years_html, "The exposed 10-year hours/minutes query should explain both year methods"
