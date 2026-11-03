@@ -36,6 +36,36 @@ H2 = "text-2xl font-bold text-indigo-800 dark:text-indigo-200 mt-12"
 P = "mt-3 text-base leading-relaxed text-stone-800 dark:text-stone-200"
 LINK = "underline text-sky-800 dark:text-sky-300 hover:text-sky-950"
 
+NOTICE_COPY = {
+    ("en", "bmi-calculator"): (
+        'Important: BMI is a screening measure, not a diagnosis. It does not directly measure body fat and should be considered with other health information. This calculator is for adults. '
+        '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">Read CDC BMI guidance</a>.'
+    ),
+    ("ur", "bmi-calculator"): (
+        'اہم وضاحت: BMI صرف ابتدائی اسکریننگ پیمانہ ہے، تشخیص نہیں۔ یہ جسمانی چربی کو براہِ راست نہیں ناپتا اور اسے صحت کی دوسری معلومات کے ساتھ سمجھنا چاہیے۔ یہ کیلکولیٹر صرف بالغ افراد کے لیے ہے۔ '
+        '<a class="' + LINK + '" href="https://www.cdc.gov/bmi/about/index.html" target="_blank" rel="noopener noreferrer">CDC کی BMI رہنمائی پڑھیں</a>۔'
+    ),
+    ("en", "zakat-calculator"): (
+        'Method note: This calculator uses the silver Nisab of 612.36 grams and applies 2.5% to net zakatable wealth after its Nisab and lunar-year checks. Gold-based Nisab is also used, and rulings on some assets and debts differ between schools of law. This is an arithmetic aid, not a fatwa. Confirm your circumstances with a qualified scholar. '
+        '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">Read scholar-reviewed Nisab guidance</a>.'
+    ),
+    ("ur", "zakat-calculator"): (
+        'طریقۂ حساب کی وضاحت: یہ کیلکولیٹر 612.36 گرام چاندی کے نصاب اور نصاب و قمری سال کی شرائط پوری ہونے پر خالص قابلِ زکوٰۃ مال کے 2.5 فیصد کا حساب کرتا ہے۔ سونے کے نصاب کا طریقہ بھی رائج ہے، اور بعض اثاثوں اور قرضوں کے احکام فقہی مذاہب کے مطابق مختلف ہو سکتے ہیں۔ یہ حسابی سہولت ہے، شرعی فتویٰ نہیں۔ اپنے معاملے کی تصدیق مستند عالم سے کریں۔ '
+        '<a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/nisab/" target="_blank" rel="noopener noreferrer">مستند نصاب کی رہنمائی پڑھیں</a>۔'
+    ),
+}
+
+
+def prominent_notice(slug, language):
+    content = NOTICE_COPY.get((language, slug), "")
+    if not content:
+        return ""
+    return (
+        '<aside class="mt-4 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800 p-4 text-sm leading-relaxed text-amber-950 dark:text-amber-100" role="note">'
+        + content + "</aside>"
+    )
+
+
 
 def field(fid, label, step="0.01", hint=""):
     h = ""
@@ -1705,6 +1735,7 @@ def tool_page(t):
         + ui + '</section>'
     )
     answer_note = answer_block(t["slug"], "en")
+    notice_html = prominent_notice(t["slug"], "en")
     primary_tool_content = calculator_section + answer_note
     breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
@@ -1729,7 +1760,7 @@ def tool_page(t):
     body = (
         ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
         + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
-        + (primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
+        + (notice_html + primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
            if t["slug"] in {tool["slug"] for tool in TOOLS}
            else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
         + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "")
@@ -1798,6 +1829,7 @@ def urdu_tool_page(t):
         + ui + '</section>'
     )
     answer_note = "" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur")
+    notice_html = prominent_notice(t["slug"], "ur")
     primary_tool_content = calculator_section + answer_note
     body = (
         '<nav aria-label="صفحہ کی ترتیب" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
@@ -1810,7 +1842,7 @@ def urdu_tool_page(t):
     if t["slug"] == "standard-calculator":
         body += primary_tool_content + _urdu_lead
     else:
-        body += _urdu_lead + primary_tool_content
+        body += _urdu_lead + notice_html + primary_tool_content
     body += (
         '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
