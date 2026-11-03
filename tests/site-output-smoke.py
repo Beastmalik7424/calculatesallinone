@@ -58,7 +58,7 @@ assert home_head, "Homepage must have a valid head element"
 assert re.match(r"\s*<meta\s+charset=", home_head.group(1), re.I), "Homepage UTF-8 charset must be the first head element"
 assert home_head.group(1).find('name="msvalidate.01"') > home_head.group(1).find('charset='), "Bing verification must follow the charset declaration"
 assert not re.search(r"\n[ \t]*\n", home_head.group(1)), "Homepage head must not contain blank-line pollution"
-assert "<h1>Free Online Calculators for EMI, BMI, Zakat &amp; More</h1>" in home_html, "Homepage H1 must naturally identify the main calculator intents"
+assert "<h1>Free Online Calculators for EMI, BMI, Zakat and More</h1>" in home_html, "Homepage H1 must naturally identify the main calculator intents"
 for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
@@ -66,7 +66,7 @@ assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_ht
 assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
 assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
-assert "<h1>Free Online Calculators</h1>" in home_html and "Free tools for health, money, maths, dates and everyday tasks. No sign-up required." in home_html, "Homepage should describe the current calculator library in its opening copy"
+assert "<h1>Free Online Calculators for EMI, BMI, Zakat and More</h1>" in home_html and "Free tools for health, money, maths, dates and everyday tasks. No sign-up required." in home_html, "Homepage should describe its main calculator intents in the opening copy"
 assert "Free Online Standard Calculator" not in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." not in home_html, "Homepage must not retain the outdated calculator-only headline or tool list"
 for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
     assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
