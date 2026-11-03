@@ -342,11 +342,7 @@
     return n.toLocaleString(MSG[lang()].numeric, { maximumFractionDigits: 2 })
   }
 
-  function copyShareText (text) {
-    var clipboard = window.navigator && window.navigator.clipboard
-    if (clipboard && typeof clipboard.writeText === "function") {
-      return clipboard.writeText(text)
-    }
+  function legacyCopyShareText (text) {
     return new Promise(function (resolve, reject) {
       if (!document.body || !document.execCommand) {
         reject(new Error("Clipboard is unavailable"))
@@ -365,6 +361,16 @@
       if (copied) resolve()
       else reject(new Error("Clipboard copy failed"))
     })
+  }
+
+  function copyShareText (text) {
+    var clipboard = window.navigator && window.navigator.clipboard
+    if (clipboard && typeof clipboard.writeText === "function") {
+      return clipboard.writeText(text).catch(function () {
+        return legacyCopyShareText(text)
+      })
+    }
+    return legacyCopyShareText(text)
   }
 
   function initResultSharing () {
