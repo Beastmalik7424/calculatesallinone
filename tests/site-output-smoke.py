@@ -1023,9 +1023,9 @@ assert 'id="tool-calculator" class="ca-tool-standard-calculator mt-4"' in _ur_st
 # Health and religious-method notices must be visible before the calculator inputs.
 for page_path, form_id, notice in (
     ("/bmi-calculator/", 'id="bmi-form"', "BMI is a screening measure, not a diagnosis."),
-    ("/ur/bmi-calculator/", 'id="bmi-form"', "BMI صرف ابتدائی اسکریننگ ہے، تشخیص نہیں۔"),
-    ("/zakat-calculator/", 'id="zakat-form"', "This calculator uses the silver Nisab of 612.36 grams."),
-    ("/ur/zakat-calculator/", 'id="zakat-form"', "یہ کیلکولیٹر 612.36 گرام چاندی کا نصاب استعمال کرتا ہے۔"),
+    ("/ur/bmi-calculator/", 'id="bmi-form"', "BMI صرف ابتدائی اسکریننگ پیمانہ ہے، تشخیص نہیں۔"),
+    ("/zakat-calculator/", 'id="zakat-form"', "This calculator uses the silver Nisab of 612.36 grams and applies 2.5%"),
+    ("/ur/zakat-calculator/", 'id="zakat-form"', "یہ کیلکولیٹر 612.36 گرام چاندی کے نصاب اور"),
 ):
     page_html = output_for_url(SITE + page_path).read_text(encoding="utf-8")
     assert notice in page_html, f"Missing prominent method/safety notice on {page_path}"
