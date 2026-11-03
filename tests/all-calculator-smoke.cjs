@@ -55,7 +55,9 @@ const document = {
   getElementById(id) { return elements[id] || null; },
   querySelectorAll(selector) { return selector && selector.includes("-result") ? Object.values(elements).filter(el => el.id && el.id.endsWith("-result")) : []; },
   title: "CalculatesAll Test",
-  createElement(tag) { return { tag, value: "", textContent: "", hidden: false, attributes: {}, _handlers: {}, className: "", addEventListener(type, fn) { this._handlers[type] = fn; }, setAttribute(name, value) { this.attributes[name] = String(value); } }; }
+  createElement(tag) { return { tag, value: "", textContent: "", hidden: false, attributes: {}, _handlers: {}, className: "", style: {}, addEventListener(type, fn) { this._handlers[type] = fn; }, setAttribute(name, value) { this.attributes[name] = String(value); }, select() {} }; },
+  body: { appendChild(node) { node.parentNode = this; }, removeChild(node) { node.parentNode = null; } },
+  execCommand(command) { window.legacyCopied = command === "copy"; return window.legacyCopied; }
 };
 class FakeMutationObserver { constructor(callback) { this.callback = callback; observers.push(this); } observe(target) { this.target = target; } disconnect() {} }
 const window = { location: { href: "https://calculateallinone.vercel.app/bmi-calculator/" }, navigator: { async share(data) { window.sharedData = data; } , clipboard: { async writeText(text) { window.copiedText = text; } } }, localStorage: { getItem(k) { return storage.has(k) ? storage.get(k) : null; }, setItem(k,v) { storage.set(k,String(v)); } } };
@@ -342,5 +344,8 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   await zakatShare._handlers.click();
   assert.match(window.copiedText, /Zakat payable: 25/);
   assert.match(window.copiedText, /https:\/\/calculateallinone\.vercel\.app\/bmi-calculator\//);
-  console.log("PASS: result share button visibility, native share payload and clipboard fallback");
+  window.navigator.clipboard.writeText = async function () { throw new Error("Clipboard API rejected"); };
+  await zakatShare._handlers.click();
+  assert.equal(window.legacyCopied, true, "legacy copy fallback must run when the Clipboard API rejects");
+  console.log("PASS: result share button visibility, native share payload, Clipboard API and legacy copy fallback");
 })().catch(error => { console.error(error); process.exitCode = 1; });
