@@ -53,11 +53,11 @@ def output_for_url(url):
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
-home_head = re.search(r"<head\\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
+home_head = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
 assert home_head, "Homepage must have a valid head element"
-assert re.match(r"\\s*<meta\\s+charset=", home_head.group(1), re.I), "Homepage UTF-8 charset must be the first head element"
+assert re.match(r"\s*<meta\s+charset=", home_head.group(1), re.I), "Homepage UTF-8 charset must be the first head element"
 assert home_head.group(1).find('name="msvalidate.01"') > home_head.group(1).find('charset='), "Bing verification must follow the charset declaration"
-assert not re.search(r"\\n[ \\t]*\\n", home_head.group(1)), "Homepage head must not contain blank-line pollution"
+assert not re.search(r"\n[ \t]*\n", home_head.group(1)), "Homepage head must not contain blank-line pollution"
 assert "<h1>Free Online Calculators for EMI, BMI, Zakat &amp; More</h1>" in home_html, "Homepage H1 must naturally identify the main calculator intents"
 for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
@@ -172,10 +172,10 @@ assert all(value in years_html for value in ("1,460", "1,460.97", "4,015", "4,01
 assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
-emi_head = re.search(r"<head\\b[^>]*>(.*?)</head>", emi_html, re.S | re.I)
+emi_head = re.search(r"<head\b[^>]*>(.*?)</head>", emi_html, re.S | re.I)
 assert emi_head, "EMI page must have a valid head element"
-assert re.match(r"\\s*<meta\\s+charset=", emi_head.group(1), re.I), "EMI page UTF-8 charset must be the first head element"
-assert not re.search(r"\\n[ \\t]*\\n", emi_head.group(1)), "EMI head must not contain blank-line pollution"
+assert re.match(r"\s*<meta\s+charset=", emi_head.group(1), re.I), "EMI page UTF-8 charset must be the first head element"
+assert not re.search(r"\n[ \t]*\n", emi_head.group(1)), "EMI head must not contain blank-line pollution"
 assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
 # Category hubs are indexable when their explanatory sections and tool links are present.
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
