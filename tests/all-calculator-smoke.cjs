@@ -51,12 +51,14 @@ const document = {
   documentElement: { lang: "en", classList: { contains: () => false, toggle() {} } },
   addEventListener(type, fn) { if (type === "DOMContentLoaded") handlers.ready = fn; },
   getElementById(id) { return elements[id] || null; },
-  querySelectorAll() { return []; },
-  createElement(tag) { return { tag, value: "", textContent: "" }; }
+  querySelectorAll(selector) { return selector && selector.includes("-result") ? Object.values(elements).filter(el => el.id && el.id.endsWith("-result")) : []; },
+  title: "CalculatesAll Test",
+  createElement(tag) { return { tag, value: "", textContent: "", hidden: false, attributes: {}, _handlers: {}, className: "", addEventListener(type, fn) { this._handlers[type] = fn; }, setAttribute(name, value) { this.attributes[name] = String(value); } }; }
 };
-class FakeMutationObserver { constructor(callback) { this.callback = callback; observers.push(this); } observe(target) { this.target = target; } disconnect() {} }\nconst window = { location: { href: "https://calculateallinone.vercel.app/bmi-calculator/" }, navigator: { async share(data) { window.sharedData = data; } , clipboard: { async writeText(text) { window.copiedText = text; } } }, localStorage: { getItem(k) { return storage.has(k) ? storage.get(k) : null; }, setItem(k,v) { storage.set(k,String(v)); } } };
+class FakeMutationObserver { constructor(callback) { this.callback = callback; observers.push(this); } observe(target) { this.target = target; } disconnect() {} }
+const window = { location: { href: "https://calculateallinone.vercel.app/bmi-calculator/" }, navigator: { async share(data) { window.sharedData = data; } , clipboard: { async writeText(text) { window.copiedText = text; } } }, localStorage: { getItem(k) { return storage.has(k) ? storage.get(k) : null; }, setItem(k,v) { storage.set(k,String(v)); } } };
 const context = {
-  document, window, console, isFinite, Number, String, Math, Date: FixedDate, MutationObserver: FakeMutationObserver,
+  document, window, console, isFinite, Number, String, Math, Date: FixedDate, MutationObserver: FakeMutationObserver, MutationObserver: FakeMutationObserver,
   setInterval(fn) { handlers.interval = fn; return 1; },
   clearInterval() {},
   performance: { now: () => clock }
