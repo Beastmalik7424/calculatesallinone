@@ -53,6 +53,12 @@ def output_for_url(url):
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
+home_head = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
+assert home_head, "Homepage must have a valid head element"
+assert re.match(r"\s*<meta\s+charset=", home_head.group(1), re.I), "Homepage UTF-8 charset must be the first head element"
+assert home_head.group(1).find('name="msvalidate.01"') > home_head.group(1).find('charset='), "Bing verification must follow the charset declaration"
+assert not re.search(r"\n[ \t]*\n", home_head.group(1)), "Homepage head must not contain blank-line pollution"
+assert "<h1>EMI, BMI and Zakat Calculators</h1>" in home_html, "Homepage H1 must naturally identify the main calculator intents"
 for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
@@ -60,7 +66,7 @@ assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_ht
 assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
 assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
-assert "<h1>Free Online Calculators</h1>" in home_html and "Free tools for health, money, maths, dates and everyday tasks. No sign-up required." in home_html, "Homepage should describe the current calculator library in its opening copy"
+assert "<h1>EMI, BMI and Zakat Calculators</h1>" in home_html and "Free tools for health, money, maths, dates and everyday tasks. No sign-up required." in home_html, "Homepage should describe its main calculator intents in the opening copy"
 assert "Free Online Standard Calculator" not in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." not in home_html, "Homepage must not retain the outdated calculator-only headline or tool list"
 for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
     assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
@@ -166,6 +172,10 @@ assert all(value in years_html for value in ("1,460", "1,460.97", "4,015", "4,01
 assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
+emi_head = re.search(r"<head\b[^>]*>(.*?)</head>", emi_html, re.S | re.I)
+assert emi_head, "EMI page must have a valid head element"
+assert re.match(r"\s*<meta\s+charset=", emi_head.group(1), re.I), "EMI page UTF-8 charset must be the first head element"
+assert not re.search(r"\n[ \t]*\n", emi_head.group(1)), "EMI head must not contain blank-line pollution"
 assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
 # Category hubs are indexable when their explanatory sections and tool links are present.
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
@@ -759,7 +769,7 @@ assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage w
 assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index" in home_html, "Homepage health reference must link to WHO"
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
 assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
-assert "<h1>Free Online Calculators</h1>" in home_html, "Homepage H1 must describe the current calculator library"
+assert "<h1>EMI, BMI and Zakat Calculators</h1>" in home_html, "Homepage H1 must describe the main calculator intents"
 # The opening-copy requirement is covered by the core-tools summary assertion above.
 # The standard calculator landing page now explicitly describes its scientific mode.
 scientific_url = SITE + "/standard-calculator/"
