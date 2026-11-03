@@ -2088,7 +2088,7 @@ def home_app_page(lang):
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for adult maintenance calories, EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas."
-        h1 = "Free Online Calculators for EMI, BMI, Zakat and More"
+        h1 = "EMI, BMI and Zakat Calculators"
         lead = "Free tools for health, money, maths, dates and everyday tasks. No sign-up required."
         more_h = "More free tools"
     trust = ""
