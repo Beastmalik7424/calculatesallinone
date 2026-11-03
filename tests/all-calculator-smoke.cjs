@@ -7,7 +7,7 @@ const elements = {};
 function element(id, value = "") {
   return elements[id] = {
     id, value, checked: false, disabled: false, hidden: false, textContent: "", options: [], selectedIndex: 0,
-    attributes: {}, _handlers: {}, classList: {
+    attributes: {}, _handlers: {}, parentNode: { insertBefore(node) { insertedShareButtons.push(node); node.parentNode = this; }, appendChild(node) { insertedShareButtons.push(node); node.parentNode = this; } }, classList: {
       _set: new Set(),
       toggle(name, force) { if (force === undefined ? !this._set.has(name) : force) this._set.add(name); else this._set.delete(name); },
       contains(name) { return this._set.has(name); }
@@ -28,7 +28,7 @@ function element(id, value = "") {
   "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
   "conv-form","u-cat","u-val","u-from","u-to","conv-result","t-count","t-target","t-progress","t-tap","t-reset",
   "sw-display","sw-start","sw-stop","sw-reset",
-  "years-days-form","yd-direction","yd-value","yd-value-label","yd-method","yd-calendar-option","yd-exact-fields","yd-start-date","yd-submit","yd-result"
+  "years-days-form","yd-direction","yd-value","yd-value-label","yd-method","yd-calendar-option","yd-exact-fields","yd-start-date","yd-submit","yd-result","extra-result","calorie-result","qt-result"
 ].forEach(id => element(id));
 elements["u-cat"].value = "weight";
 elements["bmi-unit"].value = "metric";
@@ -54,9 +54,9 @@ const document = {
   querySelectorAll() { return []; },
   createElement(tag) { return { tag, value: "", textContent: "" }; }
 };
-const window = { localStorage: { getItem(k) { return storage.has(k) ? storage.get(k) : null; }, setItem(k,v) { storage.set(k,String(v)); } } };
+class FakeMutationObserver { constructor(callback) { this.callback = callback; observers.push(this); } observe(target) { this.target = target; } disconnect() {} }\nconst window = { location: { href: "https://calculateallinone.vercel.app/bmi-calculator/" }, navigator: { async share(data) { window.sharedData = data; } , clipboard: { async writeText(text) { window.copiedText = text; } } }, localStorage: { getItem(k) { return storage.has(k) ? storage.get(k) : null; }, setItem(k,v) { storage.set(k,String(v)); } } };
 const context = {
-  document, window, console, isFinite, Number, String, Math, Date: FixedDate,
+  document, window, console, isFinite, Number, String, Math, Date: FixedDate, MutationObserver: FakeMutationObserver,
   setInterval(fn) { handlers.interval = fn; return 1; },
   clearInterval() {},
   performance: { now: () => clock }
@@ -308,3 +308,32 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   assert.match(generated, /20261030-exact-years-1/);
   console.log("PASS: exact calendar day count, leap years, invalid dates and generated controls");
 }
+
+
+// Result sharing: buttons appear only when a result exists and use native share or clipboard fallback.
+(async function testResultSharing() {
+  const bmiShare = insertedShareButtons.find(button => button.attributes["data-share-result-for"] === "bmi-result");
+  const zakatShare = insertedShareButtons.find(button => button.attributes["data-share-result-for"] === "zakat-result");
+  assert.ok(bmiShare, "BMI result must have a share button");
+  assert.ok(zakatShare, "Zakat result must have a share button");
+  assert.equal(bmiShare.hidden, true, "Share button stays hidden before a result exists");
+  const bmiObserver = observers.find(observer => observer.target === elements["bmi-result"]);
+  assert.ok(bmiObserver, "BMI result must be observed for result changes");
+  bmiObserver.callback();
+  assert.equal(bmiShare.hidden, false, "Share button appears after a result is available");
+  elements["bmi-result"].textContent = "BMI result: 24.2 normal weight";
+  await bmiShare._handlers.click();
+  assert.equal(window.sharedData.title, "CalculatesAll Test");
+  assert.match(window.sharedData.text, /BMI result: 24.2 normal weight/);
+  assert.equal(window.sharedData.url, "https://calculateallinone.vercel.app/bmi-calculator/");
+
+  const zakatObserver = observers.find(observer => observer.target === elements["zakat-result"]);
+  assert.ok(zakatObserver, "Zakat result must be observed for result changes");
+  elements["zakat-result"].textContent = "Zakat payable: 25";
+  zakatObserver.callback();
+  window.navigator.share = undefined;
+  await zakatShare._handlers.click();
+  assert.match(window.copiedText, /Zakat payable: 25/);
+  assert.match(window.copiedText, /https:\/\/calculateallinone\.vercel\.app\/bmi-calculator\//);
+  console.log("PASS: result share button visibility, native share payload and clipboard fallback");
+})().catch(error => { console.error(error); process.exitCode = 1; });
