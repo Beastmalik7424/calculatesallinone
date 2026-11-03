@@ -4,6 +4,8 @@ const vm = require("node:vm");
 
 const handlers = {};
 const elements = {};
+const observers = [];
+const insertedShareButtons = [];
 function element(id, value = "") {
   return elements[id] = {
     id, value, checked: false, disabled: false, hidden: false, textContent: "", options: [], selectedIndex: 0,
