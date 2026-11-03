@@ -176,6 +176,7 @@ emi_head = re.search(r"<head\b[^>]*>(.*?)</head>", emi_html, re.S | re.I)
 assert emi_head, "EMI page must have a valid head element"
 assert re.match(r"\s*<meta\s+charset=", emi_head.group(1), re.I), "EMI page UTF-8 charset must be the first head element"
 assert not re.search(r"\r?\n[ \t\r]*\r?\n", emi_head.group(1)), "EMI head must not contain blank-line pollution"
+assert re.search(r'<main\b[^>]*\bid="main"[^>]*>', emi_html, re.I), "EMI page main landmark must have the stable main ID"
 assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in emi_html, "EMI calculator must use the site's existing favicon asset"
 # Category hubs are indexable when their explanatory sections and tool links are present.
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
