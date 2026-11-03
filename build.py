@@ -918,6 +918,7 @@ TOOLS.extend([
                 ("How many years and months are in 504 days?", "About 1 year, 4 months and 17 days using an average Gregorian month of 30.436875 days. This is an estimate; exact calendar age requires actual start and end dates."),
                 ("How many days are in one year?", "A common year has 365 days and a leap year has 366. Averaged over the 400-year Gregorian cycle, one year is 365.2425 days."),
                 ("How many days are in 10 years?", "3,650 using the simple method or 3,652.425 using the Gregorian average. A real calendar span may contain two or three leap days depending on its start and end dates."),
+                ("How many days are in 6 years?", "Using the 365-day method, 6 years are 2,190 days. Using the Gregorian average, they are 2,191.455 days. Exact calendar days depend on the start date and leap days."),
                 ("How many days are in 20 years?", "7,300 with the simple 365-day method, or 7,304.85 with the Gregorian average. The exact calendar total depends on the start and end dates."),
                 ("How many days are in 50 years?", "18,250 with the simple 365-day method, or 18,262.125 with the Gregorian average. The exact calendar total depends on the start and end dates."),
                 ("How many hours and minutes are in 10 years?", "Using 365 days per year, 10 years are 87,600 hours or 5,256,000 minutes. Using the 365.2425-day Gregorian average, they are 87,658.2 hours or 5,259,492 minutes."),
