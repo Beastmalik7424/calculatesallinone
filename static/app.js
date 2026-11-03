@@ -395,8 +395,14 @@
       status.className = "ml-3 text-sm text-stone-700 dark:text-stone-300"
       status.setAttribute("role", "status")
       status.setAttribute("aria-live", "polite")
-      result.parentNode.insertBefore(button, result.nextSibling)
-      result.parentNode.insertBefore(status, button.nextSibling)
+      if (result.id === "calc-display") {
+        // Keep the standard calculator keypad in its original position.
+        result.parentNode.appendChild(button)
+        result.parentNode.appendChild(status)
+      } else {
+        result.parentNode.insertBefore(button, result.nextSibling)
+        result.parentNode.insertBefore(status, button.nextSibling)
+      }
 
       button.addEventListener("click", async function () {
         var resultText = String(result.innerText || result.textContent || "").trim()
