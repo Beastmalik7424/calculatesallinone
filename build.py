@@ -588,7 +588,7 @@ HUB_CONTENT = {
         ],
     },
     "time": {
-        "intro": "Choose the right date or time tool: calculate age from calendar dates, find the days between two dates, convert years and days using fixed-year or exact calendar methods, or time an activity with the browser stopwatch. Query Calculator also answers supported date, month and time-conversion questions in several languages. Each tool states its method and limits.",
+        "intro": "Choose a date or time tool: calculate age from calendar dates, find the days between two dates, convert years to days with a 365-day year, the Gregorian average or an exact start-date method, or convert days to years using a selected year length. Use the browser stopwatch for timing. Query Calculator also answers supported date, month and time-conversion questions in several languages.",
         "faq": [
             ("Does the age calculator use my time zone?", "No. It compares calendar dates only."),
         ],
@@ -884,7 +884,7 @@ TOOLS.extend([
     {
         "slug": "years-to-days-calculator", "category": "time",
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
-        "description": "Convert years to days or days to years with 365-day, Gregorian-average or exact calendar-date methods. Also derive weeks, hours and minutes.",
+        "description": "Convert years to days or days to years using a 365-day or Gregorian-average year. Exact start-date conversion is available for years to days only.",
         "h1": "Years to Days Calculator",
         "lead": "Convert in either direction and view derived weeks, hours, minutes and seconds. Choose a 365-day or Gregorian-average year, or enter a start date for an exact leap-year-aware years-to-days result.",
         "ui": (
