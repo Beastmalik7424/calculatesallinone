@@ -1910,7 +1910,7 @@
       // Month-to-years-and-days keeps the clear calendar-style year/month split.
       // Other requested units are calculated from the unrounded Gregorian mean.
       // Exact calendar days still require a starting date.
-      var monthAndYearsDays = question.match(/(?:^|\\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\\s+months?\\b.*\\byears?\\b.*\\bdays?\\b/)
+      var monthAndYearsDays = question.match(/(?:^|\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\s+months?\b.*\byears?\b.*\bdays?\b/)
       if (monthAndYearsDays) {
         var monthValue = timeConversionNumber(monthAndYearsDays[1])
         if (monthValue === null) {
@@ -1924,13 +1924,13 @@
         var monthBreakdown = wholeYears + " year" + (wholeYears === 1 ? "" : "s") +
           " and " + timeConversionFormat(remainingMonths) + " month" + (remainingMonths === 1 ? "" : "s")
         var monthAnswerParts = [monthBreakdown, timeConversionFormat(approximateDays) + " days"]
-        if (/\\bhours?\\b/.test(question)) {
+        if (/\bhours?\b/.test(question)) {
           monthAnswerParts.push(timeConversionFormat(Math.round(averageDays * 24 * 100) / 100) + " hours")
         }
-        if (/\\bminutes?\\b/.test(question)) {
+        if (/\bminutes?\b/.test(question)) {
           monthAnswerParts.push(timeConversionFormat(Math.round(averageDays * 1440 * 100) / 100) + " minutes")
         }
-        if (/\\bseconds?\\b/.test(question)) {
+        if (/\bseconds?\b/.test(question)) {
           monthAnswerParts.push(timeConversionFormat(Math.round(averageDays * 86400 * 100) / 100) + " seconds")
         }
         say("qt-result", timeConversionFormat(monthValue) + " months = " +
