@@ -1741,11 +1741,14 @@
         }
         return lastWasNumber ? total + group : null
       }
-      question = question.replace(/[\\p{L}]+(?:-[\\p{L}]+)*/gu, function (phrase, offset, whole) {
-        var words = phrase.toLowerCase().split("-")
-        var value = spokenNumberValue(words)
-        if (value === null) return phrase
-        return String(value)
+      var spokenAlternatives = Object.keys(spokenNumberWords).concat(["hundred", "thousand", "and"])
+        .sort(function (a, b) { return b.length - a.length })
+        .map(function (word) { return word.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&") })
+      var spokenPattern = new RegExp("(^|[^\\\\p{L}])((?:" + spokenAlternatives.join("|") +
+        ")(?:[\\\\s-]+(?:" + spokenAlternatives.join("|") + "))*)(?=$|[^\\\\p{L}])", "giu")
+      question = question.replace(spokenPattern, function (match, before, phrase) {
+        var value = spokenNumberValue(phrase.toLowerCase().split(/[\\s-]+/))
+        return before + (value === null ? phrase : String(value))
       })
       // Remove standard thousands separators before extracting the quantity.
       question = question.replace(/(?<=\\d),(?=\\d{3}(?:\\D|$))/g, "")
