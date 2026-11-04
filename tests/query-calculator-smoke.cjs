@@ -108,9 +108,9 @@ for (const [q, expected] of yearDayQueries) {
 
 const multiUnitCases = [
  ["34 years in days months and weeks", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
- ["thirty four years in days months and weeks", /34 years = 12,418\\.25 days.*408 months.*1,774\\.04 weeks/i],
- ["34 months in days and weeks", /34 months = 1,034\\.85 days.*147\\.84 weeks/i],
- ["34 saal mn kitne din mahine aur haftay", /34 years = 12,418\\.25 days.*408 months.*1,774\\.04 weeks/i],
+ ["thirty four years in days months and weeks", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
+ ["34 months in days and weeks", /34 months = 1,034\.85 days.*147\.84 weeks/i],
+ ["34 saal mn kitne din mahine aur haftay", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
  ["34 saal mein kitne din mahine aur haftay", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
  ["34 سال میں کتنے دن مہینے اور ہفتے", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
  ["34 साल में कितने दिन महीने और सप्ताह", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
