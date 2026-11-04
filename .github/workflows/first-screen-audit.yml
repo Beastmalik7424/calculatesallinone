@@ -11,6 +11,7 @@ on:
       - 'styles/input.css'
       - 'static/app.js'
       - 'tests/viewport-audit.cjs'
+      - 'tests/query-calculator-browser.cjs'
       - '.github/workflows/first-screen-audit.yml'
   workflow_dispatch:
 jobs:
@@ -41,6 +42,7 @@ jobs:
           done
           curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null
           node tests/calorie-calculator-browser.cjs
+          node tests/query-calculator-browser.cjs
       - name: Save actual first-screen screenshots
         if: always()
         uses: actions/upload-artifact@v7
