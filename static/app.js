@@ -1907,9 +1907,10 @@
         return
       }
 
-      // Month conversions use 12 months per year. Day estimates use the
-      // Gregorian mean month (365.2425 / 12); exact days require a start date.
-      var monthAndYearsDays = question.match(/(?:^|\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\s+months?\b.*\byears?\b.*\bdays?\b/)
+      // Month-to-years-and-days keeps the clear calendar-style year/month split.
+      // Other requested units are calculated from the unrounded Gregorian mean.
+      // Exact calendar days still require a starting date.
+      var monthAndYearsDays = question.match(/(?:^|\\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\\s+months?\\b.*\\byears?\\b.*\\bdays?\\b/)
       if (monthAndYearsDays) {
         var monthValue = timeConversionNumber(monthAndYearsDays[1])
         if (monthValue === null) {
@@ -1918,12 +1919,24 @@
         }
         var wholeYears = Math.floor(monthValue / 12)
         var remainingMonths = monthValue - wholeYears * 12
-        var approximateDays = Math.round(monthValue * 365.2425 / 12 * 100) / 100
+        var averageDays = monthValue * 365.2425 / 12
+        var approximateDays = Math.round(averageDays * 100) / 100
+        var monthBreakdown = wholeYears + " year" + (wholeYears === 1 ? "" : "s") +
+          " and " + timeConversionFormat(remainingMonths) + " month" + (remainingMonths === 1 ? "" : "s")
+        var monthAnswerParts = [monthBreakdown, timeConversionFormat(approximateDays) + " days"]
+        if (/\\bhours?\\b/.test(question)) {
+          monthAnswerParts.push(timeConversionFormat(Math.round(averageDays * 24 * 100) / 100) + " hours")
+        }
+        if (/\\bminutes?\\b/.test(question)) {
+          monthAnswerParts.push(timeConversionFormat(Math.round(averageDays * 1440 * 100) / 100) + " minutes")
+        }
+        if (/\\bseconds?\\b/.test(question)) {
+          monthAnswerParts.push(timeConversionFormat(Math.round(averageDays * 86400 * 100) / 100) + " seconds")
+        }
         say("qt-result", timeConversionFormat(monthValue) + " months = " +
-          wholeYears + " years and " + timeConversionFormat(remainingMonths) +
-          " months; approximately " + timeConversionFormat(approximateDays) +
-          " days using the Gregorian average month length of 30.436875 days. " +
-          "Exact calendar days depend on the starting date.")
+          monthAnswerParts.join("; ") +
+          ". Uses the Gregorian average of 365.2425 days per year (30.436875 days per month). " +
+          "Exact calendar days and hours depend on the starting date.")
         return
       }
 
