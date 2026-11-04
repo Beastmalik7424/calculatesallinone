@@ -131,4 +131,32 @@ for (const [q, expected] of numberWordCases) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+
+const conversationalAgeCases = [
+ ["Ager mery bhai ki age 39 years h aor meri age", /Your brother is 39 years old\. What is your age\?/i],
+ ["agar mere bhai ki age 39 years hai aur meri age", /Your brother is 39 years old\. What is your age\?/i],
+ ["my brother is 39 years old and my age", /Your brother is 39 years old\. What is your age\?/i],
+ ["my brother age thirty nine and my age", /Your brother is 39 years old\. What is your age\?/i],
+ ["my brother is 39 and I am 35 what is age difference", /Age difference = 4 years/i],
+ ["my brother age 39 years and my age 35 years", /Age difference = 4 years/i],
+ ["meri age 35 years aur mere bhai ki age 39 years difference", /Age difference = 4 years/i],
+ ["my brother is 39 years old", /Your brother is 39 years old/i],
+ ["my age is 35 and my brother age is 39 how much older", /Age difference = 4 years/i]
+];
+for (const [q, expected] of conversationalAgeCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+const incompleteConversionCases = [
+ ["3 years in", /Which unit do you want to convert 3 years into\?/i],
+ ["how many days in 3", /Which time unit is the quantity 3 measured in\?/i],
+ ["convert 5 months to", /Which unit do you want to convert 5 months into\?/i]
+];
+for (const [q, expected] of incompleteConversionCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+
 console.log("Query Calculator DOM, multilingual month conversions, DOB, Pakistan date and arithmetic tests PASS");

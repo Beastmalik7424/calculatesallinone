@@ -1853,6 +1853,60 @@
           remainingDays + " days). Exact Gregorian calendar days.")
         return
       }
+      // Recover common conversational age questions before generic conversion parsing.
+      // Never invent the second person's age when a comparison is incomplete.
+      var ageIntent = /(?:\bage\b|ages|umar|عمر|उम्र|\byears?\s+old\b)/.test(question)
+      var brotherIntent = /(?:brother|bhai|بھائی|भाई)/.test(question)
+      var selfAgeIntent = /(?:my age|meri age|mery age|mera age|meri umar|mery umar|myself|i am|i'm|and i|aor meri|aur meri|اور میری|اور میری عمر|میری عمر)/.test(question)
+      if (ageIntent && brotherIntent) {
+        var ageValues = (question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []).map(Number)
+        if (ageValues.length >= 2 && ageValues.every(function (n) { return Number.isFinite(n) && n >= 0 && n <= 130 })) {
+          var firstAge = ageValues[0]
+          var secondAge = ageValues[1]
+          var difference = Math.abs(firstAge - secondAge)
+          say("qt-result", "Age difference = " + timeConversionFormat(difference) +
+            " years. The two ages provided are " + timeConversionFormat(firstAge) +
+            " and " + timeConversionFormat(secondAge) + " years.")
+          return
+        }
+        if (ageValues.length === 1 && selfAgeIntent) {
+          say("qt-result", "Your brother is " + timeConversionFormat(ageValues[0]) +
+            " years old. What is your age? I need it to calculate the age difference.")
+          return
+        }
+        if (ageValues.length === 1) {
+          say("qt-result", "Your brother is " + timeConversionFormat(ageValues[0]) +
+            " years old. Are you asking for the age difference? If so, please provide your age.")
+          return
+        }
+      }
+
+      // Gracefully handle unfinished conversion requests instead of a generic error.
+      var partialNumbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
+      var partialTokens = question.match(/[a-z]+/g) || []
+      var partialUnits = partialTokens.filter(function (word) { return !!aliases[word] })
+      if (partialNumbers.length === 1 && partialUnits.length === 1 &&
+          /(?:\bin\b|\bto\b|\binto\b|\bconvert\b|\bhow many\b|\bkitne\b|\bkitna\b)/.test(question)) {
+        var partialValue = timeConversionNumber(partialNumbers[0])
+        var partialSource = aliases[partialUnits[0]]
+        if (partialValue !== null && /(?:\bto\s*$|\binto\s*$|\bin\s*$)/.test(question)) {
+          say("qt-result", "Which unit do you want to convert " + timeConversionFormat(partialValue) +
+            " " + partialSource + (partialValue === 1 ? "" : "s") + " into?")
+          return
+        }
+      }
+      if (partialNumbers.length === 1 && partialUnits.length === 1 &&
+          /(?:\bin\s+[0-9]+(?:[.][0-9]+)?\s*$|\bto\s+[0-9]+(?:[.][0-9]+)?\s*$)/.test(question)) {
+        say("qt-result", "Which time unit is the quantity " + partialNumbers[0] +
+          " measured in? For example, years, months, weeks or days.")
+        return
+      }
+      if (partialNumbers.length === 1 && partialUnits.length === 0 &&
+          /(?:\bhow many\b|\btotal\b|\bin\b|\bto\b|\bconvert\b|\bkitne\b|\bkitna\b)/.test(question)) {
+        say("qt-result", "Which time unit is the quantity " + partialNumbers[0] + " measured in?")
+        return
+      }
+
       // Month conversions use 12 months per year. Day estimates use the
       // Gregorian mean month (365.2425 / 12); exact days require a start date.
       var monthAndYearsDays = question.match(/(?:^|\s)([0-9]+(?:[.][0-9]+)?|[.][0-9]+)\s+months?\b.*\byears?\b.*\bdays?\b/)
