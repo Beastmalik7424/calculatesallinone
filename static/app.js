@@ -1703,7 +1703,7 @@
         seventy:70, eighty:80, ninety:90,
         aik:1, ek:1, aikah:1, do:2, teen:3, tin:3, char:4, chaar:4, paanch:5,
         panch:5, cheh:6, chhay:6, saat:7, sat:7, aath:8, ath:8, nau:9,
-        das:10, gyarah:11, g्यारह:11, barah:12, bara:12, terah:13, chaudah:14,
+        das:10, gyarah:11, barah:12, bara:12, terah:13, chaudah:14,
         pandrah:15, solah:16, satrah:17, atharah:18, unnees:19, bees:20,
         tees:30, chalees:40, chalis:40, pachaas:50, pachhas:50, pachis:25, pachees:25, saath:60,
         sattar:70, assi:80, nabbe:90,
@@ -1711,7 +1711,7 @@
         दस:10, ग्यारह:11, बारह:12, तेरह:13, चौदह:14, पंद्रह:15, सोलह:16,
         सत्रह:17, अठारह:18, उन्नीस:19, बीस:20, तीस:30, चालीस:40, पचास:50,
         पच्चीस:25, साठ:60, सत्तर:70, अस्सी:80, नब्बे:90,
-        ایک:1, دو:2, تین:3, چار:4, پانچ:5, چھ:6, سات:7, آٹھ:8, آٹھ:8, نو:9,
+        ایک:1, دو:2, تین:3, چار:4, پانچ:5, چھ:6, سات:7, آٹھ:8, نو:9,
         دس:10, گیارہ:11, بارہ:12, تیرہ:13, چودہ:14, پندرہ:15, سولہ:16,
         سترہ:17, اٹھارہ:18, انیس:19, بیس:20, تیس:30, چالیس:40, پچاس:50,
         پچیس:25, ساٹھ:60, ستر:70, اسی:80, نوے:90
@@ -1725,8 +1725,7 @@
           if (word === "and" || word === "و" || word === "اور") continue
           if (Object.prototype.hasOwnProperty.call(spokenNumberWords, word)) {
             var n = spokenNumberWords[word]
-            if (n >= 20) group += n
-            else group += n
+            group += n
             lastWasNumber = true
           } else if (word === "hundred" || word === "سو" || word === "सौ") {
             group = (group || 1) * 100
