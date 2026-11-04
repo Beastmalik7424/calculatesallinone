@@ -131,4 +131,21 @@ for (const [q, expected] of numberWordCases) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+
+const conversationalAgeCases = [
+ ["Mery bhai ki age 39 years h aur meri age", /Your brother's age is 39 years.*Please tell me your age/i],
+ ["Ager mery bhai ki age 39 years h aur meri ag", /Your brother's age is 39 years.*Please tell me your age/i],
+ ["My brother is 39 years old and I am 35 years old what is the age difference", /Brother: 39 years.*You: 35 years.*4 years/i],
+ ["Mere bhai ki umar 39 saal hai aur meri umar 35 saal hai difference", /39 years.*35 years.*4 years/i],
+ ["my brother age 39 and my age 35", /39 years.*35 years.*4 years/i],
+ ["my sister is 28 years old and I am 31 years old", /Sister: 28 years.*You: 31 years.*3 years/i],
+ ["bhai 39 saal meri age 35 saal", /39 years.*35 years.*4 years/i],
+ ["my brother age 39 years", /Your brother's age is 39 years/i]
+];
+for (const [q, expected] of conversationalAgeCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+
 console.log("Query Calculator DOM, multilingual month conversions, DOB, Pakistan date and arithmetic tests PASS");
