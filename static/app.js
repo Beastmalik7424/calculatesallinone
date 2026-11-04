@@ -1902,6 +1902,29 @@
           return
         }
       }
+      // Calendar-year questions use the Gregorian leap-year rule, not a fixed 365-day factor.
+      var singleCalendarYear = question.match(/days?\s+in\s+(?:the\s+)?(?:year\s+)?(\d{4})/i)
+      if (singleCalendarYear) {
+        var calendarYear = Number(singleCalendarYear[1])
+        var isLeapCalendarYear = calendarYear % 4 === 0 && (calendarYear % 100 !== 0 || calendarYear % 400 === 0)
+        say("qt-result", calendarYear + (isLeapCalendarYear ? " is a leap year = 366 days." : " is not a leap year = 365 days."))
+        return
+      }
+      var yearRange = question.match(/(\d+)\s+years?\s+(?:from|starting(?:\s+in)?)\s+(\d{4})(?:\s+(?:in\s+days?|to\s+days?))?/i)
+      if (yearRange && /\bday(?:s)?\b/i.test(question)) {
+        var yearCount = Number(yearRange[1])
+        var firstYear = Number(yearRange[2])
+        if (yearCount > 0 && yearCount <= 100000 && Number.isInteger(yearCount)) {
+          var leapDays = 0
+          for (var y = firstYear; y < firstYear + yearCount; y++) {
+            if (y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)) leapDays++
+          }
+          say("qt-result", yearCount + " calendar years from " + firstYear + " = " +
+            timeConversionFormat(yearCount * 365 + leapDays) + " days (" + leapDays +
+            " leap day" + (leapDays === 1 ? "" : "s") + " counted).")
+          return
+        }
+      }
       var numbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
       var tokens = question.match(/[a-z]+/g) || []
       var units = tokens.filter(function (word) { return !!aliases[word] })
@@ -1940,6 +1963,18 @@
       if (source === "year" && target === "month") {
         say("qt-result", timeConversionFormat(value) + " years = " +
           timeConversionFormat(value * 12) + " months. Uses 12 months per year.")
+        return
+      }
+      if (source === "year" && target === "day") {
+        var averageDays = Math.round(value * 365.2425 * 100) / 100
+        say("qt-result", timeConversionFormat(value) + " years ≈ " + timeConversionFormat(averageDays) +
+          " days. Uses the Gregorian average of 365.2425 days per year. For an exact result, include a starting year or date so leap days can be counted.")
+        return
+      }
+      if (source === "day" && target === "year") {
+        var averageYears = Math.round(value / 365.2425 * 10000) / 10000
+        say("qt-result", timeConversionFormat(value) + " days ≈ " + timeConversionFormat(averageYears) +
+          " years. Uses the Gregorian average of 365.2425 days per year.")
         return
       }
       var result = value * factors[source] / factors[target]
