@@ -1982,6 +1982,88 @@
       var numbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
       var tokens = question.match(/[a-z]+/g) || []
       var units = tokens.filter(function (word) { return !!aliases[word] })
+      // One quantity can request several output units (for example, 34 years in days, months and weeks).
+      // The unit nearest the number is the source. If no source unit is supplied, ask instead of guessing.
+      if (numbers.length === 1 && units.length >= 2) {
+        var multiValue = timeConversionNumber(numbers[0])
+        if (multiValue === null) {
+          say("qt-result", "Enter a nonnegative number up to 1,000,000.")
+          return
+        }
+        var multiMatches = Array.from(question.matchAll(/[a-z]+/g)).filter(function (match) {
+          return !!aliases[match[0]]
+        })
+        var multiNumberIndex = question.indexOf(numbers[0])
+        multiMatches.sort(function (a, b) {
+          return Math.abs(a.index - multiNumberIndex) - Math.abs(b.index - multiNumberIndex)
+        })
+        var multiSource = aliases[multiMatches[0][0]]
+        var multiTargets = []
+        multiMatches.slice(1).forEach(function (match) {
+          var unit = aliases[match[0]]
+          if (unit !== multiSource && multiTargets.indexOf(unit) === -1) multiTargets.push(unit)
+        })
+        if (multiMatches.length >= 2 && multiTargets.length >= 2) {
+          var multiBaseDays = multiValue
+          if (multiSource === "year") multiBaseDays = multiValue * 365.2425
+          else if (multiSource === "month") multiBaseDays = multiValue * (365.2425 / 12)
+          else if (multiSource === "week") multiBaseDays = multiValue * 7
+          else if (multiSource === "day") multiBaseDays = multiValue
+          else if (multiSource === "hour") multiBaseDays = multiValue / 24
+          else if (multiSource === "minute") multiBaseDays = multiValue / 1440
+          else if (multiSource === "second") multiBaseDays = multiValue / 86400
+          var multiFactors = { year: 365.2425, month: 365.2425 / 12, week: 7, day: 1,
+            hour: 1 / 24, minute: 1 / 1440, second: 1 / 86400 }
+          var multiLabels = { year: "years", month: "months", week: "weeks", day: "days",
+            hour: "hours", minute: "minutes", second: "seconds" }
+          var multiParts = []
+          multiTargets.forEach(function (unit) {
+            var amount = multiBaseDays / multiFactors[unit]
+            var rounded = Math.round(amount * 100) / 100
+            multiParts.push(timeConversionFormat(rounded) + " " + multiLabels[unit])
+          })
+          var sourceLabel = multiSource + (multiValue === 1 ? "" : "s")
+          var locale = lang()
+          var intro = {
+            en: timeConversionFormat(multiValue) + " " + sourceLabel + " = ",
+            ur: timeConversionFormat(multiValue) + " " + sourceLabel + " کے برابر ",
+            ar: timeConversionFormat(multiValue) + " " + sourceLabel + " تساوي ",
+            hi: timeConversionFormat(multiValue) + " " + sourceLabel + " = ",
+            es: timeConversionFormat(multiValue) + " " + sourceLabel + " = ",
+            fr: timeConversionFormat(multiValue) + " " + sourceLabel + " = "
+          }
+          var joiner = { en: "; ", ur: "؛ ", ar: "؛ ", hi: "؛ ", es: "; ", fr: "; " }
+          var ending = {
+            en: ". Uses the Gregorian average of 365.2425 days per year (30.436875 days per month). Exact calendar days depend on the starting date.",
+            ur: "۔ گریگورین کیلنڈر کے اوسط 365.2425 دن فی سال کے مطابق۔ درست کیلنڈر دن آغاز کی تاریخ پر منحصر ہیں۔",
+            ar: ". يستخدم متوسط التقويم الغريغوري البالغ 365.2425 يومًا في السنة. يعتمد العدد الدقيق للأيام على تاريخ البداية.",
+            hi: "। ग्रेगोरियन कैलेंडर के औसत 365.2425 दिन प्रति वर्ष के आधार पर। सटीक कैलेंडर दिनों के लिए प्रारंभ तिथि आवश्यक है।",
+            es: ". Usa el promedio gregoriano de 365,2425 días por año. Los días exactos dependen de la fecha inicial.",
+            fr: ". Utilise la moyenne grégorienne de 365,2425 jours par an. Le nombre exact de jours dépend de la date de début."
+          }
+          var localizedUnits = {
+            ur: { year:"سال", month:"مہینے", week:"ہفتے", day:"دن", hour:"گھنٹے", minute:"منٹ", second:"سیکنڈ" },
+            ar: { year:"سنوات", month:"أشهر", week:"أسابيع", day:"أيام", hour:"ساعات", minute:"دقائق", second:"ثوانٍ" },
+            hi: { year:"वर्ष", month:"महीने", week:"सप्ताह", day:"दिन", hour:"घंटे", minute:"मिनट", second:"सेकंड" },
+            es: { year:"años", month:"meses", week:"semanas", day:"días", hour:"horas", minute:"minutos", second:"segundos" },
+            fr: { year:"ans", month:"mois", week:"semaines", day:"jours", hour:"heures", minute:"minutes", second:"secondes" }
+          }
+          if (localizedUnits[locale]) {
+            multiParts = multiTargets.map(function (unit) {
+              var amount = Math.round((multiBaseDays / multiFactors[unit]) * 100) / 100
+              return timeConversionFormat(amount) + " " + localizedUnits[locale][unit]
+            })
+          }
+          say("qt-result", (intro[locale] || intro.en) + multiParts.join(joiner[locale] || joiner.en) +
+            (ending[locale] || ending.en))
+          return
+        }
+      }
+      if (numbers.length === 1 && units.length >= 2) {
+        say("qt-result", "Which unit does " + numbers[0] +
+          " refer to? Please specify years, months, weeks or days so I can calculate the requested conversions.")
+        return
+      }
       if (numbers.length !== 1 || units.length !== 2) {
         say("qt-result", "Please ask one supported time, date or arithmetic question, for example: 115 months in years and days, Pakistan independence date, or 80 years mein kitne din hote hain?")
         return
