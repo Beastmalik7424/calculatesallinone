@@ -199,4 +199,15 @@ for (const [q, expected] of incompleteConversionCases) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+const monthHourRegressionCases = [
+ ["121 months in years, days and hours", /10 years and 1 month.*3,682\.86 days.*88,388\.69 hours/i],
+ ["121 month mn kitny years and days and hours hoty hn", /10 years and 1 month.*3,682\.86 days.*88,388\.69 hours/i],
+ ["121 months in years days hours and minutes", /10 years and 1 month.*3,682\.86 days.*88,388\.69 hours.*5,303,321\.1 minutes/i]
+];
+for (const [q, expected] of monthHourRegressionCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+
 console.log("Query Calculator DOM, multilingual month conversions, DOB, Pakistan date and arithmetic tests PASS");
