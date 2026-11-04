@@ -1994,7 +1994,7 @@
           return !!aliases[match[0]]
         })
         var multiNumberIndex = question.indexOf(numbers[0])
-        var afterQuantity = question.slice(multiNumberIndex + numbers[0].length).match(/^\\s*([a-z]+)/)
+        var afterQuantity = question.slice(multiNumberIndex + numbers[0].length).match(/^\s*([a-z]+)/)
         var multiSource = afterQuantity && aliases[afterQuantity[1]] ? aliases[afterQuantity[1]] : null
         var multiTargets = []
         multiMatches.forEach(function (match) {
