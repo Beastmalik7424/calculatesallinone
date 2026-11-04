@@ -1875,8 +1875,8 @@
           return
         }
         if (ageValues.length === 1) {
-          say("qt-result", "Your brother's age is " + timeConversionFormat(ageValues[0]) +
-            " years. Are you asking for the age difference? If so, please provide your age.")
+          say("qt-result", "Your brother is " + timeConversionFormat(ageValues[0]) +
+            " years old. Are you asking for the age difference? If so, please provide your age.")
           return
         }
       }
