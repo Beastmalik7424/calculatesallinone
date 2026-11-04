@@ -79,4 +79,29 @@ for(const [q,expected] of cases){
  listeners["form:submit"]({preventDefault(){}});
  assert.match(result.textContent,expected,q+" => "+result.textContent);
 }
+// Natural-language unit order follows the quantity, not the order of words.
+const yearDayQueries = [
+ ["30 years is how many days", /30 years = 10,950 days/],
+ ["total days in 3 years", /3 years = 1,095 days/],
+ ["how many days in 21 years", /21 years = 7,665 days/],
+ ["how many years is 2555 days", /2,555 days = 7 years/],
+ ["how many days is 25 years", /25 years = 9,125 days/],
+ ["1 years in days", /1 year = 365 days/],
+ ["14 years to days", /14 years = 5,110 days/],
+ ["4 years into days", /4 years = 1,460 days/],
+ ["convert 2555 days to years", /2,555 days = 7 years/],
+ ["3 years into days", /3 years = 1,095 days/],
+ ["21 years to days", /21 years = 7,665 days/],
+ ["25 years in days", /25 years = 9,125 days/],
+ ["how many days are there in 3 years", /3 years = 1,095 days/],
+ ["3 saal mein kitne din", /3 years = 1,095 days/],
+ ["3 سال میں کتنے دن", /3 years = 1,095 days/],
+ ["3 साल में कितने दिन", /3 years = 1,095 days/],
+ ["كم يوم في 3 سنوات", /3 years = 1,095 days/]
+];
+for (const [q, expected] of yearDayQueries) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
 console.log("Query Calculator DOM, multilingual month conversions, DOB, Pakistan date and arithmetic tests PASS");
