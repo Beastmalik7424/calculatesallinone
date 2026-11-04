@@ -105,6 +105,23 @@ for (const [q, expected] of yearDayQueries) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+
+const multiUnitCases = [
+ ["34 years in days months and weeks", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
+ ["34 saal mein kitne din mahine aur haftay", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
+ ["34 سال میں کتنے دن مہینے اور ہفتے", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
+ ["34 साल में कितने दिन महीने और सप्ताह", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
+ ["34 años en días meses y semanas", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
+ ["34 ans en jours mois et semaines", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
+ ["34 سنوات بالأيام والأشهر والأسابيع", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
+ ["34 mn kitnay days months and weeks", /Which unit does 34 refer to.*years, months, weeks, days/i]
+];
+for (const [q, expected] of multiUnitCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+
 const leapYearCases = [["how many days in year 2024", /2024 is a leap year = 366 days/i], ["how many days in year 2023", /2023 is not a leap year = 365 days/i], ["how many days in year 2000", /2000 is a leap year = 366 days/i], ["how many days in year 1900", /1900 is not a leap year = 365 days/i], ["3 years from 2024 in days", /3 calendar years from 1 January 2024 = 1,096 days/i], ["4 years from 2000 to days", /4 calendar years from 1 January 2000 = 1,461 days/i], ["4 years from 1900 in days", /4 calendar years from 1 January 1900 = 1,460 days/i], ["3 years in days", /3 years ≈ 1,095.73 days.*Gregorian average/i]];
 for (const [q, expected] of leapYearCases) { input.value=q; listeners["form:submit"]({preventDefault(){}}); assert.match(result.textContent,expected,q+" => "+result.textContent); }
 
