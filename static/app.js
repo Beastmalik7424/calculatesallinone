@@ -2057,7 +2057,7 @@
           return
         }
       }
-      if (numbers.length === 1 && units.length >= 2) {
+      if (numbers.length === 1 && units.length >= 2 && !multiSource) {
         say("qt-result", "Which unit does " + numbers[0] +
           " refer to? Please specify years, months, weeks or days so I can calculate the requested conversions.")
         return
