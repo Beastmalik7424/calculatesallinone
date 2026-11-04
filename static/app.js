@@ -1728,10 +1728,10 @@
             if (n >= 20) group = (group % 100) + n
             else group += n
             lastWasNumber = true
-          } else if (word === "hundred" || word === "ہزار" && false) {
+          } else if (word === "hundred" || word === "سو" || word === "सौ") {
             group = (group || 1) * 100
             lastWasNumber = true
-          } else if (word === "thousand") {
+          } else if (word === "thousand" || word === "ہزار") {
             total += (group || 1) * 1000
             group = 0
             lastWasNumber = true
@@ -1741,17 +1741,16 @@
         }
         return lastWasNumber ? total + group : null
       }
-      var spokenAlternatives = Object.keys(spokenNumberWords).concat(["hundred", "thousand", "and"])
+      var spokenAlternatives = Object.keys(spokenNumberWords).concat(["hundred", "thousand", "and", "ہزار", "سو", "सौ"])
         .sort(function (a, b) { return b.length - a.length })
-        .map(function (word) { return word.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&") })
-      var spokenPattern = new RegExp("(^|[^\\\\p{L}])((?:" + spokenAlternatives.join("|") +
-        ")(?:[\\\\s-]+(?:" + spokenAlternatives.join("|") + "))*)(?=$|[^\\\\p{L}])", "giu")
+      var spokenPattern = new RegExp("(^|[^\\p{L}])((?:" + spokenAlternatives.join("|") +
+        ")(?:[\\s-]+(?:" + spokenAlternatives.join("|") + "))*)(?=$|[^\\p{L}])", "giu")
       question = question.replace(spokenPattern, function (match, before, phrase) {
-        var value = spokenNumberValue(phrase.toLowerCase().split(/[\\s-]+/))
+        var value = spokenNumberValue(phrase.toLowerCase().split(/[\s-]+/))
         return before + (value === null ? phrase : String(value))
       })
       // Remove standard thousands separators before extracting the quantity.
-      question = question.replace(/(?<=\\d),(?=\\d{3}(?:\\D|$))/g, "")
+      question = question.replace(/(?<=\d),(?=\d{3}(?:\D|$))/g, "")
 
       // Calendar-date questions take priority over generic time-unit conversions.
       // Dates are interpreted as DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD.
