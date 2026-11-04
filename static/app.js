@@ -1895,6 +1895,12 @@
           return
         }
       }
+      if (partialNumbers.length === 1 && partialUnits.length === 1 &&
+          /(?:\bin\s+[0-9]+(?:[.][0-9]+)?\s*$|\bto\s+[0-9]+(?:[.][0-9]+)?\s*$)/.test(question)) {
+        say("qt-result", "Which time unit is the quantity " + partialNumbers[0] +
+          " measured in? For example, years, months, weeks or days.")
+        return
+      }
       if (partialNumbers.length === 1 && partialUnits.length === 0 &&
           /(?:\bhow many\b|\btotal\b|\bin\b|\bto\b|\bconvert\b|\bkitne\b|\bkitna\b)/.test(question)) {
         say("qt-result", "Which time unit is the quantity " + partialNumbers[0] + " measured in?")
