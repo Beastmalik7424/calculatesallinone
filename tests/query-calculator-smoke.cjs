@@ -81,23 +81,23 @@ for(const [q,expected] of cases){
 }
 // Natural-language unit order follows the quantity, not the order of words.
 const yearDayQueries = [
- ["30 years is how many days", /30 years = 10,950 days/],
- ["total days in 3 years", /3 years = 1,095 days/],
- ["how many days in 21 years", /21 years = 7,665 days/],
- ["how many years is 2555 days", /2,555 days = 7 years/],
- ["how many days is 25 years", /25 years = 9,125 days/],
- ["1 years in days", /1 year = 365 days/],
- ["14 years to days", /14 years = 5,110 days/],
- ["4 years into days", /4 years = 1,460 days/],
- ["convert 2555 days to years", /2,555 days = 7 years/],
- ["3 years into days", /3 years = 1,095 days/],
- ["21 years to days", /21 years = 7,665 days/],
- ["25 years in days", /25 years = 9,125 days/],
- ["how many days are there in 3 years", /3 years = 1,095 days/],
- ["3 saal mein kitne din", /3 years = 1,095 days/],
- ["3 سال میں کتنے دن", /3 years = 1,095 days/],
- ["3 साल में कितने दिन", /3 years = 1,095 days/],
- ["كم يوم في 3 سنوات", /3 years = 1,095 days/]
+ ["30 years is how many days", /30 years ≈ 10,957.28 days/],
+ ["total days in 3 years", /3 years ≈ 1,095.73 days/],
+ ["how many days in 21 years", /21 years ≈ 7,670.09 days/],
+ ["how many years is 2555 days", /2,555 days ≈ 6.9954 years/],
+ ["how many days is 25 years", /25 years ≈ 9,131.06 days/],
+ ["1 years in days", /1 year ≈ 365.24 days/],
+ ["14 years to days", /14 years ≈ 5,113.4 days/],
+ ["4 years into days", /4 years ≈ 1,460.97 days/],
+ ["convert 2555 days to years", /2,555 days ≈ 6.9954 years/],
+ ["3 years into days", /3 years ≈ 1,095.73 days/],
+ ["21 years to days", /21 years ≈ 7,670.09 days/],
+ ["25 years in days", /25 years ≈ 9,131.06 days/],
+ ["how many days are there in 3 years", /3 years ≈ 1,095.73 days/],
+ ["3 saal mein kitne din", /3 years ≈ 1,095.73 days/],
+ ["3 سال میں کتنے دن", /3 years ≈ 1,095.73 days/],
+ ["3 साल में कितने दिन", /3 years ≈ 1,095.73 days/],
+ ["كم يوم في 3 سنوات", /3 years ≈ 1,095.73 days/]
 ];
 for (const [q, expected] of yearDayQueries) {
  input.value = q;
@@ -105,25 +105,28 @@ for (const [q, expected] of yearDayQueries) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+const leapYearCases = [["how many days in year 2024", /2024 is a leap year = 366 days/i], ["how many days in year 2023", /2023 is not a leap year = 365 days/i], ["how many days in year 2000", /2000 is a leap year = 366 days/i], ["how many days in year 1900", /1900 is not a leap year = 365 days/i], ["3 years from 2024 in days", /3 calendar years from 1 January 2024 = 1,096 days/i], ["4 years from 2000 to days", /4 calendar years from 1 January 2000 = 1,461 days/i], ["4 years from 1900 in days", /4 calendar years from 1 January 1900 = 1,460 days/i], ["3 years in days", /3 years ≈ 1,095.73 days.*Gregorian average/i]];
+for (const [q, expected] of leapYearCases) { input.value=q; listeners["form:submit"]({preventDefault(){}}); assert.match(result.textContent,expected,q+" => "+result.textContent); }
+
 const numberWordCases = [
- ["thirty years is how many days", /30 years = 10,950 days/],
- ["three years in days", /3 years = 1,095 days/],
- ["how many days in twenty one years", /21 years = 7,665 days/],
- ["how many years is two thousand five hundred fifty five days", /2,555 days = 7 years/],
- ["two thousand five hundred and fifty five days in years", /2,555 days = 7 years/],
- ["twenty-one years in days", /21 years = 7,665 days/],
- ["how many days is twenty five years", /25 years = 9,125 days/],
- ["2,555 days in years", /2,555 days = 7 years/],
- ["twenty five years in days", /25 years = 9,125 days/],
- ["one year in days", /1 year = 365 days/],
- ["four years into days", /4 years = 1,460 days/],
- ["3 years in days", /3 years = 1,095 days/],
- ["three saal mein kitne din", /3 years = 1,095 days/],
- ["teen saal mein kitne din", /3 years = 1,095 days/],
- ["तीन साल में कितने दिन", /3 years = 1,095 days/],
- ["3 साल में कितने दिन", /3 years = 1,095 days/],
- ["تین سال میں کتنے دن", /3 years = 1,095 days/],
- ["how many days in 3 years", /3 years = 1,095 days/]
+ ["thirty years is how many days", /30 years ≈ 10,957.28 days/],
+ ["three years in days", /3 years ≈ 1,095.73 days/],
+ ["how many days in twenty one years", /21 years ≈ 7,670.09 days/],
+ ["how many years is two thousand five hundred fifty five days", /2,555 days ≈ 6.9954 years/],
+ ["two thousand five hundred and fifty five days in years", /2,555 days ≈ 6.9954 years/],
+ ["twenty-one years in days", /21 years ≈ 7,670.09 days/],
+ ["how many days is twenty five years", /25 years ≈ 9,131.06 days/],
+ ["2,555 days in years", /2,555 days ≈ 6.9954 years/],
+ ["twenty five years in days", /25 years ≈ 9,131.06 days/],
+ ["one year in days", /1 year ≈ 365.24 days/],
+ ["four years into days", /4 years ≈ 1,460.97 days/],
+ ["3 years in days", /3 years ≈ 1,095.73 days/],
+ ["three saal mein kitne din", /3 years ≈ 1,095.73 days/],
+ ["teen saal mein kitne din", /3 years ≈ 1,095.73 days/],
+ ["तीन साल में कितने दिन", /3 years ≈ 1,095.73 days/],
+ ["3 साल में कितने दिन", /3 years ≈ 1,095.73 days/],
+ ["تین سال میں کتنے دن", /3 years ≈ 1,095.73 days/],
+ ["how many days in 3 years", /3 years ≈ 1,095.73 days/]
 ];
 for (const [q, expected] of numberWordCases) {
  input.value = q;
