@@ -108,7 +108,7 @@ for (const [q, expected] of yearDayQueries) {
 
 const leapYearCases = [
  ["how many days in year 2024", /2024 is a leap year = 366 days/i],
- ["days in 2023", /2023 is not a leap year = 365 days/i],
+ ["how many days in year 2023", /2023 is not a leap year = 365 days/i],
  ["how many days in year 2000", /2000 is a leap year = 366 days/i],
  ["how many days in year 1900", /1900 is not a leap year = 365 days/i],
  ["3 years from 2024 in days", /3 calendar years from 2024 = 1,096 days/i],
