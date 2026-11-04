@@ -1855,7 +1855,7 @@
       }
       // Recover common conversational age questions before generic conversion parsing.
       // Never invent the second person's age when a comparison is incomplete.
-      var ageIntent = /(?:\bage\b|ages|umar|عمر|उम्र)/.test(question)
+      var ageIntent = /(?:\bage\b|ages|umar|عمر|उम्र|\byears?\s+old\b)/.test(question)
       var brotherIntent = /(?:brother|bhai|بھائی|भाई)/.test(question)
       var selfAgeIntent = /(?:my age|meri age|mery age|mera age|meri umar|mery umar|myself|i am|i'm|and i|aor meri|aur meri|اور میری|اور میری عمر|میری عمر)/.test(question)
       if (ageIntent && brotherIntent) {
