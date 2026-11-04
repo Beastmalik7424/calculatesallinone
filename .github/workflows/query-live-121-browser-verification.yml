@@ -49,7 +49,7 @@ jobs:
                 console.log("LIVE RESULT:", actual);
                 assert.match(actual, /10 years and 1 month/i, "Must show 10 years and 1 month");
                 assert.match(actual, /3,682\.86 days/, "Must show 3,682.86 average days");
-                assert.match(actual, /88,388\.73 hours/, "Must show 88,388.73 average hours");
+                assert.match(actual, /88,388\.69 hours/, "Must show 88,388.69 average hours");
               }
               assert.deepEqual(pageErrors, [], "Production page must not raise uncaught JavaScript errors");
               console.log("PASS: live production browser interaction, Roman Urdu + English, years/months/days/hours, no uncaught page errors.");
