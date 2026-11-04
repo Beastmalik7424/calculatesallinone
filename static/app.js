@@ -1855,8 +1855,21 @@
         say("qt-result", "Enter a nonnegative number up to 1,000,000.")
         return
       }
-      var source = aliases[units[0]]
-      var target = aliases[units[1]]
+      // The source unit is the unit attached to the numeric quantity.
+      // The target may appear earlier in natural questions ("days in 3 years").
+      var numberIndex = question.indexOf(numbers[0])
+      var unitMatches = Array.from(question.matchAll(/[a-z]+/g)).filter(function (match) {
+        return !!aliases[match[0]]
+      })
+      var firstDistance = Math.abs(unitMatches[0].index - numberIndex)
+      var secondDistance = Math.abs(unitMatches[1].index - numberIndex)
+      if (firstDistance === secondDistance) {
+        say("qt-result", "Please make the source quantity clear, for example: 3 years in days or 2,555 days in years.")
+        return
+      }
+      var sourceIndex = firstDistance < secondDistance ? 0 : 1
+      var source = aliases[unitMatches[sourceIndex][0]]
+      var target = aliases[unitMatches[1 - sourceIndex][0]]
       if (source === "month" && target === "year") {
         var fullYears = Math.floor(value / 12)
         var leftoverMonths = value - fullYears * 12
