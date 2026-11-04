@@ -1994,16 +1994,14 @@
           return !!aliases[match[0]]
         })
         var multiNumberIndex = question.indexOf(numbers[0])
-        multiMatches.sort(function (a, b) {
-          return Math.abs(a.index - multiNumberIndex) - Math.abs(b.index - multiNumberIndex)
-        })
-        var multiSource = aliases[multiMatches[0][0]]
+        var afterQuantity = question.slice(multiNumberIndex + numbers[0].length).match(/^\\s*([a-z]+)/)
+        var multiSource = afterQuantity && aliases[afterQuantity[1]] ? aliases[afterQuantity[1]] : null
         var multiTargets = []
-        multiMatches.slice(1).forEach(function (match) {
+        multiMatches.forEach(function (match) {
           var unit = aliases[match[0]]
           if (unit !== multiSource && multiTargets.indexOf(unit) === -1) multiTargets.push(unit)
         })
-        if (multiMatches.length >= 2 && multiTargets.length >= 2) {
+        if (multiSource && multiTargets.length >= 2) {
           var multiBaseDays = multiValue
           if (multiSource === "year") multiBaseDays = multiValue * 365.2425
           else if (multiSource === "month") multiBaseDays = multiValue * (365.2425 / 12)
