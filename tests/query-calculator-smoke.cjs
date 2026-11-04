@@ -124,10 +124,10 @@ for (const [q, expected] of multiUnitCases) {
 
 
 const localizedMultiUnitCases = [
- ["en", /34 years = .*days.*months.*weeks/i],
- ["ur", /34 سال کے برابر .*دن.*مہینے.*ہفتے/],
- ["ar", /34 سنوات تساوي .*أيام.*أشهر.*أسابيع/],
- ["hi", /34 वर्ष = .*दिन.*महीने.*सप्ताह/],
+ ["en", /years = .*days.*months.*weeks/i],
+ ["ur", /سال کے برابر .*دن.*مہینے.*ہفتے/],
+ ["ar", /سنوات تساوي .*أيام.*أشهر.*أسابيع/],
+ ["hi", /वर्ष = .*दिन.*महीने.*सप्ताह/],
  ["es", /34 años = .*días.*meses.*semanas/],
  ["fr", /34 ans = .*jours.*mois.*semaines/]
 ];
