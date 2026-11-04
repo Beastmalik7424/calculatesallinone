@@ -105,6 +105,23 @@ for (const [q, expected] of yearDayQueries) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+
+const leapYearCases = [
+ ["how many days in year 2024", /2024 is a leap year = 366 days/i],
+ ["days in 2023", /2023 is not a leap year = 365 days/i],
+ ["how many days in year 2000", /2000 is a leap year = 366 days/i],
+ ["how many days in year 1900", /1900 is not a leap year = 365 days/i],
+ ["3 years from 2024 in days", /3 calendar years from 2024 = 1,096 days/i],
+ ["4 years from 2000 to days", /4 calendar years from 2000 = 1,461 days/i],
+ ["4 years from 1900 in days", /4 calendar years from 1900 = 1,460 days/i],
+ ["3 years in days", /3 years ≈ 1,095\.73 days.*Gregorian average/i]
+];
+for (const [q, expected] of leapYearCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+
 const numberWordCases = [
  ["thirty years is how many days", /30 years = 10,950 days/],
  ["three years in days", /3 years = 1,095 days/],
