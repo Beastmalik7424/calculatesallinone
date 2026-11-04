@@ -1691,7 +1691,66 @@
         [/منٹ|मिनट|minutos|minuto|minutes|دقائق|دقيقة/g, " minute "],
         [/سیکنڈ|सेकंड|segundos|segundo|secondes|ثواني|ثانية/g, " second "]
       ]
+
       multilingualTerms.forEach(function (item) { question = question.replace(item[0], item[1]) })
+      // Accept spoken cardinal numbers as well as numeric digits. Keep this
+      // deterministic and dependency-free so the query tool works offline.
+      var spokenNumberWords = {
+        zero:0, oh:0, one:1, a:1, an:1, two:2, three:3, four:4, five:5, six:6,
+        seven:7, eight:8, nine:9, ten:10, eleven:11, twelve:12, thirteen:13,
+        fourteen:14, fifteen:15, sixteen:16, seventeen:17, eighteen:18, nineteen:19,
+        twenty:20, thirty:30, forty:40, fourty:40, fifty:50, sixty:60,
+        seventy:70, eighty:80, ninety:90,
+        aik:1, ek:1, aikah:1, do:2, teen:3, tin:3, char:4, chaar:4, paanch:5,
+        panch:5, cheh:6, chhay:6, saat:7, sat:7, aath:8, ath:8, nau:9,
+        das:10, gyarah:11, barah:12, bara:12, terah:13, chaudah:14,
+        pandrah:15, solah:16, satrah:17, atharah:18, unnees:19, bees:20,
+        tees:30, chalees:40, chalis:40, pachaas:50, pachhas:50, pachis:25, pachees:25, saath:60,
+        sattar:70, assi:80, nabbe:90,
+        एक:1, दो:2, तीन:3, चार:4, पाँच:5, पांच:5, छह:6, छः:6, सात:7, आठ:8, नौ:9,
+        दस:10, ग्यारह:11, बारह:12, तेरह:13, चौदह:14, पंद्रह:15, सोलह:16,
+        सत्रह:17, अठारह:18, उन्नीस:19, बीस:20, तीस:30, चालीस:40, पचास:50,
+        पच्चीस:25, साठ:60, सत्तर:70, अस्सी:80, नब्बे:90,
+        ایک:1, دو:2, تین:3, چار:4, پانچ:5, چھ:6, سات:7, آٹھ:8, نو:9,
+        دس:10, گیارہ:11, بارہ:12, تیرہ:13, چودہ:14, پندرہ:15, سولہ:16,
+        سترہ:17, اٹھارہ:18, انیس:19, بیس:20, تیس:30, چالیس:40, پچاس:50,
+        پچیس:25, ساٹھ:60, ستر:70, اسی:80, نوے:90
+      }
+      function spokenNumberValue (words) {
+        var total = 0
+        var group = 0
+        var lastWasNumber = false
+        for (var wi = 0; wi < words.length; wi++) {
+          var word = words[wi]
+          if (word === "and" || word === "و" || word === "اور") continue
+          if (Object.prototype.hasOwnProperty.call(spokenNumberWords, word)) {
+            var n = spokenNumberWords[word]
+            group += n
+            lastWasNumber = true
+          } else if (word === "hundred" || word === "سو" || word === "सौ") {
+            group = (group || 1) * 100
+            lastWasNumber = true
+          } else if (word === "thousand" || word === "ہزار") {
+            total += (group || 1) * 1000
+            group = 0
+            lastWasNumber = true
+          } else {
+            return null
+          }
+        }
+        return lastWasNumber ? total + group : null
+      }
+      var spokenAlternatives = Object.keys(spokenNumberWords).concat(["hundred", "thousand", "and", "ہزار", "سو", "सौ"])
+        .sort(function (a, b) { return b.length - a.length })
+      var spokenPattern = new RegExp("(^|[^\\p{L}])((?:" + spokenAlternatives.join("|") +
+        ")(?:[\\s-]+(?:" + spokenAlternatives.join("|") + "))*)(?=$|[^\\p{L}])", "giu")
+      question = question.replace(spokenPattern, function (match, before, phrase) {
+        var value = spokenNumberValue(phrase.toLowerCase().split(/[\s-]+/))
+        return before + (value === null ? phrase : String(value))
+      })
+      // Remove standard thousands separators before extracting the quantity.
+      question = question.replace(/(?<=\d),(?=\d{3}(?:\D|$))/g, "")
+
       // Calendar-date questions take priority over generic time-unit conversions.
       // Dates are interpreted as DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD.
       var dateMatch = question.match(/(?:^|[^0-9])([0-9]{1,4})[-/]([0-9]{1,2})[-/]([0-9]{1,4})(?![0-9])/)
