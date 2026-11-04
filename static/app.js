@@ -2020,8 +2020,16 @@
             var rounded = Math.round(amount * 100) / 100
             multiParts.push(timeConversionFormat(rounded) + " " + multiLabels[unit])
           })
-          var sourceLabel = multiSource + (multiValue === 1 ? "" : "s")
           var locale = lang()
+          var sourceUnitLabels = {
+            ur: { year:"سال", month:"مہینے", week:"ہفتے", day:"دن", hour:"گھنٹے", minute:"منٹ", second:"سیکنڈ" },
+            ar: { year:"سنوات", month:"أشهر", week:"أسابيع", day:"أيام", hour:"ساعات", minute:"دقائق", second:"ثوانٍ" },
+            hi: { year:"वर्ष", month:"महीने", week:"सप्ताह", day:"दिन", hour:"घंटे", minute:"मिनट", second:"सेकंड" },
+            es: { year:"años", month:"meses", week:"semanas", day:"días", hour:"horas", minute:"minutos", second:"segundos" },
+            fr: { year:"ans", month:"mois", week:"semaines", day:"jours", hour:"heures", minute:"minutes", second:"secondes" }
+          }
+          var sourceLabel = sourceUnitLabels[locale] ? sourceUnitLabels[locale][multiSource] :
+            multiSource + (multiValue === 1 ? "" : "s")
           var intro = {
             en: timeConversionFormat(multiValue) + " " + sourceLabel + " = ",
             ur: timeConversionFormat(multiValue) + " " + sourceLabel + " کے برابر ",
