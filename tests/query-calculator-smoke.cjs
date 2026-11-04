@@ -104,4 +104,27 @@ for (const [q, expected] of yearDayQueries) {
  listeners["form:submit"]({preventDefault(){}});
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
+
+const numberWordCases = [
+ ["thirty years is how many days", /30 years = 10,950 days/],
+ ["three years in days", /3 years = 1,095 days/],
+ ["how many days in twenty one years", /21 years = 7,665 days/],
+ ["how many years is two thousand five hundred fifty five days", /2,555 days = 7 years/],
+ ["how many days is twenty five years", /25 years = 9,125 days/],
+ ["one year in days", /1 year = 365 days/],
+ ["four years into days", /4 years = 1,460 days/],
+ ["3 years in days", /3 years = 1,095 days/],
+ ["three saal mein kitne din", /3 years = 1,095 days/],
+ ["teen saal mein kitne din", /3 years = 1,095 days/],
+ ["तीन साल में कितने दिन", /3 years = 1,095 days/],
+ ["3 साल में कितने दिन", /3 years = 1,095 days/],
+ ["تین سال میں کتنے دن", /3 years = 1,095 days/],
+ ["how many days in 3 years", /3 years = 1,095 days/]
+];
+for (const [q, expected] of numberWordCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+
 console.log("Query Calculator DOM, multilingual month conversions, DOB, Pakistan date and arithmetic tests PASS");
