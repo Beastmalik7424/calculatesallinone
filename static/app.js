@@ -1967,8 +1967,8 @@
       }
       if (source === "year" && target === "day") {
         var averageDays = Math.round(value * 365.2425 * 100) / 100
-        say("qt-result", timeConversionFormat(value) + " years ≈ " + timeConversionFormat(averageDays) +
-          " days. Uses the Gregorian average of 365.2425 days per year. For an exact result, include a starting year or date so leap days can be counted.")
+        say("qt-result", timeConversionFormat(value) + (value === 1 ? " year ≈ " : " years ≈ ") + timeConversionFormat(averageDays) +
+          (averageDays === 1 ? " day. " : " days. ") + "Uses the Gregorian average of 365.2425 days per year. For an exact result, include a starting year or date so leap days can be counted.")
         return
       }
       if (source === "day" && target === "year") {
