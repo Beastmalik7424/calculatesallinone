@@ -114,7 +114,7 @@ const multiUnitCases = [
  ["34 años en días meses y semanas", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
  ["34 ans en jours mois et semaines", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
  ["34 سنوات بالأيام والأشهر والأسابيع", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
- ["34 mn kitnay days months and weeks", /Which unit does 34 refer to.*years, months, weeks, days/i]
+ ["34 mn kitnay days months and weeks", /Which unit does 34 refer to.*years, months, weeks or days/i]
 ];
 for (const [q, expected] of multiUnitCases) {
  input.value = q;
