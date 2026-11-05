@@ -868,7 +868,7 @@ assert 'id="all-tools" class="ca-home-tools"' in home_html, "Homepage must expos
 # native details menu and retain readable light/dark theme classes.
 assert '<details id="ca-all-tools-menu"' in home_html, "Homepage must provide an expandable All Tools menu"
 assert '<summary' in home_html[home_html.index('<details id="ca-all-tools-menu"'):home_html.index('</details>', home_html.index('<details id="ca-all-tools-menu"'))], "All Tools menu must have a native clickable summary"
-assert "All Tools" in home_html, "English homepage must label the expandable calculator menu"
+assert "Choose a free calculator" in home_html, "English homepage must label the expandable calculator menu with a clear action"
 for _slug in ("calorie-calculator", "zakat-calculator", "bmi-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "standard-calculator", "tasbih-counter", "stopwatch", "years-to-days-calculator", "query-calculator", "emi-calculator", "percentage-calculator", "fraction-calculator", "compound-interest-calculator", "date-calculator"):
     assert f'href="/{_slug}/"' in home_html, f"All Tools menu must include /{_slug}/"
 assert "dark:bg-stone-900" in home_html and "dark:text-stone-100" in home_html, "All Tools menu must remain readable in dark mode"
