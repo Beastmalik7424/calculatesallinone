@@ -23,5 +23,6 @@ assert "does not answer arbitrary questions" in llms
 assert "not a diagnosis" in llms
 assert "not a religious ruling" in llms
 assert "source references" in llms
+assert re.search(r"^# CalculatesAll\s*\n> Free browser-based calculators for money, health, math, dates and everyday tasks\. Each tool states its inputs, method and limitations; results are general estimates, not professional advice\.", llms), "llms.txt should give AI readers a concise, accurate summary directly under the H1"
 assert "expert reviewed" not in llms.lower()
 print(f"PASS: llms.txt covers all {len(sitemap_urls)} sitemap URLs with accurate scope and limitations")
