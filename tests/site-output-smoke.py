@@ -68,6 +68,8 @@ assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
 assert "<h1>EMI, BMI and Zakat Calculators</h1>" in home_html and "Free tools for health, money, maths, dates and everyday tasks. No sign-up required." in home_html, "Homepage should describe its main calculator intents in the opening copy"
 assert re.search(r"<summary[^>]*>\s*Choose a free calculator\s*<span[^>]*>⌄</span></summary>", home_html), "Homepage tools menu must provide a clear free-calculator call to action"
+assert "<h2>Calculator tools</h2>" in home_html, "Homepage tools section should explicitly identify calculator tools"
+assert re.search(r"<a\\b(?=[^>]*href=\"#ca-all-tools-menu\")(?=[^>]*aria-label=\"Browse free calculator tools\")[^>]*>Browse calculators</a>", home_html), "Homepage must expose a recognisable link-based calculator browsing action"
 assert "Free Online Standard Calculator" not in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." not in home_html, "Homepage must not retain the outdated calculator-only headline or tool list"
 for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
     assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
