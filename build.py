@@ -582,9 +582,13 @@ HUB_CONTENT = {
         ],
     },
     "health": {
-        "intro": "The health tools on CalculatesAll give screening numbers, not diagnoses. The BMI calculator uses the standard formula and the World Health Organization adult weight categories, in metric or imperial units.",
+        "intro": "The health tools on CalculatesAll give screening estimates, not diagnoses. The BMI calculator uses the standard formula, weight in kilograms divided by height in metres squared, and the adult weight categories published by the World Health Organization. Use the result as a starting point for a conversation with a doctor or another health professional.",
         "faq": [
-            ("Should I use BMI to decide if I am healthy?", "BMI is one screening measure. It does not show body fat or fitness directly. Discuss your result with a doctor or health professional."),
+            ("How is BMI calculated?", "BMI = weight (kg) ÷ height (m)². Example: a person who weighs 70 kg and is 1.75 m tall has BMI 70 ÷ (1.75 × 1.75) = 70 ÷ 3.06 = 22.9, which falls in the normal range of 18.5 to 24.9."),
+            ("What are the adult BMI categories?", "The World Health Organization groups adults as underweight (below 18.5), normal (18.5 to 24.9), overweight (25.0 to 29.9) and obesity (30.0 and above)."),
+            ("Should I use BMI to decide if I am healthy?", "BMI does not measure body fat or muscle directly. Athletes with high muscle mass often have a high BMI, and some adults with a normal BMI carry a high share of body fat. Discuss your result with a doctor."),
+            ("Is BMI accurate for children and teenagers?", "No. The adult categories above apply to adults aged 18 and over. For children and teenagers, health professionals compare BMI with age- and sex-specific growth charts."),
+            ("How do I calculate BMI in pounds and inches?", "BMI = 703 × weight (lb) ÷ height (in)². Example: 154 lb at 69 inches gives 703 × 154 ÷ 69² = 108,262 ÷ 4,761 = 22.7."),
         ],
     },
     "time": {
