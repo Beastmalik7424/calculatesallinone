@@ -67,6 +67,7 @@ assert "How it works" in home_html and "Choose a calculator" in home_html and "E
 assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
 assert "<h1>EMI, BMI and Zakat Calculators</h1>" in home_html and "Free tools for health, money, maths, dates and everyday tasks. No sign-up required." in home_html, "Homepage should describe its main calculator intents in the opening copy"
+assert re.search(r"<summary[^>]*>\s*Choose a free calculator\s*<span[^>]*>⌄</span></summary>", home_html), "Homepage tools menu must provide a clear free-calculator call to action"
 assert "Free Online Standard Calculator" not in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." not in home_html, "Homepage must not retain the outdated calculator-only headline or tool list"
 for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
     assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
@@ -867,7 +868,7 @@ assert 'id="all-tools" class="ca-home-tools"' in home_html, "Homepage must expos
 # native details menu and retain readable light/dark theme classes.
 assert '<details id="ca-all-tools-menu"' in home_html, "Homepage must provide an expandable All Tools menu"
 assert '<summary' in home_html[home_html.index('<details id="ca-all-tools-menu"'):home_html.index('</details>', home_html.index('<details id="ca-all-tools-menu"'))], "All Tools menu must have a native clickable summary"
-assert "All Tools" in home_html, "English homepage must label the expandable calculator menu"
+assert "Choose a free calculator" in home_html, "English homepage must label the expandable calculator menu with a clear action"
 for _slug in ("calorie-calculator", "zakat-calculator", "bmi-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "standard-calculator", "tasbih-counter", "stopwatch", "years-to-days-calculator", "query-calculator", "emi-calculator", "percentage-calculator", "fraction-calculator", "compound-interest-calculator", "date-calculator"):
     assert f'href="/{_slug}/"' in home_html, f"All Tools menu must include /{_slug}/"
 assert "dark:bg-stone-900" in home_html and "dark:text-stone-100" in home_html, "All Tools menu must remain readable in dark mode"
