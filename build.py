@@ -2101,12 +2101,14 @@ def home_app_page(lang):
         h1 = "مفت آن لائن کیلکولیٹرز اور یوٹیلیٹی ٹولز"
         lead = "CalculatesAll میں پیسے، صحت، تاریخوں، اکائیوں اور روزمرہ استعمال کے لیے مفت ٹولز موجود ہیں۔ حساب آپ کے براؤزر میں ہوتا ہے اور آپ کے درج کردہ اعداد ہمارے سرور کو نہیں بھیجے جاتے۔"
         more_h = "دوسرے ٹولز"
+        tools_heading_action = '<span class="ca-home-free">' + s["free"] + '</span>'
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for adult maintenance calories, EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas."
         h1 = "EMI, BMI and Zakat Calculators"
         lead = "Free tools for health, money, maths, dates and everyday tasks. No sign-up required."
-        more_h = "More free tools"
+        more_h = "Calculator tools"
+        tools_heading_action = '<a class="ca-home-free no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="#ca-all-tools-menu" aria-label="Browse free calculator tools">Browse calculators</a>'
     trust = ""
     for i, label in enumerate(TRUST[lang]):
         trust += '<li class="rounded-xl p-3 text-center text-sm font-bold ' + TRUST_CLASS[i] + '">' + label + "</li>"
@@ -2182,7 +2184,7 @@ def home_app_page(lang):
         '</aside>'
         + hero
         + '<aside id="all-tools" class="ca-home-tools">'
-        + '<div class="ca-home-tools-heading"><div><p class="ca-home-side-eyebrow">' + s["many"] + '</p><h2>' + more_h + '</h2></div><span class="ca-home-free">' + s["free"] + '</span></div>'
+        + '<div class="ca-home-tools-heading"><div><p class="ca-home-side-eyebrow">' + s["many"] + '</p><h2>' + more_h + '</h2></div>' + tools_heading_action + '</div>'
         + all_tools_menu
         + '<p class="ca-home-tools-copy">' + tool_intro + '</p>'
         + '<ul class="ca-home-tool-grid">' + tiles + '</ul></aside>'
