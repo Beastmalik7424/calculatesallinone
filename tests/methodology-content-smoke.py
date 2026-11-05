@@ -19,7 +19,7 @@ method = visible("methodology")
 method_html = (ROOT / "methodology" / "index.html").read_text(encoding="utf-8")
 method_headings = [
     unescape(re.sub(r"<[^>]+>", " ", heading)).strip()
-    for heading in re.findall(r"<h2\\b[^>]*>(.*?)</h2>", method_html, re.S)
+    for heading in re.findall(r"<h2\b[^>]*>(.*?)</h2>", method_html, re.S)
 ]
 for heading in (
     "How to use this methodology",
