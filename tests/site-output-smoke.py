@@ -449,6 +449,17 @@ img_src = re.search(r"(?:^|;)\s*img-src\s+([^;]+)", csp_header)
 assert img_src and "https://ep1.adtrafficquality.google" in img_src.group(1).split(), (
     "CSP img-src must allow the exact Google Ad Traffic Quality image host observed in production."
 )
+assert "https://fazier.com" in img_src.group(1).split(), (
+    "CSP img-src must allow the Fazier footer badge image host."
+)
+fazier_badge = re.search(r'<img\b[^>]*alt="Fazier badge"[^>]*>', home_html, re.S)
+assert fazier_badge, "Homepage must render the Fazier footer badge."
+fazier_badge_src = re.search(r'\bsrc="([^"]+)"', fazier_badge.group(0))
+assert fazier_badge_src, "Fazier footer badge must have an image source."
+fazier_badge_url = urlparse(fazier_badge_src.group(1))
+assert fazier_badge_url.scheme == "https" and fazier_badge_url.netloc == "fazier.com", (
+    "Fazier badge image must use the exact HTTPS host permitted by the img-src directive."
+)
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 assert not (ROOT / "marketplaces").exists(), "Internal marketplace setup guide must not be published"
 assert SITE + "/marketplaces/" not in sitemap_urls, "Removed marketplace guide must not be in the sitemap"
