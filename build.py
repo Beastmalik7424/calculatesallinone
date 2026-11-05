@@ -614,7 +614,7 @@ HUB_CONTENT = {
 
 CATEGORIES = [
     {"slug": "money", "name": "Money and Business", "desc": "Compare EMI, Zakat, profit and loss, discounts and compound interest with worked examples, formulas and clear assumptions."},
-    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI and estimated maintenance calories in metric or imperial units, with clear methods and limitations."},
+    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI and estimated maintenance calories in metric or imperial units, with worked examples, clear methods and limitations."},
     {"slug": "time", "name": "Date and Time", "desc": "Use age, date-difference and years-to-days calculators, plus a browser stopwatch, to check calendar spans, time conversions and everyday timing."},
     {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages and fractions, use standard or scientific arithmetic, and convert weight, length and temperature with clear worked examples."},
     {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
@@ -1938,7 +1938,20 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
     else:
         body = ""
     body += '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
-    for p in paragraphs:
+    methodology_headings = {
+        0: "How to use this methodology",
+        1: "Arithmetic, percentages and fractions",
+        4: "Money, profit, discounts and loans",
+        8: "Dates and unit conversions",
+        10: "Health and Zakat calculation limits",
+        12: "Rounding, input validation and verification",
+        15: "Privacy, references and corrections",
+        18: "Calculator-specific assumptions",
+        21: "Practical checks for money and unit conversions",
+    } if path == "/methodology/" else {}
+    for index, p in enumerate(paragraphs):
+        if index in methodology_headings:
+            body += '<h2 class="' + H2 + '">' + methodology_headings[index] + "</h2>"
         body += '<p class="' + P + '">' + p + "</p>"
     if path == "/about/":
         contact_email = html.escape(CONTACT_EMAIL, quote=True)

@@ -17,6 +17,23 @@ def visible(slug):
 
 method = visible("methodology")
 method_html = (ROOT / "methodology" / "index.html").read_text(encoding="utf-8")
+method_headings = [
+    unescape(re.sub(r"<[^>]+>", " ", heading)).strip()
+    for heading in re.findall(r"<h2\b[^>]*>(.*?)</h2>", method_html, re.S)
+]
+for heading in (
+    "How to use this methodology",
+    "Arithmetic, percentages and fractions",
+    "Money, profit, discounts and loans",
+    "Dates and unit conversions",
+    "Health and Zakat calculation limits",
+    "Rounding, input validation and verification",
+    "Privacy, references and corrections",
+    "Calculator-specific assumptions",
+    "Practical checks for money and unit conversions",
+):
+    assert heading in method_headings, f"Methodology missing answer-focused section heading: {heading}"
+
 for url in (
     "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
     "https://www.nist.gov/pml/owm/si-units-length",

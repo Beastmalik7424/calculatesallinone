@@ -48,6 +48,11 @@ for phrase in (
 for slug in ("percentage-calculator", "fraction-calculator"):
     assert f'href="/{slug}/"' in math, slug
 assert 'href="/calorie-calculator/"' in page("health"), "Health hub must link to the adult calorie calculator"
+health_html = page("health")
+health_description = re.search(r'<meta name="description" content="([^"]+)"', health_html)
+assert health_description, "Health hub must have a meta description"
+assert 120 <= len(health_description.group(1)) <= 160, "Health hub meta description should use its available search snippet space"
+assert "worked examples" in health_description.group(1).lower(), "Health hub description should accurately mention its worked examples"
 assert 'href="/compound-interest-calculator/"' in money
 for phrase in (
     "calculate age from calendar dates",
