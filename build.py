@@ -661,9 +661,9 @@ URDU = {
     "bmi-calculator": {
         "name": "BMI کیلکولیٹر",
         "title": "BMI کیلکولیٹر اردو میں | بالغ افراد | CalculatesAll",
-        "description": "مفت BMI کیلکولیٹر اردو میں استعمال کریں۔ وزن kg یا lb اور قد cm یا فٹ/انچ درج کریں۔ بالغوں کی WHO درجہ بندی اور جنوبی ایشیائی خطرے کی حدیں سمجھیں۔",
+        "description": "بالغوں کا BMI اردو میں معلوم کریں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں۔ WHO کی درجہ بندی دیکھیں۔",
         "h1": "بالغوں کے لیے BMI کیلکولیٹر",
-        "lead": "BMI = وزن (کلوگرام) ÷ قد (میٹر)²۔ بالغوں میں یہ وزن کی ابتدائی اسکریننگ ہے، بیماری کی تشخیص نہیں، نتیجے کو دوسرے صحت کے عوامل کے ساتھ سمجھیں۔",
+        "lead": "بالغوں کا BMI وزن (کلوگرام) ÷ قد (میٹر)² سے نکلتا ہے۔ WHO کی عمومی درجہ بندی میں 18.5 سے کم کم وزن، 18.5 سے 25 سے کم معمول، 25 سے 30 سے کم زیادہ وزن، اور 30 یا زیادہ موٹاپے کی حد ہے۔ BMI اسکریننگ ہے، تشخیص نہیں۔"
         "labels": [
             ("Weight (kg)", "وزن (کلو گرام)"),
             ("Weight unit", "وزن کی اکائی"),
@@ -1347,6 +1347,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
              "publisher": {"@id": SITE_URL + "/#organization"}},
             {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization",
              "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION,
+             "sameAs": ["https://github.com/Beastmalik7424/calculatesallinone"],
              "logo": SITE_URL + "/assets/favicon.svg",
              "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
             {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer",
@@ -1890,7 +1891,7 @@ def urdu_tool_page(t):
          "description": u["description"], "inLanguage": "ur", "applicationCategory": t["app"],
          "operatingSystem": "Any", "browserRequirements": "Requires JavaScript",
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}},
-        {"@context": "https://schema.org", "@type": "BreadcrumbList", "inLanguage": "ur", "itemListElement": [
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "صفحہ اول", "item": SITE_URL + "/ur/"},
             {"@type": "ListItem", "position": 2, "name": cat_ur, "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": u["name"], "item": url}]},
