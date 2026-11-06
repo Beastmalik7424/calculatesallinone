@@ -8,7 +8,7 @@ from pathlib import Path
 PAGE = Path("public/ur/bmi-calculator/index.html")
 SITE = "https://calculateallinone.vercel.app"
 EXPECTED_TITLE = "BMI کیلکولیٹر اردو میں | بالغ افراد | CalculatesAll"
-EXPECTED_DESCRIPTION = "مفت BMI کیلکولیٹر اردو میں استعمال کریں۔ وزن kg یا lb اور قد cm یا فٹ/انچ درج کریں۔ بالغوں کی WHO درجہ بندی اور جنوبی ایشیائی خطرے کی حدیں سمجھیں۔"
+EXPECTED_DESCRIPTION = "بالغوں کا BMI اردو میں معلوم کریں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں۔ WHO کی درجہ بندی دیکھیں۔"
 
 
 def visible(value):
@@ -72,7 +72,11 @@ def main():
     app = next((item for item in schemas if item.get("@type") == "WebApplication"), None)
     page = next((item for item in schemas if item.get("@type") == "WebPage"), None)
     faq = next((item for item in schemas if item.get("@type") == "FAQPage"), None)
-    assert app and page and faq, "Missing WebApplication, WebPage or FAQPage JSON-LD"
+    breadcrumb = next((item for item in schemas if item.get("@type") == "BreadcrumbList"), None)
+    organization = next((item for item in schemas if item.get("@type") == "Organization"), None)
+    assert app and page and faq and breadcrumb and organization, "Missing WebApplication, WebPage, FAQPage, BreadcrumbList or Organization JSON-LD"
+    assert "inLanguage" not in breadcrumb, "BreadcrumbList must not use the unsupported inLanguage property"
+    assert "https://github.com/Beastmalik7424/calculatesallinone" in organization.get("sameAs", []), "Organization must link to its official source repository"
     assert app.get("description") == html.unescape(description.group(1)), "WebApplication description must match the visible search description"
     assert app.get("author", {}).get("@id") == SITE + "/#maintainer", "WebApplication author entity is missing"
     assert app.get("publisher", {}).get("@id") == SITE + "/#organization", "WebApplication publisher entity is missing"
