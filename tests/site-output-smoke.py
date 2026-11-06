@@ -770,6 +770,29 @@ assert tool_grid_match, "Homepage must render the primary tools grid"
 tool_grid_html = tool_grid_match.group(1)
 assert tool_grid_html.count('href="/emi-calculator/"') == 1, "Homepage tools grid must contain exactly one EMI Calculator link"
 assert "EMI Calculator" in tool_grid_html, "Homepage tools grid must visibly label the EMI Calculator"
+# The standard calculator is already the homepage hero. Every other live calculator
+# must also appear exactly once in the compact tools grid.
+expected_home_grid_paths = {
+    "/calorie-calculator/", "/zakat-calculator/", "/bmi-calculator/",
+    "/profit-loss-calculator/", "/discount-calculator/", "/age-calculator/",
+    "/unit-converter/", "/tasbih-counter/", "/stopwatch/",
+    "/years-to-days-calculator/", "/query-calculator/", "/emi-calculator/",
+    "/percentage-calculator/", "/fraction-calculator/",
+    "/compound-interest-calculator/", "/date-calculator/",
+}
+home_grid_paths = re.findall(r'href="(/[^"]+/)"', tool_grid_html)
+assert len(home_grid_paths) == len(expected_home_grid_paths), (
+    f"Homepage tools grid must contain {len(expected_home_grid_paths)} unique calculator links; "
+    f"found {len(home_grid_paths)}: {home_grid_paths!r}"
+)
+assert len(set(home_grid_paths)) == len(home_grid_paths), (
+    f"Homepage tools grid must not contain duplicate calculator links: {home_grid_paths!r}"
+)
+assert set(home_grid_paths) == expected_home_grid_paths, (
+    "Homepage tools grid must include every non-hero calculator exactly once; "
+    f"missing={sorted(expected_home_grid_paths - set(home_grid_paths))!r}, "
+    f"unexpected={sorted(set(home_grid_paths) - expected_home_grid_paths)!r}"
+)
 money_html = output_for_url(SITE + "/money/").read_text(encoding="utf-8")
 money_list_match = re.search(r'<ul class="mt-8 grid gap-4">(.*?)</ul>', money_html, re.S)
 assert money_list_match, "Money and Business hub must render its calculator list"
