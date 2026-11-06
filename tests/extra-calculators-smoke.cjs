@@ -1,6 +1,6 @@
 "use strict";
 const assert=require("node:assert/strict");
-const {percentage,percentageShare,percentageChange,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
+const {percentage,percentageShare,percentageChange,percentageDifference,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
 assert.equal(percentage(25,200),50);
 assert.equal(percentage(12.5,80),10);
 assert.equal(percentage(0,200),0);
@@ -14,6 +14,14 @@ assert.equal(percentageChange(1e308,1e308),0);
 assert.throws(()=>percentageChange(0,80),/starting value must be greater than zero/);
 assert.throws(()=>percentageChange(-50,-25),/starting value must be greater than zero/);
 assert.throws(()=>percentageChange(1e-308,1e308),/Result exceeds supported range/);
+assert.deepEqual(percentageDifference(40,60),{difference:20,average:50,percentage:40});
+assert.deepEqual(percentageDifference(60,40),{difference:20,average:50,percentage:40});
+assert.equal(percentageDifference(80,100).percentage,22.2222222222);
+assert.equal(percentageDifference(0,10).percentage,200);
+assert.equal(percentageDifference(1e308,0).percentage,200);
+assert.throws(()=>percentageDifference(0,0),/Both values cannot be zero/);
+assert.throws(()=>percentageDifference(-1,10),/non-negative values/);
+assert.throws(()=>percentageDifference(1,Infinity),/finite numbers/);
 assert.equal(percentage(-25,100),-25);
 assert.equal(percentageShare(-45,250),-18);
 assert.equal(percentage(1e308,100),1e308);
@@ -41,7 +49,7 @@ const path = require("node:path");
 // Regression: Tailwind must compile the primary action's background on all four extra pages.
 const compiledCss = fs.readFileSync(path.join(__dirname, "..", "static", "site.css"), "utf8");
 assert.match(compiledCss, /\.bg-sky-700\s*\{/, "Missing bg-sky-700: extra calculator Calculate buttons become white-on-white");
-for (const slug of ["percentage-calculator", "fraction-calculator", "compound-interest-calculator", "date-calculator"]) {
+for (const slug of ["percentage-calculator", "percentage-difference-calculator", "fraction-calculator", "compound-interest-calculator", "date-calculator"]) {
   const html = fs.readFileSync(path.join(__dirname, "..", "public", slug, "index.html"), "utf8");
   assert.match(html, /<button[^>]*bg-sky-700[^>]*>Calculate<\/button>/, slug + " primary action lacks background class");
 }
@@ -53,6 +61,8 @@ const extraSource=fs2.readFileSync(require("node:path").join(__dirname,"..","ext
 assert.match(extraSource,/what percentage the part represents of another/);
 assert.match(extraSource,/Calculate a percentage of a number, find what percentage one amount is of another, or measure percentage change/);
 assert.match(extraSource,/18% of PKR 2,500/);
+assert.ok(extraSource.includes("percentage difference = |A - B|"), "Percentage difference page must show its symmetric formula");
+assert.ok(extraSource.includes("Percentage Difference Calculator"), "Percentage difference page must have a dedicated title");
 assert.match(extraSource,/1,102\.50/);
 assert.match(extraSource,/28 February 2024 to 1 March 2024 is 2 days/);
 const hubSource=fs2.readFileSync(require("node:path").join(__dirname,"..","content_v13.py"),"utf8");
