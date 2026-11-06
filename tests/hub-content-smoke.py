@@ -65,7 +65,7 @@ for phrase in (
 
 years_to_days = (Path("public") / "years-to-days-calculator" / "index.html").read_text(encoding="utf-8")
 description_line = next((line for line in years_to_days.splitlines() if '<meta name="description"' in line), "")
-assert "Exact start-date conversion applies to years to days only." in description_line, "Years-to-days metadata must state the exact-date mode limitation"
+assert "365-day and 365.2425-day methods" in description_line and "exact leap-year-aware days from a Gregorian start date." in description_line, "Years-to-days metadata must describe both year-length methods and the exact-date mode"
 assert "Exact calendar years (years to days only)" in years_to_days, "Years-to-days UI must keep the exact-mode direction limitation visible"
 
 print("Money, Math and Time hub content, canonical/indexability and contextual links verified")
