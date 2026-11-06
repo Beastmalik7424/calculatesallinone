@@ -1882,9 +1882,6 @@ def urdu_tool_page(t):
             {"@type": "ListItem", "position": 3, "name": u["name"], "item": url}]},
     ]
     if t["slug"] == "bmi-calculator":
-        how = bmi_urdu_guide_html()
-    else:
-        if t["slug"] == "bmi-calculator":
         schema[0]["author"] = {"@id": SITE_URL + "/#maintainer"}
         schema[0]["publisher"] = {"@id": SITE_URL + "/#organization"}
         schema.append({
@@ -1900,7 +1897,9 @@ def urdu_tool_page(t):
                 "https://pubmed.ncbi.nlm.nih.gov/14726171/",
             ],
         })
-    how = ""
+        how = bmi_urdu_guide_html()
+    else:
+        how = ""
         for p in u["how"]:
             how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
