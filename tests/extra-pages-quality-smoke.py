@@ -16,6 +16,19 @@ CASES = {
             "starting value",
         ],
     },
+    "percentage-difference-calculator": {
+        "category": "/math/",
+        "phrases": [
+            "Percentage difference compares two non-negative values",
+            "percentage difference = |A - B|",
+            "For 40 and 60",
+            "For 80 and 100",
+            "Percentage difference and percentage change answer different questions",
+            "returns 200%",
+            "both values are zero",
+            "same unit and measurement basis",
+        ],
+    },
     "fraction-calculator": {
         "category": "/math/",
         "phrases": [
@@ -81,6 +94,7 @@ for slug, spec in CASES.items():
     assert "BreadcrumbList" in types, f"Missing breadcrumb schema: {slug}"
     expected_domain = {
         "percentage-calculator": "openstax.org",
+        "percentage-difference-calculator": "mathsisfun.org",
         "fraction-calculator": "openstax.org",
         "compound-interest-calculator": "investor.gov",
         "date-calculator": "aa.usno.navy.mil",
@@ -97,6 +111,7 @@ for href in (
     "/compound-interest-calculator/",
     "/date-calculator/",
     "/percentage-calculator/",
+    "/percentage-difference-calculator/",
     "/fraction-calculator/",
 ):
     assert f'href="{href}"' in about_html, f"Missing About-page link: {href}"
