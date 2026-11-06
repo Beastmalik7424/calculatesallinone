@@ -42,7 +42,7 @@ def main():
     for phrase in ("BMI", "وزن", "قد", "میٹر", "اسکریننگ"):
         assert phrase in opening, f"Answer-first opening is missing {phrase!r}"
     assert "÷" in opening and "²" in opening, "Opening must state the BMI formula directly"
-    assert len(opening.split()) >= 12, "Opening answer must state a complete, concise definition and limitation"
+    assert len(opening.split()) >= 25, "Opening answer must contain enough context to stand alone"
     assert "طبی تشخیص نہیں" in opening, "Opening must clarify that BMI is not a diagnosis"
 
     assert 'id="bmi-form"' in body and "BMI کا حساب کریں" in body, "Existing BMI calculator form or action is missing"
