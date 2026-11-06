@@ -42,14 +42,15 @@ def main():
     for phrase in ("BMI", "وزن", "قد", "میٹر", "اسکریننگ"):
         assert phrase in opening, f"Answer-first opening is missing {phrase!r}"
     assert "÷" in opening and "²" in opening, "Opening must state the BMI formula directly"
+    assert len(opening.split()) >= 25, "Opening answer must contain enough context to stand alone"
 
     assert 'id="bmi-form"' in body and "BMI کا حساب کریں" in body, "Existing BMI calculator form or action is missing"
     assert 'id="bmi-urdu-summary"' in body, "A concise, visible answer summary is missing"
-    assert "BMI کیا ہے اور اسے کیسے نکالتے ہیں؟" in body, "Missing question-led BMI definition section"
-    assert "بالغوں کے BMI کی معیاری حدود کیا ہیں؟" in body, "Missing question-led adult BMI category section"
-    assert "جنوبی ایشیائی افراد کے لیے اضافی BMI حدود کیا ہیں؟" in body, "Missing South Asian risk-threshold explanation"
-    assert "BMI کن باتوں کی نشاندہی نہیں کرتا؟" in body, "Missing BMI limitation section"
-    assert "BMI کے نتیجے کے بعد کیا کرنا چاہیے؟" in body, "Missing next-step section"
+    assert "BMI کیا ہے اور اسے کیسے نکالتے ہیں?" in body, "Missing question-led BMI definition section"
+    assert "بالغوں کے BMI کی معیاری حدود کیا ہیں?" in body, "Missing question-led adult BMI category section"
+    assert "جنوبی ایشیائی افراد کے لیے اضافی BMI حدود کیا ہیں?" in body, "Missing South Asian risk-threshold explanation"
+    assert "BMI کن باتوں کی نشاندہی نہیں کرتا?" in body, "Missing BMI limitation section"
+    assert "BMI کے نتیجے کے بعد کیا کرنا چاہیے?" in body, "Missing next-step section"
 
     # The international WHO categories stay unchanged; Asian action points are explicitly contextualised.
     for phrase in ("18.5", "25", "30", "23.0", "27.5", "WHO"):
@@ -88,7 +89,7 @@ def main():
     schema_questions = [item.get("name") for item in faq.get("mainEntity", [])]
     assert len(visible_questions) >= 6, "Expected useful visible FAQ coverage"
     assert schema_questions == visible_questions, "FAQ JSON-LD must exactly match visible FAQ questions"
-    assert len(re.findall(r"<h2\b[^>]*>.*?؟</h2>", body, re.S | re.I)) >= 5, "Expected at least five question-led answer sections"
+    assert len(re.findall(r"<h2\b[^>]*>.*?\?</h2>", body, re.S | re.I)) >= 5, "Expected at least five question-led answer sections"
 
     print("PASS: Urdu BMI title, description, canonical and indexability")
     print("PASS: answer-first definition, summary and question-led self-contained sections")
