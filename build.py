@@ -2117,20 +2117,20 @@ def home_app_page(lang):
     for i, label in enumerate(TRUST[lang]):
         trust += '<li class="rounded-xl p-3 text-center text-sm font-bold ' + TRUST_CLASS[i] + '">' + label + "</li>"
     tiles = ""
-    for t in TOOLS:
-        if t["slug"] == "standard-calculator":
+    # Build the homepage grid from the canonical calculator navigation list so
+    # new standalone calculators cannot silently disappear from the main index.
+    for slug, english_name, _short_name in CAROUSEL_TOOLS:
+        if slug == "standard-calculator":
+            continue  # The standard calculator is already the homepage hero.
+        if urdu and slug not in URDU:
             continue
-        if urdu and t["slug"] not in URDU:
-            continue
-        name = URDU[t["slug"]]["name"] if urdu else t["name"]
-        href = ("/ur/" if urdu else "/") + t["slug"] + "/"
-        tiles += ('<li><a href="' + href + '" class="' + TILE_BASE + " " + TILE_GRAD[t["slug"]] + '">'
-                  '<span class="text-4xl" aria-hidden="true">' + TILE_ICON[t["slug"]] + "</span>"
+        name = CAROUSEL_TRANSLATIONS["ur"][slug] if urdu else english_name
+        href = ("/ur/" if urdu else "/") + slug + "/"
+        icon = TILE_ICON.get(slug, "🧮")
+        gradient = TILE_GRAD.get(slug, "bg-gradient-to-br from-cyan-700 to-blue-800")
+        tiles += ('<li><a href="' + href + '" class="' + TILE_BASE + " " + gradient + '">'
+                  '<span class="text-4xl" aria-hidden="true">' + icon + "</span>"
                   "<span>" + name + "</span></a></li>")
-    if not urdu:
-        tiles += ('<li><a href="/emi-calculator/" class="' + TILE_BASE + ' bg-gradient-to-br from-cyan-700 to-blue-800">'
-                  '<span class="text-4xl" aria-hidden="true">💳</span>'
-                  '<span>EMI Calculator</span></a></li>')
     all_tool_links = ""
     for slug, english_name, _short_name in CAROUSEL_TOOLS:
         if urdu:
