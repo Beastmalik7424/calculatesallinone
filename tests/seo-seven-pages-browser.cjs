@@ -111,6 +111,44 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       desktopErrors.forEach(error => console.log("  desktop homepage " + error));
       failures.push("desktop homepage: browser console/page errors detected");
     }
+    const expectedGridPaths = [
+      "/calorie-calculator/", "/zakat-calculator/", "/bmi-calculator/",
+      "/profit-loss-calculator/", "/discount-calculator/", "/age-calculator/",
+      "/unit-converter/", "/tasbih-counter/", "/stopwatch/",
+      "/years-to-days-calculator/", "/query-calculator/", "/emi-calculator/",
+      "/percentage-calculator/", "/fraction-calculator/",
+      "/compound-interest-calculator/", "/date-calculator/"
+    ];
+    const desktopToolGrid = desktop.locator(".ca-home-tool-grid");
+    const desktopGridPaths = await desktopToolGrid.locator("a").evaluateAll(nodes => nodes.map(node => node.getAttribute("href")));
+    assert.equal(desktopGridPaths.length, 16, "desktop homepage grid must contain all 16 non-hero calculators");
+    assert.deepEqual([...desktopGridPaths].sort(), [...expectedGridPaths].sort(), "desktop homepage grid must contain every non-hero calculator exactly once");
+    assert.equal(await desktopToolGrid.locator("a:visible").count(), 16, "all desktop calculator grid links must be visible");
+    const desktopToolColumns = await desktopToolGrid.evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\\s+/).length);
+    assert.equal(desktopToolColumns, 4, "desktop calculator grid must use four columns");
+
+    for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }]) {
+      const mobileHome = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      const mobileHomeErrors = [];
+      mobileHome.on("console", msg => { if (msg.type() === "error") mobileHomeErrors.push("console: " + msg.text()); });
+      mobileHome.on("pageerror", err => mobileHomeErrors.push("pageerror: " + err.message));
+      const mobileHomeResponse = await mobileHome.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
+      assert.equal(mobileHomeResponse && mobileHomeResponse.status(), 200, "mobile homepage should return HTTP 200");
+      const mobileGrid = mobileHome.locator(".ca-home-tool-grid");
+      const mobileGridPaths = await mobileGrid.locator("a").evaluateAll(nodes => nodes.map(node => node.getAttribute("href")));
+      assert.equal(mobileGridPaths.length, 16, "mobile homepage grid must contain all 16 non-hero calculators");
+      assert.deepEqual([...mobileGridPaths].sort(), [...expectedGridPaths].sort(), "mobile homepage grid must contain every non-hero calculator exactly once");
+      assert.equal(await mobileGrid.locator("a:visible").count(), 16, "all mobile calculator grid links must be visible");
+      const mobileColumns = await mobileGrid.evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\\s+/).length);
+      assert.equal(mobileColumns, 2, "mobile calculator grid must use two columns");
+      const gridFits = await mobileGrid.evaluate(el => el.scrollWidth <= el.clientWidth + 1);
+      assert.equal(gridFits, true, "mobile calculator grid must not overflow horizontally");
+      if (mobileHomeErrors.length) {
+        mobileHomeErrors.forEach(error => console.log("  mobile homepage " + error));
+        failures.push("mobile homepage: browser console/page errors detected");
+      }
+      await mobileHome.close();
+    }
     console.log("/ homepage desktop layout passed (1440px, calculator first, All Tools below, no console/page errors)");
     await desktop.close();
 
