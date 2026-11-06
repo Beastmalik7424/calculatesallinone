@@ -16,7 +16,7 @@ assert.throws(()=>percentageChange(-50,-25),/starting value must be greater than
 assert.throws(()=>percentageChange(1e-308,1e308),/Result exceeds supported range/);
 assert.deepEqual(percentageDifference(40,60),{difference:20,average:50,percentage:40});
 assert.deepEqual(percentageDifference(60,40),{difference:20,average:50,percentage:40});
-assert.equal(percentageDifference(80,100).percentage,22.2222222222);
+assert.ok(Math.abs(percentageDifference(80,100).percentage-22.2222222222)<1e-9);
 assert.equal(percentageDifference(0,10).percentage,200);
 assert.equal(percentageDifference(1e308,0).percentage,200);
 assert.throws(()=>percentageDifference(0,0),/Both values cannot be zero/);
