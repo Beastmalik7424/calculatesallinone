@@ -663,7 +663,7 @@ URDU = {
         "title": "BMI کیلکولیٹر اردو میں | بالغ افراد | CalculatesAll",
         "description": "بالغوں کا BMI اردو میں معلوم کریں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں۔ WHO کی حدیں دیکھیں۔ یہ اسکریننگ ہے، تشخیص نہیں۔",
         "h1": "بالغوں کے لیے BMI کیلکولیٹر",
-        "lead": "بالغوں کا BMI = وزن (کلوگرام) ÷ قد (میٹر)²۔ یہ وزن کی اسکریننگ ہے، طبی تشخیص نہیں۔",
+        "lead": "بالغوں کا BMI وزن (kg) کو قد (m) کے مربع سے تقسیم کرکے نکلتا ہے۔ 18.5 سے 25 سے کم عمومی صحت مند حد ہے۔ یہ اسکریننگ ہے، تشخیص نہیں۔",
         "labels": [
             ("Weight (kg)", "وزن (کلو گرام)"),
             ("Weight unit", "وزن کی اکائی"),
@@ -1933,7 +1933,8 @@ def urdu_tool_page(t):
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
     )
-    _urdu_lead = '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
+    _lead_class = "mt-2 text-base leading-5" if t["slug"] == "bmi-calculator" else "mt-3 text-lg"
+    _urdu_lead = '<p class="' + _lead_class + ' text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
     if t["slug"] == "standard-calculator":
         body += primary_tool_content + _urdu_lead
     else:
