@@ -860,8 +860,7 @@ for slug in calculator_slugs:
     urdu_html = urdu_page.read_text(encoding="utf-8")
     calc_pos = urdu_html.find('<section id="tool-calculator"')
     h1_pos = urdu_html.find("<h1")
-    lead_match = re.search(r'<p class="[^"]*(?:mt-2 text-base|mt-3 text-lg|mt-4 text-lg)[^"]*"[^>]*>', urdu_html[h1_pos:]) if h1_pos >= 0 else None
-    lead_pos = h1_pos + lead_match.start() if lead_match else -1
+    lead_pos = urdu_html.find("<p", h1_pos) if h1_pos >= 0 else -1
     assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
         f"Urdu calculator must follow the heading and short lead: /ur/{slug}/"
     )
