@@ -619,9 +619,14 @@ for url in urls:
         assert app_schemas[0].get("inLanguage") == page_lang, "EMI WebApplication schema language must match the HTML language"
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
-            assert "dateModified" not in item, (
-                f"Do not publish unverified dateModified on {url}."
-            )
+            if url.endswith("/ur/bmi-calculator/"):
+                assert item.get("dateModified") == "2026-11-06", (
+                    "Urdu BMI dateModified must match the verified substantive content and source update."
+                )
+            else:
+                assert "dateModified" not in item, (
+                    f"Do not publish unverified dateModified on {url}."
+                )
         if item.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
             if "inLanguage" in item:
                 assert item.get("inLanguage") == page_lang, (
@@ -855,7 +860,7 @@ for slug in calculator_slugs:
     urdu_html = urdu_page.read_text(encoding="utf-8")
     calc_pos = urdu_html.find('<section id="tool-calculator"')
     h1_pos = urdu_html.find("<h1")
-    lead_pos = urdu_html.find('<p class="mt-3 text-lg', h1_pos)
+    lead_pos = urdu_html.find("<p", h1_pos) if h1_pos >= 0 else -1
     assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
         f"Urdu calculator must follow the heading and short lead: /ur/{slug}/"
     )

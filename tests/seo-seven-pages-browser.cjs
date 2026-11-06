@@ -221,6 +221,45 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       }
       await emiPage.close();
     }
+    // Urdu BMI regression: preserve the form, mobile width and calculation behavior.
+    for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }]) {
+      const bmiPage = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+      const bmiErrors = [];
+      bmiPage.on("console", msg => { if (msg.type() === "error") bmiErrors.push("console: " + msg.text()); });
+      bmiPage.on("pageerror", err => bmiErrors.push("pageerror: " + err.message));
+      const bmiResponse = await bmiPage.goto(base + "/ur/bmi-calculator/", { waitUntil: "load", timeout: 30000 });
+      assert.equal(bmiResponse && bmiResponse.status(), 200, "Urdu BMI page should return HTTP 200");
+      const bmiForm = bmiPage.locator("#bmi-form");
+      assert.equal(await bmiForm.isVisible(), true, "Urdu BMI form should be visible");
+      const bmiFormBox = await bmiForm.boundingBox();
+      assert.ok(bmiFormBox, "Urdu BMI form should have a measurable layout box");
+      assert.ok(bmiFormBox.x >= 0 && bmiFormBox.x + bmiFormBox.width <= viewport.width + 1, "Urdu BMI form must fit the mobile viewport width");
+      const viewportWidth = await bmiPage.evaluate(() => ({
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth
+      }));
+      assert.ok(viewportWidth.scrollWidth <= viewportWidth.clientWidth + 1, "Urdu BMI page must not overflow horizontally");
+      const summaryFollowsForm = await bmiPage.evaluate(() => {
+        const form = document.querySelector("#bmi-form");
+        const summary = document.querySelector("#bmi-urdu-summary");
+        return Boolean(form && summary && (form.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING));
+      });
+      assert.equal(summaryFollowsForm, true, "Urdu BMI explanatory content must remain after the calculator");
+      console.log("/ur/bmi-calculator/ " + viewport.width + "x" + viewport.height + " formBottom=" + Math.round(bmiFormBox.y + bmiFormBox.height) + " firstViewportFit=" + (bmiFormBox.y + bmiFormBox.height <= viewport.height));
+      if (viewport.width === 390) {
+        await bmiPage.locator("#b-kg").fill("70");
+        await bmiPage.locator("#b-cm").fill("170");
+        await bmiForm.locator('button[type="submit"]').click();
+        await bmiPage.locator("#bmi-result").waitFor({ state: "visible", timeout: 5000 });
+        assert.match(await bmiPage.locator("#bmi-result").textContent(), /24\.2/, "Urdu BMI calculator should still calculate 70 kg at 170 cm as 24.2");
+      }
+      if (bmiErrors.length) {
+        bmiErrors.forEach(error => console.log("  Urdu BMI " + viewport.width + "px " + error));
+        failures.push("Urdu BMI " + viewport.width + "px: browser console/page errors detected");
+      }
+      await bmiPage.close();
+    }
+
   } catch (error) {
     failures.push("interactive calculator browser test: " + (error && error.message ? error.message : String(error)));
   } finally {

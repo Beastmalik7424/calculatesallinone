@@ -660,10 +660,10 @@ URDU = {
     },
     "bmi-calculator": {
         "name": "BMI کیلکولیٹر",
-        "title": "بالغوں کے لیے BMI کیلکولیٹر | CalculatesAll",
-        "description": "کلوگرام یا پاؤنڈ وزن اور سینٹی میٹر یا فٹ و انچ قد سے بالغوں کا BMI نکالیں، درجہ بندی اور حدود سمجھیں۔",
+        "title": "BMI کیلکولیٹر اردو میں | بالغ افراد | CalculatesAll",
+        "description": "بالغوں کا BMI اردو میں معلوم کریں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں۔ WHO کی حدیں دیکھیں۔ یہ اسکریننگ ہے، تشخیص نہیں۔",
         "h1": "بالغوں کے لیے BMI کیلکولیٹر",
-        "lead": "وزن کے لیے کلوگرام یا پاؤنڈ اور قد کے لیے سینٹی میٹر یا فٹ اور انچ منتخب کریں۔ یہ کیلکولیٹر بالغوں کے لیے ہے۔",
+        "lead": "بالغوں کا BMI = وزن (kg) ÷ قد (میٹر)²۔ یعنی وزن کو قد کے مربع سے تقسیم کریں۔ 18.5 سے 25 سے کم عمومی حد ہے۔ BMI اسکریننگ ہے، تشخیص نہیں۔",
         "labels": [
             ("Weight (kg)", "وزن (کلو گرام)"),
             ("Weight unit", "وزن کی اکائی"),
@@ -679,7 +679,7 @@ URDU = {
             ("Calculate BMI", "BMI کا حساب کریں"),
         ],
         "how_heading": "فارمولا، درجہ بندی اور حدود",
-        "faq_heading": "عام سوالات",
+        "faq_heading": "عام سوالات (FAQ)",
         "how": [
             "بالغوں کا باڈی ماس انڈیکس (BMI) نکالنے کے لیے وزن کلوگرام میں اور قد میٹر میں درکار ہوتا ہے۔ فارمولا یہ ہے: BMI = وزن (کلوگرام) ÷ قد (میٹر)²۔ اگر قد سینٹی میٹر میں ہو تو اسے 100 پر تقسیم کر کے میٹر میں تبدیل کریں۔",
             "اگر قد فٹ اور انچ میں درج کریں تو پہلے کل انچ نکالیں: (فٹ × 12) + انچ۔ پھر کل انچ کو 2.54 سے ضرب دے کر سینٹی میٹر حاصل کریں۔ وزن کلوگرام یا پاؤنڈ میں منتخب کیا جا سکتا ہے؛ پاؤنڈ کو حساب سے پہلے کلوگرام میں تبدیل کیا جاتا ہے۔",
@@ -697,10 +697,66 @@ URDU = {
             ("کیا BMI 25 ہونا بیماری کی تشخیص ہے؟", "نہیں۔ گول کی گئی BMI قدر 25.0 بالغوں میں زیادہ وزن کی اسکریننگ حد کا آغاز ہے، تشخیص نہیں۔"),
             ("نتیجے کے بعد کیا کرنا چاہیے؟", "اسے عمومی معلومات سمجھیں۔ اگر وزن میں بڑی تبدیلی، علامات یا طبی مسئلہ ہو تو مستند معالج سے مشورہ کریں۔"),
             ("حد کے قریب درجہ کیوں بدل سکتا ہے؟", "کیلکولیٹر BMI کو ایک اعشاری جگہ تک گول کر کے درجہ منتخب کرتا ہے۔ اس لیے دکھائی گئی 25.0 کی قدر زیادہ وزن کی حد میں شمار ہوتی ہے۔"),
+            ("کیا جنوبی ایشیائی افراد کے لیے BMI کی اضافی حدیں ہیں؟", "جی ہاں۔ WHO کی ماہرین کی مشاورت نے 23.0 اور 27.5 کو اضافی عوامی صحت کے اقدام کے مقامات کے طور پر شناخت کیا، مگر انہیں ہر ایشیائی آبادی کے لیے ایک ہی نئی عالمی درجہ بندی قرار نہیں دیا۔"),
+            ("کیا یہ کیلکولیٹر جنوبی ایشیائی خطرے کی حدیں بھی لاگو کرتا ہے؟", "نہیں۔ یہ کیلکولیٹر معیاری بین الاقوامی بالغ BMI درجہ بندی دکھاتا ہے۔ جنوبی ایشیائی پس منظر میں ذاتی خطرے کی تشریح کے لیے مقامی طبی رہنمائی اور معالج سے مشورہ کریں۔"),
         ],
-        "sources": 'بالغوں کی BMI درجہ بندی کے لیے <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" rel="noopener noreferrer">عالمی ادارۂ صحت (WHO) کی موٹاپے اور زیادہ وزن سے متعلق معلومات</a> دیکھیں۔ BMI صرف اسکریننگ پیمانہ ہے اور اسے طبی سیاق میں سمجھنا چاہیے۔',
+        "sources": 'بالغوں کی معیاری درجہ بندی کے لیے <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">عالمی ادارۂ صحت (WHO) کی رہنمائی</a>، <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC کی بالغ BMI درجہ بندی</a> اور <a class="' + LINK + '" href="https://www.nhs.uk/conditions/overweight-and-obesity/" target="_blank" rel="noopener noreferrer">NHS کی جنوبی ایشیائی افراد کے لیے BMI رہنمائی</a> دیکھیں۔ ایشیائی آبادیوں کے اضافی BMI اقدام کے مقامات کے لیے <a class="' + LINK + '" href="https://pubmed.ncbi.nlm.nih.gov/14726171/" target="_blank" rel="noopener noreferrer">WHO Expert Consultation کی تحقیق</a> بھی ملاحظہ کریں۔',
     },
 }
+
+BMI_URDU_SECTIONS = [
+    ("bmi-urdu-definition", "BMI کیا ہے اور اسے کیسے نکالتے ہیں?", [
+        "باڈی ماس انڈیکس (BMI) وزن اور قد کے تناسب کا حساب ہے۔ بالغوں کے لیے فارمولا یہ ہے: BMI = وزن (کلوگرام) ÷ قد (میٹر)²۔ سینٹی میٹر کو میٹر میں بدلنے کے لیے 100 پر تقسیم کریں۔",
+        "مثال: 70 کلوگرام وزن اور 170 سینٹی میٹر قد پر حساب 70 ÷ (1.70 × 1.70) = 24.2 بنتا ہے۔ فٹ اور انچ کے لیے پہلے کل انچ = (فٹ × 12) + انچ نکالیں، پھر 2.54 سے ضرب دے کر سینٹی میٹر حاصل کریں۔",
+    ]),
+    ("bmi-urdu-categories", "بالغوں کے BMI کی معیاری حدود کیا ہیں?", [
+        "WHO کی عمومی بین الاقوامی بالغ درجہ بندی میں BMI 18.5 سے کم کم وزن، 18.5 سے 25 سے کم معمول کا وزن، 25 سے 30 سے کم زیادہ وزن، اور 30 یا اس سے زیادہ موٹاپے کی حد ہے۔ یہ آبادی کی سطح پر اسکریننگ کی حدود ہیں، کسی فرد کی بیماری کی تشخیص نہیں۔",
+        "یہ کیلکولیٹر BMI کو ایک اعشاری جگہ تک گول کرکے دکھائی گئی قدر کے مطابق درجہ منتخب کرتا ہے۔ اس لیے حد کے قریب اصل قدر گول ہونے کے بعد اگلے درجے میں دکھائی دے سکتی ہے۔",
+    ]),
+    ("bmi-urdu-south-asian", "جنوبی ایشیائی افراد کے لیے اضافی BMI حدود کیا ہیں?", [
+        "جنوبی ایشیائی پس منظر کے بعض افراد میں ذیابیطس اور دل کی بیماری کا خطرہ نسبتاً کم BMI پر بھی بڑھ سکتا ہے۔ WHO کی 2004 ماہرین کی مشاورت نے 23.0 اور 27.5 کو اضافی عوامی صحت کے اقدام کے مقامات بتایا، مگر واضح کیا کہ تمام ایشیائی آبادیوں کے لیے ایک ہی نئی حد مقرر نہیں کی جا سکتی۔ یہ اقدام کے مقامات معیاری بین الاقوامی 18.5، 25 اور 30 کی درجہ بندی کا متبادل نہیں ہیں۔",
+        "برطانیہ کی NHS رہنمائی جنوبی ایشیائی پس منظر کے بالغ افراد کے لیے BMI 23 سے 27.4 کو زائد وزن اور 27.5 یا اس سے زیادہ کو موٹاپے کی حد شمار کرتی ہے۔ یہ NHS کی مخصوص رہنمائی ہے، ہر ملک یا ہر فرد کے لیے خودکار تشخیص نہیں۔ یہ کیلکولیٹر معیاری WHO حدود دکھاتا ہے اور ان اضافی حدوں کو خودکار طور پر لاگو نہیں کرتا۔",
+    ]),
+    ("bmi-urdu-limitations", "BMI کن باتوں کی نشاندہی نہیں کرتا?", [
+        "BMI جسمانی چربی کو براہِ راست نہیں ناپتا، چربی کی جگہ نہیں بتاتا اور عضلات و چربی میں فرق نہیں کرتا۔ زیادہ عضلات رکھنے والے فرد کا BMI بلند ہو سکتا ہے، اس لیے ایک ہی عدد مختلف افراد میں مختلف معنی رکھ سکتا ہے۔",
+        "بچوں اور نوعمروں کے لیے عمر اور جنس کے مطابق BMI-for-age چارٹس درکار ہوتے ہیں۔ حمل، بعض بڑی عمروں، بیماری یا جسم میں پانی جمع ہونے کی صورت میں BMI کو خاص طبی سیاق میں سمجھنا چاہیے۔",
+    ]),
+    ("bmi-urdu-next-steps", "BMI کے نتیجے کے بعد کیا کرنا چاہیے?", [
+        "نتیجے کو ابتدائی معلومات سمجھیں، مکمل صحت کی جانچ نہیں۔ معالج ضرورت کے مطابق کمر کا گھیر، بلڈ پریشر، خون کے ٹیسٹ، طبی تاریخ، ادویات، خوراک اور جسمانی سرگرمی بھی دیکھ سکتا ہے۔",
+        "اگر وزن میں تیزی سے تبدیلی، علامات یا کوئی طبی مسئلہ ہو تو مستند معالج سے بات کریں۔ اپنی صحت کے بارے میں فیصلہ صرف BMI کے عدد کی بنیاد پر نہ کریں۔",
+    ]),
+]
+
+
+def bmi_urdu_guide_html():
+    out = (
+        '<section id="bmi-urdu-summary" class="mt-8" aria-labelledby="bmi-urdu-summary-heading">'
+        '<h2 id="bmi-urdu-summary-heading" class="' + H2 + '">BMI کا خلاصہ</h2>'
+        '<p class="' + P + '">BMI ایک عمومی اسکریننگ پیمانہ ہے، بیماری کی تشخیص نہیں۔ یہ وزن اور قد سے نکالا جاتا ہے۔ بالغوں کی عمومی WHO درجہ بندی میں 18.5 سے کم کم وزن، 18.5 سے 25 سے کم معمول کا وزن، 25 سے 30 سے کم زیادہ وزن، اور 30 یا اس سے زیادہ موٹاپے کی حد ہے۔ جنوبی ایشیائی پس منظر میں اضافی خطرہ کم BMI پر بھی ہو سکتا ہے۔</p>'
+        '</section>'
+    )
+    for section_id, heading, paragraphs in BMI_URDU_SECTIONS:
+        out += '<section class="mt-8" aria-labelledby="' + section_id + '">'
+        out += '<h2 id="' + section_id + '" class="' + H2 + '">' + heading + '</h2>'
+        if section_id == "bmi-urdu-categories":
+            out += (
+                '<div class="mt-4 overflow-x-auto rounded-xl border border-stone-300 dark:border-stone-700">'
+                '<table dir="rtl" class="w-full border-collapse text-sm" aria-label="بالغوں کی BMI درجہ بندی">'
+                '<thead><tr>'
+                '<th scope="col" class="border-b border-stone-300 dark:border-stone-700 p-3 text-start">BMI (kg/m²)</th>'
+                '<th scope="col" class="border-b border-stone-300 dark:border-stone-700 p-3 text-start">بالغوں کا زمرہ</th>'
+                '</tr></thead><tbody>'
+                '<tr><td class="border-b border-stone-200 dark:border-stone-800 p-3">18.5 سے کم</td><td class="border-b border-stone-200 dark:border-stone-800 p-3">کم وزن</td></tr>'
+                '<tr><td class="border-b border-stone-200 dark:border-stone-800 p-3">18.5 سے 24.9</td><td class="border-b border-stone-200 dark:border-stone-800 p-3">معمول کا وزن</td></tr>'
+                '<tr><td class="border-b border-stone-200 dark:border-stone-800 p-3">25.0 سے 29.9</td><td class="border-b border-stone-200 dark:border-stone-800 p-3">زیادہ وزن</td></tr>'
+                '<tr><td class="p-3">30.0 یا زیادہ</td><td class="p-3">موٹاپا</td></tr>'
+                '</tbody></table></div>'
+            )
+        for paragraph in paragraphs:
+            out += '<p class="' + P + '">' + paragraph + '</p>'
+        out += '</section>'
+    return out
+
 
 
 EXTRA = {
@@ -1291,6 +1347,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
              "publisher": {"@id": SITE_URL + "/#organization"}},
             {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization",
              "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION,
+             "sameAs": ["https://github.com/Beastmalik7424/calculatesallinone"],
              "logo": SITE_URL + "/assets/favicon.svg",
              "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
             {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer",
@@ -1834,14 +1891,32 @@ def urdu_tool_page(t):
          "description": u["description"], "inLanguage": "ur", "applicationCategory": t["app"],
          "operatingSystem": "Any", "browserRequirements": "Requires JavaScript",
          "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}},
-        {"@context": "https://schema.org", "@type": "BreadcrumbList", "inLanguage": "ur", "itemListElement": [
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "صفحہ اول", "item": SITE_URL + "/ur/"},
             {"@type": "ListItem", "position": 2, "name": cat_ur, "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": u["name"], "item": url}]},
     ]
-    how = ""
-    for p in u["how"]:
-        how += '<p class="' + P + '">' + p + "</p>"
+    if t["slug"] == "bmi-calculator":
+        schema[0]["author"] = {"@id": SITE_URL + "/#maintainer"}
+        schema[0]["publisher"] = {"@id": SITE_URL + "/#organization"}
+        schema.append({
+            "@context": "https://schema.org", "@type": "WebPage",
+            "name": u["title"], "url": url, "inLanguage": "ur",
+            "author": {"@id": SITE_URL + "/#maintainer"},
+            "publisher": {"@id": SITE_URL + "/#organization"},
+            "dateModified": "2026-11-06",
+            "citation": [
+                "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
+                "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
+                "https://www.nhs.uk/conditions/overweight-and-obesity/",
+                "https://pubmed.ncbi.nlm.nih.gov/14726171/",
+            ],
+        })
+        how = bmi_urdu_guide_html()
+    else:
+        how = ""
+        for p in u["how"]:
+            how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
     calculator_section = (
         ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4" aria-label="کیلکولیٹر">'
@@ -1858,15 +1933,20 @@ def urdu_tool_page(t):
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
     )
-    _urdu_lead = '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
+    _lead_class = "mt-2 text-base leading-5" if t["slug"] == "bmi-calculator" else "mt-3 text-lg"
+    _urdu_lead = '<p class="' + _lead_class + ' text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
     if t["slug"] == "standard-calculator":
         body += primary_tool_content + _urdu_lead
     else:
         body += _urdu_lead + primary_tool_content
+    how_section = how if t["slug"] == "bmi-calculator" else ('<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how)
+    source_checked = ('<p class="mt-3 text-sm text-stone-700 dark:text-stone-300">ماخذ کی آخری جانچ: 6 نومبر 2026۔</p>' if t["slug"] == "bmi-calculator" else "")
+    maintainer_note = ('<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">صفحے کے منتظم: <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>۔ یہ صفحہ عمومی معلومات فراہم کرتا ہے، طبی تشخیص یا علاج کا متبادل نہیں۔</p>' if t["slug"] == "bmi-calculator" else "")
     body += (
-        '<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how
+        how_section
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
         + ('<h2 class="' + H2 + '">ماخذ</h2><p class="' + P + '">' + u["sources"] + '</p>' if u.get("sources") else "")
+        + source_checked + maintainer_note
         + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">انگریزی ورژن</a></p>'
     )
     alternates = [("en", "/" + t["slug"] + "/"), ("ur", path), ("x-default", "/" + t["slug"] + "/")]
