@@ -3,6 +3,7 @@ import html
 
 PAGES = [
  ("percentage-calculator","Percentage Calculator","Calculate a percentage of a number, find what percentage one amount is of another, or measure percentage change with clear inputs and steps.",[("value","Percentage (%)","number"),("total","Number","number")],"What is 25% of 200? Enter 25 and 200 to get 50. Formula: percentage divided by 100, multiplied by the number."),
+ ("percentage-difference-calculator","Percentage Difference Calculator","Compare two non-negative values with a symmetric percentage difference calculator. See the absolute gap, average, formula and a worked example.",[("first","First value (0 or more)","number"),("second","Second value (0 or more)","number")],"Percentage difference compares two non-negative values when neither is a starting point. Divide the absolute difference by the average of the two values, then multiply by 100. Swapping the values does not change the result."),
  ("fraction-calculator","Fraction Calculator","Add, subtract, multiply or divide fractions and simplify the result.",[("a","First numerator","number"),("b","First denominator","number"),("c","Second numerator","number"),("d","Second denominator","number")],"For addition, a/b + c/d = (ad + bc)/bd. Fractions are reduced to lowest terms."),
  ("compound-interest-calculator","Compound Interest Calculator","Estimate compound growth from a starting amount, annual rate, time and compounding frequency.",[("principal","Starting amount","number"),("rate","Annual interest rate (%)","number"),("years","Years","number"),("frequency","Compounding times per year (1 to 365)","number")],"Formula: A = P × (1 + r/n)^(nt). Rates are entered as annual percentages. This estimate excludes fees, taxes and additional deposits."),
  ("date-calculator","Date Difference Calculator","Find the signed number of calendar days between two dates using the Gregorian calendar, including leap years.",[("start","Start date","date"),("end","End date","date")],"The result is end date minus start date in full calendar days. It does not count the starting day."),
@@ -17,6 +18,14 @@ GUIDES = {
     "Enter finite numbers. The reverse calculation requires a non-zero whole amount. Percentage change is calculated as (new value − starting value) ÷ starting value × 100 and requires a positive starting value. A zero or negative starting value makes an ordinary increase/decrease percentage undefined or misleading. Results use browser number arithmetic and are formatted for readability, so do not treat the displayed decimal as a bank settlement or tax filing amount. This tool does not determine local tax rules, eligibility or legal pricing requirements.",
     "To find what percentage one amount is of another, divide the part by the whole and multiply by 100. For example, 18 out of 72 is 25 percent because 18 ÷ 72 × 100 = 25. This is a different question from finding 25 percent of 72, which gives 18. Check which quantity is the part and which is the whole before entering values.",
     "To measure a percentage change, subtract the starting value from the ending value, divide that difference by the starting value, and multiply by 100. A change from 80 to 92 is a 15 percent increase. A change from 80 to 68 is a 15 percent decrease. If the starting value is zero, percentage change is undefined. A negative starting value also needs careful interpretation because the sign can make a simple increase/decrease label misleading.",
+],
+"percentage-difference-calculator": [
+    "Use percentage difference when two values have equal status and neither is a before or after value. Examples include two supplier quotes, two measurements of the same object, or two independent readings. Both inputs must use the same unit and measurement basis.",
+    "Formula: percentage difference = |A - B| ÷ ((A + B) ÷ 2) × 100. For 40 and 60, the absolute difference is 20 and the average is 50. The calculation is 20 ÷ 50 × 100 = 40%.",
+    "Worked example: for 80 and 100, the absolute difference is 20 and the average is 90. The percentage difference is 20 ÷ 90 × 100 = 22.2222%. Entering 100 first and 80 second gives the same result.",
+    "Percentage difference and percentage change answer different questions. From 80 to 100, percentage change is 25% because 80 is the starting value. Percentage difference is 22.2222% because 90, the average, is the reference. Use the Percentage Calculator's change mode when one value is the baseline.",
+    "If one value is zero and the other is positive, the standard formula returns 200%. If both values are zero, the average is zero and the result is undefined. This calculator accepts non-negative values and rejects negative values so the average-based comparison remains unambiguous.",
+    "Compare like with like. Do not compare values in different units or measurement bases. Results are rounded to up to eight decimal places for readability. Percentage difference is not a measure of statistical significance, measurement uncertainty or percent error."
 ],
 "fraction-calculator": [
     "A fraction has a numerator above a denominator. The denominator cannot be zero. A zero denominator is invalid because division by zero has no defined value. To add one half and one third, multiply each numerator by the other denominator, add the two products, and divide by the product of the denominators. The result is five sixths. Subtraction uses the same common denominator but subtracts the cross-products. The calculator then reduces the result to lowest terms using the greatest common divisor.",
@@ -48,6 +57,7 @@ GUIDES = {
 
 CATEGORY = {
     "percentage-calculator": ("/math/", "Math and Converters"),
+    "percentage-difference-calculator": ("/math/", "Math and Converters"),
     "fraction-calculator": ("/math/", "Math and Converters"),
     "compound-interest-calculator": ("/money/", "Money and Business"),
     "date-calculator": ("/time/", "Date and Time"),
@@ -57,6 +67,12 @@ RELATED_LINKS = {
     "percentage-calculator": [
         ("/discount-calculator/", "Discount Calculator"),
         ("/profit-loss-calculator/", "Profit and Loss Calculator"),
+        ("/fraction-calculator/", "Fraction Calculator"),
+        ("/percentage-difference-calculator/", "Percentage Difference Calculator"),
+    ],
+    "percentage-difference-calculator": [
+        ("/percentage-calculator/", "Percentage Calculator"),
+        ("/standard-calculator/", "Standard & Scientific Calculator"),
         ("/fraction-calculator/", "Fraction Calculator"),
     ],
     "fraction-calculator": [
@@ -78,6 +94,7 @@ RELATED_LINKS = {
 
 SECTION_HEADINGS = {
     "percentage-calculator": ["Worked percentage examples", "Discounts and tax", "Percentage increase and decrease", "Input limits and rounding", "Finding a percentage share", "How percentage change is measured"],
+    "percentage-difference-calculator": ["What percentage difference measures", "Formula and worked example", "Percentage difference vs percentage change", "Why the order does not matter", "Zero and negative values", "Rounding and limitations"],
     "fraction-calculator": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero denominators", "Large numbers and decimal inputs", "Check the result", "Compare equivalent fractions"],
     "compound-interest-calculator": ["What compound interest means", "Worked example: semiannual compounding", "Simple versus compound interest", "Formula and variables", "Compare compounding frequency", "Assumptions and limits"],
     "date-calculator": ["How elapsed days are counted", "Leap-year example", "Verify the result manually", "Business days and legal deadlines", "Inclusive versus elapsed dates", "Date order and negative results"],
@@ -90,6 +107,14 @@ FAQS = {
         ("What percentage is 30 out of 120?", "25%. Divide 30 by 120 and multiply by 100."),
         ("What is the percentage change from 80 to 100?", "A 25% increase. The change is 20, and 20 divided by the starting value 80 is 0.25."),
         ("Why does a 20% rise followed by a 20% fall not return to the starting amount?", "Starting from 100, a 20% rise gives 120. A 20% fall from 120 is 24, leaving 96."),
+    ],
+    "percentage-difference-calculator": [
+        ("What is the percentage difference between 80 and 100?", "22.2222%. The absolute difference is 20 and the average is 90, so 20 ÷ 90 × 100 = 22.2222%."),
+        ("Is percentage difference the same as percentage change?", "No. Percentage difference uses the average of the two values. Percentage change uses the starting value as its reference."),
+        ("Does the order of the two values matter?", "No. The absolute difference and average are unchanged when the two values are swapped."),
+        ("What happens when one value is zero?", "If the other value is positive, the standard formula returns 200%."),
+        ("What happens when both values are zero?", "The result is undefined because the average is zero, so the calculator reports that condition instead of a percentage."),
+        ("Can I compare values with different units?", "No. Convert them to the same unit and measurement basis before comparing."),
     ],
     "fraction-calculator": [
         ("What is 1/2 + 1/3?", "5/6. Convert to sixths: 3/6 + 2/6 = 5/6."),
@@ -116,6 +141,10 @@ SOURCE_LINKS = {
     "percentage-calculator": [
         ("OpenStax: Percent applications and percent increase", "https://openstax.org/books/prealgebra-2e/pages/6-2-solve-general-applications-of-percent", "Textbook reference for percent applications, increase and decrease calculations."),
     ],
+    "percentage-difference-calculator": [
+        ("Math Is Fun: Percentage Difference", "https://www.mathsisfun.org/percentage-difference", "Explains why the absolute difference is divided by the average when neither value is a starting point."),
+        ("Cuemath: Percent Difference", "https://www.cuemath.com/commercial-math/percent-difference/", "Provides the symmetric average-based formula and worked examples."),
+    ],
     "fraction-calculator": [
         ("OpenStax: Add and subtract fractions with different denominators", "https://openstax.org/books/prealgebra/pages/4-5-add-and-subtract-fractions-with-different-denominators", "Explains common denominators and the worked 1/2 + 1/3 = 5/6 example."),
         ("OpenStax: Fraction operations", "https://openstax.org/books/prealgebra-2e/pages/4-key-concepts", "Summarizes fraction multiplication, division, addition and subtraction."),
@@ -135,7 +164,7 @@ def build_extra_pages(head,shell,write):
     for slug,title,description,fields,explanation in PAGES:
         path="/"+slug+"/"
         category_path,category_name=CATEGORY[slug]
-        compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator")
+        compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator", "percentage-difference-calculator")
         section_padding = "p-3 sm:p-6" if compact_mobile else "p-4 sm:p-6"
         form_margin = "mt-2" if compact_mobile else "mt-3"
         mobile_columns = "grid-cols-2" if compact_mobile else "grid-cols-1"
@@ -154,7 +183,7 @@ def build_extra_pages(head,shell,write):
             body+="<div class='sm:col-span-2 mt-1'><label for='percentage-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='percentage-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='of'>What is X% of a number?</option><option value='share'>What percentage is one number of another?</option><option value='change'>What is the percentage change?</option></select></div>"
         for key,label,kind in fields:
             body+='<div class="min-w-0"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
-            body+='<input required id="'+key+'" type="'+kind+'" '+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
+            body+='<input required id="'+key+'" type="'+kind+'" '+('min="0" ' if slug=="percentage-difference-calculator" and kind=="number" else '')+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
         if slug=="fraction-calculator":
             body+='<div class="sm:col-span-2 compact-form-full min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
         body+='<button type="submit" class="sm:col-span-2 compact-form-full rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
