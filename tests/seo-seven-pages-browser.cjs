@@ -251,7 +251,7 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
         await bmiPage.locator("#b-cm").fill("170");
         await bmiForm.locator('button[type="submit"]').click();
         await bmiPage.locator("#bmi-result").waitFor({ state: "visible", timeout: 5000 });
-        assert.match(await bmiPage.locator("#bmi-result").textContent(), /24\\.2/, "Urdu BMI calculator should still calculate 70 kg at 170 cm as 24.2");
+        assert.match(await bmiPage.locator("#bmi-result").textContent(), /24\.2/, "Urdu BMI calculator should still calculate 70 kg at 170 cm as 24.2");
       }
       if (bmiErrors.length) {
         bmiErrors.forEach(error => console.log("  Urdu BMI " + viewport.width + "px " + error));
