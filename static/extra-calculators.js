@@ -24,6 +24,21 @@
   if(!Number.isFinite(result))throw Error("Result exceeds supported range");
   return result;
  }
+ function percentageDifference(first,second){
+  finite(first,second);
+  if(first<0||second<0)throw Error("Enter two non-negative values");
+  const scale=Math.max(first,second);
+  if(scale===0)throw Error("Both values cannot be zero because their average is zero");
+  const normalizedFirst=first/scale,normalizedSecond=second/scale;
+  const normalizedAverage=(normalizedFirst+normalizedSecond)/2;
+  const raw=(Math.abs(normalizedFirst-normalizedSecond)/normalizedAverage)*100;
+  const percentage=Math.round(raw*1e12)/1e12;
+  const difference=Math.abs(first-second);
+  const average=first/2+second/2;
+  if(average===0)throw Error("The average is too small to represent reliably. Enter larger values");
+  finite(difference,average,percentage);
+  return {difference,average,percentage};
+ }
  function gcd(a,b){while(b){[a,b]=[b,a%b];}return Math.abs(a);}
  function fraction(a,b,c,d,operation){finite(a,b,c,d);if(![a,b,c,d].every(Number.isSafeInteger)||b===0||d===0)throw Error("Use whole-number numerators and nonzero denominators");
  const A=BigInt(a),B=BigInt(b),C=BigInt(c),D=BigInt(d);
@@ -44,5 +59,5 @@
  function compound(principal,rate,years,frequency){finite(principal,rate,years,frequency);if(principal<0||years<0||rate<=-100*frequency||!Number.isSafeInteger(frequency)||frequency<1||frequency>365)throw Error("Invalid investment values");const value=principal*Math.pow(1+rate/(100*frequency),frequency*years);if(!Number.isFinite(value))throw Error("Result exceeds supported range");return value;}
  function parseISO(s){if(typeof s!=="string"||!/^(\d{4})-(\d{2})-(\d{2})$/.test(s))throw Error("Use YYYY-MM-DD dates");const [y,m,d]=s.split("-").map(Number);const ms=Date.UTC(y,m-1,d);const t=new Date(ms);if(y<100||t.getUTCFullYear()!==y||t.getUTCMonth()!==m-1||t.getUTCDate()!==d)throw Error("Invalid calendar date");return ms;}
  function dateDifference(start,end){return (parseISO(end)-parseISO(start))/86400000;}
- return {percentage,percentageShare,percentageChange,fraction,compound,dateDifference};
+ return {percentage,percentageShare,percentageChange,percentageDifference,fraction,compound,dateDifference};
 });
