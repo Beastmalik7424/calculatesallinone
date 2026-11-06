@@ -33,6 +33,10 @@ URDU_DESCRIPTION_FALLBACKS = {
     "/ur/stopwatch/": "براؤزر میں وقت شروع، روکیں اور دوبارہ صفر کریں، اور مختصر وقت کی پیمائش میں ممکنہ فرق سمجھیں۔",
     "/ur/tasbih-counter/": "ذکر کی گنتی کے لیے ہدف مقرر کریں، باقی تعداد دیکھیں اور گنتی کو اسی ڈیوائس پر محفوظ رکھیں۔",
 }
+VERIFIED_PAGE_UPDATE_DATES = {
+    # This date records the substantive Urdu BMI content and source update in this change.
+    "/ur/bmi-calculator/": "2026-11-06",
+}
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
 def page_path(file):
@@ -130,6 +134,7 @@ def normalize_meta(raw, path, lang):
         "/terms/": "Terms of Use | CalculatesAll Free Tools",
         "/time/": "Date and Time Calculators | CalculatesAll",
         "/ur/age-calculator/": "عمر کیلکولیٹر | سال، مہینے اور دن",
+        "/ur/bmi-calculator/": "BMI کیلکولیٹر اردو میں | بالغ افراد | CalculatesAll",
     }
     title = title_overrides.get(path, title)
     # Repair the known malformed title explicitly rather than truncating it into a fragment.
@@ -160,7 +165,7 @@ def normalize_meta(raw, path, lang):
 }
     urdu_description_overrides = {
     "/ur/age-calculator/": "تاریخ پیدائش اور مطلوبہ تاریخ درج کرکے عمر سال، مہینوں اور دنوں میں معلوم کریں۔ کل گزرے دن بھی دیکھیں اور کیلکولیٹر کے تاریخوں کے حساب کا طریقہ سمجھیں۔",
-    "/ur/bmi-calculator/": "کلوگرام یا پاؤنڈ وزن اور سینٹی میٹر یا فٹ و انچ قد درج کرکے بالغ افراد کا BMI معلوم کریں۔ WHO کی وزن کی درجہ بندی دیکھیں اور نتیجے کی حدود سمجھیں۔",
+    "/ur/bmi-calculator/": "مفت BMI کیلکولیٹر اردو میں استعمال کریں۔ وزن kg یا lb اور قد cm یا فٹ/انچ درج کریں۔ بالغوں کی WHO درجہ بندی اور جنوبی ایشیائی خطرے کی حدیں سمجھیں۔",
     "/ur/discount-calculator/": "اصل قیمت اور رعایت کا فیصد درج کرکے بچت، رعایت کے بعد آخری قیمت اور حساب کا طریقہ دیکھیں۔ مختلف رعایتوں کا موازنہ کریں اور خریداری سے پہلے نتیجہ چیک کریں۔",
     "/ur/profit-loss-calculator/": "قیمت خرید اور فروخت درج کرکے منافع یا نقصان اور اس کا فیصد معلوم کریں۔ کاروباری آمدنی، لاگت اور اخراجات سے خالص منافع کا حساب بھی کریں اور فارمولے دیکھیں۔",
     "/ur/standard-calculator/": "براؤزر میں جمع، تفریق، ضرب، تقسیم، فیصد اور قوسین کے ساتھ حساب کریں۔ سائنسی موڈ میں مثلثاتی افعال، جذر اور لاگرتھم استعمال کریں، بغیر ایپ ڈاؤن لوڈ کیے۔",
@@ -286,8 +291,12 @@ def main():
             schemas.append(web_page)
         web_page["name"] = title
         web_page["url"] = canonical
-        # Shared source-file commit dates do not prove when this individual page was reviewed.
-        web_page.pop("dateModified", None)
+        # Keep dateModified only for pages with an explicit, page-specific substantive update.
+        verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
+        if verified_date:
+            web_page["dateModified"] = verified_date
+        else:
+            web_page.pop("dateModified", None)
         web_page["inLanguage"] = lang
         faq_items = extract_faq_items(raw)
         if faq_items:
