@@ -619,9 +619,14 @@ for url in urls:
         assert app_schemas[0].get("inLanguage") == page_lang, "EMI WebApplication schema language must match the HTML language"
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
-            assert "dateModified" not in item, (
-                f"Do not publish unverified dateModified on {url}."
-            )
+            if url.endswith("/ur/bmi-calculator/"):
+                assert item.get("dateModified") == "2026-11-06", (
+                    "Urdu BMI dateModified must match the verified substantive content and source update."
+                )
+            else:
+                assert "dateModified" not in item, (
+                    f"Do not publish unverified dateModified on {url}."
+                )
         if item.get("@type") in ("WebSite", "WebPage", "CollectionPage", "WebApplication"):
             if "inLanguage" in item:
                 assert item.get("inLanguage") == page_lang, (
