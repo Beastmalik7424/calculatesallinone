@@ -124,7 +124,7 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
     assert.equal(desktopGridPaths.length, 16, "desktop homepage grid must contain all 16 non-hero calculators");
     assert.deepEqual([...desktopGridPaths].sort(), [...expectedGridPaths].sort(), "desktop homepage grid must contain every non-hero calculator exactly once");
     assert.equal(await desktopToolGrid.locator("a:visible").count(), 16, "all desktop calculator grid links must be visible");
-    const desktopToolColumns = await desktopToolGrid.evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\\s+/).length);
+    const desktopToolColumns = await desktopToolGrid.evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
     assert.equal(desktopToolColumns, 4, "desktop calculator grid must use four columns");
 
     for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }]) {
@@ -139,7 +139,7 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       assert.equal(mobileGridPaths.length, 16, "mobile homepage grid must contain all 16 non-hero calculators");
       assert.deepEqual([...mobileGridPaths].sort(), [...expectedGridPaths].sort(), "mobile homepage grid must contain every non-hero calculator exactly once");
       assert.equal(await mobileGrid.locator("a:visible").count(), 16, "all mobile calculator grid links must be visible");
-      const mobileColumns = await mobileGrid.evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\\s+/).length);
+      const mobileColumns = await mobileGrid.evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
       assert.equal(mobileColumns, 2, "mobile calculator grid must use two columns");
       const gridFits = await mobileGrid.evaluate(el => el.scrollWidth <= el.clientWidth + 1);
       assert.equal(gridFits, true, "mobile calculator grid must not overflow horizontally");
