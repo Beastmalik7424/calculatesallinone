@@ -2,6 +2,8 @@ from pathlib import Path
 
 # Keep internal recommendations tightly related to the task on each calculator page.
 checks = {
+    "percentage-calculator": ["discount-calculator", "profit-loss-calculator", "fraction-calculator", "percentage-difference-calculator"],
+    "percentage-difference-calculator": ["percentage-calculator", "standard-calculator", "fraction-calculator"],
     "profit-loss-calculator": ["discount-calculator", "percentage-calculator"],
     "discount-calculator": ["percentage-calculator", "profit-loss-calculator"],
     "standard-calculator": ["percentage-calculator", "fraction-calculator"],
@@ -24,7 +26,7 @@ for page in ("tasbih-counter", "bmi-calculator", "zakat-calculator", "stopwatch"
 # The homepage and category hubs continue to expose all core journeys.
 for page, slugs in {
     "/": ["percentage-calculator", "fraction-calculator", "compound-interest-calculator", "date-calculator"],
-    "/math/": ["percentage-calculator", "fraction-calculator"],
+    "/math/": ["percentage-calculator", "percentage-difference-calculator", "fraction-calculator"],
     "/money/": ["compound-interest-calculator"],
     "/time/": ["date-calculator"],
 }.items():
