@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused build-output checks for the eight scoped SEO URLs."""
+"""Focused build-output checks for the nine scoped SEO URLs."""
 import html
 import re
 import sys
@@ -22,6 +22,7 @@ TARGETS = {
 CHECK_PAGES = {"/": ROOT / "index.html"}
 for path in TARGETS:
     CHECK_PAGES[path] = ROOT / path.strip("/") / "index.html"
+CHECK_PAGES["/percentage-difference-calculator/"] = ROOT / "percentage-difference-calculator" / "index.html"
 
 errors = []
 def check(condition, message):
@@ -68,7 +69,7 @@ for path, raw in pages.items():
     check(len(titles[path]) < 60, path + ": title must be under 60 characters (" + str(len(titles[path])) + ")")
     check(0 < len(descriptions[path]) < 160, path + ": description must be under 160 characters")
     check(not re.search(r"<img\b(?![^>]*\balt\s*=)", raw, re.I), path + ": image missing alt attribute")
-    if path in ("/about/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/"):
+    if path in ("/about/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/", "/percentage-difference-calculator/"):
         schemas = []
         for match in re.finditer(r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', raw, re.S | re.I):
             try:
@@ -88,13 +89,19 @@ for path, raw in pages.items():
             check(visible_main(raw).count("?") >= 3, path + ": expected at least three visible FAQ questions")
     if path in ("/about/", "/discount-calculator/", "/editorial-policy/", "/health/"):
         words = re.findall(r"\b[\w’'-]+\b", visible_main(raw), re.UNICODE)
-        minimum = 420 if path == "/about/" else (300 if path == "/discount-calculator/" else 150)
+        minimum = 420 if path == "/about/" else (300 if path in ("/discount-calculator/", "/percentage-difference-calculator/") else 150)
         print("WORDCOUNT", path, len(words))
         check(len(words) >= minimum, path + ": main-content word count below " + str(minimum) + " (" + str(len(words)) + ")")
 
-check(len(set(titles.values())) == len(titles), "duplicate titles across homepage and eight scoped pages")
-check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across homepage and eight scoped pages")
+check(len(set(titles.values())) == len(titles), "duplicate titles across homepage and nine scoped pages")
+check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across homepage and nine scoped pages")
 
+new_page = pages.get("/percentage-difference-calculator/", "")
+check('<meta name="robots" content="index, follow">' in new_page, "percentage difference page must be indexable")
+math_hub = read(ROOT / "math" / "index.html")
+percentage_page = read(ROOT / "percentage-calculator" / "index.html")
+check('href="/percentage-difference-calculator/"' in math_hub, "math hub is missing the percentage difference link")
+check('href="/percentage-difference-calculator/"' in percentage_page, "percentage calculator is missing the related percentage difference link")
 home = pages.get("/", "")
 check('href="#all-tools"' in home and "Browse all free calculators" in home,
       "homepage is missing the primary browse-calculators CTA")
@@ -120,6 +127,8 @@ try:
             node = next((n for n in root.findall("sm:url", ns) if n.findtext("sm:loc", namespaces=ns) == url), None)
             lastmod = node.findtext("sm:lastmod", namespaces=ns) if node is not None else None
             check(lastmod is None, "unverified lastmod must be omitted for " + url)
+    check(SITE + "/percentage-difference-calculator/" in locs, "percentage difference page is missing from the indexable sitemap")
+    print(SITE + "/percentage-difference-calculator/")
     for url in locs:
         check(url.endswith("/"), "sitemap URL lacks trailing slash: " + str(url))
     for node in root.findall("sm:url", ns):
@@ -137,7 +146,7 @@ sitemap_lines = [line.strip() for line in robots_txt.splitlines() if line.strip(
 check(sitemap_lines == ["Sitemap: " + SITE + "/sitemap.xml"], "robots.txt must have exactly one full sitemap URL")
 check(not any(line.strip() == "Disallow: /" for line in robots_txt.splitlines()), "robots.txt blocks the whole site")
 
-# Internal links from the homepage and seven target pages must resolve to a generated page or asset.
+# Internal links from the homepage and scoped pages must resolve to a generated page or asset.
 for source_path, raw in pages.items():
     for href in re.findall(r'\bhref=["\']([^"\']+)["\']', raw, re.I):
         if href.startswith(("http://", "https://", "mailto:", "tel:", "javascript:", "#", "data:")):
