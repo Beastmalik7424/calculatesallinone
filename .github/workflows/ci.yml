@@ -108,7 +108,7 @@ jobs:
           node -e 'const fs=require("node:fs"); for (const name of ["home","bmi","zakat","calorie"]) { const r=JSON.parse(fs.readFileSync("/tmp/lighthouse-"+name+".json","utf8")); const score=r.categories.seo.score; console.log("Lighthouse SEO "+name+": "+Math.round(score*100)+"/100"); if (score !== 1) process.exitCode=1; }'
       - name: Lighthouse SEO audit for nine scoped pages
         run: |
-          python3 -m http.server 4175 --directory public >/tmp/calculateall-http-seven.log 2>&1 &
+          python3 -m http.server 4175 --directory public >/tmp/calculateall-http-nine.log 2>&1 &
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:4175/ >/dev/null; then break; fi
             sleep 1
@@ -116,7 +116,7 @@ jobs:
           node -e 'const fs=require("node:fs"); const paths=["/about/","/ar/","/es/","/fr/","/contact/","/discount-calculator/","/editorial-policy/","/health/","/percentage-difference-calculator/"]; fs.writeFileSync("/tmp/seo-nine-paths.json",JSON.stringify(paths));'
           for path in /about/ /ar/ /es/ /fr/ /contact/ /discount-calculator/ /editorial-policy/ /health/ /percentage-difference-calculator/; do
             slug=$(echo "$path" | tr -cd '[:alnum:]')
-            npx --yes lighthouse@12.8.2 "http://127.0.0.1:4175$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu" --only-categories=seo --output=json --output-path="/tmp/lh-seven-$slug.json"
+            npx --yes lighthouse@12.8.2 "http://127.0.0.1:4175$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu" --only-categories=seo --output=json --output-path="/tmp/lh-nine-$slug.json"
           done
           node -e 'const fs=require("node:fs"); const paths=["/about/","/ar/","/es/","/fr/","/contact/","/discount-calculator/","/editorial-policy/","/health/","/percentage-difference-calculator/"]; let bad=0; for(const path of paths){const slug=path.replace(/[^a-z0-9]/gi,"");const r=JSON.parse(fs.readFileSync("/tmp/lh-nine-"+slug+".json","utf8"));const refs=new Set(r.categories.seo.auditRefs.map(x=>x.id));const failed=Object.entries(r.audits).filter(([id,a])=>refs.has(id)&&a.score===0).map(([id])=>id);const expectedNoindex=["/ar/","/es/","/fr/"].includes(path);const unexpected=failed.filter(id=>!(expectedNoindex&&id==="is-crawlable"));console.log(path+" Lighthouse SEO "+Math.round(r.categories.seo.score*100)+"/100; failed SEO audits: "+(failed.join(",")||"none"));if(unexpected.length){console.error("Unexpected failed audits on "+path+": "+unexpected.join(","));bad=1;}} if(bad)process.exit(1); console.log("Lighthouse scoped-page audit: PASS; only expected is-crawlable findings are allowed on intentionally noindex language pages.");'
       - name: Test headless browser console on nine scoped pages
