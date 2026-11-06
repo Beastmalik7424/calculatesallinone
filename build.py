@@ -1571,15 +1571,23 @@ def years_to_days_reference_html():
         (4, "1,460", "1,460.97"),
         (5, "1,825", "1,826.2125"),
         (6, "2,190", "2,191.455"),
+        (9, "3,285", "3,287.1825"),
         (10, "3,650", "3,652.425"),
         (11, "4,015", "4,017.6675"),
         (13, "4,745", "4,748.1525"),
+        (14, "5,110", "5,113.395"),
         (15, "5,475", "5,478.6375"),
+        (16, "5,840", "5,843.88"),
         (20, "7,300", "7,304.85"),
+        (21, "7,665", "7,670.0925"),
         (25, "9,125", "9,131.0625"),
         (29, "10,585", "10,592.0325"),
         (30, "10,950", "10,957.275"),
+        (32, "11,680", "11,687.76"),
+        (40, "14,600", "14,609.7"),
         (50, "18,250", "18,262.125"),
+        (60, "21,900", "21,914.55"),
+        (74, "27,010", "27,027.945"),
         (80, "29,200", "29,219.4"),
         (100, "36,500", "36,524.25"),
     ]
@@ -1736,8 +1744,8 @@ def tool_page(t):
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
     elif t["slug"] == "years-to-days-calculator":
-        title = "Years to Days & Days to Years Calculator"
-        desc = "Convert years to days or days to years using 365 or 365.2425 days per year. Exact start-date conversion applies to years to days only."
+        title = "Years to Days Calculator | How Many Days in X Years?"
+        desc = "Convert years to days or days to years. Compare 365-day and 365.2425-day methods, or count exact leap-year-aware days from a Gregorian start date."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]

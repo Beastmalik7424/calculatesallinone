@@ -20,6 +20,7 @@ import html as html_lib
 import json
 import os
 import re
+from decimal import Decimal
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import urlparse
@@ -159,8 +160,8 @@ urdu_age_html = output_for_url(SITE + "/ur/age-calculator/").read_text(encoding=
 urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
-assert "<title>Years to Days &amp; Days to Years Calculator</title>" in years_html, "Years-to-Days title should identify both conversion directions"
-assert 'name="description" content="Convert years to days or days to years using a 365-day or Gregorian-average year. Exact start-date conversion applies to years to days only."' in years_html, "Years-to-Days meta description must state the exact-date mode limitation"
+assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
+assert 'name="description" content="Convert years to days or days to years. Compare 365-day and 365.2425-day methods, or count exact leap-year-aware days from a Gregorian start date."' in years_html, "Years-to-Days meta description must explain both conversion methods and exact calendar mode"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 5 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
@@ -176,6 +177,27 @@ assert "How many years and days are in 115 months?" in years_html and "9 years a
 assert "How many years and months are in 504 days?" in years_html and "1 year, 4 months and 17 days" in years_html, "The exposed 504-day query should explain its average-month assumption"
 assert all(value in years_html for value in ("1,460", "1,460.97", "4,015", "4,017.6675", "4,745", "4,748.1525")), "Quick reference table should include the exposed 11- and 13-year conversions"
 assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
+# The latest finalized GSC query sample included additional year counts. Keep the
+# reference table useful for those exact intents, and verify each value with Decimal.
+_year_reference_expected = {
+    9: ("3,285", "3,287.1825"),
+    14: ("5,110", "5,113.395"),
+    16: ("5,840", "5,843.88"),
+    21: ("7,665", "7,670.0925"),
+    32: ("11,680", "11,687.76"),
+    40: ("14,600", "14,609.7"),
+    60: ("21,900", "21,914.55"),
+    74: ("27,010", "27,027.945"),
+}
+for _years, (_simple, _average) in _year_reference_expected.items():
+    _row = (
+        '<tr><th scope="row" class="border-b p-3">' + str(_years) + '</th>'
+        '<td class="border-b p-3">' + _simple + '</td>'
+        '<td class="border-b p-3">' + _average + '</td></tr>'
+    )
+    assert _row in years_html, f"Missing verified quick-reference row for {_years} years"
+    assert Decimal(_years) * Decimal("365") == Decimal(_simple.replace(",", "")), _years
+    assert Decimal(_years) * Decimal("365.2425") == Decimal(_average.replace(",", "")), _years
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
 emi_head = re.search(r"<head\b[^>]*>(.*?)</head>", emi_html, re.S | re.I)
