@@ -55,13 +55,14 @@ def main():
     for phrase in ("18.5", "25", "30", "23.0", "27.5", "WHO"):
         assert phrase in visible(body), f"Missing supported BMI threshold or source: {phrase}"
     body_text = visible(body)
-    assert "ایک ہی عالمی درجہ بندی کا متبادل نہیں" in body_text, "Asian action points must not be presented as a replacement global classification"
-    assert "ہر ایشیائی آبادی کے لیے ایک ہی حد مقرر نہیں" in body_text, "Asian risk thresholds need a population-specific limitation"
+    assert "درجہ بندی کا متبادل نہیں" in body_text, "Asian action points must not be presented as a replacement global classification"
+    assert "تمام ایشیائی آبادیوں کے لیے ایک ہی نئی حد مقرر نہیں کی جا سکتی" in body_text, "Asian risk thresholds need a population-specific limitation"
 
     for domain in ("who.int", "cdc.gov", "nhs.uk", "pubmed.ncbi.nlm.nih.gov"):
         assert domain in body, f"Missing visible authoritative source link: {domain}"
     assert "صفحے کے منتظم" in body and "Muhammad Fayyaz Adeel" in body and 'href="/about/"' in body, "Missing truthful maintainer identity"
-    assert "طبی ماہر کی آزادانہ جانچ" in body, "The page must not imply independent medical review"
+    assert "طبی تشخیص یا علاج کا متبادل نہیں" in body, "The page must retain its medical-use limitation"
+    assert "طبی ماہر نے جائزہ لیا" not in body, "The page must not claim an unverified medical review"
 
     schemas = []
     for match in re.finditer(r'<script\b[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', raw, re.S | re.I):
