@@ -38,6 +38,7 @@ for phrase in (
 for phrase in (
     "What is 25% of 200?",
     "What is 1/2 + 1/3?",
+    "percentage difference",
     "25% of 200 is 50",
     "5/6",
     "Can I convert kilograms to pounds?",
@@ -45,7 +46,7 @@ for phrase in (
 ):
     assert phrase.lower() in math.lower(), ("math", phrase)
 
-for slug in ("percentage-calculator", "fraction-calculator"):
+for slug in ("percentage-calculator", "percentage-difference-calculator", "fraction-calculator"):
     assert f'href="/{slug}/"' in math, slug
 assert 'href="/calorie-calculator/"' in page("health"), "Health hub must link to the adult calorie calculator"
 health_html = page("health")
