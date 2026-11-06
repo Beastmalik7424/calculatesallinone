@@ -12,15 +12,15 @@ EXPECTED_DESCRIPTION = "مفت BMI کیلکولیٹر اردو میں استعم
 
 
 def visible(value):
-    value = re.sub(r"(?is)<(script|style)\\b.*?</\\1>", " ", value)
+    value = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", value)
     value = re.sub(r"<[^>]+>", " ", value)
-    return re.sub(r"\\s+", " ", html.unescape(value)).strip()
+    return re.sub(r"\s+", " ", html.unescape(value)).strip()
 
 
 def main():
     assert PAGE.is_file(), "Urdu BMI page was not generated"
     raw = PAGE.read_text(encoding="utf-8")
-    main_match = re.search(r"<main\\b[^>]*>(.*?)</main>", raw, re.S | re.I)
+    main_match = re.search(r"<main\b[^>]*>(.*?)</main>", raw, re.S | re.I)
     assert main_match, "Urdu BMI page is missing main content"
     body = main_match.group(1)
 
@@ -34,9 +34,9 @@ def main():
     assert '<meta name="robots" content="index, follow">' in raw, "Urdu BMI page must remain indexable"
     assert '<html lang="ur" dir="rtl">' in raw, "Urdu language or RTL direction changed"
 
-    h1s = re.findall(r"<h1\\b[^>]*>(.*?)</h1>", body, re.S | re.I)
+    h1s = re.findall(r"<h1\b[^>]*>(.*?)</h1>", body, re.S | re.I)
     assert len(h1s) == 1, f"Expected exactly one H1, found {len(h1s)}"
-    first_paragraph = re.search(r"</h1>\\s*<p\\b[^>]*>(.*?)</p>", body, re.S | re.I)
+    first_paragraph = re.search(r"</h1>\s*<p\b[^>]*>(.*?)</p>", body, re.S | re.I)
     assert first_paragraph, "A direct opening answer must follow the H1"
     opening = visible(first_paragraph.group(1))
     for phrase in ("BMI", "وزن", "قد", "میٹر", "اسکریننگ"):
@@ -64,7 +64,7 @@ def main():
     assert "طبی ماہر کی آزادانہ جانچ" in body, "The page must not imply independent medical review"
 
     schemas = []
-    for match in re.finditer(r'<script\\b[^>]*type="application/ld\\+json"[^>]*>(.*?)</script>', raw, re.S | re.I):
+    for match in re.finditer(r'<script\b[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', raw, re.S | re.I):
         parsed = json.loads(match.group(1))
         schemas.extend(parsed if isinstance(parsed, list) else [parsed])
     app = next((item for item in schemas if item.get("@type") == "WebApplication"), None)
@@ -82,12 +82,12 @@ def main():
         assert domain in citations, f"Missing structured citation: {domain}"
 
     visible_questions = [
-        visible(q) for q in re.findall(r"<summary\\b[^>]*>(.*?)</summary>", body, re.S | re.I)
+        visible(q) for q in re.findall(r"<summary\b[^>]*>(.*?)</summary>", body, re.S | re.I)
     ]
     schema_questions = [item.get("name") for item in faq.get("mainEntity", [])]
     assert len(visible_questions) >= 6, "Expected useful visible FAQ coverage"
     assert schema_questions == visible_questions, "FAQ JSON-LD must exactly match visible FAQ questions"
-    assert len(re.findall(r"<h2\\b[^>]*>.*?؟</h2>", body, re.S | re.I)) >= 5, "Expected at least five question-led answer sections"
+    assert len(re.findall(r"<h2\b[^>]*>.*?؟</h2>", body, re.S | re.I)) >= 5, "Expected at least five question-led answer sections"
 
     print("PASS: Urdu BMI title, description, canonical and indexability")
     print("PASS: answer-first definition, summary and question-led self-contained sections")
