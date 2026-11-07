@@ -33,6 +33,8 @@ const {chromium}=require("playwright");
      if(!(await page.locator("#extra-result").innerText()).includes("200%"))throw Error("Zero versus a positive value should return 200%");
      await page.locator("#first").fill("0");await page.locator("#second").fill("0");await form.locator("button[type=submit]").click();
      if(!(await page.locator("#extra-result").innerText()).includes("Both values cannot be zero"))throw Error("Two zero values must be rejected");
+     await page.locator("#first").fill("5e-324");await page.locator("#second").fill("5e-324");await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("Average: 4.940656e-324"))throw Error("Equal minimum positive values must retain a representable average");
     }
     if(errors.length)throw Error(path+" browser errors: "+errors.join("; "));
     console.log(path+" "+viewport.width+"px PASS: "+result);
