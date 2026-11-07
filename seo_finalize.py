@@ -112,6 +112,22 @@ def extract_faq_items(raw):
 def word_count(value):
     return len(strip_tags(value).split())
 
+def remove_ineligible_software_app(node):
+    """Remove Google SoftwareApplication rich-result markup without inventing ratings."""
+    if isinstance(node, list):
+        return [cleaned for item in node if (cleaned := remove_ineligible_software_app(item)) is not None]
+    if isinstance(node, dict):
+        if node.get("@type") == "WebApplication":
+            return None
+        cleaned = {}
+        for key, value in node.items():
+            cleaned_value = remove_ineligible_software_app(value)
+            if cleaned_value is not None:
+                cleaned[key] = cleaned_value
+        return cleaned
+    return node
+
+
 def normalize_meta(raw, path, lang):
     title_match = re.search(r"<title>(.*?)</title>", raw, re.S)
     desc_match = re.search(r'<meta name="description" content="([^"]*)"', raw)
@@ -285,6 +301,10 @@ def main():
                 schemas.append(json.loads(match.group(1)))
             except json.JSONDecodeError as exc:
                 raise SystemExit("Invalid JSON-LD in " + path + ": " + str(exc))
+        # Google requires a genuine app rating or review for SoftwareApplication rich results.
+        # The site has no verified public app reviews, so remove this optional rich-result type
+        # while preserving WebPage, Organization, BreadcrumbList, FAQPage and other valid nodes.
+        schemas = [cleaned for schema in schemas if (cleaned := remove_ineligible_software_app(schema)) is not None]
         web_page = next((s for s in schemas if s.get("@type") in ("WebPage", "AboutPage", "ProfilePage")), None)
         if web_page is None:
             web_page = {"@context":"https://schema.org","@type":"WebPage","name":title,"url":canonical}
