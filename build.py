@@ -2619,6 +2619,8 @@ def main():
         entries.append((path, []))
     from extra_calculator_pages import build_extra_pages
     entries.extend(build_extra_pages(head, shell, write))
+    from hub_page import build_hub_page
+    entries.extend(build_hub_page(head, shell, write))
     entries.append(("/emi-calculator/", []))
     not_found()
     normalize_internal_page_links()
