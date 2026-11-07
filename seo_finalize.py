@@ -128,8 +128,18 @@ def remove_ineligible_software_app_from_html(raw, path):
 
 
 def remove_ineligible_software_app(node):
-    """Remove Google SoftwareApplication rich-result markup without inventing ratings."""
+    """Remove ineligible app rich-result nodes while preserving their page-level entity links."""
     if isinstance(node, list):
+        apps = [item for item in node if isinstance(item, dict) and item.get("@type") == "WebApplication"]
+        pages = [item for item in node if isinstance(item, dict) and item.get("@type") in ("WebPage", "AboutPage", "ProfilePage") ]
+        for app in apps:
+            matching_pages = [page for page in pages if app.get("url") and page.get("url") == app.get("url")]
+            if not matching_pages and len(pages) == 1:
+                matching_pages = pages
+            for page in matching_pages:
+                for key in ("author", "publisher", "citation"):
+                    if key in app and key not in page:
+                        page[key] = app[key]
         return [cleaned for item in node if (cleaned := remove_ineligible_software_app(item)) is not None]
     if isinstance(node, dict):
         if node.get("@type") == "WebApplication":
