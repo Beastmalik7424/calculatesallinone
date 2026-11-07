@@ -22,6 +22,8 @@ assert.equal(percentageDifference(1e308,0).percentage,200);
 assert.throws(()=>percentageDifference(0,0),/Both values cannot be zero/);
 assert.throws(()=>percentageDifference(-1,10),/non-negative values/);
 assert.throws(()=>percentageDifference(1,Infinity),/finite numbers/);
+assert.deepEqual(percentageDifference(Number.MIN_VALUE,Number.MIN_VALUE),{difference:0,average:Number.MIN_VALUE,percentage:0});
+assert.equal(percentageDifference(Number.MIN_VALUE,Number.MIN_VALUE*2).average,Number.MIN_VALUE*2);
 assert.equal(percentage(-25,100),-25);
 assert.equal(percentageShare(-45,250),-18);
 assert.equal(percentage(1e308,100),1e308);
