@@ -112,6 +112,21 @@ def extract_faq_items(raw):
 def word_count(value):
     return len(strip_tags(value).split())
 
+def remove_ineligible_software_app_from_html(raw, path):
+    """Strip WebApplication nodes from JSON-LD on pages excluded from normal SEO finalization."""
+    pattern = r'<script\\b[^>]*type="application/ld\\+json"[^>]*>(.*?)</script>'
+    def clean_script(match):
+        try:
+            parsed = json.loads(match.group(1))
+        except json.JSONDecodeError as exc:
+            raise SystemExit("Invalid JSON-LD in " + path + ": " + str(exc))
+        cleaned = remove_ineligible_software_app(parsed)
+        if cleaned is None:
+            return ""
+        return '<script type="application/ld+json">' + json.dumps(cleaned, ensure_ascii=False, separators=(",", ":")) + '</script>'
+    return re.sub(pattern, clean_script, raw, flags=re.S | re.I)
+
+
 def remove_ineligible_software_app(node):
     """Remove Google SoftwareApplication rich-result markup without inventing ratings."""
     if isinstance(node, list):
@@ -285,6 +300,7 @@ def main():
             if head_count != 1:
                 raise SystemExit("Missing or malformed head element: " + path)
         if path in noindex:
+            raw = remove_ineligible_software_app_from_html(raw, path)
             file.write_text(raw, encoding="utf-8")
             continue
         lang_match = re.search(r'<html lang="([^"]+)"', raw)
