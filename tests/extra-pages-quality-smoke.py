@@ -89,8 +89,7 @@ for slug, spec in CASES.items():
     scripts = re.findall(r'<script[^>]+type="application/ld\+json"[^>]*>(.*?)</script>', source, re.S)
     schemas = [json.loads(item) for item in scripts]
     types = {schema.get("@type") for schema in schemas}
-    assert "WebApplication" in types, f"Missing WebApplication schema: {slug}"
-    assert any(schema.get("@type") == "WebApplication" and schema.get("author", {}).get("@id") == "https://calculateallinone.vercel.app/#maintainer" and schema.get("publisher", {}).get("@id") == "https://calculateallinone.vercel.app/#organization" for schema in schemas), f"Missing truthful author/publisher entity links: {slug}"
+    assert "WebApplication" not in types, f"Ineligible SoftwareApplication rich-result markup must be omitted: {slug}"
     assert "BreadcrumbList" in types, f"Missing breadcrumb schema: {slug}"
     expected_domain = {
         "percentage-calculator": "openstax.org",
