@@ -2251,7 +2251,7 @@ def home_app_page(lang):
     side_title = "Designed for quick answers" if not urdu else "فوری جواب کے لیے آسان ڈیزائن"
     side_desc = "Clear buttons, readable results, and useful everyday tools in one place." if not urdu else "آسان بٹن، واضح نتائج اور روزمرہ کے مفید ٹولز ایک جگہ۔"
     calc_title = "Standard Calculator" if not urdu else "معیاری کیلکولیٹر"
-    tool_intro = 'Choose a calculator, or browse the <a class="text-sky-800 dark:text-sky-300 underline" href="/money/">Money and Business</a> and <a class="text-sky-800 dark:text-sky-300 underline" href="/math/">Math and Converters</a> hubs.' if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
+    tool_intro = 'Choose a calculator, or browse the <a class="text-sky-800 dark:text-sky-300 underline" href="/free-online-calculators/">complete free online calculators guide</a>. You can also explore the <a class="text-sky-800 dark:text-sky-300 underline" href="/money/">Money and Business</a> and <a class="text-sky-800 dark:text-sky-300 underline" href="/math/">Math and Converters</a> hubs.' if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
     free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
     hero_ui = CALC_UI
     if urdu:
@@ -2574,7 +2574,10 @@ def main():
             'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
         ]),
         ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
-            'For corrections, feedback or questions about a tool, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
+            'For corrections, feedback, accessibility problems, Urdu translation fixes or questions about a calculator, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
+            "To help us reproduce a calculation issue, identify the calculator and include its full page URL, the exact input values and units you entered, the result displayed, and the result you expected. If the issue depends on a particular sequence, describe the steps and options you selected. You can also include the source or formula that supports the expected result.",
+            "We read every message. A report with specific inputs, units and an expected result gives us something that can be checked. A general statement that a result looks wrong may not provide enough information to reproduce the issue, and we may need more details before we can confirm it.",
+            'When a formula or content error is confirmed, we correct the affected tool page and retest the calculator before publishing the update. The <a class="' + LINK + '" href="/editorial-policy/">Editorial Policy</a> explains the correction process. For information about personal information and site data, read the <a class="' + LINK + '" href="/privacy/">Privacy Policy</a>. Please do not send passwords, payment details, medical records or other sensitive personal information. We do not promise a fixed response time.',
         ]),
     ]
     for path, title, desc, h1, paras in static_pages:
@@ -2606,10 +2609,13 @@ def main():
             ]
         elif path == "/affiliate-disclosure/":
             paras = [
-                "CalculatesAll is free to use. Advertising is not currently enabled on the site. If ads are enabled in the future, they will be separated from calculator results, buttons and navigation.",
-                "CalculatesAll does not currently use affiliate links. Any future affiliate relationship will be disclosed beside relevant links and on this page.",
-                "Advertising does not determine calculator formulas, worked examples or results. We do not publish paid reviews, invented ratings or undisclosed sponsored editorial content.",
-                'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
+                "CalculatesAll is free to use. Advertising is not enabled on the site at present. No advertisements are currently displayed, and this page does not represent that an advertising programme is active. If advertising is enabled in the future, it will be clearly separated from calculator results, buttons and navigation.",
+                "CalculatesAll does not currently have active affiliate links. Links in the Marketplace guide are official information or sign-up links, not affiliate links, and no commission tracking is active by default. No visitor should treat an ordinary marketplace link as an endorsement or an affiliate recommendation.",
+                "If Google AdSense is considered in the future, advertising will depend on Google approval, applicable consent requirements, policy compliance and correctly configured publisher and ad-unit details. The site will not use placeholder publisher IDs or invented ad-slot IDs.",
+                "Advertising does not determine calculator formulas, worked examples or results. The same calculation method applies regardless of advertising. We do not publish paid reviews, invented ratings or sponsored content presented as independent editorial content.",
+                "An advertisement is not an endorsement by CalculatesAll. Advertisers and their partners control their own offers and destination pages, so visitors should review third-party terms before taking action. The Privacy Policy explains how advertising cookies and privacy choices are addressed if advertising is introduced.",
+                "If a genuine affiliate relationship is introduced later, it will be clearly labelled beside the relevant link and explained on this page before or when visitors use it. Until then, no affiliate links or commission-based tracking are active.",
+                'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
             ]
         elif path == "/about/":
             # ABOUT_EXTRA is already supplied by the About page definition above.
