@@ -15,13 +15,56 @@ assert.match(scheduleRegion[1], /\brole="region"/, "Scrollable EMI schedule must
 assert.match(scheduleRegion[1], /\baria-label="Repayment schedule"/, "Scrollable EMI schedule must have an accessible name");
 assert.ok(html.includes('property="og:image" content="https://calculateallinone.vercel.app/assets/og-image.png"'), "EMI page must use the generated canonical social preview image");
 assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "EMI page must expose a large social preview");
-assert.equal((html.match(/"@type":"FAQPage"/g) || []).length, 1, "EMI page must contain exactly one FAQPage schema block");
-const appSchemaStart = html.indexOf('<script type="application/ld+json" id="app-schema">') + '<script type="application/ld+json" id="app-schema">'.length;
-const appSchemaEnd = html.indexOf("</script>", appSchemaStart);
-assert.ok(appSchemaStart >= 0 && appSchemaEnd > appSchemaStart, "EMI WebApplication schema must exist");
-const appSchema = JSON.parse(html.slice(appSchemaStart, appSchemaEnd));
-assert.equal(appSchema.url, "https://calculateallinone.vercel.app/emi-calculator/", "WebApplication schema URL must match canonical URL");
-assert.equal(appSchema.inLanguage, "en", "WebApplication schema language must match document language");
+const schemaBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
+  .map(([, raw]) => JSON.parse(raw));
+const schemas = schemaBlocks.flatMap(schema => Array.isArray(schema) ? schema : [schema]);
+const byType = type => schemas.filter(schema => schema["@type"] === type);
+assert.equal(byType("FAQPage").length, 1, "EMI page must contain exactly one FAQPage schema block");
+assert.equal(byType("WebApplication").length, 0, "EMI page must not publish ineligible SoftwareApplication rich-result markup");
+assert.equal(byType("WebSite").length, 1, "EMI page must link to the canonical WebSite entity");
+assert.equal(byType("Organization").length, 1, "EMI page must link to the canonical Organization entity");
+assert.equal(byType("Person").length, 1, "EMI page must link to the named maintainer entity");
+assert.equal(byType("WebPage").length, 1, "EMI page must declare exactly one WebPage entity");
+assert.equal(byType("BreadcrumbList").length, 1, "EMI page must describe its visible breadcrumb trail");
+const siteSchema = byType("WebSite")[0];
+assert.equal(siteSchema["@id"], "https://calculateallinone.vercel.app/#website");
+assert.equal(siteSchema.url, "https://calculateallinone.vercel.app/");
+assert.equal(siteSchema.publisher["@id"], "https://calculateallinone.vercel.app/#organization");
+const organizationSchema = byType("Organization")[0];
+assert.equal(organizationSchema["@id"], "https://calculateallinone.vercel.app/#organization");
+assert.equal(organizationSchema.url, "https://calculateallinone.vercel.app/");
+assert.ok(organizationSchema.sameAs.includes("https://github.com/Beastmalik7424/calculatesallinone"));
+const personSchema = byType("Person")[0];
+assert.equal(personSchema["@id"], "https://calculateallinone.vercel.app/#maintainer");
+assert.equal(personSchema.worksFor["@id"], organizationSchema["@id"]);
+const pageSchema = byType("WebPage")[0];
+assert.equal(pageSchema.url, "https://calculateallinone.vercel.app/emi-calculator/");
+assert.equal(pageSchema.author["@id"], personSchema["@id"]);
+assert.equal(pageSchema.publisher["@id"], organizationSchema["@id"]);
+assert.equal(pageSchema.isPartOf["@id"], siteSchema["@id"]);
+assert.equal(pageSchema.breadcrumb["@id"], "https://calculateallinone.vercel.app/emi-calculator/#breadcrumb");
+const breadcrumbSchema = byType("BreadcrumbList")[0];
+assert.equal(breadcrumbSchema["@id"], "https://calculateallinone.vercel.app/emi-calculator/#breadcrumb");
+assert.deepEqual(
+  breadcrumbSchema.itemListElement.map(item => [item.position, item.name, item.item]),
+  [
+    [1, "Browse all free calculators", "https://calculateallinone.vercel.app/"],
+    [2, "Money and Business", "https://calculateallinone.vercel.app/money/"],
+    [3, "EMI Calculator", "https://calculateallinone.vercel.app/emi-calculator/"]
+  ],
+  "Breadcrumb JSON-LD must match the visible Home > Money and Business > EMI Calculator trail"
+);
+const generatedEmiPath = "public/emi-calculator/index.html";
+if (fs.existsSync(generatedEmiPath)) {
+  const generatedHtml = fs.readFileSync(generatedEmiPath, "utf8");
+  const generatedSchemas = [...generatedHtml.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
+    .map(([, raw]) => JSON.parse(raw)).flatMap(schema => Array.isArray(schema) ? schema : [schema]);
+  const generatedTypes = type => generatedSchemas.filter(schema => schema["@type"] === type);
+  for (const type of ["WebSite", "Organization", "Person", "WebPage", "BreadcrumbList", "FAQPage"]) {
+    assert.equal(generatedTypes(type).length, 1, "Generated EMI page must retain exactly one " + type + " entity");
+  }
+  assert.equal(generatedTypes("WebApplication").length, 0, "Generated EMI page must not reintroduce WebApplication markup");
+}
 
 // Regression guard: the standalone EMI page must retain global site navigation and a centered, responsive calculator column.
 assert.match(html, /<nav aria-label="Main" class="site-nav">[\s\S]*?class="ca-calculator-carousel"[\s\S]*?data-tool-shortcut="emi-calculator"[\s\S]*?aria-current="page"[\s\S]*?<\/nav>/, "EMI page must expose the active calculator carousel in its existing navigation row");
