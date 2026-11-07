@@ -114,7 +114,7 @@ def word_count(value):
 
 def remove_ineligible_software_app_from_html(raw, path):
     """Strip WebApplication nodes from JSON-LD on pages excluded from normal SEO finalization."""
-    pattern = r'<script\\b[^>]*type="application/ld\\+json"[^>]*>(.*?)</script>'
+    pattern = r'<script\b[^>]*type="application/ld\+json"[^>]*>(.*?)</script>'
     def clean_script(match):
         try:
             parsed = json.loads(match.group(1))
