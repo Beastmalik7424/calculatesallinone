@@ -15,7 +15,7 @@ missing = sorted(sitemap_urls - listed)
 stale = sorted(listed - sitemap_urls)
 assert not missing, "llms.txt omits sitemap pages: " + ", ".join(missing)
 assert not stale, "llms.txt includes URLs outside the indexable sitemap: " + ", ".join(stale)
-assert len(sitemap_urls) == 40, f"Expected 40 sitemap URLs after adding the percentage-difference calculator, found {len(sitemap_urls)}"
+assert len(sitemap_urls) == 41, f"Expected 41 sitemap URLs after adding the free online calculators hub, found {len(sitemap_urls)}"
 calorie_url = SITE + "/calorie-calculator/"
 assert calorie_url in sitemap_urls, "Adult calorie calculator must be indexable in the sitemap"
 assert calorie_url in listed, "llms.txt must describe the published adult calorie calculator"

@@ -2056,6 +2056,7 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
             '<section aria-labelledby="about-tools" class="mt-8">'
             '<h2 id="about-tools" class="' + H2 + '">What calculators and tools are available?</h2>'
             '<p class="' + P + '">The money tools include the <a class="' + LINK + '" href="/profit-loss-calculator/">Profit and Loss Calculator</a>, <a class="' + LINK + '" href="/discount-calculator/">Discount Calculator</a>, <a class="' + LINK + '" href="/emi-calculator/">EMI Calculator</a>, <a class="' + LINK + '" href="/zakat-calculator/">Zakat Calculator</a> and <a class="' + LINK + '" href="/compound-interest-calculator/">Compound Interest Calculator</a>. Date and measurement tools include the <a class="' + LINK + '" href="/age-calculator/">Age Calculator</a>, <a class="' + LINK + '" href="/years-to-days-calculator/">Years to Days Calculator</a>, <a class="' + LINK + '" href="/date-calculator/">Date Difference Calculator</a>, <a class="' + LINK + '" href="/query-calculator/">Query Calculator</a> and <a class="' + LINK + '" href="/unit-converter/">Unit Converter</a>.</p>'
+            '<p class="' + P + '">For the complete list of free calculators, see the <a class="' + LINK + '" href="/free-online-calculators/">free online calculators guide</a>.</p>'
             '<p class="' + P + '">Browse the <a class="' + LINK + '" href="/money/">Money and Business</a>, <a class="' + LINK + '" href="/math/">Math and Converters</a>, <a class="' + LINK + '" href="/time/">Date and Time</a>, <a class="' + LINK + '" href="/health/">Health</a> and <a class="' + LINK + '" href="/worship/">Worship and Daily Use</a> categories to find related tools and their stated scope.</p>'
             '<p class="' + P + '">The Query Calculator accepts supported plain-language time-conversion questions, such as asking how many days are in 80 years; it does not try to answer arbitrary questions.</p>'
             '<p class="' + P + '">Math tools include the <a class="' + LINK + '" href="/percentage-calculator/">Percentage Calculator</a>, <a class="' + LINK + '" href="/percentage-difference-calculator/">Percentage Difference Calculator</a> and <a class="' + LINK + '" href="/fraction-calculator/">Fraction Calculator</a>. Everyday tools include the <a class="' + LINK + '" href="/standard-calculator/">Standard Calculator</a>, <a class="' + LINK + '" href="/bmi-calculator/">adult BMI calculator</a>, <a class="' + LINK + '" href="/tasbih-counter/">Tasbih Counter</a> and <a class="' + LINK + '" href="/stopwatch/">Stopwatch</a>.</p>'
@@ -2619,6 +2620,8 @@ def main():
         entries.append((path, []))
     from extra_calculator_pages import build_extra_pages
     entries.extend(build_extra_pages(head, shell, write))
+    from hub_page import build_hub_page
+    entries.extend(build_hub_page(head, shell, write))
     entries.append(("/emi-calculator/", []))
     not_found()
     normalize_internal_page_links()

@@ -3,6 +3,7 @@
 /affiliate-disclosure/
 /age-calculator/
 /bmi-calculator/
+/calorie-calculator/
 /compound-interest-calculator/
 /contact/
 /date-calculator/
@@ -10,11 +11,13 @@
 /editorial-policy/
 /emi-calculator/
 /fraction-calculator/
+/free-online-calculators/
 /health/
 /math/
 /methodology/
 /money/
 /percentage-calculator/
+/percentage-difference-calculator/
 /privacy/
 /profit-loss-calculator/
 /query-calculator/
