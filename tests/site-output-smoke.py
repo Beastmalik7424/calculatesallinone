@@ -142,7 +142,7 @@ for phrase in ("page url", "input values", "expected result", "sensitive persona
     assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 assert "Maintained by <a" in profit_html and "Muhammad Fayyaz Adeel" in profit_html and 'href="/about/"' in profit_html, "Calculator guide should have an honest maintainer byline"
-assert '"author":{"@id":"' + SITE + '/#maintainer"}' in profit_html, "Calculator WebApplication schema should reference the named maintainer"
+assert any(node.get("@type") == "WebPage" and node.get("author", {}).get("@id") == SITE + "/#maintainer" for node in profit_nodes), "Calculator WebPage schema should reference the named maintainer"
 assert '"description":"Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."' in profit_html, "Calculator schema should use the same organization description as the homepage"
 # Only pages flagged by the completed crawler get metadata changes; keep copy page-specific.
 for path in ("/affiliate-disclosure/", "/compound-interest-calculator/", "/contact/", "/date-calculator/", "/discount-calculator/", "/fraction-calculator/", "/stopwatch/", "/worship/", "/zakat-calculator/"):
@@ -637,9 +637,7 @@ for url in urls:
     if url.endswith("/emi-calculator/"):
         assert len(faq_schemas) == 1, "EMI page must have exactly one FAQPage schema generated from visible FAQ content"
         app_schemas = [item for item in parsed_schemas if item.get("@type") == "WebApplication"]
-        assert len(app_schemas) == 1, "EMI page must retain exactly one WebApplication schema"
-        assert app_schemas[0].get("url") == url, "EMI WebApplication schema URL must match its canonical URL"
-        assert app_schemas[0].get("inLanguage") == page_lang, "EMI WebApplication schema language must match the HTML language"
+        assert not app_schemas, "EMI page must omit SoftwareApplication rich-result markup without genuine public ratings or reviews"
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
             if url.endswith("/ur/bmi-calculator/"):

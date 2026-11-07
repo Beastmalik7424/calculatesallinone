@@ -97,7 +97,7 @@ def main():
         for question in spec["questions"]:
             assert f"<summary" in html and question in html, f"Missing visible FAQ: {question!r}"
         nodes = schemas_in(html)
-        assert any(node.get("@type") == "WebApplication" and node.get("applicationCategory") == spec["app"] for node in nodes), f"Missing WebApplication schema: /{slug}/"
+        assert not any(node.get("@type") == "WebApplication" for node in nodes), f"Ineligible WebApplication rich-result markup must be omitted: /{slug}/"
         crumbs = [node for node in nodes if node.get("@type") == "BreadcrumbList"]
         assert len(crumbs) == 1, f"Expected one BreadcrumbList: /{slug}/"
         items = crumbs[0].get("itemListElement", [])

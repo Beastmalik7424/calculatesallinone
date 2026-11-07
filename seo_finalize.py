@@ -112,6 +112,47 @@ def extract_faq_items(raw):
 def word_count(value):
     return len(strip_tags(value).split())
 
+def remove_ineligible_software_app_from_html(raw, path):
+    """Strip WebApplication nodes from JSON-LD on pages excluded from normal SEO finalization."""
+    pattern = r'<script\b[^>]*type="application/ld\+json"[^>]*>(.*?)</script>'
+    def clean_script(match):
+        try:
+            parsed = json.loads(match.group(1))
+        except json.JSONDecodeError as exc:
+            raise SystemExit("Invalid JSON-LD in " + path + ": " + str(exc))
+        cleaned = remove_ineligible_software_app(parsed)
+        if cleaned is None:
+            return ""
+        return '<script type="application/ld+json">' + json.dumps(cleaned, ensure_ascii=False, separators=(",", ":")) + '</script>'
+    return re.sub(pattern, clean_script, raw, flags=re.S | re.I)
+
+
+def remove_ineligible_software_app(node):
+    """Remove ineligible app rich-result nodes while preserving their page-level entity links."""
+    if isinstance(node, list):
+        apps = [item for item in node if isinstance(item, dict) and item.get("@type") == "WebApplication"]
+        pages = [item for item in node if isinstance(item, dict) and item.get("@type") in ("WebPage", "AboutPage", "ProfilePage") ]
+        for app in apps:
+            matching_pages = [page for page in pages if app.get("url") and page.get("url") == app.get("url")]
+            if not matching_pages and len(pages) == 1:
+                matching_pages = pages
+            for page in matching_pages:
+                for key in ("author", "publisher", "citation"):
+                    if key in app and key not in page:
+                        page[key] = app[key]
+        return [cleaned for item in node if (cleaned := remove_ineligible_software_app(item)) is not None]
+    if isinstance(node, dict):
+        if node.get("@type") == "WebApplication":
+            return None
+        cleaned = {}
+        for key, value in node.items():
+            cleaned_value = remove_ineligible_software_app(value)
+            if cleaned_value is not None:
+                cleaned[key] = cleaned_value
+        return cleaned
+    return node
+
+
 def normalize_meta(raw, path, lang):
     title_match = re.search(r"<title>(.*?)</title>", raw, re.S)
     desc_match = re.search(r'<meta name="description" content="([^"]*)"', raw)
@@ -269,6 +310,7 @@ def main():
             if head_count != 1:
                 raise SystemExit("Missing or malformed head element: " + path)
         if path in noindex:
+            raw = remove_ineligible_software_app_from_html(raw, path)
             file.write_text(raw, encoding="utf-8")
             continue
         lang_match = re.search(r'<html lang="([^"]+)"', raw)
@@ -289,6 +331,10 @@ def main():
         if web_page is None:
             web_page = {"@context":"https://schema.org","@type":"WebPage","name":title,"url":canonical}
             schemas.append(web_page)
+        # Google requires a genuine app rating or review for SoftwareApplication rich results.
+        # The site has no verified public app reviews, so remove this optional rich-result type
+        # while transferring truthful author/publisher/citation links to the page entity.
+        schemas = remove_ineligible_software_app(schemas)
         web_page["name"] = title
         web_page["url"] = canonical
         # Keep dateModified only for pages with an explicit, page-specific substantive update.
