@@ -16,6 +16,16 @@ for page, slugs in checks.items():
         assert f'href="/{slug}/"' in html, (page, slug)
         assert (Path("public") / slug / "index.html").exists(), slug
 
+for page, slugs in {
+    "percentage-calculator": ["percentage-difference-calculator"],
+    "percentage-difference-calculator": ["percentage-calculator", "standard-calculator", "fraction-calculator"],
+}.items():
+    html = (Path("public") / page / "index.html").read_text(encoding="utf-8")
+    assert '<nav aria-label="Related calculators"' in html, page
+    for slug in slugs:
+        assert f'href="/{slug}/"' in html, (page, slug)
+        assert (Path("public") / slug / "index.html").exists(), slug
+
 # Pages without a genuinely related tool must not receive unrelated generic recommendations.
 for page in ("tasbih-counter", "bmi-calculator", "zakat-calculator", "stopwatch", "unit-converter"):
     html = (Path("public") / page / "index.html").read_text(encoding="utf-8")
@@ -24,7 +34,7 @@ for page in ("tasbih-counter", "bmi-calculator", "zakat-calculator", "stopwatch"
 # The homepage and category hubs continue to expose all core journeys.
 for page, slugs in {
     "/": ["percentage-calculator", "fraction-calculator", "compound-interest-calculator", "date-calculator"],
-    "/math/": ["percentage-calculator", "fraction-calculator"],
+    "/math/": ["percentage-calculator", "percentage-difference-calculator", "fraction-calculator"],
     "/money/": ["compound-interest-calculator"],
     "/time/": ["date-calculator"],
 }.items():

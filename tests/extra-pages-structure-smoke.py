@@ -20,6 +20,20 @@ PAGES = {
         "related": ["discount-calculator", "profit-loss-calculator", "fraction-calculator"],
         "headings": ["Worked percentage examples", "Discounts and tax", "Percentage increase and decrease"],
     },
+    "percentage-difference-calculator": {
+        "hub": "math",
+        "app": "UtilitiesApplication",
+        "questions": [
+            "What is the percentage difference between 80 and 100?",
+            "Is percentage difference the same as percentage change?",
+            "Does the order of the two values matter?",
+            "What happens when one value is zero?",
+            "What happens when both values are zero?",
+            "Can I compare values with different units?",
+        ],
+        "related": ["percentage-calculator", "standard-calculator", "fraction-calculator"],
+        "headings": ["What percentage difference measures", "Formula and worked example", "Percentage difference vs percentage change"],
+    },
     "fraction-calculator": {
         "hub": "math",
         "app": "UtilitiesApplication",
@@ -99,7 +113,7 @@ def main():
         for target in spec["related"]:
             assert f'href="/{target}/"' in related, f"Missing related link /{target}/ from /{slug}/"
         print(f"PASS: /{slug}/ structure, breadcrumbs, schema, FAQs and related links")
-    print("PASS: all four extra calculator pages have complete semantic navigation and helpful FAQs")
+    print("PASS: all five extra calculator pages have complete semantic navigation and helpful FAQs")
 
 if __name__ == "__main__":
     main()

@@ -13,7 +13,8 @@ const {chromium}=require("playwright");
    for(const [path,fields,expected] of [
     ["/fraction-calculator/",[["a","1"],["b","2"],["c","1"],["d","3"]],"5/6"],
     ["/compound-interest-calculator/",[["principal","1000"],["rate","10"],["years","1"],["frequency","2"]],"1,102.50"],
-    ["/date-calculator/",[["start","2024-02-28"],["end","2024-03-01"]],"2 days"]
+    ["/date-calculator/",[["start","2024-02-28"],["end","2024-03-01"]],"2 days"],
+    ["/percentage-difference-calculator/",[["first","40"],["second","60"]],"40%"]
    ]){
     const response=await page.goto(base+path);
     if(!response||response.status()!==200)throw Error(path+" HTTP failure at "+viewport.width+"px");
@@ -24,6 +25,17 @@ const {chromium}=require("playwright");
     await form.locator("button[type=submit]").click();
     const result=await page.locator("#extra-result").innerText();
     if(!result.includes(expected))throw Error(path+" wrong result at "+viewport.width+"px: "+result);
+    if(path==="/percentage-difference-calculator/"){
+     if(await page.locator("#first").getAttribute("min")!=="0"||await page.locator("#second").getAttribute("min")!=="0")throw Error("Percentage difference inputs must reject negative values at the HTML level");
+     await page.locator("#first").fill("60");await page.locator("#second").fill("40");await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("40%"))throw Error("Swapping percentage-difference inputs must preserve the result");
+     await page.locator("#first").fill("0");await page.locator("#second").fill("10");await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("200%"))throw Error("Zero versus a positive value should return 200%");
+     await page.locator("#first").fill("0");await page.locator("#second").fill("0");await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("Both values cannot be zero"))throw Error("Two zero values must be rejected");
+     await page.locator("#first").fill("5e-324");await page.locator("#second").fill("5e-324");await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("Average: 4.940656e-324"))throw Error("Equal minimum positive values must retain a representable average");
+    }
     if(errors.length)throw Error(path+" browser errors: "+errors.join("; "));
     console.log(path+" "+viewport.width+"px PASS: "+result);
    }
@@ -135,7 +147,7 @@ const {chromium}=require("playwright");
   }
 
   for(const width of [320,360,390,1366]){
-   for(const path of ["/","/percentage-calculator/","/fraction-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
+   for(const path of ["/","/percentage-calculator/","/percentage-difference-calculator/","/fraction-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
     const page=await browser.newPage({viewport:{width,height:width===1366?768:844}});
     const response=await page.goto(base+path);
     if(!response||response.status()!==200)throw Error(path+" HTTP failure at "+width+"px");
