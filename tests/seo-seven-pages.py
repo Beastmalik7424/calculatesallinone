@@ -84,7 +84,7 @@ for path, raw in pages.items():
             check(any(obj.get("@type") == "Organization" and obj.get("@id") == SITE + "/#organization" for obj in schemas), path + ": missing canonical Organization entity")
             check(any(obj.get("@type") == "Person" and obj.get("@id") == SITE + "/#maintainer" for obj in schemas), path + ": missing canonical maintainer entity")
         if path == "/discount-calculator/":
-            check(any(obj.get("@type") == "WebApplication" for obj in schemas), path + ": missing WebApplication")
+            check(not any(obj.get("@type") == "WebApplication" for obj in schemas), path + ": ineligible WebApplication rich-result markup must be omitted")
             check(any(obj.get("@type") == "FAQPage" for obj in schemas), path + ": missing FAQPage for visible FAQs")
             check(visible_main(raw).count("?") >= 3, path + ": expected at least three visible FAQ questions")
     if path in ("/about/", "/discount-calculator/", "/editorial-policy/", "/health/"):
