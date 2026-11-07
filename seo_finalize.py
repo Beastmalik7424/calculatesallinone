@@ -330,7 +330,7 @@ def main():
         # Google requires a genuine app rating or review for SoftwareApplication rich results.
         # The site has no verified public app reviews, so remove this optional rich-result type
         # while preserving WebPage, Organization, BreadcrumbList, FAQPage and other valid nodes.
-        schemas = [cleaned for schema in schemas if (cleaned := remove_ineligible_software_app(schema)) is not None]
+        schemas = remove_ineligible_software_app(schemas)
         web_page = next((s for s in schemas if s.get("@type") in ("WebPage", "AboutPage", "ProfilePage")), None)
         if web_page is None:
             web_page = {"@context":"https://schema.org","@type":"WebPage","name":title,"url":canonical}
