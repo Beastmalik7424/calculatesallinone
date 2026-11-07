@@ -11,7 +11,7 @@ assert pages, "No generated HTML pages found"
 checked = 0
 for path in pages:
     raw = path.read_text(encoding="utf-8")
-    for match in re.finditer(r'<script\\b(?=[^>]*\\btype=["\']application/ld\\+json["\'])(.*?)>(.*?)</script>', raw, re.S | re.I):
+    for match in re.finditer(r'<script\b(?=[^>]*\btype=["\']application/ld\+json["\'])(.*?)>(.*?)</script>', raw, re.S | re.I):
         parsed = json.loads(match.group(2))
         nodes = parsed if isinstance(parsed, list) else parsed.get("@graph", [parsed]) if isinstance(parsed, dict) else []
         assert not any(node.get("@type") == "WebApplication" for node in nodes if isinstance(node, dict)), (
