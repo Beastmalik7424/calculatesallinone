@@ -138,9 +138,13 @@ setValues({"b-kg":70,"b-cm":170,"b-ft":"5abc","b-in":"12"});
 assert.equal(submit("bmi-form"), true, "form submit must prevent browser navigation/reload");
 assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i);
 assert.match(elements["bmi-result"].textContent, /BMI is a general screening tool/i);
+assert.match(elements["bmi-result"].textContent, /category is based on the unrounded BMI value/i, "BMI result must explain that category uses the unrounded value");
 assert.equal(elements["b-ft-error"].textContent, "", "disabled hidden feet field must not be validated");
 for (const [kg, cm, expected, label] of [
   [63.25,170,"21.9","normal weight"],[70,170,"24.2","normal weight"],
+  [53.4,170,"18.5","underweight"], // 18.4775 rounds to 18.5 but remains below the exact 18.5 threshold.
+  [72.2,170,"25.0","normal weight"], // 24.9827 rounds to 25.0 but remains below the exact 25 threshold.
+  [86.6,170,"30.0","overweight"], // 29.9654 rounds to 30.0 but remains below the exact 30 threshold.
   [72.25,170,"25.0","overweight"],[86.7,170,"30.0","obesity"]
 ]) {
   setValues({"b-kg":kg,"b-cm":cm}); submit("bmi-form");

@@ -145,6 +145,10 @@ assert len(bmi_breadcrumbs) == 1 and bmi_breadcrumbs[0].get("@id") == SITE + "/b
 assert [item["name"] for item in bmi_breadcrumbs[0]["itemListElement"]] == ["Home", "Health", "BMI Calculator"], "BMI breadcrumb schema must match the visible page hierarchy"
 assert "Maintained by <a" in bmi_html and "Muhammad Fayyaz Adeel" in bmi_html and 'href="/about/"' in bmi_html, "BMI page schema author must be supported by a visible maintainer byline"
 assert 'href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"' in bmi_html, "BMI structured citation must be visible on the page"
+assert "category using the unrounded BMI" in bmi_html and "rounds only the displayed number to one decimal place" in bmi_html, "BMI guidance must distinguish exact category thresholds from rounded display values"
+assert "rounds BMI to one decimal place before assigning the displayed category" not in bmi_html, "BMI guidance must not claim that rounded values determine the category"
+health_html = output_for_url(SITE + "/health/").read_text(encoding="utf-8")
+assert "unrounded BMI" in health_html and "rounds only the displayed number to one decimal place" in health_html, "Health hub BMI guidance must match the exact-threshold calculator behavior"
 assert not [node for node in bmi_nodes if node.get("@type") == "WebApplication"], "BMI page must not restore ineligible WebApplication rich-result markup"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 profit_nodes = jsonld_nodes(profit_html)

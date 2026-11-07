@@ -1699,7 +1699,7 @@ BMI_GUIDE = [
         "For feet and inches, convert total height to centimetres with (feet × 12 + inches) × 2.54. If kg is selected, the calculator uses the metric formula. If lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches squared.",
     ]),
     ("Adult BMI categories", [
-        "For adults, the standard WHO categories are underweight below 18.5, normal weight from 18.5 to below 25, overweight from 25 to below 30, and obesity from 30 upward. This calculator rounds BMI to one decimal place before assigning the displayed category. Values near a boundary can therefore display in the next category after rounding.",
+        "For adults, the standard WHO categories are underweight below 18.5, normal weight from 18.5 to below 25, overweight from 25 to below 30, and obesity from 30 upward. This calculator assigns the category using the unrounded BMI and rounds only the displayed number to one decimal place. A displayed value of 25.0 can therefore remain in the normal weight category when the exact BMI is just below 25.",
         "These categories are population-level screening ranges. They do not determine whether an individual is healthy, and they should not be used as a personal diagnosis or treatment plan.",
     ]),
     ("Worked examples", [
@@ -1720,8 +1720,8 @@ BMI_GUIDE = [
 BMI_FAQ = [
     ("Can I use this BMI calculator for children or teenagers?", "No. This calculator uses adult BMI categories. Children and teenagers need age- and sex-specific BMI-for-age growth charts interpreted in the right context."),
     ("Does BMI measure body fat?", "No. BMI uses height and weight only. It cannot directly measure body fat or distinguish muscle from fat."),
-    ("Is a BMI of 25 a diagnosis?", "No. A rounded adult BMI of 25.0 is the start of the overweight screening category, not a diagnosis. A clinician can interpret it with other health information."),
-    ("Why does the category change near a boundary?", "This calculator rounds the calculated BMI to one decimal place before choosing a category. A displayed value of 25.0 is classified in the overweight category."),
+    ("Is a BMI of 25 a diagnosis?", "No. An exact adult BMI of 25.0 is the start of the overweight screening category, not a diagnosis. A displayed value of 25.0 may be rounded from a slightly lower exact BMI, so the category is based on the unrounded value. A clinician can interpret it with other health information."),
+    ("Why can the displayed BMI and category appear to differ near a boundary?", "The category is selected using the unrounded BMI. The displayed number is rounded to one decimal place. For example, an exact BMI of 24.98 displays as 25.0 but remains in the normal weight category. At exactly 25.0, the adult screening category is overweight."),
     ("What should I do with my result?", "Treat it as general information. Discuss concerns or major weight changes with a qualified healthcare professional, especially if you have symptoms or a medical condition."),
 ]
 BMI_SOURCES = 'Adult BMI categories are based on the World Health Organization\'s classification. Read the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" rel="noopener noreferrer">WHO fact sheet on obesity and overweight</a>. BMI is a screening measure and should be interpreted in context.'

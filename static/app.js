@@ -15,7 +15,7 @@
       bmiCmError: "Enter a height from 50 to 260 cm using digits and an optional decimal point.",
       bmiFtError: "Enter a whole number of feet from 1 to 8.",
       bmiInError: "Enter inches from 0 to 11.99 using digits and an optional decimal point.",
-      bmiStrictResult: "Your BMI is {bmi}. Based on the rounded result, this is in the {label} category for adults (WHO).",
+      bmiStrictResult: "Your BMI is {bmi}. The category is based on the unrounded BMI value: {label} for adults (WHO).",
       bmiDisclaimer: "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor.",
       shareResult: "Share result",
       shareSuccess: "Result shared successfully.",
@@ -77,7 +77,7 @@
       bmiCmError: "قد 50 سے 260 سینٹی میٹر کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
       bmiFtError: "فٹ کی مکمل عددی قدر 1 سے 8 کے درمیان درج کریں۔",
       bmiInError: "انچ 0 سے 11.99 کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
-      bmiStrictResult: "آپ کا BMI {bmi} ہے۔ گول کی گئی قدر کے مطابق یہ بالغوں میں {label} کی حد میں آتا ہے (WHO)۔",
+      bmiStrictResult: "آپ کا BMI {bmi} ہے۔ زمرہ غیر گول کی گئی BMI قدر کے مطابق ہے: بالغوں میں {label} (WHO)۔ دکھائی گئی قدر ایک اعشاری جگہ تک گول ہے۔",
       bmiDisclaimer: "BMI ایک عمومی اسکریننگ پیمانہ ہے۔ یہ جسمانی چربی کو براہ راست نہیں ناپتا اور ڈاکٹر کے مشورے کا متبادل نہیں۔",
       shareResult: "نتیجہ شیئر کریں",
       shareSuccess: "نتیجہ کامیابی سے شیئر ہو گیا۔",
@@ -616,9 +616,9 @@
           return
         }
         var roundedBMI = Number(bmi.toFixed(1))
-        var label = roundedBMI < 18.5 ? t("bmiUnder") :
-          roundedBMI < 25 ? t("bmiNormal") :
-          roundedBMI < 30 ? t("bmiOver") : t("bmiObese")
+        var label = bmi < 18.5 ? t("bmiUnder") :
+          bmi < 25 ? t("bmiNormal") :
+          bmi < 30 ? t("bmiOver") : t("bmiObese")
         say("bmi-result", t("bmiStrictResult", { bmi: roundedBMI.toFixed(1), label: label }) + " " + t("bmiDisclaimer"))
       })
       return

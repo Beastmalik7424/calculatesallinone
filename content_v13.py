@@ -33,7 +33,7 @@ HUB_EXTRA = {
             "If your weight changes quickly, if you are pregnant, if you are a child or a teenager, or if you have any health concern, speak to a doctor or qualified health professional. Do not change medicines or diet based only on a calculator result.",
         ]),
         ("How to interpret a BMI result responsibly", [
-            "Before comparing two BMI results, check that weight and height were entered in the correct units and that the same measurement method was used. A small change near a category boundary can move a rounded result into another range, so do not treat one decimal place as a precise measure of health.",
+            "Before comparing two BMI results, check that weight and height were entered in the correct units and that the same measurement method was used. The calculator selects the WHO category using the unrounded BMI and rounds only the displayed number to one decimal place. A displayed value of 25.0 can still be in the normal weight category when the exact BMI is just below 25.",
             "BMI does not account directly for muscle mass, body composition, pregnancy, age-related changes or every individual health factor. It is useful as a screening signal when interpreted with other information, not as a target that every person must reach.",
             "For a more complete assessment, a clinician may consider waist measurement, medical history, blood pressure, laboratory results and changes over time. This category page is general educational information, not personal medical advice. Use the adult BMI tool only for adults and discuss concerns with a qualified health professional.",
         ]),
