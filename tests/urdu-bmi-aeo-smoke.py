@@ -70,17 +70,14 @@ def main():
     for match in re.finditer(r'<script\b[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', raw, re.S | re.I):
         parsed = json.loads(match.group(1))
         schemas.extend(parsed if isinstance(parsed, list) else [parsed])
-    app = next((item for item in schemas if item.get("@type") == "WebApplication"), None)
     page = next((item for item in schemas if item.get("@type") == "WebPage"), None)
     faq = next((item for item in schemas if item.get("@type") == "FAQPage"), None)
     breadcrumb = next((item for item in schemas if item.get("@type") == "BreadcrumbList"), None)
     organization = next((item for item in schemas if item.get("@type") == "Organization"), None)
-    assert app and page and faq and breadcrumb and organization, "Missing WebApplication, WebPage, FAQPage, BreadcrumbList or Organization JSON-LD"
+    assert page and faq and breadcrumb and organization, "Missing WebPage, FAQPage, BreadcrumbList or Organization JSON-LD"
+    assert not any(item.get("@type") == "WebApplication" for item in schemas), "Ineligible SoftwareApplication rich-result markup must be omitted without genuine public ratings or reviews"
     assert "inLanguage" not in breadcrumb, "BreadcrumbList must not use the unsupported inLanguage property"
     assert "https://github.com/Beastmalik7424/calculatesallinone" in organization.get("sameAs", []), "Organization must link to its official source repository"
-    assert app.get("description") == html.unescape(description.group(1)), "WebApplication description must match the visible search description"
-    assert app.get("author", {}).get("@id") == SITE + "/#maintainer", "WebApplication author entity is missing"
-    assert app.get("publisher", {}).get("@id") == SITE + "/#organization", "WebApplication publisher entity is missing"
     assert page.get("author", {}).get("@id") == SITE + "/#maintainer", "WebPage author entity is missing"
     assert page.get("publisher", {}).get("@id") == SITE + "/#organization", "WebPage publisher entity is missing"
     assert page.get("dateModified") == "2026-11-06", "Verified page-specific content update date is missing"
@@ -100,7 +97,7 @@ def main():
     print("PASS: answer-first definition, summary and question-led self-contained sections")
     print("PASS: WHO and South Asian BMI thresholds are distinguished accurately")
     print("PASS: visible authoritative citations, maintainer disclosure and medical-review limitation")
-    print("PASS: WebApplication, WebPage and FAQ structured data match visible content")
+    print("PASS: WebPage, FAQ, BreadcrumbList and Organization structured data match visible content; no unsupported app rating is invented")
     print("PASS: existing BMI form remains present")
     return 0
 
