@@ -129,6 +129,23 @@ about_breadcrumbs = [node for node in about_nodes if node.get("@type") == "Bread
 assert len(about_breadcrumbs) == 1 and [item["name"] for item in about_breadcrumbs[0]["itemListElement"]] == ["Home", "About CalculatesAll"], "About page should expose a matching breadcrumb graph"
 about_people = [node for node in about_nodes if node.get("@type") == "Person" and node.get("@id") == SITE + "/#maintainer"]
 assert len(about_people) == 1 and "Malik Adeel Bhatti" in about_people[0].get("alternateName", []), "Maintainer schema must consistently include the publicly stated alternate name"
+bmi_html = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
+bmi_nodes = jsonld_nodes(bmi_html)
+bmi_pages = [node for node in bmi_nodes if node.get("@type") == "WebPage"]
+assert len(bmi_pages) == 1, "English BMI page must expose exactly one WebPage entity"
+bmi_page = bmi_pages[0]
+assert bmi_page.get("@id") == SITE + "/bmi-calculator/#webpage", "BMI WebPage must have a stable page-specific @id"
+assert bmi_page.get("author", {}).get("@id") == SITE + "/#maintainer", "BMI WebPage author must resolve to the visible maintainer"
+assert bmi_page.get("publisher", {}).get("@id") == SITE + "/#organization", "BMI WebPage publisher must resolve to the site Organization"
+assert bmi_page.get("isPartOf", {}).get("@id") == SITE + "/#website", "BMI WebPage must reference the canonical WebSite"
+assert bmi_page.get("breadcrumb", {}).get("@id") == SITE + "/bmi-calculator/#breadcrumb", "BMI WebPage must reference its own breadcrumb entity"
+assert bmi_page.get("citation") == ["https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"], "BMI WebPage citations must match its visible WHO source"
+bmi_breadcrumbs = [node for node in bmi_nodes if node.get("@type") == "BreadcrumbList"]
+assert len(bmi_breadcrumbs) == 1 and bmi_breadcrumbs[0].get("@id") == SITE + "/bmi-calculator/#breadcrumb", "BMI page must expose one linked BreadcrumbList"
+assert [item["name"] for item in bmi_breadcrumbs[0]["itemListElement"]] == ["Home", "Health", "BMI Calculator"], "BMI breadcrumb schema must match the visible page hierarchy"
+assert "Maintained by <a" in bmi_html and "Muhammad Fayyaz Adeel" in bmi_html and 'href="/about/"' in bmi_html, "BMI page schema author must be supported by a visible maintainer byline"
+assert 'href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"' in bmi_html, "BMI structured citation must be visible on the page"
+assert not [node for node in bmi_nodes if node.get("@type") == "WebApplication"], "BMI page must not restore ineligible WebApplication rich-result markup"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 profit_nodes = jsonld_nodes(profit_html)
 profit_orgs = [node for node in profit_nodes if node.get("@type") == "Organization" and node.get("name") == "CalculatesAll"]
