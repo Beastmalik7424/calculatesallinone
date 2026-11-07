@@ -15,7 +15,7 @@ assert.match(scheduleRegion[1], /\brole="region"/, "Scrollable EMI schedule must
 assert.match(scheduleRegion[1], /\baria-label="Repayment schedule"/, "Scrollable EMI schedule must have an accessible name");
 assert.ok(html.includes('property="og:image" content="https://calculateallinone.vercel.app/assets/og-image.png"'), "EMI page must use the generated canonical social preview image");
 assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "EMI page must expose a large social preview");
-const schemaBlocks = [...html.matchAll(/<script\\b[^>]*type="application\\/ld\\+json"[^>]*>([\\s\\S]*?)<\\/script>/g)]
+const schemaBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
   .map(([, raw]) => JSON.parse(raw));
 const schemas = schemaBlocks.flatMap(schema => Array.isArray(schema) ? schema : [schema]);
 const byType = type => schemas.filter(schema => schema["@type"] === type);
@@ -57,7 +57,7 @@ assert.deepEqual(
 const generatedEmiPath = "public/emi-calculator/index.html";
 if (fs.existsSync(generatedEmiPath)) {
   const generatedHtml = fs.readFileSync(generatedEmiPath, "utf8");
-  const generatedSchemas = [...generatedHtml.matchAll(/<script\\b[^>]*type="application\\/ld\\+json"[^>]*>([\\s\\S]*?)<\\/script>/g)]
+  const generatedSchemas = [...generatedHtml.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
     .map(([, raw]) => JSON.parse(raw)).flatMap(schema => Array.isArray(schema) ? schema : [schema]);
   const generatedTypes = type => generatedSchemas.filter(schema => schema["@type"] === type);
   for (const type of ["WebSite", "Organization", "Person", "WebPage", "BreadcrumbList", "FAQPage"]) {
