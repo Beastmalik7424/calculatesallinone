@@ -1793,6 +1793,24 @@ def tool_page(t):
         {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
         {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION, "logo": SITE_URL + "/assets/favicon.svg", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
+    if t["slug"] == "bmi-calculator":
+        # Link the page entity to the visible maintainer, site publisher, source citation and breadcrumb.
+        # Do not claim medical review, ratings, or a dateModified that has not been verified.
+        schema[1]["@id"] = url + "#breadcrumb"
+        schema.append({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "@id": url + "#webpage",
+            "name": title,
+            "url": url,
+            "description": desc,
+            "author": {"@id": SITE_URL + "/#maintainer"},
+            "publisher": {"@id": SITE_URL + "/#organization"},
+            "isPartOf": {"@id": SITE_URL + "/#website"},
+            "breadcrumb": {"@id": url + "#breadcrumb"},
+            "citation": ["https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"],
+            "inLanguage": "en",
+        })
     related_map = {
         "profit-loss-calculator": [("discount-calculator", "Discount Calculator"), ("percentage-calculator", "Percentage Calculator")],
         "discount-calculator": [("percentage-calculator", "Percentage Calculator"), ("profit-loss-calculator", "Profit and Loss Calculator")],
