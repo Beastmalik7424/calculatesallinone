@@ -34,7 +34,8 @@
   const raw=(Math.abs(normalizedFirst-normalizedSecond)/normalizedAverage)*100;
   const percentage=Math.round(raw*1e12)/1e12;
   const difference=Math.abs(first-second);
-  const average=first/2+second/2;
+  const sum=first+second;
+  const average=Number.isFinite(sum)?sum/2:first/2+second/2;
   if(average===0)throw Error("The average is too small to represent reliably. Enter larger values");
   finite(difference,average,percentage);
   return {difference,average,percentage};
