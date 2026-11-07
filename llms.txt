@@ -9,6 +9,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 ## Main entry points
 
 - [Homepage](https://calculateallinone.vercel.app/): Overview of the available tools.
+- [Free online calculators guide](https://calculateallinone.vercel.app/free-online-calculators/): Complete list of all free calculators, how to choose one, and answers to common questions.
 - [About CalculatesAll](https://calculateallinone.vercel.app/about/): Maintainer, purpose, tools, methods, privacy and limitations.
 - [Calculation methodology](https://calculateallinone.vercel.app/methodology/): Formulas, conversion factors, worked examples and assumptions.
 - [Editorial policy](https://calculateallinone.vercel.app/editorial-policy/): How content is researched, checked, corrected and updated.
