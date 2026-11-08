@@ -62,8 +62,11 @@
  function scaledRatioTerm(value){
   if(typeof value==="number"&&!Number.isFinite(value))throw Error("Enter valid finite numbers");
   if(typeof value!=="number"&&typeof value!=="string")throw Error("Enter valid ratio terms");
-  const raw=String(value).trim();
+  let raw=String(value).trim();
   if(raw.startsWith("-"))throw Error("Ratio terms must be non-negative");
+  if(raw===".")throw Error("Enter a valid decimal value");
+  if(raw.startsWith("."))raw="0"+raw;
+  if(raw.endsWith("."))raw=raw.slice(0,-1);
   const match=/^([0-9]+)(?:[.]([0-9]{1,6}))?$/.exec(raw);
   if(!match)throw Error("Use non-negative values with up to 6 decimal places");
   return BigInt(match[1])*1000000n+BigInt((match[2]||"").padEnd(6,"0")||"0");
