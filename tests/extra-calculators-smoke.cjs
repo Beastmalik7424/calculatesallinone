@@ -36,6 +36,7 @@ assert.deepEqual(solveProportion(2,3,null,6),{missing:"C",value:4,a:2,b:3,c:4,d:
 assert.throws(()=>solveProportion(2,3,null,null),/exactly one/);
 assert.throws(()=>solveProportion(0,3,4,null),/positive values/);
 assert.deepEqual(scaleRatio(2,3,4),{a:8,b:12});
+assert.deepEqual(scaleRatio(0,3,2),{a:0,b:6});
 assert.throws(()=>scaleRatio(2,3,0),/positive scale factor/);
 assert.throws(()=>scaleRatio(0,0,2),/not both zero/);
 assert.deepEqual(percentageDifference(Number.MIN_VALUE,Number.MIN_VALUE),{difference:0,average:Number.MIN_VALUE,percentage:0});
