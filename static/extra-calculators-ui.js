@@ -61,7 +61,7 @@
    }
    else if(mode==="ratio"){
     const kind=document.getElementById("ratio-mode").value;
-    const format=n=>n.toLocaleString("en-US",{maximumFractionDigits:8});
+    const format=n=>n!==0&&(Math.abs(n)<1e-6||Math.abs(n)>=1e12)?n.toExponential(6):n.toLocaleString("en-US",{maximumFractionDigits:8});
     if(kind==="simplify"){
      const raw=id=>{const node=document.getElementById(id);if(!node)throw Error("Missing input field");return node.value.trim();};
      const x=window.ExtraCalculators.simplifyRatio(raw("a"),raw("b"));
