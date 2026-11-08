@@ -60,15 +60,16 @@
  function compound(principal,rate,years,frequency){finite(principal,rate,years,frequency);if(principal<0||years<0||rate<=-100*frequency||!Number.isSafeInteger(frequency)||frequency<1||frequency>365)throw Error("Invalid investment values");const value=principal*Math.pow(1+rate/(100*frequency),frequency*years);if(!Number.isFinite(value))throw Error("Result exceeds supported range");return value;}
  function parseISO(s){if(typeof s!=="string"||!/^(\d{4})-(\d{2})-(\d{2})$/.test(s))throw Error("Use YYYY-MM-DD dates");const [y,m,d]=s.split("-").map(Number);const ms=Date.UTC(y,m-1,d);const t=new Date(ms);if(y<100||t.getUTCFullYear()!==y||t.getUTCMonth()!==m-1||t.getUTCDate()!==d)throw Error("Invalid calendar date");return ms;}
  function scaledRatioTerm(value){
-  finite(value);
-  if(value<0)throw Error("Ratio terms must be non-negative");
-  const match=/^([0-9]+)(?:[.]([0-9]{1,6}))?$/.exec(String(value));
+  if(typeof value==="number"&&!Number.isFinite(value))throw Error("Enter valid finite numbers");
+  if(typeof value!=="number"&&typeof value!=="string")throw Error("Enter valid ratio terms");
+  const raw=String(value).trim();
+  if(raw.startsWith("-"))throw Error("Ratio terms must be non-negative");
+  const match=/^([0-9]+)(?:[.]([0-9]{1,6}))?$/.exec(raw);
   if(!match)throw Error("Use non-negative values with up to 6 decimal places");
   return BigInt(match[1])*1000000n+BigInt((match[2]||"").padEnd(6,"0")||"0");
  }
  function gcdBigInt(a,b){while(b!==0n){[a,b]=[b,a%b];}return a<0n?-a:a;}
  function simplifyRatio(a,b){
-  finite(a,b);
   const first=scaledRatioTerm(a),second=scaledRatioTerm(b);
   if(first===0n&&second===0n)throw Error("Both ratio terms cannot be zero");
   const divisor=gcdBigInt(first,second);
