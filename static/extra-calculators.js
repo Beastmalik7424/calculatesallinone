@@ -78,6 +78,18 @@
   const divisor=gcdBigInt(first,second);
   return {a:(first/divisor).toString(),b:(second/divisor).toString()};
  }
+ function multiplyDivide(first,second,divisor){
+  // Divide the numerator factor closest to the divisor first to avoid avoidable intermediate overflow or underflow.
+  const candidates=[{ratio:first/divisor,other:second},{ratio:second/divisor,other:first}]
+   .filter(item=>Number.isFinite(item.ratio)&&item.ratio>0)
+   .map(item=>({value:item.ratio*item.other,distance:Math.abs(Math.log(item.ratio))}))
+   .filter(item=>Number.isFinite(item.value)&&item.value>0)
+   .sort((left,right)=>left.distance-right.distance);
+  if(candidates.length)return candidates[0].value;
+  const fallback=(first*second)/divisor;
+  if(Number.isFinite(fallback)&&fallback>0)return fallback;
+  throw Error("Result exceeds supported range");
+ }
  function solveProportion(a,b,c,d){
   const values=[a,b,c,d];
   const missing=values.map((value,index)=>value===null?index:-1).filter(index=>index!==-1);
@@ -87,10 +99,10 @@
   if(known.some(value=>value<=0))throw Error("Enter three positive values to solve a proportion");
   let value;
   switch(missing[0]){
-   case 0:value=(b/d)*c;break;
-   case 1:value=(a/c)*d;break;
-   case 2:value=(a/b)*d;break;
-   case 3:value=(b/a)*c;break;
+   case 0:value=multiplyDivide(b,c,d);break;
+   case 1:value=multiplyDivide(a,d,c);break;
+   case 2:value=multiplyDivide(a,d,b);break;
+   case 3:value=multiplyDivide(b,c,a);break;
   }
   if(!Number.isFinite(value)||value<=0)throw Error("Result exceeds supported range");
   const completed=values.slice();completed[missing[0]]=value;
