@@ -34,7 +34,7 @@ GUIDES = {
     "Simplify a three-term ratio by dividing all three terms by their greatest common divisor. For 100:200:400, the GCD is 100, so the simplified ratio is 1:2:4. The order of the three quantities remains important.",
     "The two-term and three-term simplify modes accept non-negative decimal terms with up to six decimal places. They scale all entered terms to a common six-decimal integer representation before finding the GCD. Examples: 1.5:2.5 becomes 3:5, and 1.5:3:4.5 becomes 1:2:3. Inputs with more than six decimal places are rejected rather than silently rounded.",
     "A proportion states that two ratios are equal: A:B = C:D. Enter exactly three positive values and leave one blank. The calculator uses cross multiplication, A × D = B × C, to solve the missing term. For example, 2:3 = 4:6 because 2 × 6 = 3 × 4.",
-    "To scale a two-term ratio, multiply both terms by the same positive factor. Multiplying 2:3 by 4 gives 8:12. The numbers change, but the relationship remains equivalent because both terms use the same factor.",
+    "To scale a two-term ratio, multiply both terms by the same positive factor. Scale mode accepts non-negative terms and a positive factor with up to six decimal places, then calculates from exact scaled integers. For example, 2:3 scaled by 4 becomes 8:12, and 1.5:2.5 scaled by 0.1 becomes 0.15:0.25. Results can retain up to twelve decimal places.",
     "In two-term simplify and scale modes, one term can be zero but both cannot be zero. In three-term simplify mode, one or two terms can be zero, but not all three. Negative terms are not accepted. Proportion mode requires three positive known values so the missing term has a unique positive result. Scale mode also requires a positive factor. These modes compare pure numbers and do not perform unit conversions."
 ],
 "fraction-calculator": [
@@ -141,7 +141,7 @@ FAQS = {
         ("How do I simplify a ratio?", "Divide every term by the greatest common divisor. For example, 10:15 becomes 2:3, and 100:200:400 becomes 1:2:4."),
         ("Can a ratio have three terms?", "Yes. A:B:C compares three quantities in order. Choose the three-term mode and enter all three values. For example, 100:200:400 simplifies to 1:2:4."),
         ("How do I solve A:B = C:D?", "Enter exactly three positive values and leave the missing term blank. The calculator uses A × D = B × C to solve the fourth value."),
-        ("Can I enter decimal values?", "The two-term and three-term simplify modes accept non-negative decimal terms with up to six decimal places. Values with more decimal places are rejected instead of being silently rounded."),
+        ("Can I enter decimal values?", "The two-term and three-term simplify modes, and the two-term scale mode, accept non-negative decimal values with up to six decimal places. Scaling uses exact integer arithmetic and can return up to twelve decimal places. Inputs with more than six decimal places are rejected."),
         ("Can a ratio contain zero?", "In two-term simplify and scale modes, one term may be zero but both cannot be zero. In three-term simplify mode, one or two terms may be zero, but not all three. Proportion mode requires positive known values. Negative terms are not accepted."),
         ("Does scaling change a ratio?", "No. Multiplying both terms by the same positive factor creates an equivalent ratio. For example, 2:3 scaled by 4 becomes 8:12.")
     ],

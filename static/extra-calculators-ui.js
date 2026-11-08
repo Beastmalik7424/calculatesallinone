@@ -74,8 +74,8 @@
      const x=window.ExtraCalculators.solveProportion(optional("a"),optional("b"),optional("c"),optional("d"));
      result="Proportion: "+format(x.a)+":"+format(x.b)+" = "+format(x.c)+":"+format(x.d)+" | Missing "+x.missing+" = "+format(x.value);
     }else if(kind==="scale"){
-     const x=window.ExtraCalculators.scaleRatio(v("a"),v("b"),v("factor"));
-     result="Equivalent ratio: "+format(x.a)+":"+format(x.b);
+     const x=window.ExtraCalculators.scaleRatio(raw("a"),raw("b"),raw("factor"));
+     result="Equivalent ratio: "+x.a+":"+x.b;
     }else throw Error("Choose a calculation type");
    }
    else if(mode==="fraction"){const x=window.ExtraCalculators.fraction(v("a"),v("b"),v("c"),v("d"),document.getElementById("operation").value);result=x.n+"/"+x.d;}

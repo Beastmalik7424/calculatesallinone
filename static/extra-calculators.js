@@ -63,7 +63,7 @@
   if(typeof value==="number"&&!Number.isFinite(value))throw Error("Enter valid finite numbers");
   if(typeof value!=="number"&&typeof value!=="string")throw Error("Enter valid ratio terms");
   let raw=String(value).trim();
-  if(raw.startsWith("-"))throw Error("Ratio terms must be non-negative");
+  if(raw.startsWith("-"))throw Error("Values must be non-negative");
   if(raw===".")throw Error("Enter a valid decimal value");
   if(raw.startsWith("."))raw="0"+raw;
   if(raw.endsWith("."))raw=raw.slice(0,-1);
@@ -114,12 +114,17 @@
   const completed=values.slice();completed[missing[0]]=value;
   return {missing:["A","B","C","D"][missing[0]],value,a:completed[0],b:completed[1],c:completed[2],d:completed[3]};
  }
+ function scaledProductToString(value){
+  const scale=1000000000000n;
+  const whole=value/scale;
+  const fraction=(value%scale).toString().padStart(12,"0").replace(/0+$/,"");
+  return fraction?whole.toString()+"."+fraction:whole.toString();
+ }
  function scaleRatio(a,b,factor){
-  finite(a,b,factor);
-  if(a<0||b<0||(a===0&&b===0)||factor<=0)throw Error("Use non-negative ratio terms, not both zero, and a positive scale factor");
-  const scaledA=a*factor,scaledB=b*factor;
-  if(!Number.isFinite(scaledA)||!Number.isFinite(scaledB))throw Error("Result exceeds supported range");
-  return {a:scaledA,b:scaledB};
+  const first=scaledRatioTerm(a),second=scaledRatioTerm(b),multiplier=scaledRatioTerm(factor);
+  if(first===0n&&second===0n)throw Error("Use non-negative ratio terms, not both zero, and a positive scale factor");
+  if(multiplier===0n)throw Error("Use non-negative ratio terms, not both zero, and a positive scale factor");
+  return {a:scaledProductToString(first*multiplier),b:scaledProductToString(second*multiplier)};
  }
  function dateDifference(start,end){return (parseISO(end)-parseISO(start))/86400000;}
  return {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference};

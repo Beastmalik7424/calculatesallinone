@@ -12,6 +12,11 @@ on:
       - 'static/app.js'
       - 'tests/viewport-audit.cjs'
       - 'tests/query-calculator-browser.cjs'
+      - 'extra_calculator_pages.py'
+      - 'static/extra-calculators.js'
+      - 'static/extra-calculators-ui.js'
+      - 'tests/extra-calculators-browser.cjs'
+      - 'tests/extra-calculators-smoke.cjs'
       - '.github/workflows/first-screen-audit.yml'
   workflow_dispatch:
 jobs:
@@ -43,6 +48,7 @@ jobs:
           curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null
           node tests/calorie-calculator-browser.cjs
           node tests/query-calculator-browser.cjs
+          node tests/extra-calculators-browser.cjs
       - name: Save actual first-screen screenshots
         if: always()
         uses: actions/upload-artifact@v7
