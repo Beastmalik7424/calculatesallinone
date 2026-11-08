@@ -18,6 +18,7 @@ https://calculateallinone.vercel.app/methodology/
 https://calculateallinone.vercel.app/money/
 https://calculateallinone.vercel.app/percentage-calculator/
 https://calculateallinone.vercel.app/percentage-difference-calculator/
+https://calculateallinone.vercel.app/ratio-calculator/
 https://calculateallinone.vercel.app/privacy/
 https://calculateallinone.vercel.app/profit-loss-calculator/
 https://calculateallinone.vercel.app/query-calculator/
