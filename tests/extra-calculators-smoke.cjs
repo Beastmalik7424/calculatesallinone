@@ -24,6 +24,7 @@ assert.throws(()=>percentageDifference(-1,10),/non-negative values/);
 assert.throws(()=>percentageDifference(1,Infinity),/finite numbers/);
 assert.deepEqual(simplifyRatio(10,15),{a:"2",b:"3"});
 assert.deepEqual(simplifyRatio(1.5,2.5),{a:"3",b:"5"});
+assert.deepEqual(simplifyRatio("9007199254740993","9007199254740995"),{a:"9007199254740993",b:"9007199254740995"});
 assert.deepEqual(simplifyRatio(0,15),{a:"0",b:"1"});
 assert.throws(()=>simplifyRatio(0,0),/Both ratio terms cannot be zero/);
 assert.throws(()=>simplifyRatio(-1,2),/non-negative/);
