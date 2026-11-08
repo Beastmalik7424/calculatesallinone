@@ -63,7 +63,8 @@
     const kind=document.getElementById("ratio-mode").value;
     const format=n=>n.toLocaleString("en-US",{maximumFractionDigits:8});
     if(kind==="simplify"){
-     const x=window.ExtraCalculators.simplifyRatio(v("a"),v("b"));
+     const raw=id=>{const node=document.getElementById(id);if(!node)throw Error("Missing input field");return node.value.trim();};
+     const x=window.ExtraCalculators.simplifyRatio(raw("a"),raw("b"));
      result="Simplified ratio: "+x.a+":"+x.b;
     }else if(kind==="proportion"){
      const optional=id=>{const node=document.getElementById(id);if(!node)throw Error("Missing input field");const raw=node.value.trim();if(raw==="")return null;const n=Number(raw);if(!Number.isFinite(n))throw Error("Enter valid numbers");return n;};
