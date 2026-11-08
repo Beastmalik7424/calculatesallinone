@@ -40,13 +40,14 @@ PAGES = {
         "questions": [
             "What is a ratio?",
             "How do I simplify a ratio?",
+            "Can a ratio have three terms?",
             "How do I solve A:B = C:D?",
             "Can I enter decimal values?",
             "Can a ratio contain zero?",
             "Does scaling change a ratio?",
         ],
         "related": ["percentage-calculator", "percentage-difference-calculator", "fraction-calculator"],
-        "headings": ["What a ratio compares", "Simplify a ratio with the GCD", "Ratios with decimal inputs", "Solve a proportion with one missing value", "Scale an equivalent ratio", "Input limits and units"],
+        "headings": ["What a ratio compares", "Simplify a ratio with the GCD", "Simplify a three-term ratio", "Ratios with decimal inputs", "Solve a proportion with one missing value", "Scale an equivalent ratio", "Input limits and units"],
     },
     "fraction-calculator": {
         "hub": "math",
