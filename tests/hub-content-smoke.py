@@ -41,6 +41,8 @@ for phrase in (
     "How do I simplify a ratio?",
     "10:15",
     "2:3",
+    "100:200:400",
+    "1:2:4",
     "percentage difference",
     "25% of 200 is 50",
     "5/6",

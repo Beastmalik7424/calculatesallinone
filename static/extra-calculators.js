@@ -78,6 +78,12 @@
   const divisor=gcdBigInt(first,second);
   return {a:(first/divisor).toString(),b:(second/divisor).toString()};
  }
+ function simplifyRatioThree(a,b,c){
+  const terms=[a,b,c].map(scaledRatioTerm);
+  if(terms.every(term=>term===0n))throw Error("All three ratio terms cannot be zero");
+  const divisor=gcdBigInt(gcdBigInt(terms[0],terms[1]),terms[2]);
+  return {a:(terms[0]/divisor).toString(),b:(terms[1]/divisor).toString(),c:(terms[2]/divisor).toString()};
+ }
  function multiplyDivide(first,second,divisor){
   // Divide the numerator factor closest to the divisor first to avoid avoidable intermediate overflow or underflow.
   const candidates=[{ratio:first/divisor,other:second},{ratio:second/divisor,other:first}]
@@ -116,5 +122,5 @@
   return {a:scaledA,b:scaledB};
  }
  function dateDifference(start,end){return (parseISO(end)-parseISO(start))/86400000;}
- return {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,solveProportion,scaleRatio,fraction,compound,dateDifference};
+ return {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference};
 });
