@@ -37,6 +37,13 @@ assert.deepEqual(solveProportion(2,null,4,6),{missing:"B",value:3,a:2,b:3,c:4,d:
 assert.deepEqual(solveProportion(2,3,null,6),{missing:"C",value:4,a:2,b:3,c:4,d:6});
 assert.throws(()=>solveProportion(2,3,null,null),/exactly one/);
 assert.throws(()=>solveProportion(0,3,4,null),/positive values/);
+// Regression: cross-multiplication must not underflow an intermediate quotient when the final answer is representable.
+assert.equal(solveProportion(null,1e308,1e-308,1e308).value,1e-308);
+assert.equal(solveProportion(1e308,null,1e308,1e-308).value,1e-308);
+assert.equal(solveProportion(1e-308,1e308,null,1e308).value,1e-308);
+assert.equal(solveProportion(1e308,1e-308,1e308,null).value,1e-308);
+assert.throws(()=>solveProportion(1e-308,1e308,1e308,null),/Result exceeds supported range/);
+assert.throws(()=>solveProportion(1e308,1e-308,1e-308,null),/Result exceeds supported range/);
 assert.deepEqual(scaleRatio(2,3,4),{a:8,b:12});
 assert.deepEqual(scaleRatio(0,3,2),{a:0,b:6});
 assert.throws(()=>scaleRatio(2,3,0),/positive scale factor/);
