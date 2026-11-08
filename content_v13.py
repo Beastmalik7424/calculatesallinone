@@ -57,7 +57,7 @@ HUB_EXTRA = {
     ],
     "math": [
         ("Choose the right math tool", [
-            "Use the Standard Calculator for ordinary arithmetic and bracketed expressions. Switch to Scientific mode for functions such as powers, roots and trigonometry. Use the Percentage Calculator for a percentage of an amount or to find what percentage a part represents of a whole. Use the Fraction Calculator when exact numerator-and-denominator arithmetic is more useful than a decimal answer. Use the Ratio Calculator to simplify two quantities, scale an equivalent ratio or solve a proportion with one positive value missing. Example: 10:15 simplifies to 2:3. Convert measurements to the same unit before comparing them.",
+            "Use the Standard Calculator for ordinary arithmetic and bracketed expressions. Switch to Scientific mode for functions such as powers, roots and trigonometry. Use the Percentage Calculator for a percentage of an amount or to find what percentage a part represents of a whole. Use the Fraction Calculator when exact numerator-and-denominator arithmetic is more useful than a decimal answer. Use the Ratio Calculator to simplify two- or three-term ratios, scale an equivalent two-term ratio or solve a proportion with one positive value missing. Examples: 10:15 simplifies to 2:3, and 100:200:400 simplifies to 1:2:4. Convert measurements to the same unit before comparing them.",
             "Use the Unit Converter only when the starting and target units measure the same physical quantity. For example, convert kilograms to pounds under weight, metres to feet under length, and Celsius to Fahrenheit under temperature. A length conversion cannot convert area, volume or speed."
         ]),
         ("Worked arithmetic and percentage checks", [
