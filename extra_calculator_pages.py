@@ -217,10 +217,10 @@ def build_extra_pages(head,shell,write):
             body+="<div class='col-span-2 sm:col-span-2 mt-1'><label for='ratio-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='ratio-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='simplify'>Simplify a ratio</option><option value='proportion'>Solve a proportion</option><option value='scale'>Scale a ratio</option></select></div>"
         for key,label,kind in fields:
             wrapper_id = (' id="ratio-field-'+key+'"' if slug=="ratio-calculator" else '')
-            hidden_class = (' hidden' if slug=="ratio-calculator" and key in ("c","d","factor") else '')
+            hidden_attr = (' hidden' if slug=="ratio-calculator" and key in ("c","d","factor") else '')
             required_attr = '' if slug=="ratio-calculator" else 'required '
             min_attr = 'min="0" ' if slug in ("percentage-difference-calculator","ratio-calculator") and kind=="number" else ''
-            body+='<div'+wrapper_id+' class="min-w-0'+hidden_class+'"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
+            body+='<div'+wrapper_id+hidden_attr+' class="min-w-0"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
             body+='<input '+required_attr+'id="'+key+'" type="'+kind+'" '+min_attr+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
         if slug=="fraction-calculator":
             body+='<div class="sm:col-span-2 compact-form-full min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
