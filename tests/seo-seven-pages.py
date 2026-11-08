@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused build-output checks for the nine scoped SEO URLs."""
+"""Focused build-output checks for the ten scoped SEO URLs."""
 import html
 import re
 import sys
@@ -23,6 +23,7 @@ CHECK_PAGES = {"/": ROOT / "index.html"}
 for path in TARGETS:
     CHECK_PAGES[path] = ROOT / path.strip("/") / "index.html"
 CHECK_PAGES["/percentage-difference-calculator/"] = ROOT / "percentage-difference-calculator" / "index.html"
+CHECK_PAGES["/ratio-calculator/"] = ROOT / "ratio-calculator" / "index.html"
 
 errors = []
 def check(condition, message):
@@ -69,7 +70,7 @@ for path, raw in pages.items():
     check(len(titles[path]) < 60, path + ": title must be under 60 characters (" + str(len(titles[path])) + ")")
     check(0 < len(descriptions[path]) < 160, path + ": description must be under 160 characters")
     check(not re.search(r"<img\b(?![^>]*\balt\s*=)", raw, re.I), path + ": image missing alt attribute")
-    if path in ("/about/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/", "/percentage-difference-calculator/"):
+    if path in ("/about/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/", "/percentage-difference-calculator/", "/ratio-calculator/"):
         schemas = []
         for match in re.finditer(r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', raw, re.S | re.I):
             try:
@@ -87,20 +88,26 @@ for path, raw in pages.items():
             check(not any(obj.get("@type") == "WebApplication" for obj in schemas), path + ": ineligible WebApplication rich-result markup must be omitted")
             check(any(obj.get("@type") == "FAQPage" for obj in schemas), path + ": missing FAQPage for visible FAQs")
             check(visible_main(raw).count("?") >= 3, path + ": expected at least three visible FAQ questions")
-    if path in ("/about/", "/discount-calculator/", "/editorial-policy/", "/health/"):
+    if path in ("/about/", "/discount-calculator/", "/editorial-policy/", "/health/", "/ratio-calculator/"):
         words = re.findall(r"\b[\w’'-]+\b", visible_main(raw), re.UNICODE)
-        minimum = 420 if path == "/about/" else (300 if path in ("/discount-calculator/", "/percentage-difference-calculator/") else 150)
+        minimum = 420 if path == "/about/" else (300 if path in ("/discount-calculator/", "/percentage-difference-calculator/", "/ratio-calculator/") else 150)
         print("WORDCOUNT", path, len(words))
         check(len(words) >= minimum, path + ": main-content word count below " + str(minimum) + " (" + str(len(words)) + ")")
 
-check(len(set(titles.values())) == len(titles), "duplicate titles across homepage and nine scoped pages")
-check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across homepage and nine scoped pages")
+check(len(set(titles.values())) == len(titles), "duplicate titles across homepage and ten scoped pages")
+check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across homepage and ten scoped pages")
 
 new_page = pages.get("/percentage-difference-calculator/", "")
 check('<meta name="robots" content="index, follow">' in new_page, "percentage difference page must be indexable")
+ratio_page = pages.get("/ratio-calculator/", "")
+check('<meta name="robots" content="index, follow">' in ratio_page, "ratio calculator page must be indexable")
 math_hub = read(ROOT / "math" / "index.html")
 percentage_page = read(ROOT / "percentage-calculator" / "index.html")
+fraction_page = read(ROOT / "fraction-calculator" / "index.html")
 check('href="/percentage-difference-calculator/"' in math_hub, "math hub is missing the percentage difference link")
+check('href="/ratio-calculator/"' in math_hub, "math hub is missing the ratio calculator link")
+check('href="/ratio-calculator/"' in percentage_page, "percentage calculator is missing the related ratio link")
+check('href="/ratio-calculator/"' in fraction_page, "fraction calculator is missing the related ratio link")
 check('href="/percentage-difference-calculator/"' in percentage_page, "percentage calculator is missing the related percentage difference link")
 home = pages.get("/", "")
 check('href="#all-tools"' in home and "Browse all free calculators" in home,
@@ -128,6 +135,7 @@ try:
             lastmod = node.findtext("sm:lastmod", namespaces=ns) if node is not None else None
             check(lastmod is None, "unverified lastmod must be omitted for " + url)
     check(SITE + "/percentage-difference-calculator/" in locs, "percentage difference page is missing from the indexable sitemap")
+    check(SITE + "/ratio-calculator/" in locs, "ratio calculator page is missing from the indexable sitemap")
     print(SITE + "/percentage-difference-calculator/")
     for url in locs:
         check(url.endswith("/"), "sitemap URL lacks trailing slash: " + str(url))
