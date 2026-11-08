@@ -59,6 +59,46 @@
  }
  function compound(principal,rate,years,frequency){finite(principal,rate,years,frequency);if(principal<0||years<0||rate<=-100*frequency||!Number.isSafeInteger(frequency)||frequency<1||frequency>365)throw Error("Invalid investment values");const value=principal*Math.pow(1+rate/(100*frequency),frequency*years);if(!Number.isFinite(value))throw Error("Result exceeds supported range");return value;}
  function parseISO(s){if(typeof s!=="string"||!/^(\d{4})-(\d{2})-(\d{2})$/.test(s))throw Error("Use YYYY-MM-DD dates");const [y,m,d]=s.split("-").map(Number);const ms=Date.UTC(y,m-1,d);const t=new Date(ms);if(y<100||t.getUTCFullYear()!==y||t.getUTCMonth()!==m-1||t.getUTCDate()!==d)throw Error("Invalid calendar date");return ms;}
+ function scaledRatioTerm(value){
+  finite(value);
+  if(value<0)throw Error("Ratio terms must be non-negative");
+  const match=/^([0-9]+)(?:[.]([0-9]{1,6}))?$/.exec(String(value));
+  if(!match)throw Error("Use non-negative values with up to 6 decimal places");
+  return BigInt(match[1])*1000000n+BigInt((match[2]||"").padEnd(6,"0")||"0");
+ }
+ function gcdBigInt(a,b){while(b!==0n){[a,b]=[b,a%b];}return a<0n?-a:a;}
+ function simplifyRatio(a,b){
+  finite(a,b);
+  const first=scaledRatioTerm(a),second=scaledRatioTerm(b);
+  if(first===0n&&second===0n)throw Error("Both ratio terms cannot be zero");
+  const divisor=gcdBigInt(first,second);
+  return {a:(first/divisor).toString(),b:(second/divisor).toString()};
+ }
+ function solveProportion(a,b,c,d){
+  const values=[a,b,c,d];
+  const missing=values.map((value,index)=>value===null?index:-1).filter(index=>index!==-1);
+  if(missing.length!==1)throw Error("Leave exactly one proportion value blank");
+  const known=values.filter(value=>value!==null);
+  finite(...known);
+  if(known.some(value=>value<=0))throw Error("Enter three positive values to solve a proportion");
+  let value;
+  switch(missing[0]){
+   case 0:value=(b/d)*c;break;
+   case 1:value=(a/c)*d;break;
+   case 2:value=(a/b)*d;break;
+   case 3:value=(b/a)*c;break;
+  }
+  if(!Number.isFinite(value)||value<=0)throw Error("Result exceeds supported range");
+  const completed=values.slice();completed[missing[0]]=value;
+  return {missing:["A","B","C","D"][missing[0]],value,a:completed[0],b:completed[1],c:completed[2],d:completed[3]};
+ }
+ function scaleRatio(a,b,factor){
+  finite(a,b,factor);
+  if(a<0||b<0||(a===0&&b===0)||factor<=0)throw Error("Use non-negative ratio terms, not both zero, and a positive scale factor");
+  const scaledA=a*factor,scaledB=b*factor;
+  if(!Number.isFinite(scaledA)||!Number.isFinite(scaledB))throw Error("Result exceeds supported range");
+  return {a:scaledA,b:scaledB};
+ }
  function dateDifference(start,end){return (parseISO(end)-parseISO(start))/86400000;}
- return {percentage,percentageShare,percentageChange,percentageDifference,fraction,compound,dateDifference};
+ return {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,solveProportion,scaleRatio,fraction,compound,dateDifference};
 });
