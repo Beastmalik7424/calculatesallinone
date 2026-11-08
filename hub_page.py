@@ -10,7 +10,7 @@ TD = "border border-stone-300 dark:border-stone-700 p-3 align-top"
 
 PATH = "/free-online-calculators/"
 TITLE = "Free Online Calculators for Money, Health, Math and Time"
-DESC = ("Free online calculators for Zakat, EMI, BMI, percentages, age, dates and unit conversion. Each tool shows its formula, an example and its limits.")
+DESC = ("Free online calculators for Zakat, EMI, BMI, percentages, ratios, age, dates and unit conversion. Each tool shows its formula, an example and its limits.")
 
 TOOLS = [
     ("Zakat Calculator", "/zakat-calculator/", "Money", "Estimates zakatable wealth using the method stated on the page.", "Check the nisab value and debts you enter."),
@@ -22,6 +22,7 @@ TOOLS = [
     ("BMI Calculator", "/bmi-calculator/", "Health", "Calculates adult body mass index in metric or imperial units.", "BMI is a screening measure, not a diagnosis."),
     ("Percentage Calculator", "/percentage-calculator/", "Math", "Finds a percentage of a number, or the percentage one number is of another.", "Confirm which value is the base."),
     ("Percentage Difference Calculator", "/percentage-difference-calculator/", "Math", "Compares two non-negative values using their average.", "Use percentage change when one value is the starting point."),
+    ("Ratio Calculator", "/ratio-calculator/", "Math", "Simplifies two terms, scales an equivalent ratio or solves a proportion with one missing value.", "Use the same units and enter exactly three positive values for a proportion."),
     ("Fraction Calculator", "/fraction-calculator/", "Math", "Adds, subtracts, multiplies and divides fractions exactly.", "Results are simplified fractions."),
     ("Standard Calculator", "/standard-calculator/", "Math", "Performs everyday arithmetic with a scientific mode.", "Check operator order when using parentheses."),
     ("Unit Converter", "/unit-converter/", "Math", "Converts length, weight, temperature and other common units.", "Temperature needs an offset as well as a scale factor."),
