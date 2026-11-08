@@ -34,7 +34,7 @@ GUIDES = {
     "Simplify mode accepts non-negative decimal terms with up to six decimal places. It scales both terms to a common six-decimal integer representation before finding the GCD. Example: 1.5:2.5 becomes 3:5. Inputs with more than six decimal places are rejected rather than silently rounded.",
     "A proportion states that two ratios are equal: A:B = C:D. Enter exactly three positive values and leave one blank. The calculator uses cross multiplication, A × D = B × C, to solve the missing term. For example, 2:3 = 4:6 because 2 × 6 = 3 × 4.",
     "To scale a ratio, multiply both terms by the same positive factor. Multiplying 2:3 by 4 gives 8:12. The numbers change, but the relationship remains equivalent because both terms use the same factor.",
-    "In simplify mode, one term can be zero but both cannot be zero, and negative terms are not accepted. Proportion mode requires three positive known values so the missing term has a unique positive result. Scale mode requires a positive factor. These modes compare pure numbers and do not perform unit conversions."
+    "In simplify and scale modes, one term can be zero but both cannot be zero, and negative terms are not accepted. Proportion mode requires three positive known values so the missing term has a unique positive result. Scale mode also requires a positive factor. These modes compare pure numbers and do not perform unit conversions."
 ],
 "fraction-calculator": [
     "A fraction has a numerator above a denominator. The denominator cannot be zero. A zero denominator is invalid because division by zero has no defined value. To add one half and one third, multiply each numerator by the other denominator, add the two products, and divide by the product of the denominators. The result is five sixths. Subtraction uses the same common denominator but subtracts the cross-products. The calculator then reduces the result to lowest terms using the greatest common divisor.",
@@ -140,7 +140,7 @@ FAQS = {
         ("How do I simplify a ratio?", "Divide both terms by their greatest common divisor. For example, 10:15 becomes 2:3 because both terms divide by 5."),
         ("How do I solve A:B = C:D?", "Enter exactly three positive values and leave the missing term blank. The calculator uses A × D = B × C to solve the fourth value."),
         ("Can I enter decimal values?", "Simplify mode accepts non-negative decimal terms with up to six decimal places. Values with more decimal places are rejected instead of being silently rounded."),
-        ("Can a ratio contain zero?", "In simplify mode, one term may be zero but both cannot be zero. Proportion and scale modes require positive known values."),
+        ("Can a ratio contain zero?", "In simplify and scale modes, one term may be zero but both cannot be zero. Proportion mode requires positive known values, and scale mode requires a positive factor. Negative terms are not accepted."),
         ("Does scaling change a ratio?", "No. Multiplying both terms by the same positive factor creates an equivalent ratio. For example, 2:3 scaled by 4 becomes 8:12.")
     ],
 "fraction-calculator": [
