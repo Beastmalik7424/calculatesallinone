@@ -21,7 +21,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 ## Calculator categories
 
 - [Money and Business](https://calculateallinone.vercel.app/money/): EMI, Zakat, profit and loss, discounts and compound interest, with worked examples and assumptions.
-- [Math and Converters](https://calculateallinone.vercel.app/math/): Standard and scientific arithmetic, percentages, fractions and unit conversion.
+- [Math and Converters](https://calculateallinone.vercel.app/math/): Standard and scientific arithmetic, percentages, ratios, fractions and unit conversion.
 - [Date and Time](https://calculateallinone.vercel.app/time/): Age, years-to-days, date difference and stopwatch tools.
 - [Health](https://calculateallinone.vercel.app/health/): Adult BMI screening, maintenance-calorie estimates and their limitations.
 - [Worship](https://calculateallinone.vercel.app/worship/): Tasbih and Zakat tools, with stated method and limitations.
@@ -39,6 +39,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 - [Standard Calculator](https://calculateallinone.vercel.app/standard-calculator/): Everyday arithmetic and scientific mode.
 - [Percentage Calculator](https://calculateallinone.vercel.app/percentage-calculator/): Percentage of a number, percentage share and percentage increase/decrease.
 - [Percentage Difference Calculator](https://calculateallinone.vercel.app/percentage-difference-calculator/): Compare two non-negative values using the absolute difference divided by their average. Includes a worked example and explains how percentage difference differs from percentage change.
+- [Ratio Calculator](https://calculateallinone.vercel.app/ratio-calculator/): Simplify ratios, scale equivalent ratios and solve a proportion when one positive value is missing.
 - [Fraction Calculator](https://calculateallinone.vercel.app/fraction-calculator/): Add, subtract, multiply and divide fractions with simplified results.
 - [Unit Converter](https://calculateallinone.vercel.app/unit-converter/): Weight, length and temperature conversions with stated factors.
 
