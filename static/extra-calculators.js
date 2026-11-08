@@ -63,7 +63,7 @@
   if(typeof value==="number"&&!Number.isFinite(value))throw Error("Enter valid finite numbers");
   if(typeof value!=="number"&&typeof value!=="string")throw Error("Enter valid ratio terms");
   let raw=String(value).trim();
-  if(raw.startsWith("-"))throw Error("Ratio terms must be non-negative");
+  if(raw.startsWith("-"))throw Error("Values must be non-negative");
   if(raw===".")throw Error("Enter a valid decimal value");
   if(raw.startsWith("."))raw="0"+raw;
   if(raw.endsWith("."))raw=raw.slice(0,-1);
