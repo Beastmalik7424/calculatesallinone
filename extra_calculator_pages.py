@@ -219,9 +219,12 @@ def build_extra_pages(head,shell,write):
             wrapper_id = (' id="ratio-field-'+key+'"' if slug=="ratio-calculator" else '')
             hidden_attr = (' hidden' if slug=="ratio-calculator" and key in ("c","d","factor") else '')
             required_attr = '' if slug=="ratio-calculator" else 'required '
-            min_attr = 'min="0" ' if slug in ("percentage-difference-calculator","ratio-calculator") and kind=="number" else ''
+            input_type = 'text' if slug=="ratio-calculator" else kind
+            input_mode = 'inputmode="decimal" autocomplete="off" ' if slug=="ratio-calculator" else ''
+            min_attr = 'min="0" ' if slug=="percentage-difference-calculator" and kind=="number" else ''
+            step_attr = '' if slug=="ratio-calculator" else ('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')
             body+='<div'+wrapper_id+hidden_attr+' class="min-w-0"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
-            body+='<input '+required_attr+'id="'+key+'" type="'+kind+'" '+min_attr+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
+            body+='<input '+required_attr+'id="'+key+'" type="'+input_type+'" '+input_mode+min_attr+step_attr+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
         if slug=="fraction-calculator":
             body+='<div class="sm:col-span-2 compact-form-full min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
         body+='<button type="submit" class="sm:col-span-2 compact-form-full rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
