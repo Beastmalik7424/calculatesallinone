@@ -19,6 +19,7 @@ FILES = [
     Path("public/health/index.html"),
     Path("public/calorie-calculator/index.html"),
     Path("public/percentage-difference-calculator/index.html"),
+    Path("public/ratio-calculator/index.html"),
 ]
 ENDPOINT = "https://validator.w3.org/nu/?out=json"
 ALTERNATE_ENDPOINT = "https://html5.validator.nu/?out=json"
@@ -108,7 +109,7 @@ def main():
     if failed:
         print("Nu HTML Checker: FAIL")
         return 1
-    print("Nu HTML Checker: PASS (11 files, zero errors)")
+    print("Nu HTML Checker: PASS (12 files, zero errors)")
     return 0
 
 

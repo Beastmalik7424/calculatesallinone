@@ -1,6 +1,6 @@
 "use strict";
 const assert=require("node:assert/strict");
-const {percentage,percentageShare,percentageChange,percentageDifference,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
+const {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,solveProportion,scaleRatio,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
 assert.equal(percentage(25,200),50);
 assert.equal(percentage(12.5,80),10);
 assert.equal(percentage(0,200),0);
@@ -22,6 +22,32 @@ assert.equal(percentageDifference(1e308,0).percentage,200);
 assert.throws(()=>percentageDifference(0,0),/Both values cannot be zero/);
 assert.throws(()=>percentageDifference(-1,10),/non-negative values/);
 assert.throws(()=>percentageDifference(1,Infinity),/finite numbers/);
+assert.deepEqual(simplifyRatio(10,15),{a:"2",b:"3"});
+assert.deepEqual(simplifyRatio(1.5,2.5),{a:"3",b:"5"});
+assert.deepEqual(simplifyRatio(".5","1.5"),{a:"1",b:"3"});
+assert.deepEqual(simplifyRatio("1.","2."),{a:"1",b:"2"});
+assert.deepEqual(simplifyRatio("9007199254740993","9007199254740995"),{a:"9007199254740993",b:"9007199254740995"});
+assert.deepEqual(simplifyRatio(0,15),{a:"0",b:"1"});
+assert.throws(()=>simplifyRatio(0,0),/Both ratio terms cannot be zero/);
+assert.throws(()=>simplifyRatio(-1,2),/non-negative/);
+assert.throws(()=>simplifyRatio(1.0000001,2),/up to 6 decimal places/);
+assert.deepEqual(solveProportion(2,3,4,null),{missing:"D",value:6,a:2,b:3,c:4,d:6});
+assert.deepEqual(solveProportion(null,3,4,6),{missing:"A",value:2,a:2,b:3,c:4,d:6});
+assert.deepEqual(solveProportion(2,null,4,6),{missing:"B",value:3,a:2,b:3,c:4,d:6});
+assert.deepEqual(solveProportion(2,3,null,6),{missing:"C",value:4,a:2,b:3,c:4,d:6});
+assert.throws(()=>solveProportion(2,3,null,null),/exactly one/);
+assert.throws(()=>solveProportion(0,3,4,null),/positive values/);
+// Regression: cross-multiplication must not underflow an intermediate quotient when the final answer is representable.
+assert.equal(solveProportion(null,1e308,1e-308,1e308).value,1e-308);
+assert.equal(solveProportion(1e308,null,1e308,1e-308).value,1e-308);
+assert.equal(solveProportion(1e-308,1e308,null,1e308).value,1e-308);
+assert.equal(solveProportion(1e308,1e-308,1e308,null).value,1e-308);
+assert.throws(()=>solveProportion(1e-308,1e308,1e308,null),/Result exceeds supported range/);
+assert.throws(()=>solveProportion(1e308,1e-308,1e-308,null),/Result exceeds supported range/);
+assert.deepEqual(scaleRatio(2,3,4),{a:8,b:12});
+assert.deepEqual(scaleRatio(0,3,2),{a:0,b:6});
+assert.throws(()=>scaleRatio(2,3,0),/positive scale factor/);
+assert.throws(()=>scaleRatio(0,0,2),/not both zero/);
 assert.deepEqual(percentageDifference(Number.MIN_VALUE,Number.MIN_VALUE),{difference:0,average:Number.MIN_VALUE,percentage:0});
 assert.equal(percentageDifference(Number.MIN_VALUE,Number.MIN_VALUE*2).average,Number.MIN_VALUE*2);
 assert.equal(percentage(-25,100),-25);
@@ -51,7 +77,7 @@ const path = require("node:path");
 // Regression: Tailwind must compile the primary action's background on all four extra pages.
 const compiledCss = fs.readFileSync(path.join(__dirname, "..", "static", "site.css"), "utf8");
 assert.match(compiledCss, /\.bg-sky-700\s*\{/, "Missing bg-sky-700: extra calculator Calculate buttons become white-on-white");
-for (const slug of ["percentage-calculator", "percentage-difference-calculator", "fraction-calculator", "compound-interest-calculator", "date-calculator"]) {
+for (const slug of ["percentage-calculator", "percentage-difference-calculator", "fraction-calculator", "ratio-calculator", "compound-interest-calculator", "date-calculator"]) {
   const html = fs.readFileSync(path.join(__dirname, "..", "public", slug, "index.html"), "utf8");
   assert.match(html, /<button[^>]*bg-sky-700[^>]*>Calculate<\/button>/, slug + " primary action lacks background class");
 }
@@ -65,6 +91,8 @@ assert.match(extraSource,/Calculate a percentage of a number, find what percenta
 assert.match(extraSource,/18% of PKR 2,500/);
 assert.ok(extraSource.includes("percentage difference = |A - B|"), "Percentage difference page must show its symmetric formula");
 assert.ok(extraSource.includes("Percentage Difference Calculator"), "Percentage difference page must have a dedicated title");
+assert.ok(extraSource.includes("Ratio Calculator"), "Ratio page must have a dedicated title");
+assert.ok(extraSource.includes("10:15"), "Ratio page must include a checkable simplification example");
 assert.match(extraSource,/1,102\.50/);
 assert.match(extraSource,/28 February 2024 to 1 March 2024 is 2 days/);
 const hubSource=fs2.readFileSync(require("node:path").join(__dirname,"..","content_v13.py"),"utf8");

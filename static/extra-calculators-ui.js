@@ -21,6 +21,20 @@
   percentageMode.addEventListener("change",updatePercentageLabels);
   updatePercentageLabels();
  }
+ const ratioMode=document.getElementById("ratio-mode");
+ if(ratioMode){
+  const updateRatioFields=()=>{
+   const mode=ratioMode.value;
+   for(const id of ["a","b","c","d","factor"]){
+    const wrapper=document.getElementById("ratio-field-"+id);
+    const visible=id==="a"||id==="b"||(mode==="proportion"&&(id==="c"||id==="d"))||(mode==="scale"&&id==="factor");
+    if(wrapper){wrapper.hidden=!visible;const input=wrapper.querySelector("input");if(input)input.disabled=!visible;}
+   }
+   output.textContent="";
+  };
+  ratioMode.addEventListener("change",updateRatioFields);
+  updateRatioFields();
+ }
  form.addEventListener("submit",function(event){
   event.preventDefault();
   try{
@@ -44,6 +58,22 @@
     const answer=window.ExtraCalculators.percentageDifference(v("first"),v("second"));
     const format=n=>n!==0&&(Math.abs(n)<1e-6||Math.abs(n)>=1e12)?n.toExponential(6):n.toLocaleString("en-US",{maximumFractionDigits:8});
     result="Percentage difference: "+format(answer.percentage)+"% | Absolute difference: "+format(answer.difference)+" | Average: "+format(answer.average);
+   }
+   else if(mode==="ratio"){
+    const kind=document.getElementById("ratio-mode").value;
+    const format=n=>n!==0&&(Math.abs(n)<1e-6||Math.abs(n)>=1e12)?n.toExponential(6):n.toLocaleString("en-US",{maximumFractionDigits:8});
+    if(kind==="simplify"){
+     const raw=id=>{const node=document.getElementById(id);if(!node)throw Error("Missing input field");return node.value.trim();};
+     const x=window.ExtraCalculators.simplifyRatio(raw("a"),raw("b"));
+     result="Simplified ratio: "+x.a+":"+x.b;
+    }else if(kind==="proportion"){
+     const optional=id=>{const node=document.getElementById(id);if(!node)throw Error("Missing input field");const raw=node.value.trim();if(raw==="")return null;const n=Number(raw);if(!Number.isFinite(n))throw Error("Enter valid numbers");return n;};
+     const x=window.ExtraCalculators.solveProportion(optional("a"),optional("b"),optional("c"),optional("d"));
+     result="Proportion: "+format(x.a)+":"+format(x.b)+" = "+format(x.c)+":"+format(x.d)+" | Missing "+x.missing+" = "+format(x.value);
+    }else if(kind==="scale"){
+     const x=window.ExtraCalculators.scaleRatio(v("a"),v("b"),v("factor"));
+     result="Equivalent ratio: "+format(x.a)+":"+format(x.b);
+    }else throw Error("Choose a calculation type");
    }
    else if(mode==="fraction"){const x=window.ExtraCalculators.fraction(v("a"),v("b"),v("c"),v("d"),document.getElementById("operation").value);result=x.n+"/"+x.d;}
    else if(mode==="compound"){const principal=v("principal");const future=window.ExtraCalculators.compound(principal,v("rate"),v("years"),v("frequency"));result="Final amount: "+future.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})+" | Interest earned: "+(future-principal).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}

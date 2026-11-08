@@ -40,6 +40,14 @@ CASES = {
         "REE is not a universal minimum safe calorie intake",
         "does not implement the NIDDK dynamic weight-change model",
     ],
+    "ratio-calculator": [
+        "10:15",
+        "2:3",
+        "1.5:2.5",
+        "A:B = C:D",
+        "cross multiplication",
+        "up to six decimal places",
+    ],
     "years-to-days-calculator": [
         "For 13 years, the simple result is 4,745 days, while the Gregorian-average result is 4,748.1525 days.",
         "For 29 years, the simple conversion is 29 x 365 = 10,585 days.",
@@ -84,7 +92,7 @@ def main():
         for failure in failures:
             print("FAIL:", failure)
         return 1
-    print("PASS: query, stopwatch and years-to-days worked examples are present and checkable")
+    print("PASS: query, stopwatch, ratio and years-to-days worked examples are present and checkable")
     print("PASS: no unresolved legal placeholders in the checked calculator pages")
     return 0
 

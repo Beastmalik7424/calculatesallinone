@@ -18,6 +18,7 @@
 /money/
 /percentage-calculator/
 /percentage-difference-calculator/
+/ratio-calculator/
 /privacy/
 /profit-loss-calculator/
 /query-calculator/

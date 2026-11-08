@@ -29,6 +29,18 @@ CASES = {
             "same unit and measurement basis",
         ],
     },
+    "ratio-calculator": {
+        "category": "/math/",
+        "phrases": [
+            "10:15",
+            "2:3",
+            "1.5:2.5",
+            "A:B = C:D",
+            "cross multiplication",
+            "up to six decimal places",
+            "positive known values",
+        ],
+    },
     "fraction-calculator": {
         "category": "/math/",
         "phrases": [
@@ -78,7 +90,7 @@ for slug, spec in CASES.items():
     assert 'id="extra-calculator-form"' in source and ">Calculate</button>" in source, f"Missing calculator form: {slug}"
     assert "Maintained by" in source and "Muhammad Fayyaz Adeel" in source and 'href="/about/"' in source, f"Missing honest maintainer byline: {slug}"
     assert "representative results and invalid inputs are covered by automated tests" in source and "not an independent professional review" in source, f"Missing accurate verification disclosure: {slug}"
-    if slug in ("fraction-calculator", "compound-interest-calculator"):
+    if slug in ("fraction-calculator", "compound-interest-calculator", "ratio-calculator"):
         assert source.index('id="extra-calculator-form"') < source.index("Maintained by"), f"Compact form must precede trust notes: {slug}"
         assert "grid-cols-2" in source, f"Missing compact two-column form: {slug}"
     assert "Report this calculator" in source and 'href="/contact/"' in source, f"Missing calculator-specific feedback path: {slug}"
@@ -94,6 +106,7 @@ for slug, spec in CASES.items():
     expected_domain = {
         "percentage-calculator": "openstax.org",
         "percentage-difference-calculator": "mathsisfun.org",
+        "ratio-calculator": "openstax.org",
         "fraction-calculator": "openstax.org",
         "compound-interest-calculator": "investor.gov",
         "date-calculator": "aa.usno.navy.mil",

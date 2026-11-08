@@ -35,6 +35,7 @@ descriptions = {}
 assert urls, "Sitemap has no URLs"
 assert SITE + "/emi-calculator/" in set(urls), "The live EMI calculator must be included in the XML sitemap"
 assert SITE + "/percentage-difference-calculator/" in set(urls), "The new percentage difference calculator must be included in the XML sitemap"
+assert SITE + "/ratio-calculator/" in set(urls), "The new ratio calculator must be included in the XML sitemap"
 assert len(urls) == len(set(urls)), "Duplicate URLs found in sitemap"
 lastmod_entries = {
     node.find("sm:loc", ns).text: node.find("sm:lastmod", ns).text

@@ -14,7 +14,8 @@ const {chromium}=require("playwright");
     ["/fraction-calculator/",[["a","1"],["b","2"],["c","1"],["d","3"]],"5/6"],
     ["/compound-interest-calculator/",[["principal","1000"],["rate","10"],["years","1"],["frequency","2"]],"1,102.50"],
     ["/date-calculator/",[["start","2024-02-28"],["end","2024-03-01"]],"2 days"],
-    ["/percentage-difference-calculator/",[["first","40"],["second","60"]],"40%"]
+    ["/percentage-difference-calculator/",[["first","40"],["second","60"]],"40%"],
+    ["/ratio-calculator/",[["a","10"],["b","15"]],"2:3"]
    ]){
     const response=await page.goto(base+path);
     if(!response||response.status()!==200)throw Error(path+" HTTP failure at "+viewport.width+"px");
@@ -25,6 +26,36 @@ const {chromium}=require("playwright");
     await form.locator("button[type=submit]").click();
     const result=await page.locator("#extra-result").innerText();
     if(!result.includes(expected))throw Error(path+" wrong result at "+viewport.width+"px: "+result);
+    if(path==="/ratio-calculator/"){
+     const ratioMode=page.locator("#ratio-mode");
+     await ratioMode.selectOption("proportion");
+     if(!(await page.locator("#ratio-field-c").isVisible())||!(await page.locator("#ratio-field-d").isVisible())||await page.locator("#ratio-field-factor").isVisible())throw Error("Proportion mode must show C and D and hide the scale factor");
+     await page.locator("#a").fill("2");await page.locator("#b").fill("3");await page.locator("#c").fill("4");await page.locator("#d").fill("");
+     await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("Missing D = 6"))throw Error("2:3 = 4:D should solve D as 6");
+     await page.locator("#a").fill("1e308");await page.locator("#b").fill("1e-308");await page.locator("#c").fill("1e308");await page.locator("#d").fill("");
+     await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("Missing D = 1.000000e-308"))throw Error("A representable tiny proportion result must not be displayed as zero");
+     await ratioMode.selectOption("scale");
+     if(!(await page.locator("#ratio-field-factor").isVisible())||await page.locator("#ratio-field-c").isVisible())throw Error("Scale mode must show the factor and hide proportion fields");
+     await page.locator("#a").fill("2");await page.locator("#b").fill("3");await page.locator("#factor").fill("4");
+     await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("8:12"))throw Error("Scaling 2:3 by 4 should return 8:12");
+     await ratioMode.selectOption("simplify");
+     await page.locator("#a").fill("1.5");await page.locator("#b").fill("2.5");
+     await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("3:5"))throw Error("Decimal ratio 1.5:2.5 should simplify to 3:5");
+     await page.locator("#a").fill("9007199254740993");await page.locator("#b").fill("9007199254740995");
+     await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("9007199254740993:9007199254740995"))throw Error("Ratio inputs must preserve integer precision above Number.MAX_SAFE_INTEGER");
+     await page.locator("#a").fill("0");await page.locator("#b").fill("0");
+     await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("Both ratio terms cannot be zero"))throw Error("Zero-to-zero ratio must be rejected");
+     await ratioMode.selectOption("proportion");
+     await page.locator("#a").fill("2");await page.locator("#b").fill("3");await page.locator("#c").fill("");await page.locator("#d").fill("");
+     await form.locator("button[type=submit]").click();
+     if(!(await page.locator("#extra-result").innerText()).includes("Leave exactly one proportion value blank"))throw Error("Proportion mode must require exactly three known values");
+    }
     if(path==="/percentage-difference-calculator/"){
      if(await page.locator("#first").getAttribute("min")!=="0"||await page.locator("#second").getAttribute("min")!=="0")throw Error("Percentage difference inputs must reject negative values at the HTML level");
      await page.locator("#first").fill("60");await page.locator("#second").fill("40");await form.locator("button[type=submit]").click();
@@ -147,7 +178,7 @@ const {chromium}=require("playwright");
   }
 
   for(const width of [320,360,390,1366]){
-   for(const path of ["/","/percentage-calculator/","/percentage-difference-calculator/","/fraction-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
+   for(const path of ["/","/percentage-calculator/","/percentage-difference-calculator/","/fraction-calculator/","/ratio-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
     const page=await browser.newPage({viewport:{width,height:width===1366?768:844}});
     const response=await page.goto(base+path);
     if(!response||response.status()!==200)throw Error(path+" HTTP failure at "+width+"px");
