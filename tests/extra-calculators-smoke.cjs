@@ -57,6 +57,8 @@ assert.deepEqual(scaleRatio("1.5","2.5","0.1"),{a:"0.15",b:"0.25"});
 assert.deepEqual(scaleRatio("9007199254740993","2","1"),{a:"9007199254740993",b:"2"});
 assert.deepEqual(scaleRatio("0.000001","0.000002","0.000001"),{a:"0.000000000001",b:"0.000000000002"});
 assert.throws(()=>scaleRatio("1.0000001","2","1"),/up to 6 decimal places/);
+assert.throws(()=>scaleRatio("-1","2","1"),/non-negative/);
+assert.throws(()=>scaleRatio("1","2","-1"),/non-negative/);
 assert.throws(()=>scaleRatio(2,3,0),/positive scale factor/);
 assert.throws(()=>scaleRatio(0,0,2),/not both zero/);
 assert.deepEqual(percentageDifference(Number.MIN_VALUE,Number.MIN_VALUE),{difference:0,average:Number.MIN_VALUE,percentage:0});
