@@ -4,6 +4,7 @@ import html
 PAGES = [
  ("percentage-calculator","Percentage Calculator","Calculate a percentage of a number, find what percentage one amount is of another, or measure percentage change with clear inputs and steps.",[("value","Percentage (%)","number"),("total","Number","number")],"What is 25% of 200? Enter 25 and 200 to get 50. Formula: percentage divided by 100, multiplied by the number."),
  ("percentage-difference-calculator","Percentage Difference Calculator","Compare two non-negative values with a symmetric percentage difference calculator. See the absolute gap, average, formula and a worked example.",[("first","First value (0 or more)","number"),("second","Second value (0 or more)","number")],"Percentage difference compares two non-negative values when neither is a starting point. Divide the absolute difference by the average of the two values, then multiply by 100. Swapping the values does not change the result."),
+ ("ratio-calculator","Ratio Calculator","Simplify ratios, scale equivalent ratios, or solve A:B = C:D when one positive value is missing. Includes worked examples and clear input limits.",[("a","First term (A)","number"),("b","Second term (B)","number"),("c","Third term (C)","number"),("d","Fourth term (D)","number"),("factor","Scale factor","number")],"A ratio compares two quantities in a stated order. To simplify A:B, divide both terms by their greatest common divisor. To solve A:B = C:D, enter exactly three positive values and use A × D = B × C. Multiplying both terms by the same positive factor keeps the ratio equivalent."),
  ("fraction-calculator","Fraction Calculator","Add, subtract, multiply or divide fractions and simplify the result.",[("a","First numerator","number"),("b","First denominator","number"),("c","Second numerator","number"),("d","Second denominator","number")],"For addition, a/b + c/d = (ad + bc)/bd. Fractions are reduced to lowest terms."),
  ("compound-interest-calculator","Compound Interest Calculator","Estimate compound growth from a starting amount, annual rate, time and compounding frequency.",[("principal","Starting amount","number"),("rate","Annual interest rate (%)","number"),("years","Years","number"),("frequency","Compounding times per year (1 to 365)","number")],"Formula: A = P × (1 + r/n)^(nt). Rates are entered as annual percentages. This estimate excludes fees, taxes and additional deposits."),
  ("date-calculator","Date Difference Calculator","Find the signed number of calendar days between two dates using the Gregorian calendar, including leap years.",[("start","Start date","date"),("end","End date","date")],"The result is end date minus start date in full calendar days. It does not count the starting day."),
@@ -26,6 +27,14 @@ GUIDES = {
     "Percentage difference and percentage change answer different questions. From 80 to 100, percentage change is 25% because 80 is the starting value. Percentage difference is 22.2222% because 90, the average, is the reference. Use the Percentage Calculator's change mode when one value is the baseline.",
     "If one value is zero and the other is positive, the standard formula returns 200%. If both values are zero, the average is zero and the result is undefined. This calculator accepts non-negative values and rejects negative values so the average-based comparison remains unambiguous.",
     "Compare like with like. Do not compare values in different units or measurement bases. Results are rounded to up to eight decimal places for readability. Percentage difference is not a measure of statistical significance, measurement uncertainty or percent error."
+],
+"ratio-calculator": [
+    "A ratio compares two quantities in a specific order. A:B means the first quantity compared with the second. Keep the order consistent and convert measurements to the same unit before comparing them.",
+    "To simplify a whole-number ratio, divide both terms by their greatest common divisor (GCD). For 10:15, the GCD is 5, so 10 ÷ 5 : 15 ÷ 5 = 2:3. The two ratios describe the same relationship.",
+    "Simplify mode accepts non-negative decimal terms with up to six decimal places. It scales both terms to a common six-decimal integer representation before finding the GCD. Example: 1.5:2.5 becomes 3:5. Inputs with more than six decimal places are rejected rather than silently rounded.",
+    "A proportion states that two ratios are equal: A:B = C:D. Enter exactly three positive values and leave one blank. The calculator uses cross multiplication, A × D = B × C, to solve the missing term. For example, 2:3 = 4:6 because 2 × 6 = 3 × 4.",
+    "To scale a ratio, multiply both terms by the same positive factor. Multiplying 2:3 by 4 gives 8:12. The numbers change, but the relationship remains equivalent because both terms use the same factor.",
+    "In simplify mode, one term can be zero but both cannot be zero, and negative terms are not accepted. Proportion mode requires three positive known values so the missing term has a unique positive result. Scale mode requires a positive factor. These modes compare pure numbers and do not perform unit conversions."
 ],
 "fraction-calculator": [
     "A fraction has a numerator above a denominator. The denominator cannot be zero. A zero denominator is invalid because division by zero has no defined value. To add one half and one third, multiply each numerator by the other denominator, add the two products, and divide by the product of the denominators. The result is five sixths. Subtraction uses the same common denominator but subtracts the cross-products. The calculator then reduces the result to lowest terms using the greatest common divisor.",
@@ -58,6 +67,7 @@ GUIDES = {
 CATEGORY = {
     "percentage-calculator": ("/math/", "Math and Converters"),
     "percentage-difference-calculator": ("/math/", "Math and Converters"),
+    "ratio-calculator": ("/math/", "Math and Converters"),
     "fraction-calculator": ("/math/", "Math and Converters"),
     "compound-interest-calculator": ("/money/", "Money and Business"),
     "date-calculator": ("/time/", "Date and Time"),
@@ -69,18 +79,26 @@ RELATED_LINKS = {
         ("/profit-loss-calculator/", "Profit and Loss Calculator"),
         ("/fraction-calculator/", "Fraction Calculator"),
         ("/percentage-difference-calculator/", "Percentage Difference Calculator"),
+        ("/ratio-calculator/", "Ratio Calculator"),
     ],
     "percentage-difference-calculator": [
         ("/percentage-calculator/", "Percentage Calculator"),
         ("/standard-calculator/", "Standard & Scientific Calculator"),
         ("/fraction-calculator/", "Fraction Calculator"),
+        ("/ratio-calculator/", "Ratio Calculator"),
     ],
     "fraction-calculator": [
         ("/percentage-calculator/", "Percentage Calculator"),
+        ("/ratio-calculator/", "Ratio Calculator"),
         ("/standard-calculator/", "Standard & Scientific Calculator"),
         ("/unit-converter/", "Unit Converter"),
     ],
-    "compound-interest-calculator": [
+    "ratio-calculator": [
+        ("/percentage-calculator/", "Percentage Calculator"),
+        ("/percentage-difference-calculator/", "Percentage Difference Calculator"),
+        ("/fraction-calculator/", "Fraction Calculator"),
+    ],
+"compound-interest-calculator": [
         ("/emi-calculator/", "EMI Calculator"),
         ("/profit-loss-calculator/", "Profit and Loss Calculator"),
         ("/discount-calculator/", "Discount Calculator"),
@@ -95,7 +113,8 @@ RELATED_LINKS = {
 SECTION_HEADINGS = {
     "percentage-calculator": ["Worked percentage examples", "Discounts and tax", "Percentage increase and decrease", "Input limits and rounding", "Finding a percentage share", "How percentage change is measured"],
     "percentage-difference-calculator": ["What percentage difference measures", "Formula and worked example", "Percentage difference vs percentage change", "Why the order does not matter", "Zero and negative values", "Rounding and limitations"],
-    "fraction-calculator": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero denominators", "Large numbers and decimal inputs", "Check the result", "Compare equivalent fractions"],
+    "ratio-calculator": ["What a ratio compares", "Simplify a ratio with the GCD", "Ratios with decimal inputs", "Solve a proportion with one missing value", "Scale an equivalent ratio", "Input limits and units"],
+"fraction-calculator": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero denominators", "Large numbers and decimal inputs", "Check the result", "Compare equivalent fractions"],
     "compound-interest-calculator": ["What compound interest means", "Worked example: semiannual compounding", "Simple versus compound interest", "Formula and variables", "Compare compounding frequency", "Assumptions and limits"],
     "date-calculator": ["How elapsed days are counted", "Leap-year example", "Verify the result manually", "Business days and legal deadlines", "Inclusive versus elapsed dates", "Date order and negative results"],
 }
@@ -116,7 +135,15 @@ FAQS = {
         ("What happens when both values are zero?", "The result is undefined because the average is zero, so the calculator reports that condition instead of a percentage."),
         ("Can I compare values with different units?", "No. Convert them to the same unit and measurement basis before comparing."),
     ],
-    "fraction-calculator": [
+    "ratio-calculator": [
+        ("What is a ratio?", "A ratio compares two quantities in a stated order. A:B means A compared with B. Keep the same unit and order when comparing measurements."),
+        ("How do I simplify a ratio?", "Divide both terms by their greatest common divisor. For example, 10:15 becomes 2:3 because both terms divide by 5."),
+        ("How do I solve A:B = C:D?", "Enter exactly three positive values and leave the missing term blank. The calculator uses A × D = B × C to solve the fourth value."),
+        ("Can I enter decimal values?", "Simplify mode accepts non-negative decimal terms with up to six decimal places. Values with more decimal places are rejected instead of being silently rounded."),
+        ("Can a ratio contain zero?", "In simplify mode, one term may be zero but both cannot be zero. Proportion and scale modes require positive known values."),
+        ("Does scaling change a ratio?", "No. Multiplying both terms by the same positive factor creates an equivalent ratio. For example, 2:3 scaled by 4 becomes 8:12.")
+    ],
+"fraction-calculator": [
         ("What is 1/2 + 1/3?", "5/6. Convert to sixths: 3/6 + 2/6 = 5/6."),
         ("How do I divide two fractions?", "Multiply the first fraction by the reciprocal of the second. For example, 3/4 divided by 1/2 is 3/2."),
         ("Can a fraction have a zero denominator?", "No. A zero denominator is invalid because division by zero is undefined."),
@@ -145,7 +172,12 @@ SOURCE_LINKS = {
         ("Math Is Fun: Percentage Difference", "https://www.mathsisfun.org/percentage-difference", "Explains why the absolute difference is divided by the average when neither value is a starting point."),
         ("Cuemath: Percent Difference", "https://www.cuemath.com/commercial-math/percent-difference/", "Provides the symmetric average-based formula and worked examples."),
     ],
-    "fraction-calculator": [
+    "ratio-calculator": [
+        ("OpenStax: Ratios and proportions", "https://openstax.org/books/contemporary-mathematics/pages/5-4-ratios-and-proportions", "Explains ratios as comparisons and proportions as equal ratios, including cross multiplication."),
+        ("OpenStax: Ratios and rates", "https://openstax.org/books/prealgebra/pages/5-6-ratios-and-rate", "Covers writing, simplifying and interpreting ratios, including decimal ratios."),
+        ("OpenStax: Solve proportions and their applications", "https://openstax.org/books/prealgebra-2e/pages/6-5-solve-proportions-and-their-applications", "Explains how to solve a proportion when three values are known.")
+    ],
+"fraction-calculator": [
         ("OpenStax: Add and subtract fractions with different denominators", "https://openstax.org/books/prealgebra/pages/4-5-add-and-subtract-fractions-with-different-denominators", "Explains common denominators and the worked 1/2 + 1/3 = 5/6 example."),
         ("OpenStax: Fraction operations", "https://openstax.org/books/prealgebra-2e/pages/4-key-concepts", "Summarizes fraction multiplication, division, addition and subtraction."),
     ],
@@ -164,7 +196,7 @@ def build_extra_pages(head,shell,write):
     for slug,title,description,fields,explanation in PAGES:
         path="/"+slug+"/"
         category_path,category_name=CATEGORY[slug]
-        compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator", "percentage-difference-calculator")
+        compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator", "percentage-difference-calculator", "ratio-calculator")
         section_padding = "p-3 sm:p-6" if compact_mobile else "p-4 sm:p-6"
         form_margin = "mt-2" if compact_mobile else "mt-3"
         mobile_columns = "grid-cols-2" if compact_mobile else "grid-cols-1"
@@ -181,9 +213,15 @@ def build_extra_pages(head,shell,write):
         body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="'+form_margin+' grid '+mobile_columns+' sm:grid-cols-2 gap-x-3 gap-y-2 min-w-0'+(" ca-compact-calculator-form" if compact_mobile else "")+'">'
         if slug=="percentage-calculator":
             body+="<div class='sm:col-span-2 mt-1'><label for='percentage-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='percentage-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='of'>What is X% of a number?</option><option value='share'>What percentage is one number of another?</option><option value='change'>What is the percentage change?</option></select></div>"
+        if slug=="ratio-calculator":
+            body+="<div class='col-span-2 sm:col-span-2 mt-1'><label for='ratio-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='ratio-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='simplify'>Simplify a ratio</option><option value='proportion'>Solve a proportion</option><option value='scale'>Scale a ratio</option></select></div>"
         for key,label,kind in fields:
-            body+='<div class="min-w-0"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
-            body+='<input required id="'+key+'" type="'+kind+'" '+('min="0" ' if slug=="percentage-difference-calculator" and kind=="number" else '')+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
+            wrapper_id = (' id="ratio-field-'+key+'"' if slug=="ratio-calculator" else '')
+            hidden_class = (' hidden' if slug=="ratio-calculator" and key in ("c","d","factor") else '')
+            required_attr = '' if slug=="ratio-calculator" else 'required '
+            min_attr = 'min="0" ' if slug in ("percentage-difference-calculator","ratio-calculator") and kind=="number" else ''
+            body+='<div'+wrapper_id+' class="min-w-0'+hidden_class+'"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
+            body+='<input '+required_attr+'id="'+key+'" type="'+kind+'" '+min_attr+('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')+'class="w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]"></div>'
         if slug=="fraction-calculator":
             body+='<div class="sm:col-span-2 compact-form-full min-w-0"><label for="operation" class="block text-sm font-semibold">Operation</label><select id="operation" class="w-full min-w-0 rounded-lg border border-stone-400 p-2 text-base text-stone-900 bg-white min-h-[44px]"><option value="add">Add</option><option value="subtract">Subtract</option><option value="multiply">Multiply</option><option value="divide">Divide</option></select></div>'
         body+='<button type="submit" class="sm:col-span-2 compact-form-full rounded-lg bg-sky-700 text-white font-bold p-3 min-h-[44px]">Calculate</button></form>'
