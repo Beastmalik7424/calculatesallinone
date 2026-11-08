@@ -36,6 +36,9 @@ assert urls, "Sitemap has no URLs"
 assert SITE + "/emi-calculator/" in set(urls), "The live EMI calculator must be included in the XML sitemap"
 assert SITE + "/percentage-difference-calculator/" in set(urls), "The new percentage difference calculator must be included in the XML sitemap"
 assert SITE + "/ratio-calculator/" in set(urls), "The new ratio calculator must be included in the XML sitemap"
+ratio_html = (ROOT / "ratio-calculator" / "index.html").read_text(encoding="utf-8")
+assert 'option value="three"' in ratio_html, "Ratio Calculator must expose the three-term mode"
+assert "Can a ratio have three terms?" in ratio_html and "100:200:400" in ratio_html and "1:2:4" in ratio_html, "Ratio Calculator must explain and demonstrate three-term simplification"
 assert len(urls) == len(set(urls)), "Duplicate URLs found in sitemap"
 lastmod_entries = {
     node.find("sm:loc", ns).text: node.find("sm:lastmod", ns).text
