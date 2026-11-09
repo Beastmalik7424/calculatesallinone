@@ -107,7 +107,7 @@ def check_urdu_bmi():
     main = re.search(r"<main\b[^>]*>(.*?)</main>", source, re.S | re.I)
     assert main, "Urdu BMI main landmark missing"
     body = main.group(1)
-    assert body.find("<h1") < body.find("بالغوں کا BMI اردو میں") < body.find('id="bmi-form"'), "Urdu BMI lead must precede the calculator"
+    assert body.find("<h1") < body.find("بالغوں کا BMI = وزن") < body.find('id="bmi-form"'), "Urdu BMI lead must precede the calculator"
     for target in ("/health/", "/bmi-calculator/", "/calorie-calculator/", "/ur/age-calculator/", "/ur/unit-converter/"):
         assert f'href="{target}"' in body, f"Urdu BMI missing relevant link: {target}"
         assert (ROOT / target.strip("/") / "index.html").is_file(), f"Broken Urdu BMI target: {target}"
