@@ -197,7 +197,6 @@ def normalize_meta(raw, path, lang):
     "/contact/": "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review.",
     "/date-calculator/": "Find calendar days between two dates using the Gregorian calendar. The result accounts for leap years and shows the direction from start date to end date.",
     "/discount-calculator/": "Calculate your discount amount, final sale price and total savings from the original price and discount percentage. See the formula and a worked example.",
-    "/profit-loss-calculator/": "Calculate profit or loss from cost price and selling price. See profit percentage on cost, review worked examples, and learn how markup differs from margin.",
     "/query-calculator/": "Ask in English, Roman Urdu and six other languages about time, months, birth dates and simple arithmetic. Includes the Pakistan Independence Day date.",
     "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",
     "/stopwatch/": "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app.",
