@@ -781,6 +781,8 @@ EXTRA = {
         "faq": [
             ("What is the difference between markup and margin?", "Product markup uses cost as its base; product gross margin uses selling price. Business operating margin uses revenue after listed expenses. These percentages are not interchangeable."),
             ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
+            ("Does this calculator include tax automatically?", "No. Enter relevant direct costs and expenses in the appropriate fields. Sales tax, income tax, refunds and statutory accounting treatment are not inferred by the calculator."),
+            ("What does net operating profit mean here?", "In Business P&L mode it is revenue minus cost of goods sold and the other expenses you enter. It is not a full audited income statement and may exclude interest, tax or costs that you have not entered."),
         ],
     },
     "discount-calculator": {
