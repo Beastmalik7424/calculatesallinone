@@ -946,7 +946,7 @@ TOOLS.extend([
     {
         "slug": "years-to-days-calculator", "category": "time",
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
-        "description": "Convert years to days or days to years using 365, 365.25 or 365.2425 days per year. Exact start-date conversion is available for years to days only.",
+        "description": "Convert years to days or days to years using 365, 365.25 or 365.2425 days per year. Reverse conversion estimates years, average months and remaining days; exact calendar mode uses a start date.",
         "h1": "Years to Days Calculator",
         "lead": "Convert years and days using a 365-day year, the 365.25-day Julian average or the 365.2425-day Gregorian average. Reverse conversion also estimates years, average months and remaining days; enter a start date for an exact calendar span.",
         "ui": (
