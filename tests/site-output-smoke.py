@@ -189,9 +189,16 @@ urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days Calculator | Days to Years Converter</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
-assert 'name="description" content="Convert years to days or days to years using 365, 365.25 or 365.2425 days per year. Count exact calendar days from a start date."' in years_html, "Years-to-Days meta description must explain all conversion methods and exact calendar mode"
+assert 'name="description" content="Convert years and days with 365, 365.25 or 365.2425-day methods. See approximate months and days or count exact days from a start date."' in years_html, "Years-to-Days meta description must explain all conversion methods and exact calendar mode"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 5 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
+assert all(value in years_html for value in (
+    "1,068 2.9260 2.9240 2.9241",
+    "1,188 3.2548 3.2526 3.2526",
+    "1,297 3.5534 3.5510 3.5511",
+    "2,600 7.1233 7.1184 7.1186",
+)), "The days-to-years table should include observed GSC day-count queries"
+assert "How many years and months are in 1,188 days?" in years_html and "3 years, 3 average months and 0.96 days" in years_html, "The observed 1,188-day query should have a clearly labelled approximate month breakdown"
 assert "29,200" in years_html and "29,220" in years_html and "29,219.4" in years_html, "The 80-year row must show all verified conversion methods"
 assert "36,500" in years_html and "36,525" in years_html and "36,524.25" in years_html, "The 100-year row must show all verified conversion methods"
 assert "How many days are in 6 years?" in years_html and "2,190" in years_html and "2,191.5" in years_html and "2,191.455" in years_html, "The Google Search Console six-year conversion query should have a checkable answer"
