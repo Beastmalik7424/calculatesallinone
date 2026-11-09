@@ -167,6 +167,7 @@ def normalize_meta(raw, path, lang):
         "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
         "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
         "/date-calculator/": "Days Between Dates Calculator | CalculatesAll",
+        "/years-to-days-calculator/": "Years to Days Calculator | Days to Years Converter",
         "/money/": "Money Calculators: EMI, Zakat, Profit | CalculatesAll",
         "/math/": "Math Calculators and Unit Converters | CalculatesAll",
         "/contact/": "Contact CalculatesAll | Help and Feedback",
