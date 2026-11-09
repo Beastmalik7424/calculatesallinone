@@ -342,3 +342,29 @@ GUIDE_EXTRA["query-calculator"].extend([
         "The query tool supports defined question patterns rather than every possible natural-language request. Ambiguous wording, unsupported units or missing date details can prevent a reliable answer. For exact days between calendar dates, provide the relevant start and end dates instead of assuming a month has a fixed length.",
     ]),
 ])
+
+
+# Phase 1 priority-page additions: query-specific examples and practical limits.
+GUIDE_EXTRA["tasbih-counter"].extend([
+    ("Using the counter during a short daily session", [
+        "The counter can track a short session at home, while travelling or during a break. Select a phrase, choose a personal target, and tap once for each count you want to record. The large count display and full-width button are intended to remain easy to use on a phone.",
+        "If you pause, the current count remains on this device when browser storage is available. Undo removes one accepted tap from the current count. Reset asks for confirmation before clearing it, so a stray tap does not require starting the session again.",
+    ]),
+    ("What the counter can and cannot verify", [
+        "A digital counter can record the number of taps, but it cannot hear a recitation, confirm pronunciation, or determine whether a phrase or target is religiously required. The target is a personal tracking choice. For religious guidance, consult a qualified scholar or trusted teacher.",
+    ]),
+])
+
+GUIDE_EXTRA["profit-loss-calculator"].append(
+    ("Pakistan shop example: include direct selling costs", [
+        "Suppose a shop buys an item for PKR 800 and pays PKR 50 freight plus PKR 30 packaging before sale. If those direct costs are included, the product cost is PKR 880. Selling it for PKR 1,100 gives PKR 220 profit. Markup on cost is 220 / 880 x 100 = 25%, while gross margin on selling price is 220 / 1,100 x 100 = 20%.",
+        "If the PKR 50 freight and PKR 30 packaging are not included in the product cost, the displayed product profit will be overstated by PKR 80. Enter the full cost relevant to the calculation, and keep tax, refunds, platform charges and other operating expenses separate unless the selected mode and inputs include them.",
+    ])
+)
+
+GUIDE_EXTRA["years-to-days-calculator"].append(
+    ("Search questions about years, months and exact dates", [
+        "A question such as 'how many days are in 10 years?' has more than one valid answer unless the year convention is stated. The simple method gives 3,650 days, the Julian average gives 3,652.5 days, and the Gregorian average gives 3,652.425 days. An actual ten-year calendar interval can contain a different whole-day total depending on its start and end dates.",
+        "A question such as 'how many days are in 3 years and 2 months?' cannot have one exact answer without calendar dates because months have 28, 29, 30 or 31 days. Use the Date Difference Calculator with the actual start and end dates when an exact calendar count is required.",
+    ])
+)
