@@ -1053,7 +1053,7 @@ for slug, phrases in {
     "bmi-calculator": ["22.8571", "18.5 to below 25", "not a diagnosis"],
     "zakat-calculator": ["PKR 153,090", "PKR 16,250", "not a religious ruling"],
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
-    "tasbih-counter": ["three groups of 33 presses", "browser storage", "not a religious practice"],
+    "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice"],
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
