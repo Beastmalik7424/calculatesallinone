@@ -49,9 +49,9 @@ assert set(lastmod_entries) <= set(urls), "Sitemap lastmod entries must refer on
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
-assert not lastmod_entries, (
-    "Sitemap must omit lastmod until reliable page-specific substantive update dates are tracked. "
-    f"Unexpected entries: {lastmod_entries!r}"
+assert lastmod_entries == {SITE + "/years-to-days-calculator/": "2026-11-09"}, (
+    "Only the substantively reviewed Years-to-Days page should have a verified lastmod date. "
+    f"Actual entries: {lastmod_entries!r}"
 )
 def output_for_url(url):
     parsed = urlparse(url)
@@ -192,6 +192,7 @@ assert "<title>Years to Days Calculator | Days to Years Converter</title>" in ye
 assert 'name="description" content="Convert years and days with 365, 365.25 or 365.2425-day methods. See approximate months and days or count exact days from a start date."' in years_html, "Years-to-Days meta description must explain all conversion methods and exact calendar mode"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 5 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
+assert "Last updated: 2026-11-09." in years_html, "The substantively reviewed Years-to-Days page should display its verified update date"
 _gsc_day_examples = (
     "1,068 2.9260 2.9240 2.9241",
     "1,188 3.2548 3.2526 3.2526",
