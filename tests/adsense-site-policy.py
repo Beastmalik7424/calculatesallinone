@@ -15,12 +15,12 @@ ERRORS = []
 def page_text(path):
     raw = (ROOT / path / "index.html").read_text(encoding="utf-8")
     raw = re.sub(r"<script.*?</script>|<style.*?</style>", " ", raw, flags=re.S)
-    return re.sub(r"\\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", raw))).strip()
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", raw))).strip()
 
 
 def has_heading(path, name):
     raw = (ROOT / path / "index.html").read_text(encoding="utf-8")
-    return re.search(r"<h[1-6][^>]*>\\s*" + re.escape(name) + r"\\s*</h[1-6]>", raw) is not None
+    return re.search(r"<h[1-6][^>]*>\s*" + re.escape(name) + r"\s*</h[1-6]>", raw) is not None
 
 
 def check(cond, msg):
@@ -41,9 +41,9 @@ for slug in TOOLS_WITH_EXAMPLE:
         check(has_heading(slug, name), f"/{slug}/ has no heading exactly '{name}'")
 
 for p in ROOT.rglob("index.html"):
-    m = re.search(r"Last updated: (\\S+)", p.read_text(encoding="utf-8"))
+    m = re.search(r"Last updated: (\S+)", p.read_text(encoding="utf-8"))
     if m:
-        check(re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", m.group(1)) is not None,
+        check(re.fullmatch(r"\d{4}-\d{2}-\d{2}", m.group(1)) is not None,
               f"{p}: 'Last updated' is not YYYY-MM-DD")
 
 for e in ERRORS:
