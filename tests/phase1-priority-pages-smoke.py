@@ -77,13 +77,9 @@ def check_english_page(slug, spec):
     body = main.group(1)
     h1_pos = body.find("<h1")
     form_pos = body.find(spec["form"])
-    lead_candidates = [
-        body.find('class="ca-tool-lead"'),
-        body.find('class="ca-tool-lead-after'),
-    ]
-    lead_positions = [position for position in lead_candidates if position >= 0]
-    assert h1_pos >= 0 and lead_positions, f"Missing first-screen heading/value proposition: {slug}"
-    assert h1_pos < min(lead_positions) < form_pos, f"Lead must appear between H1 and calculator: {slug}"
+    lead_match = re.search(r'<p class="[^"]*\\bca-tool-lead\\b[^"]*">', body)
+    assert h1_pos >= 0 and lead_match, f"Missing first-screen heading/value proposition: {slug}"
+    assert h1_pos < lead_match.start() < form_pos, f"Lead must appear between H1 and calculator: {slug}"
 
     assert "Related calculators" in body, f"Missing related tools section: {slug}"
     for target in spec["related"]:
