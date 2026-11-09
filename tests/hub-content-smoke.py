@@ -73,7 +73,7 @@ years_to_days = (Path("public") / "years-to-days-calculator" / "index.html").rea
 title_line = next((line for line in years_to_days.splitlines() if "<title>" in line), "")
 assert "<title>Years to Days Calculator | Days to Years Converter</title>" in title_line, "Years-to-days title should name both supported conversion directions"
 description_line = next((line for line in years_to_days.splitlines() if '<meta name="description"' in line), "")
-assert "365-day and 365.2425-day methods" in description_line and "exact leap-year-aware days from a Gregorian start date." in description_line, "Years-to-days metadata must describe both year-length methods and the exact-date mode"
+assert "using 365, 365.25 or 365.2425 days per year" in description_line and "Count exact calendar days from a start date." in description_line, "Years-to-days metadata must describe all three methods and the exact-date mode"
 assert "Exact calendar years (years to days only)" in years_to_days, "Years-to-days UI must keep the exact-mode direction limitation visible"
 
 print("Money, Math and Time hub content, canonical/indexability and contextual links verified")
