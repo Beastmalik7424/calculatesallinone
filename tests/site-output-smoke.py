@@ -189,43 +189,48 @@ urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days Calculator | Days to Years Converter</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
-assert 'name="description" content="Convert years to days or days to years. Compare 365-day and 365.2425-day methods, or count exact leap-year-aware days from a Gregorian start date."' in years_html, "Years-to-Days meta description must explain both conversion methods and exact calendar mode"
+assert 'name="description" content="Convert years to days or days to years using 365, 365.25 or 365.2425 days per year. Count exact calendar days from a start date."' in years_html, "Years-to-Days meta description must explain all conversion methods and exact calendar mode"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 5 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
-assert "29,200" in years_html and "29,219.4" in years_html, "The 80-year row must show both verified conversion methods"
-assert "36,500" in years_html and "36,524.25" in years_html, "The 100-year row must show both verified conversion methods"
-assert "How many days are in 6 years?" in years_html and "2,190" in years_html and "2,191.455" in years_html, "The Google Search Console six-year conversion query should have a checkable answer"
-assert "How many days are in 20 years?" in years_html and "7,300" in years_html and "7,304.85" in years_html, "The Google Search Console 20-year query should have a checkable answer"
-assert "How many days are in 50 years?" in years_html and "18,250" in years_html and "18,262.125" in years_html, "The Google Search Console 50-year query should have a checkable answer"
-assert "How many days, hours, minutes and seconds are in 9 years?" in years_html and all(value in years_html for value in ("3,285 days", "78,840 hours", "4,730,400 minutes", "283,824,000 seconds", "3,287.1825 days", "78,892.38 hours", "4,733,542.8 minutes", "284,012,568 seconds")), "The exposed nine-year multi-unit query should show internally consistent results for both year methods"
-assert 9 * 365 * 24 * 60 * 60 == 283824000 and round(9 * 365.2425 * 24 * 60 * 60) == 284012568, "Nine-year second totals must match both conversion factors"
-assert "How many hours and minutes are in 10 years?" in years_html and "87,600 hours" in years_html and "5,256,000 minutes" in years_html and "87,658.2 hours" in years_html and "5,259,492 minutes" in years_html, "The exposed 10-year hours/minutes query should show internally consistent results for both year methods"
+assert "29,200" in years_html and "29,220" in years_html and "29,219.4" in years_html, "The 80-year row must show all verified conversion methods"
+assert "36,500" in years_html and "36,525" in years_html and "36,524.25" in years_html, "The 100-year row must show all verified conversion methods"
+assert "How many days are in 6 years?" in years_html and "2,190" in years_html and "2,191.5" in years_html and "2,191.455" in years_html, "The Google Search Console six-year conversion query should have a checkable answer"
+assert "How many days are in 20 years?" in years_html and "7,300" in years_html and "7,305" in years_html and "7,304.85" in years_html, "The Google Search Console 20-year query should have a checkable answer"
+assert "How many days are in 50 years?" in years_html and "18,250" in years_html and "18,262.5" in years_html and "18,262.125" in years_html, "The Google Search Console 50-year query should have a checkable answer"
+assert "How many days, hours, minutes and seconds are in 9 years?" in years_html and all(value in years_html for value in ("3,285 days", "78,840 hours", "4,730,400 minutes", "283,824,000 seconds", "3,287.25 days", "78,894 hours", "4,733,640 minutes", "284,018,400 seconds", "3,287.1825 days", "78,892.38 hours", "4,733,542.8 minutes", "284,012,568 seconds")), "The exposed nine-year multi-unit query should show internally consistent results for both year methods"
+assert 9 * 365 * 24 * 60 * 60 == 283824000 and round(9 * 365.25 * 24 * 60 * 60) == 284018400 and round(9 * 365.2425 * 24 * 60 * 60) == 284012568, "Nine-year second totals must match all conversion factors"
+assert "How many hours and minutes are in 10 years?" in years_html and "87,600 hours" in years_html and "5,256,000 minutes" in years_html and "87,660 hours" in years_html and "5,259,600 minutes" in years_html and "87,658.2 hours" in years_html and "5,259,492 minutes" in years_html, "The exposed 10-year hours/minutes query should show internally consistent results for all year methods"
 assert "How do I convert days to years?" in years_html and "191.78 years" in years_html and "191.65 years" in years_html, "Reverse conversion guidance should include a checkable real search example"
 assert "How many years and days are in 115 months?" in years_html and "9 years and 7 months" in years_html and "3,500.24 days" in years_html, "The exposed 115-month query should explain its average-month assumption"
 assert "How many years and months are in 504 days?" in years_html and "1 year, 4 months and 17 days" in years_html, "The exposed 504-day query should explain its average-month assumption"
-assert all(value in years_html for value in ("1,460", "1,460.97", "4,015", "4,017.6675", "4,745", "4,748.1525")), "Quick reference table should include the exposed 11- and 13-year conversions"
-assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
+assert all(value in years_html for value in ("1,460", "1,461", "1,460.97", "4,015", "4,017.75", "4,017.6675", "4,745", "4,748.25", "4,748.1525")), "Quick reference table should include the exposed 11- and 13-year conversions for all methods"
+assert "80 saal mein kitne din hote hain?" in years_html and "29,200" in years_html and "29,220" in years_html and "29,219.4" in years_html, "The observed Roman Urdu 80-year query should have a clear bilingual answer"
 # The latest finalized GSC query sample included additional year counts. Keep the
 # reference table useful for those exact intents, and verify each value with Decimal.
 _year_reference_expected = {
-    9: ("3,285", "3,287.1825"),
-    14: ("5,110", "5,113.395"),
-    16: ("5,840", "5,843.88"),
-    21: ("7,665", "7,670.0925"),
-    32: ("11,680", "11,687.76"),
-    40: ("14,600", "14,609.7"),
-    60: ("21,900", "21,914.55"),
-    74: ("27,010", "27,027.945"),
+    "1.5": ("547.5", "547.875", "547.86375"),
+    "9": ("3,285", "3,287.25", "3,287.1825"),
+    "14": ("5,110", "5,113.5", "5,113.395"),
+    "16": ("5,840", "5,844", "5,843.88"),
+    "21": ("7,665", "7,670.25", "7,670.0925"),
+    "32": ("11,680", "11,688", "11,687.76"),
+    "40": ("14,600", "14,610", "14,609.7"),
+    "60": ("21,900", "21,915", "21,914.55"),
+    "74": ("27,010", "27,028.5", "27,027.945"),
 }
-for _years, (_simple, _average) in _year_reference_expected.items():
+for _years, (_simple, _julian, _average) in _year_reference_expected.items():
     _row = (
-        '<tr><th scope="row" class="border-b p-3">' + str(_years) + '</th>'
+        '<tr><th scope="row" class="border-b p-3">' + _years + '</th>'
         '<td class="border-b p-3">' + _simple + '</td>'
+        '<td class="border-b p-3">' + _julian + '</td>'
         '<td class="border-b p-3">' + _average + '</td></tr>'
     )
     assert _row in years_html, f"Missing verified quick-reference row for {_years} years"
     assert Decimal(_years) * Decimal("365") == Decimal(_simple.replace(",", "")), _years
+    assert Decimal(_years) * Decimal("365.25") == Decimal(_julian.replace(",", "")), _years
     assert Decimal(_years) * Decimal("365.2425") == Decimal(_average.replace(",", "")), _years
+assert '<option value="365.25">Julian average (365.25)</option>' in years_html, "The calculator UI must expose the Julian average as a selectable method"
+assert "NASA/JPL astrodynamic parameters" in years_html and "U.S. Naval Observatory leap-year guidance" in years_html, "The year definitions must cite authoritative primary sources"
 # The standalone EMI page must use the shared SVG favicon instead of triggering a missing /favicon.ico request.
 emi_html = output_for_url(SITE + "/emi-calculator/").read_text(encoding="utf-8")
 emi_head = re.search(r"<head\b[^>]*>(.*?)</head>", emi_html, re.S | re.I)
