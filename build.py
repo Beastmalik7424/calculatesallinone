@@ -254,7 +254,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
         "h1": "Profit and Loss Calculator for Business and Products",
-        "lead": "A profit and loss calculator estimates business profit or loss from revenue, costs and expenses, or product profit from cost and selling price. Choose the calculation type to see the correct percentage basis.",
+        "lead": "Calculate business profit or loss, product profit, markup and margin. Choose a calculation type to use the correct percentage basis.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
@@ -473,7 +473,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Free online digital tasbih counter for dhikr and zikr with 33, 99 and custom targets. Tap to count on mobile or desktop; no app download needed.",
         "h1": "Free Online Tasbih Counter",
-        "lead": "A free digital tasbeeh counter for daily dhikr. Choose a phrase, set a target, and keep your count on this device without downloading an app.",
+        "lead": "Count dhikr on this device. Choose a phrase and target, then undo a tap if needed.",
         "ui": (
             '<div class="ca-tasbih-shell max-w-lg mx-auto space-y-5" id="tasbih-app">'
             '<div class="ca-tasbih-settings">'
@@ -665,7 +665,7 @@ URDU = {
         "title": "بالغ BMI کیلکولیٹر اردو میں | وزن اور قد | CalculatesAll",
         "description": "بالغوں کا BMI اردو میں نکالیں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں، فارمولا اور WHO حدود سمجھیں۔ BMI اسکریننگ ہے، تشخیص نہیں۔",
         "h1": "بالغوں کے لیے BMI کیلکولیٹر",
-        "lead": "بالغوں کا BMI = وزن (kg) ÷ قد (میٹر)²۔ یعنی وزن کو قد کے مربع سے تقسیم کریں۔ 18.5 سے 25 سے کم عمومی حد ہے۔ BMI اسکریننگ ہے، تشخیص نہیں۔",
+        "lead": "BMI = وزن (kg) ÷ قد (میٹر)²۔ بالغوں کی عمومی حد 18.5 سے 25 سے کم ہے۔ BMI اسکریننگ ہے، تشخیص نہیں۔",
         "labels": [
             ("Weight (kg)", "وزن (کلو گرام)"),
             ("Weight unit", "وزن کی اکائی"),
@@ -953,7 +953,7 @@ TOOLS.extend([
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
         "description": "Convert years to days or days to years using 365, 365.25 or 365.2425 days per year. Reverse conversion estimates years, average months and remaining days; exact calendar mode uses a start date.",
         "h1": "Years to Days Calculator",
-        "lead": "Convert years and days using a 365-day year, the 365.25-day Julian average or the 365.2425-day Gregorian average. Reverse conversion also estimates years, average months and remaining days; enter a start date for an exact calendar span.",
+        "lead": "Convert years and days with 365, 365.25 or 365.2425-day methods. Use a start date to count exact calendar days.",
         "ui": (
             '<form id="years-days-form" class="space-y-3" novalidate>'
             '<div class="grid grid-cols-2 gap-3">'
