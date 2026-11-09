@@ -193,17 +193,17 @@ GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
     ("Years and months in days: interpreting search questions", [
         "For 29 years, the simple conversion is 29 x 365 = 10,585 days. Using the Gregorian average gives 29 x 365.2425 = 10,592.0325 days. The exact calendar-day total depends on the start and end dates.",
         "For 3 years and 2 months, there is no single exact number of days without calendar dates: months contain 28, 29, 30 or 31 days. Enter the actual dates in the date difference calculator for an exact Gregorian calendar interval.",
-        "To convert 800,000 days into approximate years, divide by the chosen year length: 800,000 / 365 = about 2,191.78 simple years, or 800,000 / 365.2425 = about 2,190.33 Gregorian-average years. This is a duration conversion, not a birth-date calculation.",
+        "To convert 800,000 days into approximate years, divide by the chosen year length: 800,000 / 365 = about 2,191.78 simple years, 800,000 / 365.25 = about 2,190.28 Julian years, or 800,000 / 365.2425 = about 2,190.33 Gregorian-average years. This is a duration conversion, not a birth-date calculation.",
     ])
 )
 
 # Distinctive, query-matched explanations benchmarked against calculator competitors.
 # Keep one canonical page per intent and explain assumptions instead of duplicating pages.
 GUIDE_EXTRA["years-to-days-calculator"].append(
-    ("365 days versus 365.2425 days per year", [
-        "A fixed 365-day year is useful for simple arithmetic. The 365.2425-day Gregorian mean reflects the complete 400-year leap-year cycle: (400 x 365 + 97) / 400 = 365.2425. Some converters use 365.25, a four-year approximation. The methods are not identical over very long durations.",
-        "For 13 years, the simple result is 4,745 days, while the Gregorian-average result is 4,748.1525 days. Neither value establishes the exact number of days between two calendar anniversaries without a start date. Use the date difference tool for that question.",
-        "A day count of 800,000 divided by 365.2425 gives approximately 2,190.33 years. Always state which year length you selected when comparing conversion results from different sites.",
+    ("365 days, 365.25 days and 365.2425 days per year", [
+        "A fixed 365-day year is useful for simple arithmetic. A Julian year is exactly 365.25 days, a fixed duration used in astronomy. The Gregorian mean is 365.2425 days because its 400-year cycle has 97 leap days: (400 x 365 + 97) / 400 = 365.2425. These methods are not identical over long durations.",
+        "For 13 years, the simple result is 4,745 days, the Julian-average result is 4,748.25 days, and the Gregorian-average result is 4,748.1525 days. None establishes the exact number of days between two calendar anniversaries without a start date. Use the date difference tool for that question.",
+        "A day count of 800,000 is approximately 2,191.78 simple years, 2,190.28 Julian years or 2,190.33 Gregorian-average years. Always state which year length you selected when comparing conversion results from different sites.",
     ])
 )
 GUIDE_EXTRA["profit-loss-calculator"].append(
