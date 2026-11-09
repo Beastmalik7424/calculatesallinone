@@ -303,3 +303,42 @@ TRUST_EXTRA = {
         "You can ask us about the personal information we hold about you by contacting the address on the contact page. Because the calculators run in your browser, we normally hold no personal information about you.",
     ],
 }
+
+
+# Required page sections for the site-side AdSense content checks.
+# Keep these explanations tied to each tool's actual behaviour and stated assumptions.
+GUIDE_EXTRA["stopwatch"].extend([
+    ("Worked example", [
+        "If a timing starts at 0 seconds and stops at 83 seconds, the elapsed interval is 83 seconds, or 1 minute and 23 seconds. For a longer interval of 3,725 seconds, divide by 3,600 to get 1 hour with 125 seconds remaining, then divide 125 by 60 to get 2 minutes with 5 seconds remaining.",
+    ]),
+    ("Method", [
+        "Elapsed time is the difference between the recorded stop point and start point. A lap is a checkpoint within the same timing session, while Reset clears the current session so a new interval can be measured.",
+    ]),
+    ("Limits", [
+        "A browser stopwatch is suitable for everyday timing, workouts and study sessions, not certified sports, laboratory or legal measurement. Device scheduling, background tabs and browser load can delay display updates, so do not rely on hundredths of a second as a certified accuracy guarantee.",
+    ]),
+])
+
+GUIDE_EXTRA["tasbih-counter"].extend([
+    ("Worked example", [
+        "For a personal target of 99 presses, three groups of 33 presses make 3 x 33 = 99. If the current count is 67, the remaining count is 99 - 67 = 32. This example explains the counter arithmetic and does not prescribe a religious practice.",
+    ]),
+    ("Method", [
+        "Each deliberate press adds one to the current count. When a target is selected, the remaining amount is the target minus the current count, with completion shown when the count reaches the target. Reset begins a new count from zero.",
+    ]),
+    ("Limits", [
+        "The counter records button presses, not the wording or religious status of a recitation. Saved progress depends on browser storage on the current device and may be lost when site data is cleared, private browsing ends or a different browser or device is used.",
+    ]),
+])
+
+GUIDE_EXTRA["query-calculator"].extend([
+    ("Worked example", [
+        "Question: 4 hours in minutes. One hour contains 60 minutes, so 4 x 60 = 240 minutes. To check the answer, divide 240 by 60 and confirm that the result is 4 hours.",
+    ]),
+    ("Method", [
+        "For a supported unit conversion, identify the starting unit, apply the conversion factor for that unit pair, and label the result with the target unit. Reverse conversions use the inverse factor. Calendar questions are handled as dates rather than treating every month as an identical number of days.",
+    ]),
+    ("Limits", [
+        "The query tool supports defined question patterns rather than every possible natural-language request. Ambiguous wording, unsupported units or missing date details can prevent a reliable answer. For exact days between calendar dates, provide the relevant start and end dates instead of assuming a month has a fixed length.",
+    ]),
+])
