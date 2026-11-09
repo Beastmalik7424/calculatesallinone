@@ -49,23 +49,25 @@ CASES = {
         "up to six decimal places",
     ],
     "years-to-days-calculator": [
-        "For 13 years, the simple result is 4,745 days, while the Gregorian-average result is 4,748.1525 days.",
+        "For 13 years, the simple result is 4,745 days, the Julian-average result is 4,748.25 days, and the Gregorian-average result is 4,748.1525 days.",
         "For 29 years, the simple conversion is 29 x 365 = 10,585 days.",
         "6 2,190 2,191.455",
         "15 5,475 5,478.6375",
         "25 9,125 9,131.0625",
         "29 10,585 10,592.0325",
         "30 10,950 10,957.275",
-        "1,009 days is 2.76254817 years",
+        "1,009 days is 2.76438356 years using a 365-day year, 2.76249144 years using the 365.25-day Julian average, or 2.76254817 years",
+        "365.25-day Julian average",
+        "1.5 547.5 547.875 547.86375",
         "Worked reference: days to years",
-        "724 1.9836 1.9822",
-        "1,145 3.1370 3.1349",
-        "1,476 4.0438 4.0412",
-        "2,436 6.6740 6.6695",
-        "7,200 19.7260 19.7129",
-        "27,375 75.0000 74.9502",
-        "28,000 76.7123 76.6614",
-        "42,069 115.2575 115.1810",
+        "724 1.9836 1.9822 1.9822",
+        "1,145 3.1370 3.1348 3.1349",
+        "1,476 4.0438 4.0411 4.0412",
+        "2,436 6.6740 6.6694 6.6695",
+        "7,200 19.7260 19.7125 19.7129",
+        "27,375 75.0000 74.9487 74.9502",
+        "28,000 76.7123 76.6598 76.6614",
+        "42,069 115.2575 115.1786 115.1810",
     ],
 }
 
@@ -88,6 +90,18 @@ def main():
                 failures.append(f"/{slug}/ is missing worked example: {phrase}")
         if "OWNER TO PROVIDE" in text or "REQUIRES OWNER OR COUNSEL REVIEW" in text:
             failures.append(f"/{slug}/ contains an unresolved legal placeholder")
+    home_path = ROOT / "index.html"
+    if not home_path.is_file():
+        failures.append("Homepage / was not generated")
+    else:
+        home_text = visible_text(home_path)
+        for phrase in [
+            "Free Online Calculators and Utility Tools",
+            "CalculatesAll offers free online calculators for health, money, business, dates, mathematics and everyday conversions.",
+            "Browse all free calculators",
+        ]:
+            if phrase not in home_text:
+                failures.append("Homepage is missing the verified answer-first summary: " + phrase)
     if failures:
         for failure in failures:
             print("FAIL:", failure)
