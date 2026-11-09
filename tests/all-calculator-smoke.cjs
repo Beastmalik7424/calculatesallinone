@@ -110,11 +110,14 @@ assert.match(elements["yd-result"].textContent, /1,009 days = 2\.76254817 years/
 elements["yd-method"].value = "365";
 submit("years-days-form");
 assert.match(elements["yd-result"].textContent, /2\.76438356 years/);
+elements["yd-method"].value = "365.25";
+submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /2\.76249144 years/);
 setValues({"yd-value":-1}); submit("years-days-form");
 assert.match(elements["yd-result"].textContent, /Enter a number of days from 0 to 1,000,000/);
 elements["yd-method"].value = "calendar";
 submit("years-days-form");
-assert.match(elements["yd-result"].textContent, /choose a 365-day or Gregorian-average year/i);
+assert.match(elements["yd-result"].textContent, /choose a 365-day year, 365\.25-day Julian average or Gregorian-average year/i);
 elements["yd-direction"].value = "years-to-days";
 elements["yd-direction"]._handlers.change();
 assert.equal(elements["yd-calendar-option"].disabled, false);
