@@ -253,8 +253,8 @@ TOOLS = [
         "name": "Profit and Loss Calculator",
         "app": "UtilitiesApplication",
         "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
-        "h1": "Profit and Loss Calculator for Business and Products",
-        "lead": "Calculate business profit or loss, product profit, markup and margin. Choose a calculation type to use the correct percentage basis.",
+        "h1": "Profit and Loss Calculator",
+        "lead": "Calculate business profit, loss, markup and margin.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
@@ -1828,13 +1828,13 @@ def tool_page(t):
         + ui + '</section>'
     )
     answer_note = answer_block(t["slug"], "en")
-    primary_tool_content = calculator_section + answer_note
     breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/">Home</a></li>'
         '<li><span aria-hidden="true" class="mr-2">/</span><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li>'
         '<li aria-current="page"><span aria-hidden="true" class="mr-2">/</span>' + t["name"] + "</li></ol></nav>"
     )
+    primary_tool_content = calculator_section + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "") + answer_note
     profit_reference_table = (
         '<section class="mt-8" aria-labelledby="markup-margin-comparison">'
         '<h2 id="markup-margin-comparison" class="' + H2 + '">Markup versus margin at a glance</h2>'
@@ -1852,7 +1852,7 @@ def tool_page(t):
     priority_first_screen = t["slug"] in {"tasbih-counter", "profit-loss-calculator", "years-to-days-calculator"}
     opening_lead = '<p class="ca-tool-lead mt-3 text-base leading-relaxed text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
     body = (
-        breadcrumb_html
+        ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
         + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
         + (opening_lead + primary_tool_content
            if priority_first_screen
