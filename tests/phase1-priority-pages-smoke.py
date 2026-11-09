@@ -5,6 +5,7 @@ These checks exercise generated static HTML, not a duplicate implementation of
 calculator formulas. They protect metadata, first-screen order, navigation,
 language alternates and JSON-LD syntax.
 """
+import html
 import json
 import re
 from pathlib import Path
@@ -63,7 +64,8 @@ def jsonld_documents(source, slug):
 
 def check_english_page(slug, spec):
     source = read_page(slug)
-    assert f"<title>{spec['title']}</title>" in source, f"Search title mismatch: {slug}"
+    title_match = re.search(r"<title>(.*?)</title>", source, re.S | re.I)
+    assert title_match and html.unescape(title_match.group(1)) == spec["title"], f"Search title mismatch: {slug}"
     description = re.search(r'<meta name="description" content="([^"]*)"', source)
     assert description and description.group(1) == spec["description"], f"Meta description mismatch: {slug}"
     assert f'<link rel="canonical" href="{SITE}/{slug}/">' in source, f"Canonical changed: {slug}"
