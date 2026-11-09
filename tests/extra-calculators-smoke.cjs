@@ -81,6 +81,12 @@ assert.throws(()=>compound(1000,-1200,1,12));
 assert.equal(dateDifference("2024-02-28","2024-03-01"),2);
 assert.equal(dateDifference("2026-01-01","2026-01-01"),0);
 assert.equal(dateDifference("2026-01-02","2026-01-01"),-1);
+assert.equal(dateDifference("0001-01-01","0001-01-02"),1);
+assert.equal(dateDifference("0004-02-28","0004-03-01"),2);
+assert.equal(dateDifference("0099-12-31","0100-01-01"),1);
+assert.equal(dateDifference("0100-02-28","0100-03-01"),1);
+assert.equal(dateDifference("0400-02-28","0400-03-01"),2);
+assert.throws(()=>dateDifference("0000-01-01","0001-01-01"));
 assert.throws(()=>dateDifference("2026-02-29","2026-03-01"));
 console.log("Competitor calculator arithmetic and date regression: PASS");
 
