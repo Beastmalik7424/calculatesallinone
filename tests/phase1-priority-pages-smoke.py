@@ -85,11 +85,9 @@ def check_english_page(slug, spec):
 
     assert "Related calculators" in body, f"Missing related tools section: {slug}"
     for target in spec["related"]:
-        assert f'href="{target}"' in body, f"Missing relevant internal link {target} on {slug}"
-        if target.startswith("/") and not target.startswith("/ur/"):
-            assert (ROOT / target.strip("/") / "index.html").is_file(), f"Broken generated target {target}"
-        elif target.startswith("/ur/"):
-            assert (ROOT / target.strip("/") / "index.html").is_file(), f"Broken generated Urdu target {target}"
+        link_source = source if target.startswith("/ur/") else body
+        assert f'href="{target}"' in link_source, f"Missing relevant internal link {target} on {slug}"
+        assert (ROOT / target.strip("/") / "index.html").is_file(), f"Broken generated target {target}"
 
     questions = re.findall(r"<summary\b[^>]*>(.*?)</summary>", body, re.S | re.I)
     assert len(questions) >= spec["faq_min"], f"Insufficient visible FAQs: {slug}"
