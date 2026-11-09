@@ -26,6 +26,21 @@ const {chromium}=require("playwright");
     await form.locator("button[type=submit]").click();
     const result=await page.locator("#extra-result").innerText();
     if(!result.includes(expected))throw Error(path+" wrong result at "+viewport.width+"px: "+result);
+    if(path==="/date-calculator/"){
+     for(const [start,end,expectedDays] of [
+      ["0001-01-01","0001-01-02","1 day"],
+      ["0004-02-28","0004-03-01","2 days"],
+      ["0099-12-31","0100-01-01","1 day"],
+      ["0100-02-28","0100-03-01","1 day"],
+      ["0400-02-28","0400-03-01","2 days"]
+     ]){
+      await page.locator("#start").fill(start);
+      await page.locator("#end").fill(end);
+      await form.locator("button[type=submit]").click();
+      const dateResult=await page.locator("#extra-result").innerText();
+      if(!dateResult.includes(expectedDays))throw Error("Date difference "+start+" to "+end+" expected "+expectedDays+" at "+viewport.width+"px: "+dateResult);
+     }
+    }
     if(path==="/ratio-calculator/"){
      const ratioMode=page.locator("#ratio-mode");
      await ratioMode.selectOption("three");
