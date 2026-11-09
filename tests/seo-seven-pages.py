@@ -119,12 +119,8 @@ check("online calculator" in home.lower(), "homepage should retain the online ca
 check("profit loss calculator" in profit_loss.lower(), "profit-loss page should retain the profit loss calculator wording")
 profit_desc_match = re.search(r'<meta name="description" content="([^"]*)"', profit_loss, re.I)
 profit_desc = html.unescape(profit_desc_match.group(1)).lower() if profit_desc_match else ""
-check("cost price" in profit_desc and "selling price" in profit_desc,
-      "profit-loss meta description must describe the actual cost-price and selling-price inputs")
-check("profit percentage on cost" in profit_desc,
-      "profit-loss meta description must describe the actual cost-based percentage")
-check("operating profit" not in profit_desc and "gross profit" not in profit_desc,
-      "profit-loss meta description must not promise unsupported operating/gross profit calculations")
+for feature in ("revenue", "cost of goods sold", "expenses", "product profit", "markup", "gross profit", "operating profit", "margin"):
+    check(feature in profit_desc, "profit-loss meta description must accurately cover the page's business and product modes: missing " + feature)
 for path in TARGETS:
     check(bool(re.search(r'href=["\']' + re.escape(path) + r'["\']', home)),
           "homepage is missing direct internal link to " + path)
