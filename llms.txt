@@ -39,7 +39,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 - [Standard Calculator](https://calculateallinone.vercel.app/standard-calculator/): Everyday arithmetic and scientific mode.
 - [Percentage Calculator](https://calculateallinone.vercel.app/percentage-calculator/): Percentage of a number, percentage share and percentage increase/decrease.
 - [Percentage Difference Calculator](https://calculateallinone.vercel.app/percentage-difference-calculator/): Compare two non-negative values using the absolute difference divided by their average. Includes a worked example and explains how percentage difference differs from percentage change.
-- [Ratio Calculator](https://calculateallinone.vercel.app/ratio-calculator/): Simplify ratios, scale equivalent ratios and solve a proportion when one positive value is missing.
+- [Ratio Calculator](https://calculateallinone.vercel.app/ratio-calculator/): Simplify two- or three-term ratios, scale equivalent two-term ratios and solve a proportion when one positive value is missing.
 - [Fraction Calculator](https://calculateallinone.vercel.app/fraction-calculator/): Add, subtract, multiply and divide fractions with simplified results.
 - [Unit Converter](https://calculateallinone.vercel.app/unit-converter/): Weight, length and temperature conversions with stated factors.
 

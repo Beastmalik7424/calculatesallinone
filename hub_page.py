@@ -22,7 +22,7 @@ TOOLS = [
     ("BMI Calculator", "/bmi-calculator/", "Health", "Calculates adult body mass index in metric or imperial units.", "BMI is a screening measure, not a diagnosis."),
     ("Percentage Calculator", "/percentage-calculator/", "Math", "Finds a percentage of a number, or the percentage one number is of another.", "Confirm which value is the base."),
     ("Percentage Difference Calculator", "/percentage-difference-calculator/", "Math", "Compares two non-negative values using their average.", "Use percentage change when one value is the starting point."),
-    ("Ratio Calculator", "/ratio-calculator/", "Math", "Simplifies two terms, scales an equivalent ratio or solves a proportion with one missing value.", "Use the same units and enter exactly three positive values for a proportion."),
+    ("Ratio Calculator", "/ratio-calculator/", "Math", "Simplifies two- or three-term ratios, scales an equivalent ratio or solves a proportion with one missing value.", "Use the same units. Three-term ratios keep all three quantities in order."),
     ("Fraction Calculator", "/fraction-calculator/", "Math", "Adds, subtracts, multiplies and divides fractions exactly.", "Results are simplified fractions."),
     ("Standard Calculator", "/standard-calculator/", "Math", "Performs everyday arithmetic with a scientific mode.", "Check operator order when using parentheses."),
     ("Unit Converter", "/unit-converter/", "Math", "Converts length, weight, temperature and other common units.", "Temperature needs an offset as well as a scale factor."),

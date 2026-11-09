@@ -39,6 +39,9 @@ CASES = {
             "cross multiplication",
             "up to six decimal places",
             "positive known values",
+            "100:200:400",
+            "1:2:4",
+            "three-term ratio",
         ],
     },
     "fraction-calculator": {
