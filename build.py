@@ -22,8 +22,8 @@ if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
 SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
-# No page-specific substantive update dates are currently verified.
-LASTMOD = {}
+# Only substantive, manually verified page updates belong here.
+LASTMOD = {"/years-to-days-calculator/": "2026-11-09"}
 OUT = "public"
 STATIC = "static"
 
@@ -2317,7 +2317,9 @@ def sitemap(entries):
         links = ""
         for code, href in alts:
             links += '    <xhtml:link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '"/>\n'
-        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + links + "  </url>\n")
+        lastmod = LASTMOD.get(path)
+        lastmod_xml = "    <lastmod>" + lastmod + "</lastmod>\n" if lastmod else ""
+        items += ("  <url>\n    <loc>" + SITE_URL + path + "</loc>\n" + lastmod_xml + links + "  </url>\n")
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
            + items + "</urlset>\n")
