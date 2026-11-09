@@ -64,8 +64,8 @@ assert home_head, "Homepage must have a valid head element"
 assert re.match(r"\s*<meta\s+charset=", home_head.group(1), re.I), "Homepage UTF-8 charset must be the first head element"
 assert home_head.group(1).find('name="msvalidate.01"') > home_head.group(1).find('charset='), "Bing verification must follow the charset declaration"
 assert not re.search(r"\r?\n[ \t\r]*\r?\n", home_head.group(1)), "Homepage head must not contain blank-line pollution"
-assert "Free Online Calculators and Utility Tools" in home_html, "Homepage H1 must identify the full calculator collection"
-assert "CalculatesAll offers free online calculators for health, money, business, dates, mathematics and everyday conversions." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
+assert "Free Online Calculators" in home_html, "Homepage H1 must identify the calculator collection"
+assert "Free online calculators for health, money, business, dates, maths and everyday tasks." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
 assert "Browse all free calculators" in home_html, "Homepage must expose a clear calculator-browsing action"
 for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
@@ -74,7 +74,7 @@ assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_ht
 assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
 assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
-assert "Free Online Calculators and Utility Tools" in home_html and "CalculatesAll offers free online calculators for health, money, business, dates, mathematics and everyday conversions." in home_html, "Homepage should describe its full calculator scope in the opening copy"
+assert "Free Online Calculators" in home_html and "Free online calculators for health, money, business, dates, maths and everyday tasks." in home_html, "Homepage should describe its full calculator scope in the opening copy"
 assert re.search(r"<summary[^>]*>\s*Choose a free calculator\s*<span[^>]*>⌄</span></summary>", home_html), "Homepage tools menu must provide a clear free-calculator call to action"
 assert "<h2>Calculator tools</h2>" in home_html, "Homepage tools section should explicitly identify calculator tools"
 assert 'href="#ca-all-tools-menu"' in home_html and "Browse all free calculators</a>" in home_html, "Homepage must expose a recognisable link-based calculator browsing action"
@@ -868,7 +868,7 @@ assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage w
 assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index" in home_html, "Homepage health reference must link to WHO"
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
 assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
-assert "Free Online Calculators and Utility Tools" in home_html, "Homepage H1 must describe the full calculator collection"
+assert "Free Online Calculators" in home_html, "Homepage H1 must describe the full calculator collection"
 # The opening-copy requirement is covered by the core-tools summary assertion above.
 # The standard calculator landing page now explicitly describes its scientific mode.
 scientific_url = SITE + "/standard-calculator/"
