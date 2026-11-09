@@ -284,14 +284,14 @@ for url in urls:
             assert social and html_lib.unescape(social.group(1)) == html_lib.unescape(expected), f"Stale {name} on {url}"
     assert "Review the formula, worked example and limits before relying on the result" not in descriptions[url], f"Generic irrelevant metadata appended: {url}"
     if url == SITE + "/profit-loss-calculator/":
-        assert title_match.group(1) == "Profit and Loss Calculator | Profit % | CalculatesAll", (
+        assert title_match.group(1) == "Profit and Loss Calculator | Markup and Margin", (
             "Profit and Loss title must be complete and descriptive."
         )
     if url == SITE + "/tasbih-counter/":
-        assert title_match.group(1) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
+        assert html_lib.unescape(title_match.group(1)) == "Online Tasbih Counter for Dhikr & Zikr | CalculatesAll", (
             "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
         )
-        assert desc_match.group(1) == "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app.", (
+        assert desc_match.group(1) == "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and save progress in this browser when storage is available.", (
             "Tasbih description must be specific, useful and aligned with the page."
         )
     if url == SITE + "/age-calculator/":
