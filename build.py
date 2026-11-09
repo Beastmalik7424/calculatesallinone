@@ -1311,10 +1311,10 @@ LANG_LOCALE = {"en": "en_US", "ur": "ur_PK", "ar": "ar_AR", "hi": "hi_IN", "es":
 RTL_LANGS = ("ur", "ar")
 SHELL_EN = {"menu": "All tools", "skip": "Skip to content", "about": "About", "privacy": "Privacy", "contact": "Contact",
             "methodology": "Methodology", "editorial": "Editorial policy", "tag": "© CalculatesAll. Free tools that run in your browser.",
-            "theme": "Dark mode", "calculators": "Calculator shortcuts", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "marketplace": "Marketplace guide", "affiliate": "Advertising disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE", "discount": "Discount Calculator", "health_link": "Health"}
+            "theme": "Dark mode", "calculators": "Calculator shortcuts", "lang": "Languages", "terms": "Terms of use", "main": "Main", "footer": "Footer", "affiliate": "Advertising disclosure", "confidence": "CALCULATE WITH CONFIDENCE", "many": "ONE PLACE, MANY ANSWERS", "free": "FREE", "discount": "Discount Calculator", "health_link": "Health"}
 SHELL_UR = {"menu": "تمام ٹولز", "skip": "مرکزی مواد پر جائیں", "about": "ہمارے بارے میں", "privacy": "رازداری", "contact": "رابطہ",
             "methodology": "طریقہ کار", "editorial": "ادارتی پالیسی", "tag": "© CalculatesAll۔ مفت ٹولز جو آپ کے براؤزر میں چلتے ہیں۔",
-            "theme": "ڈارک موڈ", "calculators": "کیلکولیٹر منتخب کریں", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "marketplace": "مارکیٹ پلیس رہنما", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت", "discount": "ڈسکاؤنٹ کیلکولیٹر", "health_link": "صحت"}
+            "theme": "ڈارک موڈ", "calculators": "کیلکولیٹر منتخب کریں", "lang": "زبانیں", "terms": "شرائط استعمال", "main": "مرکزی نیویگیشن", "footer": "فٹر", "affiliate": "افیلی ایٹ انکشاف", "confidence": "اعتماد کے ساتھ حساب کریں", "many": "ایک جگہ، کئی جواب", "free": "مفت", "discount": "ڈسکاؤنٹ کیلکولیٹر", "health_link": "صحت"}
 THEME_LABEL = {"ar": "الوضع الداكن", "hi": "डार्क मोड", "es": "Modo oscuro", "fr": "Mode sombre"}
 
 
@@ -2629,7 +2629,7 @@ def main():
         elif path == "/affiliate-disclosure/":
             paras = [
                 "CalculatesAll is free to use. Advertising is not enabled on the site at present. No advertisements are currently displayed, and this page does not represent that an advertising programme is active. If advertising is enabled in the future, it will be clearly separated from calculator results, buttons and navigation.",
-                "CalculatesAll does not currently have active affiliate links. Links in the Marketplace guide are official information or sign-up links, not affiliate links, and no commission tracking is active by default. No visitor should treat an ordinary marketplace link as an endorsement or an affiliate recommendation.",
+                "CalculatesAll does not currently have active affiliate links. Any third-party marketplace links are ordinary information or sign-up links, not affiliate links, and no commission tracking is active by default. No visitor should treat an ordinary marketplace link as an endorsement or an affiliate recommendation.",
                 "If Google AdSense is considered in the future, advertising will depend on Google approval, applicable consent requirements, policy compliance and correctly configured publisher and ad-unit details. The site will not use placeholder publisher IDs or invented ad-slot IDs.",
                 "Advertising does not determine calculator formulas, worked examples or results. The same calculation method applies regardless of advertising. We do not publish paid reviews, invented ratings or sponsored content presented as independent editorial content.",
                 "An advertisement is not an endorsement by CalculatesAll. Advertisers and their partners control their own offers and destination pages, so visitors should review third-party terms before taking action. The Privacy Policy explains how advertising cookies and privacy choices are addressed if advertising is introduced.",

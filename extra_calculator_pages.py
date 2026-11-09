@@ -113,7 +113,7 @@ RELATED_LINKS = {
 SECTION_HEADINGS = {
     "percentage-calculator": ["Worked percentage examples", "Discounts and tax", "Percentage increase and decrease", "Input limits and rounding", "Finding a percentage share", "How percentage change is measured"],
     "percentage-difference-calculator": ["What percentage difference measures", "Formula and worked example", "Percentage difference vs percentage change", "Why the order does not matter", "Zero and negative values", "Rounding and limitations"],
-    "ratio-calculator": ["What a ratio compares", "Simplify a ratio with the GCD", "Ratios with decimal inputs", "Solve a proportion with one missing value", "Scale an equivalent ratio", "Input limits and units"],
+    "ratio-calculator": ["Method", "Worked example", "Decimal inputs", "Proportion method", "Scaling method", "Limits"],
 "fraction-calculator": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero denominators", "Large numbers and decimal inputs", "Check the result", "Compare equivalent fractions"],
     "compound-interest-calculator": ["What compound interest means", "Worked example: semiannual compounding", "Simple versus compound interest", "Formula and variables", "Compare compounding frequency", "Assumptions and limits"],
     "date-calculator": ["How elapsed days are counted", "Leap-year example", "Verify the result manually", "Business days and legal deadlines", "Inclusive versus elapsed dates", "Date order and negative results"],
