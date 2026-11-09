@@ -1608,9 +1608,24 @@
           say("yd-result", "Enter a number of days from 0 to 1,000,000 and choose a 365-day year, 365.25-day Julian average or Gregorian-average year.")
           return
         }
+        var decimalYears = value / reverseFactor
+        var totalWholeMonths = Math.floor(decimalYears * 12 + 1e-10)
+        var breakdownYears = Math.floor(totalWholeMonths / 12)
+        var breakdownMonths = totalWholeMonths % 12
+        var averageMonthDays = reverseFactor / 12
+        var remainingDays = value - breakdownYears * reverseFactor - breakdownMonths * averageMonthDays
+        if (remainingDays < 1e-10) remainingDays = 0
+        var roundedRemainingDays = Math.round(remainingDays * 100) / 100
+        var yearLabel = breakdownYears === 1 ? "year" : "years"
+        var monthLabel = breakdownMonths === 1 ? "month" : "months"
+        var dayLabel = roundedRemainingDays === 1 ? "day" : "days"
         say("yd-result", timeConversionFormat(value) + " days = " +
-          timeConversionFormat(value / reverseFactor) + " years. Method: " +
-          reverseFactor + " days per year. This is a decimal-year estimate, not an exact calendar anniversary.")
+          timeConversionFormat(decimalYears) + " years. Method: " +
+          reverseFactor + " days per year. Approximate breakdown: " +
+          breakdownYears + " " + yearLabel + ", " + breakdownMonths + " " +
+          monthLabel + " and " + timeConversionFormat(roundedRemainingDays) +
+          " " + dayLabel + " (average month: " + timeConversionFormat(averageMonthDays) +
+          " days). This is an estimate, not an exact calendar age. Exact calendar months require a start date.")
         return
       }
       if (method.value === "calendar") {
