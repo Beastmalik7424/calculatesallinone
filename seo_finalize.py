@@ -34,8 +34,8 @@ URDU_DESCRIPTION_FALLBACKS = {
     "/ur/tasbih-counter/": "ذکر کی گنتی کے لیے ہدف مقرر کریں، باقی تعداد دیکھیں اور گنتی کو اسی ڈیوائس پر محفوظ رکھیں۔",
 }
 VERIFIED_PAGE_UPDATE_DATES = {
-    # This date records the substantive Urdu BMI content and source update in this change.
-    "/ur/bmi-calculator/": "2026-11-06",
+    # This date records the verified Urdu BMI threshold-copy correction and source check in this change.
+    "/ur/bmi-calculator/": "2026-11-09",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
