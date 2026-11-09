@@ -23,7 +23,7 @@ CASES = {
         "h1": "Free Online Tasbih Counter",
     },
     "profit-loss-calculator": {
-        "title": "Profit and Loss Calculator | Business P&L, Markup & Margin",
+        "title": "Profit and Loss Calculator | Markup and Margin",
         "description": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
         "form": 'id="pl-form"',
         "category": "/money/",
