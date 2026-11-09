@@ -2198,8 +2198,8 @@ def home_app_page(lang):
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for health, money, business, dates, mathematics and everyday conversions, with clear formulas and no sign-up."
-        h1 = "Free Online Calculators and Utility Tools"
-        lead = "CalculatesAll offers free online calculators for health, money, business, dates, mathematics and everyday conversions. Calculate BMI, Zakat, EMI, profit and loss, discounts and more, with clear formulas and no sign-up required."
+        h1 = "Free Online Calculators"
+        lead = "Free online calculators for health, money, business, dates, maths and everyday tasks. Calculate BMI, Zakat, EMI, profit and loss with clear formulas and no sign-up."
         more_h = "Calculator tools"
         tools_heading_action = '<a class="ca-home-free no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="#ca-all-tools-menu" aria-label="Browse all free calculator tools">Browse all free calculators</a>'
     trust = ""
