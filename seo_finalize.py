@@ -186,8 +186,6 @@ def normalize_meta(raw, path, lang):
         title = "Online Tasbih Counter for Dhikr & Zikr | CalculatesAll"
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
-    if path == "/tasbih-counter/":
-        title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
     if path == "/age-calculator/":
         title = "Age Calculator | Years, Months & Days | CalculatesAll"
     if path == "/unit-converter/":
