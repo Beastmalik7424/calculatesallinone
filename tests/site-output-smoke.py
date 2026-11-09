@@ -995,12 +995,13 @@ assert 'ca-tasbih-shell' in tasbih_layout_html, "Tasbih controls must retain sty
 for token in ('#main #bmi-form', '#main .ca-tasbih-shell #t-count', '#main .ca-tasbih-shell #t-tap'):
     assert token in site_css, f"Missing first-screen style: {token}"
 
-# The lead copy must follow the interactive calculator on the English BMI/Tasbih pages.
-for slug, form_marker in (("bmi-calculator", 'id="bmi-form"'), ("tasbih-counter", 'id="tasbih-app"')):
-    first_screen_html = output_for_url(SITE + "/" + slug + "/").read_text(encoding="utf-8")
-    assert form_marker in first_screen_html, f"Missing interactive form: {slug}"
-    assert 'ca-tool-lead-after' in first_screen_html, f"Lead must be below interactive form: {slug}"
-    assert first_screen_html.index(form_marker) < first_screen_html.index('ca-tool-lead-after'), f"Lead appears above calculator: {slug}"
+# BMI keeps its established calculator-first layout; Tasbih now puts its value proposition before the controls.
+bmi_first_screen = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
+assert 'id="bmi-form"' in bmi_first_screen and 'ca-tool-lead-after' in bmi_first_screen
+assert bmi_first_screen.index('id="bmi-form"') < bmi_first_screen.index('ca-tool-lead-after')
+tasbih_first_screen = output_for_url(SITE + "/tasbih-counter/").read_text(encoding="utf-8")
+assert 'id="tasbih-app"' in tasbih_first_screen and 'ca-tool-lead ' in tasbih_first_screen
+assert tasbih_first_screen.index("<h1") < tasbih_first_screen.index('ca-tool-lead ') < tasbih_first_screen.index('id="tasbih-app"')
 for token in ('#main .ca-tasbih-shell #t-count', '#main .ca-tool-bmi-calculator #bmi-form'):
     assert token in site_css, f"Missing compact viewport layout: {token}"
 
@@ -1014,13 +1015,16 @@ assert '#main .ca-tool-tasbih-counter .ca-tasbih-settings' in site_css, "Missing
 assert '#main .ca-tool-tasbih-counter #t-tap' in site_css, "Missing Tasbih mobile button sizing rules"
 assert 'body:has(.ca-tool-tasbih-counter) #main' in site_css, "Missing Tasbih main spacing reduction"
 
-# Non-excluded calculators put their functional tools before descriptive lead text.
-for _slug in ("zakat-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"):
+# Existing pages retain their calculator-first layout; Phase 1 pages use H1, value proposition, then tool.
+for _slug in ("zakat-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"):
     _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
     assert _page.index('id="tool-calculator"') < _page.index("ca-tool-lead-after"), _slug + " must prioritize tool before lead"
-for _slug in ("standard-calculator", "bmi-calculator", "tasbih-counter"):
+for _slug in ("tasbih-counter", "profit-loss-calculator", "years-to-days-calculator"):
     _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
-    assert 'ca-tool-lead-after' in _page or _slug == "standard-calculator", "Excluded calculator changed: " + _slug
+    assert _page.index("<h1") < _page.index("ca-tool-lead ") < _page.index('id="tool-calculator"'), _slug + " must put the value proposition before the tool"
+for _slug in ("standard-calculator", "bmi-calculator"):
+    _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
+    assert 'ca-tool-lead-after' in _page or _slug == "standard-calculator", "Existing calculator-first page changed: " + _slug
 _profit_page = Path("public/profit-loss-calculator/index.html").read_text(encoding="utf-8")
 for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses", "pl-product-fields", "p-cost", "p-sell", "pl-result"):
     assert 'id="' + _id + '"' in _profit_page, "Missing profit field: " + _id
@@ -1049,6 +1053,9 @@ for slug, phrases in {
     "bmi-calculator": ["22.8571", "18.5 to below 25", "not a diagnosis"],
     "zakat-calculator": ["PKR 153,090", "PKR 16,250", "not a religious ruling"],
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
+    "tasbih-counter": ["three groups of 33 presses", "browser storage", "not a religious practice"],
+    "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
+    "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
     guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA[slug] for paragraph in paragraphs)
     for phrase in phrases:
