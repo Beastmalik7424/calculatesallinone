@@ -666,7 +666,7 @@ for url in urls:
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
             if url.endswith("/ur/bmi-calculator/"):
-                assert item.get("dateModified") == "2026-11-06", (
+                assert item.get("dateModified") == "2026-11-09", (
                     "Urdu BMI dateModified must match the verified substantive content and source update."
                 )
             else:
