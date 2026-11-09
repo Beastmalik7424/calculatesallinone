@@ -1728,7 +1728,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "years-to-days-calculator":
         title = "Years to Days Calculator | How Many Days in X Years?"
-        desc = "Convert years to days or days to years using 365, 365.25 or 365.2425 days per year. Count exact calendar days from a start date."
+        desc = "Convert years and days with 365, 365.25 or 365.2425-day methods. See approximate months and days or count exact days from a start date."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
