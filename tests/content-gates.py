@@ -96,8 +96,8 @@ def main():
     else:
         home_text = visible_text(home_path)
         for phrase in [
-            "Free Online Calculators and Utility Tools",
-            "CalculatesAll offers free online calculators for health, money, business, dates, mathematics and everyday conversions.",
+            "Free Online Calculators",
+            "Free online calculators for health, money, business, dates, maths and everyday tasks.",
             "Browse all free calculators",
         ]:
             if phrase not in home_text:
