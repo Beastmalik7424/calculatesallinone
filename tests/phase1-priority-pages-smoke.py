@@ -15,7 +15,7 @@ SITE = "https://calculateallinone.vercel.app"
 CASES = {
     "tasbih-counter": {
         "title": "Online Tasbih Counter for Dhikr & Zikr | CalculatesAll",
-        "description": "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and keep your count in this browser. No account needed.",
+        "description": "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and save progress in this browser when storage is available.",
         "form": 'id="tasbih-app"',
         "category": "/worship/",
         "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
@@ -32,7 +32,7 @@ CASES = {
         "h1": "Profit and Loss Calculator for Business and Products",
     },
     "years-to-days-calculator": {
-        "title": "Years to Days Calculator | 365-Day, Julian & Gregorian Methods",
+        "title": "Years to Days Calculator | 365, 365.25 or 365.2425",
         "description": "Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date.",
         "form": 'id="years-days-form"',
         "category": "/time/",
