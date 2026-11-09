@@ -1604,8 +1604,8 @@
       var value = timeConversionNumber($("yd-value").value)
       if (direction.value === "days-to-years") {
         var reverseFactor = Number(method.value)
-        if (value === null || (reverseFactor !== 365 && reverseFactor !== 365.2425)) {
-          say("yd-result", "Enter a number of days from 0 to 1,000,000 and choose a 365-day or Gregorian-average year.")
+        if (value === null || (reverseFactor !== 365 && reverseFactor !== 365.25 && reverseFactor !== 365.2425)) {
+          say("yd-result", "Enter a number of days from 0 to 1,000,000 and choose a 365-day year, 365.25-day Julian average or Gregorian-average year.")
           return
         }
         say("yd-result", timeConversionFormat(value) + " days = " +
@@ -1636,7 +1636,7 @@
         return
       }
       var factor = Number(method.value)
-      if (value === null || (factor !== 365 && factor !== 365.2425)) {
+      if (value === null || (factor !== 365 && factor !== 365.25 && factor !== 365.2425)) {
         say("yd-result", "Enter a number from 0 to 1,000,000 and choose a conversion method.")
         return
       }
