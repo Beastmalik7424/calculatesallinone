@@ -948,7 +948,7 @@ TOOLS.extend([
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
         "description": "Convert years to days or days to years using 365, 365.25 or 365.2425 days per year. Exact start-date conversion is available for years to days only.",
         "h1": "Years to Days Calculator",
-        "lead": "Convert years and days using a 365-day year, the 365.25-day Julian average or the 365.2425-day Gregorian average. For an exact leap-year-aware result, enter a start date and whole number of years.",
+        "lead": "Convert years and days using a 365-day year, the 365.25-day Julian average or the 365.2425-day Gregorian average. Reverse conversion also estimates years, average months and remaining days; enter a start date for an exact calendar span.",
         "ui": (
             '<form id="years-days-form" class="space-y-3" novalidate>'
             '<div class="grid grid-cols-2 gap-3">'
@@ -966,7 +966,7 @@ TOOLS.extend([
             '<div id="yd-result" class="@R@" role="status" aria-live="polite"></div>'
         ),
         "guide": [
-            ("Conversion formulas", ["Days = years multiplied by 365 for the simple method, 365.25 for the Julian average, or 365.2425 for the Gregorian average. For reverse conversion, divide days by the selected year length. The Julian year is a fixed duration; it is not an exact Gregorian calendar year. Weeks = days divided by 7. Hours = days multiplied by 24. Minutes = hours multiplied by 60. Seconds = minutes multiplied by 60."]),
+            ("Conversion formulas", ["Days = years multiplied by 365 for the simple method, 365.25 for the Julian average, or 365.2425 for the Gregorian average. For reverse conversion, divide days by the selected year length. The tool also estimates whole years, average months and remaining days using selected year length divided by 12; this is not an exact calendar-age result. The Julian year is a fixed duration; it is not an exact Gregorian calendar year. Weeks = days divided by 7. Hours = days multiplied by 24. Minutes = hours multiplied by 60. Seconds = minutes multiplied by 60."]),
             ("Worked example", ["80 years = 29,200 days by the 365-day method, 29,220 days by the 365.25-day Julian average, or 29,219.4 days by the Gregorian average. These fixed-duration conversions are not exact elapsed days between calendar dates."]),
             ("Days to years", ["Select Days to years to divide a day count by the selected year length. For example, 1,009 days is 2.76438356 years using a 365-day year, 2.76249144 years using the 365.25-day Julian average, or 2.76254817 years using the 365.2425-day Gregorian average. This is a decimal-year estimate, not a calendar age. For exact elapsed calendar years, use actual start and end dates."]),
             ("Accuracy limits", ["Calendar years vary between 365 and 366 days. For exact elapsed days, choose Exact calendar years, enter a valid start date and whole number of years. The ending anniversary is excluded and any February 29 inside the period is counted. When a start date is February 29 and the ending year is not leap, the ending anniversary is March 1. For legal deadlines, check the rule that applies to your document."]),
@@ -987,6 +987,7 @@ TOOLS.extend([
                 ("How many days, hours, minutes and seconds are in 9 years?", "Using 365 days per year, 9 years are 3,285 days, 78,840 hours, 4,730,400 minutes and 283,824,000 seconds. Using the 365.25-day Julian average, they are 3,287.25 days, 78,894 hours, 4,733,640 minutes and 284,018,400 seconds. Using the 365.2425-day Gregorian average, they are 3,287.1825 days, 78,892.38 hours, 4,733,542.8 minutes and 284,012,568 seconds. Exact calendar days depend on the start and end dates."),
                 ("How many hours and minutes are in 10 years?", "Using 365 days per year, 10 years are 87,600 hours or 5,256,000 minutes. Using the 365.25-day Julian average, they are 87,660 hours or 5,259,600 minutes. Using the 365.2425-day Gregorian average, they are 87,658.2 hours or 5,259,492 minutes."),
                 ("How do I convert days to years?", "Divide the number of days by 365, 365.25 for the Julian average, or 365.2425 for the Gregorian average. For example, 70,000 days is about 191.78 years using 365 days, 191.65 years using the Julian average, and 191.65 years using the Gregorian average. These are decimal-year estimates, not calendar ages."),
+                ("How many years and months are in 1,188 days?", "Using the 365.2425-day Gregorian average, 1,188 days is about 3.2526 years, or 3 years, 3 average months and 0.96 days. The average month is 30.436875 days (365.2425 divided by 12). This is an estimate, not an exact calendar-age result; exact calendar months require a start date."),
                 ("How many years and days are in 115 months?", "115 months is 9 years and 7 months. Using an average month of 30.436875 days, that is about 3,500.24 days. Exact elapsed days depend on the actual start date and calendar months. Use the Query Calculator for the month estimate."),
                 ("80 saal mein kitne din hote hain?", "29,200 using 365 days per year, 29,220 using the 365.25-day Julian average, or 29,219.4 using the Gregorian average of 365.2425 days per year. An exact calendar total depends on the start and end dates.")],
         "sources": 'Julian year: exactly 365.25 days (<a class="' + LINK + '" href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noopener noreferrer">NASA/JPL astrodynamic parameters</a>). Gregorian mean year: 365.2425 days over the 400-year cycle (<a class="' + LINK + '" href="https://aa.usno.navy.mil/faq/leap_years" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory leap-year guidance</a>).'
@@ -1585,7 +1586,7 @@ def years_to_days_reference_html():
 
 
 def days_to_years_reference_html():
-    day_counts = [724, 1145, 1476, 2436, 7200, 27375, 28000, 42069]
+    day_counts = [724, 1068, 1145, 1188, 1297, 1476, 2436, 2600, 7200, 27375, 28000, 42069]
     out = ('<section class="mt-10"><h2 class="' + H2 + '">Worked reference: days to years</h2>'
            '<p class="' + P + '">Convert days to decimal years by dividing by 365, 365.25 or 365.2425. Values are rounded to four decimal places; these are duration estimates, not calendar ages.</p>'
            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
