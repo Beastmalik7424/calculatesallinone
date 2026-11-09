@@ -868,7 +868,7 @@ assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage w
 assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index" in home_html, "Homepage health reference must link to WHO"
 assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
 assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
-assert "<h1>EMI, BMI and Zakat Calculators</h1>" in home_html, "Homepage H1 must describe the main calculator intents"
+assert "Free Online Calculators and Utility Tools" in home_html, "Homepage H1 must describe the full calculator collection"
 # The opening-copy requirement is covered by the core-tools summary assertion above.
 # The standard calculator landing page now explicitly describes its scientific mode.
 scientific_url = SITE + "/standard-calculator/"
