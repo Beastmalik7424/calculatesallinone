@@ -1732,7 +1732,7 @@ def tool_page(t):
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
     elif t["slug"] == "years-to-days-calculator":
-        title = "Years to Days Calculator | 365, 365.25 or 365.2425"
+        title = "Years to Days Calculator | How Many Days in X Years?"
         desc = "Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date."
         ui = t["ui"]
         guide = t["guide"]
