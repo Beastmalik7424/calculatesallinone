@@ -57,6 +57,10 @@ def main():
     for phrase in ("18.5", "25", "30", "23.0", "27.5", "WHO"):
         assert phrase in visible(body), f"Missing supported BMI threshold or source: {phrase}"
     body_text = visible(body)
+    assert "درجہ اصل غیر گول شدہ BMI سے منتخب ہوتا ہے" in body_text, "Urdu BMI category must use the unrounded value"
+    assert "اصل BMI 24.9827" in body_text and "25.0" in body_text, "Urdu BMI guidance must explain a rounded 25.0 that remains in the normal category"
+    assert "پہلے BMI کو ایک اعشاری جگہ تک گول کرتا ہے" not in body_text, "Urdu BMI copy must not say rounded display values determine the category"
+    assert "گول کرکے دکھائی گئی قدر کے مطابق درجہ منتخب کرتا ہے" not in body_text, "Urdu BMI section must not repeat the old rounding rule"
     assert "درجہ بندی کا متبادل نہیں" in body_text, "Asian action points must not be presented as a replacement global classification"
     assert "تمام ایشیائی آبادیوں کے لیے ایک ہی نئی حد مقرر نہیں کی جا سکتی" in body_text, "Asian risk thresholds need a population-specific limitation"
 
@@ -80,7 +84,7 @@ def main():
     assert "https://github.com/Beastmalik7424/calculatesallinone" in organization.get("sameAs", []), "Organization must link to its official source repository"
     assert page.get("author", {}).get("@id") == SITE + "/#maintainer", "WebPage author entity is missing"
     assert page.get("publisher", {}).get("@id") == SITE + "/#organization", "WebPage publisher entity is missing"
-    assert page.get("dateModified") == "2026-11-06", "Verified page-specific content update date is missing"
+    assert page.get("dateModified") == "2026-11-09", "Verified page-specific content update date is missing"
     citations = " ".join(page.get("citation", []))
     for domain in ("who.int", "cdc.gov", "nhs.uk", "pubmed.ncbi.nlm.nih.gov"):
         assert domain in citations, f"Missing structured citation: {domain}"
