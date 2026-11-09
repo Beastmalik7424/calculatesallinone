@@ -160,7 +160,7 @@ profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encodi
 profit_nodes = jsonld_nodes(profit_html)
 profit_orgs = [node for node in profit_nodes if node.get("@type") == "Organization" and node.get("name") == "CalculatesAll"]
 assert len(profit_orgs) == 1 and profit_orgs[0].get("@id") == SITE + "/#organization", "Profit and Loss page must reference one canonical Organization entity"
-assert "A profit and loss calculator estimates business profit or loss" in profit_html, "Profit and Loss page should open its explanatory copy with a concise definition"
+assert "Calculate business profit, loss, markup and margin." in profit_html, "Profit and Loss page should open with a concise definition and calculation scope"
 assert 'href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement"' in profit_html, "Profit and Loss page should cite the OpenStax income-statement source"
 assert 'href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"' in profit_html, "Profit and Loss page should cite ACCA ratio-analysis guidance"
 assert "Markup versus margin at a glance" in profit_html and "<table" in profit_html, "Profit and Loss page should include a useful comparison table"
@@ -189,7 +189,7 @@ urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days Calculator | Days to Years Converter</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
-assert 'name="description" content="Convert years and days with 365, 365.25 or 365.2425-day methods. See approximate months and days or count exact days from a start date."' in years_html, "Years-to-Days meta description must explain all conversion methods and exact calendar mode"
+assert 'name="description" content="Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date."' in years_html, "Years-to-Days meta description must explain all conversion methods and exact calendar mode"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 5 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 _gsc_day_examples = (
@@ -284,14 +284,14 @@ for url in urls:
             assert social and html_lib.unescape(social.group(1)) == html_lib.unescape(expected), f"Stale {name} on {url}"
     assert "Review the formula, worked example and limits before relying on the result" not in descriptions[url], f"Generic irrelevant metadata appended: {url}"
     if url == SITE + "/profit-loss-calculator/":
-        assert title_match.group(1) == "Profit and Loss Calculator | Profit % | CalculatesAll", (
+        assert title_match.group(1) == "Profit and Loss Calculator | Markup and Margin", (
             "Profit and Loss title must be complete and descriptive."
         )
     if url == SITE + "/tasbih-counter/":
-        assert title_match.group(1) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
+        assert html_lib.unescape(title_match.group(1)) == "Online Tasbih Counter for Dhikr & Zikr | CalculatesAll", (
             "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
         )
-        assert desc_match.group(1) == "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app.", (
+        assert desc_match.group(1) == "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and save progress in this browser when storage is available.", (
             "Tasbih description must be specific, useful and aligned with the page."
         )
     if url == SITE + "/age-calculator/":
@@ -894,14 +894,19 @@ assert "how to use the online standard and scientific calculator" in visible_mai
 calculator_slugs = (
     "zakat-calculator", "bmi-calculator", "profit-loss-calculator",
     "discount-calculator", "age-calculator", "unit-converter",
-    "tasbih-counter", "stopwatch",
+    "tasbih-counter", "stopwatch", "years-to-days-calculator",
 )
 for slug in calculator_slugs:
     tool_html = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     calc_pos = tool_html.find('<section id="tool-calculator"')
     h1_pos = tool_html.find("<h1")
     lead_pos = tool_html.find('<p class="mt-3 text-lg', h1_pos)
-    if slug in {"bmi-calculator", "tasbih-counter", "zakat-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"}:
+    if slug in {"tasbih-counter", "profit-loss-calculator", "years-to-days-calculator"}:
+        opening_lead_pos = tool_html.find('ca-tool-lead ', h1_pos)
+        assert h1_pos >= 0 and opening_lead_pos > h1_pos and calc_pos > opening_lead_pos, (
+            f"Priority calculator must follow its heading and value proposition: /{slug}/"
+        )
+    elif slug in {"bmi-calculator", "zakat-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"}:
         moved_lead_pos = tool_html.find('ca-tool-lead-after', h1_pos)
         assert h1_pos >= 0 and calc_pos > h1_pos and moved_lead_pos > calc_pos, (
             f"Calculator must precede moved explanatory lead: /{slug}/"
@@ -990,12 +995,13 @@ assert 'ca-tasbih-shell' in tasbih_layout_html, "Tasbih controls must retain sty
 for token in ('#main #bmi-form', '#main .ca-tasbih-shell #t-count', '#main .ca-tasbih-shell #t-tap'):
     assert token in site_css, f"Missing first-screen style: {token}"
 
-# The lead copy must follow the interactive calculator on the English BMI/Tasbih pages.
-for slug, form_marker in (("bmi-calculator", 'id="bmi-form"'), ("tasbih-counter", 'id="tasbih-app"')):
-    first_screen_html = output_for_url(SITE + "/" + slug + "/").read_text(encoding="utf-8")
-    assert form_marker in first_screen_html, f"Missing interactive form: {slug}"
-    assert 'ca-tool-lead-after' in first_screen_html, f"Lead must be below interactive form: {slug}"
-    assert first_screen_html.index(form_marker) < first_screen_html.index('ca-tool-lead-after'), f"Lead appears above calculator: {slug}"
+# BMI keeps its established calculator-first layout; Tasbih now puts its value proposition before the controls.
+bmi_first_screen = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
+assert 'id="bmi-form"' in bmi_first_screen and 'ca-tool-lead-after' in bmi_first_screen
+assert bmi_first_screen.index('id="bmi-form"') < bmi_first_screen.index('ca-tool-lead-after')
+tasbih_first_screen = output_for_url(SITE + "/tasbih-counter/").read_text(encoding="utf-8")
+assert 'id="tasbih-app"' in tasbih_first_screen and 'ca-tool-lead ' in tasbih_first_screen
+assert tasbih_first_screen.index("<h1") < tasbih_first_screen.index('ca-tool-lead ') < tasbih_first_screen.index('id="tasbih-app"')
 for token in ('#main .ca-tasbih-shell #t-count', '#main .ca-tool-bmi-calculator #bmi-form'):
     assert token in site_css, f"Missing compact viewport layout: {token}"
 
@@ -1009,13 +1015,16 @@ assert '#main .ca-tool-tasbih-counter .ca-tasbih-settings' in site_css, "Missing
 assert '#main .ca-tool-tasbih-counter #t-tap' in site_css, "Missing Tasbih mobile button sizing rules"
 assert 'body:has(.ca-tool-tasbih-counter) #main' in site_css, "Missing Tasbih main spacing reduction"
 
-# Non-excluded calculators put their functional tools before descriptive lead text.
-for _slug in ("zakat-calculator", "profit-loss-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"):
+# Existing pages retain their calculator-first layout; Phase 1 pages use H1, value proposition, then tool.
+for _slug in ("zakat-calculator", "discount-calculator", "age-calculator", "unit-converter", "stopwatch"):
     _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
     assert _page.index('id="tool-calculator"') < _page.index("ca-tool-lead-after"), _slug + " must prioritize tool before lead"
-for _slug in ("standard-calculator", "bmi-calculator", "tasbih-counter"):
+for _slug in ("tasbih-counter", "profit-loss-calculator", "years-to-days-calculator"):
     _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
-    assert 'ca-tool-lead-after' in _page or _slug == "standard-calculator", "Excluded calculator changed: " + _slug
+    assert _page.index("<h1") < _page.index("ca-tool-lead ") < _page.index('id="tool-calculator"'), _slug + " must put the value proposition before the tool"
+for _slug in ("standard-calculator", "bmi-calculator"):
+    _page = Path("public", _slug, "index.html").read_text(encoding="utf-8")
+    assert 'ca-tool-lead-after' in _page or _slug == "standard-calculator", "Existing calculator-first page changed: " + _slug
 _profit_page = Path("public/profit-loss-calculator/index.html").read_text(encoding="utf-8")
 for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses", "pl-product-fields", "p-cost", "p-sell", "pl-result"):
     assert 'id="' + _id + '"' in _profit_page, "Missing profit field: " + _id
@@ -1044,6 +1053,9 @@ for slug, phrases in {
     "bmi-calculator": ["22.8571", "18.5 to below 25", "not a diagnosis"],
     "zakat-calculator": ["PKR 153,090", "PKR 16,250", "not a religious ruling"],
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
+    "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice"],
+    "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
+    "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
     guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA[slug] for paragraph in paragraphs)
     for phrase in phrases:

@@ -253,8 +253,8 @@ TOOLS = [
         "name": "Profit and Loss Calculator",
         "app": "UtilitiesApplication",
         "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
-        "h1": "Profit and Loss Calculator for Business and Products",
-        "lead": "A profit and loss calculator estimates business profit or loss from revenue, costs and expenses, or product profit from cost and selling price. Choose the calculation type to see the correct percentage basis.",
+        "h1": "Profit and Loss Calculator",
+        "lead": "Calculate business profit, loss, markup and margin.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
@@ -473,7 +473,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Free online digital tasbih counter for dhikr and zikr with 33, 99 and custom targets. Tap to count on mobile or desktop; no app download needed.",
         "h1": "Free Online Tasbih Counter",
-        "lead": "A free digital tasbeeh counter for daily dhikr. Choose a phrase, set a target, and keep your count on this device without downloading an app.",
+        "lead": "Count dhikr on this device. Choose a phrase and target, then undo a tap if needed.",
         "ui": (
             '<div class="ca-tasbih-shell max-w-lg mx-auto space-y-5" id="tasbih-app">'
             '<div class="ca-tasbih-settings">'
@@ -662,8 +662,8 @@ URDU = {
     },
     "bmi-calculator": {
         "name": "BMI کیلکولیٹر",
-        "title": "BMI کیلکولیٹر اردو میں | بالغ افراد | CalculatesAll",
-        "description": "بالغوں کا BMI اردو میں معلوم کریں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں۔ WHO کی حدیں دیکھیں۔ یہ اسکریننگ ہے، تشخیص نہیں۔",
+        "title": "بالغ BMI کیلکولیٹر اردو میں | وزن اور قد | CalculatesAll",
+        "description": "بالغوں کا BMI اردو میں نکالیں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں، فارمولا اور WHO حدود سمجھیں۔ BMI اسکریننگ ہے، تشخیص نہیں۔",
         "h1": "بالغوں کے لیے BMI کیلکولیٹر",
         "lead": "بالغوں کا BMI = وزن (kg) ÷ قد (میٹر)²۔ یعنی وزن کو قد کے مربع سے تقسیم کریں۔ 18.5 سے 25 سے کم عمومی حد ہے۔ BMI اسکریننگ ہے، تشخیص نہیں۔",
         "labels": [
@@ -781,6 +781,8 @@ EXTRA = {
         "faq": [
             ("What is the difference between markup and margin?", "Product markup uses cost as its base; product gross margin uses selling price. Business operating margin uses revenue after listed expenses. These percentages are not interchangeable."),
             ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
+            ("Does this calculator include tax automatically?", "No. Enter relevant direct costs and expenses in the appropriate fields. Sales tax, income tax, refunds and statutory accounting treatment are not inferred by the calculator."),
+            ("What does net operating profit mean here?", "In Business P&L mode it is revenue minus cost of goods sold and the other expenses you enter. It is not a full audited income statement and may exclude interest, tax or costs that you have not entered."),
         ],
     },
     "discount-calculator": {
@@ -810,9 +812,12 @@ EXTRA = {
         ],
     },
     "tasbih-counter": {
-        "quick": "Each tap adds one. Choose a target of 33, 99, 100, or a custom whole number from 1 to 10,000. The count stays on this device when browser storage is available.",
+        "quick": "Each accepted tap adds one. Choose 33, 99, 100 or a custom whole-number target from 1 to 10,000. Browser storage keeps progress on this device when it is available.",
         "faq": [
-            ("Will my count move to another phone?", "No. The count is stored only in the browser on this device."),
+            ("Will my count move to another phone?", "No. The count is stored only in this browser on this device. It is not synced to an account or another phone."),
+            ("Can I enter my own dhikr phrase?", "Yes. Choose Custom phrase and enter up to 40 characters. The counter records taps only; it does not verify recitation or pronunciation."),
+            ("What happens if browser storage is blocked?", "The counter continues in memory and displays a notice. The count may be lost when you reload or leave the page."),
+            ("Does a target of 33 or 99 represent a religious requirement?", "No. These are optional tracking targets in this tool, not a religious ruling. Choose a target that suits your own practice and ask a qualified scholar about religious guidance."),
         ],
     },
     "stopwatch": {
@@ -948,7 +953,7 @@ TOOLS.extend([
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
         "description": "Convert years to days or days to years using 365, 365.25 or 365.2425 days per year. Reverse conversion estimates years, average months and remaining days; exact calendar mode uses a start date.",
         "h1": "Years to Days Calculator",
-        "lead": "Convert years and days using a 365-day year, the 365.25-day Julian average or the 365.2425-day Gregorian average. Reverse conversion also estimates years, average months and remaining days; enter a start date for an exact calendar span.",
+        "lead": "Convert years and days with 365, 365.25 or 365.2425-day methods. Use a start date to count exact calendar days.",
         "ui": (
             '<form id="years-days-form" class="space-y-3" novalidate>'
             '<div class="grid grid-cols-2 gap-3">'
@@ -1720,22 +1725,22 @@ def tool_page(t):
         faqs = BMI_FAQ
         sources = BMI_SOURCES
     elif t["slug"] == "profit-loss-calculator":
-        title = "Profit and Loss Calculator | Business P&L and Product Profit"
-        desc = "Free business P&L calculator for revenue, cost of goods sold and expenses, plus product profit and markup. See gross profit, operating profit and margin."
+        title = "Profit and Loss Calculator | Markup and Margin"
+        desc = "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
     elif t["slug"] == "years-to-days-calculator":
         title = "Years to Days Calculator | How Many Days in X Years?"
-        desc = "Convert years and days with 365, 365.25 or 365.2425-day methods. See approximate months and days or count exact days from a start date."
+        desc = "Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
-        title = "Free Online Tasbih Counter | Digital Tasbeeh Counter"
-        desc = "Free online tasbih counter for daily dhikr. Tap to count, set targets of 33, 99 or 100, and save your count on your device. No download needed."
+        title = "Online Tasbih Counter for Dhikr & Zikr | CalculatesAll"
+        desc = "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and save progress in this browser when storage is available."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
@@ -1794,11 +1799,12 @@ def tool_page(t):
             "inLanguage": "en",
         })
     related_map = {
-        "profit-loss-calculator": [("discount-calculator", "Discount Calculator"), ("percentage-calculator", "Percentage Calculator")],
+        "tasbih-counter": [("stopwatch", "Online Stopwatch"), ("zakat-calculator", "Zakat Calculator")],
+        "profit-loss-calculator": [("discount-calculator", "Discount Calculator"), ("percentage-calculator", "Percentage Calculator"), ("emi-calculator", "EMI Calculator"), ("compound-interest-calculator", "Compound Interest Calculator")],
         "discount-calculator": [("percentage-calculator", "Percentage Calculator"), ("profit-loss-calculator", "Profit and Loss Calculator")],
         "standard-calculator": [("percentage-calculator", "Percentage Calculator"), ("fraction-calculator", "Fraction Calculator")],
         "age-calculator": [("date-calculator", "Date Difference Calculator"), ("years-to-days-calculator", "Years to Days Calculator")],
-        "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator"), ("query-calculator", "Query Calculator")],
+        "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator"), ("query-calculator", "Query Calculator"), ("unit-converter", "Unit Converter")],
         "query-calculator": [("years-to-days-calculator", "Years to Days Calculator"), ("age-calculator", "Age Calculator")],
     }
     related_items = related_map.get(t["slug"], [])
@@ -1822,13 +1828,13 @@ def tool_page(t):
         + ui + '</section>'
     )
     answer_note = answer_block(t["slug"], "en")
-    primary_tool_content = calculator_section + answer_note
     breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
         '<li><a class="' + LINK + '" href="/">Home</a></li>'
         '<li><span aria-hidden="true" class="mr-2">/</span><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat["name"] + '</a></li>'
         '<li aria-current="page"><span aria-hidden="true" class="mr-2">/</span>' + t["name"] + "</li></ol></nav>"
     )
+    primary_tool_content = calculator_section + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "") + answer_note
     profit_reference_table = (
         '<section class="mt-8" aria-labelledby="markup-margin-comparison">'
         '<h2 id="markup-margin-comparison" class="' + H2 + '">Markup versus margin at a glance</h2>'
@@ -1843,13 +1849,16 @@ def tool_page(t):
         '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Business operating margin</th><td class="p-3">Operating profit ÷ revenue × 100</td><td class="p-3">(1,000 − 600 − 150) ÷ 1,000 × 100 = 25%</td></tr>'
         '</tbody></table></div></section>'
     ) if t["slug"] == "profit-loss-calculator" else ""
+    priority_first_screen = t["slug"] in {"tasbih-counter", "profit-loss-calculator", "years-to-days-calculator"}
+    opening_lead = '<p class="ca-tool-lead mt-3 text-base leading-relaxed text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
     body = (
         ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
         + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
-        + (primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
+        + (opening_lead + primary_tool_content
+           if priority_first_screen
+           else primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
            if t["slug"] in {tool["slug"] for tool in TOOLS}
            else '<p class="mt-3 text-lg text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>' + primary_tool_content)
-        + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "")
         + ad_slot()
         + (('<h2 class="' + H2 + '">How it is calculated</h2>'
             + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>')
@@ -1951,11 +1960,24 @@ def urdu_tool_page(t):
     how_section = how if t["slug"] == "bmi-calculator" else ('<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how)
     source_checked = ('<p class="mt-3 text-sm text-stone-700 dark:text-stone-300">ماخذ کی آخری جانچ: 6 نومبر 2026۔</p>' if t["slug"] == "bmi-calculator" else "")
     maintainer_note = ('<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">صفحے کے منتظم: <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>۔ یہ صفحہ عمومی معلومات فراہم کرتا ہے، طبی تشخیص یا علاج کا متبادل نہیں۔</p>' if t["slug"] == "bmi-calculator" else "")
+    related_urdu = ""
+    if t["slug"] == "bmi-calculator":
+        related_urdu = (
+            '<section class="mt-8" aria-labelledby="bmi-urdu-related">'
+            '<h2 id="bmi-urdu-related" class="' + H2 + '">متعلقہ کیلکولیٹر اور ٹولز</h2>'
+            '<ul class="mt-3 grid gap-3 sm:grid-cols-2">'
+            '<li><a class="' + LINK + '" href="/health/">صحت کے کیلکولیٹر</a></li>'
+            '<li><a class="' + LINK + '" href="/bmi-calculator/" hreflang="en">BMI Calculator in English</a></li>'
+            '<li><a class="' + LINK + '" href="/calorie-calculator/">بالغوں کا کیلوری کیلکولیٹر</a></li>'
+            '<li><a class="' + LINK + '" href="/ur/age-calculator/">عمر کیلکولیٹر</a></li>'
+            '<li><a class="' + LINK + '" href="/ur/unit-converter/">یونٹ کنورٹر</a></li>'
+            '</ul></section>'
+        )
     body += (
         how_section
         + '<h2 class="' + H2 + '">' + u["faq_heading"] + '</h2><div class="mt-3">' + faq + "</div>"
         + ('<h2 class="' + H2 + '">ماخذ</h2><p class="' + P + '">' + u["sources"] + '</p>' if u.get("sources") else "")
-        + source_checked + maintainer_note
+        + source_checked + maintainer_note + related_urdu
         + '<p class="mt-10 text-sm text-stone-800 dark:text-stone-200"><a class="' + LINK + '" href="/' + t["slug"] + '/" hreflang="en">انگریزی ورژن</a></p>'
     )
     alternates = [("en", "/" + t["slug"] + "/"), ("ur", path), ("x-default", "/" + t["slug"] + "/")]

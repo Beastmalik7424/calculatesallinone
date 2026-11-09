@@ -2,11 +2,12 @@ from pathlib import Path
 
 # Keep internal recommendations tightly related to the task on each calculator page.
 checks = {
-    "profit-loss-calculator": ["discount-calculator", "percentage-calculator"],
+    "tasbih-counter": ["stopwatch", "zakat-calculator"],
+    "profit-loss-calculator": ["discount-calculator", "percentage-calculator", "emi-calculator", "compound-interest-calculator"],
     "discount-calculator": ["percentage-calculator", "profit-loss-calculator"],
     "standard-calculator": ["percentage-calculator", "fraction-calculator"],
     "age-calculator": ["date-calculator", "years-to-days-calculator"],
-    "years-to-days-calculator": ["date-calculator", "age-calculator", "query-calculator"],
+    "years-to-days-calculator": ["date-calculator", "age-calculator", "query-calculator", "unit-converter"],
     "query-calculator": ["years-to-days-calculator", "age-calculator"],
 }
 for page, slugs in checks.items():
@@ -28,7 +29,7 @@ for page, slugs in {
         assert (Path("public") / slug / "index.html").exists(), slug
 
 # Pages without a genuinely related tool must not receive unrelated generic recommendations.
-for page in ("tasbih-counter", "bmi-calculator", "zakat-calculator", "stopwatch", "unit-converter"):
+for page in ("bmi-calculator", "zakat-calculator", "stopwatch", "unit-converter"):
     html = (Path("public") / page / "index.html").read_text(encoding="utf-8")
     assert "Related calculators" not in html, page
 

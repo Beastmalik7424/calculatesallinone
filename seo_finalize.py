@@ -176,16 +176,16 @@ def normalize_meta(raw, path, lang):
         "/terms/": "Terms of Use | CalculatesAll Free Tools",
         "/time/": "Date and Time Calculators | CalculatesAll",
         "/ur/age-calculator/": "عمر کیلکولیٹر | سال، مہینے اور دن",
-        "/ur/bmi-calculator/": "BMI کیلکولیٹر اردو میں | بالغ افراد | CalculatesAll",
+        "/ur/bmi-calculator/": "بالغ BMI کیلکولیٹر اردو میں | وزن اور قد | CalculatesAll",
     }
     title = title_overrides.get(path, title)
     # Repair the known malformed title explicitly rather than truncating it into a fragment.
     if path == "/profit-loss-calculator/":
-        title = "Profit and Loss Calculator | Profit % | CalculatesAll"
+        title = "Profit and Loss Calculator | Markup and Margin"
+    if path == "/tasbih-counter/":
+        title = "Online Tasbih Counter for Dhikr & Zikr | CalculatesAll"
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
-    if path == "/tasbih-counter/":
-        title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
     if path == "/age-calculator/":
         title = "Age Calculator | Years, Months & Days | CalculatesAll"
     if path == "/unit-converter/":
@@ -201,13 +201,14 @@ def normalize_meta(raw, path, lang):
     "/query-calculator/": "Ask in English, Roman Urdu and six other languages about time, months, birth dates and simple arithmetic. Includes the Pakistan Independence Day date.",
     "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",
     "/stopwatch/": "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app.",
-    "/years-to-days-calculator/": "Convert years and days with 365, 365.25 or 365.2425-day methods. See approximate months and days or count exact days from a start date.",
+    "/years-to-days-calculator/": "Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date.",
+    "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
     "/zakat-calculator/": "Calculate 2.5 percent Zakat on net wealth, check the silver Nisab threshold and lunar-year condition. Confirm personal rulings with a qualified scholar."
 }
     urdu_description_overrides = {
     "/ur/age-calculator/": "تاریخ پیدائش اور مطلوبہ تاریخ درج کرکے عمر سال، مہینوں اور دنوں میں معلوم کریں۔ کل گزرے دن بھی دیکھیں اور کیلکولیٹر کے تاریخوں کے حساب کا طریقہ سمجھیں۔",
-    "/ur/bmi-calculator/": "بالغوں کا BMI اردو میں معلوم کریں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں۔ WHO کی حدیں دیکھیں۔ یہ اسکریننگ ہے، تشخیص نہیں۔",
+    "/ur/bmi-calculator/": "بالغوں کا BMI اردو میں نکالیں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں، فارمولا اور WHO حدود سمجھیں۔ BMI اسکریننگ ہے، تشخیص نہیں۔",
     "/ur/discount-calculator/": "اصل قیمت اور رعایت کا فیصد درج کرکے بچت، رعایت کے بعد آخری قیمت اور حساب کا طریقہ دیکھیں۔ مختلف رعایتوں کا موازنہ کریں اور خریداری سے پہلے نتیجہ چیک کریں۔",
     "/ur/profit-loss-calculator/": "قیمت خرید اور فروخت درج کرکے منافع یا نقصان اور اس کا فیصد معلوم کریں۔ کاروباری آمدنی، لاگت اور اخراجات سے خالص منافع کا حساب بھی کریں اور فارمولے دیکھیں۔",
     "/ur/standard-calculator/": "براؤزر میں جمع، تفریق، ضرب، تقسیم، فیصد اور قوسین کے ساتھ حساب کریں۔ سائنسی موڈ میں مثلثاتی افعال، جذر اور لاگرتھم استعمال کریں، بغیر ایپ ڈاؤن لوڈ کیے۔",
@@ -218,7 +219,7 @@ def normalize_meta(raw, path, lang):
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app."
+        desc = "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and save progress in this browser when storage is available."
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":

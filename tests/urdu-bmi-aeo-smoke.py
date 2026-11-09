@@ -7,8 +7,8 @@ from pathlib import Path
 
 PAGE = Path("public/ur/bmi-calculator/index.html")
 SITE = "https://calculateallinone.vercel.app"
-EXPECTED_TITLE = "BMI کیلکولیٹر اردو میں | بالغ افراد | CalculatesAll"
-EXPECTED_DESCRIPTION = "بالغوں کا BMI اردو میں معلوم کریں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں۔ WHO کی حدیں دیکھیں۔ یہ اسکریننگ ہے، تشخیص نہیں۔"
+EXPECTED_TITLE = "بالغ BMI کیلکولیٹر اردو میں | وزن اور قد | CalculatesAll"
+EXPECTED_DESCRIPTION = "بالغوں کا BMI اردو میں نکالیں۔ وزن kg/lb اور قد cm یا فٹ/انچ درج کریں، فارمولا اور WHO حدود سمجھیں۔ BMI اسکریننگ ہے، تشخیص نہیں۔"
 
 
 def visible(value):
