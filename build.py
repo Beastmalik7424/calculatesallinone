@@ -1566,42 +1566,19 @@ def write(path, content):
 
 
 def years_to_days_reference_html():
-    rows = [
-        (1, "365", "365.2425"),
-        (2, "730", "730.485"),
-        (3, "1,095", "1,095.7275"),
-        (4, "1,460", "1,460.97"),
-        (5, "1,825", "1,826.2125"),
-        (6, "2,190", "2,191.455"),
-        (9, "3,285", "3,287.1825"),
-        (10, "3,650", "3,652.425"),
-        (11, "4,015", "4,017.6675"),
-        (13, "4,745", "4,748.1525"),
-        (14, "5,110", "5,113.395"),
-        (15, "5,475", "5,478.6375"),
-        (16, "5,840", "5,843.88"),
-        (20, "7,300", "7,304.85"),
-        (21, "7,665", "7,670.0925"),
-        (25, "9,125", "9,131.0625"),
-        (29, "10,585", "10,592.0325"),
-        (30, "10,950", "10,957.275"),
-        (32, "11,680", "11,687.76"),
-        (40, "14,600", "14,609.7"),
-        (50, "18,250", "18,262.125"),
-        (60, "21,900", "21,914.55"),
-        (74, "27,010", "27,027.945"),
-        (80, "29,200", "29,219.4"),
-        (100, "36,500", "36,524.25"),
-    ]
+    years_values = [1, 1.5, 2, 3, 4, 5, 6, 9, 10, 11, 13, 14, 15, 16, 20, 21, 25, 29, 30, 32, 40, 50, 60, 74, 80, 100]
+    def formatted(value):
+        return format(value, ",.5f").rstrip("0").rstrip(".")
     out = ('<section class="mt-10"><h2 class="' + H2 + '">Quick reference: years to days</h2>'
-           '<p class="' + P + '">Common conversions using a fixed 365-day year and the 365.2425-day Gregorian average. Average-method values can be fractional days.</p>'
+           '<p class="' + P + '">Compare a 365-day common year, the fixed 365.25-day Julian average and the 365.2425-day Gregorian average. Average-method values can be fractional days; exact calendar spans depend on the dates.</p>'
            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
-           '<caption class="sr-only">Years converted to days using the 365-day and Gregorian-average methods</caption>'
-           '<thead><tr><th scope="col" class="border-b p-3">Years</th><th scope="col" class="border-b p-3">365-day method</th><th scope="col" class="border-b p-3">Gregorian average</th></tr></thead><tbody>')
-    for years, simple, average in rows:
-        out += ('<tr><th scope="row" class="border-b p-3">' + str(years) + '</th>'
-                '<td class="border-b p-3">' + simple + '</td>'
-                '<td class="border-b p-3">' + average + '</td></tr>')
+           '<caption class="sr-only">Years converted to days using 365-day, 365.25-day Julian and 365.2425-day Gregorian year lengths</caption>'
+           '<thead><tr><th scope="col" class="border-b p-3">Years</th><th scope="col" class="border-b p-3">365-day method</th><th scope="col" class="border-b p-3">Julian average (365.25)</th><th scope="col" class="border-b p-3">Gregorian average (365.2425)</th></tr></thead><tbody>')
+    for years in years_values:
+        out += ('<tr><th scope="row" class="border-b p-3">' + formatted(years) + '</th>'
+                '<td class="border-b p-3">' + formatted(years * 365) + '</td>'
+                '<td class="border-b p-3">' + formatted(years * 365.25) + '</td>'
+                '<td class="border-b p-3">' + formatted(years * 365.2425) + '</td></tr>')
     out += ('</tbody></table></div><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. This table is a duration reference, not a substitute for a date-specific count.</p></section>')
     return out
 
@@ -1609,15 +1586,17 @@ def years_to_days_reference_html():
 def days_to_years_reference_html():
     day_counts = [724, 1145, 1476, 2436, 7200, 27375, 28000, 42069]
     out = ('<section class="mt-10"><h2 class="' + H2 + '">Worked reference: days to years</h2>'
-           '<p class="' + P + '">Convert a day count to decimal years by dividing by 365 for the fixed-year method or 365.2425 for the Gregorian average. Values below are rounded to four decimal places; they are duration estimates, not calendar ages.</p>'
+           '<p class="' + P + '">Convert days to decimal years by dividing by 365, 365.25 or 365.2425. Values are rounded to four decimal places; these are duration estimates, not calendar ages.</p>'
            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
-           '<caption class="sr-only">Example day counts converted to decimal years using 365-day and Gregorian-average year lengths</caption>'
-           '<thead><tr><th scope="col" class="border-b p-3">Days</th><th scope="col" class="border-b p-3">365-day year</th><th scope="col" class="border-b p-3">Gregorian average (365.2425)</th></tr></thead><tbody>')
+           '<caption class="sr-only">Example day counts converted to decimal years using 365-day, Julian-average and Gregorian-average year lengths</caption>'
+           '<thead><tr><th scope="col" class="border-b p-3">Days</th><th scope="col" class="border-b p-3">365-day year</th><th scope="col" class="border-b p-3">Julian average (365.25)</th><th scope="col" class="border-b p-3">Gregorian average (365.2425)</th></tr></thead><tbody>')
     for days in day_counts:
         simple = format(days / 365, ".4f")
+        julian = format(days / 365.25, ".4f")
         average = format(days / 365.2425, ".4f")
         out += ('<tr><th scope="row" class="border-b p-3">' + format(days, ",") + '</th>'
                 '<td class="border-b p-3">' + simple + '</td>'
+                '<td class="border-b p-3">' + julian + '</td>'
                 '<td class="border-b p-3">' + average + '</td></tr>')
     out += ('</tbody></table></div><p class="' + P + '">A decimal-year result does not identify the exact calendar age or elapsed years. For an exact interval, enter the actual start and end dates in the Date Difference Calculator.</p></section>')
     return out
