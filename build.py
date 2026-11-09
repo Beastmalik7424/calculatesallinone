@@ -2196,11 +2196,11 @@ def home_app_page(lang):
         tools_heading_action = '<span class="ca-home-free">' + s["free"] + '</span>'
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
-        desc = "Free online calculators for adult maintenance calories, EMI, Zakat, BMI, profit and loss, discounts, age and unit conversion, with clear formulas."
-        h1 = "EMI, BMI and Zakat Calculators"
-        lead = "Free tools for health, money, maths, dates and everyday tasks. No sign-up required."
+        desc = "Free online calculators for health, money, business, dates, mathematics and everyday conversions, with clear formulas and no sign-up."
+        h1 = "Free Online Calculators and Utility Tools"
+        lead = "CalculatesAll offers free online calculators for health, money, business, dates, mathematics and everyday conversions. Calculate BMI, Zakat, EMI, profit and loss, discounts and more, with clear formulas and no sign-up required."
         more_h = "Calculator tools"
-        tools_heading_action = '<a class="ca-home-free no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="#ca-all-tools-menu" aria-label="Browse free calculator tools">Browse calculators</a>'
+        tools_heading_action = '<a class="ca-home-free no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="#ca-all-tools-menu" aria-label="Browse all free calculator tools">Browse all free calculators</a>'
     trust = ""
     for i, label in enumerate(TRUST[lang]):
         trust += '<li class="rounded-xl p-3 text-center text-sm font-bold ' + TRUST_CLASS[i] + '">' + label + "</li>"
