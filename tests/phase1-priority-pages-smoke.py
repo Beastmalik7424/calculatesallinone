@@ -30,7 +30,7 @@ CASES = {
         "category": "/money/",
         "related": ["/discount-calculator/", "/percentage-calculator/", "/emi-calculator/", "/compound-interest-calculator/"],
         "faq_min": 5,
-        "h1": "Profit and Loss Calculator for Business and Products",
+        "h1": "Profit and Loss Calculator",
     },
     "years-to-days-calculator": {
         "title": "Years to Days Calculator | Days to Years Converter",
