@@ -30,23 +30,17 @@ TOOLS = [
     ("Date Difference Calculator", "/date-calculator/", "Date and Time", "Counts the days or time between two dates.", "Check whether the start and end dates are counted."),
     ("Years to Days Calculator", "/years-to-days-calculator/", "Date and Time", "Converts years into days, hours, minutes and seconds.", "Leap years change the total slightly."),
     ("Query Calculator", "/query-calculator/", "Date and Time", "Answers supported plain-language time conversion questions.", "It answers only the question types it supports."),
-    ("Stopwatch", "/stopwatch/", "Date and Time", "Measures elapsed time and laps in your browser.", "It is for everyday timing, not certified measurement."),
+    ("Stopwatch", "/stopwatch/", "Date and Time", "Measures elapsed time in your browser.", "It is for everyday timing, not certified measurement."),
     ("Tasbih Counter", "/tasbih-counter/", "Worship and Daily Use", "Counts dhikr with an optional target.", "The count is stored on the current device."),
 ]
 
 FAQ = [
-    ("Are these calculators free to use?",
-     "Yes. Every calculator on this page is free to use in your browser. No account, signup or payment is required."),
-    ("Do I need to install an app?",
-     "No. The calculators work in a standard mobile or desktop browser, and the layout adjusts to the screen size."),
-    ("Are my entered values sent to a server?",
-     "Calculator inputs are processed in your browser. The Tasbih Counter stores its count on the current device. Read the privacy policy for information about hosting and advertising."),
-    ("How are the results checked?",
-     "Each calculator uses a stated formula, and worked examples are included where they help you check a result. Automated tests cover representative inputs and boundary cases. Read the methodology page for the full approach."),
-    ("Can a calculator replace professional advice?",
-     "No. Tools for health, money and Zakat give estimates based on the inputs you provide. For important decisions, confirm the result with a qualified professional or scholar."),
-    ("How do I report a wrong result?",
-     "Send the calculator name, page URL, exact inputs, the displayed result, the expected result and the steps to reproduce it to the email on the contact page."),
+    ("Are these calculators free to use?", "Yes. Every calculator on this page is free to use in your browser. No account, signup or payment is required."),
+    ("Do I need to install an app?", "No. The calculators work in a standard mobile or desktop browser, and the layout adjusts to the screen size."),
+    ("Are my entered values sent to a server?", "Calculator inputs are processed in your browser. The Tasbih Counter stores its count on the current device. Read the privacy policy for information about hosting and advertising."),
+    ("How are the results checked?", "Each calculator uses a stated formula, and worked examples are included where they help you check a result. Automated tests cover representative inputs and boundary cases. Read the methodology page for the full approach."),
+    ("Can a calculator replace professional advice?", "No. Tools for health, money and Zakat give estimates based on the inputs you provide. For important decisions, confirm the result with a qualified professional or scholar."),
+    ("How do I report a wrong result?", "Send the calculator name, page URL, exact inputs, the displayed result, the expected result and the steps to reproduce it to the email on the contact page."),
 ]
 
 
@@ -111,8 +105,17 @@ def build_hub_page(head, shell, write):
               "url": "https://calculateallinone.vercel.app" + href}
              for i, (name, href, _c, _d, _k) in enumerate(TOOLS)
          ]},
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://calculateallinone.vercel.app/"},
+            {"@type": "ListItem", "position": 2, "name": "Free Online Calculators", "item": "https://calculateallinone.vercel.app/free-online-calculators/"},
+        ]},
+        {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": question, "acceptedAnswer": {"@type": "Answer", "text": answer}}
+            for question, answer in FAQ
+        ]},
     ]
     body = (
+        '<nav aria-label="Breadcrumb" class="mb-4 text-sm text-stone-700 dark:text-stone-300"><ol class="flex flex-wrap items-center gap-2"><li><a class="' + LINK + '" href="/">Home</a></li><li aria-hidden="true">/</li><li aria-current="page">Free Online Calculators</li></ol></nav>'
         '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">Free Online Calculators for Money, Health, Math and Time</h1>'
         '<p class="' + P + '">CalculatesAll brings together free browser-based calculators for everyday money, health, math, date and daily worship tasks. '
         "There are " + str(len(TOOLS)) + " calculators in total. Each one states its formula or method, shows an example where it helps, and lists the assumptions that affect the result.</p>"

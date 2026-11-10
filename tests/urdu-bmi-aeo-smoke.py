@@ -31,7 +31,7 @@ def main():
     assert len(EXPECTED_TITLE) < 60, "Title exceeds the site's tested title limit"
     assert 70 <= len(EXPECTED_DESCRIPTION) < 160, "Meta description is outside the site's tested length range"
     assert f'<link rel="canonical" href="{SITE}/ur/bmi-calculator/">' in raw, "Canonical URL changed"
-    assert '<meta name="robots" content="index, follow">' in raw, "Urdu BMI page must remain indexable"
+    assert '<meta name="robots" content="noindex, follow">' in raw, "Urdu BMI page must remain accessible but noindex"
     assert '<html lang="ur" dir="rtl">' in raw, "Urdu language or RTL direction changed"
 
     h1s = re.findall(r"<h1\b[^>]*>(.*?)</h1>", body, re.S | re.I)
@@ -97,7 +97,7 @@ def main():
     assert schema_questions == visible_questions, "FAQ JSON-LD must exactly match visible FAQ questions"
     assert len(re.findall(r"<h2\b[^>]*>.*?\?</h2>", body, re.S | re.I)) >= 5, "Expected at least five question-led answer sections"
 
-    print("PASS: Urdu BMI title, description, canonical and indexability")
+    print("PASS: Urdu BMI title, description, canonical and noindex status")
     print("PASS: answer-first definition, summary and question-led self-contained sections")
     print("PASS: WHO and South Asian BMI thresholds are distinguished accurately")
     print("PASS: visible authoritative citations, maintainer disclosure and medical-review limitation")
