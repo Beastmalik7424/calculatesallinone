@@ -331,16 +331,29 @@ def main():
                 schemas.append(json.loads(match.group(1)))
             except json.JSONDecodeError as exc:
                 raise SystemExit("Invalid JSON-LD in " + path + ": " + str(exc))
-        # Google requires a genuine app rating or review for SoftwareApplication rich results.
-        # The site has no verified public app reviews, so remove this optional rich-result type
-        # while transferring truthful author/publisher/citation links to the page entity.
-        schemas = remove_ineligible_software_app(schemas)
-        # The sanitizer rebuilds JSON-LD dictionaries. Resolve the page node again afterward
-        # so subsequent metadata updates are applied to the objects that will be serialized.
         web_page = next((s for s in schemas if isinstance(s, dict) and s.get("@type") in ("WebPage", "AboutPage", "ProfilePage")), None)
         if web_page is None:
             web_page = {"@context":"https://schema.org","@type":"WebPage","name":title,"url":canonical}
             schemas.append(web_page)
+        original_web_page = web_page
+        # Google requires a genuine app rating or review for SoftwareApplication rich results.
+        # The site has no verified public app reviews, so remove this optional rich-result type
+        # while transferring truthful author/publisher/citation links to the page entity.
+        # The sanitizer rebuilds JSON-LD dictionaries, so retain fields it transfers to the
+        # original page node and merge any missing values into the serialized replacement.
+        schemas = remove_ineligible_software_app(schemas)
+        web_page = next((s for s in schemas if isinstance(s, dict)
+                         and s.get("@type") in ("WebPage", "AboutPage", "ProfilePage")
+                         and s.get("url") == canonical), None)
+        if web_page is None:
+            web_page = next((s for s in schemas if isinstance(s, dict)
+                             and s.get("@type") in ("WebPage", "AboutPage", "ProfilePage")), None)
+        if web_page is None:
+            web_page = {"@context":"https://schema.org","@type":"WebPage","name":title,"url":canonical}
+            schemas.append(web_page)
+        if web_page is not original_web_page:
+            for key, value in original_web_page.items():
+                web_page.setdefault(key, value)
         web_page["name"] = title
         web_page["url"] = canonical
         # Keep dateModified only for pages with an explicit, page-specific substantive update.
