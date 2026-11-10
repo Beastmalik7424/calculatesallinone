@@ -1175,3 +1175,17 @@ for page_path, input_id, notice in (
     page_html = output_for_url(SITE + page_path).read_text(encoding="utf-8")
     assert notice in page_html, f"Missing prominent method/safety notice on {page_path}"
     assert page_html.index(notice) < page_html.index(input_id), f"Notice must appear before the first calculator input on {page_path}"
+
+
+# Header brand links must always return to the canonical site homepage.
+# This prevents a translated homepage logo from linking back to itself.
+for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/", "/ar/", "/es/", "/fr/", "/hi/"):
+    _logo_html = output_for_url(SITE + _logo_path).read_text(encoding="utf-8")
+    _logo_match = re.search(
+        r'<a href="([^"]+)" aria-label="CalculatesAll[^"]*" class="font-extrabold text-xl',
+        _logo_html,
+    )
+    assert _logo_match and _logo_match.group(1) == "/", (
+        "Header logo must link to the root homepage: " + _logo_path
+    )
+print("PASS: header brand logo links to the root homepage on all locale routes")
