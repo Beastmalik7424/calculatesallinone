@@ -1193,7 +1193,8 @@ for _locale_path, _locale_file in _locale_pages:
 
     assert re.search(r'<a href="/" aria-label="CalculatesAll[^"]*" class="font-extrabold text-xl', _locale_html), (
         "Header brand logo must link to the root homepage, not a locale self-link: " + _locale_path
-    )    assert SITE + _locale_path not in sitemap_urls, (
+    )
+    assert SITE + _locale_path not in sitemap_urls, (
         "Noindex locale page must be excluded from sitemap: " + _locale_path
     )
 print("PASS: " + str(len(_locale_pages)) + " translated locale pages are noindex and excluded from sitemap")
