@@ -355,6 +355,8 @@ def main():
         web_page["url"] = canonical
         # Keep dateModified only for pages with an explicit, page-specific substantive update.
         verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
+        if path == "/age-calculator/":
+            print("AGE_SCHEMA_DEBUG", repr(path), repr(verified_date), repr(web_page.get("url")), repr(web_page.get("dateModified")))
         for item in schemas:
             if isinstance(item, dict) and item.get("@type") in ("WebPage", "AboutPage", "ProfilePage"):
                 if verified_date:
