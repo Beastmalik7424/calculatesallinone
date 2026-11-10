@@ -1214,12 +1214,12 @@ print("PASS: Arabic, Spanish, French and Hindi links are absent from shared foot
 for _page_file in ROOT.rglob("index.html"):
     _page_html = _page_file.read_text(encoding="utf-8")
     _relative = "/" + _page_file.parent.relative_to(ROOT).as_posix().strip("/") + "/"
-    assert not re.search(r"""\\bhreflang=["']ur["']""", _page_html, re.I), (
+    assert not re.search(r"""\bhreflang=["']ur["']""", _page_html, re.I), (
         "Unreviewed Urdu hreflang attribute remains: " + _relative
     )
-    _head_match = re.search(r"<head\\b[^>]*>(.*?)</head>", _page_html, re.S | re.I)
+    _head_match = re.search(r"<head\b[^>]*>(.*?)</head>", _page_html, re.S | re.I)
     assert _head_match, "Missing document head on " + _relative
-    _alternate_tags = re.findall(r"""<link\\b(?=[^>]*rel=["']alternate["'])[^>]*>""", _head_match.group(1), re.I)
+    _alternate_tags = re.findall(r"""<link\b(?=[^>]*rel=["']alternate["'])[^>]*>""", _head_match.group(1), re.I)
     for _alternate in _alternate_tags:
         assert not re.search(r"""href=["']""" + re.escape(SITE) + r"""/(?:ur|ar|es|fr|hi)/""", _alternate, re.I), (
             "Hreflang alternate points to a noindex locale page: " + _relative
