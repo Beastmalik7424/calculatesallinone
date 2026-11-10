@@ -19,7 +19,7 @@ CASES = {
         "description": "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and save progress in this browser when storage is available.",
         "form": 'id="tasbih-app"',
         "category": "/worship/",
-        "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
+        "related": ["/stopwatch/", "/zakat-calculator/"],
         "faq_min": 5,
         "h1": "Free Online Tasbih Counter",
     },

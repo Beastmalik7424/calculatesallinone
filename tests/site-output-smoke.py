@@ -1209,3 +1209,35 @@ for _page_file in ROOT.rglob("index.html"):
     )
 print("PASS: Arabic, Spanish, French and Hindi links are absent from shared footer navigation")
 
+# Commit 3: every generated page must avoid hreflang links to unreviewed locale routes.
+# Urdu pages remain available and may retain their own same-language body navigation.
+for _page_file in ROOT.rglob("index.html"):
+    _page_html = _page_file.read_text(encoding="utf-8")
+    _relative = "/" + _page_file.parent.relative_to(ROOT).as_posix().strip("/") + "/"
+    assert not re.search(r"""\bhreflang=["']ur["']""", _page_html, re.I), (
+        "Unreviewed Urdu hreflang attribute remains: " + _relative
+    )
+    _head_match = re.search(r"<head\b[^>]*>(.*?)</head>", _page_html, re.S | re.I)
+    assert _head_match, "Missing document head on " + _relative
+    _alternate_tags = re.findall(r"""<link\b(?=[^>]*rel=["']alternate["'])[^>]*>""", _head_match.group(1), re.I)
+    for _alternate in _alternate_tags:
+        assert not re.search(r"""href=["']""" + re.escape(SITE) + r"""/(?:ur|ar|es|fr|hi)/""", _alternate, re.I), (
+            "Hreflang alternate points to a noindex locale page: " + _relative
+        )
+    _footer_match = re.search(r"<footer.*?</footer>", _page_html, re.S | re.I)
+    assert _footer_match and not re.search(r"""href=["']/ur/""", _footer_match.group(0), re.I), (
+        "Footer must not link to the unreviewed Urdu locale: " + _relative
+    )
+    if not _relative.startswith("/ur/"):
+        assert not re.search(r"""href=["']/ur/""", _page_html, re.I), (
+            "Non-Urdu page body must not link to the unreviewed Urdu locale: " + _relative
+        )
+
+_sitemap_markup = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+assert not re.search(r"""hreflang=["']ur["']""", _sitemap_markup, re.I), (
+    "Sitemap must not advertise an unreviewed Urdu hreflang alternate"
+)
+assert not re.search(r"""<loc>""" + re.escape(SITE) + r"""/ur/""", _sitemap_markup, re.I), (
+    "Noindex Urdu routes must remain excluded from the sitemap"
+)
+print("PASS: all generated pages have clean hreflang, footer and cross-locale navigation")
