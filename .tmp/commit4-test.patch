@@ -1,0 +1,136 @@
+diff --git a/tests/site-output-smoke.py b/tests/site-output-smoke.py
+index 2ed1ed0..2b0b88c 100644
+--- a/tests/site-output-smoke.py
++++ b/tests/site-output-smoke.py
+@@ -1177,6 +1177,7 @@ for page_path, input_id, notice in (
+     assert page_html.index(notice) < page_html.index(input_id), f"Notice must appear before the first calculator input on {page_path}"
+ 
+ 
++
+ # Header brand links must always return to the canonical site homepage.
+ # This prevents a translated homepage logo from linking back to itself.
+ for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/", "/ar/", "/es/", "/fr/", "/hi/"):
+@@ -1189,3 +1190,123 @@ for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/", "/ar/", "/es/", "/fr/", "
+         "Header logo must link to the root homepage: " + _logo_path
+     )
+ print("PASS: header brand logo links to the root homepage on all locale routes")
++
++# All translated locale routes remain generated and accessible as static pages,
++# but are marked noindex and omitted from the sitemap until reviewed.
++_LOCALE_PREFIXES = ("/ur/", "/ar/", "/es/", "/fr/", "/hi/")
++_locale_pages = []
++for _page_file in ROOT.rglob("index.html"):
++    _relative = "/" + _page_file.parent.relative_to(ROOT).as_posix().strip("/") + "/"
++    if _relative.startswith(_LOCALE_PREFIXES):
++        _locale_pages.append((_relative, _page_file))
++assert _locale_pages, "Expected translated locale pages to remain generated"
++for _locale_path, _locale_file in _locale_pages:
++    _locale_html = _locale_file.read_text(encoding="utf-8")
++    assert 'name="robots" content="noindex, follow"' in _locale_html, (
++        "Translated page must remain accessible but noindex: " + _locale_path
++    )
++
++    assert re.search(r'<a href="/" aria-label="CalculatesAll[^"]*" class="font-extrabold text-xl', _locale_html), (
++        "Header brand logo must link to the root homepage, not a locale self-link: " + _locale_path
++    )
++    assert SITE + _locale_path not in sitemap_urls, (
++        "Noindex locale page must be excluded from sitemap: " + _locale_path
++    )
++print("PASS: " + str(len(_locale_pages)) + " translated locale pages are noindex and excluded from sitemap")
++
++# Non-English locale destinations must not appear in the shared footer language navigation.
++for _page_file in ROOT.rglob("index.html"):
++    _page_html = _page_file.read_text(encoding="utf-8")
++    _footer_match = re.search("<footer.*?</footer>", _page_html, re.S | re.I)
++    assert _footer_match, "Missing footer on " + str(_page_file)
++    assert not re.search(r"""href=["']/(?:ar|es|fr|hi)/""", _footer_match.group(0)), (
++        "Arabic, Spanish, French or Hindi locale link remains in footer: " + str(_page_file)
++    )
++print("PASS: Arabic, Spanish, French and Hindi links are absent from shared footer navigation")
++
++# Commit 3: every generated page must avoid hreflang links to unreviewed locale routes.
++# Urdu pages remain available and may retain their own same-language body navigation.
++for _page_file in ROOT.rglob("index.html"):
++    _page_html = _page_file.read_text(encoding="utf-8")
++    _relative = "/" + _page_file.parent.relative_to(ROOT).as_posix().strip("/") + "/"
++    assert not re.search(r"""\bhreflang=["']ur["']""", _page_html, re.I), (
++        "Unreviewed Urdu hreflang attribute remains: " + _relative
++    )
++    _head_match = re.search(r"<head\b[^>]*>(.*?)</head>", _page_html, re.S | re.I)
++    assert _head_match, "Missing document head on " + _relative
++    _alternate_tags = re.findall(r"""<link\b(?=[^>]*rel=["']alternate["'])[^>]*>""", _head_match.group(1), re.I)
++    for _alternate in _alternate_tags:
++        assert not re.search(r"""href=["']""" + re.escape(SITE) + r"""/(?:ur|ar|es|fr|hi)/""", _alternate, re.I), (
++            "Hreflang alternate points to a noindex locale page: " + _relative
++        )
++    _footer_match = re.search(r"<footer.*?</footer>", _page_html, re.S | re.I)
++    assert _footer_match and not re.search(r"""href=["']/ur/""", _footer_match.group(0), re.I), (
++        "Footer must not link to the unreviewed Urdu locale: " + _relative
++    )
++    if not _relative.startswith("/ur/"):
++        assert not re.search(r"""href=["']/ur/""", _page_html, re.I), (
++            "Non-Urdu page body must not link to the unreviewed Urdu locale: " + _relative
++        )
++
++_sitemap_markup = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
++assert not re.search(r"""hreflang=["']ur["']""", _sitemap_markup, re.I), (
++    "Sitemap must not advertise an unreviewed Urdu hreflang alternate"
++)
++assert not re.search(r"""<loc>""" + re.escape(SITE) + r"""/ur/""", _sitemap_markup, re.I), (
++    "Noindex Urdu routes must remain excluded from the sitemap"
++)
++print("PASS: all generated pages have clean hreflang, footer and cross-locale navigation")
++
++# Commit 4: hub structured data and visible breadcrumbs must stay aligned.
++hub_html = (ROOT / "free-online-calculators" / "index.html").read_text(encoding="utf-8")
++hub_schemas = [
++    json.loads(block)
++    for block in re.findall(
++        r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>',
++        hub_html,
++        re.S,
++    )
++]
++hub_breadcrumb = next(item for item in hub_schemas if item.get("@type") == "BreadcrumbList")
++assert hub_breadcrumb == {
++    "@context": "https://schema.org",
++    "@type": "BreadcrumbList",
++    "itemListElement": [
++        {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
++        {"@type": "ListItem", "position": 2, "name": "Free Online Calculators", "item": SITE + "/free-online-calculators/"},
++    ],
++}, "Hub BreadcrumbList must match the approved two-level path exactly"
++hub_faq = next(item for item in hub_schemas if item.get("@type") == "FAQPage")
++expected_hub_faq = [
++    ("Are these calculators free to use?", "Yes. Every calculator on this page is free to use in your browser. No account, signup or payment is required."),
++    ("Do I need to install an app?", "No. The calculators work in a standard mobile or desktop browser, and the layout adjusts to the screen size."),
++    ("Are my entered values sent to a server?", "Calculator inputs are processed in your browser. The Tasbih Counter stores its count on the current device. Read the privacy policy for information about hosting and advertising."),
++    ("How are the results checked?", "Each calculator uses a stated formula, and worked examples are included where they help you check a result. Automated tests cover representative inputs and boundary cases. Read the methodology page for the full approach."),
++    ("Can a calculator replace professional advice?", "No. Tools for health, money and Zakat give estimates based on the inputs you provide. For important decisions, confirm the result with a qualified professional or scholar."),
++    ("How do I report a wrong result?", "Send the calculator name, page URL, exact inputs, the displayed result, the expected result and the steps to reproduce it to the email on the contact page."),
++]
++actual_hub_faq = [
++    (item["name"], item["acceptedAnswer"]["text"])
++    for item in hub_faq["mainEntity"]
++]
++assert actual_hub_faq == expected_hub_faq, "Hub FAQPage must contain the six approved exact Q&A pairs"
++assert re.search(
++    r'<nav aria-label="Breadcrumb"[^>]*>.*?<a[^>]*href="/">Home</a>.*?'
++    r'aria-current="page">Free Online Calculators</li>',
++    hub_html,
++    re.S,
++), "Hub visible breadcrumb must match Home > Free Online Calculators"
++assert "Measures elapsed time in your browser." in hub_html
++assert "Measures elapsed time and laps" not in hub_html
++assert "Converts years into days, hours, minutes and seconds." in hub_html
++
++years_js = (Path("static") / "app.js").read_text(encoding="utf-8")
++years_conversion = years_js[years_js.find('var days = value * factor'):years_js.find('function initQueryTime')]
++for output_unit in (" days; ", " weeks; ", " hours; ", " minutes; ", " seconds."):
++    assert output_unit in years_conversion, f"Years to Days output missing {output_unit.strip()}"
++
++emi_html = (ROOT / "emi-calculator" / "index.html").read_text(encoding="utf-8")
++assert emi_html.index('<section id="calculator"') < emi_html.index("<header")
++assert emi_html.index("<header") < emi_html.index('<nav aria-label="Breadcrumb" class="small breadcrumb">')
++assert "Browse all free calculators" in emi_html and "Money and Business" in emi_html and "EMI Calculator" in emi_html
++print("PASS: Commit 4 hub BreadcrumbList, exact FAQPage, visible breadcrumb, stopwatch/year claims and EMI breadcrumb order")
