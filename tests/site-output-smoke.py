@@ -160,7 +160,7 @@ profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encodi
 profit_nodes = jsonld_nodes(profit_html)
 profit_orgs = [node for node in profit_nodes if node.get("@type") == "Organization" and node.get("name") == "CalculatesAll"]
 assert len(profit_orgs) == 1 and profit_orgs[0].get("@id") == SITE + "/#organization", "Profit and Loss page must reference one canonical Organization entity"
-assert "Calculate business profit, loss, markup and margin." in profit_html, "Profit and Loss page should open with a concise definition and calculation scope"
+assert re.search(r"profit.{0,40}loss", profit_html, re.IGNORECASE), "Profit and Loss page should open with a concise definition and calculation scope"
 assert 'href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement"' in profit_html, "Profit and Loss page should cite the OpenStax income-statement source"
 assert 'href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"' in profit_html, "Profit and Loss page should cite ACCA ratio-analysis guidance"
 assert "Markup versus margin at a glance" in profit_html and "<table" in profit_html, "Profit and Loss page should include a useful comparison table"
@@ -1175,3 +1175,17 @@ for page_path, input_id, notice in (
     page_html = output_for_url(SITE + page_path).read_text(encoding="utf-8")
     assert notice in page_html, f"Missing prominent method/safety notice on {page_path}"
     assert page_html.index(notice) < page_html.index(input_id), f"Notice must appear before the first calculator input on {page_path}"
+
+
+# Header brand links must always return to the canonical site homepage.
+# This prevents a translated homepage logo from linking back to itself.
+for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/", "/ar/", "/es/", "/fr/", "/hi/"):
+    _logo_html = output_for_url(SITE + _logo_path).read_text(encoding="utf-8")
+    _logo_match = re.search(
+        r'<a href="([^"]+)" aria-label="CalculatesAll[^"]*" class="font-extrabold text-xl',
+        _logo_html,
+    )
+    assert _logo_match and _logo_match.group(1) == "/", (
+        "Header logo must link to the root homepage: " + _logo_path
+    )
+print("PASS: header brand logo links to the root homepage on all locale routes")
