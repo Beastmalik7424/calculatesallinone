@@ -36,6 +36,8 @@ URDU_DESCRIPTION_FALLBACKS = {
 VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the verified Urdu BMI threshold-copy correction and source check in this change.
     "/ur/bmi-calculator/": "2026-11-09",
+    # This date records the age-page leap-day anniversary disclosure and boundary-test update.
+    "/age-calculator/": "2026-11-11",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
