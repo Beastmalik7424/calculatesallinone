@@ -364,6 +364,8 @@ def main():
                 else:
                     item.pop("dateModified", None)
         web_page["inLanguage"] = lang
+        if path == "/age-calculator/":
+            print("AGE_SCHEMA_POST", [(item.get("@type"), item.get("url"), item.get("dateModified")) for item in schemas if isinstance(item, dict)])
         faq_items = extract_faq_items(raw)
         if faq_items:
             schemas = [s for s in schemas if s.get("@type") != "FAQPage"]
