@@ -340,16 +340,21 @@ def main():
         # while transferring truthful author/publisher/citation links to the page entity.
         # Preserve the original page object because the sanitizer transfers those links to it.
         schemas = remove_ineligible_software_app(schemas)
+        page_schema_types = ("WebPage", "AboutPage", "ProfilePage")
         matching_page_index = next((i for i, item in enumerate(schemas)
                                     if isinstance(item, dict)
-                                    and item.get("@type") in ("WebPage", "AboutPage", "ProfilePage")
-                                    and item.get("url") == web_page.get("url")), None)
+                                    and item.get("@type") in page_schema_types
+                                    and ((web_page.get("@id") and item.get("@id") == web_page.get("@id"))
+                                         or (web_page.get("url") and item.get("url") == web_page.get("url")))), None)
+        if matching_page_index is None:
+            matching_page_index = next((i for i, item in enumerate(schemas)
+                                        if isinstance(item, dict) and item.get("@type") in page_schema_types), None)
         if matching_page_index is None:
             schemas.append(web_page)
         else:
             # The sanitizer returns rebuilt dictionaries. Reinsert the original page node so
             # its transferred author/publisher/citation fields and subsequent metadata updates
-            # are the same object that gets serialized.
+            # are the same object that gets serialized, without duplicating a page entity.
             schemas[matching_page_index] = web_page
         web_page["name"] = title
         web_page["url"] = canonical
