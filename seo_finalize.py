@@ -36,6 +36,8 @@ URDU_DESCRIPTION_FALLBACKS = {
 VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the verified Urdu BMI threshold-copy correction and source check in this change.
     "/ur/bmi-calculator/": "2026-11-09",
+    # This date records the age-page leap-day anniversary disclosure and boundary-test update.
+    "/age-calculator/": "2026-11-11",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
@@ -329,22 +331,41 @@ def main():
                 schemas.append(json.loads(match.group(1)))
             except json.JSONDecodeError as exc:
                 raise SystemExit("Invalid JSON-LD in " + path + ": " + str(exc))
-        web_page = next((s for s in schemas if s.get("@type") in ("WebPage", "AboutPage", "ProfilePage")), None)
+        web_page = next((s for s in schemas if isinstance(s, dict) and s.get("@type") in ("WebPage", "AboutPage", "ProfilePage")), None)
         if web_page is None:
             web_page = {"@context":"https://schema.org","@type":"WebPage","name":title,"url":canonical}
             schemas.append(web_page)
         # Google requires a genuine app rating or review for SoftwareApplication rich results.
         # The site has no verified public app reviews, so remove this optional rich-result type
         # while transferring truthful author/publisher/citation links to the page entity.
+        # Preserve the original page object because the sanitizer transfers those links to it.
         schemas = remove_ineligible_software_app(schemas)
+        page_schema_types = ("WebPage", "AboutPage", "ProfilePage")
+        matching_page_index = next((i for i, item in enumerate(schemas)
+                                    if isinstance(item, dict)
+                                    and item.get("@type") in page_schema_types
+                                    and ((web_page.get("@id") and item.get("@id") == web_page.get("@id"))
+                                         or (web_page.get("url") and item.get("url") == web_page.get("url")))), None)
+        if matching_page_index is None:
+            matching_page_index = next((i for i, item in enumerate(schemas)
+                                        if isinstance(item, dict) and item.get("@type") in page_schema_types), None)
+        if matching_page_index is None:
+            schemas.append(web_page)
+        else:
+            # The sanitizer returns rebuilt dictionaries. Reinsert the original page node so
+            # its transferred author/publisher/citation fields and subsequent metadata updates
+            # are the same object that gets serialized, without duplicating a page entity.
+            schemas[matching_page_index] = web_page
         web_page["name"] = title
         web_page["url"] = canonical
         # Keep dateModified only for pages with an explicit, page-specific substantive update.
         verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
-        if verified_date:
-            web_page["dateModified"] = verified_date
-        else:
-            web_page.pop("dateModified", None)
+        for item in schemas:
+            if isinstance(item, dict) and item.get("@type") in ("WebPage", "AboutPage", "ProfilePage"):
+                if verified_date:
+                    item["dateModified"] = verified_date
+                else:
+                    item.pop("dateModified", None)
         web_page["inLanguage"] = lang
         faq_items = extract_faq_items(raw)
         if faq_items:
