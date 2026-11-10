@@ -45,8 +45,9 @@ elements["yd-calendar-option"].value = "calendar";
 const storage = new Map();
 let clock = 0;
 const NativeDate = Date;
+let fixedNow = "2026-10-18T12:00:00Z";
 class FixedDate extends NativeDate {
-  constructor(...args) { super(...(args.length ? args : ["2026-10-18T12:00:00Z"])); }
+  constructor(...args) { super(...(args.length ? args : [fixedNow])); }
   static UTC(...args) { return NativeDate.UTC(...args); }
 }
 const document = {
@@ -238,6 +239,16 @@ for (const [dob, expected] of [
   elements["a-dob"].value = dob; submit("age-form");
   assert.match(elements["age-result"].textContent, expected);
 }
+fixedNow = "2025-02-27T12:00:00Z";
+elements["a-dob"].value = "2000-02-29"; submit("age-form");
+assert.match(elements["age-result"].textContent, /24 years, 11 months and 29 days/, "29 February birth stays one day short of the 28 February anniversary");
+fixedNow = "2025-02-28T12:00:00Z";
+submit("age-form");
+assert.match(elements["age-result"].textContent, /25 years, 0 months and 0 days/, "This calculator uses 28 February as the non-leap-year anniversary");
+fixedNow = "2025-03-01T12:00:00Z";
+submit("age-form");
+assert.match(elements["age-result"].textContent, /25 years, 0 months and 1 day/, "Age remains one day past the calculator anniversary on 1 March");
+fixedNow = "2026-10-18T12:00:00Z";
 elements["a-dob"].value = "2027-01-01"; submit("age-form");
 assert.match(elements["age-result"].textContent, /future/i);
 
