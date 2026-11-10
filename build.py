@@ -1444,36 +1444,28 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
 
 
 def lang_links(lang, s, current_path=None):
-    # Calculator language links preserve the current tool and only show
-    # locales for which an equivalent translated page exists.
+    # Unreviewed translated routes are noindex. Keep language navigation one-way
+    # from translated pages to English; never link indexable pages to /ur/.
+    if lang == "en":
+        return ""
     import re
     match = re.fullmatch(r"/(?:ur/)?([^/]+)/", current_path or "")
     if match and match.group(1) in {t["slug"] for t in TOOLS}:
         slug = match.group(1)
         if slug not in URDU:
             return ""
-        choices = [
-            ("en", "English", "/" + slug + "/"),
-            ("ur", "اردو", "/ur/" + slug + "/"),
-        ]
-        items = ""
-        for code, name, href in choices:
-            if code == lang:
-                continue
-            items += ('<li><a class="' + LINK + ' min-h-[44px] inline-flex items-center rounded-full px-3 py-1 bg-white/80 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700" hreflang="' + code
-                      + '" href="' + href + '">' + name + "</a></li>")
-        return ('<nav aria-label="' + s["lang"] + '" class="mt-3"><ul class="flex flex-wrap gap-x-3 gap-y-2 text-sm">'
-                + items + "</ul></nav>")
-
-    items = ""
-    for l in LANGS:
-        # Only English and Urdu are retained in the visible language switcher.
-        if l["code"] not in ("en", "ur") or l["code"] == lang:
-            continue
-        items += ('<li><a class="' + LINK + ' min-h-[44px] inline-flex items-center rounded-full px-3 py-1 bg-white/80 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700" hreflang="' + l["code"]
-                  + '" href="' + l["path"] + '">' + l["name"] + "</a></li>")
-    return ('<nav aria-label="' + s["lang"] + '" class="mt-3"><ul class="flex flex-wrap gap-x-3 gap-y-2 text-sm">'
-            + items + "</ul></nav>")
+        href = "/" + slug + "/"
+    else:
+        href = "/"
+    items = (
+        '<li><a class="' + LINK
+        + ' min-h-[44px] inline-flex items-center rounded-full px-3 py-1 bg-white/80 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700" hreflang="en" href="'
+        + href + '">English</a></li>'
+    )
+    return (
+        '<nav aria-label="' + s["lang"] + '" class="mt-3"><ul class="flex flex-wrap gap-x-3 gap-y-2 text-sm">'
+        + items + "</ul></nav>"
+    )
 
 
 FOOTER_EMI_LABEL = {"en": "EMI Calculator", "ur": "ای ایم آئی کیلکولیٹر", "ar": "حاسبة الأقساط", "hi": "ईएमआई कैलकुलेटर", "es": "Calculadora de EMI", "fr": "Calculateur EMI"}
