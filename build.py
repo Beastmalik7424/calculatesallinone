@@ -1481,7 +1481,7 @@ FOOTER_EMI_LABEL = {"en": "EMI Calculator", "ur": "ای ایم آئی کیلکو
 
 def shell(main_html, lang="en", current_path=None):
     s = shell_strings(lang)
-    home = "/" if lang == "en" else "/" + lang + "/"
+    home = "/"
     brand_home_label = {"en": " home page", "ur": " ہوم پیج", "ar": " الصفحة الرئيسية", "hi": " होम पेज", "es": " página de inicio", "fr": " page d’accueil"}.get(lang, " home page")
     main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
     menu_position = "left-0 right-auto" if lang in RTL_LANGS else "right-0"
