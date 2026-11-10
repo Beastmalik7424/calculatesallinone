@@ -117,7 +117,7 @@ GUIDE_EXTRA = {
             "The calculator follows the Gregorian calendar, so day counts include every leap day between the two dates.",
         ]),
         ("Birthdays on 29 February", [
-            "The calculator counts calendar dates. A person born on 29 February has a birthday in leap years only. Many countries treat 1 March as the legal birthday in other years, so check your local rule if you need it for a document.",
+            "For a 29 February birth, this calculator uses 28 February as the anniversary in non-leap years. This is a calculation convention, not a legal rule. Legal age and eligibility rules can differ by jurisdiction, so check the relevant authority for official decisions.",
         ]),
         ("Using the total days figure", [
             "The total days figure is useful for planning, for example counting days until a milestone. It counts whole days, not hours, so the result does not change during the day.",

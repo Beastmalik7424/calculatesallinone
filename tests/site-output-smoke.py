@@ -1113,6 +1113,7 @@ for _sw_path in ("/stopwatch/", "/ur/stopwatch/"):
 _age_editorial_html = (Path(__file__).resolve().parents[1] / "public" / "age-calculator" / "index.html").read_text(encoding="utf-8")
 assert "Worked example: age across a leap day" in _age_editorial_html
 assert "2024 includes 29 February" in _age_editorial_html
+assert "uses 28 February as the anniversary in non-leap years" in _age_editorial_html
 assert "does not determine legal eligibility" in _age_editorial_html
 
 
