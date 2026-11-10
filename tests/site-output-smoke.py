@@ -684,7 +684,7 @@ for url in urls:
         assert not app_schemas, "EMI page must omit SoftwareApplication rich-result markup without genuine public ratings or reviews"
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
-            if url.endswith("/age-calculator/"):
+            if url == SITE + "/age-calculator/":
                 assert item.get("dateModified") == "2026-11-11", (
                     "Age page dateModified must match the verified leap-day disclosure update."
                 )
