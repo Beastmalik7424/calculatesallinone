@@ -1380,6 +1380,8 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
                 for key, value in entity.items():
                     if key not in ("@context", "@type", "@id"):
                         existing[key] = value
+    # Keep every translated route accessible, but out of search results until its full translated journey is reviewed.
+    noindex = noindex or path.startswith(("/ur/", "/ar/", "/es/", "/fr/", "/hi/"))
     robots = "noindex, follow" if noindex else "index, follow"
     alt = ""
     if alternates:
@@ -1465,7 +1467,8 @@ def lang_links(lang, s, current_path=None):
 
     items = ""
     for l in LANGS:
-        if l["code"] == lang:
+        # Only English and Urdu are retained in the visible language switcher.
+        if l["code"] not in ("en", "ur") or l["code"] == lang:
             continue
         items += ('<li><a class="' + LINK + ' min-h-[44px] inline-flex items-center rounded-full px-3 py-1 bg-white/80 dark:bg-stone-800/80 border border-stone-200 dark:border-stone-700" hreflang="' + l["code"]
                   + '" href="' + l["path"] + '">' + l["name"] + "</a></li>")
@@ -2336,6 +2339,9 @@ def not_found():
 def sitemap(entries):
     items = ""
     for path, alts in entries:
+        # Noindex locale pages must never be emitted into the generated sitemap.
+        if path.startswith(("/ur/", "/ar/", "/es/", "/fr/", "/hi/")):
+            continue
         links = ""
         for code, href in alts:
             links += '    <xhtml:link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '"/>\n'

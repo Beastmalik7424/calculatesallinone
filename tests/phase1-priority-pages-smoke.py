@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression checks for the four Phase 1 priority calculator landing pages.
+"""Regression checks for the Phase 1 priority calculator landing pages.
 
 These checks exercise generated static HTML, not a duplicate implementation of
 calculator formulas. They protect metadata, first-screen order, navigation,
@@ -102,7 +102,7 @@ def check_urdu_bmi():
     meta = re.search(r'<meta name="description" content="([^"]*)"', source)
     assert meta and meta.group(1) == description, "Urdu BMI description mismatch"
     assert f'<link rel="canonical" href="{SITE}/ur/bmi-calculator/">' in source, "Urdu BMI canonical changed"
-    assert '<meta name="robots" content="index, follow">' in source, "Urdu BMI must remain indexable"
+    assert '<meta name="robots" content="noindex, follow">' in source, "Urdu BMI must remain accessible but noindex"
     assert '<html lang="ur" dir="rtl">' in source, "Urdu language direction changed"
     main = re.search(r"<main\b[^>]*>(.*?)</main>", source, re.S | re.I)
     assert main, "Urdu BMI main landmark missing"
@@ -114,18 +114,14 @@ def check_urdu_bmi():
     assert "Related calculators" in body or "متعلقہ کیلکولیٹر" in body, "Urdu BMI related tools section missing"
     assert len(re.findall(r"<summary\b", body, re.I)) >= 6, "Urdu BMI needs six visible FAQs"
     links = re.findall(r'<link\b[^>]*hreflang=["\']([^"\']+)["\'][^>]*href=["\']([^"\']+)["\']', source, re.I)
-    assert {(lang, href) for lang, href in links} >= {
-        ("en", SITE + "/bmi-calculator/"),
-        ("ur", SITE + "/ur/bmi-calculator/"),
-        ("x-default", SITE + "/bmi-calculator/"),
-    }, "Urdu BMI hreflang alternates changed"
+    assert not links, "Noindex Urdu BMI page must not advertise hreflang search alternates"
     jsonld_documents(source, slug)
 
 def main():
     for slug, spec in CASES.items():
         check_english_page(slug, spec)
     check_urdu_bmi()
-    print("PASS: four Phase 1 pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD and preserved canonicals/language signals")
+    print("PASS: four Phase 1 pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD, canonicals and locale noindex behavior")
     return 0
 
 if __name__ == "__main__":

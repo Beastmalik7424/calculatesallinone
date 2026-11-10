@@ -12,6 +12,7 @@ HUB_PATHS = {"/money/", "/health/", "/math/", "/time/", "/worship/"}
 # These homepage translations are not yet confirmed by a competent native-language reviewer.
 # Keep them accessible to visitors but out of search results until the translated journey is checked.
 UNREVIEWED_LOCALE_HOMES = {"/ar/", "/hi/", "/es/", "/fr/", "/ur/"}
+NOINDEX_LOCALE_PREFIXES = ("/ur/", "/ar/", "/es/", "/fr/", "/hi/")
 DESCRIPTION_FALLBACKS = {
     "/about/": "Learn what CalculatesAll offers, how its free calculators work, and the principles behind clear formulas, examples and stated limitations.",
     "/privacy/": "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.",
@@ -273,6 +274,8 @@ def main():
         if guide_headings < 4 or explanatory_paragraphs < 6 or not has_tool_links:
             noindex.add(path)
     noindex.update(UNREVIEWED_LOCALE_HOMES)
+    # Exclude every generated page in these locale paths, not just the translated homepages.
+    noindex.update(path for path in paths if path.startswith(NOINDEX_LOCALE_PREFIXES))
     # Preserve any intentional noindex pages, including 404.
     for path, file in paths.items():
         raw = file.read_text(encoding="utf-8")
@@ -311,15 +314,16 @@ def main():
             raw, head_count = re.subn(r"(<head\b[^>]*>)(.*?)(</head>)", normalize_audited_head, raw, count=1, flags=re.S | re.I)
             if head_count != 1:
                 raise SystemExit("Missing or malformed head element: " + path)
-        if path in noindex:
-            raw = remove_ineligible_software_app_from_html(raw, path)
-            file.write_text(raw, encoding="utf-8")
-            continue
         lang_match = re.search(r'<html lang="([^"]+)"', raw)
         lang = lang_match.group(1) if lang_match else "en"
+        # Noindex pages still need complete, page-specific metadata. Normalize first,
+        # then skip indexable-only schema and freshness processing.
         raw, title, desc = normalize_meta(raw, path, lang)
-        titles[path] = title
-        descriptions[path] = desc
+        # Noindex pages still receive complete page-level metadata and valid structured data.
+        # Only their indexability and inclusion in the sitemap are suppressed.
+        if path not in noindex:
+            titles[path] = title
+            descriptions[path] = desc
         # Remove legacy blanket review/update stamps. Never claim a page was reviewed unless that review occurred.
         raw = re.sub(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', "", raw, count=1, flags=re.S)
         schemas = []
@@ -385,8 +389,10 @@ def main():
     ET.indent(urlset, space="  ")
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(urlset, encoding="unicode") + "\n", encoding="utf-8")
     (ROOT / "robots.txt").write_text("User-agent: *\nAllow: /\nDisallow: /404\n\nSitemap: " + SITE + "/sitemap.xml\n", encoding="utf-8")
+    locale_noindex = sorted(path for path in noindex_list if path.startswith(NOINDEX_LOCALE_PREFIXES))
     report = ["SEO build report", "Freshness metadata: dateModified set only for verified page-specific updates; sitemap lastmod omitted", "Indexable pages: " + str(len(indexable)),
-              "Noindex pages: " + str(len(noindex_list)), "Sitemap URLs: " + str(len(indexable)),
+              "Noindex pages: " + str(len(noindex_list)), "Locale pages noindexed: " + str(len(locale_noindex)),
+              "Locale URLs excluded from sitemap: " + str(len(locale_noindex)), "Sitemap URLs: " + str(len(indexable)),
               "Titles: unique and under 60 characters", "Descriptions: unique, page-specific and 70-160 characters",
               "JSON-LD: parsed and serialized as valid JSON", "Hub decisions:"]
     report.extend("  " + p + ": " + ("noindex" if p in noindex else "indexable") for p in sorted(HUB_PATHS))

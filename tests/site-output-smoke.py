@@ -1175,3 +1175,33 @@ for page_path, input_id, notice in (
     page_html = output_for_url(SITE + page_path).read_text(encoding="utf-8")
     assert notice in page_html, f"Missing prominent method/safety notice on {page_path}"
     assert page_html.index(notice) < page_html.index(input_id), f"Notice must appear before the first calculator input on {page_path}"
+
+# All translated locale routes remain generated and accessible as static pages,
+# but are marked noindex and omitted from the sitemap until reviewed.
+_LOCALE_PREFIXES = ("/ur/", "/ar/", "/es/", "/fr/", "/hi/")
+_locale_pages = []
+for _page_file in ROOT.rglob("index.html"):
+    _relative = "/" + _page_file.parent.relative_to(ROOT).as_posix().strip("/") + "/"
+    if _relative.startswith(_LOCALE_PREFIXES):
+        _locale_pages.append((_relative, _page_file))
+assert _locale_pages, "Expected translated locale pages to remain generated"
+for _locale_path, _locale_file in _locale_pages:
+    _locale_html = _locale_file.read_text(encoding="utf-8")
+    assert 'name="robots" content="noindex, follow"' in _locale_html, (
+        "Translated page must remain accessible but noindex: " + _locale_path
+    )
+    assert SITE + _locale_path not in sitemap_urls, (
+        "Noindex locale page must be excluded from sitemap: " + _locale_path
+    )
+print("PASS: " + str(len(_locale_pages)) + " translated locale pages are noindex and excluded from sitemap")
+
+# Non-English locale destinations must not appear in the shared footer language navigation.
+for _page_file in ROOT.rglob("index.html"):
+    _page_html = _page_file.read_text(encoding="utf-8")
+    _footer_match = re.search("<footer.*?</footer>", _page_html, re.S | re.I)
+    assert _footer_match, "Missing footer on " + str(_page_file)
+    assert not re.search(r"""href=["']/(?:ar|es|fr|hi)/""", _footer_match.group(0)), (
+        "Arabic, Spanish, French or Hindi locale link remains in footer: " + str(_page_file)
+    )
+print("PASS: Arabic, Spanish, French and Hindi links are absent from shared footer navigation")
+

@@ -60,18 +60,6 @@ This index helps automated systems discover the site's pages. It is not a replac
 - [Query Calculator](https://calculateallinone.vercel.app/query-calculator/): Supported natural-language arithmetic and time-conversion questions. It does not answer arbitrary questions.
 - [Tasbih Counter](https://calculateallinone.vercel.app/tasbih-counter/): Browser-based count, undo, reset and target controls.
 
-## Urdu tools
-
-- [Urdu Age Calculator](https://calculateallinone.vercel.app/ur/age-calculator/)
-- [Urdu BMI Calculator](https://calculateallinone.vercel.app/ur/bmi-calculator/)
-- [Urdu Discount Calculator](https://calculateallinone.vercel.app/ur/discount-calculator/)
-- [Urdu Profit and Loss Calculator](https://calculateallinone.vercel.app/ur/profit-loss-calculator/)
-- [Urdu Standard Calculator](https://calculateallinone.vercel.app/ur/standard-calculator/)
-- [Urdu Stopwatch](https://calculateallinone.vercel.app/ur/stopwatch/)
-- [Urdu Tasbih Counter](https://calculateallinone.vercel.app/ur/tasbih-counter/)
-- [Urdu Unit Converter](https://calculateallinone.vercel.app/ur/unit-converter/)
-- [Urdu Zakat Calculator](https://calculateallinone.vercel.app/ur/zakat-calculator/)
-
 ## Usage and accuracy notes
 
 - Check the units, percentage basis, conversion factor and exclusions shown on the relevant page.
