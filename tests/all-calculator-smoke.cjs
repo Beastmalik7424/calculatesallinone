@@ -118,6 +118,8 @@ setValues({"yd-value":1188,"yd-method":365.2425});
 submit("years-days-form");
 assert.match(elements["yd-result"].textContent, /Approximate breakdown: 3 years, 3 months and 0\.96 days/);
 assert.match(elements["yd-result"].textContent, /average month: 30\.436875 days/);
+setValues({"yd-value":1009,"yd-method":365.2425}); submit("years-days-form");
+assert.match(elements["yd-result"].textContent, /Approximate breakdown: 2 years, 9 months and 4\.58 days/);
 setValues({"yd-value":-1}); submit("years-days-form");
 assert.match(elements["yd-result"].textContent, /Enter a number of days from 0 to 1,000,000/);
 elements["yd-method"].value = "calendar";
