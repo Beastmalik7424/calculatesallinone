@@ -190,8 +190,17 @@ assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30,
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days Calculator | Days to Years Converter</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
 assert 'name="description" content="Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date."' in years_html, "Years-to-Days meta description must explain all conversion methods and exact calendar mode"
-assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 5 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
+assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
+for phrase in (
+    "Choose a conversion method",
+    "Days = Years × Selected days per year.",
+    "Exact calendar years from a start date",
+    "29 February 2024 plus one year ends exclusively on 1 March 2025, after 366 days.",
+    "Results display up to eight decimal places.",
+    "Inputs range from 0 to 1,000,000.",
+):
+    assert phrase in years_html, f"Years-to-Days guide must preserve verified method, precision and input-limit detail: {phrase}"
 _gsc_day_examples = (
     "1,068 2.9260 2.9240 2.9241",
     "1,188 3.2548 3.2526 3.2526",
@@ -691,6 +700,10 @@ for url in urls:
             elif url.endswith("/ur/bmi-calculator/"):
                 assert item.get("dateModified") == "2026-11-09", (
                     "Urdu BMI dateModified must match the verified substantive content and source update."
+                )
+            elif url == SITE + "/years-to-days-calculator/":
+                assert item.get("dateModified") == "2026-11-11", (
+                    "Years-to-Days dateModified must match the verified guide and worked-example update."
                 )
             else:
                 assert "dateModified" not in item, (
