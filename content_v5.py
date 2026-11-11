@@ -368,33 +368,21 @@ GUIDE_EXTRA["years-to-days-calculator"].append(
         "A question such as 'how many days are in 3 years and 2 months?' cannot have one exact answer without calendar dates because months have 28, 29, 30 or 31 days. Use the Date Difference Calculator with the actual start and end dates when an exact calendar count is required.",
     ])
 )
-# Commit 5: consolidated Years-to-Days guide, verified against the calculator implementation.
+# Focused Years-to-Days guide: one method explanation, practical examples and exact-date limits.
 GUIDE_EXTRA["years-to-days-calculator"] = [
-    ("Choose a conversion method", [
-        "Convert years to days or days to years. Forward conversion multiplies by the selected year length and displays days, weeks, hours, minutes and seconds. Reverse conversion divides by that length and estimates decimal years, whole years, average months and remaining days.",
-        "Choose 365 days, the 365.25-day Julian year or the 365.2425-day Gregorian average. Exact calendar years is years-to-days only and requires a Gregorian start date plus whole years.",
+    ("Choose the year method", [
+        "For fixed-duration conversions, choose 365 days for simple arithmetic, 365.25 days for the Julian year, or 365.2425 days for the Gregorian average across its 400-year cycle. These are fixed lengths, not exact counts between calendar dates.",
     ]),
-    ("Formulas and precision", [
-        "Days = Years × Selected days per year. Decimal years = Days ÷ Selected days per year. Weeks = days ÷ 7; hours = days × 24; minutes = days × 1,440; seconds = days × 86,400.",
-        "Results display up to eight decimal places. Fixed conversions are durations, not clock-time, time-zone or daylight-saving calculations.",
+    ("Formulas and a reverse-conversion example", [
+        "Years to days: days = years × selected year length. Days to years: decimal years = days ÷ selected year length. Weeks = days ÷ 7; hours = days × 24; minutes = days × 1,440; seconds = days × 86,400. Results display up to eight decimal places.",
+        "For 1,188 days using the 365.2425-day setting, the result is about 3.25263352 years, or an estimated 3 years, 3 months and 0.96 days. The average month is 30.436875 days. This is a duration estimate, not an exact calendar age.",
     ]),
-    ("Fixed-year conversion: 80 years", [
-        "For 80 years, the 365-day method gives 29,200 days; the Julian method gives 29,220 days; the Gregorian-average method gives 29,219.4 days. The result depends on the selected convention. A fixed conversion can produce a fractional day. For this calculator’s date-only anniversary method, the result is a whole number of calendar days.",
-        "A 365-day year is a simple convention. NASA/JPL lists the Julian year as 365.25 days. The Gregorian rule produces 97 leap days per 400 years, averaging 365.2425 days. Century years are leap years only when divisible by 400. Gregorian years contain 365 or 366 days.",
-        "For 13 years, the simple result is 4,745 days, the Julian-average result is 4,748.25 days, and the Gregorian-average result is 4,748.1525 days. For 29 years, the simple conversion is 29 x 365 = 10,585 days. Ten years gives 3,650 days, 3,652.5 days or 3,652.425 days. Use the reference table for more examples.",
-    ]),
-    ("Exact calendar years from a start date", [
-        "An average cannot give exact days between anniversaries. Select Years to days, choose Exact calendar years, then enter a Gregorian start date and whole years.",
-        "It counts up to, but excludes, the ending anniversary. Results include days, whole weeks plus leftover days, hours, minutes, seconds, the exclusive end date and leap days included.",
-        "1 January 2024 to 1 January 2028 is 1,461 days, including 29 February 2024. A 29 February start uses 1 March when the ending year is not a leap year: 29 February 2024 plus one year ends exclusively on 1 March 2025, after 366 days. Exact mode accepts whole years only.",
-    ]),
-    ("Days to years: estimated breakdown", [
-        "In Days to years, the selected fixed year length converts the input to decimal years and an estimated years/months/days breakdown. Average month length is the selected year length divided by 12.",
-        "For 1,188 days using 365.2425, the result is about 3.25263352 years, or 3 years, 3 months and 0.96 days. The average month is 30.436875 days. This is not an exact age because months have 28, 29, 30 or 31 days.",
-        "1,009 days is 2.76438356 years using a 365-day year, 2.76249144 years using the 365.25-day Julian average, or 2.76254817 years using the 365.2425-day Gregorian average. Use decimal years for duration estimates, not exact ages or calendar-month counts.",
+    ("Exact calendar dates", [
+        "For exact calendar dates, this calculator counts whole calendar days between anniversaries. Select Years to days, choose Exact calendar years, then enter a valid Gregorian start date and a whole number of years.",
+        "The count includes the start date and excludes the ending anniversary. For example, 1 January 2024 to 1 January 2028 is 1,461 days, including 29 February 2024. If a 29 February start has no matching leap day in the ending year, the anniversary is 1 March.",
     ]),
     ("Input limits and related tools", [
-        "Inputs range from 0 to 1,000,000. Fixed methods accept decimals. Exact mode requires whole years, a valid Gregorian date from 1 January 0001 to 31 December 9999, and an ending year no later than 9999. Invalid dates and unsupported values are rejected.",
-        "For two dates, use the <a href='/date-calculator/'>Date Difference Calculator</a>. For age from a birth date, use the <a href='/age-calculator/'>Age Calculator</a>.",
+        "Inputs range from 0 to 1,000,000. Fixed methods accept decimals. Exact mode requires whole years and a valid Gregorian date from 1 January 0001 to 31 December 9999, with the ending year no later than 9999. Invalid dates and unsupported values are rejected.",
+        "For any two calendar dates, use the <a href='/date-calculator/'>Date Difference Calculator</a>. For age from a birth date, use the <a href='/age-calculator/'>Age Calculator</a>.",
     ]),
 ]
