@@ -371,17 +371,15 @@ GUIDE_EXTRA["years-to-days-calculator"].append(
 # Commit 5: consolidated Years-to-Days guide, verified against the calculator implementation.
 GUIDE_EXTRA["years-to-days-calculator"] = [
     ("Choose a conversion method", [
-        "Convert years to days or days to years. Forward conversion multiplies by the selected year length and displays days, weeks, hours, minutes and seconds. Reverse conversion divides by that length and estimates decimal years, whole years, average months and remaining days.",
-        "Choose 365 days, the 365.25-day Julian year or the 365.2425-day Gregorian average. Exact calendar years is years-to-days only and requires a Gregorian start date plus whole years.",
+        "Convert years to days by multiplying by the selected year length, or days to years by dividing by it. Forward results also show weeks, hours, minutes and seconds; reverse results include decimal years and an estimated years, months and days breakdown.",
+        "The 365-day option is a simple convention. A Julian year is exactly 365.25 days. The Gregorian average is 365.2425 days across its 400-year cycle, which contains 97 leap days. These fixed lengths estimate durations; exact calendar mode uses an actual Gregorian start date.",
     ]),
     ("Formulas and precision", [
         "Days = Years × Selected days per year. Decimal years = Days ÷ Selected days per year. Weeks = days ÷ 7; hours = days × 24; minutes = days × 1,440; seconds = days × 86,400.",
         "Results display up to eight decimal places. Fixed conversions are durations, not clock-time, time-zone or daylight-saving calculations.",
     ]),
     ("Fixed-year conversion: 80 years", [
-        "For 80 years, the 365-day method gives 29,200 days; the Julian method gives 29,220 days; the Gregorian-average method gives 29,219.4 days. The result depends on the selected convention. A fixed conversion can produce a fractional day. For this calculator’s date-only anniversary method, the result is a whole number of calendar days.",
-        "A 365-day year is a simple convention. NASA/JPL lists the Julian year as 365.25 days. The Gregorian rule produces 97 leap days per 400 years, averaging 365.2425 days. Century years are leap years only when divisible by 400. Gregorian years contain 365 or 366 days.",
-        "For 13 years, the simple result is 4,745 days, the Julian-average result is 4,748.25 days, and the Gregorian-average result is 4,748.1525 days. For 29 years, the simple conversion is 29 x 365 = 10,585 days. Ten years gives 3,650 days, 3,652.5 days or 3,652.425 days. Use the reference table for more examples.",
+        "For 80 years, the 365-day method gives 29,200 days, the 365.25-day Julian method gives 29,220 days, and the 365.2425-day Gregorian average gives 29,219.4 days. For exact calendar dates, this calculator counts whole calendar days between anniversaries.",
     ]),
     ("Exact calendar years from a start date", [
         "An average cannot give exact days between anniversaries. Select Years to days, choose Exact calendar years, then enter a Gregorian start date and whole years.",
