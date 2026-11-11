@@ -379,7 +379,7 @@ GUIDE_EXTRA["years-to-days-calculator"] = [
         "Results display up to eight decimal places. Fixed conversions are durations, not clock-time, time-zone or daylight-saving calculations.",
     ]),
     ("Fixed-year conversion: 80 years", [
-        "For 80 years, the 365-day method gives 29,200 days, the 365.25-day Julian method gives 29,220 days, and the 365.2425-day Gregorian average gives 29,219.4 days. For exact calendar dates, this calculator counts whole calendar days between anniversaries.",
+        "For 80 years, the 365-day method gives 29,200 days, the 365.25-day Julian method gives 29,220 days, and the 365.2425-day Gregorian average gives 29,219.4 days. For a 10-year comparison, the same methods give 3,650 days, 3,652.5 days and 3,652.425 days. For exact calendar dates, this calculator counts whole calendar days between anniversaries.",
     ]),
     ("Exact calendar years from a start date", [
         "An average cannot give exact days between anniversaries. Select Years to days, choose Exact calendar years, then enter a Gregorian start date and whole years.",
