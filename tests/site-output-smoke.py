@@ -1194,3 +1194,42 @@ for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/", "/ar/", "/es/", "/fr/", "
         "Header logo must link to the root homepage: " + _logo_path
     )
 print("PASS: header brand logo links to the root homepage on all locale routes")
+
+
+// Focused Years-to-Days content/UX regression checks.
+_years_page = Path("public/years-to-days-calculator/index.html").read_text(encoding="utf-8")
+assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in _years_page
+assert "For this calculator’s date-only anniversary method, the result is a whole number of calendar days." not in _years_page
+assert _years_page.count("For exact calendar dates, this calculator counts whole calendar days between anniversaries.") == 1
+
+_quick_start = _years_page.index('<section id="years-to-days-quick-reference"')
+_quick_end = _years_page.index("</section>", _quick_start)
+_quick_table = _years_page[_quick_start:_quick_end]
+assert _years_page.index('id="tool-calculator"') < _quick_start, "Calculator must remain before the quick reference table"
+assert _quick_table.count("<tr") == 6, "Quick table must have one header and five concise example rows"
+
+_full_start = _years_page.index('<details id="years-to-days-full-reference"')
+_full_end = _years_page.index("</details>", _full_start) + len("</details>")
+_full_table = _years_page[_full_start:_full_end]
+assert _quick_start < _full_start, "Short examples must appear before the full reference table"
+assert _full_table.count("<tr") == 27, "Full reference must retain all 26 data rows plus its header"
+assert "View all 26 years-to-days reference rows" in _full_table
+
+_faq_start = _years_page.index("Common questions</h2>")
+_faq_end = _years_page.index(">Sources</h2>", _faq_start)
+_faq_html = _years_page[_faq_start:_faq_end]
+assert _faq_html.count("<details") == 4, "Years-to-Days must show exactly four concise FAQs"
+for _question in (
+    "Which year method should I choose?",
+    "Does exact calendar mode count leap days?",
+    "Can I convert days to years?",
+    "What happens with a 29 February start date?",
+):
+    assert _question in _faq_html, "Missing focused FAQ: " + _question
+
+for _href in ("/date-calculator/", "/age-calculator/", "/query-calculator/", "/unit-converter/"):
+    assert f'href="{_href}"' in _years_page, "Missing internal Years-to-Days link: " + _href
+    assert Path("public", _href.strip("/"), "index.html").is_file(), "Internal Years-to-Days destination missing: " + _href
+for _href in ("https://ssd.jpl.nasa.gov/astro_par.html", "https://aa.usno.navy.mil/faq/leap_years"):
+    assert f'href="{_href}"' in _years_page, "Missing authoritative reference link: " + _href
+print("PASS: Years-to-Days quick/full tables, focused FAQs, exact-date wording and links")
