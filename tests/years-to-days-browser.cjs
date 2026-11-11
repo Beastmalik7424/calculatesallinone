@@ -78,6 +78,9 @@ const viewports = [
       await submit();
       assert.match(await result.innerText(), /Approximate breakdown: 3 years, 3 months and 0\.96 days/);
       assert.match(await result.innerText(), /Exact calendar months require a start date/);
+      await value.fill("1009");
+      await submit();
+      assert.match(await result.innerText(), /Approximate breakdown: 2 years, 9 months and 4\.58 days/);
 
       await method.selectOption("365");
       await value.fill("1009");
