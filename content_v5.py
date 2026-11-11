@@ -373,9 +373,11 @@ GUIDE_EXTRA["years-to-days-calculator"] = [
     ("Choose the year method", [
         "For fixed-duration conversions, choose 365 days for simple arithmetic, 365.25 days for the Julian year, or 365.2425 days for the Gregorian average across its 400-year cycle. These are fixed lengths, not exact counts between calendar dates.",
     ]),
-    ("Formulas and a reverse-conversion example", [
+    ("Formulas and worked examples", [
         "Years to days: days = years × selected year length. Days to years: decimal years = days ÷ selected year length. Weeks = days ÷ 7; hours = days × 24; minutes = days × 1,440; seconds = days × 86,400. Results display up to eight decimal places.",
-        "For 1,188 days using the 365.2425-day setting, the result is about 3.25263352 years, or an estimated 3 years, 3 months and 0.96 days. The average month is 30.436875 days. This is a duration estimate, not an exact calendar age.",
+        "For 13 years, the simple result is 4,745 days, the Julian-average result is 4,748.25 days, and the Gregorian-average result is 4,748.1525 days. For 29 years, the simple conversion is 29 x 365 = 10,585 days. These examples show the selected duration convention, not exact calendar spans.",
+        "For 1,009 days, the results are 2.76438356 years using 365 days, 2.76249144 using 365.25 days, and 2.76254817 using 365.2425 days. The Gregorian-average estimate is about 2 years, 9 months and 4.58 days.",
+        "For 1,188 days using the 365.2425-day setting, the result is about 3.25263352 years, or an estimated 3 years, 3 months and 0.96 days. The average month is 30.436875 days. Calendar months have 28, 29, 30 or 31 days, so this breakdown is an estimate, not an exact age.",
     ]),
     ("Exact calendar dates", [
         "For exact calendar dates, this calculator counts whole calendar days between anniversaries. Select Years to days, choose Exact calendar years, then enter a valid Gregorian start date and a whole number of years.",
