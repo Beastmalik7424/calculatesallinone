@@ -1732,8 +1732,8 @@ def tool_page(t):
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
-        title = "Online Tasbih Counter for Dhikr & Zikr | CalculatesAll"
-        desc = "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and save progress in this browser when storage is available."
+        title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
+        desc = "Count dhikr or zikr with a free tasbih calculator. Choose 33, 99 or a custom target and undo taps. Progress saves in this browser when storage is available."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
