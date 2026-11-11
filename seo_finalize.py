@@ -21,7 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
-    "/tasbih-counter/": "Use a free online tasbih counter for dhikr. Set a target, track your tasbeeh count, and save progress on this device without downloading an app.",
+    "/tasbih-counter/": "Count dhikr or zikr with a free tasbih calculator. Choose 33, 99 or a custom target and undo taps. Progress saves in this browser when storage is available.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
     "/ur/zakat-calculator/": "اپنی بچت، اثاثے اور واجب الادا قرض درج کرکے چاندی کے نصاب اور مکمل قمری سال کی شرط کے مطابق زکوٰۃ کا حساب کریں۔",
@@ -187,7 +187,7 @@ def normalize_meta(raw, path, lang):
     if path == "/profit-loss-calculator/":
         title = "Profit and Loss Calculator | Markup and Margin"
     if path == "/tasbih-counter/":
-        title = "Online Tasbih Counter for Dhikr & Zikr | CalculatesAll"
+        title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
     if path == "/age-calculator/":
@@ -223,7 +223,7 @@ def normalize_meta(raw, path, lang):
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Count tasbih or zikr on your phone. Choose 33, 99 or a custom target, undo a tap and save progress in this browser when storage is available."
+        desc = "Count dhikr or zikr with a free tasbih calculator. Choose 33, 99 or a custom target and undo taps. Progress saves in this browser when storage is available."
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
