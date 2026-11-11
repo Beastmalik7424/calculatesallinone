@@ -2266,6 +2266,17 @@ def home_app_page(lang):
     calc_title = "Standard Calculator" if not urdu else "معیاری کیلکولیٹر"
     tool_intro = 'Choose a calculator, or browse the <a class="text-sky-800 dark:text-sky-300 underline" href="/free-online-calculators/">complete free online calculators guide</a>. You can also explore the <a class="text-sky-800 dark:text-sky-300 underline" href="/money/">Money and Business</a> and <a class="text-sky-800 dark:text-sky-300 underline" href="/math/">Math and Converters</a> hubs.' if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
     free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
+    language_links = ""
+    if not urdu:
+        language_links = (
+            '<nav aria-label="Other languages" class="mt-8">'
+            '<h2 class="text-xl font-semibold">Other language versions</h2>'
+            '<ul class="mt-3 flex flex-wrap gap-3">'
+            '<li><a class="' + LINK + '" href="/ar/">العربية</a></li>'
+            '<li><a class="' + LINK + '" href="/es/">Español</a></li>'
+            '<li><a class="' + LINK + '" href="/fr/">Français</a></li>'
+            '</ul></nav>'
+        )
     hero_ui = CALC_UI
     if urdu:
         for en, ur in URDU["standard-calculator"]["labels"]:
@@ -2299,6 +2310,7 @@ def home_app_page(lang):
         + cats
         + ('<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">Explore more calculators</h2><ul class="mt-3 grid gap-3"><li><a class="text-sky-800 dark:text-sky-300 underline" href="/percentage-calculator/">Percentage Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/fraction-calculator/">Fraction Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/compound-interest-calculator/">Compound Interest Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/date-calculator/">Date Difference Calculator</a></li></ul></nav>' if not urdu else '')
         + '<section class="ca-home-extra">' + home_extra_html(lang) + '</section>'
+        + language_links
         '</div>'
     )
     schema = [
