@@ -49,8 +49,8 @@ CASES = {
         "up to six decimal places",
     ],
     "years-to-days-calculator": [
-        "For 13 years, the simple result is 4,745 days, the Julian-average result is 4,748.25 days, and the Gregorian-average result is 4,748.1525 days.",
-        "For 29 years, the simple conversion is 29 x 365 = 10,585 days.",
+        "For exact calendar dates, this calculator counts whole calendar days between anniversaries.",
+        "29 10,585 10,592.25 10,592.0325",
         "6 2,190 2,191.5 2,191.455",
         "15 5,475 5,478.75 5,478.6375",
         "25 9,125 9,131.25 9,131.0625",

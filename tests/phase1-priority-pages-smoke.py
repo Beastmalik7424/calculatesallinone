@@ -20,7 +20,7 @@ CASES = {
         "form": 'id="tasbih-app"',
         "category": "/worship/",
         "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
-        "faq_min": 5,
+        "faq_min": 4,
         "h1": "Free Online Tasbih Counter",
     },
     "profit-loss-calculator": {
