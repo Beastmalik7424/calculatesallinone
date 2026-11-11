@@ -50,7 +50,7 @@ CASES = {
     ],
     "years-to-days-calculator": [
         "For exact calendar dates, this calculator counts whole calendar days between anniversaries.",
-        "For 29 years, the simple conversion is 29 x 365 = 10,585 days.",
+        "29 10,585 10,592.25 10,592.0325",
         "6 2,190 2,191.5 2,191.455",
         "15 5,475 5,478.75 5,478.6375",
         "25 9,125 9,131.25 9,131.0625",
