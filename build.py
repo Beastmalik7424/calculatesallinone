@@ -971,23 +971,12 @@ TOOLS.extend([
             '<div id="yd-result" class="@R@" role="status" aria-live="polite"></div>'
         ),
         "guide": [],
-        "faq": [("How many days are in 80 years?", "29,200 with the simple method, 29,220 with the 365.25-day Julian average, or 29,219.4 with the Gregorian-average method."),
-                ("Does this account for leap years?", "Yes in Exact calendar years mode, which uses a start date and counts actual February 29 dates. The 365.25-day Julian average and 365.2425-day Gregorian average are fixed-duration approximations; neither counts actual leap days for a specific start date."),
-                ("Can I convert days to years?", "Yes. Select Days to years and choose a 365-day year, the 365.25-day Julian average or the 365.2425-day Gregorian average. Exact calendar mode is only available for converting whole years to days from a start date."),
-                ("How many days are in 1.5 years?", "547.5 days using a 365-day year, 547.875 days using the 365.25-day Julian average, or 547.86375 days using the 365.2425-day Gregorian average."),
-                ("How many years is 1,009 days?", "About 2.76 years, or approximately 2 years, 9 months and 4.58 days using an average Gregorian month of 30.436875 days. This is an estimate; exact calendar age requires actual start and end dates."),
-                ("How many years and months are in 504 days?", "About 1 year, 4 months and 17 days using an average Gregorian month of 30.436875 days. This is an estimate; exact calendar age requires actual start and end dates."),
-                ("How many days are in one year?", "A common year has 365 days and a leap year has 366. The fixed Julian year is 365.25 days. Averaged over the 400-year Gregorian cycle, one Gregorian year is 365.2425 days."),
-                ("How many days are in 10 years?", "3,650 using the 365-day method, 3,652.5 using the Julian average, or 3,652.425 using the Gregorian average. A real calendar span may contain two or three leap days depending on its start and end dates."),
-                ("How many days are in 6 years?", "Using the 365-day method, 6 years are 2,190 days. Using the Julian average, they are 2,191.5 days. Using the Gregorian average, they are 2,191.455 days. Exact calendar days depend on the start date and leap days."),
-                ("How many days are in 20 years?", "7,300 with the simple 365-day method, 7,305 with the Julian average, or 7,304.85 with the Gregorian average. The exact calendar total depends on the start and end dates."),
-                ("How many days are in 50 years?", "18,250 with the simple 365-day method, 18,262.5 with the Julian average, or 18,262.125 with the Gregorian average. The exact calendar total depends on the start and end dates."),
-                ("How many days, hours, minutes and seconds are in 9 years?", "Using 365 days per year, 9 years are 3,285 days, 78,840 hours, 4,730,400 minutes and 283,824,000 seconds. Using the 365.25-day Julian average, they are 3,287.25 days, 78,894 hours, 4,733,640 minutes and 284,018,400 seconds. Using the 365.2425-day Gregorian average, they are 3,287.1825 days, 78,892.38 hours, 4,733,542.8 minutes and 284,012,568 seconds. Exact calendar days depend on the start and end dates."),
-                ("How many hours and minutes are in 10 years?", "Using 365 days per year, 10 years are 87,600 hours or 5,256,000 minutes. Using the 365.25-day Julian average, they are 87,660 hours or 5,259,600 minutes. Using the 365.2425-day Gregorian average, they are 87,658.2 hours or 5,259,492 minutes."),
-                ("How do I convert days to years?", "Divide the number of days by 365, 365.25 for the Julian average, or 365.2425 for the Gregorian average. For example, 70,000 days is about 191.78 years using 365 days, 191.65 years using the Julian average, and 191.65 years using the Gregorian average. These are decimal-year estimates, not calendar ages."),
-                ("How many years and months are in 1,188 days?", "Using the 365.2425-day Gregorian average, 1,188 days is about 3.2526 years, or 3 years, 3 average months and 0.96 days. The average month is 30.436875 days (365.2425 divided by 12). This is an estimate, not an exact calendar-age result; exact calendar months require a start date."),
-                ("How many years and days are in 115 months?", "115 months is 9 years and 7 months. Using an average month of 30.436875 days, that is about 3,500.24 days. Exact elapsed days depend on the actual start date and calendar months. Use the Query Calculator for the month estimate."),
-                ("80 saal mein kitne din hote hain?", "29,200 using 365 days per year, 29,220 using the 365.25-day Julian average, or 29,219.4 using the Gregorian average of 365.2425 days per year. An exact calendar total depends on the start and end dates.")],
+        "faq": [
+            ("Which year-length methods can I use?", "Choose 365 days, the 365.25-day Julian year or the 365.2425-day Gregorian average. These are fixed-duration conversions; the exact calendar option counts actual days from a start date."),
+            ("Does exact calendar mode include leap days?", "Yes. It counts actual Gregorian calendar days up to, but not including, the ending anniversary. A 29 February start uses 1 March when the ending year is not a leap year."),
+            ("Can I convert days to years?", "Yes. Select Days to years and choose one of the three fixed year lengths. The result is a decimal-year estimate with an approximate years, months and days breakdown."),
+            ("Can exact calendar mode use decimal years?", "No. Exact calendar mode accepts whole years and a valid Gregorian start date. The fixed 365, 365.25 and 365.2425 methods accept decimal values.")
+        ],
         "sources": 'Julian year: exactly 365.25 days (<a class="' + LINK + '" href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noopener noreferrer">NASA/JPL astrodynamic parameters</a>). Gregorian mean year: 365.2425 days over the 400-year cycle (<a class="' + LINK + '" href="https://aa.usno.navy.mil/faq/leap_years" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory leap-year guidance</a>).'
     },
     {
@@ -1567,19 +1556,28 @@ def write(path, content):
 
 def years_to_days_reference_html():
     years_values = [1, 1.5, 2, 3, 4, 5, 6, 9, 10, 11, 13, 14, 15, 16, 20, 21, 25, 29, 30, 32, 40, 50, 60, 74, 80, 100]
+    quick_values = [1, 1.5, 10, 29, 80]
     def formatted(value):
         return format(value, ",.5f").rstrip("0").rstrip(".")
-    out = ('<section class="mt-10"><h2 class="' + H2 + '">Quick reference: years to days</h2>'
-           '<p class="' + P + '">Compare a 365-day common year, the fixed 365.25-day Julian average and the 365.2425-day Gregorian average. Average-method values can be fractional days; exact calendar spans depend on the dates.</p>'
-           '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
-           '<caption class="sr-only">Years converted to days using 365-day, 365.25-day Julian and 365.2425-day Gregorian year lengths</caption>'
-           '<thead><tr><th scope="col" class="border-b p-3">Years</th><th scope="col" class="border-b p-3">365-day method</th><th scope="col" class="border-b p-3">Julian average (365.25)</th><th scope="col" class="border-b p-3">Gregorian average (365.2425)</th></tr></thead><tbody>')
-    for years in years_values:
-        out += ('<tr><th scope="row" class="border-b p-3">' + formatted(years) + '</th>'
-                '<td class="border-b p-3">' + formatted(years * 365) + '</td>'
-                '<td class="border-b p-3">' + formatted(years * 365.25) + '</td>'
-                '<td class="border-b p-3">' + formatted(years * 365.2425) + '</td></tr>')
-    out += ('</tbody></table></div><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. This table is a duration reference, not a substitute for a date-specific count.</p></section>')
+    def table_rows(values):
+        rows = ""
+        for years in values:
+            rows += ('<tr><th scope="row" class="border-b p-3">' + formatted(years) + '</th>'
+                     '<td class="border-b p-3">' + formatted(years * 365) + '</td>'
+                     '<td class="border-b p-3">' + formatted(years * 365.25) + '</td>'
+                     '<td class="border-b p-3">' + formatted(years * 365.2425) + '</td></tr>')
+        return rows
+    table_start = ('<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
+                   '<caption class="sr-only">Years converted to days using 365-day, 365.25-day Julian and 365.2425-day Gregorian year lengths</caption>'
+                   '<thead><tr><th scope="col" class="border-b p-3">Years</th><th scope="col" class="border-b p-3">365-day method</th><th scope="col" class="border-b p-3">Julian average (365.25)</th><th scope="col" class="border-b p-3">Gregorian average (365.2425)</th></tr></thead><tbody>')
+    table_end = '</tbody></table></div>'
+    out = ('<section class="mt-8"><h2 class="' + H2 + '">Quick reference: years to days</h2>'
+           '<p class="' + P + '">A short comparison for common examples. Fixed-year methods are estimates; exact calendar totals depend on the start date.</p>'
+           + table_start + table_rows(quick_values) + table_end
+           + '<details id="years-days-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 26 years-to-days reference examples</summary>'
+           + table_start + table_rows(years_values) + table_end
+           + '</details><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. The expanded table is a duration reference, not a substitute for a date-specific count.</p></section>')
     return out
 
 
@@ -1857,7 +1855,7 @@ def tool_page(t):
             + '<p class="mt-4 rounded-xl bg-sky-50 dark:bg-sky-950 border border-sky-200 dark:border-sky-800 p-5 text-base text-stone-900 dark:text-stone-100"><strong>Worked method.</strong> ' + EXTRA[t["slug"]]["quick"] + '</p>')
            if EXTRA[t["slug"]]["quick"].strip() else "")
         + profit_reference_table
-        + (guide_html(guide[:2]) + years_to_days_reference_html() + guide_html(guide[2:]) + days_to_years_reference_html()
+        + (years_to_days_reference_html() + guide_html(guide[:2]) + guide_html(guide[2:]) + days_to_years_reference_html()
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
