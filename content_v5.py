@@ -388,7 +388,7 @@ GUIDE_EXTRA["years-to-days-calculator"] = [
     ]),
     ("Days to years: estimated breakdown", [
         "In Days to years, the selected fixed year length converts the input to decimal years and an estimated years/months/days breakdown. Average month length is the selected year length divided by 12.",
-        "For 1,188 days using 365.2425, the result is about 3.25263352 years, or 3 years, 3 months and 0.96 days. The average month is 30.436875 days. This is not an exact age because months have 28, 29, 30 or 31 days.",
+        "Search example: How many years and months are in 1,188 days? Using 365.2425, the result is about 3.25263352 years, or 3 years, 3 average months and 0.96 days. The average month is 30.436875 days. This is not an exact age because months have 28, 29, 30 or 31 days.",
         "For 1,009 days, the 365.2425-day Gregorian-average method gives about 2.76254817 years, or an estimated 2 years, 9 months and 4.58 days using average months. This is a duration estimate, not an exact calendar age. Use actual start and end dates when calendar months matter.",
     ]),
     ("Input limits and related tools", [
