@@ -334,7 +334,7 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   assert.match(generated, /id="yd-direction"/);
   assert.match(generated, /option value="days-to-years"/);
   assert.match(generated, /id="yd-calendar-option"/);
-  assert.match(generated, /How many years is 1,009 days\?/);
+  assert.match(generated, /Can exact calendar mode use decimal years\?/);
   assert.match(generated, /id="yd-exact-fields"/);
   assert.match(generated, /id="yd-start-date"/);
   assert.match(generated, /id="yd-calendar-option" value="calendar"/);
