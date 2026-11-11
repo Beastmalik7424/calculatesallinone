@@ -200,7 +200,7 @@ _gsc_day_examples = (
     "2,600 7.1233 7.1184 7.1186",
 )
 _years_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", years_html))
-_years_text = re.sub(r"\\s+", " ", _years_text).strip()
+_years_text = re.sub(r"\s+", " ", _years_text).strip()
 _missing_gsc_days = [value for value in _gsc_day_examples if value not in _years_text]
 _table_pos = _years_text.find("Worked reference: days to years")
 assert not _missing_gsc_days, f"Missing GSC day-count rows {_missing_gsc_days}; actual table text: {_years_text[_table_pos:_table_pos + 800]}"
@@ -1050,7 +1050,7 @@ for slug, phrases in {
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
     "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice"],
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
-    "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
+    "years-to-days-calculator": ["3.25263352 years", "30.436875 days", "28, 29, 30 or 31 days"],
 }.items():
     guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA[slug] for paragraph in paragraphs)
     for phrase in phrases:
@@ -1187,7 +1187,7 @@ for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/", "/ar/", "/es/", "/fr/", "
 print("PASS: header brand logo links to the root homepage on all locale routes")
 
 
-// Focused Years-to-Days content/UX regression checks.
+# Focused Years-to-Days content/UX regression checks.
 _years_page = Path("public/years-to-days-calculator/index.html").read_text(encoding="utf-8")
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in _years_page
 assert "For this calculator’s date-only anniversary method, the result is a whole number of calendar days." not in _years_page
