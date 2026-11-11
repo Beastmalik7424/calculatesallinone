@@ -2311,7 +2311,7 @@ def home_app_page(lang):
         + ('<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">Explore more calculators</h2><ul class="mt-3 grid gap-3"><li><a class="text-sky-800 dark:text-sky-300 underline" href="/percentage-calculator/">Percentage Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/fraction-calculator/">Fraction Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/compound-interest-calculator/">Compound Interest Calculator</a></li><li><a class="text-sky-800 dark:text-sky-300 underline" href="/date-calculator/">Date Difference Calculator</a></li></ul></nav>' if not urdu else '')
         + '<section class="ca-home-extra">' + home_extra_html(lang) + '</section>'
         + language_links
-        '</div>'
+        + '</div>'
     )
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "@id": SITE_URL + "/#website", "name": "CalculatesAll", "url": SITE_URL + path, "inLanguage": lang},
