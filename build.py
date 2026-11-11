@@ -274,6 +274,7 @@ TOOLS = [
         ),
         "guide": [
             ("Business P&L formulas", [
+                "Business profit is the amount left after a business subtracts the costs and operating expenses included in its calculation from revenue. This calculator shows gross profit after cost of goods sold, then net operating profit after other business expenses.",
                 "Gross profit equals total revenue minus cost of goods sold. Net operating profit equals gross profit minus other business expenses.",
                 "Net operating margin equals net operating profit divided by total revenue, multiplied by 100. When revenue is zero, margin is not available.",
                 "This simplified operating P&L excludes separate interest and income tax calculations. Enter those amounts in other expenses only when appropriate.",
