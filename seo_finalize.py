@@ -200,7 +200,7 @@ def normalize_meta(raw, path, lang):
     "/affiliate-disclosure/": "Learn how CalculatesAll is funded, how advertisements are labelled, and how future affiliate links will be disclosed without influencing calculator results.",
     "/compound-interest-calculator/": "Estimate compound interest from your starting balance, annual rate, time and compounding frequency. Review the formula and see how growth accumulates.",
     "/contact/": "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review.",
-    "/date-calculator/": "Find calendar days between two dates using the Gregorian calendar. The result accounts for leap years and shows the direction from start date to end date.",
+    "/date-calculator/": "Compare dates with elapsed or inclusive day counts, calendar years, months and days, and decimal weeks. Gregorian leap-year and month-end rules are explained.",
     "/discount-calculator/": "Calculate your discount amount, final sale price and total savings from the original price and discount percentage. See the formula and a worked example.",
     "/query-calculator/": "Ask in English, Roman Urdu and six other languages about time, months, birth dates and simple arithmetic. Includes the Pakistan Independence Day date.",
     "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",

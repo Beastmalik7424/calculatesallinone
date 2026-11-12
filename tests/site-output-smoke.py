@@ -351,6 +351,14 @@ for path, expected_title in EXPECTED_INTENT_TITLES.items():
         social = re.search('<meta ' + attr + '="' + name + '" content="([^"]*)"', page_html)
         assert social and html_lib.unescape(social.group(1)) == expected_title, f"Stale {name}: {path}"
 
+date_html = output_for_url(SITE + "/date-calculator/").read_text(encoding="utf-8")
+expected_date_description = "Compare dates with elapsed or inclusive day counts, calendar years, months and days, and decimal weeks. Gregorian leap-year and month-end rules are explained."
+description = re.search(r'<meta name="description" content="([^"]*)"', date_html)
+assert description and html_lib.unescape(description.group(1)) == expected_date_description, "Date calculator description must explain elapsed/inclusive counts, calendar breakdown and weeks"
+for attr, name in (("property", "og:description"), ("name", "twitter:description")):
+    social = re.search('<meta ' + attr + '="' + name + '" content="([^"]*)"', date_html)
+    assert social and html_lib.unescape(social.group(1)) == expected_date_description, f"Stale {name} on date calculator"
+
 query_page = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
 assert "115 months in years and days" in query_page, "Query Calculator should show the month conversion example"
 assert "Pakistan's Independence Day" in query_page and "14 August 1947" in query_page, "Query Calculator should explain the supported Pakistan date lookup"
