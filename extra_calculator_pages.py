@@ -201,10 +201,10 @@ def build_extra_pages(head,shell,write):
     for slug,title,description,fields,explanation in PAGES:
         path="/"+slug+"/"
         category_path,category_name=CATEGORY[slug]
-        compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator", "percentage-difference-calculator", "ratio-calculator")
+        compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator", "percentage-difference-calculator", "ratio-calculator", "date-calculator")
         section_padding = "p-3 sm:p-6" if compact_mobile else "p-4 sm:p-6"
         form_margin = "mt-2" if compact_mobile else "mt-3"
-        mobile_columns = "grid-cols-2" if compact_mobile else "grid-cols-1"
+        mobile_columns = "grid-cols-2" if compact_mobile and slug != "date-calculator" else "grid-cols-1"
         trust_markup = (
             '<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="text-sky-800 underline dark:text-sky-300" href="/about/">Muhammad Fayyaz Adeel</a>. See the method, references and limitations below.</p>'
             '<p class="mt-1 text-xs text-stone-600 dark:text-stone-400">Verification: representative results and invalid inputs are covered by automated tests. This is not an independent professional review.</p>'
