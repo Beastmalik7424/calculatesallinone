@@ -40,7 +40,7 @@ const {chromium}=require("playwright");
       const dateResult=await page.locator("#extra-result").innerText();
       if(!dateResult.includes(expectedDays))throw Error("Date difference "+start+" to "+end+" expected "+expectedDays+" at "+viewport.width+"px: "+dateResult);
      }
-     for(const label of ['label[for="date-count-elapsed"]','label[for="date-count-inclusive"]']){
+     for(const label of ['label:has(#date-count-elapsed)','label:has(#date-count-inclusive)']){
       const target=await page.locator(label).boundingBox();
       if(!target||target.height<44)throw Error("Date-count radio target is below 44px at "+viewport.width+"px: "+label);
      }
