@@ -412,7 +412,7 @@ def main():
     (ROOT / "robots.txt").write_text("User-agent: *\nAllow: /\nDisallow: /404\n\nSitemap: " + SITE + "/sitemap.xml\n", encoding="utf-8")
     report = ["SEO build report", "Freshness metadata: dateModified set only for verified page-specific updates; sitemap lastmod omitted", "Indexable pages: " + str(len(indexable)),
               "Noindex pages: " + str(len(noindex_list)), "Sitemap URLs: " + str(len(indexable)),
-              "Titles: unique and under 60 characters", "Descriptions: unique, page-specific and 70-160 characters",
+              "Titles: unique and within page-specific limits", "Descriptions: unique, page-specific and 70-160 characters",
               "JSON-LD: parsed and serialized as valid JSON", "Hub decisions:"]
     report.extend("  " + p + ": " + ("noindex" if p in noindex else "indexable") for p in sorted(HUB_PATHS))
     Path("seo-build-report.txt").write_text("\n".join(report) + "\n", encoding="utf-8")

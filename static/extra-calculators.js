@@ -157,7 +157,8 @@
   if(afterMonths>later){months--;afterMonths=addMonthsClamped(cursor,months);}
   const days=Math.round((later-afterMonths)/86400000);
   const totalDays=Math.round((later-earlier)/86400000);
-  return {years:years*sign,months:months*sign,days:days*sign,weeks:totalDays/7*sign};
+  const signed=value=>value===0?0:value*sign;
+  return {years:signed(years),months:signed(months),days:signed(days),weeks:signed(totalDays/7)};
  }
  return {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference,dateBreakdown};
 });
