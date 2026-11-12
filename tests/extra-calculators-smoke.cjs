@@ -1,6 +1,6 @@
 "use strict";
 const assert=require("node:assert/strict");
-const {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference}=require("../static/extra-calculators.js");
+const {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference,dateBreakdown}=require("../static/extra-calculators.js");
 assert.equal(percentage(25,200),50);
 assert.equal(percentage(12.5,80),10);
 assert.equal(percentage(0,200),0);
@@ -79,7 +79,7 @@ assert.equal(compound(1000,10,1,2),1102.5);
 assert.equal(compound(1000,0,2,12),1000);
 assert.throws(()=>compound(1000,-1200,1,12));
 assert.equal(dateDifference("2024-02-28","2024-03-01"),2);
-assert.equal(dateDifference("2026-01-01","2026-01-01"),0);
+assert.deepEqual([dateDifference("2026-01-01","2026-01-01"),dateDifference("2026-01-01","2026-01-01",true)],[0,1]);
 assert.equal(dateDifference("2026-01-02","2026-01-01"),-1);
 assert.equal(dateDifference("0001-01-01","0001-01-02"),1);
 assert.equal(dateDifference("0004-02-28","0004-03-01"),2);
@@ -88,7 +88,15 @@ assert.equal(dateDifference("0100-02-28","0100-03-01"),1);
 assert.equal(dateDifference("0400-02-28","0400-03-01"),2);
 assert.throws(()=>dateDifference("0000-01-01","0001-01-01"));
 assert.throws(()=>dateDifference("2026-02-29","2026-03-01"));
-console.log("Competitor calculator arithmetic and date regression: PASS");
+assert.deepEqual([dateDifference("2024-01-01","2024-01-02",true),dateDifference("2024-01-02","2024-01-01",true)],[2,-2]);
+console.log("Date difference elapsed/inclusive regression: PASS");
+assert.deepEqual(dateBreakdown("2024-01-31","2024-02-29"),{years:0,months:1,days:0,weeks:29/7});
+assert.deepEqual(dateBreakdown("2023-01-31","2023-02-28"),{years:0,months:1,days:0,weeks:4});
+assert.deepEqual(dateBreakdown("2024-01-31","2024-03-01"),{years:0,months:1,days:1,weeks:30/7});
+assert.deepEqual(dateBreakdown("2024-02-28","2024-03-01"),{years:0,months:0,days:2,weeks:2/7});
+assert.deepEqual(dateBreakdown("2024-02-29","2025-02-28"),{years:1,months:0,days:0,weeks:365/7});
+assert.deepEqual(dateBreakdown("2024-02-29","2024-01-31"),{years:0,months:-1,days:0,weeks:-29/7});
+console.log("Date calendar breakdown and month-end clamping regression: PASS");
 
 
 const fs = require("node:fs");

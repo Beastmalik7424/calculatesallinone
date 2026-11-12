@@ -170,7 +170,7 @@ def normalize_meta(raw, path, lang):
         "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
         "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
         "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
-        "/date-calculator/": "Days Between Dates Calculator | CalculatesAll",
+        "/date-calculator/": "Date Difference Calculator | Days Between Dates | CalculatesAll",
         "/years-to-days-calculator/": "Years to Days Calculator | Days to Years Converter",
         "/money/": "Money Calculators: EMI, Zakat, Profit | CalculatesAll",
         "/math/": "Math Calculators and Unit Converters | CalculatesAll",
@@ -228,7 +228,8 @@ def normalize_meta(raw, path, lang):
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
         desc = "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result."
-    if len(title) > 59:
+    # This exact-intent date title is 63 characters and has a dedicated regression gate.
+    if path != "/date-calculator/" and len(title) > 59:
         title = re.sub(r" \| Free Online Tool \| CalculatesAll$", " | CalculatesAll", title)
         if len(title) > 59:
             suffix = " | CalculatesAll"

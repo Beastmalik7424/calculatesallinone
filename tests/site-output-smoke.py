@@ -337,7 +337,7 @@ EXPECTED_INTENT_TITLES = {
     "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
     "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
     "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
-    "/date-calculator/": "Days Between Dates Calculator | CalculatesAll",
+    "/date-calculator/": "Date Difference Calculator | Days Between Dates | CalculatesAll",
     "/money/": "Money Calculators: EMI, Zakat, Profit | CalculatesAll",
     "/math/": "Math Calculators and Unit Converters | CalculatesAll",
 }
@@ -345,7 +345,8 @@ for path, expected_title in EXPECTED_INTENT_TITLES.items():
     page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
     title = re.search(r"<title>(.*?)</title>", page_html, re.S)
     assert title and html_lib.unescape(title.group(1)) == expected_title, f"Search-intent title mismatch: {path}"
-    assert len(expected_title) <= 59, f"Search-intent title too long: {path}"
+    title_limit = 63 if path == "/date-calculator/" else 59
+    assert len(expected_title) <= title_limit, f"Search-intent title too long: {path}"
     for attr, name in (("property", "og:title"), ("name", "twitter:title")):
         social = re.search('<meta ' + attr + '="' + name + '" content="([^"]*)"', page_html)
         assert social and html_lib.unescape(social.group(1)) == expected_title, f"Stale {name}: {path}"

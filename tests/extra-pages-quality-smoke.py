@@ -71,6 +71,9 @@ CASES = {
             "28 February 2024",
             "29 February",
             "elapsed Gregorian calendar days",
+            "calendar breakdown",
+            "month-end clamping",
+            "4.14 weeks",
             "business days",
             "inclusive",
         ],
@@ -85,7 +88,11 @@ for slug, spec in CASES.items():
     title = re.search(r"<title>(.*?)</title>", source, re.S)
     description = re.search(r'<meta name="description" content="([^"]*)"', source)
     canonical = f'<link rel="canonical" href="https://calculateallinone.vercel.app/{slug}/">'
-    assert title and 25 <= len(unescape(title.group(1))) <= 60, f"Invalid title: {slug}"
+    title_text = unescape(title.group(1)) if title else ""
+    title_limit = 63 if slug == "date-calculator" else 60
+    assert title and 25 <= len(title_text) <= title_limit, f"Invalid title: {slug}"
+    if slug == "date-calculator":
+        assert title_text == "Date Difference Calculator | Days Between Dates | CalculatesAll", "Date calculator title must preserve the exact requested search-intent wording"
     assert description and 70 <= len(unescape(description.group(1))) <= 160, f"Invalid description: {slug}"
     assert canonical in source, f"Canonical mismatch: {slug}"
     assert '<meta name="robots" content="index, follow">' in source, f"Unexpected indexability: {slug}"

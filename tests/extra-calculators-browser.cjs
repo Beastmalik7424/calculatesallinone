@@ -40,6 +40,26 @@ const {chromium}=require("playwright");
       const dateResult=await page.locator("#extra-result").innerText();
       if(!dateResult.includes(expectedDays))throw Error("Date difference "+start+" to "+end+" expected "+expectedDays+" at "+viewport.width+"px: "+dateResult);
      }
+     for(const label of ['label[for="date-count-elapsed"]','label[for="date-count-inclusive"]']){
+      const target=await page.locator(label).boundingBox();
+      if(!target||target.height<44)throw Error("Date-count radio target is below 44px at "+viewport.width+"px: "+label);
+     }
+     await page.locator("#start").fill("2024-01-31");
+     await page.locator("#end").fill("2024-02-29");
+     await page.locator("#date-count-elapsed").check();
+     await form.locator("button[type=submit]").click();
+     const elapsedResult=await page.locator("#extra-result").innerText();
+     if(!elapsedResult.includes("29 days (elapsed)")||!elapsedResult.includes("0 years, 1 month, 0 days")||!elapsedResult.includes("4.14 weeks"))throw Error("Elapsed date result or calendar breakdown is incorrect at "+viewport.width+"px: "+elapsedResult);
+     await page.locator("#date-count-inclusive").check();
+     if(await page.locator("#extra-result").innerText())throw Error("Changing the date-count mode should clear the previous result");
+     await form.locator("button[type=submit]").click();
+     const inclusiveResult=await page.locator("#extra-result").innerText();
+     if(!inclusiveResult.includes("30 days (inclusive)")||!inclusiveResult.includes("0 years, 1 month, 0 days"))throw Error("Inclusive count must change the day total only at "+viewport.width+"px: "+inclusiveResult);
+     await page.locator("#start").fill("2024-03-01");
+     await page.locator("#end").fill("2024-01-31");
+     await form.locator("button[type=submit]").click();
+     const reverseResult=await page.locator("#extra-result").innerText();
+     if(!reverseResult.includes("-31 days (inclusive)")||!reverseResult.includes("0 years, -1 month, -1 day"))throw Error("Reversed inclusive date result lost its sign or calendar breakdown at "+viewport.width+"px: "+reverseResult);
     }
     if(path==="/ratio-calculator/"){
      const ratioMode=page.locator("#ratio-mode");
