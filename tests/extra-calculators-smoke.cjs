@@ -121,7 +121,7 @@ assert.ok(extraSource.includes("Percentage Difference Calculator"), "Percentage 
 assert.ok(extraSource.includes("Ratio Calculator"), "Ratio page must have a dedicated title");
 assert.ok(extraSource.includes("10:15"), "Ratio page must include a checkable simplification example");
 assert.match(extraSource,/1,102\.50/);
-assert.match(extraSource,/28 February 2024 to 1 March 2024 is 2 days/);
+assert.match(extraSource,/28 February 2024 to 1 March 2024 is 2 elapsed days/);
 const hubSource=fs2.readFileSync(require("node:path").join(__dirname,"..","content_v13.py"),"utf8");
 for(const phrase of ["PKR 4,500","PKR 3,600","net operating profit","advertised APY","8 + 3 × 4 = 20","1/2 + 1/3","25.4 millimetres"]){assert.ok(hubSource.includes(phrase),"Missing useful hub guidance: "+phrase);}
 console.log("AdSense content usefulness regression: PASS");
