@@ -7,7 +7,7 @@ PAGES = [
  ("ratio-calculator","Ratio Calculator","Reduce two- or three-term ratios, scale equivalent ratios, or solve A:B = C:D with one value missing. Includes decimal support and clear input limits.",[("a","First term (A)","number"),("b","Second term (B)","number"),("c","Third term (C)","number"),("d","Fourth term (D)","number"),("factor","Scale factor","number")],"A ratio compares quantities in a stated order. Simplify two- or three-term ratios by dividing every term by the greatest common divisor. To solve A:B = C:D, enter exactly three positive values and use A × D = B × C. Scaling multiplies both terms by the same positive factor."),
  ("fraction-calculator","Fraction Calculator","Add, subtract, multiply or divide fractions and simplify the result.",[("a","First numerator","number"),("b","First denominator","number"),("c","Second numerator","number"),("d","Second denominator","number")],"For addition, a/b + c/d = (ad + bc)/bd. Fractions are reduced to lowest terms."),
  ("compound-interest-calculator","Compound Interest Calculator","Estimate compound growth from a starting amount, annual rate, time and compounding frequency.",[("principal","Starting amount","number"),("rate","Annual interest rate (%)","number"),("years","Years","number"),("frequency","Compounding times per year (1 to 365)","number")],"Formula: A = P × (1 + r/n)^(nt). Rates are entered as annual percentages. This estimate excludes fees, taxes and additional deposits."),
- ("date-calculator","Date Difference Calculator","Find the signed number of calendar days between two dates using the Gregorian calendar, including leap years.",[("start","Start date","date"),("end","End date","date")],"The result is end date minus start date in full calendar days. It does not count the starting day."),
+ ("date-calculator","Date Difference Calculator","Count signed elapsed or inclusive days between two Gregorian dates, with a calendar years, months and days breakdown plus weeks.",[("start","Start date","date"),("end","End date","date")],"Elapsed days = end date minus start date. Inclusive mode counts both endpoints. Calendar months use month-end clamping, so 31 January plus one month reaches the last day of February."),
 ]
 
 
@@ -57,13 +57,13 @@ GUIDES = {
     "Simple interest uses the original principal as the base for every period. At 1,000 and 10 percent for three years, simple interest adds 300 and gives 1,300 before costs. Annual compounding gives 1,331 because each year's interest becomes part of the next year's base. Use the calculator only when the provider's rate is a nominal annual rate and the stated compounding frequency matches the product terms. If the provider quotes APY or an effective annual rate, do not enter it as though it were a nominal rate without converting it correctly.",
 ],
 "date-calculator": [
-    "This tool returns signed elapsed Gregorian calendar days: end date minus start date. A later end date gives a positive result, an earlier end date gives a negative result, and identical dates give zero. The start date is not counted as a completed elapsed day. The calculation uses date-only values, not hours, time zones or daylight-saving clock changes.",
-    "Worked example: 28 February 2024 to 1 March 2024 is 2 days because 29 February is a leap day. The same dates in 2025 are 1 day. If a form or contract counts both the first and last dates, the inclusive count for a forward interval is normally the elapsed result plus one. Check the specific rule before using a date count for a deadline.",
+    "Choose Elapsed to count midnight boundaries from the start date to the end date. Choose Inclusive to count both endpoint dates. Inclusive adds one day for a forward interval and subtracts one for a reversed interval. Identical dates are 0 elapsed days or 1 inclusive day. The calculation uses date-only Gregorian values, not hours, time zones or daylight-saving clock changes.",
+    "Worked example: 28 February 2024 to 1 March 2024 is 2 elapsed days because 29 February is a leap day. The same dates in 2025 are 1 elapsed day. From 31 January 2024 to 29 February 2024, the calculator shows 29 elapsed days, 30 inclusive days and 4.14 weeks.",
+    "The calendar breakdown uses the largest complete years, then months, then remaining days. Months and years use month-end clamping: 31 January 2024 plus one month reaches 29 February, while 31 January 2023 plus one month reaches 28 February. Therefore 31 January to 1 March 2024 is 1 month and 1 day. Weeks are the elapsed day total divided by seven and are shown as a decimal.",
     "To verify a result manually, count the calendar-day boundary crossings from the start date up to the end date. For a forward interval that crosses a month, include the actual length of that month. February has 29 days in a leap year and 28 otherwise. The Gregorian leap-year rule is divisible by four, except century years unless divisible by 400.",
     "This calculator does not count weekdays only, remove public holidays, calculate working days, or decide legal deadline rules. It also does not measure exact elapsed hours between timestamps. Use a jurisdiction-specific business calendar for working-day deadlines, and confirm contract, court, travel or immigration counting rules with the relevant authority. Invalid dates are rejected rather than silently changed.",
     "Before relying on a result, compare the entered dates with the source document and confirm whether it asks for elapsed days, inclusive calendar days or business days. Those counting methods answer different questions and can produce different totals.",
-    "For example, a trip that begins on 10 June and ends on 15 June spans five elapsed calendar days when the start date is excluded. If a form asks for every date touched by the trip, it may expect six dates instead. This difference is why the result should be described as elapsed days, not automatically as the number of nights, billable days or inclusive deadline days.",
-    "Use the signed result to compare date order as well as duration. A result of minus 5 means the end date is five calendar days before the start date. Swapping the two dates changes the sign but not the absolute number of days. This tool does not calculate hours between timestamps, count working days, identify public holidays or decide when a legal notice period expires. Those tasks require the relevant time zone, local rules and calendar.",
+    "Use the signed result to compare date order as well as duration. A negative result means the end date is before the start date. Reversing the dates changes the sign but not the absolute duration. The inclusive count includes both endpoint dates while preserving the direction of the interval.",
 ]
 }
 
@@ -161,9 +161,9 @@ FAQS = {
         ("Does this include fees, tax or additional deposits?", "No. The estimate assumes one starting amount, a constant nominal annual rate and no deposits, withdrawals, fees or tax."),
     ],
     "date-calculator": [
-        ("How many days are there from 28 February 2024 to 1 March 2024?", "2 elapsed Gregorian calendar days because 29 February 2024 is a leap day."),
-        ("How many days are there from 28 February 2025 to 1 March 2025?", "1 elapsed calendar day. 2025 is not a leap year."),
-        ("Does the result include both the start date and end date?", "No. It is elapsed days, calculated as end date minus start date. An inclusive count may be one greater for a forward interval."),
+        ("How many days are there from 28 February 2024 to 1 March 2024?", "2 elapsed Gregorian calendar days because 29 February 2024 is a leap day. Select Inclusive to count 3 days."),
+        ("How many days are there from 28 February 2025 to 1 March 2025?", "1 elapsed calendar day. 2025 is not a leap year. Select Inclusive to count 2 days."),
+        ("Does the result include both the start date and end date?", "Elapsed is the default. Select Inclusive to count both endpoint dates. The same date is 0 elapsed days or 1 inclusive day."),
         ("Does this calculate business days?", "No. It counts calendar days and does not remove weekends or public holidays. Use a calendar for the relevant jurisdiction for business-day deadlines."),
     ],
 }
@@ -201,10 +201,10 @@ def build_extra_pages(head,shell,write):
     for slug,title,description,fields,explanation in PAGES:
         path="/"+slug+"/"
         category_path,category_name=CATEGORY[slug]
-        compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator", "percentage-difference-calculator", "ratio-calculator")
+        compact_mobile = slug in ("fraction-calculator", "compound-interest-calculator", "percentage-difference-calculator", "ratio-calculator", "date-calculator")
         section_padding = "p-3 sm:p-6" if compact_mobile else "p-4 sm:p-6"
         form_margin = "mt-2" if compact_mobile else "mt-3"
-        mobile_columns = "grid-cols-2" if compact_mobile else "grid-cols-1"
+        mobile_columns = "grid-cols-2" if compact_mobile and slug != "date-calculator" else "grid-cols-1"
         trust_markup = (
             '<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="text-sky-800 underline dark:text-sky-300" href="/about/">Muhammad Fayyaz Adeel</a>. See the method, references and limitations below.</p>'
             '<p class="mt-1 text-xs text-stone-600 dark:text-stone-400">Verification: representative results and invalid inputs are covered by automated tests. This is not an independent professional review.</p>'
@@ -216,6 +216,8 @@ def build_extra_pages(head,shell,write):
         if not compact_mobile:
             body+=trust_markup
         body+='<form id="extra-calculator-form" data-calculator="'+slug.replace("-calculator","").replace("compound-interest","compound").replace("date","date")+'" class="'+form_margin+' grid '+mobile_columns+' sm:grid-cols-2 gap-x-3 gap-y-2 min-w-0'+(" ca-compact-calculator-form" if compact_mobile else "")+'">'
+        if slug=="date-calculator":
+            body+='<fieldset class="sm:col-span-2 mt-1 min-w-0"><legend class="block text-sm font-semibold text-stone-800 dark:text-stone-100">Day-count mode</legend><div class="mt-1 grid grid-cols-2 gap-2"><label class="flex min-h-[44px] min-w-0 items-center gap-2 rounded-lg border border-stone-400 bg-white p-2 text-sm text-stone-900 dark:bg-stone-800 dark:text-stone-100"><input id="date-count-elapsed" type="radio" name="date-count-mode" value="elapsed" checked class="h-4 w-4 shrink-0 accent-sky-700">Elapsed</label><label class="flex min-h-[44px] min-w-0 items-center gap-2 rounded-lg border border-stone-400 bg-white p-2 text-sm text-stone-900 dark:bg-stone-800 dark:text-stone-100"><input id="date-count-inclusive" type="radio" name="date-count-mode" value="inclusive" class="h-4 w-4 shrink-0 accent-sky-700">Inclusive</label></div></fieldset>'
         if slug=="percentage-calculator":
             body+="<div class='sm:col-span-2 mt-1'><label for='percentage-mode' class='block text-sm font-semibold text-stone-800 dark:text-stone-100'>Calculation type</label><select id='percentage-mode' class='w-full min-w-0 rounded-lg border border-stone-400 bg-white p-2 text-base text-stone-900 min-h-[44px]'><option value='of'>What is X% of a number?</option><option value='share'>What percentage is one number of another?</option><option value='change'>What is the percentage change?</option></select></div>"
         if slug=="ratio-calculator":

@@ -126,6 +126,39 @@
   if(multiplier===0n)throw Error("Use non-negative ratio terms, not both zero, and a positive scale factor");
   return {a:scaledProductToString(first*multiplier),b:scaledProductToString(second*multiplier)};
  }
- function dateDifference(start,end){return (parseISO(end)-parseISO(start))/86400000;}
- return {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference};
+ function dateDifference(start,end,inclusive=false){
+  const elapsed=(parseISO(end)-parseISO(start))/86400000;
+  return inclusive?elapsed+(elapsed===0?1:Math.sign(elapsed)):elapsed;
+ }
+ function addMonthsClamped(timestamp,monthDelta){
+  const date=new Date(timestamp);
+  const monthIndex=date.getUTCMonth()+monthDelta;
+  const targetYear=date.getUTCFullYear()+Math.floor(monthIndex/12);
+  const targetMonth=((monthIndex%12)+12)%12;
+  const lastDay=new Date(0);
+  lastDay.setUTCHours(0,0,0,0);
+  lastDay.setUTCFullYear(targetYear,targetMonth+1,0);
+  const target=new Date(0);
+  target.setUTCHours(0,0,0,0);
+  target.setUTCFullYear(targetYear,targetMonth,Math.min(date.getUTCDate(),lastDay.getUTCDate()));
+  return target.getTime();
+ }
+ function dateBreakdown(start,end){
+  const startMs=parseISO(start),endMs=parseISO(end);
+  const sign=endMs<startMs?-1:1;
+  const earlier=Math.min(startMs,endMs),later=Math.max(startMs,endMs);
+  const earlierDate=new Date(earlier),laterDate=new Date(later);
+  let years=laterDate.getUTCFullYear()-earlierDate.getUTCFullYear();
+  let cursor=addMonthsClamped(earlier,years*12);
+  if(cursor>later){years--;cursor=addMonthsClamped(earlier,years*12);}
+  const cursorDate=new Date(cursor);
+  let months=(laterDate.getUTCFullYear()-cursorDate.getUTCFullYear())*12+(laterDate.getUTCMonth()-cursorDate.getUTCMonth());
+  let afterMonths=addMonthsClamped(cursor,months);
+  if(afterMonths>later){months--;afterMonths=addMonthsClamped(cursor,months);}
+  const days=Math.round((later-afterMonths)/86400000);
+  const totalDays=Math.round((later-earlier)/86400000);
+  const signed=value=>value===0?0:value*sign;
+  return {years:signed(years),months:signed(months),days:signed(days),weeks:signed(totalDays/7)};
+ }
+ return {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference,dateBreakdown};
 });
