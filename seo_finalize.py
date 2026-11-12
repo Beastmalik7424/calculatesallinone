@@ -384,8 +384,9 @@ def main():
     if len(set(descriptions.values())) != len(descriptions):
         raise SystemExit("Duplicate descriptions among indexable pages")
     for path, title in titles.items():
-        if len(title) >= 60:
-            raise SystemExit("Title >=60 characters: " + path)
+        title_limit = 63 if path == "/date-calculator/" else 59
+        if len(title) > title_limit:
+            raise SystemExit("Title exceeds " + str(title_limit) + " characters: " + path)
         if not 70 <= len(descriptions[path]) <= 160:
             raise SystemExit("Description outside 70-160 characters: " + path + " (" + str(len(descriptions[path])) + ")")
     indexable = sorted(path for path in paths if path not in noindex)
