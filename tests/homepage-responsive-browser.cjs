@@ -10,6 +10,8 @@ const axe = require("axe-core");
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
     const pageErrors = [];
     page.on("pageerror", error => pageErrors.push(error.message));
+    // Test-only CSP bypass allows injecting axe-core; production CSP hashes are checked separately in CI.
+    await page.setBypassCSP(true);
 
     const response = await page.goto("http://127.0.0.1:4174/", { waitUntil: "domcontentloaded" });
     assert.equal(response.status(), 200, "homepage must return HTTP 200");
