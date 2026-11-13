@@ -93,6 +93,9 @@ for slug, spec in CASES.items():
     assert title and 25 <= len(title_text) <= title_limit, f"Invalid title: {slug}"
     if slug == "date-calculator":
         assert title_text == "Date Difference Calculator | Days Between Dates | CalculatesAll", "Date calculator title must preserve the exact requested search-intent wording"
+        headings = [unescape(value) for value in re.findall(r"<h2[^>]*>(.*?)</h2>", source)]
+        assert "Gregorian leap-year rule" in headings, "Date calculator must label its Gregorian leap-year explanation accurately"
+        assert "Business days and legal deadlines" not in headings, "Date calculator must not use a business-days heading for calendar-day guidance"
     assert description and 70 <= len(unescape(description.group(1))) <= 160, f"Invalid description: {slug}"
     assert canonical in source, f"Canonical mismatch: {slug}"
     assert '<meta name="robots" content="index, follow">' in source, f"Unexpected indexability: {slug}"
