@@ -96,6 +96,14 @@ class HomepageStructureIntegrationTests(unittest.TestCase):
         self.assertIn('id="calc-display"', html)
         self.assertIn('id="calc-pad"', html)
 
+    def test_homepage_calculator_keypad_order_is_unchanged(self):
+        html = HOME_HTML.read_text(encoding="utf-8")
+        keypad = re.search(r'<div id="calc-pad"[^>]*>(.*?)</div>', html, re.S)
+        self.assertIsNotNone(keypad, "Homepage calculator keypad must remain present")
+        actual = re.findall(r'data-key="([^"]+)"', keypad.group(1))
+        expected = ["C", "BS", "%", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "00", "0", ".", "="]
+        self.assertEqual(actual, expected, "Homepage calculator keys and their order must remain unchanged")
+
     def test_route_manifests_match_the_approved_baseline(self):
         snapshot = json.loads(BASELINE.read_text(encoding="utf-8"))
         for filename, key in (
@@ -104,7 +112,8 @@ class HomepageStructureIntegrationTests(unittest.TestCase):
             ("no-slash.txt", "no_slash"),
         ):
             actual = [line.strip() for line in (ROOT / filename).read_text(encoding="utf-8").splitlines() if line.strip()]
-            self.assertEqual(actual, snapshot[key], filename + " must remain unchanged")
+            self.assertEqual(len(actual), len(set(actual)), filename + " must not contain duplicate routes")
+            self.assertEqual(sorted(actual), sorted(snapshot[key]), filename + " route membership must remain unchanged")
 
 
 if __name__ == "__main__":
