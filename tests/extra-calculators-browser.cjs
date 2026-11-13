@@ -27,6 +27,9 @@ const {chromium}=require("playwright");
     const result=await page.locator("#extra-result").innerText();
     if(!result.includes(expected))throw Error(path+" wrong result at "+viewport.width+"px: "+result);
     if(path==="/date-calculator/"){
+     for(const id of ["start","end"]){
+      if(await page.locator("#"+id).getAttribute("autocomplete")!=="off")throw Error("Date input "+id+" must declare autocomplete=off at "+viewport.width+"px");
+     }
      for(const [start,end,expectedDays] of [
       ["0001-01-01","0001-01-02","1 day"],
       ["0004-02-28","0004-03-01","2 days"],

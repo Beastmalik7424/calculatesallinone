@@ -227,7 +227,12 @@ def build_extra_pages(head,shell,write):
             hidden_attr = (' hidden' if slug=="ratio-calculator" and key in ("c","d","factor") else '')
             required_attr = '' if slug=="ratio-calculator" else 'required '
             input_type = 'text' if slug=="ratio-calculator" else kind
-            input_mode = 'inputmode="decimal" autocomplete="off" ' if slug=="ratio-calculator" else ''
+            if slug=="ratio-calculator":
+                input_mode = 'inputmode="decimal" autocomplete="off" '
+            elif slug=="date-calculator" and kind=="date":
+                input_mode = 'autocomplete="off" '
+            else:
+                input_mode = ''
             min_attr = 'min="0" ' if slug=="percentage-difference-calculator" and kind=="number" else ''
             step_attr = '' if slug=="ratio-calculator" else ('step="1" ' if slug=="fraction-calculator" and kind=="number" else 'step="any" ' if kind=="number" else '')
             body+='<div'+wrapper_id+hidden_attr+' class="min-w-0"><label for="'+key+'" class="block text-sm font-semibold text-stone-800 dark:text-stone-100">'+html.escape(label)+'</label>'
