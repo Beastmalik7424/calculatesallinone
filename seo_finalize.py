@@ -21,7 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
-    "/tasbih-counter/": "Count dhikr or zikr with a free tasbih calculator. Choose 33, 99 or a custom target and undo taps. Progress saves in this browser when storage is available.",
+    "/tasbih-counter/": "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
     "/ur/zakat-calculator/": "اپنی بچت، اثاثے اور واجب الادا قرض درج کرکے چاندی کے نصاب اور مکمل قمری سال کی شرط کے مطابق زکوٰۃ کا حساب کریں۔",
@@ -223,7 +223,7 @@ def normalize_meta(raw, path, lang):
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Count dhikr or zikr with a free tasbih calculator. Choose 33, 99 or a custom target and undo taps. Progress saves in this browser when storage is available."
+        desc = "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app."
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
