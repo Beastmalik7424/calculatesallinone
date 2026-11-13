@@ -277,9 +277,9 @@ for (let i = 0; i < 1000; i++) {
   assert.equal(dateDifference(startDate, endDate, true), elapsed + (elapsed === 0 ? 1 : Math.sign(elapsed)));
   const breakdown = dateBreakdown(startDate, endDate);
   const reverse = dateBreakdown(endDate, startDate);
-  assert.equal(breakdown.years, -reverse.years);
-  assert.equal(breakdown.months, -reverse.months);
-  assert.equal(breakdown.days, -reverse.days);
+  assert.ok(breakdown.years === -reverse.years || (breakdown.years === 0 && reverse.years === 0));
+  assert.ok(breakdown.months === -reverse.months || (breakdown.months === 0 && reverse.months === 0));
+  assert.ok(breakdown.days === -reverse.days || (breakdown.days === 0 && reverse.days === 0));
   propertyNear(breakdown.weeks * 7, elapsed, 1e-12, 1e-9);
   assert.ok(Math.abs(breakdown.months) < 12);
   assert.ok(Math.abs(breakdown.days) <= 31);
