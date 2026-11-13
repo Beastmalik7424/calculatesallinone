@@ -249,9 +249,9 @@ assert.match(caloriePage, /\/assets\/calorie-calculator\.js\?v=/, "generated cal
 assert.match(caloriePage, /id="calorie-form"/, "generated calorie page must expose the expected form contract");
 assert.match(percentagePage, /\/assets\/extra-calculators\.js/, "generated percentage page must load the tested extra-calculator engine");
 assert.match(percentagePage, /\/assets\/extra-calculators-ui\.js/, "generated percentage page must load the calculator UI adapter");
-assert.match(percentagePage, /id="percentage-form"/, "generated percentage page must expose its form contract");
+assert.match(percentagePage, /id="extra-calculator-form"/, "generated percentage page must expose its form contract");
 assert.match(fractionPage, /\/assets\/extra-calculators\.js/, "generated fraction page must load the tested extra-calculator engine");
-assert.match(fractionPage, /id="fraction-form"/, "generated fraction page must expose its form contract");
+assert.match(fractionPage, /id="extra-calculator-form"/, "generated fraction page must expose its form contract");
 
 console.log("PASS: " + simulations + " deterministic calculator simulations (seed 20261114)");
 console.log("PASS: " + unitAssertions + " independent unit/property assertions");
