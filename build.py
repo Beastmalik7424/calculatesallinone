@@ -2351,15 +2351,7 @@ def sitemap(entries):
 
 
 def robots():
-    text = (
-        "User-agent: OAI-SearchBot\n"
-        "Allow: /\n"
-        "Disallow: /404\n\n"
-        "User-agent: *\n"
-        "Allow: /\n"
-        "Disallow: /404\n\n"
-        "Sitemap: " + SITE_URL + "/sitemap.xml\n"
-    )
+    text = "User-agent: *\nAllow: /\nDisallow: /404\n\nSitemap: " + SITE_URL + "/sitemap.xml\n"
     with open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8") as f:
         f.write(text)
 
