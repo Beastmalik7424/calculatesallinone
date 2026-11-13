@@ -76,7 +76,8 @@ for route in indexable:
         r'<meta\s+name=["\']robots["\']\s+content=["\']([^"\']+)["\']',
         raw, re.I
     )
-    h1_count = len(re.findall(r"<h1\b", raw, re.I))
+    markup = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", raw)
+    h1_count = len(re.findall(r"<h1\b", markup, re.I))
 
     check(len(title_matches) == 1, route + ": expected exactly one title")
     check(len(description_matches) == 1, route + ": expected exactly one meta description")
@@ -101,10 +102,10 @@ for route in indexable:
     check(robots_matches and robots_matches[0].strip().lower() == "index, follow",
           route + ": indexable route must use 'index, follow'")
 
-    check(bool(re.search(r"<main\b", raw, re.I)), route + ": missing main landmark")
+    check(bool(re.search(r"<main\b", markup, re.I)), route + ": missing main landmark")
     check(bool(re.search(r'<html\b[^>]*\blang=["\'][a-z]{2}(?:-[A-Za-z0-9-]+)?["\']', raw, re.I)),
           route + ": missing valid HTML language declaration")
-    check(not re.search(r"<img\b(?![^>]*\balt\s*=)", raw, re.I),
+    check(not re.search(r"<img\b(?![^>]*\balt\s*=)", markup, re.I),
           route + ": image missing alt attribute")
 
     schema_blocks = re.findall(
