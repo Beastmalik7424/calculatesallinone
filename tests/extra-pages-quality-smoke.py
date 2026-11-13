@@ -2,6 +2,10 @@ from pathlib import Path
 import json
 import re
 from html import unescape
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import extra_calculator_pages as page_content
 
 ROOT = Path("public")
 CASES = {
@@ -80,6 +84,9 @@ CASES = {
     },
 }
 
+for slug, headings_for_page in page_content.SECTION_HEADINGS.items():
+    assert len(headings_for_page) == len(page_content.GUIDES[slug]), f"Section headings and guide paragraphs are out of sync: {slug}"
+
 for slug, spec in CASES.items():
     path = ROOT / slug / "index.html"
     assert path.is_file(), f"Missing /{slug}/"
@@ -96,6 +103,7 @@ for slug, spec in CASES.items():
         headings = [unescape(value) for value in re.findall(r"<h2[^>]*>(.*?)</h2>", source)]
         assert "Gregorian leap-year rule" in headings, "Date calculator must label its Gregorian leap-year explanation accurately"
         assert "Calendar-day counting limitations" in headings, "Date calculator limitations need a heading that matches the content"
+        assert "Check the required counting rule" in headings, "Date calculator must explain that elapsed, inclusive and business-day rules differ"
         assert "Inclusive versus elapsed dates" not in headings, "Date calculator must not label business-day limitations as a counting-mode explanation"
         section_text = {
             unescape(heading): unescape(paragraph)
@@ -107,6 +115,8 @@ for slug, spec in CASES.items():
         }
         limitations = section_text["Calendar-day counting limitations"]
         assert "does not exclude weekends or public holidays" in limitations and "legal deadline rules" in limitations, "Date calculator must state its business-day and holiday limitations"
+        counting_rule = section_text["Check the required counting rule"]
+        assert "elapsed days, inclusive calendar days or business days" in counting_rule, "Date calculator must distinguish the three counting rules"
         signed_results = section_text["Date order and negative results"]
         assert "later end date produces a positive result" in signed_results, "Date calculator must explain positive signed results"
         assert "earlier end date produces a negative result" in signed_results, "Date calculator must explain negative signed results"
