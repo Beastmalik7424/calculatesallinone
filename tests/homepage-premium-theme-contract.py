@@ -40,10 +40,10 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
         source = SOURCE_CSS.read_text(encoding="utf-8")
         block = source.split(MARKER, 1)[1].split(END_MARKER, 1)[0]
         forbidden = re.compile(
-            r"(?im)^\\s*(?:display|position|top|right|bottom|left|order|"
+            r"(?im)^\s*(?:display|position|top|right|bottom|left|order|"
             r"grid(?:-[a-z-]+)?|flex(?:-[a-z-]+)?|width|min-width|max-width|"
             r"height|min-height|max-height|margin(?:-[a-z-]+)?|"
-            r"padding(?:-[a-z-]+)?|gap|row-gap|column-gap|transform)\\s*:"
+            r"padding(?:-[a-z-]+)?|gap|row-gap|column-gap|transform)\s*:"
         )
         self.assertIsNone(forbidden.search(block), "Theme-only CSS must not alter layout, spacing, or geometry")
 
