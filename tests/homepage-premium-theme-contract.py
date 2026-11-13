@@ -65,6 +65,7 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
             ("#ffffff", "#0f5f57"),
             ("#0f5f57", "#e0f2ef"),
             ("#e3f4f0", "#18332f"),
+            ("#e6f3f1", "#18332f"),
             ("#e6f3f1", "#142c28"),
             ("#ffffff", "#155e57"),
             ("#ccfbf1", "#0f766e"),
