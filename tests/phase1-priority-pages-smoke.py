@@ -34,7 +34,7 @@ CASES = {
     },
     "years-to-days-calculator": {
         "title": "Years to Days Calculator | How Many Days in X Years?",
-        "description": "Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date.",
+        "description": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",
         "form": 'id="years-days-form"',
         "category": "/time/",
         "related": ["/date-calculator/", "/age-calculator/", "/query-calculator/", "/unit-converter/"],
