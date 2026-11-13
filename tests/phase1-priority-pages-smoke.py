@@ -33,7 +33,7 @@ CASES = {
         "h1": "Profit and Loss Calculator",
     },
     "years-to-days-calculator": {
-        "title": "Years to Days Calculator | Days to Years Converter",
+        "title": "Years to Days Calculator | How Many Days in X Years?",
         "description": "Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date.",
         "form": 'id="years-days-form"',
         "category": "/time/",
