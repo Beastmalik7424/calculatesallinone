@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "currency": "USD cents for EMI",
+  "referenceCases": {
+    "percentage": {"input": [25, 200], "expected": 50},
+    "percentageShare": {"input": [45, 250], "expected": 18},
+    "percentageChange": {"input": [80, 100], "expected": 25},
+    "percentageDifference": {"input": [40, 60], "expected": {"difference": 20, "average": 50, "percentage": 40}},
+    "fractionAdd": {"input": [1, 2, 1, 3, "add"], "expected": {"n": 5, "d": 6}},
+    "compound": {"input": [1000, 10, 1, 2], "expected": 1102.5},
+    "dateDifference": {"input": ["2024-02-28", "2024-03-01"], "expected": 2},
+    "calorieMale": {"input": {"age": 30, "weight": 70, "weightUnit": "kg", "heightUnit": "cm", "heightCm": 175, "coefficient": "male", "activityId": "sedentary"}, "expected": {"resting": 1648.75, "maintenance": 1978.5}},
+    "calorieFemale": {"input": {"age": 30, "weight": 70, "weightUnit": "kg", "heightUnit": "cm", "heightCm": 175, "coefficient": "female", "activityId": "sedentary", "pregnancyStatus": "no"}, "expected": {"resting": 1482.75, "maintenance": 1779.3}},
+    "emi": {"input": [100000000, 12, 12], "expected": {"monthlyPaymentCents": 8884879, "totalInterestCents": 6618545, "totalPaymentCents": 106618545}}
+  }
+}
