@@ -74,7 +74,7 @@ The primary query intent is a page-to-query mapping based on the page's actual f
 | tasbih calculator | 0 | 12 | 8.42 |
 | calculator tasbih | 0 | 4 | 10.00 |
 
-The current title and description already include the exact `tasbih calculator` and `dhikr counter` intent. Do not repeat the phrase unnaturally. The next improvement should be based on SERP snippet comparison and more data, not keyword stuffing.
+The current title already includes the exact `Tasbih Calculator Online` and `Dhikr Counter` intent. The PR branch updates the 146-character description to state the free online tool, supported 33/99/custom targets, undo, browser-local progress and no sign-up. This is a snippet test, not a ranking guarantee. Do not repeat the phrase unnaturally.
 
 ### Years to Days Calculator
 
@@ -91,7 +91,7 @@ Search Console returned 50 query rows for this page. They are predominantly long
 | 800000/365 | 2 | 7.50 |
 | days to years calculator | 1 | 82.00 |
 
-The current page supports 365, 365.25 and 365.2425-day methods plus exact Gregorian date mode. Its generated title should preserve the query-aligned wording already authored in `build.py`: **Years to Days Calculator | How Many Days in X Years?** The SEO finalizer currently overrides this with a less query-aligned title; this is a confirmed metadata inconsistency to correct and regression-test.
+The current page supports 365, 365.25 and 365.2425-day methods plus exact Gregorian date mode. The SEO finalizer was overriding the query-aligned title authored in `build.py`; the PR branch now preserves **Years to Days Calculator | How Many Days in X Years?** and updates the title regression checks.
 
 ### Unit Converter
 
