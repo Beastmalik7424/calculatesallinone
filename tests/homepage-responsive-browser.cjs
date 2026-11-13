@@ -24,7 +24,7 @@ const { chromium } = require("playwright");
         ) & Node.DOCUMENT_POSITION_FOLLOWING)
       ),
     }));
-    assert.equal(initial.buttonCount, 20, "homepage calculator must keep all 20 keypad buttons");
+    assert.equal(initial.buttonCount, 23, "homepage calculator must keep all 23 keypad buttons");
     assert.equal(initial.calculatorBeforeTools, true, "calculator must remain before the All Tools panel");
 
     let scenarios = 0;
@@ -58,7 +58,7 @@ const { chromium } = require("playwright");
           metrics.tools.width <= 0 ||
           metrics.calculator.right > metrics.viewportWidth + 1 ||
           metrics.tools.right > metrics.viewportWidth + 1 ||
-          metrics.keypadCount !== 20 ||
+          metrics.keypadCount !== 23 ||
           metrics.keypadTargets.some(target => target.width < 44 || target.height < 44) ||
           metrics.toolTargets.some(target => target.width < 44 || target.height < 44);
         if (invalid && failures.length < 25) {
@@ -77,7 +77,7 @@ const { chromium } = require("playwright");
     console.log(
       "PASS: " + scenarios +
       " responsive viewport/theme simulations (801 widths × light/dark), " +
-      "20 calculator keypad targets and tool-link touch targets checked"
+      "23 calculator keypad targets and tool-link touch targets checked"
     );
   } finally {
     await browser.close();
