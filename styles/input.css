@@ -103,6 +103,22 @@
 .ca-home-wrap nav[aria-label="Categories"] { max-width: 86rem; margin: 1.25rem auto 0; }
 .ca-home-wrap nav[aria-label="Categories"] ul { gap: .65rem; }
 .ca-home-wrap nav[aria-label="Categories"] a { border: 1px solid #dbeafe; background: rgba(255,255,255,.86); }
+.dark .ca-home-side {
+  background: linear-gradient(155deg, #142c28 0%, #18332f 100%);
+  border-color: #315a54;
+  color: #e3f4f0;
+}
+.dark .ca-home-side-icon { background-color: #315a54; color: #e3f4f0; }
+.dark .ca-home-side .ca-home-side-eyebrow { color: #e6f3f1; }
+.dark .ca-home-side-copy { color: #e6f3f1; }
+.dark .ca-home-benefits li { color: #e3f4f0; }
+.dark .ca-home-benefits li span { background-color: #315a54; color: #a7f3d0; }
+.dark .ca-home-orbit { border-color: rgba(230,243,241,.25); }
+.dark .ca-home-orbit span {
+  background-color: #142c28;
+  border-color: #315a54;
+  color: #e6f3f1;
+}
 .dark .ca-home-wrap { border-color: #233b5d; background: radial-gradient(ellipse at 7% 18%, rgba(14,116,144,.25), transparent 30%), radial-gradient(ellipse at 92% 12%, rgba(79,70,229,.22), transparent 28%), linear-gradient(135deg,#0b1220 0%,#111e35 50%,#10172a 100%); }
 .dark .ca-home-header h1, .dark .ca-home-card-heading, .dark .ca-home-tools h2 { color: #f8fafc; }
 .dark .ca-home-lead, .dark .ca-home-tools-copy { color: #cbd5e1; }
@@ -2083,6 +2099,26 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
 
 
 /* Approved Premium Professional + Soft Teal homepage theme (visual-only). */
+.ca-home-wrap::before,
+.ca-home-wrap::after { border-color: rgba(15, 118, 110, .16); }
+.ca-home-wrap::before { box-shadow: 0 0 0 2rem rgba(15,118,110,.035), 0 0 0 4rem rgba(15,118,110,.025); }
+.ca-home-wrap::after { box-shadow: 0 0 0 2rem rgba(15,118,110,.035), 0 0 0 4rem rgba(15,118,110,.025); }
+.ca-home-side {
+  background: linear-gradient(155deg, #0f766e 0%, #0f5f57 100%);
+  border-color: #0f5f57;
+  color: #ffffff;
+}
+.ca-home-side-icon { background-color: rgba(255,255,255,.14); color: #ccfbf1; }
+.ca-home-side .ca-home-side-eyebrow { color: #ccfbf1; }
+.ca-home-side-copy { color: #e0f2ef; }
+.ca-home-benefits li { color: #e6f3f1; }
+.ca-home-benefits li span { background-color: rgba(255,255,255,.14); color: #a7f3d0; }
+.ca-home-orbit { border-color: rgba(224,242,239,.35); }
+.ca-home-orbit span {
+  background-color: rgba(255,255,255,.08);
+  border-color: rgba(224,242,239,.45);
+  color: #e0f2ef;
+}
 .ca-home-wrap {
   --ca-home-canvas: #f8fcfb;
   --ca-home-soft: #edf6f4;
