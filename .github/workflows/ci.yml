@@ -21,6 +21,8 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+      - name: Test Node runtime contract
+        run: python3 tests/runtime-contract-smoke.py
       - name: Install dependencies
         run: npm ci
       - name: Test hardened braces dependency
