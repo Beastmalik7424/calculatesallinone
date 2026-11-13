@@ -2095,9 +2095,8 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
   background: linear-gradient(135deg, #f8fcfb 0%, #edf6f4 100%);
   border-color: #cfe4e0;
 }
-.ca-home-header h1,
-.ca-home-card-heading,
-.ca-home-tools h2 { color: #164e48; }
+.ca-home-header h1 { color: #164e48; }
+.ca-home-card-heading, .ca-home-tools h2 { color: #164e48; }
 .ca-home-lead,
 .ca-home-tools-copy { color: #315a54; }
 .ca-home-badge {
@@ -2191,9 +2190,8 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
   background: linear-gradient(135deg, #142c28 0%, #18332f 100%);
   border-color: #315a54;
 }
-.dark .ca-home-header h1,
-.dark .ca-home-card-heading,
-.dark .ca-home-tools h2 { color: #e3f4f0; }
+.dark .ca-home-header h1 { color: #e3f4f0; }
+.dark .ca-home-card-heading, .dark .ca-home-tools h2 { color: #e3f4f0; }
 .dark .ca-home-lead,
 .dark .ca-home-tools-copy { color: #e6f3f1; }
 .dark .ca-home-badge {
