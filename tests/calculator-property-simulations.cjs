@@ -17,6 +17,7 @@ function close(actual, expected, tolerance = 1e-9) {
   assert.ok(Number.isFinite(actual), "actual value must be finite");
   assert.ok(Math.abs(actual - expected) <= tolerance * Math.max(1, Math.abs(expected)),
     "expected " + expected + ", received " + actual);
+  assertionCount += 2;
 }
 function gcd(a, b) { while (b) [a, b] = [b, a % b]; return a < 0n ? -a : a; }
 function gcd3(a, b, c) { return gcd(gcd(a, b), c); }
@@ -41,8 +42,11 @@ function scaledDecimal(value) {
 function scaledTerm(value) { return BigInt(value) * 1000000n; }
 
 let simulations = 0;
-let unitAssertions = 0;
-function unit(condition, message) { assert.ok(condition, message); unitAssertions++; }
+let assertionCount = 0;
+function equal(actual, expected, message) { equal(actual, expected, message); assertionCount++; }
+function deepEqual(actual, expected, message) { deepEqual(actual, expected, message); assertionCount++; }
+function match(actual, expected, message) { match(actual, expected, message); assertionCount++; }
+function unit(condition, message) { assert.ok(condition, message); assertionCount++; }
 function simulate(fn, count) {
   for (let i = 0; i < count; i++) { fn(i); simulations++; }
 }
@@ -61,7 +65,7 @@ close(maleRef.maintenanceKcalPerDay, refs.referenceCases.calorieMale.expected.ma
 const femaleRef = calorie.calculateMaintenanceCalories(refs.referenceCases.calorieFemale.input);
 close(femaleRef.restingKcalPerDay, refs.referenceCases.calorieFemale.expected.resting);
 close(femaleRef.maintenanceKcalPerDay, refs.referenceCases.calorieFemale.expected.maintenance);
-unitAssertions += 10;
+
 
 // 1,000 independent percentage-of calculations.
 simulate(() => {
@@ -100,14 +104,14 @@ simulate(() => {
 // 1,000 two-term and three-term ratio reductions checked with a BigInt GCD oracle.
 simulate(() => {
   const a = BigInt(integer(0, 1000000)), b = BigInt(integer(0, 1000000));
-  if (a === 0n && b === 0n) return;
+  if (a === 0n && b === 0n) b = 1n;
   const g = gcd(a, b);
   const got = extra.simplifyRatio(Number(a), Number(b));
   unit(got.a === (a / g).toString() && got.b === (b / g).toString(), "two-term ratio must reduce by the exact GCD");
 }, 1000);
 simulate(() => {
   const a = BigInt(integer(0, 1000000)), b = BigInt(integer(0, 1000000)), c = BigInt(integer(0, 1000000));
-  if (a === 0n && b === 0n && c === 0n) return;
+  if (a === 0n && b === 0n && c === 0n) c = 1n;
   const g = gcd3(a, b, c);
   const got = extra.simplifyRatioThree(Number(a), Number(b), Number(c));
   unit(got.a === (a / g).toString() && got.b === (b / g).toString() && got.c === (c / g).toString(),
@@ -132,7 +136,7 @@ simulate(() => {
   const got = extra.scaleRatio(a, b, factor);
   assert.equal(got.a, scaledDecimal(as * fs));
   assert.equal(got.b, scaledDecimal(bs * fs));
-  unitAssertions += 2;
+
 }, 1000);
 
 // 1,000 fraction operations across add/subtract/multiply/divide, with a BigInt oracle.
@@ -140,6 +144,7 @@ simulate(i => {
   const a = BigInt(integer(-1000, 1000)), b = BigInt(integer(1, 1000));
   const c = BigInt(integer(-1000, 1000)), d = BigInt(integer(1, 1000));
   const operation = ["add", "subtract", "multiply", "divide"][i % 4];
+  if (operation === "divide" && c === 0n) c = 1n;
   let n, den;
   if (operation === "add") { n = a * d + c * b; den = b * d; }
   else if (operation === "subtract") { n = a * d - c * b; den = b * d; }
@@ -147,7 +152,7 @@ simulate(i => {
   else { if (c === 0n) return; n = a * d; den = b * c; }
   const expected = normalizedFraction(n, den);
   assert.deepEqual(extra.fraction(Number(a), Number(b), Number(c), Number(d), operation), expected);
-  unitAssertions++;
+
 }, 1000);
 
 // 1,000 compound-interest schedules, using repeated multiplication rather than Math.pow.
@@ -170,7 +175,7 @@ simulate(() => {
   assert.equal(extra.dateDifference(start, end), expected);
   assert.equal(extra.dateDifference(end, start), -expected);
   assert.equal(extra.dateDifference(start, end, true), expected + (expected === 0 ? 1 : Math.sign(expected)));
-  unitAssertions += 3;
+
 }, 1000);
 
 // 1,000 calendar breakdown invariants, including negative and month-end intervals.
@@ -253,6 +258,7 @@ assert.match(percentagePage, /id="extra-calculator-form"/, "generated percentage
 assert.match(fractionPage, /\/assets\/extra-calculators\.js/, "generated fraction page must load the tested extra-calculator engine");
 assert.match(fractionPage, /id="extra-calculator-form"/, "generated fraction page must expose its form contract");
 
+equal(simulations, 14000, "all planned deterministic simulation cases must execute");
 console.log("PASS: " + simulations + " deterministic calculator simulations (seed 20261114)");
-console.log("PASS: " + unitAssertions + " independent unit/property assertions");
+console.log("PASS: " + assertionCount + " independently counted unit/property assertions");
 console.log("PASS: 3 generated-page integration contracts");
