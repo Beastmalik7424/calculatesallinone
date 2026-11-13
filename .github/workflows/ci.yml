@@ -23,6 +23,8 @@ jobs:
           python-version: "3.12"
       - name: Test Node runtime contract
         run: python3 tests/runtime-contract-smoke.py
+      - name: Test Playwright lockfile contract
+        run: python3 tests/playwright-lock-contract-smoke.py
       - name: Install dependencies
         run: npm ci
       - name: Test hardened braces dependency
