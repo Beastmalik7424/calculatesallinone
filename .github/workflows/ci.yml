@@ -136,6 +136,7 @@ jobs:
           node tests/extra-calculators-browser.cjs
           node tests/calorie-calculator-browser.cjs
           node tests/years-to-days-browser.cjs
+          node tests/homepage-responsive-browser.cjs
       # Protected Vercel previews are verified separately through the authenticated Vercel connector.
       - name: Test safe monetization configuration
         run: python tests/monetization-smoke.py
