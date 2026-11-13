@@ -106,7 +106,7 @@ class HomepageStructureIntegrationTests(unittest.TestCase):
         keypad = re.search(r'<div id="calc-pad"[^>]*>(.*?)</div>', html, re.S)
         self.assertIsNotNone(keypad, "Homepage calculator keypad must remain present")
         actual = re.findall(r'data-key="([^"]+)"', keypad.group(1))
-        expected = ["C", "BS", "%", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "00", "0", ".", "="]
+        expected = ["C", "(", ")", "BS", "7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "00", "0", ".", "+", "sqrt", "%", "="]
         self.assertEqual(actual, expected, "Homepage calculator keys and their order must remain unchanged")
 
     def test_route_manifests_match_the_approved_baseline(self):
