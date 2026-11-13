@@ -2,6 +2,7 @@
 
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
+const axe = require("axe-core");
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -13,6 +14,7 @@ const { chromium } = require("playwright");
     const response = await page.goto("http://127.0.0.1:4174/", { waitUntil: "domcontentloaded" });
     assert.equal(response.status(), 200, "homepage must return HTTP 200");
     await page.waitForSelector(".ca-home-calculator #calc-pad button");
+    await page.addScriptTag({ content: axe.source });
 
     const initial = await page.evaluate(() => ({
       buttonCount: document.querySelectorAll(".ca-home-calculator #calc-pad button").length,
@@ -23,14 +25,36 @@ const { chromium } = require("playwright");
           document.querySelector(".ca-home-tools")
         ) & Node.DOCUMENT_POSITION_FOLLOWING)
       ),
+      viewportAllowsZoom: !/user-scalable\\s*=\\s*no|maximum-scale\\s*=\\s*1(?:\\D|$)/i.test(
+        document.querySelector('meta[name="viewport"]')?.content || ""
+      ),
+      unnamedButtons: [...document.querySelectorAll(".ca-home-calculator #calc-pad button")]
+        .filter(button => !(button.getAttribute("aria-label") || button.textContent.trim()))
+        .length,
     }));
     assert.equal(initial.buttonCount, 23, "homepage calculator must keep all 23 keypad buttons");
     assert.equal(initial.calculatorBeforeTools, true, "calculator must remain before the All Tools panel");
+    assert.equal(initial.viewportAllowsZoom, true, "mobile viewport must not disable pinch zoom");
+    assert.equal(initial.unnamedButtons, 0, "every calculator key must have an accessible name");
 
     let scenarios = 0;
     const failures = [];
+    const accessibilityFindings = [];
     for (const theme of ["light", "dark"]) {
       await page.evaluate(isDark => document.documentElement.classList.toggle("dark", isDark), theme === "dark");
+      await page.setViewportSize({ width: 1280, height: 800 });
+      const axeResult = await page.evaluate(async () => {
+        const result = await axe.run(document, {
+          runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"] }
+        });
+        return result.violations.map(violation => ({
+          id: violation.id,
+          impact: violation.impact,
+          help: violation.help,
+          targets: violation.nodes.map(node => node.target)
+        }));
+      });
+      for (const finding of axeResult) accessibilityFindings.push({ theme, ...finding });
       for (let width = 320; width <= 1920; width += 2) {
         await page.setViewportSize({ width, height: 800 });
         const metrics = await page.evaluate(() => {
@@ -69,6 +93,11 @@ const { chromium } = require("playwright");
 
     assert.deepEqual(pageErrors, [], "homepage must not produce uncaught browser errors");
     assert.equal(
+      accessibilityFindings.length,
+      0,
+      "WCAG 2.2 A/AA axe checks found violations: " + JSON.stringify(accessibilityFindings)
+    );
+    assert.equal(
       failures.length,
       0,
       "responsive layout failed at one or more viewport/theme combinations: " +
@@ -77,7 +106,7 @@ const { chromium } = require("playwright");
     console.log(
       "PASS: " + scenarios +
       " responsive viewport/theme simulations (801 widths × light/dark), " +
-      "23 calculator keypad targets and tool-link touch targets checked"
+      "23 calculator keypad targets, tool-link touch targets, zoom, accessible names and WCAG 2.2 A/AA checks passed"
     );
   } finally {
     await browser.close();
