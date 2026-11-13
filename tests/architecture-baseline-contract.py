@@ -71,6 +71,7 @@ class RepositoryBaselineIntegrationTests(unittest.TestCase):
         self.assertEqual(no_slash, snapshot["no_slash"])
 
     def test_vercel_static_output_contract_matches_snapshot(self):
+        self.assertTrue(BASELINE.is_file(), "approved build baseline is missing")
         snapshot = json.loads(BASELINE.read_text(encoding="utf-8"))
         vercel = json.loads((ROOT / "vercel.json").read_text(encoding="utf-8"))
         self.assertEqual(vercel.get("buildCommand"), snapshot["vercel"]["buildCommand"])
