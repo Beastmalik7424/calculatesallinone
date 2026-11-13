@@ -93,6 +93,12 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
             ".ca-home-calculator #calc-pad button[data-key=\"=\"]{",
             ".ca-home-tool-grid a{",
             ".dark .ca-home-tools-heading .ca-home-side-eyebrow",
+            ".ca-home-tools #ca-all-tools-menu summary",
+            ".ca-home-tools #ca-all-tools-menu a",
+            ".dark .ca-home-tools #ca-all-tools-menu summary",
+            ".dark .ca-home-tools #ca-all-tools-menu a",
+            ".ca-home-tools-copy a",
+            ".dark .ca-home-tools-copy a",
             ".dark .ca-home-wrap{",
         ):
             with self.subTest(selector=selector):
