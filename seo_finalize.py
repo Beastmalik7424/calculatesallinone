@@ -21,7 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
-    "/tasbih-counter/": "Count dhikr or zikr with a free tasbih calculator. Choose 33, 99 or a custom target and undo taps. Progress saves in this browser when storage is available.",
+    "/tasbih-counter/": "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
     "/ur/zakat-calculator/": "اپنی بچت، اثاثے اور واجب الادا قرض درج کرکے چاندی کے نصاب اور مکمل قمری سال کی شرط کے مطابق زکوٰۃ کا حساب کریں۔",
@@ -171,7 +171,7 @@ def normalize_meta(raw, path, lang):
         "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
         "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
         "/date-calculator/": "Date Difference Calculator | Days Between Dates | CalculatesAll",
-        "/years-to-days-calculator/": "Years to Days Calculator | Days to Years Converter",
+        "/years-to-days-calculator/": "Years to Days Calculator | How Many Days in X Years?",
         "/money/": "Money Calculators: EMI, Zakat, Profit | CalculatesAll",
         "/math/": "Math Calculators and Unit Converters | CalculatesAll",
         "/contact/": "Contact CalculatesAll | Help and Feedback",
@@ -205,7 +205,7 @@ def normalize_meta(raw, path, lang):
     "/query-calculator/": "Ask in English, Roman Urdu and six other languages about time, months, birth dates and simple arithmetic. Includes the Pakistan Independence Day date.",
     "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",
     "/stopwatch/": "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app.",
-    "/years-to-days-calculator/": "Convert years to days or days to years with 365, 365.25 or 365.2425-day methods. Compare examples and count exact calendar days from a start date.",
+    "/years-to-days-calculator/": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",
     "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
     "/zakat-calculator/": "Calculate 2.5 percent Zakat on net wealth, check the silver Nisab threshold and lunar-year condition. Confirm personal rulings with a qualified scholar."
@@ -223,7 +223,7 @@ def normalize_meta(raw, path, lang):
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Count dhikr or zikr with a free tasbih calculator. Choose 33, 99 or a custom target and undo taps. Progress saves in this browser when storage is available."
+        desc = "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app."
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
@@ -409,7 +409,12 @@ def main():
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})
     ET.indent(urlset, space="  ")
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(urlset, encoding="unicode") + "\n", encoding="utf-8")
-    (ROOT / "robots.txt").write_text("User-agent: *\nAllow: /\nDisallow: /404\n\nSitemap: " + SITE + "/sitemap.xml\n", encoding="utf-8")
+    (ROOT / "robots.txt").write_text(
+        "User-agent: OAI-SearchBot\nAllow: /\nDisallow: /404\n\n"
+        "User-agent: *\nAllow: /\nDisallow: /404\n\n"
+        "Sitemap: " + SITE + "/sitemap.xml\n",
+        encoding="utf-8",
+    )
     report = ["SEO build report", "Freshness metadata: dateModified set only for verified page-specific updates; sitemap lastmod omitted", "Indexable pages: " + str(len(indexable)),
               "Noindex pages: " + str(len(noindex_list)), "Sitemap URLs: " + str(len(indexable)),
               "Titles: unique and within page-specific limits", "Descriptions: unique, page-specific and 70-160 characters",

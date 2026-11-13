@@ -71,9 +71,9 @@ for phrase in (
 
 years_to_days = (Path("public") / "years-to-days-calculator" / "index.html").read_text(encoding="utf-8")
 title_line = next((line for line in years_to_days.splitlines() if "<title>" in line), "")
-assert "<title>Years to Days Calculator | Days to Years Converter</title>" in title_line, "Years-to-days title should name both supported conversion directions"
+assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in title_line, "Years-to-days title should name both supported conversion directions"
 description_line = next((line for line in years_to_days.splitlines() if '<meta name="description"' in line), "")
-assert "Convert years to days or days to years with 365, 365.25 or 365.2425-day methods." in description_line and "Compare examples and count exact calendar days from a start date." in description_line, "Years-to-days metadata must describe all three methods and both result modes"
+assert "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods." in description_line and "Use a start date for exact Gregorian calendar days." in description_line, "Years-to-days metadata must describe all three methods and both result modes"
 assert "Exact calendar years (years to days only)" in years_to_days, "Years-to-days UI must keep the exact-mode direction limitation visible"
 
 print("Money, Math and Time hub content, canonical/indexability and contextual links verified")
