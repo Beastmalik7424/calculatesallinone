@@ -67,6 +67,10 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
             ("#e3f4f0", "#18332f"),
             ("#e6f3f1", "#142c28"),
             ("#ffffff", "#155e57"),
+            ("#ccfbf1", "#0f766e"),
+            ("#e0f2ef", "#0f766e"),
+            ("#e6f3f1", "#0f5f57"),
+            ("#a7f3d0", "#315a54"),
             ("#142c28", "#e6f3f1"),
         )
         for foreground, background in pairs:
@@ -80,6 +84,8 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
         css = BUILT_CSS.read_text(encoding="utf-8")
         for selector in (
             ".ca-home-wrap{",
+            ".ca-home-side{",
+            ".dark .ca-home-side{",
             ".ca-home-calculator,.ca-home-tools{",
             ".ca-home-card-heading",
             ".ca-home-tools h2",
