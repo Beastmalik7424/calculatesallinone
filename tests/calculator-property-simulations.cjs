@@ -43,9 +43,9 @@ function scaledTerm(value) { return BigInt(value) * 1000000n; }
 
 let simulations = 0;
 let assertionCount = 0;
-function equal(actual, expected, message) { equal(actual, expected, message); assertionCount++; }
-function deepEqual(actual, expected, message) { deepEqual(actual, expected, message); assertionCount++; }
-function match(actual, expected, message) { match(actual, expected, message); assertionCount++; }
+function equal(actual, expected, message) { assert.equal(actual, expected, message); assertionCount++; }
+function deepEqual(actual, expected, message) { assert.deepEqual(actual, expected, message); assertionCount++; }
+function match(actual, expected, message) { assert.match(actual, expected, message); assertionCount++; }
 function unit(condition, message) { assert.ok(condition, message); assertionCount++; }
 function simulate(fn, count) {
   for (let i = 0; i < count; i++) { fn(i); simulations++; }
@@ -55,10 +55,10 @@ function simulate(fn, count) {
 close(extra.percentage(...refs.referenceCases.percentage.input), refs.referenceCases.percentage.expected);
 close(extra.percentageShare(...refs.referenceCases.percentageShare.input), refs.referenceCases.percentageShare.expected);
 close(extra.percentageChange(...refs.referenceCases.percentageChange.input), refs.referenceCases.percentageChange.expected);
-assert.deepEqual(extra.percentageDifference(...refs.referenceCases.percentageDifference.input), refs.referenceCases.percentageDifference.expected);
-assert.deepEqual(extra.fraction(...refs.referenceCases.fractionAdd.input), refs.referenceCases.fractionAdd.expected);
+deepEqual(extra.percentageDifference(...refs.referenceCases.percentageDifference.input), refs.referenceCases.percentageDifference.expected);
+deepEqual(extra.fraction(...refs.referenceCases.fractionAdd.input), refs.referenceCases.fractionAdd.expected);
 close(extra.compound(...refs.referenceCases.compound.input), refs.referenceCases.compound.expected);
-assert.equal(extra.dateDifference(...refs.referenceCases.dateDifference.input), refs.referenceCases.dateDifference.expected);
+equal(extra.dateDifference(...refs.referenceCases.dateDifference.input), refs.referenceCases.dateDifference.expected);
 const maleRef = calorie.calculateMaintenanceCalories(refs.referenceCases.calorieMale.input);
 close(maleRef.restingKcalPerDay, refs.referenceCases.calorieMale.expected.resting);
 close(maleRef.maintenanceKcalPerDay, refs.referenceCases.calorieMale.expected.maintenance);
@@ -134,8 +134,8 @@ simulate(() => {
   const a = integer(1, 100000), b = integer(1, 100000), factor = integer(1, 100000);
   const as = scaledTerm(a), bs = scaledTerm(b), fs = scaledTerm(factor);
   const got = extra.scaleRatio(a, b, factor);
-  assert.equal(got.a, scaledDecimal(as * fs));
-  assert.equal(got.b, scaledDecimal(bs * fs));
+  equal(got.a, scaledDecimal(as * fs));
+  equal(got.b, scaledDecimal(bs * fs));
 
 }, 1000);
 
@@ -151,7 +151,7 @@ simulate(i => {
   else if (operation === "multiply") { n = a * c; den = b * d; }
   else { if (c === 0n) return; n = a * d; den = b * c; }
   const expected = normalizedFraction(n, den);
-  assert.deepEqual(extra.fraction(Number(a), Number(b), Number(c), Number(d), operation), expected);
+  deepEqual(extra.fraction(Number(a), Number(b), Number(c), Number(d), operation), expected);
 
 }, 1000);
 
@@ -172,9 +172,9 @@ simulate(() => {
 simulate(() => {
   const start = utcDate(), end = utcDate();
   const expected = (Date.parse(end + "T00:00:00Z") - Date.parse(start + "T00:00:00Z")) / 86400000;
-  assert.equal(extra.dateDifference(start, end), expected);
-  assert.equal(extra.dateDifference(end, start), -expected);
-  assert.equal(extra.dateDifference(start, end, true), expected + (expected === 0 ? 1 : Math.sign(expected)));
+  equal(extra.dateDifference(start, end), expected);
+  equal(extra.dateDifference(end, start), -expected);
+  equal(extra.dateDifference(start, end, true), expected + (expected === 0 ? 1 : Math.sign(expected)));
 
 }, 1000);
 
@@ -250,13 +250,13 @@ const root = path.join(__dirname, "..");
 const caloriePage = fs.readFileSync(path.join(root, "public", "calorie-calculator", "index.html"), "utf8");
 const percentagePage = fs.readFileSync(path.join(root, "public", "percentage-calculator", "index.html"), "utf8");
 const fractionPage = fs.readFileSync(path.join(root, "public", "fraction-calculator", "index.html"), "utf8");
-assert.match(caloriePage, /\/assets\/calorie-calculator\.js\?v=/, "generated calorie page must load the tested calorie engine");
-assert.match(caloriePage, /id="calorie-form"/, "generated calorie page must expose the expected form contract");
-assert.match(percentagePage, /\/assets\/extra-calculators\.js/, "generated percentage page must load the tested extra-calculator engine");
-assert.match(percentagePage, /\/assets\/extra-calculators-ui\.js/, "generated percentage page must load the calculator UI adapter");
-assert.match(percentagePage, /id="extra-calculator-form"/, "generated percentage page must expose its form contract");
-assert.match(fractionPage, /\/assets\/extra-calculators\.js/, "generated fraction page must load the tested extra-calculator engine");
-assert.match(fractionPage, /id="extra-calculator-form"/, "generated fraction page must expose its form contract");
+match(caloriePage, /\/assets\/calorie-calculator\.js\?v=/, "generated calorie page must load the tested calorie engine");
+match(caloriePage, /id="calorie-form"/, "generated calorie page must expose the expected form contract");
+match(percentagePage, /\/assets\/extra-calculators\.js/, "generated percentage page must load the tested extra-calculator engine");
+match(percentagePage, /\/assets\/extra-calculators-ui\.js/, "generated percentage page must load the calculator UI adapter");
+match(percentagePage, /id="extra-calculator-form"/, "generated percentage page must expose its form contract");
+match(fractionPage, /\/assets\/extra-calculators\.js/, "generated fraction page must load the tested extra-calculator engine");
+match(fractionPage, /id="extra-calculator-form"/, "generated fraction page must expose its form contract");
 
 equal(simulations, 14000, "all planned deterministic simulation cases must execute");
 console.log("PASS: " + simulations + " deterministic calculator simulations (seed 20261114)");
