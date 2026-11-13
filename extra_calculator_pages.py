@@ -61,9 +61,9 @@ GUIDES = {
     "Worked example: 28 February 2024 to 1 March 2024 is 2 elapsed days because 29 February is a leap day. The same dates in 2025 are 1 elapsed day. From 31 January 2024 to 29 February 2024, the calculator shows 29 elapsed days, 30 inclusive days and 4.14 weeks.",
     "The calendar breakdown uses the largest complete years, then months, then remaining days. Months and years use month-end clamping: 31 January 2024 plus one month reaches 29 February, while 31 January 2023 plus one month reaches 28 February. Therefore 31 January to 1 March 2024 is 1 month and 1 day. Weeks are the elapsed day total divided by seven and are shown as a decimal.",
     "The Gregorian leap-year rule treats a year as a leap year when it is divisible by four, except century years unless they are also divisible by 400. Therefore 2024 and 2000 are leap years, while 1900 and 2025 are not. A leap year adds 29 February, which changes a date interval when it crosses that day. The U.S. Naval Observatory reference below explains this rule.",
-    "This calculator does not count weekdays only, remove public holidays, calculate working days, or decide legal deadline rules. It also does not measure exact elapsed hours between timestamps. Use a jurisdiction-specific business calendar for working-day deadlines, and confirm contract, court, travel or immigration counting rules with the relevant authority. Invalid dates are rejected rather than silently changed.",
+    "This calculator counts calendar days, not working days. It does not exclude weekends or public holidays, or determine legal deadline rules. It also does not measure exact elapsed hours between timestamps. For a working-day deadline, use the official calendar for the relevant jurisdiction and confirm the applicable contract, court, travel or immigration rule. Invalid dates are rejected rather than silently adjusted.",
     "Before relying on a result, compare the entered dates with the source document and confirm whether it asks for elapsed days, inclusive calendar days or business days. Those counting methods answer different questions and can produce different totals.",
-    "Use the signed result to compare date order as well as duration. A negative result means the end date is before the start date. Reversing the dates changes the sign but not the absolute duration. The inclusive count includes both endpoint dates while preserving the direction of the interval.",
+    "Results are signed. A later end date produces a positive result, an earlier end date produces a negative result, and identical dates produce 0 elapsed days or 1 inclusive day. Reversing the dates changes the sign but not the absolute duration. Inclusive mode counts both endpoint dates while preserving interval direction.",
 ]
 }
 
@@ -120,7 +120,7 @@ SECTION_HEADINGS = {
     "ratio-calculator": ["What a ratio compares", "Simplify a ratio with the GCD", "Simplify a three-term ratio", "Ratios with decimal inputs", "Solve a proportion with one missing value", "Scale an equivalent ratio", "Input limits and units", "Worked example", "Method", "Limits"],
 "fraction-calculator": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero denominators", "Large numbers and decimal inputs", "Check the result", "Compare equivalent fractions"],
     "compound-interest-calculator": ["What compound interest means", "Worked example: semiannual compounding", "Simple versus compound interest", "Formula and variables", "Compare compounding frequency", "Assumptions and limits"],
-    "date-calculator": ["How elapsed days are counted", "Leap-year example", "Verify the result manually", "Gregorian leap-year rule", "Inclusive versus elapsed dates", "Date order and negative results"],
+    "date-calculator": ["How elapsed days are counted", "Leap-year example", "Verify the result manually", "Gregorian leap-year rule", "Calendar-day counting limitations", "Check the required counting rule", "Date order and negative results"],
 }
 
 FAQS = {
