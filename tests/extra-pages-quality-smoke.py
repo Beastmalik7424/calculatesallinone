@@ -95,7 +95,22 @@ for slug, spec in CASES.items():
         assert title_text == "Date Difference Calculator | Days Between Dates | CalculatesAll", "Date calculator title must preserve the exact requested search-intent wording"
         headings = [unescape(value) for value in re.findall(r"<h2[^>]*>(.*?)</h2>", source)]
         assert "Gregorian leap-year rule" in headings, "Date calculator must label its Gregorian leap-year explanation accurately"
-        assert "Business days and legal deadlines" not in headings, "Date calculator must not use a business-days heading for calendar-day guidance"
+        assert "Calendar-day counting limitations" in headings, "Date calculator limitations need a heading that matches the content"
+        assert "Inclusive versus elapsed dates" not in headings, "Date calculator must not label business-day limitations as a counting-mode explanation"
+        section_text = {
+            unescape(heading): unescape(paragraph)
+            for heading, paragraph in re.findall(
+                r'<section class="mt-6"><h2[^>]*>(.*?)</h2><p[^>]*>(.*?)</p></section>',
+                source,
+                re.S,
+            )
+        }
+        limitations = section_text["Calendar-day counting limitations"]
+        assert "does not exclude weekends or public holidays" in limitations and "legal deadline rules" in limitations, "Date calculator must state its business-day and holiday limitations"
+        signed_results = section_text["Date order and negative results"]
+        assert "later end date produces a positive result" in signed_results, "Date calculator must explain positive signed results"
+        assert "earlier end date produces a negative result" in signed_results, "Date calculator must explain negative signed results"
+        assert "reversing the dates changes the sign" in signed_results.lower(), "Date calculator must explain how reversing dates affects the sign"
     assert description and 70 <= len(unescape(description.group(1))) <= 160, f"Invalid description: {slug}"
     assert canonical in source, f"Canonical mismatch: {slug}"
     assert '<meta name="robots" content="index, follow">' in source, f"Unexpected indexability: {slug}"
