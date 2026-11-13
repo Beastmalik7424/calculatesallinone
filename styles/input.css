@@ -2230,6 +2230,7 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
 .dark .ca-home-card-heading, .dark .ca-home-tools h2 { color: #e3f4f0; }
 .dark .ca-home-lead,
 .dark .ca-home-tools-copy { color: #e6f3f1; }
+.dark .ca-home-tools-heading .ca-home-side-eyebrow { color: #e6f3f1; }
 .dark .ca-home-badge {
   background-color: #18332f;
   border-color: #315a54;
