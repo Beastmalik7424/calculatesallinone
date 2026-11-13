@@ -37,6 +37,8 @@ jobs:
         run: node tests/input-validation-smoke.cjs
       - name: Check Python syntax
         run: python -m py_compile build.py calorie_calculator.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
+      - name: Test architecture baseline contracts
+        run: python3 tests/architecture-baseline-contract.py
       - name: Build the site
         run: npm run build
       - name: Test percentage, fraction, compound interest and date engines
