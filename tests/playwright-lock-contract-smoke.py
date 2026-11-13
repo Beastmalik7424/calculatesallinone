@@ -7,6 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAYWRIGHT_VERSION = "1.64.1"
+PLAYWRIGHT_INTEGRITY = "sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA=="
+CORE_INTEGRITY = "sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ=="
 
 
 def validate_playwright_config(config):
@@ -16,6 +18,8 @@ def validate_playwright_config(config):
         and config.get("playwright_package_version") == PLAYWRIGHT_VERSION
         and config.get("playwright_core_version") == PLAYWRIGHT_VERSION
         and config.get("playwright_core_dependency") == PLAYWRIGHT_VERSION
+        and config.get("playwright_integrity") == PLAYWRIGHT_INTEGRITY
+        and config.get("core_integrity") == CORE_INTEGRITY
         and config.get("ci_uses_npm_ci") is True
         and config.get("ci_has_no_ad_hoc_install") is True
         and config.get("ci_installs_chromium") is True
@@ -34,6 +38,8 @@ def repository_playwright_config(root=ROOT):
         "playwright_package_version": playwright_lock.get("version"),
         "playwright_core_version": core_lock.get("version"),
         "playwright_core_dependency": playwright_lock.get("dependencies", {}).get("playwright-core"),
+        "playwright_integrity": playwright_lock.get("integrity"),
+        "core_integrity": core_lock.get("integrity"),
         "ci_uses_npm_ci": "run: npm ci" in ci,
         "ci_has_no_ad_hoc_install": "npm install --no-save --package-lock=false playwright" not in ci,
         "ci_installs_chromium": "npx playwright install --with-deps chromium" in ci,
@@ -48,6 +54,8 @@ class PlaywrightLockUnitTests(unittest.TestCase):
             "playwright_package_version": PLAYWRIGHT_VERSION,
             "playwright_core_version": PLAYWRIGHT_VERSION,
             "playwright_core_dependency": PLAYWRIGHT_VERSION,
+            "playwright_integrity": PLAYWRIGHT_INTEGRITY,
+            "core_integrity": CORE_INTEGRITY,
             "ci_uses_npm_ci": True,
             "ci_has_no_ad_hoc_install": True,
             "ci_installs_chromium": True,
@@ -72,6 +80,13 @@ class PlaywrightLockUnitTests(unittest.TestCase):
         config = self.valid_config()
         config["ci_has_no_ad_hoc_install"] = False
         self.assertFalse(validate_playwright_config(config))
+
+    def test_rejects_tampered_package_integrity(self):
+        for key in ("playwright_integrity", "core_integrity"):
+            with self.subTest(key=key):
+                config = self.valid_config()
+                config[key] = "sha512-invalid"
+                self.assertFalse(validate_playwright_config(config))
 
     def test_rejects_missing_browser_install(self):
         config = self.valid_config()
