@@ -409,7 +409,12 @@ def main():
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})
     ET.indent(urlset, space="  ")
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(urlset, encoding="unicode") + "\n", encoding="utf-8")
-    (ROOT / "robots.txt").write_text("User-agent: *\nAllow: /\nDisallow: /404\n\nSitemap: " + SITE + "/sitemap.xml\n", encoding="utf-8")
+    (ROOT / "robots.txt").write_text(
+        "User-agent: OAI-SearchBot\nAllow: /\nDisallow: /404\n\n"
+        "User-agent: *\nAllow: /\nDisallow: /404\n\n"
+        "Sitemap: " + SITE + "/sitemap.xml\n",
+        encoding="utf-8",
+    )
     report = ["SEO build report", "Freshness metadata: dateModified set only for verified page-specific updates; sitemap lastmod omitted", "Indexable pages: " + str(len(indexable)),
               "Noindex pages: " + str(len(noindex_list)), "Sitemap URLs: " + str(len(indexable)),
               "Titles: unique and within page-specific limits", "Descriptions: unique, page-specific and 70-160 characters",
