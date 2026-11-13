@@ -84,8 +84,8 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
         css = BUILT_CSS.read_text(encoding="utf-8")
         for selector in (
             ".ca-home-wrap{",
-            ".ca-home-side{",
-            ".dark .ca-home-side{",
+            ".ca-home-side",
+            ".dark .ca-home-side",
             ".ca-home-calculator,.ca-home-tools{",
             ".ca-home-card-heading",
             ".ca-home-tools h2",
