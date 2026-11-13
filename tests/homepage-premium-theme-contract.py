@@ -77,7 +77,8 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
         for selector in (
             ".ca-home-wrap{",
             ".ca-home-calculator,.ca-home-tools{",
-            ".ca-home-card-heading,.ca-home-tools h2{",
+            ".ca-home-card-heading",
+            ".ca-home-tools h2",
             ".ca-home-calculator #calc-display{",
             ".ca-home-calculator #calc-pad button[data-key=\"=\"]{",
             ".ca-home-tool-grid a{",
