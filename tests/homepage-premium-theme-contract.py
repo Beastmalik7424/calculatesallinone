@@ -59,11 +59,15 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
 
     def test_text_and_control_color_pairs_meet_wcag_aa_normal_text_contrast(self):
         pairs = (
-            ("#164e48", "#ffffff"),
-            ("#0f766e", "#ffffff"),
+            ("#164e48", "#f8fcfb"),
+            ("#315a54", "#edf6f4"),
+            ("#ffffff", "#0f766e"),
+            ("#ffffff", "#0f5f57"),
             ("#0f5f57", "#e0f2ef"),
-            ("#155e57", "#e6f3f1"),
-            ("#e3f4f0", "#10211f"),
+            ("#e3f4f0", "#18332f"),
+            ("#e6f3f1", "#142c28"),
+            ("#ffffff", "#155e57"),
+            ("#142c28", "#e6f3f1"),
         )
         for foreground, background in pairs:
             with self.subTest(foreground=foreground, background=background):
