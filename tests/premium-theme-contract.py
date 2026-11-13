@@ -140,7 +140,7 @@ class HomepageIntegrationTests(unittest.TestCase):
     def test_generated_stylesheet_contains_the_approved_theme(self):
         output_css = ROOT / "public" / "assets" / "site.css"
         self.assertTrue(output_css.is_file(), "generated homepage stylesheet is missing")
-        self.assertIn(CSS_MARKER, output_css.read_text(encoding="utf-8"))
+        self.assertIn("--ca-premium-accent", output_css.read_text(encoding="utf-8"), "minified generated CSS must retain the theme tokens")
 
 
 if __name__ == "__main__":
