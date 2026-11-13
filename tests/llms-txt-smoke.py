@@ -5,10 +5,14 @@ import sys
 SITE = "https://calculateallinone.vercel.app"
 llms_path = Path("public/llms.txt")
 sitemap_path = Path("public/sitemap.xml")
+robots_path = Path("public/robots.txt")
 assert llms_path.is_file(), "public/llms.txt is missing"
 assert sitemap_path.is_file(), "public/sitemap.xml is missing"
+assert robots_path.is_file(), "public/robots.txt is missing"
 llms = llms_path.read_text(encoding="utf-8")
 sitemap = sitemap_path.read_text(encoding="utf-8")
+robots = robots_path.read_text(encoding="utf-8")
+assert re.search(r"(?ms)^User-agent: OAI-SearchBot\\s*\\nAllow: /\\s*\\nDisallow: /404(?:\\s|$)", robots), "robots.txt must explicitly allow OAI-SearchBot while keeping /404 blocked"
 listed = set(re.findall(r"https://calculateallinone\.vercel\.app/[^\s)]*", llms))
 sitemap_urls = set(re.findall(r"<loc>(.*?)</loc>", sitemap))
 missing = sorted(sitemap_urls - listed)
@@ -31,4 +35,4 @@ assert "not a religious ruling" in llms
 assert "source references" in llms
 assert re.search(r"^# CalculatesAll\s*\n> Free browser-based calculators for money, health, math, dates and everyday tasks\. Each tool states its inputs, method and limitations; results are general estimates, not professional advice\.", llms), "llms.txt should give AI readers a concise, accurate summary directly under the H1"
 assert "expert reviewed" not in llms.lower()
-print(f"PASS: llms.txt covers all {len(sitemap_urls)} sitemap URLs with accurate scope and limitations")
+print(f"PASS: OAI-SearchBot is allowed; llms.txt covers all {len(sitemap_urls)} sitemap URLs with accurate scope and limitations")
