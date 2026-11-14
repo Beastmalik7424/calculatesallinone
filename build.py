@@ -579,16 +579,8 @@ TOOLS = [
         ),
         "guide": [
             ("How it works", [
-                "The stopwatch reads the browser clock and shows elapsed time in hours, minutes, seconds and hundredths of a second.",
-                "Elapsed time is calculated from the start time, so it stays accurate when you return to a tab that was in the background.",
-            ]),
-            ("Limits", [
-                "This is suitable for everyday timing. Official sport or laboratory timing needs certified equipment.",
-            ]),
-            ("Use the stopwatch for repeatable everyday tasks", [
-                "A browser stopwatch is useful for timing a study interval, workout set, cooking step or short work session. Press Start at the beginning, Stop when the interval ends, and Reset before a new attempt. If you compare repeated sessions, use the same start and stop method so the results are more meaningful.",
-                "The display shows hundredths of a second, but that display precision is not the same as certified measurement accuracy. Browser scheduling, operating-system load and background-tab throttling can affect how often the screen refreshes. The elapsed-time calculation is based on the browser clock, yet this tool is not intended for official sporting results, laboratory experiments or legal evidence.",
-                "This page does not store a history of completed timings. Record any result you need before resetting or reloading the page. If the task requires a verified split time, calibrated hardware or a formal timing protocol, use equipment designed for that purpose instead of relying on a general-purpose browser tool.",
+                "Press Start when a study interval, workout set, cooking step or short work session begins. Press Stop when it ends, and Reset before a new attempt. For comparisons, use the same start and stop method each time.",
+                "The elapsed value is calculated from differences between performance.now() timestamps, not by counting interval callbacks. A background tab can delay the visible refresh; the next update recalculates elapsed time from the current monotonic timestamp. The display shows hours, minutes, seconds and hundredths, but that display precision is not a certified accuracy guarantee.",
             ]),
         ],
         "faq": [
@@ -793,14 +785,14 @@ def bmi_urdu_guide_html():
 
 EXTRA = {
     "zakat-calculator": {
-        "quick": "Zakat is 2.5 percent of net zakatable wealth, due when that wealth is at least the Nisab (612.36 grams of silver) and has been held for one lunar year.",
+        "quick": "",
         "faq": [
             ("Is Zakat due on my home?", "Your home that you live in is not zakatable wealth. Rental property income and goods held for sale can be zakatable, so check the rules for each asset with a scholar."),
             ("Do I subtract debts?", "Debts due now are commonly subtracted from zakatable wealth. Whether particular long-term debts are deducted is a point scholars discuss, so confirm your case."),
         ],
     },
     "bmi-calculator": {
-        "quick": "BMI uses weight in kg divided by height in metres squared when kg is selected, or 703 × weight in lb divided by height in total inches squared when lb is selected. For adults, 18.5 to 24.9 is the WHO normal weight range.",
+        "quick": "",
         "faq": [
             ("Is a BMI of 25 unhealthy?", "A BMI of 25 is at the start of the overweight range. It is a screening number only. Waist size, blood pressure and blood tests give a fuller picture, and a clinician can interpret them with you."),
             ("Does BMI work for athletes?", "BMI can overstate body fat in people with high muscle mass. A clinician can use other measures for athletes."),
@@ -822,13 +814,13 @@ EXTRA = {
         ],
     },
     "age-calculator": {
-        "quick": "Age is calculated by subtracting the birth date from today's date, year by year, month by month and day by day, then borrowing from the previous month where needed.",
+        "quick": "",
         "faq": [
             ("How do I find my age in days?", "Enter your date of birth. The total days lived figure is shown with your years, months and days."),
         ],
     },
     "unit-converter": {
-        "quick": "Convert by multiplying the value by the factor from the starting unit to the base unit, then dividing by the factor from the target unit to the base unit.",
+        "quick": "",
         "faq": [
             ("How do I convert centimeters to inches?", "Divide centimeters by 2.54. For example, 10 cm is about 3.94 inches. One inch is exactly 2.54 centimeters."),
             ("How do I convert kilograms to pounds?", "Multiply kilograms by about 2.20462262. For example, 1 kg is about 2.2046 lb. The exact reference is 1 lb = 0.45359237 kg."),
@@ -836,7 +828,7 @@ EXTRA = {
         ],
     },
     "standard-calculator": {
-        "quick": "Multiplication and division run before addition and subtraction. The percent key divides the last number by 100.",
+        "quick": "",
         "faq": [
             ("Does this calculator handle parentheses?", "Yes. Use the ( and ) buttons to group calculations. Multiplication and division run before addition and subtraction."),
         ],
@@ -846,7 +838,7 @@ EXTRA = {
         "faq": [],
     },
     "stopwatch": {
-        "quick": "Press Start to begin timing, Stop to pause, and Reset to clear. The display shows hours, minutes, seconds and hundredths.",
+        "quick": "",
         "faq": [
             ("Does the stopwatch continue after I close the tab?", "No. Closing or reloading the page stops and clears the stopwatch."),
         ],
@@ -1043,7 +1035,7 @@ TOOLS.extend([
 ])
 EXTRA.update({
     "years-to-days-calculator": {"faq": [], "quick": ""},
-    "query-calculator": {"faq": [], "quick": "Month conversions use 12 months per year and an average Gregorian month of 30.436875 days. Example: 115 months = 9 years and 7 months, about 3,500.24 average days; exact calendar days need a start date."},
+    "query-calculator": {"faq": [], "quick": ""},
 })
 
 TOOLS.append({
