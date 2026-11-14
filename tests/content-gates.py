@@ -5,6 +5,7 @@ This deliberately checks examples and transparent assumptions, not a minimum
 word count. Google does not prescribe a preferred page length.
 """
 import html
+import json
 import re
 import sys
 from pathlib import Path
@@ -120,9 +121,9 @@ def main():
             "exact input values and units",
             "displayed result and expected result",
             "Do not include passwords",
-            "Calculation methodology",
-            "Editorial policy",
-            "Privacy policy",
+            "calculation methodology",
+            "editorial policy",
+            "privacy policy",
             "How do I report a calculator error?",
             "What information should I include?",
             "How long does a reply take?",
