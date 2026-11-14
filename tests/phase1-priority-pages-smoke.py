@@ -182,6 +182,8 @@ def check_targeted_content():
         content = visible_text(slug)
         for phrase in phrases:
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
+    for slug in required:
+        assert "Last updated: 2026-11-14" in visible_text(slug), f"/{slug}/ must display its verified update date"
     years_html = read_page("years-to-days-calculator")
     assert "https://aa.usno.navy.mil/faq/leap_years" in years_html
     assert "https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z" in years_html
