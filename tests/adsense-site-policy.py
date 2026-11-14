@@ -76,10 +76,12 @@ for repeated_heading in (
     check(not has_heading("discount-calculator", repeated_heading),
           f"/discount-calculator/ repeats the concept in '{repeated_heading}'")
 
-check(discount_html.count("Amount saved equals original price multiplied by the discount percentage, divided by 100.") == 1,
-      "/discount-calculator/ repeats its primary savings formula")
-check(discount_html.count("Final price equals original price minus the amount saved.") == 1,
-      "/discount-calculator/ repeats its final-price formula")
+savings_formula_count = discount_html.count("Amount saved equals original price multiplied by the discount percentage, divided by 100.")
+check(savings_formula_count == 1,
+      f"/discount-calculator/ must show its primary savings formula exactly once (found {savings_formula_count})")
+final_price_formula_count = discount_html.count("Final price equals original price minus the amount saved.")
+check(final_price_formula_count == 1,
+      f"/discount-calculator/ must show its final-price formula exactly once (found {final_price_formula_count})")
 
 profit_html = (ROOT / "profit-loss-calculator" / "index.html").read_text(encoding="utf-8")
 for repeated_heading in (
