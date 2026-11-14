@@ -22,8 +22,12 @@ if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
 SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
-# No page-specific substantive update dates are currently verified.
-LASTMOD = {}
+# These visible dates reflect substantive content and source updates made on 2026-11-14.
+LASTMOD = {
+    "/years-to-days-calculator/": "2026-11-14",
+    "/unit-converter/": "2026-11-14",
+    "/tasbih-counter/": "2026-11-14",
+}
 OUT = "public"
 STATIC = "static"
 
