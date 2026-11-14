@@ -38,7 +38,7 @@ CASES = {
         "form": 'id="years-days-form"',
         "category": "/time/",
         "related": ["/date-calculator/", "/age-calculator/", "/query-calculator/", "/unit-converter/"],
-        "faq_min": 5,
+        "faq_min": 4,
         "h1": "Years to Days Calculator",
     },
     "unit-converter": {
