@@ -115,5 +115,5 @@ CONTACT_EXTRA = [
 ABOUT_EXTRA = [
     "CalculatesAll is a free, browser-based collection of calculators and everyday tools for money, dates, unit conversions, arithmetic, health screening and counting. It is designed to make routine calculations easier to check, with methods and limitations explained on relevant tool pages.",
     "Use a tool to check a routine calculation, then review its inputs, units, method, worked example where provided and stated limitations. No account or download is required.",
-    "English is the main site language, and selected calculator tools are also available in Urdu. Each published Urdu tool page explains its own inputs, method and relevant limitations.",
+    "English is the main site language, and selected calculator tools are also available in Urdu, with page-specific inputs, examples and calculation methods.",
 ]
