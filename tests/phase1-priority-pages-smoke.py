@@ -16,11 +16,11 @@ SITE = "https://calculateallinone.vercel.app"
 CASES = {
     "tasbih-counter": {
         "title": "Tasbih Calculator Online | Dhikr Counter | CalculatesAll",
-        "description": "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app.",
+        "description": "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and keep progress in this browser when storage is available.",
         "form": 'id="tasbih-app"',
         "category": "/worship/",
         "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
-        "faq_min": 4,
+        "faq_min": 6,
         "h1": "Free Online Tasbih Counter",
     },
     "profit-loss-calculator": {
@@ -169,10 +169,16 @@ def check_targeted_content():
         ],
         "tasbih-counter": [
             "Maintained by Muhammad Fayyaz Adeel",
-            "Keyboard, storage and reset behaviour",
-            "manual taps or key presses",
+            "What is a digital Tasbih counter?",
+            "How to use this online Tasbih counter",
+            "Five phrases and plain meanings",
+            "Saving and privacy",
+            "Worked example: target and remaining count",
+            "target is a personal tracking setting",
             "same browser and device",
             "does not sync across devices",
+            "selected target",
+            "custom target",
             "Reset requires confirmation",
             "Can I count with a keyboard?",
             "What happens if browser storage is unavailable?",
@@ -182,8 +188,13 @@ def check_targeted_content():
         content = visible_text(slug)
         for phrase in phrases:
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
-    for slug in required:
-        assert "Last updated: 2026-11-14" in visible_text(slug), f"/{slug}/ must display its verified update date"
+    expected_dates = {
+        "tasbih-counter": "2026-11-15",
+        "years-to-days-calculator": "2026-11-14",
+        "unit-converter": "2026-11-14",
+    }
+    for slug, expected_date in expected_dates.items():
+        assert f"Last updated: {expected_date}" in visible_text(slug), f"/{slug}/ must display its verified update date"
     years_html = read_page("years-to-days-calculator")
     assert "https://aa.usno.navy.mil/faq/leap_years" in years_html
     assert "https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z" in years_html
@@ -191,11 +202,60 @@ def check_targeted_content():
     assert "https://nvlpubs.nist.gov/nistpubs/hb/2026/NIST.HB.44-2026.pdf" in unit_html
     assert "https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9" in unit_html
 
+def check_tasbih_content_structure():
+    source = read_page("tasbih-counter")
+    main_match = re.search(r"<main\\b[^>]*>(.*?)</main>", source, re.S | re.I)
+    assert main_match, "Tasbih page is missing its main content"
+    body = main_match.group(1)
+    headings = [html.unescape(value).strip() for value in re.findall(r"<h2[^>]*>(.*?)</h2>", body, re.S | re.I)]
+    expected = [
+        "What is a digital Tasbih counter?",
+        "How to use this online Tasbih counter",
+        "Five phrases and plain meanings",
+        "Saving and privacy",
+        "Worked example: target and remaining count",
+        "Common questions",
+        "Scope and religious guidance",
+        "Related calculators",
+    ]
+    for heading in expected:
+        assert headings.count(heading) == 1, f"Tasbih page must contain exactly one '{heading}' section"
+    obsolete = [
+        "Keyboard, storage and reset behaviour",
+        "Saving, privacy, and limitations",
+        "Choosing a target",
+        "Privacy of your count",
+        "Tasbih calculator and digital zikr counter example",
+        "Choosing the right online tasbeeh counter",
+        "Worked example",
+        "Method",
+        "Limits",
+        "Using the counter during a short daily session",
+        "What the counter can and cannot verify",
+        "How it is calculated",
+        "Sources",
+    ]
+    for heading in obsolete:
+        assert heading not in headings, f"Redundant or misleading Tasbih section remains: {heading}"
+    questions = [
+        html.unescape(re.sub(r"<[^>]+>", " ", value)).strip()
+        for value in re.findall(r"<summary\\b[^>]*>(.*?)</summary>", body, re.S | re.I)
+    ]
+    assert len(questions) == 6, f"Tasbih page should have six distinct FAQs, got {len(questions)}"
+    assert len({question.casefold() for question in questions}) == len(questions), "Tasbih FAQ questions must not be duplicated"
+    content = visible_text("tasbih-counter")
+    assert content.count("three groups of 33 presses") == 1, "The 99-count worked example must appear once"
+    assert content.count("99 - 67 = 32") == 1, "The remaining-count arithmetic must appear once"
+    assert "When browser storage is available, the current count, selected phrase and selected target" in content, "The page must accurately explain which settings persist"
+    assert "does not sync across devices" in content.lower(), "The page must explain device-local storage"
+
+
 def main():
     for slug, spec in CASES.items():
         check_english_page(slug, spec)
     check_urdu_bmi()
     check_targeted_content()
+    check_tasbih_content_structure()
     print("PASS: priority pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD, preserved canonicals, and research-backed content")
     return 0
 
