@@ -193,7 +193,7 @@ def normalize_meta(raw, path, lang):
     if path == "/age-calculator/":
         title = "Age Calculator | Years, Months & Days | CalculatesAll"
     if path == "/unit-converter/":
-        title = "Unit Converter: cm to Inches, kg to lbs | CalculatesAll"
+        title = "Unit Converter | Weight, Length & Temperature"
     desc = html.unescape(desc_match.group(1).strip())
     description_overrides = {
     "/about/": "Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details.",
