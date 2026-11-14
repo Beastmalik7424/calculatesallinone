@@ -2044,6 +2044,42 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
     else:
         body = ""
     body += '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
+    if path == "/contact/":
+        # OWNER TO CONFIRM: verify CONTACT_EMAIL is current and monitored before publication.
+        contact_faq = [
+            ("How do I report a calculator error?", "Email the calculator name, full page URL, exact input values and units, displayed result, expected result, and steps needed to reproduce the issue."),
+            ("What information should I include?", "Include only details needed to explain the problem. For date or time issues, include the date format and time zone when relevant. Do not include passwords, payment card numbers, bank details, medical records, or other sensitive information."),
+            ("How long does a reply take?", "No fixed response time is published. Do not assume that a reply will arrive by a particular date."),
+        ]
+        faq_entities = [
+            {"@type": "Question", "name": question,
+             "acceptedAnswer": {"@type": "Answer", "text": answer}}
+            for question, answer in contact_faq
+        ]
+        schema.append({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "name": "Contact CalculatesAll FAQs",
+            "url": SITE_URL + path,
+            "mainEntity": faq_entities,
+        })
+        body += (
+            '<p class="' + P + '">Contact CalculatesAll by email at <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a> for calculator corrections, accessibility issues, translation feedback, or questions about site content. For a calculation report, include the calculator name, page URL, exact input values and units, displayed result, expected result, and steps to reproduce the issue.</p>'
+            '<h2 class="' + H2 + '">Report a calculator error</h2>'
+            '<p class="' + P + '">Describe what you were trying to calculate and what happened. Copy the input values exactly, including units and decimal places. If the result depends on a sequence of selections, list those steps in order. A relevant formula or reliable reference can also help explain why you believe the displayed result is incorrect. Do not change or round the original inputs when reporting the issue.</p>'
+            '<h2 class="' + H2 + '">Send feedback or an accessibility report</h2>'
+            '<p class="' + P + '">Use the same email address for feedback about page wording, keyboard access, screen-reader labels, mobile layout, or Urdu translation. Identify the page and describe the device, browser, language, or action involved when that context is needed to reproduce the problem. Suggestions are considered as part of site maintenance, but submission does not guarantee that a requested feature will be added.</p>'
+            '<h2 class="' + H2 + '">Protect sensitive information</h2>'
+            '<p class="' + P + '">Do not include passwords, payment card numbers, bank details, medical records, identity documents, or other sensitive personal information in an email. Send only the minimum details needed to explain the issue. Review the <a class="' + LINK + '" href="/privacy/">Privacy policy</a> for the site information-handling statement before deciding what to share.</p>'
+            '<h2 class="' + H2 + '">Related site guidance</h2>'
+            '<ul class="mt-3 list-disc space-y-2 pl-6 text-base text-stone-800 dark:text-stone-200">'
+            '<li><a class="' + LINK + '" href="/methodology/">Calculation methodology</a> explains the methods, examples, assumptions, and limits used by the tools.</li>'
+            '<li><a class="' + LINK + '" href="/editorial-policy/">Editorial policy</a> describes how content and reported errors are reviewed and corrected.</li>'
+            '<li><a class="' + LINK + '" href="/privacy/">Privacy policy</a> explains the site's stated approach to data and privacy.</li>'
+            '</ul>'
+            '<h2 class="' + H2 + '">Contact questions</h2><div class="mt-3">' + faq_html(contact_faq) + '</div>'
+        )
+        paragraphs = []
     methodology_headings = {
         0: "How to use this methodology",
         1: "Arithmetic, percentages and fractions",
