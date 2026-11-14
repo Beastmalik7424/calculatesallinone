@@ -174,7 +174,7 @@ def check_targeted_content():
             "Five phrases and plain meanings",
             "Saving and privacy",
             "Worked example: target and remaining count",
-            "target is a personal tracking setting",
+            "Targets are personal tracking settings",
             "same browser and device",
             "does not sync across devices",
             "selected target",
