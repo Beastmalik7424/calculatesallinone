@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused build-output checks for the ten scoped SEO URLs."""
+"""Focused build-output checks for English and Urdu indexable routes."""
 import html
 import re
 import sys
@@ -11,9 +11,15 @@ ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
 RETIRED_LOCALE_HOMES = ("/ar/", "/hi/", "/es/", "/fr/")
 URDU_INDEXABLE = (
+    "/ur/age-calculator/",
+    "/ur/bmi-calculator/",
     "/ur/discount-calculator/",
     "/ur/profit-loss-calculator/",
     "/ur/standard-calculator/",
+    "/ur/stopwatch/",
+    "/ur/tasbih-counter/",
+    "/ur/unit-converter/",
+    "/ur/zakat-calculator/",
 )
 TARGETS = {
     "/about/": "index",
@@ -23,7 +29,15 @@ TARGETS = {
     "/health/": "index",
     "/ur/discount-calculator/": "index",
     "/ur/profit-loss-calculator/": "index",
+    "/ur/age-calculator/": "index",
+    "/ur/bmi-calculator/": "index",
+    "/ur/discount-calculator/": "index",
+    "/ur/profit-loss-calculator/": "index",
     "/ur/standard-calculator/": "index",
+    "/ur/stopwatch/": "index",
+    "/ur/tasbih-counter/": "index",
+    "/ur/unit-converter/": "index",
+    "/ur/zakat-calculator/": "index",
 }
 HOME_LINKS = {
     "/about/",
@@ -155,7 +169,7 @@ try:
     for path in RETIRED_LOCALE_HOMES:
         check(SITE + path not in locs, "retired locale homepage must be absent from sitemap: " + path)
     for path in URDU_INDEXABLE:
-        check(SITE + path in locs, "reviewed Urdu calculator route must remain in sitemap: " + path)
+        check(SITE + path in locs,  "Urdu calculator route must remain in sitemap: " + path)
     for path, decision in TARGETS.items():
         url = SITE + path
         check((url in locs) == (decision == "index"), "sitemap membership mismatch for " + url)
