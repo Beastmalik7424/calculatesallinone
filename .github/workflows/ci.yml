@@ -89,7 +89,7 @@ jobs:
         run: python3 tests/seo-seven-pages.py
       - name: Test Nu HTML validator failover handling
         run: python3 tests/validate-html-retry-smoke.py
-      - name: Validate HTML for homepage and ten scoped pages
+      - name: Validate HTML for homepage, all Urdu tools and scoped English pages
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
         run: python3 tests/validate-html.py
       - name: Validate explicit HTTP 301 redirect configuration
