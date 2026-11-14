@@ -114,6 +114,12 @@ def main():
         failures.append("/contact/ was not generated")
     else:
         contact_html = contact_path.read_text(encoding="utf-8")
+        if "<title>Contact CalculatesAll</title>" not in contact_html:
+            failures.append("/contact/ has an unexpected or missing title")
+        if "Contact CalculatesAll to report a calculator issue" not in contact_html:
+            failures.append("/contact/ has an unexpected or missing meta description")
+        if "We read every message" in contact_html or "publish confirmed corrections on the tool page" in contact_html:
+            failures.append("/contact/ contains an unverified response or correction promise")
         main_match = re.search(r"<main\b[^>]*>(.*?)</main>", contact_html, re.S | re.I)
         contact_main_html = main_match.group(1) if main_match else ""
         contact_text_source = re.sub(r"(?is)<(script|style|nav)\b.*?</\1>", " ", contact_main_html)
