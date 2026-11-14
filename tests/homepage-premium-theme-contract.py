@@ -120,8 +120,8 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
             source,
             "The regex must not be double-escaped",
         )
-        evaluate_start = source.index("const initial = await page.evaluate(() => {")
-        evaluate_end = source.index("});", evaluate_start)
+        evaluate_start = source.index("const initial = await page.evaluate(() =>")
+        evaluate_end = source.index("}));", evaluate_start)
         evaluate_source = source[evaluate_start:evaluate_end]
         self.assertIn(
             "const zoomRestrictionPattern = ",
