@@ -1090,7 +1090,10 @@ for slug, phrases in {
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
-    guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA[slug] for paragraph in paragraphs)
+    if slug == "tasbih-counter":
+        guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
+    else:
+        guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
     for phrase in phrases:
         assert phrase.lower() in guide.lower(), (slug, phrase)
 emi_guide = (ROOT / "emi-calculator" / "index.html").read_text(encoding="utf-8")
