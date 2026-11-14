@@ -1345,6 +1345,11 @@
     function saveCount () { writeStored("tasbih.count", count); showStorageState() }
     function savePhrase () { writeStored("tasbih.phrase", phrase.value === "custom" ? "custom:" + customPhrase.value.trim() : phrase.value); showStorageState() }
     function saveLifetime () { writeStored("tasbih.lifetime", lifetime); showStorageState() }
+    function saveTarget () {
+      writeStored("tasbih.target", target.value)
+      writeStored("tasbih.customTarget", customTarget.value.trim().slice(0, 20))
+      showStorageState()
+    }
     function paint (allowVibration) {
       countEl.textContent = String(count)
       if (lifetimeEl) lifetimeEl.textContent = String(lifetime)
@@ -1389,6 +1394,8 @@
     var storedCount = readStored("tasbih.count")
     var storedPhrase = readStored("tasbih.phrase")
     var storedLifetime = readStored("tasbih.lifetime")
+    var storedTarget = readStored("tasbih.target")
+    var storedCustomTarget = readStored("tasbih.customTarget")
     if (storedCount === null) {
       // Migrate the previous counter key so existing visitors keep their saved count.
       var legacyCount = readStored("tasbih-count")
@@ -1405,6 +1412,8 @@
     else lifetime = count
     phrase.value = storedPhrase !== null && storedPhrase.indexOf("custom:") === 0 ? "custom" : phraseValue
     if (phrase.value === "custom") customPhrase.value = phraseValue
+    if (storedCustomTarget !== null) customTarget.value = storedCustomTarget.slice(0, 20)
+    if (storedTarget === "custom" || ["33", "99", "100"].indexOf(storedTarget) !== -1) target.value = storedTarget
     customTargetWrap.hidden = target.value !== "custom"
     customPhrase.disabled = phrase.value !== "custom"
     phrase.addEventListener("change", function () {
@@ -1428,11 +1437,13 @@
       customTargetWrap.hidden = target.value !== "custom"
       targetError.textContent = ""
       lastTargetReached = false
+      saveTarget()
       paint()
     })
     customTarget.addEventListener("input", function () {
       targetError.textContent = ""
       lastTargetReached = false
+      saveTarget()
       paint()
     })
     $("t-tap").addEventListener("click", increment)
