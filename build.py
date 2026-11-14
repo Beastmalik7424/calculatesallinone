@@ -258,7 +258,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
         "h1": "Profit and Loss Calculator",
-        "lead": "Calculate business profit, loss, markup and margin.",
+        "lead": "This profit loss calculator compares business operating profit with product-level profit or loss, markup and margin.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
@@ -324,7 +324,7 @@ TOOLS = [
         "guide": [
             ("The formulas", [
                 "Amount saved equals original price multiplied by the discount percentage, divided by 100.",
-                "Final price equals original price minus amount saved.",
+                "Final price equals original price minus the amount saved.",
             ]),
             ("Worked example", [
                 "Original price is 2,500. Discount is 20 percent.",
@@ -807,7 +807,7 @@ EXTRA = {
         ],
     },
     "profit-loss-calculator": {
-        "quick": "Business P&L: net operating profit = revenue - cost of goods sold - other expenses, and operating margin = net operating profit / revenue x 100. Product mode: profit = selling price - cost price, markup = profit / cost price x 100, and gross margin = profit / selling price x 100.",
+        "quick": "",
         "faq": [
             ("What is the difference between markup and margin?", "Product markup uses cost as its base; product gross margin uses selling price. Business operating margin uses revenue after listed expenses. These percentages are not interchangeable."),
             ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
@@ -816,7 +816,7 @@ EXTRA = {
         ],
     },
     "discount-calculator": {
-        "quick": "Amount saved equals original price multiplied by the discount percentage, divided by 100. Final price equals original price minus the amount saved.",
+        "quick": "",
         "faq": [
             ("How do I calculate two discounts together?", "Apply the first discount to the original price, then apply the second discount to the reduced price. Stacked discounts are not the same as adding the percentages."),
         ],
@@ -1668,7 +1668,7 @@ ANSWER_BLOCKS = {
     },
     "profit-loss-calculator": {
         "en": 'Business example: revenue 1,000, cost of goods sold 600 and other expenses 150 gives net operating profit 250 and margin 25%. Product example: cost 1,000 and selling price 1,200 gives markup 20%. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
-        "ur": 'اگر کسی چیز کی قیمت خرید 1,000 اور فروخت 1,200 ہو تو دوسرے کاروباری اخراجات سے پہلے فرق 200 ہے۔ یہ اسی کیلکولیٹر کا بنیادی تقابل ہے۔ ماخذ: <a class="' + LINK + '" href="/methodology/">CalculatesAll کا حسابی طریقۂ کار</a>۔'
+        "ur": ''
     },
     "discount-calculator": {
         "en": 'A 20% discount on a price of 1,000 saves 200 and leaves a final price of 800 before tax or extra charges. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',

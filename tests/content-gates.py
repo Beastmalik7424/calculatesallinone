@@ -108,6 +108,27 @@ def main():
         ]:
             if phrase not in home_text:
                 failures.append("Homepage is missing the verified answer-first summary: " + phrase)
+    # Regression: the Health hub must describe the same supported pregnancy and
+    # breastfeeding paths as the Adult Calorie Calculator.
+    health_path = ROOT / "health" / "index.html"
+    calorie_path = ROOT / "calorie-calculator" / "index.html"
+    if not health_path.is_file():
+        failures.append("/health/ was not generated for the calorie-scope consistency check")
+    else:
+        health_text = visible_text(health_path)
+        if "The calorie tool is for adults 18 and older and is not intended for pregnancy or breastfeeding." in health_text:
+            failures.append("/health/ incorrectly says the entire calorie tool excludes pregnancy and breastfeeding")
+        if "Separate National Academies DRI 2023 reference estimates are available for pregnancy and breastfeeding for adults aged 19 and older" not in health_text:
+            failures.append("/health/ must explain the separate National Academies DRI 2023 pregnancy and breastfeeding estimates and their 19+ eligibility")
+        if "The original Mifflin–St Jeor study included 498 healthy adults aged 19–78" not in health_text:
+            failures.append("/health/ must distinguish the calculator's 18+ input eligibility from the original equation study's 19–78 sample")
+    if not calorie_path.is_file():
+        failures.append("/calorie-calculator/ was not generated for the Health hub consistency check")
+    else:
+        calorie_text = visible_text(calorie_path)
+        if "separate National Academies 2023 Dietary Reference Intakes for Energy method" not in calorie_text:
+            failures.append("/calorie-calculator/ no longer documents its separate pregnancy and breastfeeding method")
+
     if failures:
         for failure in failures:
             print("FAIL:", failure)

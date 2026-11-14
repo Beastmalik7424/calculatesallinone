@@ -20,7 +20,7 @@ HUB_EXTRA = {
     "health": [
         ("Daily calorie estimates", [
             "Use the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/calorie-calculator/\">Adult Calorie Calculator</a> to estimate maintenance calories from the Mifflin–St Jeor resting-energy equation and an explicitly stated consumer activity assumption. It is an estimate, not a measured metabolic rate or a medical prescription.",
-            "The calorie tool is for adults 18 and older and is not intended for pregnancy or breastfeeding. It estimates maintenance only and does not prescribe a calorie deficit, surplus or weight-change target.",
+            "The standard Mifflin–St Jeor path accepts adults aged 18 and older. The original Mifflin–St Jeor study included 498 healthy adults aged 19–78, so the calculator flags ages outside that study range. Separate National Academies DRI 2023 reference estimates are available for pregnancy and breastfeeding for adults aged 19 and older in the supported life stages described on the calculator page. These are population estimates, not personal prescriptions or clinical assessments. The standard path does not prescribe a calorie deficit, surplus or weight-change target.",
         ]),
         ("How to use the health tool", [
             "The BMI calculator asks for weight and height and gives one screening number for adults. You can enter values in metric or imperial units. Choose the unit first, then enter the numbers.",
