@@ -688,8 +688,8 @@ for url in urls:
                     "Years-to-Days dateModified must match the latest verified content and source update."
                 )
             elif url == SITE + "/unit-converter/":
-                assert item.get("dateModified") == "2026-11-14", (
-                    "Unit Converter dateModified must match the verified formulas, sources and limitations update."
+                assert item.get("dateModified") == "2026-11-15", (
+                    "Unit Converter dateModified must match the latest verified formula and content consolidation update."
                 )
             elif url == SITE + "/tasbih-counter/":
                 assert item.get("dateModified") == "2026-11-15", (
