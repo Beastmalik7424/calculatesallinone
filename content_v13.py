@@ -101,7 +101,7 @@ TERMS_PARAS = [
     "You are responsible for checking results before you rely on them. Where a decision affects money, health, or religious practice, confirm it with a qualified professional.",
     "We try to keep the tools accurate and available, but we cannot guarantee that every result is error free or that the site will always be available. We may change or remove tools and pages at any time.",
     "The content, design and code of this site belong to CalculatesAll unless stated otherwise. You may share a link to any page. Please do not copy large parts of the guides or present our tools as your own.",
-    "Advertising may appear on some pages. Advertisers and their partners follow their own policies. Read the privacy page for how cookies and advertising data are handled.",
+    "Advertising is not currently displayed on this site. If advertising is introduced, it will be clearly identified and kept separate from calculator results, buttons and navigation. Advertisers and their partners follow their own policies. Read the privacy page for how cookies and advertising data are handled if ads are enabled.",
     "We do not accept liability for loss caused by reliance on a result, to the extent the law allows. Nothing in these terms limits any right you have under the law where you live.",
     "We may update these terms from time to time. The current version is published on this page. Check this page again before relying on the terms.",
     "For questions about these terms, contact us using the address on the contact page.",
