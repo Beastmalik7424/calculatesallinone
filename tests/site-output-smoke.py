@@ -676,8 +676,8 @@ for url in urls:
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
             if url == SITE + "/age-calculator/":
-                assert item.get("dateModified") == "2026-11-11", (
-                    "Age page dateModified must match the verified leap-day disclosure update."
+                assert item.get("dateModified") == "2026-11-15", (
+                    "Age page dateModified must match the current verified page-specific content update."
                 )
             elif url.endswith("/ur/bmi-calculator/"):
                 assert item.get("dateModified") == "2026-11-09", (
