@@ -7,7 +7,11 @@ import sys
 from pathlib import Path
 
 ROOT = Path("public")
-TOOLS_WITH_EXAMPLE = ["stopwatch", "query-calculator", "ratio-calculator"]
+REQUIRED_GUIDE_HEADINGS = {
+    "query-calculator": ("Worked examples", "Method", "Limits", "Unsupported question patterns"),
+    "ratio-calculator": ("Worked example", "Method", "Limits"),
+    "stopwatch": ("Worked example", "Method", "Accuracy and limits"),
+}
 AFFILIATE_PHRASE = "Advertising is not enabled on the site at present"
 ERRORS = []
 
@@ -55,8 +59,8 @@ check("Advertising is not currently displayed" in terms_text,
 check("Advertising may appear on some pages" not in terms_text,
       "/terms/ must not use ambiguous present/future advertising language.")
 
-for slug in TOOLS_WITH_EXAMPLE:
-    for name in ("Worked example", "Method", "Limits"):
+for slug, names in REQUIRED_GUIDE_HEADINGS.items():
+    for name in names:
         check(has_heading(slug, name), f"/{slug}/ has no heading exactly '{name}'")
 
 check(has_heading("tasbih-counter", "Worked example: target and remaining count"),
