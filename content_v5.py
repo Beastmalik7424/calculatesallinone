@@ -124,15 +124,11 @@ GUIDE_EXTRA = {
         ]),
     ],
     "stopwatch": [
-        ("Starting and stopping", [
-            "Press Start when the activity begins and Stop when it ends. Press Reset to clear the display before the next timing.",
-            "The display shows hours, minutes, seconds and hundredths of a second, so short intervals are readable.",
-        ]),
         ("Accuracy and limits", [
-            "The stopwatch uses the browser clock and reads time with high resolution. Your device, browser load and background activity can add small delays to the displayed value.",
+            "The stopwatch uses the browser's monotonic performance clock to calculate elapsed time. A background tab can delay the visible refresh, but the next update recalculates from the current timestamp rather than counting missed refreshes. Hundredths of a second are display precision, not a certified accuracy guarantee.",
+            "Use certified equipment for official sports, laboratory or legal measurements. This page does not store a history of completed timings, so record any result you need before resetting or reloading the page.",
         ]),
-    ],
-}
+    ],}
 
 GUIDE_EXTRA["unit-converter"].append(
     ("Check a conversion without trusting a rounded display", [
@@ -169,6 +165,7 @@ GUIDE_EXTRA["query-calculator"] = [
         "Question: 2 weeks in hours. Step 1: 2 x 7 = 14 days. Step 2: 14 x 24 = 336 hours. Result: 336 hours.",
         "Question: 3 days to minutes. Step 1: 3 x 24 = 72 hours. Step 2: 72 x 60 = 4,320 minutes. Result: 4,320 minutes.",
         "The same chain works in reverse. For a question such as 336 hours to days, each step divides by the same factor instead of multiplying: 336 / 24 = 14 days, and 14 / 7 = 2 weeks.",
+        "Four hours in minutes is 4 × 60 = 240 minutes. To check it, divide 240 by 60 and confirm that the result is 4 hours.",
     ]),
     ("Checking an answer by hand", [
         "Divide the answer by each factor used in the question, in reverse order. For 4,320 minutes, dividing by 60 gives 72 hours, and dividing by 24 gives 3 days. This check confirms the unit chain and the arithmetic, using the same fixed factors the calculator uses.",
@@ -176,9 +173,9 @@ GUIDE_EXTRA["query-calculator"] = [
     ]),
 ]
 GUIDE_EXTRA["stopwatch"].append(
-    ("Worked examples", [
-        "A lap time of 83 seconds equals 1 minute and 23 seconds. Step 1: 1 x 60 = 60 seconds. Step 2: 60 + 23 = 83 seconds.",
-        "A total of 3,725 seconds equals 1 hour, 2 minutes and 5 seconds. Step 1: 1 x 3,600 = 3,600 seconds. Step 2: 3,725 - 3,600 = 125 seconds. Step 3: 2 x 60 = 120 seconds, leaving 125 - 120 = 5 seconds.",
+    ("Worked example", [
+        "A lap time of 83 seconds equals 1 minute and 23 seconds: 1 × 60 = 60 seconds, then 60 + 23 = 83 seconds.",
+        "A total of 3,725 seconds equals 1 hour, 2 minutes and 5 seconds: 3,725 − 3,600 = 125 seconds, then 125 − 120 = 5 seconds after 2 minutes.",
     ])
 )
 
@@ -249,27 +246,18 @@ TRUST_EXTRA = {
 
 # Required page sections for the site-side AdSense content checks.
 # Keep these explanations tied to each tool's actual behaviour and stated assumptions.
-GUIDE_EXTRA["stopwatch"].extend([
-    ("Worked example", [
-        "If a timing starts at 0 seconds and stops at 83 seconds, the elapsed interval is 83 seconds, or 1 minute and 23 seconds. For a longer interval of 3,725 seconds, divide by 3,600 to get 1 hour with 125 seconds remaining, then divide 125 by 60 to get 2 minutes with 5 seconds remaining.",
-    ]),
+GUIDE_EXTRA["stopwatch"].append(
     ("Method", [
         "Elapsed time is the difference between the recorded stop point and start point. A lap is a checkpoint within the same timing session, while Reset clears the current session so a new interval can be measured.",
-    ]),
-    ("Limits", [
-        "A browser stopwatch is suitable for everyday timing, workouts and study sessions, not certified sports, laboratory or legal measurement. Device scheduling, background tabs and browser load can delay display updates, so do not rely on hundredths of a second as a certified accuracy guarantee.",
-    ]),
-])
+    ])
+)
 
 
 GUIDE_EXTRA["query-calculator"].extend([
-    ("Worked example", [
-        "Question: 4 hours in minutes. One hour contains 60 minutes, so 4 x 60 = 240 minutes. To check the answer, divide 240 by 60 and confirm that the result is 4 hours.",
-    ]),
     ("Method", [
         "For a supported unit conversion, identify the starting unit, apply the conversion factor for that unit pair, and label the result with the target unit. Reverse conversions use the inverse factor. Calendar questions are handled as dates rather than treating every month as an identical number of days.",
     ]),
-    ("Limits", [
+    ("Unsupported question patterns", [
         "The query tool supports defined question patterns rather than every possible natural-language request. Ambiguous wording, unsupported units or missing date details can prevent a reliable answer. For exact days between calendar dates, provide the relevant start and end dates instead of assuming a month has a fixed length.",
     ]),
 ])
