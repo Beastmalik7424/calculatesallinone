@@ -310,7 +310,7 @@ for url in urls:
             "Age calculator description must be useful and page-specific."
         )
     if url == SITE + "/unit-converter/":
-        assert title_match.group(1) == "Unit Converter: cm to Inches, kg to lbs | CalculatesAll", (
+        assert title_match.group(1) == "Unit Converter | Weight, Length &amp; Temperature", (
             "Unit converter title must describe its supported conversion categories."
         )
         assert desc_match.group(1) == "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result.", (
