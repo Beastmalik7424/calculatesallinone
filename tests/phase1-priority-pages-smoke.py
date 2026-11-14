@@ -90,7 +90,10 @@ def check_english_page(slug, spec):
     form_pos = body.find(spec["form"])
     lead_match = re.search(r'<p class="[^"]*\bca-tool-lead\b[^"]*">', body)
     assert h1_pos >= 0 and lead_match, f"Missing first-screen heading/value proposition: {slug}"
-    assert h1_pos < lead_match.start() < form_pos, f"Lead must appear between H1 and calculator: {slug}"
+    if slug == "unit-converter":
+        assert h1_pos < form_pos < lead_match.start(), f"Existing calculator-first layout must remain unchanged: {slug}"
+    else:
+        assert h1_pos < lead_match.start() < form_pos, f"Lead must appear between H1 and calculator: {slug}"
 
     assert "Related calculators" in body, f"Missing related tools section: {slug}"
     for target in spec["related"]:
