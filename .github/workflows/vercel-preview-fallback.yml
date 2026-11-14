@@ -37,11 +37,15 @@ jobs:
         run: test "$(git rev-parse HEAD)" = "$TARGET_SHA"
       - uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '24'
           cache: npm
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
+      - name: Test Node and Python runtime contract
+        run: python3 tests/runtime-contract-smoke.py
+      - name: Test workflow least-privilege permissions
+        run: python3 tests/workflow-security-contract.py
       - name: Build and regression checks
         run: |
           npm ci

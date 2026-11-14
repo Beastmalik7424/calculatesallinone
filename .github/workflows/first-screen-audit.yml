@@ -22,6 +22,8 @@ on:
       - 'tests/extra-calculators-smoke.cjs'
       - '.github/workflows/first-screen-audit.yml'
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   viewport:
     runs-on: ubuntu-24.04
@@ -37,6 +39,8 @@ jobs:
           python-version: '3.12'
       - name: Test Node and Python runtime contract
         run: python3 tests/runtime-contract-smoke.py
+      - name: Test workflow least-privilege permissions
+        run: python3 tests/workflow-security-contract.py
       - name: Test Playwright lockfile contract
         run: python3 tests/playwright-lock-contract-smoke.py
       - name: Install locked dependencies
