@@ -114,9 +114,9 @@ def main():
         failures.append("/contact/ was not generated")
     else:
         contact_html = contact_path.read_text(encoding="utf-8")
-        if "<title>Contact CalculatesAll</title>" not in contact_html:
+        if "<title>Contact CalculatesAll | Help and Feedback</title>" not in contact_html:
             failures.append("/contact/ has an unexpected or missing title")
-        if "Contact CalculatesAll to report a calculator issue" not in contact_html:
+        if "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem." not in contact_html:
             failures.append("/contact/ has an unexpected or missing meta description")
         if "We read every message" in contact_html or "publish confirmed corrections on the tool page" in contact_html:
             failures.append("/contact/ contains an unverified response or correction promise")
