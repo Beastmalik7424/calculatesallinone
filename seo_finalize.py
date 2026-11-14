@@ -227,7 +227,7 @@ def normalize_meta(raw, path, lang):
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
-        desc = "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result."
+        desc = "Convert kilograms, grams, pounds, ounces, metric and imperial lengths, and Celsius, Fahrenheit or Kelvin. See formulas, examples and input limits."
     # This exact-intent date title is 63 characters and has a dedicated regression gate.
     if path != "/date-calculator/" and len(title) > 59:
         title = re.sub(r" \| Free Online Tool \| CalculatesAll$", " | CalculatesAll", title)
