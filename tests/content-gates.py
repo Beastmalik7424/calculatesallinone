@@ -114,7 +114,11 @@ def main():
         failures.append("/contact/ was not generated")
     else:
         contact_html = contact_path.read_text(encoding="utf-8")
-        contact_text = visible_text(contact_path)
+        main_match = re.search(r"<main\b[^>]*>(.*?)</main>", contact_html, re.S | re.I)
+        contact_main = main_match.group(1) if main_match else ""
+        contact_main = re.sub(r"(?is)<(script|style|nav)\b.*?</\1>", " ", contact_main)
+        contact_main = re.sub(r"<[^>]+>", " ", contact_main)
+        contact_text = re.sub(r"\s+", " ", html.unescape(contact_main)).strip()
         for phrase in [
             "Contact CalculatesAll by email",
             "calculator corrections",
@@ -152,14 +156,14 @@ def main():
             failures.append("/contact/ must contain exactly one FAQPage node")
         elif len(faq_nodes[0].get("mainEntity", [])) != 3:
             failures.append("/contact/ FAQPage must match exactly three visible questions")
-        if contact_html.count("<details") != 3:
+        if contact_main.count("<details") != 3:
             failures.append("/contact/ must display exactly three FAQ details")
         allowed_urls = {
             line.strip().rstrip("/") + "/"
             for line in Path("urls.txt").read_text(encoding="utf-8").splitlines()
             if line.strip().startswith("https://calculateallinone.vercel.app/")
         }
-        internal_links = re.findall(r'href="(/[^"#?]*)', contact_html)
+        internal_links = re.findall(r'href="(/[^"#?]*)', contact_main)
         for link in internal_links:
             canonical_link = "https://calculateallinone.vercel.app" + link
             if not (canonical_link.rstrip("/") + "/") in allowed_urls:
