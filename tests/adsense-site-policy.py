@@ -65,6 +65,35 @@ for p in ROOT.rglob("index.html"):
         check(re.fullmatch(r"\d{4}-\d{2}-\d{2}", m.group(1)) is not None,
               f"{p}: 'Last updated' is not YYYY-MM-DD")
 
+# Regression gates for the two pages where the live preview exposed repeated
+# explanations. These checks target duplicate sections, not arbitrary word counts.
+discount_html = (ROOT / "discount-calculator" / "index.html").read_text(encoding="utf-8")
+for repeated_heading in (
+    "Single discount worked example",
+    "Stacked discounts",
+    "Successive discounts worked example",
+):
+    check(not has_heading("discount-calculator", repeated_heading),
+          f"/discount-calculator/ repeats the concept in '{repeated_heading}'")
+
+check(discount_html.count("Amount saved equals original price multiplied by the discount percentage, divided by 100.") == 1,
+      "/discount-calculator/ repeats its primary savings formula")
+check(discount_html.count("Final price equals original price minus the amount saved.") == 1,
+      "/discount-calculator/ repeats its final-price formula")
+
+profit_html = (ROOT / "profit-loss-calculator" / "index.html").read_text(encoding="utf-8")
+for repeated_heading in (
+    "Profit and loss in a business",
+    "Example with a loss",
+    "More common mistakes",
+    "Profit loss calculator: cost versus selling price",
+    "Profit margin versus markup: practical comparison",
+):
+    check(not has_heading("profit-loss-calculator", repeated_heading),
+          f"/profit-loss-calculator/ repeats material already explained in '{repeated_heading}'")
+check(has_heading("profit-loss-calculator", "Pakistan shop example: include direct selling costs"),
+      "/profit-loss-calculator/ must retain its distinctive local-cost example")
+
 for e in ERRORS:
     print("FAIL:", e)
 print(f"{len(ERRORS)} failing checks")
