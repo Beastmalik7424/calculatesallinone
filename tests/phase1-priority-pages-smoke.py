@@ -41,6 +41,15 @@ CASES = {
         "faq_min": 5,
         "h1": "Years to Days Calculator",
     },
+    "unit-converter": {
+        "title": "Unit Converter | Weight, Length & Temperature",
+        "description": "Convert kilograms, grams, pounds, ounces, metric and imperial lengths, and Celsius, Fahrenheit or Kelvin. See formulas, examples and input limits.",
+        "form": 'id="conv-form"',
+        "category": "/math/",
+        "related": ["/bmi-calculator/", "/calorie-calculator/"],
+        "faq_min": 5,
+        "h1": "Unit Converter for Weight, Length and Temperature",
+    },
 }
 
 def read_page(slug):
@@ -121,11 +130,55 @@ def check_urdu_bmi():
     }, "Urdu BMI hreflang alternates changed"
     jsonld_documents(source, slug)
 
+def visible_text(slug):
+    source = read_page(slug)
+    main = re.search(r"<main\b[^>]*>(.*?)</main>", source, re.S | re.I)
+    assert main, f"Missing main content: /{slug}/"
+    body = re.sub(r"(?is)<(script|style|nav)\b.*?</\1>", " ", main.group(1))
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body))).strip()
+
+def check_targeted_content():
+    required = {
+        "years-to-days-calculator": [
+            "Quick answers to common years-to-days questions",
+            "5 years = 1,826.2125 days using the Gregorian average",
+            "30 years = 10,957.275 days using the Gregorian average",
+            "70,000 days ÷ 365.2425 = 191.6535 years",
+            "Exact calendar days depend on the start date",
+        ],
+        "unit-converter": [
+            "Supported unit categories and choices",
+            "Weight: kilograms (kg), grams (g), pounds (lb) and ounces (oz)",
+            "Length: metres (m), centimetres (cm), kilometres (km), feet (ft), inches (in) and miles (mi)",
+            "Temperature: Celsius (°C), Fahrenheit (°F) and Kelvin (K)",
+            "Result = value × source-unit factor ÷ target-unit factor",
+            "Temperature uses offset formulas rather than a single multiplier",
+            "1 kg = 2.20462 lb",
+            "100°F = 37.78°C",
+            "Negative weight and length inputs are rejected",
+            "Absolute zero is -273.15°C",
+        ],
+        "tasbih-counter": [
+            "Keyboard, storage and reset behaviour",
+            "manual taps or key presses",
+            "same browser and device",
+            "does not sync across devices",
+            "Reset requires confirmation",
+            "Can I count with a keyboard?",
+            "What happens if browser storage is unavailable?",
+        ],
+    }
+    for slug, phrases in required.items():
+        content = visible_text(slug)
+        for phrase in phrases:
+            assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
+
 def main():
     for slug, spec in CASES.items():
         check_english_page(slug, spec)
     check_urdu_bmi()
-    print("PASS: four Phase 1 pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD and preserved canonicals/language signals")
+    check_targeted_content()
+    print("PASS: priority pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD, preserved canonicals, and research-backed content")
     return 0
 
 if __name__ == "__main__":
