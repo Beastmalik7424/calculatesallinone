@@ -24,6 +24,8 @@ def validate_runtime_config(config):
         "ci_python": EXPECTED_PYTHON,
         "site_build_python": EXPECTED_PYTHON,
         "first_screen_python": EXPECTED_PYTHON,
+        "preview_fallback_node": EXPECTED_WORKFLOW_NODE,
+        "preview_fallback_python": EXPECTED_PYTHON,
     }
     return all(config.get(key) == value for key, value in expected.items())
 
@@ -56,6 +58,7 @@ def repository_runtime_config(root=ROOT):
     ci = (root / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     site_build = (root / ".github/workflows/site-build.yml").read_text(encoding="utf-8")
     first_screen = (root / ".github/workflows/first-screen-audit.yml").read_text(encoding="utf-8")
+    preview_fallback = (root / ".github/workflows/vercel-preview-fallback.yml").read_text(encoding="utf-8")
     return {
         "nvmrc": nvmrc,
         "package_engine": package.get("engines", {}).get("node"),
@@ -66,6 +69,8 @@ def repository_runtime_config(root=ROOT):
         "ci_python": workflow_python_version(ci),
         "site_build_python": workflow_python_version(site_build),
         "first_screen_python": workflow_python_version(first_screen),
+        "preview_fallback_node": workflow_node_version(preview_fallback),
+        "preview_fallback_python": workflow_python_version(preview_fallback),
     }
 
 
@@ -81,6 +86,8 @@ class RuntimeContractUnitTests(unittest.TestCase):
             "ci_python": "3.12",
             "site_build_python": "3.12",
             "first_screen_python": "3.12",
+            "preview_fallback_node": "24",
+            "preview_fallback_python": "3.12",
         }
 
     def test_accepts_a_fully_aligned_node_24_python_312_configuration(self):
@@ -130,12 +137,12 @@ class RuntimeContractUnitTests(unittest.TestCase):
 
 
 class RepositoryRuntimeIntegrationTests(unittest.TestCase):
-    def test_local_package_lock_and_all_ci_workflows_target_node_24_and_python_312(self):
+    def test_local_package_lock_and_all_runtime_workflows_target_node_24_and_python_312(self):
         config = repository_runtime_config()
         self.assertTrue(
             validate_runtime_config(config),
             "runtime mismatch. Expected .nvmrc=24, package.json/package-lock engines.node=24.x, "
-            "all CI Node versions=24 and Python versions=3.12. Actual: "
+            "all CI and preview-fallback Node versions=24 and Python versions=3.12. Actual: "
             + json.dumps(config, sort_keys=True),
         )
 

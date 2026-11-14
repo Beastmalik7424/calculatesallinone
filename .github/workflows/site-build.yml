@@ -26,6 +26,8 @@ jobs:
           cache: npm
       - name: Test Node runtime contract
         run: python3 tests/runtime-contract-smoke.py
+      - name: Test workflow least-privilege permissions
+        run: python3 tests/workflow-security-contract.py
       - name: Test Playwright lockfile contract
         run: python3 tests/playwright-lock-contract-smoke.py
       - name: Install locked dependencies
