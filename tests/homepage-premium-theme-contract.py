@@ -120,6 +120,14 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
             source,
             "The regex must not be double-escaped",
         )
+        evaluate_start = source.index("const initial = await page.evaluate(() => {")
+        evaluate_end = source.index("});", evaluate_start)
+        evaluate_source = source[evaluate_start:evaluate_end]
+        self.assertIn(
+            "const zoomRestrictionPattern = ",
+            evaluate_source,
+            "The zoom restriction regex must be defined in the browser evaluation scope",
+        )
         pattern = re.compile(r"user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?:\D|$)", re.I)
         self.assertIsNotNone(pattern.search("width=device-width, user-scalable=no"))
         self.assertIsNotNone(pattern.search("width=device-width, maximum-scale=1"))
