@@ -287,8 +287,8 @@ const {chromium}=require("playwright");
    await page.close();
   }
 
-  for(const width of [390,1366]){
-   const viewport={width,height:width===390?844:768};
+  for(const width of [320,390,1366]){
+   const viewport={width,height:width===390?844:width===320?568:768};
    const page=await browser.newPage({viewport});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
    page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
@@ -306,7 +306,7 @@ const {chromium}=require("playwright");
    if(!(order.count.top<order.settings.top&&order.settings.top<order.tap.top&&order.tap.top<order.actions.top))throw Error("Tasbih count, phrase/target settings, tap and reset must follow the intended first-screen order at "+width+"px: "+JSON.stringify(order));
    if(order.tap.bottom<=order.tap.top||order.tapDisplay==="none"||order.tapVisibility!=="visible"||Number(order.tapOpacity)===0||order.tapPointerEvents==="none")throw Error("Tasbih Count one button is not visibly clickable: "+JSON.stringify(order));
    if(order.carouselLinks<8||order.activeHref!=="/tasbih-counter/")throw Error("Tasbih page carousel is incomplete or current tool is not active: "+JSON.stringify(order));
-   if(order.settings.bottom>(width===390?844:768)||order.phrase.bottom>(width===390?844:768)||order.target.bottom>(width===390?844:768)||order.count.bottom>(width===390?844:768)||order.undo.bottom>(width===390?844:768)||order.reset.bottom>(width===390?844:768)||order.overflow)throw Error("Tasbih count, phrase/target and primary actions must fit the first viewport at "+width+"px: "+JSON.stringify(order));
+   if(order.settings.bottom>viewport.height||order.phrase.bottom>viewport.height||order.target.bottom>viewport.height||order.count.bottom>viewport.height||order.undo.bottom>viewport.height||order.reset.bottom>viewport.height||order.overflow)throw Error("Tasbih count, phrase/target and primary actions must fit the first viewport at "+width+"px: "+JSON.stringify(order));
    for(let i=0;i<33;i++)await page.locator("#t-tap").click();
    if((await page.locator("#t-count").innerText()).trim()!=="33")throw Error("Tasbih tap count should reach 33");
    await page.locator("#t-undo").click();
