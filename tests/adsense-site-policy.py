@@ -44,12 +44,16 @@ check("No Google AdSense ad units are currently displayed" in privacy_text,
       "/privacy/ must distinguish the current no-ad state from future advertising.")
 check("does not currently load the AdSense ad-serving script" in privacy_text,
       "/privacy/ must accurately describe the current inactive ad-code state.")
+check("CalculatesAll may show advertising served by Google AdSense" not in privacy_text,
+      "/privacy/ must not imply that AdSense is currently active.")
 check("No AdSense ad units are currently displayed" in affiliate_text,
       "/affiliate-disclosure/ must accurately state that no ad units are active.")
 check("does not currently load the AdSense ad-serving script" in affiliate_text,
       "/affiliate-disclosure/ must distinguish publisher verification from active ad serving.")
 check("Advertising is not currently displayed" in terms_text,
       "/terms/ must not imply that advertising is already being displayed.")
+check("Advertising may appear on some pages" not in terms_text,
+      "/terms/ must not use ambiguous present/future advertising language.")
 
 for slug in TOOLS_WITH_EXAMPLE:
     for name in ("Worked example", "Method", "Limits"):
