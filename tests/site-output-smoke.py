@@ -1120,6 +1120,8 @@ for _english in ("> Business P&amp;L</label>", "> Product profit</label>", ">Cal
 _ur_tasbih = output_for_url(SITE + "/ur/tasbih-counter/").read_text(encoding="utf-8")
 assert "Saving is unavailable in this browser" not in _ur_tasbih, "Urdu tasbih storage note must be localized"
 assert "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے" in _ur_tasbih, "Urdu tasbih storage note missing"
+assert "موجودہ گنتی، منتخب عبارت اور ہدف" in _ur_tasbih, "Urdu Tasbih page must explain that count, phrase and target are saved"
+assert "دوسرے براؤزر یا آلے سے ہم آہنگ نہیں ہوتیں" in _ur_tasbih, "Urdu Tasbih page must explain that settings do not sync"
 for _ur_page in ("/ur/", "/ur/standard-calculator/"):
     _ur_html = output_for_url(SITE + _ur_page).read_text(encoding="utf-8")
     assert ">Scientific Mode</button>" not in _ur_html, _ur_page + " Scientific Mode toggle must be localized"
