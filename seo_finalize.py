@@ -329,8 +329,14 @@ def main():
         raw, title, desc = normalize_meta(raw, path, lang)
         titles[path] = title
         descriptions[path] = desc
-        # Remove legacy blanket review/update stamps. Never claim a page was reviewed unless that review occurred.
-        raw = re.sub(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', "", raw, count=1, flags=re.S)
+        # Keep only an exact, verified page-specific update date. Never claim a review that did not occur.
+        update_stamp = re.compile(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', re.S)
+        verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
+        def retain_verified_update(match):
+            stamp = match.group(0)
+            expected_prefix = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + verified_date + '.'
+            return stamp if verified_date and stamp.startswith(expected_prefix) else ""
+        raw = update_stamp.sub(retain_verified_update, raw, count=1)
         schemas = []
         jsonld_script_pattern = r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>"""
         for match in re.finditer(jsonld_script_pattern, raw, re.S | re.I):
