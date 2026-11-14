@@ -406,10 +406,29 @@ TOOLS = [
                 "Mixing pounds and kilograms. 1 kilogram is about 2.2046 pounds, not 2.",
                 "Entering a negative weight or length. Physical weight and length cannot be negative.",
             ]),
+            ("Supported unit categories and choices", [
+                "Weight: kilograms (kg), grams (g), pounds (lb) and ounces (oz). The pound and ounce options use avoirdupois mass units. Length: metres (m), centimetres (cm), kilometres (km), feet (ft), inches (in) and miles (mi). Temperature: Celsius (°C), Fahrenheit (°F) and Kelvin (K). These are the three categories currently supported by this converter.",
+                "This tool does not currently convert area, volume, speed, time, pressure or digital data. Choose a converter that explicitly supports the quantity you need rather than treating unlike quantities as interchangeable."
+            ]),
+            ("The conversion formula and worked examples", [
+                "Weight and length use a shared base unit. First convert the input to kilograms or metres, then convert from that base unit to the target unit. Result = value × source-unit factor ÷ target-unit factor. This keeps each conversion on one consistent path.",
+                "For example, 1 kg = 2.20462 lb when rounded to six significant figures, and 1 mile = 1.609344 km. The international avoirdupois pound is exactly 0.45359237 kg. NIST Handbook 44 (2026), Appendix C, lists the exact pound-to-kilogram relationship.",
+                "Temperature uses offset formulas rather than a single multiplier because Celsius, Fahrenheit and Kelvin have different zero points. °F = °C × 9/5 + 32; °C = (°F − 32) × 5/9; K = °C + 273.15. For example, 100°F = 37.78°C when rounded to two decimal places. NIST publishes these temperature conversion equations."
+            ]),
+            ("Precision, input limits and common mistakes", [
+                "Weight and length results are displayed to six significant figures. Temperature results are displayed to two decimal places. A rounded display may not show every digit of an exact conversion factor, so do not interpret the number of displayed digits as a statement about measurement accuracy.",
+                "Negative weight and length inputs are rejected. Celsius and Fahrenheit values may be negative, but no temperature can be below absolute zero. Absolute zero is -273.15°C (0 K). A value below that limit is rejected.",
+                "Check that both selected units measure the same kind of quantity and that you selected the intended temperature scale. This tool converts mass, length and temperature only; it does not calculate density, area or volume."
+            ]),
         ],
         "faq": [
             ("Why is a negative weight rejected?", "A physical weight or length cannot be negative. Temperature in Celsius and Fahrenheit can be negative."),
             ("Why is Kelvin rejected below zero?", "Zero Kelvin is absolute zero. No temperature can be lower."),
+            ("Which units does the converter support?", "It supports kg, g, lb and oz for weight; m, cm, km, ft, in and mi for length; and °C, °F and K for temperature."),
+            ("Why does temperature need a formula instead of a multiplier?", "Celsius, Fahrenheit and Kelvin have different zero points. Temperature conversions therefore need an offset as well as a scale factor, such as °F = °C × 9/5 + 32."),
+            ("Is one pound exactly 0.45359237 kilograms?", "Yes. The international avoirdupois pound is exactly 0.45359237 kg. See NIST Handbook 44 (2026), Appendix C."),
+            ("How many decimal places does the converter show?", "Weight and length results are shown to six significant figures. Temperature results are shown to two decimal places. The displayed result may therefore be rounded."),
+            ("Can I convert area, volume or speed here?", "No. This converter currently supports weight, length and temperature only.")
         ],
         "sources": "Conversion factors follow standard SI and imperial definitions, for example 1 pound equals 0.45359237 kilograms exactly.",
     },
@@ -523,10 +542,19 @@ TOOLS = [
                 "The counter uses local browser storage on your device. It does not need an account and does not send the count to a server. Browser privacy settings, private browsing, clearing site data, or switching devices can make saved values unavailable. If storage is blocked, the counter continues in memory and displays a note, but values may be lost when you reload or leave the page.",
                 "A target is only a personal tracking setting in this tool. The page does not claim that a specific number is required or that using a digital counter has a particular religious reward. It does not replace prayer beads, finger counting, personal judgement, or guidance from a qualified scholar.",
             ]),
+            ("Keyboard, storage and reset behaviour", [
+                "Use Space or Enter to add one count when focus is not inside a form field or another control. The counter records manual taps or key presses; it cannot verify spoken recitation or count automatically.",
+                "Your current count and selected phrase are saved in local browser storage when available. This storage belongs to the same browser and device and does not sync across devices or browsers. Clearing site data, using private browsing, or blocking storage can remove saved progress.",
+                "Reset requires confirmation before the current count is cleared. If browser storage is unavailable, the counter can continue in memory for the current page visit, but the value may be lost after reload or when you leave."
+            ])
         ],
         "faq": [
             ("Is the count saved on a server?", "No. It is saved only in this browser."),
             ("What happens when I reach the target?", "The counter shows that the target is reached. Press Reset to start again."),
+            ("Can I count with a keyboard?", "Yes. Press Space or Enter when focus is not inside another control or text field."),
+            ("Will my count sync to another device?", "No. The count is stored in the current browser on the current device. It is not synced to another browser or device."),
+            ("What happens if browser storage is unavailable?", "The counter can continue in memory for the current visit, but the saved count may be lost when you reload or leave the page."),
+            ("Does the counter reset automatically when the target is reached?", "No. It displays a target-reached message. Press Reset and confirm if you want to clear the current count.")
         ],
         "sources": "Tasbih counts are recorded on the device only.",
     },
@@ -970,12 +998,22 @@ TOOLS.extend([
             '<button id="yd-submit" class="@B@" type="submit">Convert Years</button></form>'
             '<div id="yd-result" class="@R@" role="status" aria-live="polite"></div>'
         ),
-        "guide": [],
+        "guide": [
+            ("Quick answers to common years-to-days questions", [
+                "Using the 365.2425-day Gregorian mean, 5 years = 1,826.2125 days using the Gregorian average. The 365-day method gives 1,825 days, while the 365.25-day Julian average gives 1,826.25 days.",
+                "Using the 365.2425-day Gregorian mean, 30 years = 10,957.275 days using the Gregorian average. The 365-day method gives 10,950 days, while the 365.25-day Julian average gives 10,957.5 days.",
+                "For the reverse question, 70,000 days ÷ 365.2425 = 191.6535 years using the Gregorian mean. This is a decimal-year estimate, not an exact calendar age.",
+                "Exact calendar days depend on the start date because the actual Gregorian interval may include leap days. Enter the start date and a whole number of years in Exact calendar years when you need the elapsed day count for a specific anniversary."
+            ])
+        ],
         "faq": [
             ("Which year-length methods can I use?", "Choose 365 days, the 365.25-day Julian year or the 365.2425-day Gregorian average. These are fixed-duration conversions; the exact calendar option counts actual days from a start date."),
             ("Does exact calendar mode include leap days?", "Yes. It counts actual Gregorian calendar days up to, but not including, the ending anniversary. A 29 February start uses 1 March when the ending year is not a leap year."),
             ("Can I convert days to years?", "Yes. Select Days to years and choose one of the three fixed year lengths. The result is a decimal-year estimate with an approximate years, months and days breakdown."),
-            ("Can exact calendar mode use decimal years?", "No. Exact calendar mode accepts whole years and a valid Gregorian start date. The fixed 365, 365.25 and 365.2425 methods accept decimal values.")
+            ("Can exact calendar mode use decimal years?", "No. Exact calendar mode accepts whole years and a valid Gregorian start date. The fixed 365, 365.25 and 365.2425 methods accept decimal values."),
+            ("How many days are in 5 years?", "Using the Gregorian mean, 5 × 365.2425 = 1,826.2125 days. A simple 365-day estimate is 1,825 days. The exact calendar total depends on the dates and leap days in the interval."),
+            ("How many days are in 30 years?", "Using the Gregorian mean, 30 × 365.2425 = 10,957.275 days. A simple 365-day estimate is 10,950 days. Use a start date for the exact calendar total."),
+            ("How many years are 70,000 days?", "70,000 ÷ 365.2425 = about 191.6535 Gregorian mean years. This is an average-duration conversion, not a date-specific calendar age.")
         ],
         "sources": 'Julian year: exactly 365.25 days (<a class="' + LINK + '" href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noopener noreferrer">NASA/JPL astrodynamic parameters</a>). Gregorian mean year: 365.2425 days over the 400-year cycle (<a class="' + LINK + '" href="https://aa.usno.navy.mil/faq/leap_years" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory leap-year guidance</a>).'
     },
@@ -1646,7 +1684,7 @@ ANSWER_BLOCKS = {
         "ur": 'لیپ سال میں 366 دن ہوتے ہیں، اس لیے عمر کو صرف کل دنوں کو 365 پر تقسیم کر کے نکالنا درست نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.timeanddate.com/date/leapyear.html" target="_blank" rel="noopener noreferrer">لیپ سال کی وضاحت</a>۔'
     },
     "unit-converter": {
-        "en": 'One international avoirdupois pound equals exactly 0.45359237 kilograms. Source: <a class="' + LINK + '" href="https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9" target="_blank" rel="noopener noreferrer">NIST conversion factors</a>.',
+        "en": 'One international avoirdupois pound equals exactly 0.45359237 kilograms. Source: <a class="' + LINK + '" href="https://nvlpubs.nist.gov/nistpubs/hb/2026/NIST.HB.44-2026.pdf" target="_blank" rel="noopener noreferrer">NIST Handbook 44 (2026), Appendix C</a>.',
         "ur": 'ایک بین الاقوامی پاؤنڈ بالکل 0.45359237 کلوگرام کے برابر ہے۔ ماخذ: <a class="' + LINK + '" href="https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9" target="_blank" rel="noopener noreferrer">NIST کی اکائیوں کی تبدیلی کی جدول</a>۔'
     },
     "standard-calculator": {
@@ -1718,6 +1756,13 @@ def tool_page(t):
     elif t["slug"] == "profit-loss-calculator":
         title = "Profit and Loss Calculator | Markup and Margin"
         desc = "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
+    elif t["slug"] == "unit-converter":
+        title = "Unit Converter | Weight, Length & Temperature"
+        desc = "Convert kilograms, grams, pounds, ounces, metric and imperial lengths, and Celsius, Fahrenheit or Kelvin. See formulas, examples and input limits."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
@@ -1797,6 +1842,7 @@ def tool_page(t):
         "age-calculator": [("date-calculator", "Date Difference Calculator"), ("years-to-days-calculator", "Years to Days Calculator")],
         "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator"), ("query-calculator", "Query Calculator"), ("unit-converter", "Unit Converter")],
         "query-calculator": [("years-to-days-calculator", "Years to Days Calculator"), ("age-calculator", "Age Calculator")],
+        "unit-converter": [("bmi-calculator", "Adult BMI Calculator"), ("calorie-calculator", "Calorie Calculator")],
     }
     related_items = related_map.get(t["slug"], [])
     related = "".join(
