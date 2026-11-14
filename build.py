@@ -1011,9 +1011,6 @@ TOOLS.extend([
             ("Does exact calendar mode include leap days?", "Yes. It counts actual Gregorian calendar days up to, but not including, the ending anniversary. A 29 February start uses 1 March when the ending year is not a leap year."),
             ("Can I convert days to years?", "Yes. Select Days to years and choose one of the three fixed year lengths. The result is a decimal-year estimate with an approximate years, months and days breakdown."),
             ("Can exact calendar mode use decimal years?", "No. Exact calendar mode accepts whole years and a valid Gregorian start date. The fixed 365, 365.25 and 365.2425 methods accept decimal values."),
-            ("How many days are in 5 years?", "Using the Gregorian mean, 5 × 365.2425 = 1,826.2125 days. A simple 365-day estimate is 1,825 days. The exact calendar total depends on the dates and leap days in the interval."),
-            ("How many days are in 30 years?", "Using the Gregorian mean, 30 × 365.2425 = 10,957.275 days. A simple 365-day estimate is 10,950 days. Use a start date for the exact calendar total."),
-            ("How many years are 70,000 days?", "70,000 ÷ 365.2425 = about 191.6535 Gregorian mean years. This is an average-duration conversion, not a date-specific calendar age.")
         ],
         "sources": 'Julian year: exactly 365.25 days (<a class="' + LINK + '" href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noopener noreferrer">NASA/JPL astrodynamic parameters</a>). Gregorian mean year: 365.2425 days over the 400-year cycle (<a class="' + LINK + '" href="https://aa.usno.navy.mil/faq/leap_years" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory leap-year guidance</a>).'
     },
