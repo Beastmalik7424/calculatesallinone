@@ -70,6 +70,10 @@ GUIDE_EXTRA = {
             "A 25% discount followed by a 10% price increase leaves a 100-unit starting price at 82.50: first 100 becomes 75, then 75 increases by 7.50. It is not the same as subtracting 15% from the starting price.",
             "For sequential adjustments, apply each percentage to the amount immediately before that step. Keep intermediate values unrounded when calculating a final payable amount, then follow the applicable currency and merchant rounding rules.",
         ]),
+        ("Calculate a second discount from the reduced price", [
+            "On PKR 4,500, a 20% discount first reduces the price to PKR 3,600. A further 10% applies to PKR 3,600, so it saves PKR 360 and leaves PKR 3,240. The total saving is PKR 1,260, or 28% of the original price, not 30%.",
+            "The second percentage uses the reduced amount as its base. Calculate each step in order instead of adding the two percentages together.",
+        ]),
         ("Find the original price from a discounted price", [
             "When the final price and discount rate are known, original price = final price ÷ (1 − discount rate). The discount rate must be written as a decimal, and the discount must be below 100%.",
             "Example: a final price of PKR 3,600 after a 20% discount represents 80% of the original price. Therefore 3,600 ÷ 0.80 = PKR 4,500. This reverse calculation does not verify whether a seller's advertised original price was genuine.",
