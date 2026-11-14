@@ -76,7 +76,7 @@ def check_english_page(slug, spec):
     title_match = re.search(r"<title>(.*?)</title>", source, re.S | re.I)
     assert title_match and html.unescape(title_match.group(1)) == spec["title"], f"Search title mismatch: {slug}; expected={spec['title']!r}; actual={html.unescape(title_match.group(1)) if title_match else None!r}"
     description = re.search(r'<meta name="description" content="([^"]*)"', source)
-    assert description and description.group(1) == spec["description"], f"Meta description mismatch: {slug}"
+    assert description and description.group(1) == spec["description"], f"Meta description mismatch: {slug}: got {description.group(1) if description else None!r}, expected {spec['description']!r}"
     assert f'<link rel="canonical" href="{SITE}/{slug}/">' in source, f"Canonical changed: {slug}"
     assert '<meta name="robots" content="index, follow">' in source, f"Unexpected robots directive: {slug}"
     assert source.count("<h1") == 1 and spec["h1"] in source, f"Expected one clear H1: {slug}"
