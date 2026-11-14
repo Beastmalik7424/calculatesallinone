@@ -204,7 +204,7 @@ def check_targeted_content():
 
 def check_tasbih_content_structure():
     source = read_page("tasbih-counter")
-    main_match = re.search(r"<main\\b[^>]*>(.*?)</main>", source, re.S | re.I)
+    main_match = re.search(r"<main\b[^>]*>(.*?)</main>", source, re.S | re.I)
     assert main_match, "Tasbih page is missing its main content"
     body = main_match.group(1)
     headings = [html.unescape(value).strip() for value in re.findall(r"<h2[^>]*>(.*?)</h2>", body, re.S | re.I)]
@@ -239,7 +239,7 @@ def check_tasbih_content_structure():
         assert heading not in headings, f"Redundant or misleading Tasbih section remains: {heading}"
     questions = [
         html.unescape(re.sub(r"<[^>]+>", " ", value)).strip()
-        for value in re.findall(r"<summary\\b[^>]*>(.*?)</summary>", body, re.S | re.I)
+        for value in re.findall(r"<summary\b[^>]*>(.*?)</summary>", body, re.S | re.I)
     ]
     assert len(questions) == 6, f"Tasbih page should have six distinct FAQs, got {len(questions)}"
     assert len({question.casefold() for question in questions}) == len(questions), "Tasbih FAQ questions must not be duplicated"
