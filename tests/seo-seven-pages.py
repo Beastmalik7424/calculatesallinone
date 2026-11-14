@@ -102,8 +102,7 @@ for path, raw in pages.items():
             check(any(obj.get("@type") == "FAQPage" for obj in schemas), path + ": missing FAQPage for visible FAQs")
             check(visible_main(raw).count("?") >= 3, path + ": expected at least three visible FAQ questions")
     if path in URDU_INDEXABLE:
-        check(bool(re.search(r'<html\\b[^>]*\\blang=["\\']ur["\\']', raw, re.I)),
-              path + ": Urdu page must declare lang=ur")
+        check('<html lang="ur"' in raw, path + ": Urdu page must declare lang=ur")
         check('hreflang="ur" href="' + SITE + path + '"' in raw,
               path + ": Urdu page must self-reference in hreflang")
         slug = path.rsplit("/", 2)[-2]
