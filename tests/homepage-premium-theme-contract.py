@@ -81,6 +81,48 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
                     foreground + " on " + background + " must meet WCAG AA 4.5:1",
                 )
 
+    def test_browser_dependencies_are_pinned_and_ci_uses_npm_ci(self):
+        package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+        lock = json.loads((ROOT / "package-lock.json").read_text(encoding="utf-8"))
+        expected = {
+            "axe-core": ("4.13.0", "sha512-UzGt8zg7Ny8djbYMhxl2zuEevVa7r2gJjYY5Lwr1xM7+XU2nd6CkIWFTVcCIbAP63vSz71NaVyyuSk9lHKcy0A=="),
+            "playwright": ("1.64.1", "sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA=="),
+            "playwright-core": ("1.64.1", "sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ=="),
+        }
+        manifest = package.get("devDependencies", {})
+        lock_root = lock.get("packages", {}).get("", {}).get("devDependencies", {})
+        for name, (version, integrity) in expected.items():
+            with self.subTest(package=name):
+                self.assertEqual(manifest.get(name), version, name + " must be exact-version pinned in package.json")
+                self.assertEqual(lock_root.get(name), version, name + " must be exact-version pinned in package-lock.json")
+                entry = lock.get("packages", {}).get("node_modules/" + name, {})
+                self.assertEqual(entry.get("version"), version, name + " lock entry must match the exact version")
+                self.assertEqual(entry.get("integrity"), integrity, name + " lock entry must match the verified npm integrity")
+        playwright = lock.get("packages", {}).get("node_modules/playwright", {})
+        self.assertEqual(playwright.get("dependencies", {}).get("playwright-core"), "1.64.1")
+        for workflow_path in (".github/workflows/ci.yml", ".github/workflows/site-build.yml"):
+            workflow = (ROOT / workflow_path).read_text(encoding="utf-8")
+            with self.subTest(workflow=workflow_path):
+                self.assertIn("run: npm ci", workflow, "CI must install the committed lockfile")
+                self.assertNotIn("npm install --no-save --package-lock=false", workflow, "CI must not install untracked browser dependencies")
+
+    def test_zoom_restriction_pattern_rejects_disabling_viewport_directives(self):
+        source = (ROOT / "tests/homepage-responsive-browser.cjs").read_text(encoding="utf-8")
+        self.assertIn(
+            r"const zoomRestrictionPattern = /user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?:\D|$)/i;",
+            source,
+            "The browser test must use a whitespace-aware zoom restriction pattern",
+        )
+        self.assertNotIn(
+            r"const zoomRestrictionPattern = /user-scalable\\s*=\s*no",
+            source,
+            "The regex must not be double-escaped",
+        )
+        pattern = re.compile(r"user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?:\D|$)", re.I)
+        self.assertIsNotNone(pattern.search("width=device-width, user-scalable=no"))
+        self.assertIsNotNone(pattern.search("width=device-width, maximum-scale=1"))
+        self.assertIsNone(pattern.search("width=device-width, initial-scale=1.0"))
+
     def test_production_bundle_contains_homepage_visual_theme_selectors(self):
         css = BUILT_CSS.read_text(encoding="utf-8")
         for selector in (

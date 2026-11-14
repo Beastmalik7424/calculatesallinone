@@ -3,6 +3,7 @@
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 const axe = require("axe-core");
+const zoomRestrictionPattern = /user-scalable\\s*=\\s*no|maximum-scale\\s*=\\s*1(?:\\D|$)/i;
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -26,9 +27,11 @@ const axe = require("axe-core");
           document.querySelector(".ca-home-tools")
         ) & Node.DOCUMENT_POSITION_FOLLOWING)
       ),
-      viewportAllowsZoom: !/user-scalable\\s*=\\s*no|maximum-scale\\s*=\\s*1(?:\\D|$)/i.test(
+      viewportAllowsZoom: !zoomRestrictionPattern.test(
         document.querySelector('meta[name="viewport"]')?.content || ""
       ),
+      rejectsUserScalableNo: zoomRestrictionPattern.test("width=device-width, user-scalable=no"),
+      rejectsMaximumScaleOne: zoomRestrictionPattern.test("width=device-width, maximum-scale=1"),
       unnamedButtons: [...document.querySelectorAll(".ca-home-calculator #calc-pad button")]
         .filter(button => !(button.getAttribute("aria-label") || button.textContent.trim()))
         .length,
@@ -36,6 +39,8 @@ const axe = require("axe-core");
     assert.equal(initial.buttonCount, 23, "homepage calculator must keep all 23 keypad buttons");
     assert.equal(initial.calculatorBeforeTools, true, "calculator must remain before the All Tools panel");
     assert.equal(initial.viewportAllowsZoom, true, "mobile viewport must not disable pinch zoom");
+    assert.equal(initial.rejectsUserScalableNo, true, "zoom guard must detect user-scalable=no");
+    assert.equal(initial.rejectsMaximumScaleOne, true, "zoom guard must detect maximum-scale=1");
     assert.equal(initial.unnamedButtons, 0, "every calculator key must have an accessible name");
 
     let scenarios = 0;
