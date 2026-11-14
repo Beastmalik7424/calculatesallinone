@@ -9,6 +9,7 @@ checks = {
     "age-calculator": ["date-calculator", "years-to-days-calculator"],
     "years-to-days-calculator": ["date-calculator", "age-calculator", "query-calculator", "unit-converter"],
     "query-calculator": ["years-to-days-calculator", "age-calculator"],
+    "unit-converter": ["bmi-calculator", "calorie-calculator"],
 }
 for page, slugs in checks.items():
     html = (Path("public") / page / "index.html").read_text(encoding="utf-8")
@@ -29,7 +30,7 @@ for page, slugs in {
         assert (Path("public") / slug / "index.html").exists(), slug
 
 # Pages without a genuinely related tool must not receive unrelated generic recommendations.
-for page in ("bmi-calculator", "zakat-calculator", "stopwatch", "unit-converter"):
+for page in ("bmi-calculator", "zakat-calculator", "stopwatch"):
     html = (Path("public") / page / "index.html").read_text(encoding="utf-8")
     assert "Related calculators" not in html, page
 
