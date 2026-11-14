@@ -143,6 +143,7 @@ def visible_text(slug):
 def check_targeted_content():
     required = {
         "years-to-days-calculator": [
+            "Maintained by Muhammad Fayyaz Adeel",
             "Quick answers to common years-to-days questions",
             "5 years = 1,826.2125 days using the Gregorian average",
             "30 years = 10,957.275 days using the Gregorian average",
@@ -152,6 +153,7 @@ def check_targeted_content():
             "NIST's year definition",
         ],
         "unit-converter": [
+            "Maintained by Muhammad Fayyaz Adeel",
             "Supported unit categories and choices",
             "Weight: kilograms (kg), grams (g), pounds (lb) and ounces (oz)",
             "Length: metres (m), centimetres (cm), kilometres (km), feet (ft), inches (in) and miles (mi)",
@@ -166,6 +168,7 @@ def check_targeted_content():
             "NIST Handbook 44 (2026), Appendix C",
         ],
         "tasbih-counter": [
+            "Maintained by Muhammad Fayyaz Adeel",
             "Keyboard, storage and reset behaviour",
             "manual taps or key presses",
             "same browser and device",
