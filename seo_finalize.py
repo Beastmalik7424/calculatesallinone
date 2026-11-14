@@ -334,7 +334,7 @@ def main():
         verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
         def retain_verified_update(match):
             stamp = match.group(0)
-            expected_prefix = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + verified_date + '.'
+            expected_prefix = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + verified_date + '</p>'
             return stamp if verified_date and stamp.startswith(expected_prefix) else ""
         raw = update_stamp.sub(retain_verified_update, raw, count=1)
         schemas = []
