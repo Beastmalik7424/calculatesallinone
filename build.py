@@ -2075,7 +2075,7 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
             '<ul class="mt-3 list-disc space-y-2 pl-6 text-base text-stone-800 dark:text-stone-200">'
             '<li><a class="' + LINK + '" href="/methodology/">Calculation methodology</a> explains the methods, examples, assumptions, and limits used by the tools.</li>'
             '<li><a class="' + LINK + '" href="/editorial-policy/">Editorial policy</a> describes how content and reported errors are reviewed and corrected.</li>'
-            '<li><a class="' + LINK + '" href="/privacy/">Privacy policy</a> explains the site's stated approach to data and privacy.</li>'
+            '<li><a class="' + LINK + '" href="/privacy/">Privacy policy</a> provides further information about privacy and data handling.</li>'
             '</ul>'
             '<h2 class="' + H2 + '">Contact questions</h2><div class="mt-3">' + faq_html(contact_faq) + '</div>'
         )
