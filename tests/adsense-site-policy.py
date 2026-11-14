@@ -96,6 +96,33 @@ for repeated_heading in (
 check(has_heading("profit-loss-calculator", "Pakistan shop example: include direct selling costs"),
       "/profit-loss-calculator/ must retain its distinctive local-cost example")
 
+# Urdu content must accurately describe the calculator modes exposed in the UI.
+ur_profit = page_text("ur/profit-loss-calculator")
+check("یہ کیلکولیٹر قیمت خرید پر فیصد دکھاتا ہے۔" not in ur_profit,
+      "/ur/profit-loss-calculator/ must not claim that every percentage uses cost as its base")
+for phrase in ("کاروباری موڈ", "آپریٹنگ منافع", "آپریٹنگ مارجن", "مارک اپ", "مجموعی مارجن", "PKR 880", "PKR 1,100", "PKR 220"):
+    check(phrase in ur_profit, "/ur/profit-loss-calculator/ is missing mode-specific explanation or the verified PKR example: " + phrase)
+
+ur_standard = page_text("ur/standard-calculator")
+check("نہیں۔ یہ روزمرہ کے بنیادی حساب کے لیے ہے۔" not in ur_standard,
+      "/ur/standard-calculator/ must not deny the Scientific Mode that the UI provides")
+for phrase in ("سائنسی موڈ", "قوت", "جذر", "لوگارتھم", "فیکٹوریل", "DEG", "RAD"):
+    check(phrase in ur_standard, "/ur/standard-calculator/ is missing a supported Scientific Mode explanation: " + phrase)
+
+ur_discount = page_text("ur/discount-calculator")
+check("ٹیکس آخری قیمت کے بعد شامل کریں۔" not in ur_discount,
+      "/ur/discount-calculator/ must not present one universal tax order")
+check("PKR 3,240" in ur_discount,
+      "/ur/discount-calculator/ must retain one concrete successive-discount example")
+check("ٹیکس کی بنیاد دکان اور مقامی قواعد کے مطابق مختلف ہو سکتی ہے" in ur_discount,
+      "/ur/discount-calculator/ must state that tax treatment varies and is excluded")
+
+ur_stopwatch = page_text("ur/stopwatch")
+check("ٹیب بدلنے پر بھی وقت درست رہتا ہے" not in ur_stopwatch,
+      "/ur/stopwatch/ must not guarantee accuracy when background-tab scheduling is variable")
+check("پس منظر میں ٹیب کی تازہ کاری میں تاخیر ہو سکتی ہے" in ur_stopwatch,
+      "/ur/stopwatch/ must explain the background-tab display limitation")
+
 for e in ERRORS:
     print("FAIL:", e)
 print(f"{len(ERRORS)} failing checks")
