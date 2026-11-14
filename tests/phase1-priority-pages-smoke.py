@@ -145,6 +145,8 @@ def check_targeted_content():
             "30 years = 10,957.275 days using the Gregorian average",
             "70,000 days ÷ 365.2425 = 191.6535 years",
             "Exact calendar days depend on the start date",
+            "U.S. Naval Observatory leap-year explanation",
+            "NIST's year definition",
         ],
         "unit-converter": [
             "Supported unit categories and choices",
@@ -157,6 +159,8 @@ def check_targeted_content():
             "100°F = 37.78°C",
             "Negative weight and length inputs are rejected",
             "Absolute zero is -273.15°C",
+            "NIST Guide to the SI, Appendix B.9",
+            "NIST Handbook 44 (2026), Appendix C",
         ],
         "tasbih-counter": [
             "Keyboard, storage and reset behaviour",
@@ -172,6 +176,12 @@ def check_targeted_content():
         content = visible_text(slug)
         for phrase in phrases:
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
+    years_html = read_page("years-to-days-calculator")
+    assert 'href="https://aa.usno.navy.mil/faq/leap_years"' in years_html
+    assert 'href="https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z"' in years_html
+    unit_html = read_page("unit-converter")
+    assert 'href="https://nvlpubs.nist.gov/nistpubs/hb/2026/NIST.HB.44-2026.pdf"' in unit_html
+    assert 'href="https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9"' in unit_html
 
 def main():
     for slug, spec in CASES.items():
