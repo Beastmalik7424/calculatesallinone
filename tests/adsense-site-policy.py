@@ -93,19 +93,19 @@ for slug, heading in METHOD_SECTIONS.items():
 # No page should repeat the same visible H2 heading or a substantial paragraph within its own main content.
 for page_path in ROOT.rglob("index.html"):
     raw_page = page_path.read_text(encoding="utf-8")
-    main_match = re.search(r"<main\\b[^>]*>(.*?)</main>", raw_page, re.S | re.I)
+    main_match = re.search(r"<main\b[^>]*>(.*?)</main>", raw_page, re.S | re.I)
     if not main_match:
         continue
     main = main_match.group(1)
     headings = [
-        re.sub(r"\\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", item))).strip().casefold()
-        for item in re.findall(r"<h2\\b[^>]*>(.*?)</h2>", main, re.S | re.I)
+        re.sub(r"\s+, " ", html.unescape(re.sub(r"<[^>]+>", " ", item))).strip().casefold()
+        for item in re.findall(r"<h2\b[^>]*>(.*?)</h2>", main, re.S | re.I)
     ]
     duplicates = sorted({heading for heading in headings if headings.count(heading) > 1})
     check(not duplicates, f"{page_path}: duplicate H2 headings: {duplicates}")
     paragraphs = [
-        re.sub(r"\\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", item))).strip().casefold()
-        for item in re.findall(r"<p\\b[^>]*>(.*?)</p>", main, re.S | re.I)
+        re.sub(r"\s+, " ", html.unescape(re.sub(r"<[^>]+>", " ", item))).strip().casefold()
+        for item in re.findall(r"<p\b[^>]*>(.*?)</p>", main, re.S | re.I)
     ]
     substantial = [p for p in paragraphs if len(p) >= 120 and not p.startswith("maintained by ")]
     duplicate_paragraphs = sorted({p for p in substantial if substantial.count(p) > 1})
