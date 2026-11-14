@@ -1356,7 +1356,8 @@ def shell_strings(lang):
 
 
 def home_alts_all():
-    return [(l["code"], l["path"]) for l in LANGS] + [("x-default", "/")]
+    # /ur/ remains noindex pending native-language review, so it must not be a hreflang alternate.
+    return [("en", "/"), ("x-default", "/")]
 
 
 def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
@@ -1495,7 +1496,7 @@ def shell(main_html, lang="en", current_path=None):
     s = shell_strings(lang)
     home = "/"
     brand_home_label = {"en": " home page", "ur": " ہوم پیج", "ar": " الصفحة الرئيسية", "hi": " होम पेज", "es": " página de inicio", "fr": " page d’accueil"}.get(lang, " home page")
-    main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
+    main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/") else "max-w-3xl"
     menu_position = "left-0 right-auto" if lang in RTL_LANGS else "right-0"
     tool_paths = {"/" + t["slug"] + "/" for t in TOOLS if t["slug"] != "standard-calculator"}
     urdu_tool_paths = {"/ur/" + slug + "/" for slug in URDU if slug != "standard-calculator"}
