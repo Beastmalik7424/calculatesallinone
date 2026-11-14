@@ -263,6 +263,7 @@ assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in em
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
     assert SITE + hub in sitemap_urls, f"Substantive category hub should be indexable: {hub}"
 # The four unreviewed translated homepages are retired until native review is complete.
+# A route is considered retired only when build output, navigation, hreflang and sitemap all omit it.
 RETIRED_LOCALE_HOMES = ("/ar/", "/hi/", "/es/", "/fr/")
 for locale_home in RETIRED_LOCALE_HOMES:
     locale_file = ROOT / locale_home.strip("/") / "index.html"
