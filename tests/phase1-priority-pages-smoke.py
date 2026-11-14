@@ -244,7 +244,7 @@ def check_tasbih_content_structure():
     assert len(questions) == 6, f"Tasbih page should have six distinct FAQs, got {len(questions)}"
     assert len({question.casefold() for question in questions}) == len(questions), "Tasbih FAQ questions must not be duplicated"
     content = visible_text("tasbih-counter")
-    assert content.count("three groups of 33 presses") == 1, "The 99-count worked example must appear once"
+    assert content.casefold().count("three groups of 33 presses") == 1, "The 99-count worked example must appear once"
     assert content.count("99 - 67 = 32") == 1, "The remaining-count arithmetic must appear once"
     assert "When browser storage is available, the current count, selected phrase and selected target" in content, "The page must accurately explain which settings persist"
     assert "does not sync across devices" in content.lower(), "The page must explain device-local storage"
