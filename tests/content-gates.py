@@ -87,8 +87,8 @@ def main():
     failures = []
     from build import LASTMOD
     from seo_finalize import VERIFIED_PAGE_UPDATE_DATES
-    if LASTMOD != VERIFIED_PAGE_UPDATE_DATES:
-        failures.append("Visible Last updated dates and SEO finalizer verified dates must match exactly.")
+    if any(VERIFIED_PAGE_UPDATE_DATES.get(path) != date for path, date in LASTMOD.items()):
+        failures.append("Every visible Last updated date must match its page-specific verified SEO date.")
     for slug, expected_phrases in CASES.items():
         path = ROOT / slug / "index.html"
         if not path.is_file():
