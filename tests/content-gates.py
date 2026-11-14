@@ -135,7 +135,7 @@ def main():
         if contact_text.lower().count("how do i report a calculator error?") != 1:
             failures.append("/contact/ does not expose the expected visible FAQ question")
         faq_scripts = re.findall(
-            r'<script type="application/ld\\+json">(.*?)</script>',
+            r'<script type="application/ld\+json">(.*?)</script>',
             contact_html,
             re.S,
         )
