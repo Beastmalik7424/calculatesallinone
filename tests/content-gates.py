@@ -120,6 +120,8 @@ def main():
             failures.append("/health/ incorrectly says the entire calorie tool excludes pregnancy and breastfeeding")
         if "Separate National Academies DRI 2023 reference estimates are available for pregnancy and breastfeeding for adults aged 19 and older" not in health_text:
             failures.append("/health/ must explain the separate National Academies DRI 2023 pregnancy and breastfeeding estimates and their 19+ eligibility")
+        if "The original Mifflin–St Jeor study included 498 healthy adults aged 19–78" not in health_text:
+            failures.append("/health/ must distinguish the calculator's 18+ input eligibility from the original equation study's 19–78 sample")
     if not calorie_path.is_file():
         failures.append("/calorie-calculator/ was not generated for the Health hub consistency check")
     else:
