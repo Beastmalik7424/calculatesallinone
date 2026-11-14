@@ -29,14 +29,14 @@
 
 ## Deliberately not indexed yet
 
-The homepages `/ar/`, `/hi/`, `/es/`, `/fr/`, and `/ur/` remain `noindex, follow` and are omitted from the sitemap until their full translated tool journeys are reviewed by a competent speaker. This avoids presenting partially reviewed translations as finished search landing pages. The Urdu calculator pages that pass the current build checks remain eligible for indexing.
+The four additional locale homepages `/ar/`, `/hi/`, `/es/`, and `/fr/` are not generated or linked until their complete translated journeys receive competent native-language review. The Urdu homepage `/ur/` remains `noindex, follow` and is omitted from the sitemap while its full translated journey is reviewed. Urdu calculator pages remain technically indexable, but the source module still marks their translations as requiring native-reader review; automated build checks do not establish translation quality.
 
 ## Remaining external checks
 
 - Google Search Console's live URL Inspection and the final index coverage report must be checked in the owner's Search Console account. A public HTTP check cannot prove Google's crawl or index state.
 - AdSense approval is Google's decision. Technical installation and a valid ads.txt record do not guarantee approval.
 - Before enabling ad units, the owner must create a real AdSense ad unit, supply its slot ID, and confirm the applicable consent-management setup. Do not set the consent-readiness flag merely to force ads on.
-- Native-language review is still needed before indexing the five localized homepages.
+- Native-language review is still needed before publishing the four additional locale homepages and before describing the Urdu calculator copy as reviewed.
 - Automated smoke tests are not a substitute for full real-device usability testing or independent clinical/religious review.
 
 ## Official Google guidance used

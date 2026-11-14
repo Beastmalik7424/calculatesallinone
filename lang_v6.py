@@ -1,12 +1,8 @@
-"""Home page and interface strings for additional languages. Native reader review is required before publication."""
+"""Additional-language interface copy retained for translation review; only English and Urdu homepages are currently published."""
 
 LANGS = [
     {"code": "en", "name": "English", "dir": "ltr", "path": "/"},
     {"code": "ur", "name": "اردو", "dir": "rtl", "path": "/ur/"},
-    {"code": "ar", "name": "العربية", "dir": "rtl", "path": "/ar/"},
-    {"code": "hi", "name": "हिन्दी", "dir": "ltr", "path": "/hi/"},
-    {"code": "es", "name": "Español", "dir": "ltr", "path": "/es/"},
-    {"code": "fr", "name": "Français", "dir": "ltr", "path": "/fr/"},
 ]
 
 UI = {

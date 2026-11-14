@@ -2307,17 +2307,8 @@ def home_app_page(lang):
     calc_title = "Standard Calculator" if not urdu else "معیاری کیلکولیٹر"
     tool_intro = 'Choose a calculator, or browse the <a class="text-sky-800 dark:text-sky-300 underline" href="/free-online-calculators/">complete free online calculators guide</a>. You can also explore the <a class="text-sky-800 dark:text-sky-300 underline" href="/money/">Money and Business</a> and <a class="text-sky-800 dark:text-sky-300 underline" href="/math/">Math and Converters</a> hubs.' if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
     free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
+    # Published homepage language choices are generated from the reviewed LANGS list in the shared navigation.
     language_links = ""
-    if not urdu:
-        language_links = (
-            '<nav aria-label="Other languages" class="mt-8">'
-            '<h2 class="text-xl font-semibold">Other language versions</h2>'
-            '<ul class="mt-3 flex flex-wrap gap-3">'
-            '<li><a class="' + LINK + '" href="/ar/">العربية</a></li>'
-            '<li><a class="' + LINK + '" href="/es/">Español</a></li>'
-            '<li><a class="' + LINK + '" href="/fr/">Français</a></li>'
-            '</ul></nav>'
-        )
     hero_ui = CALC_UI
     if urdu:
         for en, ur in URDU["standard-calculator"]["labels"]:
@@ -2568,8 +2559,7 @@ def main():
     home_alts = home_alts_all()
     home_app_page("en")
     home_app_page("ur")
-    for code in ["ar", "hi", "es", "fr"]:
-        entries.append((home_lang_page(code), home_alts_all()))
+    # Additional locale homepages stay unpublished until their complete translated journeys receive native-language review.
     entries.append(("/", home_alts))
     entries.append(("/ur/", home_alts))
     for c in CATEGORIES:

@@ -9,9 +9,9 @@ from html.parser import HTMLParser
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
 HUB_PATHS = {"/money/", "/health/", "/math/", "/time/", "/worship/"}
-# These homepage translations are not yet confirmed by a competent native-language reviewer.
-# Keep them accessible to visitors but out of search results until the translated journey is checked.
-UNREVIEWED_LOCALE_HOMES = {"/ar/", "/hi/", "/es/", "/fr/", "/ur/"}
+# The Urdu homepage remains noindex until its complete translated journey receives native-language review.
+# Additional unreviewed locale homepages are not generated or linked at all.
+UNREVIEWED_LOCALE_HOMES = {"/ur/"}
 DESCRIPTION_FALLBACKS = {
     "/about/": "Learn what CalculatesAll offers, how its free calculators work, and the principles behind clear formulas, examples and stated limitations.",
     "/privacy/": "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.",
