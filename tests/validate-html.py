@@ -9,6 +9,7 @@ from pathlib import Path
 
 FILES = [
     Path("public/index.html"),
+    Path("public/ur/index.html"),
     Path("public/ur/discount-calculator/index.html"),
     Path("public/ur/profit-loss-calculator/index.html"),
     Path("public/ur/standard-calculator/index.html"),
