@@ -38,8 +38,12 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/ur/bmi-calculator/": "2026-11-09",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
-    # This date records the verified Years-to-Days guide consolidation and worked-example checks.
-    "/years-to-days-calculator/": "2026-11-11",
+    # This date records the verified Years-to-Days answer examples, calendar distinction and source review.
+    "/years-to-days-calculator/": "2026-11-14",
+    # This date records the verified unit definitions, conversion formulas, rounding and input-limit review.
+    "/unit-converter/": "2026-11-14",
+    # This date records the verified Tasbih keyboard, local-storage and reset-behaviour disclosures.
+    "/tasbih-counter/": "2026-11-14",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
