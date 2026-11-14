@@ -258,7 +258,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
         "h1": "Profit and Loss Calculator",
-        "lead": "Calculate business profit, loss, markup and margin.",
+        "lead": "This profit loss calculator compares business operating profit with product-level profit or loss, markup and margin.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
