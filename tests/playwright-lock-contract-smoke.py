@@ -29,6 +29,7 @@ def validate_playwright_config(config):
         and config.get("ci_uses_npm_ci") is True
         and config.get("ci_has_no_ad_hoc_install") is True
         and config.get("ci_installs_chromium") is True
+        and config.get("first_screen_installs_chromium") is True
     )
 
 
@@ -40,7 +41,8 @@ def repository_playwright_config(root=ROOT):
     core_lock = lock.get("packages", {}).get("node_modules/playwright-core", {})
     axe_lock = lock.get("packages", {}).get("node_modules/axe-core", {})
     site_build = (root / ".github/workflows/site-build.yml").read_text(encoding="utf-8")
-    workflows = ci + "\\n" + site_build
+    first_screen = (root / ".github/workflows/first-screen-audit.yml").read_text(encoding="utf-8")
+    workflows = ci + site_build + first_screen
     return {
         "manifest_version": package.get("devDependencies", {}).get("playwright"),
         "lock_root_version": lock.get("packages", {}).get("", {}).get("devDependencies", {}).get("playwright"),
@@ -53,9 +55,10 @@ def repository_playwright_config(root=ROOT):
         "axe_lock_root_version": lock.get("packages", {}).get("", {}).get("devDependencies", {}).get("axe-core"),
         "axe_package_version": axe_lock.get("version"),
         "axe_integrity": axe_lock.get("integrity"),
-        "ci_uses_npm_ci": "run: npm ci" in ci and "run: npm ci" in site_build,
-        "ci_has_no_ad_hoc_install": "npm install --no-save --package-lock=false" not in workflows,
+        "ci_uses_npm_ci": "run: npm ci" in ci and "run: npm ci" in site_build and "run: npm ci" in first_screen,
+        "ci_has_no_ad_hoc_install": "npm install --no-save" not in workflows,
         "ci_installs_chromium": "npx playwright install --with-deps chromium" in ci,
+        "first_screen_installs_chromium": "npx playwright install --with-deps chromium" in first_screen,
     }
 
 
@@ -76,6 +79,7 @@ class PlaywrightLockUnitTests(unittest.TestCase):
             "ci_uses_npm_ci": True,
             "ci_has_no_ad_hoc_install": True,
             "ci_installs_chromium": True,
+            "first_screen_installs_chromium": True,
         }
 
     def test_accepts_exact_locked_playwright_version(self):
@@ -109,6 +113,11 @@ class PlaywrightLockUnitTests(unittest.TestCase):
     def test_rejects_missing_browser_install(self):
         config = self.valid_config()
         config["ci_installs_chromium"] = False
+        self.assertFalse(validate_playwright_config(config))
+
+    def test_rejects_missing_first_screen_browser_install(self):
+        config = self.valid_config()
+        config["first_screen_installs_chromium"] = False
         self.assertFalse(validate_playwright_config(config))
 
     def test_two_thousand_deterministic_lockfile_mutations(self):

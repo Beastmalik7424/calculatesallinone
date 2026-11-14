@@ -102,11 +102,13 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
         self.assertEqual(playwright.get("dependencies", {}).get("playwright-core"), "1.64.1")
         self.assertEqual(core.get("version"), "1.64.1")
         self.assertEqual(core.get("integrity"), "sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==")
-        for workflow_path in (".github/workflows/ci.yml", ".github/workflows/site-build.yml"):
+        for workflow_path in (".github/workflows/ci.yml", ".github/workflows/site-build.yml", ".github/workflows/first-screen-audit.yml"):
             workflow = (ROOT / workflow_path).read_text(encoding="utf-8")
             with self.subTest(workflow=workflow_path):
                 self.assertIn("run: npm ci", workflow, "CI must install the committed lockfile")
-                self.assertNotIn("npm install --no-save --package-lock=false", workflow, "CI must not install untracked browser dependencies")
+                self.assertNotIn("npm install --no-save", workflow, "CI must not install untracked browser dependencies")
+                if workflow_path.endswith("first-screen-audit.yml"):
+                    self.assertIn("npx playwright install --with-deps chromium", workflow, "First-screen audit must install Chromium using the lockfile-pinned Playwright CLI")
 
     def test_zoom_restriction_pattern_rejects_disabling_viewport_directives(self):
         source = (ROOT / "tests/homepage-responsive-browser.cjs").read_text(encoding="utf-8")
