@@ -34,15 +34,17 @@ URDU_DESCRIPTION_FALLBACKS = {
     "/ur/tasbih-counter/": "ڈیجیٹل تسبیح کاؤنٹر میں گنتی، منتخب عبارت اور ہدف اسی براؤزر میں محفوظ رکھیں، جب مقامی اسٹوریج دستیاب ہو۔ گنتی واپس لینے اور ری سیٹ کرنے کا طریقہ دیکھیں۔",
 }
 VERIFIED_PAGE_UPDATE_DATES = {
-    # This date records the verified Urdu BMI threshold-copy correction and source check in this change.
+    # This date records the Urdu BMI threshold-copy correction and source check.
     "/ur/bmi-calculator/": "2026-11-09",
-    # This date records the age-page leap-day anniversary disclosure and boundary-test update.
-    "/age-calculator/": "2026-11-11",
-    # This date records the verified Years-to-Days answer examples, calendar distinction and source review.
+    # These dates record substantive page-specific content corrections or consolidation.
+    "/age-calculator/": "2026-11-15",
     "/years-to-days-calculator/": "2026-11-14",
-    # This date records the verified unit definitions, conversion formulas, rounding and input-limit review.
-    "/unit-converter/": "2026-11-14",
-    # This date records the verified Tasbih target-persistence, storage-disclosure and content-restructure update.
+    "/bmi-calculator/": "2026-11-15",
+    "/zakat-calculator/": "2026-11-15",
+    "/unit-converter/": "2026-11-15",
+    "/standard-calculator/": "2026-11-15",
+    "/stopwatch/": "2026-11-15",
+    "/query-calculator/": "2026-11-15",
     "/tasbih-counter/": "2026-11-15",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
@@ -334,8 +336,10 @@ def main():
         verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
         def retain_verified_update(match):
             stamp = match.group(0)
+            if not verified_date:
+                return ""
             expected_prefix = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + verified_date + '</p>'
-            return stamp if verified_date and stamp.startswith(expected_prefix) else ""
+            return stamp if stamp.startswith(expected_prefix) else ""
         raw = update_stamp.sub(retain_verified_update, raw, count=1)
         schemas = []
         jsonld_script_pattern = r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>"""
