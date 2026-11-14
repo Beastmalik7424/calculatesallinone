@@ -3,7 +3,6 @@
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 const axe = require("axe-core");
-const zoomRestrictionPattern = /user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?:\D|$)/i;
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -18,7 +17,9 @@ const zoomRestrictionPattern = /user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?:\
     assert.equal(response.status(), 200, "homepage must return HTTP 200");
     await page.waitForSelector(".ca-home-calculator #calc-pad button");
 
-    const initial = await page.evaluate(() => ({
+    const initial = await page.evaluate(() => {
+      const zoomRestrictionPattern = /user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?:\D|$)/i;
+      return {
       buttonCount: document.querySelectorAll(".ca-home-calculator #calc-pad button").length,
       calculatorBeforeTools: Boolean(
         document.querySelector(".ca-home-calculator") &&
@@ -35,7 +36,8 @@ const zoomRestrictionPattern = /user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?:\
       unnamedButtons: [...document.querySelectorAll(".ca-home-calculator #calc-pad button")]
         .filter(button => !(button.getAttribute("aria-label") || button.textContent.trim()))
         .length,
-    }));
+      };
+    });;
     assert.equal(initial.buttonCount, 23, "homepage calculator must keep all 23 keypad buttons");
     assert.equal(initial.calculatorBeforeTools, true, "calculator must remain before the All Tools panel");
     assert.equal(initial.viewportAllowsZoom, true, "mobile viewport must not disable pinch zoom");
