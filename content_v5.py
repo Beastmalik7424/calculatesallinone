@@ -174,8 +174,8 @@ GUIDE_EXTRA["query-calculator"] = [
 ]
 GUIDE_EXTRA["stopwatch"].append(
     ("Worked example", [
-        "A lap time of 83 seconds equals 1 minute and 23 seconds: 1 × 60 = 60 seconds, then 60 + 23 = 83 seconds.",
-        "A total of 3,725 seconds equals 1 hour, 2 minutes and 5 seconds: 3,725 − 3,600 = 125 seconds, then 125 − 120 = 5 seconds after 2 minutes.",
+        "A lap time of 83 seconds equals 1 minute and 23 seconds. Step 1: 1 × 60 = 60 seconds. Step 2: 60 + 23 = 83 seconds.",
+        "A total of 3,725 seconds equals 1 hour, 2 minutes and 5 seconds. Step 1: 1 × 3,600 = 3,600 seconds. Step 2: 3,725 − 3,600 = 125 seconds. Step 3: 2 × 60 = 120 seconds, leaving 5 seconds.",
     ])
 )
 
