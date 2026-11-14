@@ -27,8 +27,6 @@ TARGETS = {
     "/discount-calculator/": "index",
     "/editorial-policy/": "index",
     "/health/": "index",
-    "/ur/discount-calculator/": "index",
-    "/ur/profit-loss-calculator/": "index",
     "/ur/age-calculator/": "index",
     "/ur/bmi-calculator/": "index",
     "/ur/discount-calculator/": "index",
