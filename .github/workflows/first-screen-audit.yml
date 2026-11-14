@@ -20,6 +20,7 @@ on:
       - 'static/extra-calculators-ui.js'
       - 'tests/extra-calculators-browser.cjs'
       - 'tests/extra-calculators-smoke.cjs'
+      - 'tests/years-to-days-browser.cjs'
       - '.github/workflows/first-screen-audit.yml'
   workflow_dispatch:
 permissions:
@@ -63,6 +64,7 @@ jobs:
             sleep 1
           done
           curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null
+          node tests/years-to-days-browser.cjs
           node tests/calorie-calculator-browser.cjs
           node tests/query-calculator-browser.cjs
           node tests/extra-calculators-browser.cjs

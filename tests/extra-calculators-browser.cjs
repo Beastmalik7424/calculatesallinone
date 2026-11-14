@@ -202,6 +202,92 @@ const {chromium}=require("playwright");
   }
 
   for(const width of [390,1366]){
+   const page=await browser.newPage({viewport:{width,height:width===390?844:768}});
+   const errors=[];page.on("pageerror",e=>errors.push(e.message));
+   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   const response=await page.goto(base+"/unit-converter/");
+   if(!response||response.status()!==200)throw Error("Unit converter HTTP failure at "+width+"px");
+   const unitResult=page.locator("#conv-result");
+   await page.locator("#u-cat").selectOption("weight");
+   await page.locator("#u-from").selectOption("kg");
+   await page.locator("#u-to").selectOption("lb");
+   await page.locator("#u-val").fill("1");
+   await page.locator("#conv-form button[type=submit]").click();
+   if(!(await unitResult.innerText()).includes("2.20462"))throw Error("1 kg to pounds reference conversion failed");
+   await page.locator("#u-cat").selectOption("length");
+   await page.locator("#u-from").selectOption("mi");
+   await page.locator("#u-to").selectOption("km");
+   await page.locator("#u-val").fill("1");
+   await page.locator("#conv-form button[type=submit]").click();
+   if(!(await unitResult.innerText()).includes("1.60934"))throw Error("1 mile to kilometres reference conversion failed");
+   await page.locator("#u-cat").selectOption("temp");
+   await page.locator("#u-from").selectOption("F");
+   await page.locator("#u-to").selectOption("C");
+   await page.locator("#u-val").fill("100");
+   await page.locator("#conv-form button[type=submit]").click();
+   if(!(await unitResult.innerText()).includes("37.78"))throw Error("100 Fahrenheit to Celsius reference conversion failed");
+   const unitRuns=await page.evaluate(()=>{
+    const form=document.querySelector("#conv-form"),category=document.querySelector("#u-cat");
+    const value=document.querySelector("#u-val"),from=document.querySelector("#u-from"),to=document.querySelector("#u-to");
+    const output=document.querySelector("#conv-result");
+    const units={
+     weight:{keys:["kg","g","lb","oz"],factor:{kg:1,g:0.001,lb:0.45359237,oz:0.028349523125}},
+     length:{keys:["m","cm","km","ft","in","mi"],factor:{m:1,cm:0.01,km:1000,ft:0.3048,in:0.0254,mi:1609.344}},
+     temp:{keys:["C","F","K"]}
+    };
+    let seed=20261114;
+    const random=()=>{seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296;};
+    let count=0;
+    for(let i=0;i<1000;i++){
+     const name=["weight","length","temp"][i%3],spec=units[name];
+     category.value=name;category.dispatchEvent(new Event("change",{bubbles:true}));
+     const source=spec.keys[Math.floor(random()*spec.keys.length)];
+     const target=spec.keys[Math.floor(random()*spec.keys.length)];
+     let input;
+     if(name==="weight"||name==="length")input=random()*100000;
+     else input=source==="K"?random()*1000:source==="F"?-459.67+random()*1000:-273.15+random()*1000;
+     from.value=source;to.value=target;value.value=String(input);
+     form.dispatchEvent(new Event("submit",{bubbles:true,cancelable:true}));
+     const match=output.textContent.match(/ equals ([+-]?[0-9,]+(?:\.[0-9]+)?) /);
+     if(!match)throw new Error("unit simulation "+i+" returned unexpected text: "+output.textContent);
+     const actual=Number(match[1].replace(/,/g,""));
+     let expected;
+     if(name==="temp"){
+      const c=source==="C"?input:source==="F"?(input-32)*5/9:input-273.15;
+      expected=target==="C"?c:target==="F"?c*9/5+32:c+273.15;
+     }else expected=input*spec.factor[source]/spec.factor[target];
+     const tolerance=name==="temp"?0.0051:1e-5*Math.max(1,Math.abs(expected));
+     if(!Number.isFinite(actual)||Math.abs(actual-expected)>tolerance)
+      throw new Error("unit simulation "+i+" mismatch "+name+" "+source+" to "+target+": expected "+expected+", got "+actual);
+     count++;
+    }
+    return count;
+   });
+   if(unitRuns!==1000)throw Error("Expected 1,000 unit-conversion simulations, got "+unitRuns);
+   await page.locator("#u-cat").selectOption("weight");
+   await page.locator("#u-from").selectOption("kg");
+   await page.locator("#u-to").selectOption("lb");
+   await page.locator("#u-val").fill("-1");
+   await page.locator("#conv-form button[type=submit]").click();
+   if(!(await unitResult.innerText()).includes("cannot be negative"))throw Error("Negative mass validation failed");
+   await page.locator("#u-cat").selectOption("length");
+   await page.locator("#u-from").selectOption("m");
+   await page.locator("#u-to").selectOption("cm");
+   await page.locator("#u-val").fill("-1");
+   await page.locator("#conv-form button[type=submit]").click();
+   if(!(await unitResult.innerText()).includes("cannot be negative"))throw Error("Negative length validation failed");
+   await page.locator("#u-cat").selectOption("temp");
+   await page.locator("#u-from").selectOption("C");
+   await page.locator("#u-to").selectOption("K");
+   await page.locator("#u-val").fill("-273.151");
+   await page.locator("#conv-form button[type=submit]").click();
+   if(!(await unitResult.innerText()).includes("below absolute zero"))throw Error("Absolute-zero validation failed");
+   if(errors.length)throw Error("Unit converter browser errors: "+errors.join("; "));
+   console.log("Unit converter PASS "+width+"px: 1,000 deterministic conversions, reference values and input boundaries");
+   await page.close();
+  }
+
+  for(const width of [390,1366]){
    const viewport={width,height:width===390?844:768};
    const page=await browser.newPage({viewport});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
@@ -233,6 +319,20 @@ const {chromium}=require("playwright");
    await page.locator("#t-target").selectOption("custom");
    await page.locator("#t-custom-target").fill("33");
    if(!(await page.locator("#t-custom-target-wrap").isVisible()))throw Error("Tasbih custom target field should become visible");
+   const countAfterThousand=await page.evaluate(()=>{
+    const button=document.querySelector("#t-tap");
+    for(let i=0;i<1000;i++)button.click();
+    return document.querySelector("#t-count").textContent.trim();
+   });
+   if(countAfterThousand!=="1000")throw Error("Tasbih must preserve all 1,000 manual taps without target auto-reset: "+countAfterThousand);
+   await page.reload();
+   if((await page.locator("#t-count").innerText()).trim()!=="1000")throw Error("Tasbih count must persist across reload in the same browser");
+   const countAfterUndo=await page.evaluate(()=>{
+    const button=document.querySelector("#t-undo");
+    for(let i=0;i<1000;i++)button.click();
+    return document.querySelector("#t-count").textContent.trim();
+   });
+   if(countAfterUndo!=="0")throw Error("Tasbih must reverse 1,000 undo operations to zero: "+countAfterUndo);
    if(errors.length)throw Error("Tasbih browser errors: "+errors.join("; "));
    console.log("Tasbih browser PASS "+width+"px: count/actions above settings, tap/undo/reset and custom phrase/target");
    await page.close();

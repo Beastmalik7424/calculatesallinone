@@ -310,10 +310,10 @@ for url in urls:
             "Age calculator description must be useful and page-specific."
         )
     if url == SITE + "/unit-converter/":
-        assert title_match.group(1) == "Unit Converter: cm to Inches, kg to lbs | CalculatesAll", (
+        assert title_match.group(1) == "Unit Converter | Weight, Length &amp; Temperature", (
             "Unit converter title must describe its supported conversion categories."
         )
-        assert desc_match.group(1) == "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result.", (
+        assert desc_match.group(1) == "Convert kilograms, grams, pounds, ounces, metric and imperial lengths, and Celsius, Fahrenheit or Kelvin. See formulas, examples and input limits.", (
             "Unit converter description must match supported conversions and search intent."
         )
         assert len(title_match.group(1)) <= 59, "Unit converter title should remain concise"
@@ -710,8 +710,16 @@ for url in urls:
                     "Urdu BMI dateModified must match the verified substantive content and source update."
                 )
             elif url == SITE + "/years-to-days-calculator/":
-                assert item.get("dateModified") == "2026-11-11", (
-                    "Years-to-Days dateModified must match the verified guide and worked-example update."
+                assert item.get("dateModified") == "2026-11-14", (
+                    "Years-to-Days dateModified must match the latest verified content and source update."
+                )
+            elif url == SITE + "/unit-converter/":
+                assert item.get("dateModified") == "2026-11-14", (
+                    "Unit Converter dateModified must match the verified formulas, sources and limitations update."
+                )
+            elif url == SITE + "/tasbih-counter/":
+                assert item.get("dateModified") == "2026-11-14", (
+                    "Tasbih Counter dateModified must match the verified usage and storage disclosure update."
                 )
             else:
                 assert "dateModified" not in item, (

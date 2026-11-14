@@ -112,6 +112,79 @@ const viewports = [
       await submit();
       assert.match(await result.innerText(), /Enter a number of days from 0 to 1,000,000/);
 
+      const propertyRuns = await page.evaluate(() => {
+        const form = document.querySelector("#years-days-form");
+        const direction = document.querySelector("#yd-direction");
+        const method = document.querySelector("#yd-method");
+        const value = document.querySelector("#yd-value");
+        const startDate = document.querySelector("#yd-start-date");
+        const result = document.querySelector("#yd-result");
+        let seed = 20261114;
+        const random = () => {
+          seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5;
+          return (seed >>> 0) / 4294967296;
+        };
+        const factors = [365, 365.25, 365.2425];
+        let count = 0;
+        for (let i = 0; i < 1000; i++) {
+          const mode = i % 3;
+          let expected;
+          let match;
+          if (mode === 2) {
+            const year = 1900 + Math.floor(random() * 100);
+            const month = 1 + Math.floor(random() * 12);
+            const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+            const day = 1 + Math.floor(random() * lastDay);
+            const years = Math.floor(random() * 20);
+            const start = new Date(Date.UTC(year, month - 1, day));
+            const end = new Date(start.getTime());
+            end.setUTCFullYear(year + years);
+            expected = Math.round((end.getTime() - start.getTime()) / 86400000);
+            direction.value = "years-to-days";
+            direction.dispatchEvent(new Event("change", { bubbles: true }));
+            method.value = "calendar";
+            method.dispatchEvent(new Event("change", { bubbles: true }));
+            startDate.value = String(year).padStart(4, "0") + "-" + String(month).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+            value.value = String(years);
+            form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+            match = result.textContent.match(/calendar years = ([\d,]+(?:\.\d+)?) days;/);
+          } else {
+            const factor = factors[Math.floor(random() * factors.length)];
+            if (mode === 0) {
+              const years = Math.round(random() * 100000000) / 100;
+              direction.value = "years-to-days";
+              direction.dispatchEvent(new Event("change", { bubbles: true }));
+              method.value = String(factor);
+              method.dispatchEvent(new Event("change", { bubbles: true }));
+              value.value = String(years);
+              expected = years * factor;
+              form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+              match = result.textContent.match(/ years = ([\d,]+(?:\.\d+)?) days;/);
+            } else {
+              const days = Math.round(random() * 100000000) / 100;
+              direction.value = "days-to-years";
+              direction.dispatchEvent(new Event("change", { bubbles: true }));
+              method.value = String(factor);
+              method.dispatchEvent(new Event("change", { bubbles: true }));
+              value.value = String(days);
+              expected = days / factor;
+              form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+              match = result.textContent.match(/ days = ([\d,]+(?:\.\d+)?) years\./);
+            }
+          }
+          if (!match) throw new Error("Simulation " + i + " produced an unexpected result: " + result.textContent);
+          const actual = Number(match[1].replace(/,/g, ""));
+          const tolerance = 1e-7 * Math.max(1, Math.abs(expected));
+          if (!Number.isFinite(actual) || Math.abs(actual - expected) > tolerance) {
+            throw new Error("Simulation " + i + " mismatch: expected " + expected + ", got " + actual);
+          }
+          count++;
+        }
+        return count;
+      });
+      assert.equal(propertyRuns, 1000, "1,000 deterministic fixed-year and exact-calendar simulations must run");
+      console.log("Years-to-Days property simulations PASS: " + propertyRuns + " at " + viewport.width + "px");
+
       if (errors.length) {
         throw new Error("Browser errors at " + viewport.width + "px: " + errors.join("; "));
       }

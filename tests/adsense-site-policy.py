@@ -41,7 +41,7 @@ for slug in TOOLS_WITH_EXAMPLE:
         check(has_heading(slug, name), f"/{slug}/ has no heading exactly '{name}'")
 
 for p in ROOT.rglob("index.html"):
-    m = re.search(r"Last updated: (\S+)", p.read_text(encoding="utf-8"))
+    m = re.search(r"Last updated:\s*(\d{4}-\d{2}-\d{2})(?=\s|<)", p.read_text(encoding="utf-8"))
     if m:
         check(re.fullmatch(r"\d{4}-\d{2}-\d{2}", m.group(1)) is not None,
               f"{p}: 'Last updated' is not YYYY-MM-DD")

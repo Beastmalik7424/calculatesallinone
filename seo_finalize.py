@@ -38,8 +38,12 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/ur/bmi-calculator/": "2026-11-09",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
-    # This date records the verified Years-to-Days guide consolidation and worked-example checks.
-    "/years-to-days-calculator/": "2026-11-11",
+    # This date records the verified Years-to-Days answer examples, calendar distinction and source review.
+    "/years-to-days-calculator/": "2026-11-14",
+    # This date records the verified unit definitions, conversion formulas, rounding and input-limit review.
+    "/unit-converter/": "2026-11-14",
+    # This date records the verified Tasbih keyboard, local-storage and reset-behaviour disclosures.
+    "/tasbih-counter/": "2026-11-14",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
@@ -193,7 +197,7 @@ def normalize_meta(raw, path, lang):
     if path == "/age-calculator/":
         title = "Age Calculator | Years, Months & Days | CalculatesAll"
     if path == "/unit-converter/":
-        title = "Unit Converter: cm to Inches, kg to lbs | CalculatesAll"
+        title = "Unit Converter | Weight, Length & Temperature"
     desc = html.unescape(desc_match.group(1).strip())
     description_overrides = {
     "/about/": "Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details.",
@@ -227,7 +231,7 @@ def normalize_meta(raw, path, lang):
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
-        desc = "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result."
+        desc = "Convert kilograms, grams, pounds, ounces, metric and imperial lengths, and Celsius, Fahrenheit or Kelvin. See formulas, examples and input limits."
     # This exact-intent date title is 63 characters and has a dedicated regression gate.
     if path != "/date-calculator/" and len(title) > 59:
         title = re.sub(r" \| Free Online Tool \| CalculatesAll$", " | CalculatesAll", title)
@@ -325,8 +329,14 @@ def main():
         raw, title, desc = normalize_meta(raw, path, lang)
         titles[path] = title
         descriptions[path] = desc
-        # Remove legacy blanket review/update stamps. Never claim a page was reviewed unless that review occurred.
-        raw = re.sub(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', "", raw, count=1, flags=re.S)
+        # Keep only an exact, verified page-specific update date. Never claim a review that did not occur.
+        update_stamp = re.compile(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', re.S)
+        verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
+        def retain_verified_update(match):
+            stamp = match.group(0)
+            expected_prefix = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + verified_date + '</p>'
+            return stamp if verified_date and stamp.startswith(expected_prefix) else ""
+        raw = update_stamp.sub(retain_verified_update, raw, count=1)
         schemas = []
         jsonld_script_pattern = r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>"""
         for match in re.finditer(jsonld_script_pattern, raw, re.S | re.I):
