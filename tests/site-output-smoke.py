@@ -313,7 +313,7 @@ for url in urls:
         assert title_match.group(1) == "Unit Converter | Weight, Length &amp; Temperature", (
             "Unit converter title must describe its supported conversion categories."
         )
-        assert desc_match.group(1) == "Convert units online: cm to inches, inches to cm, kg to lbs and Celsius to Fahrenheit. Enter a value, choose units and get the result.", (
+        assert desc_match.group(1) == "Convert kilograms, grams, pounds, ounces, metric and imperial lengths, and Celsius, Fahrenheit or Kelvin. See formulas, examples and input limits.", (
             "Unit converter description must match supported conversions and search intent."
         )
         assert len(title_match.group(1)) <= 59, "Unit converter title should remain concise"
