@@ -533,7 +533,7 @@ TOOLS = [
             ("How to use this online Tasbih counter", [
                 "Choose one of the five preset phrases or select Custom phrase and enter up to 40 characters. Choose a preset target of 33, 99 or 100, or select Custom target and enter a whole number from 1 to 10,000. Targets are personal tracking settings.",
                 "Press Count one once for each count you want to record. You can also press Space or Enter when focus is not inside another control or text field. The progress message shows how many counts remain. When the selected target is reached, the page displays a message and may briefly vibrate if your device and browser support vibration.",
-                "Undo subtracts one from the current count when it is above zero. Reset asks for confirmation before clearing the current count. The lifetime total tracks accepted taps separately from the current count.",
+                "Undo subtracts one from the current count when it is above zero. Reset requires confirmation before clearing the current count. The lifetime total tracks accepted taps separately from the current count.",
             ]),
             ("Five phrases and plain meanings", [
                 "SubhanAllah is commonly translated as “Glory be to Allah.” This is a plain-language meaning, not a detailed commentary.",
@@ -543,7 +543,7 @@ TOOLS = [
                 "La ilaha illallah means “There is no deity worthy of worship except Allah.” Transliteration and English wording can vary; consult a qualified teacher if you need a formal translation or pronunciation guidance.",
             ]),
             ("Saving and privacy", [
-                "When browser storage is available, the current count, selected phrase and selected target, including a custom target, are saved in local storage on this device. These values are not uploaded to a server or synced to another browser or device. Clearing site data, private browsing or browser restrictions can make saved values unavailable.",
+                "When browser storage is available, the current count, selected phrase and selected target, including a custom target, are saved locally in the same browser and device. The saved information does not sync across devices and is not uploaded to a server. Clearing site data, private browsing or browser restrictions can make saved values unavailable.",
                 "If storage is unavailable, the counter can continue in memory during the current page visit, but values may be lost when you reload or leave. A target is a personal tracking setting, not a religious ruling or a claim that a particular number or reward is required.",
             ]),
             ("Worked example: target and remaining count", [
