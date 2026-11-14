@@ -673,27 +673,24 @@ for url in urls:
         assert len(faq_schemas) == 1, "EMI page must have exactly one FAQPage schema generated from visible FAQ content"
         app_schemas = [item for item in parsed_schemas if item.get("@type") == "WebApplication"]
         assert not app_schemas, "EMI page must omit SoftwareApplication rich-result markup without genuine public ratings or reviews"
+    expected_date_modified = {
+        SITE + "/age-calculator/": "2026-11-15",
+        SITE + "/ur/bmi-calculator/": "2026-11-09",
+        SITE + "/years-to-days-calculator/": "2026-11-14",
+        SITE + "/bmi-calculator/": "2026-11-15",
+        SITE + "/zakat-calculator/": "2026-11-15",
+        SITE + "/unit-converter/": "2026-11-15",
+        SITE + "/standard-calculator/": "2026-11-15",
+        SITE + "/stopwatch/": "2026-11-15",
+        SITE + "/query-calculator/": "2026-11-15",
+        SITE + "/tasbih-counter/": "2026-11-15",
+    }
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
-            if url == SITE + "/age-calculator/":
-                assert item.get("dateModified") == "2026-11-15", (
-                    "Age page dateModified must match the current verified page-specific content update."
-                )
-            elif url.endswith("/ur/bmi-calculator/"):
-                assert item.get("dateModified") == "2026-11-09", (
-                    "Urdu BMI dateModified must match the verified substantive content and source update."
-                )
-            elif url == SITE + "/years-to-days-calculator/":
-                assert item.get("dateModified") == "2026-11-14", (
-                    "Years-to-Days dateModified must match the latest verified content and source update."
-                )
-            elif url == SITE + "/unit-converter/":
-                assert item.get("dateModified") == "2026-11-15", (
-                    "Unit Converter dateModified must match the latest verified formula and content consolidation update."
-                )
-            elif url == SITE + "/tasbih-counter/":
-                assert item.get("dateModified") == "2026-11-15", (
-                    "Tasbih Counter dateModified must match the verified target-persistence and content update."
+            expected_date = expected_date_modified.get(url)
+            if expected_date:
+                assert item.get("dateModified") == expected_date, (
+                    f"{url} dateModified must match its verified page-specific content update."
                 )
             else:
                 assert "dateModified" not in item, (

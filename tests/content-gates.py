@@ -5,11 +5,15 @@ This deliberately checks examples and transparent assumptions, not a minimum
 word count. Google does not prescribe a preferred page length.
 """
 import html
+import json
 import re
 import sys
 from pathlib import Path
 
-ROOT = Path("public")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+ROOT = PROJECT_ROOT / "public"
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 CASES = {
     "query-calculator": [
         "Question: 2 weeks in hours.",
@@ -112,6 +116,83 @@ def main():
         ]:
             if phrase not in home_text:
                 failures.append("Homepage is missing the verified answer-first summary: " + phrase)
+    contact_path = ROOT / "contact" / "index.html"
+    if not contact_path.is_file():
+        failures.append("/contact/ was not generated")
+    else:
+        contact_html = contact_path.read_text(encoding="utf-8")
+        if "<title>Contact CalculatesAll | Help and Feedback</title>" not in contact_html:
+            failures.append("/contact/ has an unexpected or missing title")
+        if "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem." not in contact_html:
+            failures.append("/contact/ has an unexpected or missing meta description")
+        if "We read every message" in contact_html or "publish confirmed corrections on the tool page" in contact_html:
+            failures.append("/contact/ contains an unverified response or correction promise")
+        main_match = re.search(r"<main\b[^>]*>(.*?)</main>", contact_html, re.S | re.I)
+        contact_main_html = main_match.group(1) if main_match else ""
+        contact_text_source = re.sub(r"(?is)<(script|style|nav)\b.*?</\1>", " ", contact_main_html)
+        contact_text_source = re.sub(r"<[^>]+>", " ", contact_text_source)
+        contact_text = re.sub(r"\s+", " ", html.unescape(contact_text_source)).strip()
+        for phrase in [
+            "Contact CalculatesAll by email",
+            "calculator corrections",
+            "exact input values and units",
+            "displayed result, expected result",
+            "Do not include passwords",
+            "Calculation methodology",
+            "Editorial policy",
+            "Privacy policy",
+            "Sources and site guidance",
+            "A suggestion does not mean the requested feature is available or will be added.",
+            "How do I report a calculator error?",
+            "What information should I include?",
+            "How long does a reply take?",
+        ]:
+            if phrase not in contact_text:
+                failures.append("/contact/ is missing required contact guidance: " + phrase)
+        print("WORDCOUNT /contact/ " + str(len(contact_text.split())))
+        if len(contact_text.split()) < 180:
+            failures.append("/contact/ has fewer than 180 visible words")
+        if contact_text.lower().count("how do i report a calculator error?") != 1:
+            failures.append("/contact/ does not expose the expected visible FAQ question")
+        faq_scripts = re.findall(
+            r'<script type="application/ld\+json">(.*?)</script>',
+            contact_html,
+            re.S,
+        )
+        faq_nodes = []
+        for script in faq_scripts:
+            try:
+                node = json.loads(script)
+            except json.JSONDecodeError:
+                failures.append("/contact/ contains invalid JSON-LD")
+                continue
+            if isinstance(node, dict) and node.get("@type") == "FAQPage":
+                faq_nodes.append(node)
+        if len(faq_nodes) != 1:
+            failures.append("/contact/ must contain exactly one FAQPage node")
+        elif len(faq_nodes[0].get("mainEntity", [])) != 3:
+            failures.append("/contact/ FAQPage must match exactly three visible questions")
+        if contact_main_html.count("<details") != 3:
+            failures.append("/contact/ must display exactly three FAQ details")
+        allowed_urls = {
+            line.strip().rstrip("/") + "/"
+            for line in (PROJECT_ROOT / "urls.txt").read_text(encoding="utf-8").splitlines()
+            if line.strip().startswith("https://calculateallinone.vercel.app/")
+        }
+        internal_links = re.findall(r'href="(/[^"#?]*)', contact_main_html)
+        for link in internal_links:
+            canonical_link = "https://calculateallinone.vercel.app" + link
+            if not (canonical_link.rstrip("/") + "/") in allowed_urls:
+                failures.append("/contact/ contains an internal link absent from urls.txt: " + link)
+        for unsupported_claim in [
+            "we do not sell your personal information",
+            "we will reply within",
+            "usually within",
+            "medically reviewed",
+            "independently reviewed",
+        ]:
+            if unsupported_claim in contact_text.lower():
+                failures.append("/contact/ contains an unsupported claim: " + unsupported_claim)
     # Regression: the Health hub must describe the same supported pregnancy and
     # breastfeeding paths as the Adult Calorie Calculator.
     health_path = ROOT / "health" / "index.html"

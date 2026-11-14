@@ -2084,6 +2084,42 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
     else:
         body = ""
     body += '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
+    if path == "/contact/":
+        # OWNER TO CONFIRM: verify CONTACT_EMAIL is current and monitored before publication.
+        contact_faq = [
+            ("How do I report a calculator error?", "Email the calculator name, full page URL, exact input values and units, displayed result, expected result, and steps needed to reproduce the issue."),
+            ("What information should I include?", "Include only details needed to explain the problem. For date or time issues, include the date format and time zone when relevant. Do not include passwords, payment card numbers, bank details, medical records, or other sensitive information."),
+            ("How long does a reply take?", "No fixed response time is published. Do not assume that a reply will arrive by a particular date."),
+        ]
+        faq_entities = [
+            {"@type": "Question", "name": question,
+             "acceptedAnswer": {"@type": "Answer", "text": answer}}
+            for question, answer in contact_faq
+        ]
+        schema.append({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "name": "Contact CalculatesAll FAQs",
+            "url": SITE_URL + path,
+            "mainEntity": faq_entities,
+        })
+        body += (
+            '<p class="' + P + '">Contact CalculatesAll by email at <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a> for calculator corrections, accessibility issues, translation feedback, or questions about site content. For a calculation report, include the calculator name, page URL, exact input values and units, displayed result, expected result, and steps to reproduce the issue.</p>'
+            '<h2 class="' + H2 + '">Report a calculator error</h2>'
+            '<p class="' + P + '">Describe what you were trying to calculate and what happened. Copy the input values exactly, including units and decimal places. If the result depends on a sequence of selections, list those steps in order. A relevant formula or reliable reference can also help explain why you believe the displayed result is incorrect. Do not change or round the original inputs when reporting the issue.</p>'
+            '<h2 class="' + H2 + '">Send feedback or an accessibility report</h2>'
+            '<p class="' + P + '">Use the same email address for feedback about page wording, keyboard access, screen-reader labels, mobile layout, or Urdu translation. Identify the page and describe the device, browser, language, or action involved when that context is needed to reproduce the problem. A suggestion does not mean the requested feature is available or will be added.</p>'
+            '<h2 class="' + H2 + '">Protect sensitive information</h2>'
+            '<p class="' + P + '">Do not include passwords, payment card numbers, bank details, medical records, identity documents, or other sensitive personal information in an email. Send only the minimum details needed to explain the issue. Review the <a class="' + LINK + '" href="/privacy/">Privacy policy</a> for the site information-handling statement before deciding what to share.</p>'
+            '<h2 class="' + H2 + '">Sources and site guidance</h2>'
+            '<ul class="mt-3 list-disc space-y-2 pl-6 text-base text-stone-800 dark:text-stone-200">'
+            '<li><a class="' + LINK + '" href="/methodology/">Calculation methodology</a> explains the methods, examples, assumptions, and limits used by the tools.</li>'
+            '<li><a class="' + LINK + '" href="/editorial-policy/">Editorial policy</a> describes how content and reported errors are reviewed and corrected.</li>'
+            '<li><a class="' + LINK + '" href="/privacy/">Privacy policy</a> provides further information about privacy and data handling.</li>'
+            '</ul>'
+            '<h2 class="' + H2 + '">Contact questions</h2><div class="mt-3">' + faq_html(contact_faq) + '</div>'
+        )
+        paragraphs = []
     methodology_headings = {
         0: "How to use this methodology",
         1: "Arithmetic, percentages and fractions",
@@ -2628,7 +2664,7 @@ def main():
             'For information about advertising cookies and privacy choices, read the <a class="underline text-sky-800 dark:text-sky-300" href="/privacy/">Privacy Policy</a>. Any future affiliate relationship will be disclosed before or beside the relevant link.',
             'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
         ]),
-        ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
+        ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for calculator corrections, accessibility feedback, translation issues or questions about site content.", "Contact", [
             'For corrections, feedback, accessibility problems, Urdu translation fixes or questions about a calculator, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
             "To help us reproduce a calculation issue, identify the calculator and include its full page URL, the exact input values and units you entered, the result displayed, and the result you expected. If the issue depends on a particular sequence, describe the steps and options you selected. You can also include the source or formula that supports the expected result.",
             "We read every message. A report with specific inputs, units and an expected result gives us something that can be checked. A general statement that a result looks wrong may not provide enough information to reproduce the issue, and we may need more details before we can confirm it.",
