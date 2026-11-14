@@ -44,7 +44,8 @@ jobs:
       - name: Build site and run smoke tests
         run: npm run build
       - name: Verify locked Playwright version
-        run: node -e 'const v=require("playwright/package.json").version; if(v!=="1.64.1") throw new Error("Expected locked Playwright 1.64.1, got "+v); console.log("Locked Playwright version: "+v);'
+        run: |
+          node -e 'const v=require("playwright/package.json").version; if(v!=="1.64.1") throw new Error("Expected locked Playwright 1.64.1, got "+v); console.log("Locked Playwright version:",v);'
       - name: Install Chromium for locked Playwright
         run: npx playwright install --with-deps chromium
       - name: Audit actual rendered first-screen buttons and profit calculations
