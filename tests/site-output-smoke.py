@@ -718,8 +718,8 @@ for url in urls:
                     "Unit Converter dateModified must match the verified formulas, sources and limitations update."
                 )
             elif url == SITE + "/tasbih-counter/":
-                assert item.get("dateModified") == "2026-11-14", (
-                    "Tasbih Counter dateModified must match the verified usage and storage disclosure update."
+                assert item.get("dateModified") == "2026-11-15", (
+                    "Tasbih Counter dateModified must match the verified target-persistence and content update."
                 )
             else:
                 assert "dateModified" not in item, (
