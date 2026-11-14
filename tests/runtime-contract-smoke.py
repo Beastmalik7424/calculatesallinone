@@ -11,6 +11,8 @@ EXPECTED_NVMRC = "24"
 EXPECTED_ENGINE = "24.x"
 EXPECTED_WORKFLOW_NODE = "24"
 EXPECTED_PYTHON = "3.12"
+SETUP_NODE_SHA = "949feb2413d6458794dcd2491c4babbbce0c15c1"
+SETUP_PYTHON_SHA = "6d4fd22b20465ccc0f7354476588e8df7c9ca0e0"
 
 
 def validate_runtime_config(config):
@@ -104,18 +106,36 @@ class RuntimeContractUnitTests(unittest.TestCase):
     def test_rejects_missing_runtime_declaration(self):
         self.assertFalse(validate_runtime_config({}))
 
+    def test_accepts_sha_pinned_setup_node_action(self):
+        content = f"uses: actions/setup-node@{SETUP_NODE_SHA} # v7\\nwith:\\n  node-version: '24'\\n"
+        self.assertEqual(workflow_node_version(content), "24")
+
+    def test_rejects_mutable_setup_node_tag(self):
+        content = "uses: actions/setup-node@v7\\nwith:\\n  node-version: '24'\\n"
+        with self.assertRaisesRegex(ValueError, "exactly one"):
+            workflow_node_version(content)
+
     def test_rejects_workflow_with_duplicate_node_setup_versions(self):
         content = (
-            "uses: actions/setup-node@v7\n  with:\n    node-version: \"24\"\n"
-            "uses: actions/setup-node@v7\n  with:\n    node-version: \"20\"\n"
+            f"uses: actions/setup-node@{SETUP_NODE_SHA} # v7\\n  with:\\n    node-version: \"24\"\\n"
+            f"uses: actions/setup-node@{SETUP_NODE_SHA} # v7\\n  with:\\n    node-version: \"20\"\\n"
         )
         with self.assertRaisesRegex(ValueError, "exactly one"):
             workflow_node_version(content)
 
+    def test_accepts_sha_pinned_setup_python_action(self):
+        content = f"uses: actions/setup-python@{SETUP_PYTHON_SHA} # v7\\nwith:\\n  python-version: '3.12'\\n"
+        self.assertEqual(workflow_python_version(content), "3.12")
+
+    def test_rejects_mutable_setup_python_tag(self):
+        content = "uses: actions/setup-python@v7\\nwith:\\n  python-version: '3.12'\\n"
+        with self.assertRaisesRegex(ValueError, "exactly one"):
+            workflow_python_version(content)
+
     def test_rejects_workflow_with_duplicate_python_setup_versions(self):
         content = (
-            "uses: actions/setup-python@v7\n  with:\n    python-version: \"3.12\"\n"
-            "uses: actions/setup-python@v7\n  with:\n    python-version: \"3.11\"\n"
+            f"uses: actions/setup-python@{SETUP_PYTHON_SHA} # v7\\n  with:\\n    python-version: \"3.12\"\\n"
+            f"uses: actions/setup-python@{SETUP_PYTHON_SHA} # v7\\n  with:\\n    python-version: \"3.11\"\\n"
         )
         with self.assertRaisesRegex(ValueError, "exactly one"):
             workflow_python_version(content)
