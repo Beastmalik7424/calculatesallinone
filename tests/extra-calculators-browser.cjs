@@ -367,6 +367,18 @@ const {chromium}=require("playwright");
    await page.close();
   }
 
+  {
+   const page=await browser.newPage({viewport:{width:390,height:844}});
+   const response=await page.goto(base+"/ur/tasbih-counter/");
+   if(!response||response.status()!==200)throw Error("Urdu Tasbih page HTTP failure");
+   await page.locator("#t-target").selectOption("custom");
+   await page.locator("#t-custom-target").fill("77");
+   await page.reload();
+   if((await page.locator("#t-target").inputValue())!=="custom"||(await page.locator("#t-custom-target").inputValue())!=="77")throw Error("Urdu Tasbih custom target must persist across reload");
+   console.log("Urdu Tasbih custom target persistence PASS");
+   await page.close();
+  }
+
   for(const width of [320,360,390,1366]){
    for(const path of ["/","/percentage-calculator/","/percentage-difference-calculator/","/fraction-calculator/","/ratio-calculator/","/compound-interest-calculator/","/date-calculator/","/bmi-calculator/","/zakat-calculator/"]){
     const page=await browser.newPage({viewport:{width,height:width===1366?768:844}});
