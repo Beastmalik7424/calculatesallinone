@@ -316,8 +316,12 @@ const {chromium}=require("playwright");
    await page.locator("#t-phrase").selectOption("custom");
    await page.locator("#t-custom-phrase").fill("Test dhikr");
    if(await page.locator("#t-custom-phrase").isDisabled())throw Error("Tasbih custom phrase field should enable");
+   await page.locator("#t-target").selectOption("99");
+   await page.reload();
+   if((await page.locator("#t-target").inputValue())!=="99")throw Error("Tasbih preset target must persist across reload");
+   if((await page.locator("#t-phrase").inputValue())!=="custom"||(await page.locator("#t-custom-phrase").inputValue())!=="Test dhikr")throw Error("Tasbih custom phrase must persist across reload");
    await page.locator("#t-target").selectOption("custom");
-   await page.locator("#t-custom-target").fill("33");
+   await page.locator("#t-custom-target").fill("123");
    if(!(await page.locator("#t-custom-target-wrap").isVisible()))throw Error("Tasbih custom target field should become visible");
    const countAfterThousand=await page.evaluate(()=>{
     const button=document.querySelector("#t-tap");
@@ -327,6 +331,8 @@ const {chromium}=require("playwright");
    if(countAfterThousand!=="1000")throw Error("Tasbih must preserve all 1,000 manual taps without target auto-reset: "+countAfterThousand);
    await page.reload();
    if((await page.locator("#t-count").innerText()).trim()!=="1000")throw Error("Tasbih count must persist across reload in the same browser");
+   if((await page.locator("#t-target").inputValue())!=="custom"||(await page.locator("#t-custom-target").inputValue())!=="123")throw Error("Tasbih custom target must persist across reload");
+   if((await page.locator("#t-phrase").inputValue())!=="custom"||(await page.locator("#t-custom-phrase").inputValue())!=="Test dhikr")throw Error("Tasbih custom phrase must remain selected after reload");
    const countAfterUndo=await page.evaluate(()=>{
     const button=document.querySelector("#t-undo");
     for(let i=0;i<1000;i++)button.click();
