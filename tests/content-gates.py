@@ -85,6 +85,10 @@ def visible_text(path):
 
 def main():
     failures = []
+    from build import LASTMOD
+    from seo_finalize import VERIFIED_PAGE_UPDATE_DATES
+    if LASTMOD != VERIFIED_PAGE_UPDATE_DATES:
+        failures.append("Visible Last updated dates and SEO finalizer verified dates must match exactly.")
     for slug, expected_phrases in CASES.items():
         path = ROOT / slug / "index.html"
         if not path.is_file():
