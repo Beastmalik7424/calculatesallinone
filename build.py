@@ -25,7 +25,13 @@ SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools fo
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
     "/years-to-days-calculator/": "2026-11-14",
-    "/unit-converter/": "2026-11-14",
+    "/bmi-calculator/": "2026-11-15",
+    "/zakat-calculator/": "2026-11-15",
+    "/age-calculator/": "2026-11-15",
+    "/unit-converter/": "2026-11-15",
+    "/standard-calculator/": "2026-11-15",
+    "/stopwatch/": "2026-11-15",
+    "/query-calculator/": "2026-11-15",
     "/tasbih-counter/": "2026-11-15",
 }
 OUT = "public"
@@ -579,16 +585,8 @@ TOOLS = [
         ),
         "guide": [
             ("How it works", [
-                "The stopwatch reads the browser clock and shows elapsed time in hours, minutes, seconds and hundredths of a second.",
-                "Elapsed time is calculated from the start time, so it stays accurate when you return to a tab that was in the background.",
-            ]),
-            ("Limits", [
-                "This is suitable for everyday timing. Official sport or laboratory timing needs certified equipment.",
-            ]),
-            ("Use the stopwatch for repeatable everyday tasks", [
-                "A browser stopwatch is useful for timing a study interval, workout set, cooking step or short work session. Press Start at the beginning, Stop when the interval ends, and Reset before a new attempt. If you compare repeated sessions, use the same start and stop method so the results are more meaningful.",
-                "The display shows hundredths of a second, but that display precision is not the same as certified measurement accuracy. Browser scheduling, operating-system load and background-tab throttling can affect how often the screen refreshes. The elapsed-time calculation is based on the browser clock, yet this tool is not intended for official sporting results, laboratory experiments or legal evidence.",
-                "This page does not store a history of completed timings. Record any result you need before resetting or reloading the page. If the task requires a verified split time, calibrated hardware or a formal timing protocol, use equipment designed for that purpose instead of relying on a general-purpose browser tool.",
+                "Press Start when a study interval, workout set, cooking step or short work session begins. Press Stop when it ends, and Reset before a new attempt. For comparisons, use the same start and stop method each time.",
+                "The elapsed value is calculated from differences between performance.now() timestamps, not by counting interval callbacks. A background tab can delay the visible refresh; the next update recalculates elapsed time from the current monotonic timestamp. The display shows hours, minutes, seconds and hundredths, but that display precision is not a certified accuracy guarantee.",
             ]),
         ],
         "faq": [
@@ -793,14 +791,14 @@ def bmi_urdu_guide_html():
 
 EXTRA = {
     "zakat-calculator": {
-        "quick": "Zakat is 2.5 percent of net zakatable wealth, due when that wealth is at least the Nisab (612.36 grams of silver) and has been held for one lunar year.",
+        "quick": "",
         "faq": [
             ("Is Zakat due on my home?", "Your home that you live in is not zakatable wealth. Rental property income and goods held for sale can be zakatable, so check the rules for each asset with a scholar."),
             ("Do I subtract debts?", "Debts due now are commonly subtracted from zakatable wealth. Whether particular long-term debts are deducted is a point scholars discuss, so confirm your case."),
         ],
     },
     "bmi-calculator": {
-        "quick": "BMI uses weight in kg divided by height in metres squared when kg is selected, or 703 × weight in lb divided by height in total inches squared when lb is selected. For adults, 18.5 to 24.9 is the WHO normal weight range.",
+        "quick": "",
         "faq": [
             ("Is a BMI of 25 unhealthy?", "A BMI of 25 is at the start of the overweight range. It is a screening number only. Waist size, blood pressure and blood tests give a fuller picture, and a clinician can interpret them with you."),
             ("Does BMI work for athletes?", "BMI can overstate body fat in people with high muscle mass. A clinician can use other measures for athletes."),
@@ -822,13 +820,13 @@ EXTRA = {
         ],
     },
     "age-calculator": {
-        "quick": "Age is calculated by subtracting the birth date from today's date, year by year, month by month and day by day, then borrowing from the previous month where needed.",
+        "quick": "",
         "faq": [
             ("How do I find my age in days?", "Enter your date of birth. The total days lived figure is shown with your years, months and days."),
         ],
     },
     "unit-converter": {
-        "quick": "Convert by multiplying the value by the factor from the starting unit to the base unit, then dividing by the factor from the target unit to the base unit.",
+        "quick": "",
         "faq": [
             ("How do I convert centimeters to inches?", "Divide centimeters by 2.54. For example, 10 cm is about 3.94 inches. One inch is exactly 2.54 centimeters."),
             ("How do I convert kilograms to pounds?", "Multiply kilograms by about 2.20462262. For example, 1 kg is about 2.2046 lb. The exact reference is 1 lb = 0.45359237 kg."),
@@ -836,7 +834,7 @@ EXTRA = {
         ],
     },
     "standard-calculator": {
-        "quick": "Multiplication and division run before addition and subtraction. The percent key divides the last number by 100.",
+        "quick": "",
         "faq": [
             ("Does this calculator handle parentheses?", "Yes. Use the ( and ) buttons to group calculations. Multiplication and division run before addition and subtraction."),
         ],
@@ -846,7 +844,7 @@ EXTRA = {
         "faq": [],
     },
     "stopwatch": {
-        "quick": "Press Start to begin timing, Stop to pause, and Reset to clear. The display shows hours, minutes, seconds and hundredths.",
+        "quick": "",
         "faq": [
             ("Does the stopwatch continue after I close the tab?", "No. Closing or reloading the page stops and clears the stopwatch."),
         ],
@@ -1043,7 +1041,7 @@ TOOLS.extend([
 ])
 EXTRA.update({
     "years-to-days-calculator": {"faq": [], "quick": ""},
-    "query-calculator": {"faq": [], "quick": "Month conversions use 12 months per year and an average Gregorian month of 30.436875 days. Example: 115 months = 9 years and 7 months, about 3,500.24 average days; exact calendar days need a start date."},
+    "query-calculator": {"faq": [], "quick": ""},
 })
 
 TOOLS.append({
@@ -1356,7 +1354,8 @@ def shell_strings(lang):
 
 
 def home_alts_all():
-    return [(l["code"], l["path"]) for l in LANGS] + [("x-default", "/")]
+    # /ur/ remains noindex pending native-language review, so it must not be a hreflang alternate.
+    return [("en", "/"), ("x-default", "/")]
 
 
 def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
@@ -1495,7 +1494,7 @@ def shell(main_html, lang="en", current_path=None):
     s = shell_strings(lang)
     home = "/"
     brand_home_label = {"en": " home page", "ur": " ہوم پیج", "ar": " الصفحة الرئيسية", "hi": " होम पेज", "es": " página de inicio", "fr": " page d’accueil"}.get(lang, " home page")
-    main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else "max-w-3xl"
+    main_width = "max-w-screen-2xl" if current_path in ("/", "/ur/") else "max-w-3xl"
     menu_position = "left-0 right-auto" if lang in RTL_LANGS else "right-0"
     tool_paths = {"/" + t["slug"] + "/" for t in TOOLS if t["slug"] != "standard-calculator"}
     urdu_tool_paths = {"/ur/" + slug + "/" for slug in URDU if slug != "standard-calculator"}
@@ -2085,6 +2084,42 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
     else:
         body = ""
     body += '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100">' + h1 + '</h1>'
+    if path == "/contact/":
+        # OWNER TO CONFIRM: verify CONTACT_EMAIL is current and monitored before publication.
+        contact_faq = [
+            ("How do I report a calculator error?", "Email the calculator name, full page URL, exact input values and units, displayed result, expected result, and steps needed to reproduce the issue."),
+            ("What information should I include?", "Include only details needed to explain the problem. For date or time issues, include the date format and time zone when relevant. Do not include passwords, payment card numbers, bank details, medical records, or other sensitive information."),
+            ("How long does a reply take?", "No fixed response time is published. Do not assume that a reply will arrive by a particular date."),
+        ]
+        faq_entities = [
+            {"@type": "Question", "name": question,
+             "acceptedAnswer": {"@type": "Answer", "text": answer}}
+            for question, answer in contact_faq
+        ]
+        schema.append({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "name": "Contact CalculatesAll FAQs",
+            "url": SITE_URL + path,
+            "mainEntity": faq_entities,
+        })
+        body += (
+            '<p class="' + P + '">Contact CalculatesAll by email at <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a> for calculator corrections, accessibility issues, translation feedback, or questions about site content. For a calculation report, include the calculator name, page URL, exact input values and units, displayed result, expected result, and steps to reproduce the issue.</p>'
+            '<h2 class="' + H2 + '">Report a calculator error</h2>'
+            '<p class="' + P + '">Describe what you were trying to calculate and what happened. Copy the input values exactly, including units and decimal places. If the result depends on a sequence of selections, list those steps in order. A relevant formula or reliable reference can also help explain why you believe the displayed result is incorrect. Do not change or round the original inputs when reporting the issue.</p>'
+            '<h2 class="' + H2 + '">Send feedback or an accessibility report</h2>'
+            '<p class="' + P + '">Use the same email address for feedback about page wording, keyboard access, screen-reader labels, mobile layout, or Urdu translation. Identify the page and describe the device, browser, language, or action involved when that context is needed to reproduce the problem. A suggestion does not mean the requested feature is available or will be added.</p>'
+            '<h2 class="' + H2 + '">Protect sensitive information</h2>'
+            '<p class="' + P + '">Do not include passwords, payment card numbers, bank details, medical records, identity documents, or other sensitive personal information in an email. Send only the minimum details needed to explain the issue. Review the <a class="' + LINK + '" href="/privacy/">Privacy policy</a> for the site information-handling statement before deciding what to share.</p>'
+            '<h2 class="' + H2 + '">Sources and site guidance</h2>'
+            '<ul class="mt-3 list-disc space-y-2 pl-6 text-base text-stone-800 dark:text-stone-200">'
+            '<li><a class="' + LINK + '" href="/methodology/">Calculation methodology</a> explains the methods, examples, assumptions, and limits used by the tools.</li>'
+            '<li><a class="' + LINK + '" href="/editorial-policy/">Editorial policy</a> describes how content and reported errors are reviewed and corrected.</li>'
+            '<li><a class="' + LINK + '" href="/privacy/">Privacy policy</a> provides further information about privacy and data handling.</li>'
+            '</ul>'
+            '<h2 class="' + H2 + '">Contact questions</h2><div class="mt-3">' + faq_html(contact_faq) + '</div>'
+        )
+        paragraphs = []
     methodology_headings = {
         0: "How to use this methodology",
         1: "Arithmetic, percentages and fractions",
@@ -2307,17 +2342,8 @@ def home_app_page(lang):
     calc_title = "Standard Calculator" if not urdu else "معیاری کیلکولیٹر"
     tool_intro = 'Choose a calculator, or browse the <a class="text-sky-800 dark:text-sky-300 underline" href="/free-online-calculators/">complete free online calculators guide</a>. You can also explore the <a class="text-sky-800 dark:text-sky-300 underline" href="/money/">Money and Business</a> and <a class="text-sky-800 dark:text-sky-300 underline" href="/math/">Math and Converters</a> hubs.' if not urdu else "شروع کرنے کے لیے کوئی ٹول منتخب کریں۔"
     free_label = "FREE TOOLS • PRIVATE BY DESIGN • NO SIGN-UP" if not urdu else "مفت ٹولز • نجی استعمال • سائن اپ نہیں"
+    # Published homepage language choices are generated from the reviewed LANGS list in the shared navigation.
     language_links = ""
-    if not urdu:
-        language_links = (
-            '<nav aria-label="Other languages" class="mt-8">'
-            '<h2 class="text-xl font-semibold">Other language versions</h2>'
-            '<ul class="mt-3 flex flex-wrap gap-3">'
-            '<li><a class="' + LINK + '" href="/ar/">العربية</a></li>'
-            '<li><a class="' + LINK + '" href="/es/">Español</a></li>'
-            '<li><a class="' + LINK + '" href="/fr/">Français</a></li>'
-            '</ul></nav>'
-        )
     hero_ui = CALC_UI
     if urdu:
         for en, ur in URDU["standard-calculator"]["labels"]:
@@ -2568,8 +2594,7 @@ def main():
     home_alts = home_alts_all()
     home_app_page("en")
     home_app_page("ur")
-    for code in ["ar", "hi", "es", "fr"]:
-        entries.append((home_lang_page(code), home_alts_all()))
+    # Additional locale homepages stay unpublished until their complete translated journeys receive native-language review.
     entries.append(("/", home_alts))
     entries.append(("/ur/", home_alts))
     for c in CATEGORIES:
@@ -2639,7 +2664,7 @@ def main():
             'For information about advertising cookies and privacy choices, read the <a class="underline text-sky-800 dark:text-sky-300" href="/privacy/">Privacy Policy</a>. Any future affiliate relationship will be disclosed before or beside the relevant link.',
             'Questions about this disclosure can be sent to <a class="underline text-sky-800 dark:text-sky-300" href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.',
         ]),
-        ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for corrections, feedback or questions about any calculator. We read every message and publish confirmed corrections on the tool page.", "Contact", [
+        ("/contact/", "Contact CalculatesAll", "Contact CalculatesAll for calculator corrections, accessibility feedback, translation issues or questions about site content.", "Contact", [
             'For corrections, feedback, accessibility problems, Urdu translation fixes or questions about a calculator, email <a class="' + LINK + '" href="mailto:' + html.escape(CONTACT_EMAIL, quote=True) + '">' + html.escape(CONTACT_EMAIL) + '</a>.',
             "To help us reproduce a calculation issue, identify the calculator and include its full page URL, the exact input values and units you entered, the result displayed, and the result you expected. If the issue depends on a particular sequence, describe the steps and options you selected. You can also include the source or formula that supports the expected result.",
             "We read every message. A report with specific inputs, units and an expected result gives us something that can be checked. A general statement that a result looks wrong may not provide enough information to reproduce the issue, and we may need more details before we can confirm it.",

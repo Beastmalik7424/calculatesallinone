@@ -86,6 +86,7 @@ for href in ("/calorie-calculator/", "/emi-calculator/", "/compound-interest-cal
 assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 assert "https://github.com/Beastmalik7424" in about_html and "source repository" in about_html, "About page should expose the verified public maintainer profile and source repository"
+assert "Short introductory pages in Arabic, Hindi, Spanish and French" not in about_html, "About page must not describe retired, unreviewed locale homepages as published."
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
 about_main_match = re.search(r"<main\b[^>]*>(.*?)</main>", about_html, re.S)
@@ -262,13 +263,23 @@ assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in em
 # Category hubs are indexable when their explanatory sections and tool links are present.
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
     assert SITE + hub in sitemap_urls, f"Substantive category hub should be indexable: {hub}"
-# Localized homepages remain noindex until their translated tool journeys receive competent review.
-for locale_home in ("/ar/", "/hi/", "/es/", "/fr/", "/ur/"):
+# The four unreviewed translated homepages are retired until native review is complete.
+# A route is considered retired only when build output, navigation, hreflang and sitemap all omit it.
+RETIRED_LOCALE_HOMES = ("/ar/", "/hi/", "/es/", "/fr/")
+for locale_home in RETIRED_LOCALE_HOMES:
     locale_file = ROOT / locale_home.strip("/") / "index.html"
-    assert locale_file.is_file(), f"Localized homepage missing: {locale_home}"
-    locale_html = locale_file.read_text(encoding="utf-8")
-    assert 'name="robots" content="noindex, follow"' in locale_html, f"Unreviewed localized homepage must stay noindex: {locale_home}"
-    assert SITE + locale_home not in sitemap_urls, f"Unreviewed localized homepage must not be in sitemap: {locale_home}"
+    assert not locale_file.exists(), f"Unreviewed localized homepage must not be generated: {locale_home}"
+    assert SITE + locale_home not in sitemap_urls, f"Retired localized homepage must not be in sitemap: {locale_home}"
+
+noindex_paths = {line.strip() for line in Path("noindex.txt").read_text(encoding="utf-8").splitlines() if line.strip()}
+assert "/ur/" in noindex_paths, "Urdu homepage must remain noindex until its full translated journey is reviewed."
+for locale_home in RETIRED_LOCALE_HOMES:
+    assert locale_home not in noindex_paths, f"Retired locale route must not be recorded as a generated noindex page: {locale_home}"
+for url in urls:
+    page_html = output_for_url(url).read_text(encoding="utf-8")
+    for locale_home in RETIRED_LOCALE_HOMES:
+        assert f'href="{locale_home}"' not in page_html, f"Generated page {url} must not link to retired locale homepage {locale_home}"
+        assert f'href="{SITE + locale_home}"' not in page_html, f"Generated page {url} must not advertise retired locale alternate {locale_home}"
 for url in urls:
     page = output_for_url(url)
     assert page.is_file(), f"Sitemap URL has no generated HTML: {url} -> {page}"
@@ -601,54 +612,17 @@ urdu_standard_html = (ROOT / "ur" / "standard-calculator" / "index.html").read_t
 # Urdu calculator breadcrumbs and shared navigation/footer must use Urdu labels.
 for english_text in ("Math and Converters", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
     assert english_text not in urdu_standard_html, "English shared UI text remains on Urdu calculator: " + english_text
-# Shared navigation and footer must be localized on every translated homepage.
-localized_home_checks = {
-    "ar": {
-        "terms": "شروط الاستخدام", 
-        "affiliate": "إفصاح الروابط التابعة", "main": 'aria-label="القائمة الرئيسية"',
-        "footer": 'aria-label="تذييل الصفحة"',
-    },
-    "hi": {
-        "terms": "उपयोग की शर्तें", 
-        "affiliate": "एफिलिएट प्रकटीकरण", "main": 'aria-label="मुख्य नेविगेशन"',
-        "footer": 'aria-label="पाद लेख"',
-    },
-    "es": {
-        "terms": "Términos de uso", 
-        "affiliate": "Divulgación de afiliación", "main": 'aria-label="Navegación principal"',
-        "footer": 'aria-label="Pie de página"',
-    },
-    "fr": {
-        "terms": "Conditions d’utilisation", 
-        "affiliate": "Divulgation d’affiliation", "main": 'aria-label="Navigation principale"',
-        "footer": 'aria-label="Pied de page"',
-    },
-}
-for locale, expected in localized_home_checks.items():
-    localized_html = output_for_url(SITE + "/" + locale + "/").read_text(encoding="utf-8")
-    for key, expected_text in expected.items():
-        assert expected_text in localized_html, f"Missing localized {key} label on /{locale}/"
-    assert 'href="/marketplaces/"' not in localized_html, f"Removed marketplace guide still linked on /{locale}/"
-    for english_text in ("All tools", "Terms of use", "Marketplace guide", "Affiliate disclosure", 'aria-label="Main"', 'aria-label="Footer"'):
-        assert english_text not in localized_html, f"English shared UI text remains on /{locale}/: {english_text}"
-# Tool-menu labels on translated homepages must not fall back to English.
-localized_tool_labels = {
-    "ar": ("حاسبة الزكاة", "حاسبة مؤشر كتلة الجسم", "حاسبة العمر"),
-    "hi": ("ज़कात कैलकुलेटर", "BMI कैलकुलेटर", "आयु कैलकुलेटर"),
-    "es": ("Calculadora de Zakat", "Calculadora de IMC", "Calculadora de edad"),
-    "fr": ("Calculatrice de Zakat", "Calculatrice d’IMC", "Calculatrice d’âge"),
-}
-english_tool_labels = (
-    "Zakat Calculator", "BMI Calculator", "Profit and Loss Calculator",
-    "Discount Calculator", "Age Calculator", "Unit Converter",
-    "Standard Calculator", "Tasbih Counter", "Online Stopwatch",
-)
-for locale, labels in localized_tool_labels.items():
-    localized_html = output_for_url(SITE + "/" + locale + "/").read_text(encoding="utf-8")
-    for label in labels:
-        assert ">" + label + "</a>" in localized_html, f"Missing localized tool label on /{locale}/: {label}"
-    for label in english_tool_labels:
-        assert ">" + label + "</a>" not in localized_html, f"English tool label remains in /{locale}/ menu: {label}"
+# The only published localized homepage is Urdu, and it remains deliberately noindex.
+urdu_home_html = (ROOT / "ur" / "index.html").read_text(encoding="utf-8")
+assert 'name="robots" content="noindex, follow"' in urdu_home_html, "Urdu homepage must remain noindex pending native review."
+assert SITE + "/ur/" not in sitemap_urls, "Urdu homepage must not be in the sitemap before native review."
+assert not re.search(r'<link\s+rel=["\']alternate["\']\s+hreflang=', urdu_home_html, re.I), "Noindex Urdu homepage must not publish hreflang alternates."
+# The four unreviewed language homepages must have no remaining navigation, canonical or alternate references.
+for generated_html in ROOT.rglob("*.html"):
+    generated_source = generated_html.read_text(encoding="utf-8")
+    for locale_code in ("ar", "hi", "es", "fr"):
+        assert not re.search(r'href=["\']/' + locale_code + r'/', generated_source), f"Retired locale link remains in {generated_html}: {locale_code}"
+        assert not re.search(r'hreflang=["\']' + locale_code + r'["\']', generated_source), f"Retired locale hreflang remains in {generated_html}: {locale_code}"
 # The Zakat page must not show an unfinished expert-review note when no reviewer is listed.
 zakat_html = (ROOT / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
 assert "Subject expert review by a qualified scholar is pending." not in zakat_html, (
@@ -699,27 +673,24 @@ for url in urls:
         assert len(faq_schemas) == 1, "EMI page must have exactly one FAQPage schema generated from visible FAQ content"
         app_schemas = [item for item in parsed_schemas if item.get("@type") == "WebApplication"]
         assert not app_schemas, "EMI page must omit SoftwareApplication rich-result markup without genuine public ratings or reviews"
+    expected_date_modified = {
+        SITE + "/age-calculator/": "2026-11-15",
+        SITE + "/ur/bmi-calculator/": "2026-11-09",
+        SITE + "/years-to-days-calculator/": "2026-11-14",
+        SITE + "/bmi-calculator/": "2026-11-15",
+        SITE + "/zakat-calculator/": "2026-11-15",
+        SITE + "/unit-converter/": "2026-11-15",
+        SITE + "/standard-calculator/": "2026-11-15",
+        SITE + "/stopwatch/": "2026-11-15",
+        SITE + "/query-calculator/": "2026-11-15",
+        SITE + "/tasbih-counter/": "2026-11-15",
+    }
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
-            if url == SITE + "/age-calculator/":
-                assert item.get("dateModified") == "2026-11-11", (
-                    "Age page dateModified must match the verified leap-day disclosure update."
-                )
-            elif url.endswith("/ur/bmi-calculator/"):
-                assert item.get("dateModified") == "2026-11-09", (
-                    "Urdu BMI dateModified must match the verified substantive content and source update."
-                )
-            elif url == SITE + "/years-to-days-calculator/":
-                assert item.get("dateModified") == "2026-11-14", (
-                    "Years-to-Days dateModified must match the latest verified content and source update."
-                )
-            elif url == SITE + "/unit-converter/":
-                assert item.get("dateModified") == "2026-11-14", (
-                    "Unit Converter dateModified must match the verified formulas, sources and limitations update."
-                )
-            elif url == SITE + "/tasbih-counter/":
-                assert item.get("dateModified") == "2026-11-15", (
-                    "Tasbih Counter dateModified must match the verified target-persistence and content update."
+            expected_date = expected_date_modified.get(url)
+            if expected_date:
+                assert item.get("dateModified") == expected_date, (
+                    f"{url} dateModified must match its verified page-specific content update."
                 )
             else:
                 assert "dateModified" not in item, (
@@ -1162,22 +1133,6 @@ assert "Worked example: discount and sales tax" in _discount_editorial_html
 assert "The final amount is 1,870" in _discount_editorial_html
 assert "Why the order of percentage changes matters" in _discount_editorial_html
 
-# Localized landing pages must reuse the single canonical WebSite entity.
-for _lang_path in ("/ar/", "/es/", "/fr/"):
-    _lang_html = output_for_url(SITE + _lang_path).read_text(encoding="utf-8")
-    _lang_schemas = [
-        json.loads(match.group(1))
-        for match in re.finditer(
-            r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
-            _lang_html,
-            re.S | re.I,
-        )
-    ]
-    _websites = [schema for schema in _lang_schemas if schema.get("@type") == "WebSite"]
-    assert len(_websites) == 1, f"{_lang_path} must expose exactly one WebSite entity"
-    assert _websites[0].get("@id") == SITE + "/#website", f"{_lang_path} WebSite must use the canonical entity ID"
-    assert _websites[0].get("url") == SITE + "/", f"{_lang_path} WebSite URL must point to the canonical site root"
-
 # Compact Zakat fields must remain fully localized on the Urdu calculator.
 _ur_zakat_compact = output_for_url(SITE + "/ur/zakat-calculator/").read_text(encoding="utf-8")
 for _label in ("نقد اور بینک بچت", "سونے کی قیمت", "چاندی کی قیمت", "فروخت کا کاروباری مال",
@@ -1218,7 +1173,7 @@ for page_path, input_id, notice in (
 
 # Header brand links must always return to the canonical site homepage.
 # This prevents a translated homepage logo from linking back to itself.
-for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/", "/ar/", "/es/", "/fr/", "/hi/"):
+for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/"):
     _logo_html = output_for_url(SITE + _logo_path).read_text(encoding="utf-8")
     _logo_match = re.search(
         r'<a href="([^"]+)" aria-label="CalculatesAll[^"]*" class="font-extrabold text-xl',

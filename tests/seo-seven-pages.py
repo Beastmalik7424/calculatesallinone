@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focused build-output checks for the ten scoped SEO URLs."""
+"""Focused build-output checks for English and Urdu indexable routes."""
 import html
 import re
 import sys
@@ -9,15 +9,40 @@ from urllib.parse import urlparse
 
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
+RETIRED_LOCALE_HOMES = ("/ar/", "/hi/", "/es/", "/fr/")
+URDU_INDEXABLE = (
+    "/ur/age-calculator/",
+    "/ur/bmi-calculator/",
+    "/ur/discount-calculator/",
+    "/ur/profit-loss-calculator/",
+    "/ur/standard-calculator/",
+    "/ur/stopwatch/",
+    "/ur/tasbih-counter/",
+    "/ur/unit-converter/",
+    "/ur/zakat-calculator/",
+)
 TARGETS = {
-    "/ar/": "noindex",
-    "/es/": "noindex",
-    "/fr/": "noindex",
     "/about/": "index",
     "/contact/": "index",
     "/discount-calculator/": "index",
     "/editorial-policy/": "index",
     "/health/": "index",
+    "/ur/age-calculator/": "index",
+    "/ur/bmi-calculator/": "index",
+    "/ur/discount-calculator/": "index",
+    "/ur/profit-loss-calculator/": "index",
+    "/ur/standard-calculator/": "index",
+    "/ur/stopwatch/": "index",
+    "/ur/tasbih-counter/": "index",
+    "/ur/unit-converter/": "index",
+    "/ur/zakat-calculator/": "index",
+}
+HOME_LINKS = {
+    "/about/",
+    "/contact/",
+    "/discount-calculator/",
+    "/editorial-policy/",
+    "/health/",
 }
 CHECK_PAGES = {"/": ROOT / "index.html"}
 for path in TARGETS:
@@ -88,6 +113,13 @@ for path, raw in pages.items():
             check(not any(obj.get("@type") == "WebApplication" for obj in schemas), path + ": ineligible WebApplication rich-result markup must be omitted")
             check(any(obj.get("@type") == "FAQPage" for obj in schemas), path + ": missing FAQPage for visible FAQs")
             check(visible_main(raw).count("?") >= 3, path + ": expected at least three visible FAQ questions")
+    if path in URDU_INDEXABLE:
+        check('<html lang="ur"' in raw, path + ": Urdu page must declare lang=ur")
+        check('hreflang="ur" href="' + SITE + path + '"' in raw,
+              path + ": Urdu page must self-reference in hreflang")
+        slug = path.rsplit("/", 2)[-2]
+        check('hreflang="en" href="' + SITE + "/" + slug + '/"' in raw,
+              path + ": Urdu page must link to its English equivalent")
     if path in ("/about/", "/discount-calculator/", "/editorial-policy/", "/health/", "/ratio-calculator/"):
         words = re.findall(r"\b[\w’'-]+\b", visible_main(raw), re.UNICODE)
         minimum = 420 if path == "/about/" else (300 if path in ("/discount-calculator/", "/percentage-difference-calculator/", "/ratio-calculator/") else 150)
@@ -117,9 +149,14 @@ check("Muhammad Fayyaz Adeel" in home and 'href="/about/"' in home,
 profit_loss = read(ROOT / "profit-loss-calculator" / "index.html")
 check("online calculator" in home.lower(), "homepage should retain the online calculator topic wording")
 check("profit loss calculator" in profit_loss.lower(), "profit-loss page should retain the profit loss calculator wording")
-for path in TARGETS:
+for path in HOME_LINKS:
     check(bool(re.search(r'href=["\']' + re.escape(path) + r'["\']', home)),
           "homepage is missing direct internal link to " + path)
+for path in RETIRED_LOCALE_HOMES:
+    check(not (ROOT / path.strip("/") / "index.html").exists(),
+          "retired locale homepage must not be generated: " + path)
+    check(not re.search(r'href=["\']' + re.escape(path) + r'["\']', home),
+          "homepage must not link to retired locale homepage " + path)
 
 sitemap_path = ROOT / "sitemap.xml"
 sitemap = read(sitemap_path)
@@ -127,6 +164,10 @@ try:
     root = ET.fromstring(sitemap)
     ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
     locs = {node.findtext("sm:loc", namespaces=ns) for node in root.findall("sm:url", ns)}
+    for path in RETIRED_LOCALE_HOMES:
+        check(SITE + path not in locs, "retired locale homepage must be absent from sitemap: " + path)
+    for path in URDU_INDEXABLE:
+        check(SITE + path in locs,  "Urdu calculator route must remain in sitemap: " + path)
     for path, decision in TARGETS.items():
         url = SITE + path
         check((url in locs) == (decision == "index"), "sitemap membership mismatch for " + url)

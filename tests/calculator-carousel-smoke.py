@@ -57,21 +57,8 @@ for path in ("/", "/bmi-calculator/", "/tasbih-counter/", "/percentage-calculato
             group
         ), f"Current calculator must be visibly and accessibly active on {path}"
 
-# Every shipped language homepage must render all 17 calculator names in its own language.
-LANGUAGE_LABELS = {
-    "ar": ["حاسبة تحويل السنوات إلى أيام", "حاسبة الاستعلام", "حاسبة الأقساط", "حاسبة النسبة المئوية", "حاسبة الكسور", "حاسبة الفائدة المركبة", "حاسبة الفرق بين التواريخ", "حاسبة السعرات الحرارية للبالغين"],
-    "hi": ["वर्ष से दिन कैलकुलेटर", "क्वेरी कैलकुलेटर", "ईएमआई कैलकुलेटर", "प्रतिशत कैलकुलेटर", "भिन्न कैलकुलेटर", "चक्रवृद्धि ब्याज कैलकुलेटर", "तिथि अंतर कैलकुलेटर", "वयस्क कैलोरी कैलकुलेटर"],
-    "es": ["Calculadora de años a días", "Calculadora de consultas", "Calculadora de EMI", "Calculadora de porcentajes", "Calculadora de fracciones", "Calculadora de interés compuesto", "Calculadora de diferencia de fechas", "Calculadora de calorías para adultos"],
-    "fr": ["Calculatrice années en jours", "Calculatrice de requêtes", "Calculatrice EMI", "Calculatrice de pourcentage", "Calculatrice de fractions", "Calculatrice d’intérêts composés", "Calculatrice de différence de dates", "Calculateur de calories pour adultes"],
-}
-for lang, required_labels in LANGUAGE_LABELS.items():
-    markup = output_for("/" + lang + "/")
-    group = primary_group(markup, "/" + lang + "/")
-    found = set(re.findall(r'data-tool-shortcut="([^"]+)"', group))
-    assert found == ENGLISH_TOOLS, f"{lang} carousel must include all 17 calculators"
-    for label in required_labels:
-        assert label in group, f"{lang} carousel missing translated full calculator name: {label}"
-
+# Only English and Urdu homepages are currently published. The Urdu homepage
+# remains noindex pending native review, but its calculator navigation must work.
 urdu_home = output_for("/ur/")
 urdu_home_group = primary_group(urdu_home, "/ur/")
 urdu_found = set(re.findall(r'data-tool-shortcut="([^"]+)"', urdu_home_group))
@@ -93,8 +80,9 @@ assert 'id="t-tap"' in tasbih, "Tasbih Count one action must remain in generated
 css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 assert "@keyframes ca-calculator-marquee" in css, "Calculator shortcuts must auto-slide"
 assert ".ca-calculator-carousel:focus-within" in css, "Keyboard focus must pause the moving carousel"
-assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must be in the upper header row before the full-width tools slide"
-assert "ca-site-nav-topline" in markup, "Header must separate the top controls from the full-width tools slide"
+homepage_markup = output_for("/")
+assert "theme-toggle" in homepage_markup and homepage_markup.index('id="theme-toggle"') < homepage_markup.index('class="ca-calculator-carousel"'), "Theme control must be in the upper header row before the full-width tools slide"
+assert "ca-site-nav-topline" in homepage_markup, "Header must separate the top controls from the full-width tools slide"
 assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
     "Reduced-motion users must get a non-animated, manually scrollable carousel"
 )

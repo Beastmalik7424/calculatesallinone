@@ -9,9 +9,15 @@ from pathlib import Path
 
 FILES = [
     Path("public/index.html"),
-    Path("public/ar/index.html"),
-    Path("public/es/index.html"),
-    Path("public/fr/index.html"),
+    Path("public/ur/index.html"),
+    Path("public/ur/discount-calculator/index.html"),
+    Path("public/ur/profit-loss-calculator/index.html"),
+    Path("public/ur/age-calculator/index.html"),
+    Path("public/ur/bmi-calculator/index.html"),
+    Path("public/ur/stopwatch/index.html"),
+    Path("public/ur/tasbih-counter/index.html"),
+    Path("public/ur/unit-converter/index.html"),
+    Path("public/ur/zakat-calculator/index.html"),
     Path("public/about/index.html"),
     Path("public/contact/index.html"),
     Path("public/discount-calculator/index.html"),
