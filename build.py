@@ -1930,7 +1930,7 @@ def urdu_tool_page(t):
         ui = ui.replace("> Business P&amp;L</label>", "> کاروبار کا نفع و نقصان</label>")
         ui = ui.replace("> Product profit</label>", "> پروڈکٹ کا نفع</label>")
     if t["slug"] == "tasbih-counter":
-        ui = ui.replace("Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.", "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے۔ آپ کی گنتی اس صفحے کو چھوڑنے یا دوبارہ لوڈ کرنے تک عارضی طور پر محفوظ رہے گی۔")
+        ui = ui.replace("Saving is unavailable in this browser. Your count and selected settings stay in memory only until you leave or reload this page.", "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے، اور منتخب ترتیبات بھی محفوظ نہیں ہوں گی۔ گنتی اور ترتیبات اس صفحے کو چھوڑنے یا دوبارہ لوڈ کرنے تک عارضی طور پر رہیں گی۔")
         ui = ui.replace('<label class="', '<label lang="ur" class="')
         ui = ui.replace('id="t-lifetime-label">', 'id="t-lifetime-label" lang="ur">')
     ui = attach_notice_badge(ui, t["slug"], "ur")
