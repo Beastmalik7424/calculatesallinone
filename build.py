@@ -412,8 +412,8 @@ TOOLS = [
             ]),
             ("The conversion formula and worked examples", [
                 "Weight and length use a shared base unit. First convert the input to kilograms or metres, then convert from that base unit to the target unit. Result = value × source-unit factor ÷ target-unit factor. This keeps each conversion on one consistent path.",
-                "For example, 1 kg = 2.20462 lb when rounded to six significant figures, and 1 mile = 1.609344 km. The international avoirdupois pound is exactly 0.45359237 kg. NIST Handbook 44 (2026), Appendix C, lists the exact pound-to-kilogram relationship.",
-                "Temperature uses offset formulas rather than a single multiplier because Celsius, Fahrenheit and Kelvin have different zero points. °F = °C × 9/5 + 32; °C = (°F − 32) × 5/9; K = °C + 273.15. For example, 100°F = 37.78°C when rounded to two decimal places. NIST publishes these temperature conversion equations."
+                "For example, 1 kg = 2.20462 lb when rounded to six significant figures, and 1 mile = 1.609344 km (displayed as 1.60934 km at six significant figures). The international avoirdupois pound is exactly 0.45359237 kg. NIST Handbook 44 (2026), Appendix C, lists the exact pound-to-kilogram relationship.",
+                "Temperature uses offset formulas rather than a single multiplier because Celsius, Fahrenheit and Kelvin have different zero points. °F = °C × 9/5 + 32; °C = (°F − 32) × 5/9; K = °C + 273.15. For example, 100°F = 37.78°C when rounded to two decimal places. See the <a class='" + LINK + "' href='https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9' target='_blank' rel='noopener noreferrer'>NIST Guide to the SI, Appendix B.9</a> for the published temperature conversion equations."
             ]),
             ("Precision, input limits and common mistakes", [
                 "Weight and length results are displayed to six significant figures. Temperature results are displayed to two decimal places. A rounded display may not show every digit of an exact conversion factor, so do not interpret the number of displayed digits as a statement about measurement accuracy.",
@@ -1003,7 +1003,8 @@ TOOLS.extend([
                 "Using the 365.2425-day Gregorian mean, 5 years = 1,826.2125 days using the Gregorian average. The 365-day method gives 1,825 days, while the 365.25-day Julian average gives 1,826.25 days.",
                 "Using the 365.2425-day Gregorian mean, 30 years = 10,957.275 days using the Gregorian average. The 365-day method gives 10,950 days, while the 365.25-day Julian average gives 10,957.5 days.",
                 "For the reverse question, 70,000 days ÷ 365.2425 = 191.6535 years using the Gregorian mean. This is a decimal-year estimate, not an exact calendar age.",
-                "Exact calendar days depend on the start date because the actual Gregorian interval may include leap days. Enter the start date and a whole number of years in Exact calendar years when you need the elapsed day count for a specific anniversary."
+                "Exact calendar days depend on the start date because the actual Gregorian interval may include leap days. Enter the start date and a whole number of years in Exact calendar years when you need the elapsed day count for a specific anniversary.",
+                "The Gregorian rule adds 97 leap days in each 400-year cycle, which produces the 365.2425-day average. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory leap-year explanation</a> describes the rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST's year definition</a> identifies the average Gregorian year as 365.2425 days."
             ])
         ],
         "faq": [
