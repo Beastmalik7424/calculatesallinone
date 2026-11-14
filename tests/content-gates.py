@@ -108,6 +108,70 @@ def main():
         ]:
             if phrase not in home_text:
                 failures.append("Homepage is missing the verified answer-first summary: " + phrase)
+    contact_path = ROOT / "contact" / "index.html"
+    if not contact_path.is_file():
+        failures.append("/contact/ was not generated")
+    else:
+        contact_html = contact_path.read_text(encoding="utf-8")
+        contact_text = visible_text(contact_path)
+        for phrase in [
+            "Contact CalculatesAll by email",
+            "calculator corrections",
+            "exact input values and units",
+            "displayed result and expected result",
+            "Do not include passwords",
+            "Calculation methodology",
+            "Editorial policy",
+            "Privacy policy",
+            "How do I report a calculator error?",
+            "What information should I include?",
+            "How long does a reply take?",
+        ]:
+            if phrase not in contact_text:
+                failures.append("/contact/ is missing required contact guidance: " + phrase)
+        if len(contact_text.split()) < 180:
+            failures.append("/contact/ has fewer than 180 visible words")
+        if contact_text.lower().count("how do i report a calculator error?") != 1:
+            failures.append("/contact/ does not expose the expected visible FAQ question")
+        faq_scripts = re.findall(
+            r'<script type="application/ld\\+json">(.*?)</script>',
+            contact_html,
+            re.S,
+        )
+        faq_nodes = []
+        for script in faq_scripts:
+            try:
+                node = json.loads(script)
+            except json.JSONDecodeError:
+                failures.append("/contact/ contains invalid JSON-LD")
+                continue
+            if isinstance(node, dict) and node.get("@type") == "FAQPage":
+                faq_nodes.append(node)
+        if len(faq_nodes) != 1:
+            failures.append("/contact/ must contain exactly one FAQPage node")
+        elif len(faq_nodes[0].get("mainEntity", [])) != 3:
+            failures.append("/contact/ FAQPage must match exactly three visible questions")
+        if contact_html.count("<details") != 3:
+            failures.append("/contact/ must display exactly three FAQ details")
+        allowed_urls = {
+            line.strip().rstrip("/") + "/"
+            for line in Path("urls.txt").read_text(encoding="utf-8").splitlines()
+            if line.strip().startswith("https://calculateallinone.vercel.app/")
+        }
+        internal_links = re.findall(r'href="(/[^"#?]*)', contact_html)
+        for link in internal_links:
+            canonical_link = "https://calculateallinone.vercel.app" + link
+            if not (canonical_link.rstrip("/") + "/") in allowed_urls:
+                failures.append("/contact/ contains an internal link absent from urls.txt: " + link)
+        for unsupported_claim in [
+            "we do not sell your personal information",
+            "we will reply within",
+            "usually within",
+            "medically reviewed",
+            "independently reviewed",
+        ]:
+            if unsupported_claim in contact_text.lower():
+                failures.append("/contact/ contains an unsupported claim: " + unsupported_claim)
     if failures:
         for failure in failures:
             print("FAIL:", failure)
