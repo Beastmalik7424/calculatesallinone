@@ -125,3 +125,164 @@ assert.match(extraSource,/28 February 2024 to 1 March 2024 is 2 elapsed days/);
 const hubSource=fs2.readFileSync(require("node:path").join(__dirname,"..","content_v13.py"),"utf8");
 for(const phrase of ["PKR 4,500","PKR 3,600","net operating profit","advertised APY","8 + 3 × 4 = 20","1/2 + 1/3","25.4 millimetres"]){assert.ok(hubSource.includes(phrase),"Missing useful hub guidance: "+phrase);}
 console.log("AdSense content usefulness regression: PASS");
+
+
+// Deterministic property simulations for the pure calculator engines.
+// These exercise the real production exports and compare them with independent
+// arithmetic oracles. Keep the seed fixed so failures are reproducible.
+let propertySeed = 20261114;
+const propertyRandom = () => {
+  propertySeed = (Math.imul(propertySeed, 1664525) + 1013904223) >>> 0;
+  return propertySeed / 4294967296;
+};
+const propertyInt = (min, max) => min + Math.floor(propertyRandom() * (max - min + 1));
+const propertyNear = (actual, expected, relative = 1e-10, absolute = 1e-9) => {
+  assert.ok(Number.isFinite(actual), `expected a finite result, received ${actual}`);
+  assert.ok(Math.abs(actual - expected) <= Math.max(absolute, Math.abs(expected) * relative),
+    `expected ${actual} to be close to ${expected}`);
+};
+const propertyGcd = (a, b) => {
+  a = a < 0n ? -a : a;
+  b = b < 0n ? -b : b;
+  while (b) [a, b] = [b, a % b];
+  return a;
+};
+const propertyScaled12 = value => {
+  const [whole, fraction = ""] = String(value).split(".");
+  return BigInt(whole) * 1000000000000n + BigInt((fraction + "0".repeat(12)).slice(0, 12));
+};
+
+let percentageCases = 0;
+for (let i = 0; i < 1000; i++) {
+  const part = propertyInt(-1000000, 1000000);
+  const total = propertyInt(-1000000, 1000000);
+  propertyNear(percentage(part, total), part * total / 100);
+  const whole = propertyInt(1, 1000000);
+  const sharePart = propertyInt(-1000000, 1000000);
+  propertyNear(percentageShare(sharePart, whole), sharePart / whole * 100);
+  const start = propertyInt(1, 1000000);
+  const end = propertyInt(0, 1000000);
+  propertyNear(percentageChange(start, end), ((end - start) / start) * 100);
+  let first = propertyInt(0, 1000000);
+  let second = propertyInt(0, 1000000);
+  if (first === 0 && second === 0) second = 1;
+  const average = (first + second) / 2;
+  const expectedDifference = Math.round((Math.abs(first - second) / average) * 100 * 1e12) / 1e12;
+  const diff = percentageDifference(first, second);
+  propertyNear(diff.difference, Math.abs(first - second));
+  propertyNear(diff.average, average);
+  propertyNear(diff.percentage, expectedDifference, 1e-12, 1e-12);
+  percentageCases++;
+}
+console.log(`SIMULATION PASS: ${percentageCases.toLocaleString("en-US")} percentage/share/change/difference cases`);
+
+let ratioCases = 0;
+for (let i = 0; i < 1000; i++) {
+  let a = propertyInt(0, 1000000), b = propertyInt(0, 1000000);
+  if (a === 0 && b === 0) b = 1;
+  const simple = simplifyRatio(a, b);
+  const sa = BigInt(simple.a), sb = BigInt(simple.b);
+  assert.equal(BigInt(a) * sb, BigInt(b) * sa);
+  assert.equal(propertyGcd(sa, sb), 1n);
+
+  let x = propertyInt(0, 1000000), y = propertyInt(0, 1000000), z = propertyInt(0, 1000000);
+  if (x === 0 && y === 0 && z === 0) z = 1;
+  const triple = simplifyRatioThree(x, y, z);
+  const tx = BigInt(triple.a), ty = BigInt(triple.b), tz = BigInt(triple.c);
+  assert.equal(BigInt(x) * ty, BigInt(y) * tx);
+  assert.equal(BigInt(x) * tz, BigInt(z) * tx);
+  assert.equal(propertyGcd(propertyGcd(tx, ty), tz), 1n);
+
+  const factor = propertyInt(1, 1000);
+  const scaled = scaleRatio(a, b, factor);
+  const scaledA = propertyScaled12(scaled.a), scaledB = propertyScaled12(scaled.b);
+  assert.equal(BigInt(a) * scaledB, BigInt(b) * scaledA);
+  ratioCases++;
+}
+console.log(`SIMULATION PASS: ${ratioCases.toLocaleString("en-US")} two-term, three-term and scaled-ratio cases`);
+
+let proportionCases = 0;
+for (let i = 0; i < 1000; i++) {
+  const a = propertyInt(1, 100000), b = propertyInt(1, 100000);
+  const c = propertyInt(1, 100000), d = propertyInt(1, 100000);
+  const expected = [b * c / d, a * d / c, a * d / b, b * c / a];
+  const inputs = [
+    [null, b, c, d],
+    [a, null, c, d],
+    [a, b, null, d],
+    [a, b, c, null]
+  ];
+  for (let missing = 0; missing < 4; missing++) {
+    const solved = solveProportion(...inputs[missing]);
+    assert.equal(solved.missing, ["A", "B", "C", "D"][missing]);
+    propertyNear(solved.value, expected[missing]);
+    propertyNear(solved.a * solved.d, solved.b * solved.c, 1e-10, 1e-7);
+    proportionCases++;
+  }
+}
+console.log(`SIMULATION PASS: ${proportionCases.toLocaleString("en-US")} proportion-solving cases`);
+
+let fractionCases = 0;
+const fractionOracle = (a, b, c, d, operation) => {
+  let n, den;
+  if (operation === "add") { n = BigInt(a) * BigInt(d) + BigInt(c) * BigInt(b); den = BigInt(b) * BigInt(d); }
+  else if (operation === "subtract") { n = BigInt(a) * BigInt(d) - BigInt(c) * BigInt(b); den = BigInt(b) * BigInt(d); }
+  else if (operation === "multiply") { n = BigInt(a) * BigInt(c); den = BigInt(b) * BigInt(d); }
+  else { n = BigInt(a) * BigInt(d); den = BigInt(b) * BigInt(c); }
+  if (den < 0n) { n = -n; den = -den; }
+  const divisor = propertyGcd(n, den);
+  return { n: n / divisor, d: den / divisor };
+};
+for (const operation of ["add", "subtract", "multiply", "divide"]) {
+  for (let i = 0; i < 1000; i++) {
+    const a = propertyInt(-100, 100);
+    const c = propertyInt(-100, 100);
+    let b = propertyInt(-100, 100), d = propertyInt(-100, 100);
+    if (b === 0) b = 1;
+    if (d === 0) d = 1;
+    if (operation === "divide" && c === 0) continue;
+    const actual = fraction(a, b, c, d, operation);
+    const expected = fractionOracle(a, b, c, d, operation);
+    assert.equal(BigInt(actual.n), expected.n);
+    assert.equal(BigInt(actual.d), expected.d);
+    fractionCases++;
+  }
+}
+console.log(`SIMULATION PASS: ${fractionCases.toLocaleString("en-US")} exact rational arithmetic cases`);
+
+let compoundCases = 0;
+for (let i = 0; i < 1000; i++) {
+  const principal = propertyInt(0, 1000000);
+  const rate = propertyInt(0, 2500) / 100;
+  const years = propertyInt(0, 10);
+  const frequency = [1, 2, 4, 12][propertyInt(0, 3)];
+  const periods = years * frequency;
+  const factor = 1 + rate / (100 * frequency);
+  let oracle = principal;
+  for (let period = 0; period < periods; period++) oracle *= factor;
+  propertyNear(compound(principal, rate, years, frequency), oracle, 1e-10, 1e-8);
+  compoundCases++;
+}
+console.log(`SIMULATION PASS: ${compoundCases.toLocaleString("en-US")} compound-interest cases`);
+
+const isoFromDay = day => new Date(day * 86400000).toISOString().slice(0, 10);
+let dateCases = 0;
+for (let i = 0; i < 1000; i++) {
+  const startDay = propertyInt(0, 47482);
+  const endDay = propertyInt(0, 47482);
+  const startDate = isoFromDay(startDay);
+  const endDate = isoFromDay(endDay);
+  const elapsed = endDay - startDay;
+  assert.equal(dateDifference(startDate, endDate), elapsed);
+  assert.equal(dateDifference(startDate, endDate, true), elapsed + (elapsed === 0 ? 1 : Math.sign(elapsed)));
+  const breakdown = dateBreakdown(startDate, endDate);
+  const reverse = dateBreakdown(endDate, startDate);
+  assert.ok(breakdown.years === -reverse.years || (breakdown.years === 0 && reverse.years === 0));
+  assert.ok(breakdown.months === -reverse.months || (breakdown.months === 0 && reverse.months === 0));
+  assert.ok(breakdown.days === -reverse.days || (breakdown.days === 0 && reverse.days === 0));
+  propertyNear(breakdown.weeks * 7, elapsed, 1e-12, 1e-9);
+  assert.ok(Math.abs(breakdown.months) < 12);
+  assert.ok(Math.abs(breakdown.days) <= 31);
+  dateCases++;
+}
+console.log(`SIMULATION PASS: ${dateCases.toLocaleString("en-US")} date-difference and calendar-breakdown cases`);
