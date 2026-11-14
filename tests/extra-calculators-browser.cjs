@@ -287,8 +287,8 @@ const {chromium}=require("playwright");
    await page.close();
   }
 
-  for(const width of [390,1366]){
-   const viewport={width,height:width===390?844:768};
+  for(const width of [320,390,1366]){
+   const viewport={width,height:width===390?844:width===320?568:768};
    const page=await browser.newPage({viewport});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
    page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
@@ -306,7 +306,7 @@ const {chromium}=require("playwright");
    if(!(order.count.top<order.settings.top&&order.settings.top<order.tap.top&&order.tap.top<order.actions.top))throw Error("Tasbih count, phrase/target settings, tap and reset must follow the intended first-screen order at "+width+"px: "+JSON.stringify(order));
    if(order.tap.bottom<=order.tap.top||order.tapDisplay==="none"||order.tapVisibility!=="visible"||Number(order.tapOpacity)===0||order.tapPointerEvents==="none")throw Error("Tasbih Count one button is not visibly clickable: "+JSON.stringify(order));
    if(order.carouselLinks<8||order.activeHref!=="/tasbih-counter/")throw Error("Tasbih page carousel is incomplete or current tool is not active: "+JSON.stringify(order));
-   if(order.settings.bottom>(width===390?844:768)||order.phrase.bottom>(width===390?844:768)||order.target.bottom>(width===390?844:768)||order.count.bottom>(width===390?844:768)||order.undo.bottom>(width===390?844:768)||order.reset.bottom>(width===390?844:768)||order.overflow)throw Error("Tasbih count, phrase/target and primary actions must fit the first viewport at "+width+"px: "+JSON.stringify(order));
+   if(order.settings.bottom>viewport.height||order.phrase.bottom>viewport.height||order.target.bottom>viewport.height||order.count.bottom>viewport.height||order.undo.bottom>viewport.height||order.reset.bottom>viewport.height||order.overflow)throw Error("Tasbih count, phrase/target and primary actions must fit the first viewport at "+width+"px: "+JSON.stringify(order));
    for(let i=0;i<33;i++)await page.locator("#t-tap").click();
    if((await page.locator("#t-count").innerText()).trim()!=="33")throw Error("Tasbih tap count should reach 33");
    await page.locator("#t-undo").click();
@@ -316,8 +316,18 @@ const {chromium}=require("playwright");
    await page.locator("#t-phrase").selectOption("custom");
    await page.locator("#t-custom-phrase").fill("Test dhikr");
    if(await page.locator("#t-custom-phrase").isDisabled())throw Error("Tasbih custom phrase field should enable");
+   await page.locator("#t-target").selectOption("99");
+   await page.reload();
+   if((await page.locator("#t-target").inputValue())!=="99")throw Error("Tasbih preset target must persist across reload");
+   if((await page.locator("#t-phrase").inputValue())!=="custom"||(await page.locator("#t-custom-phrase").inputValue())!=="Test dhikr")throw Error("Tasbih custom phrase must persist across reload");
    await page.locator("#t-target").selectOption("custom");
-   await page.locator("#t-custom-target").fill("33");
+   await page.locator("#t-custom-target").fill("0");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih must reject a custom target below 1");
+   await page.locator("#t-custom-target").fill("10001");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih must reject a custom target above 10,000");
+   await page.locator("#t-custom-target").fill("123");
    if(!(await page.locator("#t-custom-target-wrap").isVisible()))throw Error("Tasbih custom target field should become visible");
    const countAfterThousand=await page.evaluate(()=>{
     const button=document.querySelector("#t-tap");
@@ -327,6 +337,8 @@ const {chromium}=require("playwright");
    if(countAfterThousand!=="1000")throw Error("Tasbih must preserve all 1,000 manual taps without target auto-reset: "+countAfterThousand);
    await page.reload();
    if((await page.locator("#t-count").innerText()).trim()!=="1000")throw Error("Tasbih count must persist across reload in the same browser");
+   if((await page.locator("#t-target").inputValue())!=="custom"||(await page.locator("#t-custom-target").inputValue())!=="123")throw Error("Tasbih custom target must persist across reload");
+   if((await page.locator("#t-phrase").inputValue())!=="custom"||(await page.locator("#t-custom-phrase").inputValue())!=="Test dhikr")throw Error("Tasbih custom phrase must remain selected after reload");
    const countAfterUndo=await page.evaluate(()=>{
     const button=document.querySelector("#t-undo");
     for(let i=0;i<1000;i++)button.click();
@@ -335,6 +347,35 @@ const {chromium}=require("playwright");
    if(countAfterUndo!=="0")throw Error("Tasbih must reverse 1,000 undo operations to zero: "+countAfterUndo);
    if(errors.length)throw Error("Tasbih browser errors: "+errors.join("; "));
    console.log("Tasbih browser PASS "+width+"px: count/actions above settings, tap/undo/reset and custom phrase/target");
+   await page.close();
+  }
+
+  {
+   const page=await browser.newPage({viewport:{width:390,height:844}});
+   const errors=[];page.on("pageerror",e=>errors.push(e.message));
+   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   await page.addInitScript(()=>Object.defineProperty(window,"localStorage",{configurable:true,get(){throw new DOMException("Storage blocked","SecurityError");}}));
+   const response=await page.goto(base+"/tasbih-counter/");
+   if(!response||response.status()!==200)throw Error("Tasbih blocked-storage page HTTP failure");
+   if(!(await page.locator("#t-storage-note").isVisible()))throw Error("Tasbih must disclose unavailable browser storage");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="1")throw Error("Tasbih must still count in memory when storage is blocked");
+   await page.reload();
+   if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih must not claim persistence when browser storage is blocked");
+   if(errors.length)throw Error("Tasbih blocked-storage browser errors: "+errors.join("; "));
+   console.log("Tasbih blocked-storage fallback PASS: visible notice, in-memory count, reload reset");
+   await page.close();
+  }
+
+  {
+   const page=await browser.newPage({viewport:{width:390,height:844}});
+   const response=await page.goto(base+"/ur/tasbih-counter/");
+   if(!response||response.status()!==200)throw Error("Urdu Tasbih page HTTP failure");
+   await page.locator("#t-target").selectOption("custom");
+   await page.locator("#t-custom-target").fill("77");
+   await page.reload();
+   if((await page.locator("#t-target").inputValue())!=="custom"||(await page.locator("#t-custom-target").inputValue())!=="77")throw Error("Urdu Tasbih custom target must persist across reload");
+   console.log("Urdu Tasbih custom target persistence PASS");
    await page.close();
   }
 

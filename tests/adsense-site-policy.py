@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path("public")
-TOOLS_WITH_EXAMPLE = ["stopwatch", "tasbih-counter", "query-calculator", "ratio-calculator"]
+TOOLS_WITH_EXAMPLE = ["stopwatch", "query-calculator", "ratio-calculator"]
 AFFILIATE_PHRASE = "Advertising is not enabled on the site at present"
 ERRORS = []
 
@@ -58,6 +58,13 @@ check("Advertising may appear on some pages" not in terms_text,
 for slug in TOOLS_WITH_EXAMPLE:
     for name in ("Worked example", "Method", "Limits"):
         check(has_heading(slug, name), f"/{slug}/ has no heading exactly '{name}'")
+
+check(has_heading("tasbih-counter", "Worked example: target and remaining count"),
+      "/tasbih-counter/ must contain one checkable target/remaining-count example.")
+check(not has_heading("tasbih-counter", "Method"),
+      "/tasbih-counter/ should not repeat a separate generic method section.")
+check(not has_heading("tasbih-counter", "Limits"),
+      "/tasbih-counter/ should integrate its limits into the relevant privacy and scope sections.")
 
 for p in ROOT.rglob("index.html"):
     m = re.search(r"Last updated:\s*(\d{4}-\d{2}-\d{2})(?=\s|<)", p.read_text(encoding="utf-8"))

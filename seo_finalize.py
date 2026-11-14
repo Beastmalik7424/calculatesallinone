@@ -21,7 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
-    "/tasbih-counter/": "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app.",
+    "/tasbih-counter/": "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and keep progress in this browser when storage is available.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
     "/ur/zakat-calculator/": "اپنی بچت، اثاثے اور واجب الادا قرض درج کرکے چاندی کے نصاب اور مکمل قمری سال کی شرط کے مطابق زکوٰۃ کا حساب کریں۔",
@@ -31,7 +31,7 @@ URDU_DESCRIPTION_FALLBACKS = {
     "/ur/discount-calculator/": "اصل قیمت اور رعایت کا فیصد درج کرکے بچت اور آخری قیمت معلوم کریں، ساتھ ہی حساب کا طریقہ اور مثال دیکھیں۔",
     "/ur/standard-calculator/": "براؤزر میں جمع، تفریق، ضرب، تقسیم، فیصد اور قوسین کے ساتھ حساب کریں اور حساب کے اصول سمجھیں۔",
     "/ur/stopwatch/": "براؤزر میں وقت شروع، روکیں اور دوبارہ صفر کریں، اور مختصر وقت کی پیمائش میں ممکنہ فرق سمجھیں۔",
-    "/ur/tasbih-counter/": "ذکر کی گنتی کے لیے ہدف مقرر کریں، باقی تعداد دیکھیں اور گنتی کو اسی ڈیوائس پر محفوظ رکھیں۔",
+    "/ur/tasbih-counter/": "ڈیجیٹل تسبیح کاؤنٹر میں گنتی، منتخب عبارت اور ہدف اسی براؤزر میں محفوظ رکھیں، جب مقامی اسٹوریج دستیاب ہو۔ گنتی واپس لینے اور ری سیٹ کرنے کا طریقہ دیکھیں۔",
 }
 VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the verified Urdu BMI threshold-copy correction and source check in this change.
@@ -42,8 +42,8 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/years-to-days-calculator/": "2026-11-14",
     # This date records the verified unit definitions, conversion formulas, rounding and input-limit review.
     "/unit-converter/": "2026-11-14",
-    # This date records the verified Tasbih keyboard, local-storage and reset-behaviour disclosures.
-    "/tasbih-counter/": "2026-11-14",
+    # This date records the verified Tasbih target-persistence, storage-disclosure and content-restructure update.
+    "/tasbih-counter/": "2026-11-15",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
@@ -221,13 +221,13 @@ def normalize_meta(raw, path, lang):
     "/ur/profit-loss-calculator/": "قیمت خرید اور فروخت درج کرکے منافع یا نقصان اور اس کا فیصد معلوم کریں۔ کاروباری آمدنی، لاگت اور اخراجات سے خالص منافع کا حساب بھی کریں اور فارمولے دیکھیں۔",
     "/ur/standard-calculator/": "براؤزر میں جمع، تفریق، ضرب، تقسیم، فیصد اور قوسین کے ساتھ حساب کریں۔ سائنسی موڈ میں مثلثاتی افعال، جذر اور لاگرتھم استعمال کریں، بغیر ایپ ڈاؤن لوڈ کیے۔",
     "/ur/stopwatch/": "براؤزر میں وقت شروع، روکیں اور دوبارہ صفر کریں۔ اسٹاپ واچ سیکنڈ کے سو حصوں تک وقت دکھاتی ہے، مگر درستگی آلے اور براؤزر کی کارکردگی پر منحصر ہو سکتی ہے۔",
-    "/ur/tasbih-counter/": "ذکر کے لیے تسبیح کاؤنٹر استعمال کریں، 33، 99 یا اپنا ہدف مقرر کریں اور گنتی اسی ڈیوائس پر محفوظ رکھیں۔ گنتی واپس لینے، صفر کرنے اور محفوظ رہنے کا طریقہ دیکھیں۔",
+    "/ur/tasbih-counter/": "ڈیجیٹل تسبیح کاؤنٹر میں گنتی، منتخب عبارت اور ہدف اسی براؤزر میں محفوظ رکھیں، جب مقامی اسٹوریج دستیاب ہو۔ گنتی واپس لینے اور ری سیٹ کرنے کا طریقہ دیکھیں۔",
     "/ur/unit-converter/": "وزن، لمبائی اور درجہ حرارت کی اکائیاں تبدیل کریں، جیسے کلوگرام سے پاؤنڈ، سینٹی میٹر سے انچ اور سیلسیئس سے فارن ہائیٹ۔ ہر تبدیلی کا نتیجہ فوری دیکھیں۔",
     "/ur/zakat-calculator/": "چاندی کے نصاب کے مطابق خالص مال پر 2.5 فیصد زکوٰۃ کا حساب کریں۔ نقدی، سونا، چاندی، کاروباری مال اور واجب الادا قرض درج کریں، پھر قمری سال کی شرط کی تصدیق کریں۔"
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app."
+        desc = "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and keep progress in this browser when storage is available."
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":

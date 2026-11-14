@@ -22,11 +22,11 @@ if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
 SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
-# These visible dates reflect substantive content and source updates made on 2026-11-14.
+# Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
     "/years-to-days-calculator/": "2026-11-14",
     "/unit-converter/": "2026-11-14",
-    "/tasbih-counter/": "2026-11-14",
+    "/tasbih-counter/": "2026-11-15",
 }
 OUT = "public"
 STATIC = "static"
@@ -517,7 +517,7 @@ TOOLS = [
             '</div>'
             '<output id="t-count" class="block text-center text-6xl sm:text-7xl font-semibold tabular-nums bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-xl py-8" aria-live="polite">0</output>'
             '<p id="t-progress" class="text-center text-base text-stone-800 dark:text-stone-200" aria-live="polite"></p>'
-            '<p id="t-storage-note" class="text-sm text-amber-800 dark:text-amber-200" role="status" hidden>Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.</p>'
+            '<p id="t-storage-note" class="text-sm text-amber-800 dark:text-amber-200" role="status" hidden>Saving is unavailable in this browser. Your count and selected settings stay in memory only until you leave or reload this page.</p>'
             '<button id="t-tap" type="button" aria-label="Count one" class="w-full min-h-[64px] @B@ text-xl">Count one</button>'
             '<div class="grid grid-cols-2 gap-3"><button id="t-undo" type="button" class="@S@">Undo</button>'
             '<button id="t-reset" type="button" class="@S@">Reset</button></div>'
@@ -526,14 +526,14 @@ TOOLS = [
             '</div>'
         ),
         "guide": [
-            ("What is tasbih?", [
-                "Tasbih is a word used for remembrance of Allah and devotional phrases. This page is a counting aid, not a religious authority, and it does not decide which phrase or number a person should choose.",
-                "The counter records button presses. It cannot verify that a phrase was recited, detect a missed count, or determine whether a practice is required. Use it in the way that fits your own practice, and ask a qualified scholar or trusted teacher about religious rulings.",
+            ("What is a digital Tasbih counter?", [
+                "A digital Tasbih or Dhikr counter records deliberate taps or supported key presses. It can help you track a personal count on a phone or computer, but it does not listen to or verify a recitation.",
+                "Tasbih, Tasbeeh, Dhikr and Zikr are commonly used names or spellings associated with remembrance. Transliteration and usage can vary. This page is a counting aid, not a religious authority.",
             ]),
-            ("How to use this online tasbih counter", [
-                "Choose one of the five preset phrases or select Custom phrase and enter up to 40 characters. Choose a target of 33, 99, or 100, or select Custom target and enter a whole number from 1 to 10,000. The custom target field accepts digits only. A value outside the allowed range or a decimal is rejected with an error message.",
+            ("How to use this online Tasbih counter", [
+                "Choose one of the five preset phrases or select Custom phrase and enter up to 40 characters. Choose a preset target of 33, 99 or 100, or select Custom target and enter a whole number from 1 to 10,000. Targets are personal tracking settings.",
                 "Press Count one once for each count you want to record. You can also press Space or Enter when focus is not inside another control or text field. The progress message shows how many counts remain. When the selected target is reached, the page displays a message and may briefly vibrate if your device and browser support vibration.",
-                "Undo subtracts one from the current count when the count is above zero. Reset asks for confirmation before clearing the current count. The lifetime total tracks accepted count taps and is kept separately from the current session count. The phrase and current count are saved in this browser when storage is available.",
+                "Undo subtracts one from the current count when it is above zero. Reset requires confirmation before clearing the current count. The lifetime total tracks accepted taps separately from the current count.",
             ]),
             ("Five phrases and plain meanings", [
                 "SubhanAllah is commonly translated as “Glory be to Allah.” This is a plain-language meaning, not a detailed commentary.",
@@ -542,25 +542,23 @@ TOOLS = [
                 "Astaghfirullah means “I seek forgiveness from Allah.”",
                 "La ilaha illallah means “There is no deity worthy of worship except Allah.” Transliteration and English wording can vary; consult a qualified teacher if you need a formal translation or pronunciation guidance.",
             ]),
-            ("Saving, privacy, and limitations", [
-                "The counter uses local browser storage on your device. It does not need an account and does not send the count to a server. Browser privacy settings, private browsing, clearing site data, or switching devices can make saved values unavailable. If storage is blocked, the counter continues in memory and displays a note, but values may be lost when you reload or leave the page.",
-                "A target is only a personal tracking setting in this tool. The page does not claim that a specific number is required or that using a digital counter has a particular religious reward. It does not replace prayer beads, finger counting, personal judgement, or guidance from a qualified scholar.",
+            ("Saving and privacy", [
+                "When browser storage is available, the current count, selected phrase and selected target, including a custom target, are saved locally in the same browser and device. The saved information does not sync across devices and is not uploaded to a server. Clearing site data, private browsing or browser restrictions can make saved values unavailable.",
+                "If storage is unavailable, the counter can continue in memory during the current page visit, but values may be lost when you reload or leave. A target is a personal tracking setting, not a religious ruling or a claim that a particular number or reward is required.",
             ]),
-            ("Keyboard, storage and reset behaviour", [
-                "Use Space or Enter to add one count when focus is not inside a form field or another control. The counter records manual taps or key presses; it cannot verify spoken recitation or count automatically.",
-                "Your current count and selected phrase are saved in local browser storage when available. This storage belongs to the same browser and device and does not sync across devices or browsers. Clearing site data, using private browsing, or blocking storage can remove saved progress.",
-                "Reset requires confirmation before the current count is cleared. If browser storage is unavailable, the counter can continue in memory for the current page visit, but the value may be lost after reload or when you leave."
-            ])
+            ("Worked example: target and remaining count", [
+                "For a personal target of 99 presses and a current count of 67, the remaining amount is 99 - 67 = 32. Three groups of 33 presses make 3 x 33 = 99. This is an arithmetic example only; it does not prescribe a religious practice.",
+            ]),
         ],
         "faq": [
-            ("Is the count saved on a server?", "No. It is saved only in this browser."),
-            ("What happens when I reach the target?", "The counter shows that the target is reached. Press Reset to start again."),
-            ("Can I count with a keyboard?", "Yes. Press Space or Enter when focus is not inside another control or text field."),
-            ("Will my count sync to another device?", "No. The count is stored in the current browser on the current device. It is not synced to another browser or device."),
-            ("What happens if browser storage is unavailable?", "The counter can continue in memory for the current visit, but the saved count may be lost when you reload or leave the page."),
-            ("Does the counter reset automatically when the target is reached?", "No. It displays a target-reached message. Press Reset and confirm if you want to clear the current count.")
+            ("Is my count sent to a server?", "No. The count, phrase and target are stored in this browser on this device when storage is available. They are not uploaded to an account."),
+            ("Does my count sync to another device?", "No. The saved values stay in this browser on this device. They do not sync to another browser or phone."),
+            ("What happens if browser storage is unavailable?", "The counter can continue in memory during the current page visit. Reloading or leaving the page may lose the count and selected settings."),
+            ("Can I use a custom phrase and target?", "Yes. Enter a custom phrase up to 40 characters and a whole-number target from 1 to 10,000. The counter records taps, not recitation."),
+            ("What happens when I reach the target?", "The page shows a target-reached message and does not reset automatically. Press Reset and confirm if you want to clear the current count."),
+            ("Can I count with a keyboard?", "Yes. Press Space or Enter when focus is not inside a form field or another control."),
         ],
-        "sources": "Tasbih counts are recorded on the device only.",
+        "sources": "This page documents the counter's functionality only. It does not provide religious rulings or establish a required phrase or repetition count. For religious guidance, consult a qualified scholar or trusted teacher.",
     },
     {
         "slug": "stopwatch",
@@ -844,13 +842,8 @@ EXTRA = {
         ],
     },
     "tasbih-counter": {
-        "quick": "Each accepted tap adds one. Choose 33, 99, 100 or a custom whole-number target from 1 to 10,000. Browser storage keeps progress on this device when it is available.",
-        "faq": [
-            ("Will my count move to another phone?", "No. The count is stored only in this browser on this device. It is not synced to an account or another phone."),
-            ("Can I enter my own dhikr phrase?", "Yes. Choose Custom phrase and enter up to 40 characters. The counter records taps only; it does not verify recitation or pronunciation."),
-            ("What happens if browser storage is blocked?", "The counter continues in memory and displays a notice. The count may be lost when you reload or leave the page."),
-            ("Does a target of 33 or 99 represent a religious requirement?", "No. These are optional tracking targets in this tool, not a religious ruling. Choose a target that suits your own practice and ask a qualified scholar about religious guidance."),
-        ],
+        "quick": "",
+        "faq": [],
     },
     "stopwatch": {
         "quick": "Press Start to begin timing, Stop to pause, and Reset to clear. The display shows hours, minutes, seconds and hundredths.",
@@ -1778,7 +1771,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
-        desc = "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app."
+        desc = "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and keep progress in this browser when storage is available."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
@@ -1906,7 +1899,7 @@ def tool_page(t):
         + (years_to_days_reference_html() + guide_html(guide[:2]) + guide_html(guide[2:]) + days_to_years_reference_html()
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
-        + '<h2 class="' + H2 + '">Sources</h2><p class="' + P + '">' + sources + '</p>'
+        + '<h2 class="' + H2 + '">' + ("Scope and religious guidance" if t["slug"] == "tasbih-counter" else "Sources") + '</h2><p class="' + P + '">' + sources + '</p>'
         + '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p>'
         + updated
         + review_box(t["slug"])
@@ -1937,7 +1930,7 @@ def urdu_tool_page(t):
         ui = ui.replace("> Business P&amp;L</label>", "> کاروبار کا نفع و نقصان</label>")
         ui = ui.replace("> Product profit</label>", "> پروڈکٹ کا نفع</label>")
     if t["slug"] == "tasbih-counter":
-        ui = ui.replace("Saving is unavailable in this browser. Your count is kept in memory until you leave or reload this page.", "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے۔ آپ کی گنتی اس صفحے کو چھوڑنے یا دوبارہ لوڈ کرنے تک عارضی طور پر محفوظ رہے گی۔")
+        ui = ui.replace("Saving is unavailable in this browser. Your count and selected settings stay in memory only until you leave or reload this page.", "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے، اور منتخب ترتیبات بھی محفوظ نہیں ہوں گی۔ گنتی اور ترتیبات اس صفحے کو چھوڑنے یا دوبارہ لوڈ کرنے تک عارضی طور پر رہیں گی۔")
         ui = ui.replace('<label class="', '<label lang="ur" class="')
         ui = ui.replace('id="t-lifetime-label">', 'id="t-lifetime-label" lang="ur">')
     ui = attach_notice_badge(ui, t["slug"], "ur")

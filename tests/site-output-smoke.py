@@ -299,7 +299,7 @@ for url in urls:
         assert html_lib.unescape(title_match.group(1)) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
             "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
         )
-        assert desc_match.group(1) == "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and save progress in this browser. No sign-up or app.", (
+        assert desc_match.group(1) == "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and keep progress in this browser when storage is available.", (
             "Tasbih description must be specific, useful and aligned with the page."
         )
     if url == SITE + "/age-calculator/":
@@ -718,8 +718,8 @@ for url in urls:
                     "Unit Converter dateModified must match the verified formulas, sources and limitations update."
                 )
             elif url == SITE + "/tasbih-counter/":
-                assert item.get("dateModified") == "2026-11-14", (
-                    "Tasbih Counter dateModified must match the verified usage and storage disclosure update."
+                assert item.get("dateModified") == "2026-11-15", (
+                    "Tasbih Counter dateModified must match the verified target-persistence and content update."
                 )
             else:
                 assert "dateModified" not in item, (
@@ -1090,7 +1090,10 @@ for slug, phrases in {
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
-    guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA[slug] for paragraph in paragraphs)
+    if slug == "tasbih-counter":
+        guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
+    else:
+        guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
     for phrase in phrases:
         assert phrase.lower() in guide.lower(), (slug, phrase)
 emi_guide = (ROOT / "emi-calculator" / "index.html").read_text(encoding="utf-8")
@@ -1117,6 +1120,8 @@ for _english in ("> Business P&amp;L</label>", "> Product profit</label>", ">Cal
 _ur_tasbih = output_for_url(SITE + "/ur/tasbih-counter/").read_text(encoding="utf-8")
 assert "Saving is unavailable in this browser" not in _ur_tasbih, "Urdu tasbih storage note must be localized"
 assert "اس براؤزر میں گنتی محفوظ کرنا ممکن نہیں ہے" in _ur_tasbih, "Urdu tasbih storage note missing"
+assert "موجودہ گنتی، منتخب عبارت اور ہدف" in _ur_tasbih, "Urdu Tasbih page must explain that count, phrase and target are saved"
+assert "دوسرے براؤزر یا آلے سے ہم آہنگ نہیں ہوتیں" in _ur_tasbih, "Urdu Tasbih page must explain that settings do not sync"
 for _ur_page in ("/ur/", "/ur/standard-calculator/"):
     _ur_html = output_for_url(SITE + _ur_page).read_text(encoding="utf-8")
     assert ">Scientific Mode</button>" not in _ur_html, _ur_page + " Scientific Mode toggle must be localized"
