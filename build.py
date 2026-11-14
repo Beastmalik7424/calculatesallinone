@@ -1675,7 +1675,7 @@ ANSWER_BLOCKS = {
     },
     "profit-loss-calculator": {
         "en": 'Business example: revenue 1,000, cost of goods sold 600 and other expenses 150 gives net operating profit 250 and margin 25%. Product example: cost 1,000 and selling price 1,200 gives markup 20%. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
-        "ur": 'اگر کسی چیز کی قیمت خرید 1,000 اور فروخت 1,200 ہو تو دوسرے کاروباری اخراجات سے پہلے فرق 200 ہے۔ یہ اسی کیلکولیٹر کا بنیادی تقابل ہے۔ ماخذ: <a class="' + LINK + '" href="/methodology/">CalculatesAll کا حسابی طریقۂ کار</a>۔'
+        "ur": ''
     },
     "discount-calculator": {
         "en": 'A 20% discount on a price of 1,000 saves 200 and leaves a final price of 800 before tax or extra charges. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
