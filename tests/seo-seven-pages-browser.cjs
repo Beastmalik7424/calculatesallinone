@@ -2,7 +2,8 @@ const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
 
 const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, "");
-const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/", "/percentage-difference-calculator/", "/ratio-calculator/"];
+const paths = ["/about/", "/ur/discount-calculator/", "/ur/profit-loss-calculator/", "/ur/standard-calculator/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/", "/percentage-difference-calculator/", "/ratio-calculator/"];
+const retiredLocaleHomes = ["/ar/", "/hi/", "/es/", "/fr/"];
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -21,6 +22,15 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
       if (errors.length) failures.push(path + ": browser console/page errors detected");
       await page.close();
     }
+
+    for (const path of retiredLocaleHomes) {
+      const page = await browser.newPage();
+      const response = await page.goto(base + path, { waitUntil: "load", timeout: 30000 });
+      assert.equal(response && response.status(), 404, path + " must return HTTP 404 until a native-reviewed translated homepage is published");
+      assert.match(await page.locator("h1").textContent(), /Page not found/i, path + " should show the site's normal not-found page");
+      await page.close();
+    }
+    console.log("Retired unreviewed locale homepages: 4/4 returned HTTP 404");
 
     // End-to-end calculator checks in a real browser, in addition to parser unit tests.
     const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
@@ -270,5 +280,5 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
     failures.forEach(x => console.error("FAIL: " + x));
     process.exit(1);
   }
-  console.log("HEADLESS BROWSER AUDIT: PASS (10 scoped URLs + calculator end-to-end, zero console/page errors)");
+  console.log("HEADLESS BROWSER AUDIT: PASS (10 scoped URLs + 4 retired locale 404s + calculator end-to-end, zero console/page errors)");
 })().catch(err => { console.error(err); process.exit(1); });

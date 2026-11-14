@@ -262,13 +262,22 @@ assert '<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">' in em
 # Category hubs are indexable when their explanatory sections and tool links are present.
 for hub in ("/money/", "/health/", "/math/", "/time/", "/worship/"):
     assert SITE + hub in sitemap_urls, f"Substantive category hub should be indexable: {hub}"
-# Localized homepages remain noindex until their translated tool journeys receive competent review.
-for locale_home in ("/ar/", "/hi/", "/es/", "/fr/", "/ur/"):
+# The four unreviewed translated homepages are retired until native review is complete.
+RETIRED_LOCALE_HOMES = ("/ar/", "/hi/", "/es/", "/fr/")
+for locale_home in RETIRED_LOCALE_HOMES:
     locale_file = ROOT / locale_home.strip("/") / "index.html"
-    assert locale_file.is_file(), f"Localized homepage missing: {locale_home}"
-    locale_html = locale_file.read_text(encoding="utf-8")
-    assert 'name="robots" content="noindex, follow"' in locale_html, f"Unreviewed localized homepage must stay noindex: {locale_home}"
-    assert SITE + locale_home not in sitemap_urls, f"Unreviewed localized homepage must not be in sitemap: {locale_home}"
+    assert not locale_file.exists(), f"Unreviewed localized homepage must not be generated: {locale_home}"
+    assert SITE + locale_home not in sitemap_urls, f"Retired localized homepage must not be in sitemap: {locale_home}"
+
+noindex_paths = {line.strip() for line in Path("noindex.txt").read_text(encoding="utf-8").splitlines() if line.strip()}
+assert "/ur/" in noindex_paths, "Urdu homepage must remain noindex until its full translated journey is reviewed."
+for locale_home in RETIRED_LOCALE_HOMES:
+    assert locale_home not in noindex_paths, f"Retired locale route must not be recorded as a generated noindex page: {locale_home}"
+for url in urls:
+    page_html = output_for_url(url).read_text(encoding="utf-8")
+    for locale_home in RETIRED_LOCALE_HOMES:
+        assert f'href="{locale_home}"' not in page_html, f"Generated page {url} must not link to retired locale homepage {locale_home}"
+        assert f'href="{SITE + locale_home}"' not in page_html, f"Generated page {url} must not advertise retired locale alternate {locale_home}"
 for url in urls:
     page = output_for_url(url)
     assert page.is_file(), f"Sitemap URL has no generated HTML: {url} -> {page}"
