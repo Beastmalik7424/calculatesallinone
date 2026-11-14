@@ -128,12 +128,14 @@ def main():
             "Calculation methodology",
             "Editorial policy",
             "Privacy policy",
+            "Sources and site guidance",
             "How do I report a calculator error?",
             "What information should I include?",
             "How long does a reply take?",
         ]:
             if phrase not in contact_text:
                 failures.append("/contact/ is missing required contact guidance: " + phrase)
+        print("WORDCOUNT /contact/ " + str(len(contact_text.split())))
         if len(contact_text.split()) < 180:
             failures.append("/contact/ has fewer than 180 visible words")
         if contact_text.lower().count("how do i report a calculator error?") != 1:
