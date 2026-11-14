@@ -40,7 +40,8 @@ def repository_playwright_config(root=ROOT):
     core_lock = lock.get("packages", {}).get("node_modules/playwright-core", {})
     axe_lock = lock.get("packages", {}).get("node_modules/axe-core", {})
     site_build = (root / ".github/workflows/site-build.yml").read_text(encoding="utf-8")
-    workflows = ci + "\\n" + site_build
+    first_screen = (root / ".github/workflows/first-screen-audit.yml").read_text(encoding="utf-8")
+    workflows = ci + "\\n" + site_build + "\\n" + first_screen
     return {
         "manifest_version": package.get("devDependencies", {}).get("playwright"),
         "lock_root_version": lock.get("packages", {}).get("", {}).get("devDependencies", {}).get("playwright"),
@@ -53,9 +54,9 @@ def repository_playwright_config(root=ROOT):
         "axe_lock_root_version": lock.get("packages", {}).get("", {}).get("devDependencies", {}).get("axe-core"),
         "axe_package_version": axe_lock.get("version"),
         "axe_integrity": axe_lock.get("integrity"),
-        "ci_uses_npm_ci": "run: npm ci" in ci and "run: npm ci" in site_build,
-        "ci_has_no_ad_hoc_install": "npm install --no-save --package-lock=false" not in workflows,
-        "ci_installs_chromium": "npx playwright install --with-deps chromium" in ci,
+        "ci_uses_npm_ci": all("run: npm ci" in workflow for workflow in (ci, site_build, first_screen)),
+        "ci_has_no_ad_hoc_install": "npm install --no-save" not in workflows,
+        "ci_installs_chromium": all("npx playwright install --with-deps chromium" in workflow for workflow in (ci, first_screen)),
     }
 
 
