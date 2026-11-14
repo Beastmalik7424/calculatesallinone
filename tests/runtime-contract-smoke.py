@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_NVMRC = "24"
 EXPECTED_ENGINE = "24.x"
 EXPECTED_WORKFLOW_NODE = "24"
+EXPECTED_PYTHON = "3.12"
 
 
 def validate_runtime_config(config):
@@ -19,6 +20,8 @@ def validate_runtime_config(config):
         "lock_engine": EXPECTED_ENGINE,
         "ci_node": EXPECTED_WORKFLOW_NODE,
         "site_build_node": EXPECTED_WORKFLOW_NODE,
+        "first_screen_node": EXPECTED_WORKFLOW_NODE,
+        "first_screen_python": EXPECTED_PYTHON,
     }
     return all(config.get(key) == value for key, value in expected.items())
 
@@ -33,17 +36,30 @@ def workflow_node_version(content):
     return matches[0]
 
 
+def workflow_python_version(content):
+    matches = re.findall(
+        r"uses:\s*actions/setup-python@v7\s*\n\s*with:\s*\n\s*python-version:\s*[\"']?([^\"'\s]+)",
+        content,
+    )
+    if len(matches) != 1:
+        raise ValueError("workflow must define exactly one setup-python@v7 Python version")
+    return matches[0]
+
+
 def repository_runtime_config(root=ROOT):
     package = json.loads((root / "package.json").read_text(encoding="utf-8"))
     lock = json.loads((root / "package-lock.json").read_text(encoding="utf-8"))
     nvmrc_path = root / ".nvmrc"
     nvmrc = nvmrc_path.read_text(encoding="utf-8").strip() if nvmrc_path.is_file() else None
+    first_screen = (root / ".github/workflows/first-screen-audit.yml").read_text(encoding="utf-8")
     return {
         "nvmrc": nvmrc,
         "package_engine": package.get("engines", {}).get("node"),
         "lock_engine": lock.get("packages", {}).get("", {}).get("engines", {}).get("node"),
         "ci_node": workflow_node_version((root / ".github/workflows/ci.yml").read_text(encoding="utf-8")),
         "site_build_node": workflow_node_version((root / ".github/workflows/site-build.yml").read_text(encoding="utf-8")),
+        "first_screen_node": workflow_node_version(first_screen),
+        "first_screen_python": workflow_python_version(first_screen),
     }
 
 
@@ -55,6 +71,8 @@ class RuntimeContractUnitTests(unittest.TestCase):
             "lock_engine": "24.x",
             "ci_node": "24",
             "site_build_node": "24",
+            "first_screen_node": "24",
+            "first_screen_python": "3.12",
         }))
 
     def test_rejects_each_runtime_source_when_it_drifts(self):
@@ -64,6 +82,8 @@ class RuntimeContractUnitTests(unittest.TestCase):
             "lock_engine": "24.x",
             "ci_node": "24",
             "site_build_node": "24",
+            "first_screen_node": "24",
+            "first_screen_python": "3.12",
         }
         for key in valid:
             with self.subTest(source=key):
@@ -82,6 +102,14 @@ class RuntimeContractUnitTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "exactly one"):
             workflow_node_version(content)
 
+    def test_rejects_workflow_with_duplicate_python_setup_versions(self):
+        content = (
+            "uses: actions/setup-python@v7\\n  with:\\n    python-version: \\\"3.12\\\"\\n"
+            "uses: actions/setup-python@v7\\n  with:\\n    python-version: \\\"3.11\\\"\\n"
+        )
+        with self.assertRaisesRegex(ValueError, "exactly one"):
+            workflow_python_version(content)
+
     def test_two_thousand_deterministic_runtime_mutations(self):
         rng = random.Random(20261114)
         valid = {
@@ -90,6 +118,8 @@ class RuntimeContractUnitTests(unittest.TestCase):
             "lock_engine": "24.x",
             "ci_node": "24",
             "site_build_node": "24",
+            "first_screen_node": "24",
+            "first_screen_python": "3.12",
         }
         invalid_versions = ["18", "20", "22", "26", "24.11.0", "lts/*", "node"]
         for _ in range(1000):
@@ -109,7 +139,7 @@ class RepositoryRuntimeIntegrationTests(unittest.TestCase):
         config = repository_runtime_config()
         self.assertTrue(
             validate_runtime_config(config),
-            "runtime mismatch. Expected .nvmrc=24, package.json/package-lock engines.node=24.x, and both CI workflows=24. Actual: "
+            "runtime mismatch. Expected .nvmrc=24, package.json/package-lock engines.node=24.x, all CI workflows=Node 24, and first-screen Python=3.12. Actual: "
             + json.dumps(config, sort_keys=True),
         )
 
