@@ -72,6 +72,45 @@ for p in ROOT.rglob("index.html"):
         check(re.fullmatch(r"\d{4}-\d{2}-\d{2}", m.group(1)) is not None,
               f"{p}: 'Last updated' is not YYYY-MM-DD")
 
+# Editorial quality regression: each calculator page should have one clear method explanation.
+# A generic "How it is calculated" callout duplicated the page's own method section.
+METHOD_SECTIONS = {
+    "bmi-calculator": "The formula",
+    "zakat-calculator": "Zakat arithmetic and worked example",
+    "age-calculator": "How the age is calculated",
+    "unit-converter": "How conversion works",
+    "standard-calculator": "How it calculates",
+    "stopwatch": "How it works",
+    "query-calculator": "How it works",
+}
+for slug, heading in METHOD_SECTIONS.items():
+    check(has_heading(slug, heading), f"/{slug}/ must retain its page-specific method explanation: {heading}")
+    check(not has_heading(slug, "How it is calculated"),
+          f"/{slug}/ must not repeat its page-specific method under a generic duplicate heading")
+    check("Worked method." not in (ROOT / slug / "index.html").read_text(encoding="utf-8"),
+          f"/{slug}/ must not render the duplicated generic worked-method callout")
+
+# No page should repeat the same visible H2 heading or a substantial paragraph within its own main content.
+for page_path in ROOT.rglob("index.html"):
+    raw_page = page_path.read_text(encoding="utf-8")
+    main_match = re.search(r"<main\\b[^>]*>(.*?)</main>", raw_page, re.S | re.I)
+    if not main_match:
+        continue
+    main = main_match.group(1)
+    headings = [
+        re.sub(r"\\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", item))).strip().casefold()
+        for item in re.findall(r"<h2\\b[^>]*>(.*?)</h2>", main, re.S | re.I)
+    ]
+    duplicates = sorted({heading for heading in headings if headings.count(heading) > 1})
+    check(not duplicates, f"{page_path}: duplicate H2 headings: {duplicates}")
+    paragraphs = [
+        re.sub(r"\\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", item))).strip().casefold()
+        for item in re.findall(r"<p\\b[^>]*>(.*?)</p>", main, re.S | re.I)
+    ]
+    substantial = [p for p in paragraphs if len(p) >= 120 and not p.startswith("maintained by ")]
+    duplicate_paragraphs = sorted({p for p in substantial if substantial.count(p) > 1})
+    check(not duplicate_paragraphs, f"{page_path}: repeated substantial paragraph(s) within page")
+
 # Regression gates for the two pages where the live preview exposed repeated
 # explanations. These checks target duplicate sections, not arbitrary word counts.
 discount_html = (ROOT / "discount-calculator" / "index.html").read_text(encoding="utf-8")
