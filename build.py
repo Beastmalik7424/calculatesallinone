@@ -324,7 +324,7 @@ TOOLS = [
         "guide": [
             ("The formulas", [
                 "Amount saved equals original price multiplied by the discount percentage, divided by 100.",
-                "Final price equals original price minus amount saved.",
+                "Final price equals original price minus the amount saved.",
             ]),
             ("Worked example", [
                 "Original price is 2,500. Discount is 20 percent.",
