@@ -809,7 +809,7 @@ EXTRA = {
         ],
     },
     "profit-loss-calculator": {
-        "quick": "Business P&L: net operating profit = revenue - cost of goods sold - other expenses, and operating margin = net operating profit / revenue x 100. Product mode: profit = selling price - cost price, markup = profit / cost price x 100, and gross margin = profit / selling price x 100.",
+        "quick": "",
         "faq": [
             ("What is the difference between markup and margin?", "Product markup uses cost as its base; product gross margin uses selling price. Business operating margin uses revenue after listed expenses. These percentages are not interchangeable."),
             ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
@@ -818,7 +818,7 @@ EXTRA = {
         ],
     },
     "discount-calculator": {
-        "quick": "Amount saved equals original price multiplied by the discount percentage, divided by 100. Final price equals original price minus the amount saved.",
+        "quick": "",
         "faq": [
             ("How do I calculate two discounts together?", "Apply the first discount to the original price, then apply the second discount to the reduced price. Stacked discounts are not the same as adding the percentages."),
         ],
