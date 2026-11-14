@@ -22,6 +22,8 @@ on:
       - 'tests/extra-calculators-smoke.cjs'
       - '.github/workflows/first-screen-audit.yml'
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   viewport:
     runs-on: ubuntu-24.04
