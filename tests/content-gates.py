@@ -129,6 +129,7 @@ def main():
             "Editorial policy",
             "Privacy policy",
             "Sources and site guidance",
+            "A suggestion does not mean the requested feature is available or will be added.",
             "How do I report a calculator error?",
             "What information should I include?",
             "How long does a reply take?",
