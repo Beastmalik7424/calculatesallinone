@@ -7,7 +7,6 @@ REVIEW_STATUS = {
     "age-calculator": "Calendar method counts whole years, months and days between the two dates entered.",
     "unit-converter": "Conversions use the factors shown in the worked examples on this page.",
     "standard-calculator": "Expressions follow standard operator precedence, as shown in the examples on this page.",
-    "tasbih-counter": "Counting, undo, reset and target behaviour are described on this page.",
     "stopwatch": "Elapsed time comes from the browser timer, as described on this page.",
 }
 
@@ -148,14 +147,6 @@ GUIDE_EXTRA = {
             "Error means the expression is incomplete, for example it ends with an operator or has unmatched parentheses. Cannot divide by zero means the divisor was zero.",
         ]),
     ],
-    "tasbih-counter": [
-        ("Choosing a target", [
-            "Choose a preset target of 33, 99 or 100, or enter a custom whole number from 1 to 10,000. The target is a personal tracking setting, not a religious ruling or a claim that a particular number is required.",
-        ]),
-        ("Privacy of your count", [
-            "The count is stored only in your browser on this device when browser storage is available. If storage is blocked, the counter works in memory until the page is reloaded or closed. CalculatesAll does not send the count to a server or link it to an account.",
-        ]),
-    ],
     "stopwatch": [
         ("Starting and stopping", [
             "Press Start when the activity begins and Stop when it ends. Press Reset to clear the display before the next timing.",
@@ -183,12 +174,6 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
         "If the selling price is 700 instead, loss = 800 - 700 = 100 and loss percentage on cost = (100 / 800) x 100 = 12.5%. Enter the total cost, including relevant direct expenses, rather than the purchase price alone when you need a realistic business estimate.",
     ])
 )
-GUIDE_EXTRA["tasbih-counter"].append(
-    ("Tasbih calculator and digital zikr counter example", [
-        "For a personal target of 99 presses, three sets of 33 presses make 3 x 33 = 99. If you have already counted 67 presses, 99 - 67 = 32 presses remain. This is a counting example, not a ruling about how many repetitions are required.",
-        "Use the same counter for tasbih, tasbeeh or zikr. Alternate spellings describe the same counting task, so a separate near-identical page is not needed.",
-    ])
-)
 GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
     ("Years and months in days: interpreting search questions", [
         "For 29 years, the simple conversion is 29 x 365 = 10,585 days. Using the Gregorian average gives 29 x 365.2425 = 10,592.0325 days. The exact calendar-day total depends on the start and end dates.",
@@ -211,12 +196,6 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
         "Profit is selling price minus cost. Margin uses selling price as its denominator; markup uses cost. On a cost of 60 and a price of 100, profit is 40, margin is 40%, and markup is about 66.67%. Calling both percentages profit percentage without naming the base can mislead buyers.",
         "For a target 20% margin with a cost of 800, the required selling price is 800 / (1 - 0.20) = 1,000 before other charges. A 20% markup would instead give 800 x 1.20 = 960, with a margin of about 16.67%. This distinction matters when pricing products.",
         "These calculations describe a gross item-level result unless all relevant costs are included. Returns, marketplace commissions, shipping, tax treatment and overhead can change net profitability.",
-    ])
-)
-GUIDE_EXTRA["tasbih-counter"].append(
-    ("Choosing the right online tasbeeh counter", [
-        "A useful digital tasbih counter should make the increment action easy to reach on a phone, show the current count clearly, and allow an accidental press to be undone. A visible target and remaining count can help when tracking a personal routine.",
-        "Tasbih, tasbeeh and zikr counter are common ways to describe this same counting task. The page uses one functioning counter rather than multiple nearly identical keyword pages. Count tracking is not a statement about prescribed religious repetitions.",
     ])
 )
 
@@ -319,17 +298,6 @@ GUIDE_EXTRA["stopwatch"].extend([
     ]),
 ])
 
-GUIDE_EXTRA["tasbih-counter"].extend([
-    ("Worked example", [
-        "For a personal target of 99 presses, three groups of 33 presses make 3 x 33 = 99. If the current count is 67, the remaining count is 99 - 67 = 32. This example explains the counter arithmetic and does not prescribe a religious practice.",
-    ]),
-    ("Method", [
-        "Each deliberate press adds one to the current count. When a target is selected, the remaining amount is the target minus the current count, with completion shown when the count reaches the target. Reset begins a new count from zero.",
-    ]),
-    ("Limits", [
-        "The counter records button presses, not the wording or religious status of a recitation. Saved progress depends on browser storage on the current device and may be lost when site data is cleared, private browsing ends or a different browser or device is used.",
-    ]),
-])
 
 GUIDE_EXTRA["query-calculator"].extend([
     ("Worked example", [
@@ -345,15 +313,6 @@ GUIDE_EXTRA["query-calculator"].extend([
 
 
 # Phase 1 priority-page additions: query-specific examples and practical limits.
-GUIDE_EXTRA["tasbih-counter"].extend([
-    ("Using the counter during a short daily session", [
-        "The counter can track a short session at home, while travelling or during a break. Select a phrase, choose a personal target, and tap once for each count you want to record. The large count display and full-width button are intended to remain easy to use on a phone.",
-        "If you pause, the current count remains on this device when browser storage is available. Undo removes one accepted tap from the current count. Reset asks for confirmation before clearing it, so a stray tap does not require starting the session again.",
-    ]),
-    ("What the counter can and cannot verify", [
-        "A digital counter can record the number of taps, but it cannot hear a recitation, confirm pronunciation, or determine whether a phrase or target is religiously required. The target is a personal tracking choice. For religious guidance, consult a qualified scholar or trusted teacher.",
-    ]),
-])
 
 GUIDE_EXTRA["profit-loss-calculator"].append(
     ("Pakistan shop example: include direct selling costs", [
