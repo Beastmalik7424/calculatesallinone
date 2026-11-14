@@ -2071,7 +2071,7 @@ def static_page(path, title, desc, h1, paragraphs, noindex=False):
             '<p class="' + P + '">Use the same email address for feedback about page wording, keyboard access, screen-reader labels, mobile layout, or Urdu translation. Identify the page and describe the device, browser, language, or action involved when that context is needed to reproduce the problem. Suggestions are considered as part of site maintenance, but submission does not guarantee that a requested feature will be added.</p>'
             '<h2 class="' + H2 + '">Protect sensitive information</h2>'
             '<p class="' + P + '">Do not include passwords, payment card numbers, bank details, medical records, identity documents, or other sensitive personal information in an email. Send only the minimum details needed to explain the issue. Review the <a class="' + LINK + '" href="/privacy/">Privacy policy</a> for the site information-handling statement before deciding what to share.</p>'
-            '<h2 class="' + H2 + '">Related site guidance</h2>'
+            '<h2 class="' + H2 + '">Sources and site guidance</h2>'
             '<ul class="mt-3 list-disc space-y-2 pl-6 text-base text-stone-800 dark:text-stone-200">'
             '<li><a class="' + LINK + '" href="/methodology/">Calculation methodology</a> explains the methods, examples, assumptions, and limits used by the tools.</li>'
             '<li><a class="' + LINK + '" href="/editorial-policy/">Editorial policy</a> describes how content and reported errors are reviewed and corrected.</li>'
