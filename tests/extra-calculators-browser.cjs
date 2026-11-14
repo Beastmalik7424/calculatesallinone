@@ -321,6 +321,12 @@ const {chromium}=require("playwright");
    if((await page.locator("#t-target").inputValue())!=="99")throw Error("Tasbih preset target must persist across reload");
    if((await page.locator("#t-phrase").inputValue())!=="custom"||(await page.locator("#t-custom-phrase").inputValue())!=="Test dhikr")throw Error("Tasbih custom phrase must persist across reload");
    await page.locator("#t-target").selectOption("custom");
+   await page.locator("#t-custom-target").fill("0");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih must reject a custom target below 1");
+   await page.locator("#t-custom-target").fill("10001");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih must reject a custom target above 10,000");
    await page.locator("#t-custom-target").fill("123");
    if(!(await page.locator("#t-custom-target-wrap").isVisible()))throw Error("Tasbih custom target field should become visible");
    const countAfterThousand=await page.evaluate(()=>{
@@ -341,6 +347,23 @@ const {chromium}=require("playwright");
    if(countAfterUndo!=="0")throw Error("Tasbih must reverse 1,000 undo operations to zero: "+countAfterUndo);
    if(errors.length)throw Error("Tasbih browser errors: "+errors.join("; "));
    console.log("Tasbih browser PASS "+width+"px: count/actions above settings, tap/undo/reset and custom phrase/target");
+   await page.close();
+  }
+
+  {
+   const page=await browser.newPage({viewport:{width:390,height:844}});
+   const errors=[];page.on("pageerror",e=>errors.push(e.message));
+   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   await page.addInitScript(()=>Object.defineProperty(window,"localStorage",{configurable:true,get(){throw new DOMException("Storage blocked","SecurityError");}}));
+   const response=await page.goto(base+"/tasbih-counter/");
+   if(!response||response.status()!==200)throw Error("Tasbih blocked-storage page HTTP failure");
+   if(!(await page.locator("#t-storage-note").isVisible()))throw Error("Tasbih must disclose unavailable browser storage");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="1")throw Error("Tasbih must still count in memory when storage is blocked");
+   await page.reload();
+   if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih must not claim persistence when browser storage is blocked");
+   if(errors.length)throw Error("Tasbih blocked-storage browser errors: "+errors.join("; "));
+   console.log("Tasbih blocked-storage fallback PASS: visible notice, in-memory count, reload reset");
    await page.close();
   }
 
