@@ -60,47 +60,19 @@ GUIDE_EXTRA = {
             "Is BMI a body-fat test? No. Does the formula differ by sex? No, but clinical interpretation depends on more than BMI. Seek qualified clinical advice for individual health decisions.",
         ]),
     ],
-    "profit-loss-calculator": [
-        ("Profit and loss in a business", [
-            "A sale is profitable only when the selling price is higher than the total cost of the item. Total cost includes purchase price and direct costs such as freight, packaging, storage and payment fees.",
-            "A business with several products should calculate profit for each product line, because a high margin on one item can hide a loss on another.",
-        ]),
-        ("Example with a loss", [
-            "Cost price is 1,500 and selling price is 1,200. The difference is minus 300, which is a loss of 300.",
-            "The percentage is minus 300 divided by 1,500, multiplied by 100, which is minus 20 percent. The loss is 20 percent of cost.",
-        ]),
-        ("More common mistakes", [
-            "Forgetting that discounts reduce the selling price. Calculate profit after the discount you actually gave the customer.",
-            "Comparing a percentage on cost with a percentage on selling price. Always check which base a percentage uses before you compare two figures.",
-        ]),
-    ],
+    "profit-loss-calculator": [],
     "discount-calculator": [
         ("Worked example: discount and sales tax", [
             "Suppose an item has a listed price of 2,000, a 15% discount and a 10% sales tax calculated on the discounted price. The discount is 300, the discounted price is 1,700, and the tax is 170. The final amount is 1,870.",
-            "If a store instead calculates tax before applying the discount, the receipt can differ. This example assumes tax is charged on the discounted price. The calculator's discount result alone is not a complete tax-inclusive checkout quote.",
+            "If a store calculates tax before applying a discount, the receipt can differ. This example assumes tax is charged on the discounted price. The calculator reports the discount result only and is not a tax-inclusive checkout quote.",
         ]),
         ("Why the order of percentage changes matters", [
             "A 25% discount followed by a 10% price increase leaves a 100-unit starting price at 82.50: first 100 becomes 75, then 75 increases by 7.50. It is not the same as subtracting 15% from the starting price.",
             "For sequential adjustments, apply each percentage to the amount immediately before that step. Keep intermediate values unrounded when calculating a final payable amount, then follow the applicable currency and merchant rounding rules.",
         ]),
-        ("Stacked discounts", [
-            "Two discounts applied one after another are not the same as adding their percentages. A 20 percent discount followed by a 10 percent discount on the reduced price gives a total reduction of 28 percent, not 30 percent.",
-            "Example: an item priced at 1,000 with 20 percent off becomes 800. A further 10 percent off 800 is 80, so the final price is 720. The total saving is 280, which is 28 percent of 1,000.",
-        ]),
-        ("Discount before or after tax", [
-            "Most shops calculate the discount on the price before tax. Some countries and shops calculate tax first. Check the receipt to see how your store applies the discount.",
-        ]),
-        ("Using discounts for pricing", [
-            "To find the price that gives a target final price, divide the target by one minus the discount rate. For a 20 percent discount and a target of 800, the original price is 800 divided by 0.8, which is 1,000.",
-        ]),
-        ("Single discount worked example", [
-            "Discount amount = original price × discount percentage / 100. On PKR 4,500 at 20% off, the saving is PKR 900 and the final price is PKR 3,600. Check taxes and delivery separately.",
-        ]),
-        ("Reverse discount worked example", [
-            "Original price = sale price / (1 - discount rate). A PKR 3,600 sale price after 20% off represents 80% of the original price, so 3,600 / 0.80 = PKR 4,500. The formula requires a discount below 100%.",
-        ]),
-        ("Successive discounts worked example", [
-            "On PKR 4,500, a 20% discount gives PKR 3,600; a further 10% gives PKR 3,240. The saving is PKR 1,260, or 28% of the original price, not 30%. Do not add successive percentage discounts. Two successive 50% reductions leave 25% of the original price.",
+        ("Find the original price from a discounted price", [
+            "When the final price and discount rate are known, original price = final price ÷ (1 − discount rate). The discount rate must be written as a decimal, and the discount must be below 100%.",
+            "Example: a final price of PKR 3,600 after a 20% discount represents 80% of the original price. Therefore 3,600 ÷ 0.80 = PKR 4,500. This reverse calculation does not verify whether a seller's advertised original price was genuine.",
         ]),
     ],
     "age-calculator": [
@@ -177,12 +149,6 @@ GUIDE_EXTRA["unit-converter"].append(
 
 # Search Console query-specific worked examples. These complement existing tools;
 # they do not create near-duplicate landing pages for the same search intent.
-GUIDE_EXTRA["profit-loss-calculator"].append(
-    ("Profit loss calculator: cost versus selling price", [
-        "Example: A product costs 800 and sells for 1,000. Profit = 1,000 - 800 = 200. Profit on cost = (200 / 800) x 100 = 25%. Profit margin on revenue = (200 / 1,000) x 100 = 20%. The two percentages use different denominators.",
-        "If the selling price is 700 instead, loss = 800 - 700 = 100 and loss percentage on cost = (100 / 800) x 100 = 12.5%. Enter the total cost, including relevant direct expenses, rather than the purchase price alone when you need a realistic business estimate.",
-    ])
-)
 GUIDE_EXTRA["tasbih-counter"].append(
     ("Tasbih calculator and digital zikr counter example", [
         "For a personal target of 99 presses, three sets of 33 presses make 3 x 33 = 99. If you have already counted 67 presses, 99 - 67 = 32 presses remain. This is a counting example, not a ruling about how many repetitions are required.",
@@ -204,13 +170,6 @@ GUIDE_EXTRA["years-to-days-calculator"].append(
         "A fixed 365-day year is useful for simple arithmetic. A Julian year is exactly 365.25 days, a fixed duration used in astronomy. The Gregorian mean is 365.2425 days because its 400-year cycle has 97 leap days: (400 x 365 + 97) / 400 = 365.2425. These methods are not identical over long durations.",
         "For 13 years, the simple result is 4,745 days, the Julian-average result is 4,748.25 days, and the Gregorian-average result is 4,748.1525 days. None establishes the exact number of days between two calendar anniversaries without a start date. Use the date difference tool for that question.",
         "A day count of 800,000 is approximately 2,191.78 simple years, 2,190.28 Julian years or 2,190.33 Gregorian-average years. Always state which year length you selected when comparing conversion results from different sites.",
-    ])
-)
-GUIDE_EXTRA["profit-loss-calculator"].append(
-    ("Profit margin versus markup: practical comparison", [
-        "Profit is selling price minus cost. Margin uses selling price as its denominator; markup uses cost. On a cost of 60 and a price of 100, profit is 40, margin is 40%, and markup is about 66.67%. Calling both percentages profit percentage without naming the base can mislead buyers.",
-        "For a target 20% margin with a cost of 800, the required selling price is 800 / (1 - 0.20) = 1,000 before other charges. A 20% markup would instead give 800 x 1.20 = 960, with a margin of about 16.67%. This distinction matters when pricing products.",
-        "These calculations describe a gross item-level result unless all relevant costs are included. Returns, marketplace commissions, shipping, tax treatment and overhead can change net profitability.",
     ])
 )
 GUIDE_EXTRA["tasbih-counter"].append(
