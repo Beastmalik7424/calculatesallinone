@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unit and integration contracts keeping local, CI and Vercel Node runtimes aligned."""
+"""Unit and integration contracts keeping local, CI and Vercel Node/Python runtimes aligned."""
 import json
 import random
 import re
@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_NVMRC = "24"
 EXPECTED_ENGINE = "24.x"
 EXPECTED_WORKFLOW_NODE = "24"
+EXPECTED_PYTHON = "3.12"
 
 
 def validate_runtime_config(config):
@@ -19,6 +20,10 @@ def validate_runtime_config(config):
         "lock_engine": EXPECTED_ENGINE,
         "ci_node": EXPECTED_WORKFLOW_NODE,
         "site_build_node": EXPECTED_WORKFLOW_NODE,
+        "first_screen_node": EXPECTED_WORKFLOW_NODE,
+        "ci_python": EXPECTED_PYTHON,
+        "site_build_python": EXPECTED_PYTHON,
+        "first_screen_python": EXPECTED_PYTHON,
     }
     return all(config.get(key) == value for key, value in expected.items())
 
@@ -33,43 +38,61 @@ def workflow_node_version(content):
     return matches[0]
 
 
+def workflow_python_version(content):
+    matches = re.findall(
+        r"uses:\s*actions/setup-python@v7\s*\n\s*with:\s*\n\s*python-version:\s*[\"']?([^\"'\s]+)",
+        content,
+    )
+    if len(matches) != 1:
+        raise ValueError("workflow must define exactly one setup-python@v7 Python version")
+    return matches[0]
+
+
 def repository_runtime_config(root=ROOT):
     package = json.loads((root / "package.json").read_text(encoding="utf-8"))
     lock = json.loads((root / "package-lock.json").read_text(encoding="utf-8"))
     nvmrc_path = root / ".nvmrc"
     nvmrc = nvmrc_path.read_text(encoding="utf-8").strip() if nvmrc_path.is_file() else None
+    ci = (root / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    site_build = (root / ".github/workflows/site-build.yml").read_text(encoding="utf-8")
+    first_screen = (root / ".github/workflows/first-screen-audit.yml").read_text(encoding="utf-8")
     return {
         "nvmrc": nvmrc,
         "package_engine": package.get("engines", {}).get("node"),
         "lock_engine": lock.get("packages", {}).get("", {}).get("engines", {}).get("node"),
-        "ci_node": workflow_node_version((root / ".github/workflows/ci.yml").read_text(encoding="utf-8")),
-        "site_build_node": workflow_node_version((root / ".github/workflows/site-build.yml").read_text(encoding="utf-8")),
+        "ci_node": workflow_node_version(ci),
+        "site_build_node": workflow_node_version(site_build),
+        "first_screen_node": workflow_node_version(first_screen),
+        "ci_python": workflow_python_version(ci),
+        "site_build_python": workflow_python_version(site_build),
+        "first_screen_python": workflow_python_version(first_screen),
     }
 
 
 class RuntimeContractUnitTests(unittest.TestCase):
-    def test_accepts_a_fully_aligned_node_24_configuration(self):
-        self.assertTrue(validate_runtime_config({
+    def valid_config(self):
+        return {
             "nvmrc": "24",
             "package_engine": "24.x",
             "lock_engine": "24.x",
             "ci_node": "24",
             "site_build_node": "24",
-        }))
+            "first_screen_node": "24",
+            "ci_python": "3.12",
+            "site_build_python": "3.12",
+            "first_screen_python": "3.12",
+        }
+
+    def test_accepts_a_fully_aligned_node_24_python_312_configuration(self):
+        self.assertTrue(validate_runtime_config(self.valid_config()))
 
     def test_rejects_each_runtime_source_when_it_drifts(self):
-        valid = {
-            "nvmrc": "24",
-            "package_engine": "24.x",
-            "lock_engine": "24.x",
-            "ci_node": "24",
-            "site_build_node": "24",
-        }
+        valid = self.valid_config()
         for key in valid:
             with self.subTest(source=key):
                 drifted = dict(valid)
                 drifted[key] = "20"
-                self.assertFalse(validate_runtime_config(drifted), key + " must not drift from Node 24")
+                self.assertFalse(validate_runtime_config(drifted), key + " must not drift")
 
     def test_rejects_missing_runtime_declaration(self):
         self.assertFalse(validate_runtime_config({}))
@@ -82,15 +105,17 @@ class RuntimeContractUnitTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "exactly one"):
             workflow_node_version(content)
 
+    def test_rejects_workflow_with_duplicate_python_setup_versions(self):
+        content = (
+            "uses: actions/setup-python@v7\n  with:\n    python-version: \"3.12\"\n"
+            "uses: actions/setup-python@v7\n  with:\n    python-version: \"3.11\"\n"
+        )
+        with self.assertRaisesRegex(ValueError, "exactly one"):
+            workflow_python_version(content)
+
     def test_two_thousand_deterministic_runtime_mutations(self):
         rng = random.Random(20261114)
-        valid = {
-            "nvmrc": "24",
-            "package_engine": "24.x",
-            "lock_engine": "24.x",
-            "ci_node": "24",
-            "site_build_node": "24",
-        }
+        valid = self.valid_config()
         invalid_versions = ["18", "20", "22", "26", "24.11.0", "lts/*", "node"]
         for _ in range(1000):
             self.assertTrue(validate_runtime_config(dict(valid)))
@@ -105,11 +130,12 @@ class RuntimeContractUnitTests(unittest.TestCase):
 
 
 class RepositoryRuntimeIntegrationTests(unittest.TestCase):
-    def test_local_package_lock_and_both_ci_workflows_target_node_24(self):
+    def test_local_package_lock_and_all_ci_workflows_target_node_24_and_python_312(self):
         config = repository_runtime_config()
         self.assertTrue(
             validate_runtime_config(config),
-            "runtime mismatch. Expected .nvmrc=24, package.json/package-lock engines.node=24.x, and both CI workflows=24. Actual: "
+            "runtime mismatch. Expected .nvmrc=24, package.json/package-lock engines.node=24.x, "
+            "all CI Node versions=24 and Python versions=3.12. Actual: "
             + json.dumps(config, sort_keys=True),
         )
 
