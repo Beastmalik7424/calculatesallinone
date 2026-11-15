@@ -597,7 +597,7 @@
         }
         var formatted = new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", { style: "currency", currency: result.currency, maximumFractionDigits: 2 }).format(result.amountDue)
         if (lang() === "ur") {
-          var cropNames = { wheat: "گندم", barley: "جو", dates: "کھجور", grapes: "انگور", rice: "چاول", maize: "مکئی", other: "دیگر فصل" }
+          var cropNames = { wheat: "گندم", barley: "جو", dates: "کھجور", raisins: "کشمش", rice: "چاول", maize: "مکئی", other: "دیگر فصل" }
           var rateText = (result.rate * 100).toLocaleString("ur-PK") + "٪"
           var msg = result.status === "below_nisab"
             ? "فصل کی مقدار مقررہ نصاب (" + result.nisabKg.toLocaleString("ur-PK") + " کلوگرام) سے کم ہے۔ اس منتخب طریقے کے مطابق اس فصل پر عشر واجب نہیں بنتا۔"
