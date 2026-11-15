@@ -1242,7 +1242,7 @@ _bmi_2026 = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8"
 assert "2026 Standards of Care in Overweight and Obesity" in _bmi_2026, "BMI must explain the current 2026 clinical assessment context"
 assert "waist-to-height ratio" in _bmi_2026.lower(), "BMI must explain waist-to-height ratio alongside BMI"
 assert "does not ask for waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply waist-based clinical criteria"
-assert "diabetesjournals.org/docm-care/article/1/4/536/170058" in _bmi_2026, "BMI must link the 2026 clinical standards source"
+assert "doi.org/10.2337/doci26-0003" in _bmi_2026, "BMI must link the 2026 clinical standards source"
 assert "This note is general educational information." not in _bmi_2026, "BMI must replace the redundant generic South Asia disclaimer with useful clinical context"
 
 _ur_bmi_2026 = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
