@@ -132,7 +132,7 @@
       produceDueKg: meetsNisab ? quantityKg * rate : 0,
       amountDue: meetsNisab ? marketValue * rate : 0,
       guidance: sect === "shia"
-        ? "Sistani's crop Zakat applies only to wheat, barley, dates and grapes at approximately 847 kg. Rain or natural irrigation: 10%; irrigation requiring tools or pumping: 5%; where both methods are commonly regarded as jointly used: 7.5%. Crop expenses and seed are not deducted before checking Nisab under the cited rulings."
+        ? "Sistani's crop Zakat applies only to wheat, barley, dates and raisins at approximately 847 kg. Rain or natural irrigation: 10%; irrigation requiring tools or pumping: 5%; where both methods are commonly regarded as jointly used: 7.5%. Crop expenses and seed are not deducted before checking Nisab under the cited rulings."
         : "This is a crop-specific Ushr estimate, not wealth Zakat. It is due at harvest, with no lunar-year wait. Confirm crop eligibility, crop measurement stage, ownership and any local statutory rules with your qualified scholar or authority."
     });
   }
