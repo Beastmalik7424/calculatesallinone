@@ -459,6 +459,18 @@
   function initZakat () {
     var form = $("zakat-form")
     if (!form) return
+    var sectInput = $("z-sect")
+    var sunniSchoolWrap = $("z-sunni-school-wrap")
+    var marjaWrap = $("z-marja-wrap")
+    function updateFiqhFields() {
+      var shia = !!(sectInput && sectInput.value === "shia")
+      if (sunniSchoolWrap) sunniSchoolWrap.hidden = shia
+      if (marjaWrap) marjaWrap.hidden = !shia
+    }
+    if (sectInput) {
+      sectInput.addEventListener("change", updateFiqhFields)
+      updateFiqhFields()
+    }
     var assetFields = [
       ["cash", "z-cash"], ["bank", "z-bank"], ["savings", "z-savings"],
       ["gold", "z-gold"], ["silver", "z-silver"], ["investments", "z-investments"],
@@ -486,6 +498,9 @@
       try {
         var result = window.ZakatCalculator.calculate({
           currency: currency,
+          sect: sectInput ? sectInput.value : "sunni",
+          school: $("z-sunni-school") ? $("z-sunni-school").value : "hanafi",
+          marja: $("z-marja") ? $("z-marja").value : "",
           nisabMethod: method,
           silverPricePerGram: num("z-silverprice"),
           goldPricePerGram: num("z-goldprice"),
@@ -494,6 +509,13 @@
           zakatPaid: num("z-paid"),
           hawlComplete: !!($("z-hawl") && $("z-hawl").checked)
         })
+        if (result.status === "scholar_review_required") {
+          var shiaGuidance = lang() === "ur"
+            ? "آیت اللہ سیستانی کے سرکاری احکام کے مطابق عام کاغذی نوٹ اور عام بینک بیلنس سونے یا چاندی کے سکّوں والی واجب زکوٰۃ کے حکم میں شامل نہیں۔ سونے اور چاندی پر زکوٰۃ مخصوص شرائط کے ساتھ صرف ایسے ڈھلے ہوئے سکّوں پر ہے جو عام لین دین میں استعمال ہوتے ہوں۔ تجارتی سرمائے کا الگ حکم احتیاطِ واجب کے تحت ہے۔ اس کیلکولیٹر میں سکّوں کی نوعیت، تجارتی نیت اور تمام ضروری شرائط درج نہیں ہوتیں، اس لیے غلط عدد دینے کے بجائے اپنے مرجع کے دفتر سے رجوع کریں۔"
+            : result.guidance
+          say("zakat-result", shiaGuidance)
+          return
+        }
         var formatted = {
           assets: money(result.totalAssets, result.currency),
           liabilities: money(result.totalLiabilities, result.currency),
