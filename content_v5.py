@@ -13,25 +13,9 @@ REVIEW_STATUS = {
 GUIDE_EXTRA = {
     "zakat-calculator": [],
     "bmi-calculator": [
-        ("Why BMI is used", [
-            "BMI is a simple, low cost measure that is used in large population studies and in clinics as a first step. It needs only weight and height, so it is easy to repeat over time.",
-            "Because it is simple, it cannot tell muscle from fat, or fat in the belly from fat under the skin. Treat it as a starting point for a conversation with a clinician.",
-        ]),
-        ("Groups where BMI needs care", [
-            "Athletes and people with high muscle mass can have a high BMI with a low body fat level. Older adults can have a normal BMI with a high body fat level and low muscle mass.",
-            "BMI is not a reliable guide during pregnancy, because healthy weight gain is expected. Ask your midwife or doctor about gestational weight targets.",
-        ]),
-        ("How to measure correctly", [
-            "Weigh yourself in the morning, after using the toilet and before eating, in light clothing. Measure height without shoes, standing straight against a flat wall.",
-            "Round your height to the nearest millimetre or sixteenth of an inch, and check that you entered the correct units before reading the result.",
-        ]),
-        ("BMI formula and worked example", [
-            "For adults, BMI = weight in kilograms divided by height in metres squared. For 70 kg and 1.75 m, BMI = 70 / (1.75 × 1.75) = 22.8571, displayed as 22.9.",
-            "WHO adult screening thresholds: underweight below 18.5; normal weight 18.5 to below 25; overweight 25 to below 30; obesity 30 or above. These categories are not a diagnosis. Children require age- and sex-specific references. Reference: https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
-        ]),
-        ("BMI questions and mistakes", [
-            "Do not confuse centimetres and metres or use adult categories for children. Standard adult categories are not appropriate for assessing weight during pregnancy. Athletes may have high BMI due to muscle.",
-            "Is BMI a body-fat test? No. Does the formula differ by sex? No, but clinical interpretation depends on more than BMI. Seek qualified clinical advice for individual health decisions.",
+        ("How to measure consistently", [
+            "For a useful comparison, use the same scale and similar conditions each time. Measure height without shoes, stand upright and look straight ahead. Record weight and height in the units selected above, and check that centimetres have not been entered as metres.",
+            "If you track changes over time, compare measurements taken under similar conditions rather than treating one reading as a diagnosis. The input limits shown by this calculator are technical limits for the form, not target weights or medical recommendations.",
         ]),
     ],
     "profit-loss-calculator": [],
@@ -261,29 +245,17 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
 
 # Focused educational depth for the Zakat, BMI and profit/loss tools.
 # Zakat guidance is maintained in build.py's bilingual Zakat page entry.
-GUIDE_EXTRA["bmi-calculator"].extend([
-    ("What a BMI result is useful for and what it is not", [
-        "For adults, BMI is useful as a quick, repeatable screening measure based on weight and height. It can help describe a broad weight category, compare measurements taken consistently over time, and identify when a fuller health discussion may be useful. It is not a direct measurement of body fat, waist fat, muscle, fitness or an individual's disease risk.",
-        "A BMI result cannot diagnose a condition or explain why a person's weight has changed. It may be misleading for people with high muscle mass, during pregnancy, in older adults with changing muscle mass, and for children who need age- and sex-specific growth references. Do not use this number alone to start, stop or change treatment, medication, diet or exercise. This calculator is a screening aid, not a diagnosis or professional medical advice.",
-    ]),
+GUIDE_EXTRA["bmi-calculator"].append(
     ("Pakistan and South Asia context", [
-        "Body composition and the distribution of body fat can differ between populations, and some South Asian guidance discusses cardiometabolic risk at lower BMI values than the standard international adult cut-offs. Pakistan's 2019 Dietary Guidelines for Better Nutrition describe Asian-population public-health action points of 23 and 27.5 kg/m². Those action points are not the same thing as the standard WHO adult category bands. To keep this tool's output consistent and transparent, it continues to report the standard WHO adult categories shown above; it does not silently substitute a different threshold. A doctor or qualified local health professional can interpret the result alongside waist measurement, medical history and other relevant information. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://pc.gov.pk/uploads/report/Pakistan_Dietary_Nutrition_2019.pdf\" rel=\"noopener noreferrer\">Pakistan Dietary Guidelines for Better Nutrition</a> and the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight\" rel=\"noopener noreferrer\">WHO adult BMI definitions</a> for their respective contexts.",
+        "Body composition and the distribution of body fat can differ between populations, and some South Asian guidance discusses cardiometabolic risk at lower BMI values than the standard international adult cut-offs. Pakistan's 2019 Dietary Guidelines for Better Nutrition describe Asian-population public-health action points of 23 and 27.5 kg/m². Those action points are not the same thing as the standard WHO adult category bands. To keep this tool's output consistent and transparent, it continues to report the standard WHO adult categories shown above; it does not silently substitute a different threshold. A doctor or qualified local health professional can interpret the result alongside waist measurement, medical history and other relevant information. See the <a class="underline text-sky-800 dark:text-sky-300" href="https://pc.gov.pk/uploads/report/Pakistan_Dietary_Nutrition_2019.pdf" rel="noopener noreferrer">Pakistan Dietary Guidelines for Better Nutrition</a> and the <a class="underline text-sky-800 dark:text-sky-300" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" rel="noopener noreferrer">WHO adult BMI definitions</a> for their respective contexts.",
         "This note is general educational information. It does not assign a South Asian diagnosis, provide a personal risk estimate or replace an assessment by a local doctor. The appropriate interpretation can vary by individual and clinical context.",
-    ]),
-])
+    ])
+)
 
 GUIDE_EXTRA["profit-loss-calculator"].extend([
-    ("Markup and margin use different bases", [
-        "Markup measures profit against cost: markup percentage = (selling price − cost) ÷ cost × 100. Gross margin measures profit against selling price: gross margin percentage = (selling price − cost) ÷ selling price × 100. If an item costs PKR 800 and sells for PKR 1,000, the profit is PKR 200, markup is 200 ÷ 800 × 100 = 25%, and gross margin is 200 ÷ 1,000 × 100 = 20%. The profit amount is the same, but the percentages differ because their denominators differ.",
-        "A business operating margin has another base: net operating profit divided by revenue. If revenue is PKR 100,000, cost of goods sold is PKR 60,000 and entered operating expenses are PKR 15,000, gross profit is PKR 40,000, net operating profit is PKR 25,000, and net operating margin is 25,000 ÷ 100,000 × 100 = 25%. Do not label product markup or gross margin as business operating margin.",
-    ]),
-    ("Business mode and Product mode answer different questions", [
-        "Product mode compares one item's cost price with its selling price. It reports the profit or loss amount, markup on cost and gross margin on selling price. Use it when you are pricing or reviewing an individual product and have entered the relevant product cost.",
-        "Business mode uses total revenue, cost of goods sold and the other operating expenses entered. It calculates gross profit or loss, then subtracts those entered expenses to show net operating profit or loss and net operating margin on revenue. It is a simplified operating view, not a complete income statement, audited account or tax calculation. Costs not entered, including interest, tax, refunds or other charges, are not inferred.",
-    ]),
-    ("Common pricing mistakes this calculator helps expose", [
-        "A frequent mistake is calling markup a margin, even though one divides by cost and the other by selling price. Another is pricing from the supplier invoice alone while leaving out freight, packaging or other direct costs needed to get the item ready for sale. A third is treating revenue minus product cost as net business profit while ignoring rent, wages, utilities or other operating expenses.",
-        "Other avoidable errors include mixing currencies, entering a selling price before a discount as though it were the amount actually received, forgetting returns or platform/payment charges, and assuming sales tax or income tax has been calculated automatically. Use one currency, enter costs in the correct mode, and reconcile the result with invoices and business records. The calculator does not replace accounting or tax advice.",
+    ("When product profit differs from operating profit", [
+        "Suppose a business records PKR 100,000 in revenue, PKR 60,000 in cost of goods sold and PKR 15,000 in entered operating expenses. Gross profit is PKR 40,000. Net operating profit is PKR 25,000, and operating margin is PKR 25,000 ÷ PKR 100,000 × 100 = 25%. This business-level result is not the same as the markup or gross margin on one product.",
+        "Product mode compares one item's cost price with its selling price. Business mode uses total revenue, cost of goods sold and the other operating expenses entered. Costs not entered, including interest, tax, refunds or other charges, are not inferred. Use the mode that matches the question and reconcile the estimate with invoices and business records.",
     ]),
 ])
 
