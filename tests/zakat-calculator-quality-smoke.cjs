@@ -36,8 +36,8 @@ for (const id of [
 for (const term of [
   "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48",
   "503,529", "State Bank of Pakistan", "Hawl", "short-term liabilities",
-  "personal-use", "business inventory", "recoverable receivables",
-  "2.5%", "Worked example", "What this calculator does not decide"
+  "personal-use", "trade inventory", "receivables",
+  "2.5%", "Worked example", "This tool does not decide"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing useful topic: " + term);
 }
