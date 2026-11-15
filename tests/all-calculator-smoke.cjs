@@ -145,7 +145,10 @@ assert.equal(elements["yd-submit"].textContent, "Convert Years");
 elements["pl-mode-business"].checked = true;
 elements["pl-mode-product"].checked = false;
 elements["pl-mode-business"]._handlers.change();
-setValues({"p-revenue":100000,"p-cogs":45000,"p-expenses":0});
+const openingInventory = 20000, purchases = 50000, closingInventory = 25000;
+const exampleCogs = openingInventory + purchases - closingInventory;
+assert.equal(exampleCogs, 45000);
+setValues({"p-revenue":100000,"p-cogs":exampleCogs,"p-expenses":0});
 submit("pl-form");
 assert.match(elements["pl-result"].textContent, /Gross profit\/loss: 55,000/);
 assert.match(elements["pl-result"].textContent, /Net operating profit\/loss: 55,000/);
@@ -228,16 +231,24 @@ for (let i = 0; i < 1000; i++) {
     else assert.equal(result.zakatBeforePaid, net * 0.025);
   } else {
     const invalidCase = (i - 800) % 4;
-    const input = {
-      currency: invalidCase === 2 ? "" : "PKR",
-      nisabMethod:"silver",
-      silverPricePerGram: invalidCase === 1 ? 0 : 3000,
-      goldPricePerGram:1,
-      assets:{cash: invalidCase === 0 ? -1 : (invalidCase === 3 ? Number.MAX_VALUE : 0),
-              bank: invalidCase === 3 ? Number.MAX_VALUE : 0},
-      liabilities:0, zakatPaid:0, hawlComplete:true
-    };
-    assert.throws(() => context.window.ZakatCalculator.calculate(input), /must be|valid|supported|range|metal price/i);
+    if (invalidCase === 2) {
+      const emptyAsset = context.window.ZakatCalculator.calculate({
+        currency:"PKR", nisabMethod:"silver", silverPricePerGram:3000, goldPricePerGram:1,
+        assets:{cash:""}, liabilities:0, zakatPaid:0, hawlComplete:true
+      });
+      assert.equal(emptyAsset.totalAssets, 0, "empty amount must be treated as zero");
+      assert.equal(emptyAsset.zakatBeforePaid, 0);
+    } else {
+      const input = {
+        currency:"PKR", nisabMethod:"silver",
+        silverPricePerGram: invalidCase === 1 ? 0 : 3000,
+        goldPricePerGram:1,
+        assets:{cash: invalidCase === 0 ? -1 : Number.MAX_VALUE,
+                bank: invalidCase === 3 ? Number.MAX_VALUE : 0},
+        liabilities:0, zakatPaid:0, hawlComplete:true
+      };
+      assert.throws(() => context.window.ZakatCalculator.calculate(input), /must be|valid|supported|range|metal price/i);
+    }
   }
   zakatCases++;
 }
