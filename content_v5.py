@@ -284,6 +284,47 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
     ])
 )
 
+# Focused educational depth for the Zakat, BMI and profit/loss tools.
+GUIDE_EXTRA["zakat-calculator"].extend([
+    ("Pre-payment checklist", [
+        "1. Choose the calculation method you intend to follow and confirm the applicable Nisab basis with a qualified scholar. This page calculates with its stated silver-based Nisab; it does not compare every school or asset rule. 2. Record the date your zakatable wealth first reached the relevant Nisab. 3. List the cash, bank balances, precious metals, trading stock and receivables that your chosen method treats as zakatable. 4. Value those items consistently at the valuation date you are using. 5. List only debts or liabilities that your chosen method permits you to deduct, and do not automatically subtract every future instalment. 6. Check the current silver price per gram from a source you trust and record the date and currency of that quote. 7. Confirm that the required lunar year has elapsed and ask a qualified scholar about any unusual assets, ownership changes or disputed deductions before payment.",
+        "Worked arithmetic check: if eligible net wealth is PKR 650,000 and the entered silver price is PKR 250 per gram, the stated silver Nisab is 612.36 × 250 = PKR 153,090. The net wealth is above that example threshold. If the stated 2.5% method and lunar-year condition also apply, the arithmetic is PKR 650,000 × 0.025 = PKR 16,250. The example does not decide whether those inputs or conditions apply to a particular person.",
+    ]),
+    ("Why silver price and lunar-year confirmation are required", [
+        "The silver price converts the calculator's fixed 612.36-gram silver Nisab into the currency amount used for the comparison. A missing or zero price leaves that threshold unknown, so the tool withholds a Zakat amount rather than silently assuming a market value. Enter a dated price per gram in the same currency as the assets and debts; the calculator does not fetch or verify a live market quote.",
+        "The lunar-year confirmation is a separate condition from the arithmetic. The checkbox records that the user has checked the hawl requirement; it cannot verify the date wealth first reached Nisab or determine how a scholar applies the rule to interruptions or changing balances. The tool withholds the amount until the user confirms this condition. This is a user confirmation, not an automated religious assessment.",
+    ]),
+    ("Arithmetic aid, not a scholarly ruling", [
+        "This calculator performs arithmetic using the silver Nisab, 2.5% rate and inputs shown on the page. It cannot decide which assets count, how personal-use jewellery is treated, which debts may be deducted, whether a lunar year has been completed, or which scholarly opinion applies to your circumstances. Schools and qualified scholars may differ on these questions. Treat the displayed figure as a calculation under the stated assumptions only, not a fatwa or personal religious advice. Before paying, confirm the method and any uncertain asset or liability with a qualified scholar.",
+    ]),
+])
+
+GUIDE_EXTRA["bmi-calculator"].extend([
+    ("What a BMI result is useful for and what it is not", [
+        "For adults, BMI is useful as a quick, repeatable screening measure based on weight and height. It can help describe a broad weight category, compare measurements taken consistently over time, and identify when a fuller health discussion may be useful. It is not a direct measurement of body fat, waist fat, muscle, fitness or an individual's disease risk.",
+        "A BMI result cannot diagnose a condition or explain why a person's weight has changed. It may be misleading for people with high muscle mass, during pregnancy, in older adults with changing muscle mass, and for children who need age- and sex-specific growth references. Do not use this number alone to start, stop or change treatment, medication, diet or exercise. This calculator is a screening aid, not a diagnosis or professional medical advice.",
+    ]),
+    ("Pakistan and South Asia context", [
+        "Body composition and the distribution of body fat can differ between populations, and some South Asian guidance discusses cardiometabolic risk at lower BMI values than the standard international adult cut-offs. Pakistan's 2019 Dietary Guidelines for Better Nutrition describe Asian-population public-health action points of 23 and 27.5 kg/m². Those action points are not the same thing as the standard WHO adult category bands. To keep this tool's output consistent and transparent, it continues to report the standard WHO adult categories shown above; it does not silently substitute a different threshold. A doctor or qualified local health professional can interpret the result alongside waist measurement, medical history and other relevant information. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://pc.gov.pk/uploads/report/Pakistan_Dietary_Nutrition_2019.pdf\" rel=\"noopener noreferrer\">Pakistan Dietary Guidelines for Better Nutrition</a> and the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight\" rel=\"noopener noreferrer\">WHO adult BMI definitions</a> for their respective contexts.",
+        "This note is general educational information. It does not assign a South Asian diagnosis, provide a personal risk estimate or replace an assessment by a local doctor. The appropriate interpretation can vary by individual and clinical context.",
+    ]),
+])
+
+GUIDE_EXTRA["profit-loss-calculator"].extend([
+    ("Markup and margin use different bases", [
+        "Markup measures profit against cost: markup percentage = (selling price − cost) ÷ cost × 100. Gross margin measures profit against selling price: gross margin percentage = (selling price − cost) ÷ selling price × 100. If an item costs PKR 800 and sells for PKR 1,000, the profit is PKR 200, markup is 200 ÷ 800 × 100 = 25%, and gross margin is 200 ÷ 1,000 × 100 = 20%. The profit amount is the same, but the percentages differ because their denominators differ.",
+        "A business operating margin has another base: net operating profit divided by revenue. If revenue is PKR 100,000, cost of goods sold is PKR 60,000 and entered operating expenses are PKR 15,000, gross profit is PKR 40,000, net operating profit is PKR 25,000, and net operating margin is 25,000 ÷ 100,000 × 100 = 25%. Do not label product markup or gross margin as business operating margin.",
+    ]),
+    ("Business mode and Product mode answer different questions", [
+        "Product mode compares one item's cost price with its selling price. It reports the profit or loss amount, markup on cost and gross margin on selling price. Use it when you are pricing or reviewing an individual product and have entered the relevant product cost.",
+        "Business mode uses total revenue, cost of goods sold and the other operating expenses entered. It calculates gross profit or loss, then subtracts those entered expenses to show net operating profit or loss and net operating margin on revenue. It is a simplified operating view, not a complete income statement, audited account or tax calculation. Costs not entered, including interest, tax, refunds or other charges, are not inferred.",
+    ]),
+    ("Common pricing mistakes this calculator helps expose", [
+        "A frequent mistake is calling markup a margin, even though one divides by cost and the other by selling price. Another is pricing from the supplier invoice alone while leaving out freight, packaging or other direct costs needed to get the item ready for sale. A third is treating revenue minus product cost as net business profit while ignoring rent, wages, utilities or other operating expenses.",
+        "Other avoidable errors include mixing currencies, entering a selling price before a discount as though it were the amount actually received, forgetting returns or platform/payment charges, and assuming sales tax or income tax has been calculated automatically. Use one currency, enter costs in the correct mode, and reconcile the result with invoices and business records. The calculator does not replace accounting or tax advice.",
+    ]),
+])
+
 GUIDE_EXTRA["years-to-days-calculator"].append(
     ("Search questions about years, months and exact dates", [
         "A question such as 'how many days are in 10 years?' has more than one valid answer unless the year convention is stated. The simple method gives 3,650 days, the Julian average gives 3,652.5 days, and the Gregorian average gives 3,652.425 days. An actual ten-year calendar interval can contain a different whole-day total depending on its start and end dates.",
