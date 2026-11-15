@@ -1695,16 +1695,16 @@ def canon_override(doc, path):
 
 ANSWER_BLOCKS = {
     "zakat-calculator": {
-        "en": 'This calculator lets you compare silver and gold Nisab reference weights and formats the result in your selected ISO currency. It does not fetch live metal prices or issue a religious ruling. The Pakistan PKR 503,529 figure shown below is a separate, year-specific bank source-deduction threshold for 1446–1447 AH, not a universal personal Nisab. Sources: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">Islamic Relief</a> and <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan</a>.',
-        "ur": 'یہ کیلکولیٹر چاندی اور سونے کے نصاب کے مختلف وزن منتخب کرنے اور نتیجہ منتخب کرنسی میں دکھانے کی سہولت دیتا ہے۔ یہ لائیو دھات کی قیمت حاصل نہیں کرتا اور نہ ہی شرعی فتویٰ دیتا ہے۔ پاکستان کی 503,529 روپے کی رقم 1446–1447 ہجری کے مخصوص بینک اکاؤنٹس کی سرکاری کٹوتی کی حد تھی، ہر شخص کا ذاتی نصاب نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">اسلامک ریلیف</a> اور <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">اسٹیٹ بینک آف پاکستان</a>۔'
+        "en": "",
+        "ur": "",
     },
     "bmi-calculator": {
-        "en": 'For adults, the CDC classifies a BMI from 25.0 to less than 30.0 as overweight; BMI is a screening measure, not a diagnosis. Source: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC adult BMI categories</a>.',
-        "ur": 'بالغ افراد میں CDC کے مطابق BMI کی 25.0 سے 30.0 سے کم حد کو زائد وزن کہا جاتا ہے؛ BMI صرف ابتدائی جانچ ہے، تشخیص نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC کی بالغوں کے لیے BMI درجہ بندی</a>۔'
+        "en": "",
+        "ur": "",
     },
     "profit-loss-calculator": {
-        "en": 'Business example: revenue 1,000, cost of goods sold 600 and other expenses 150 gives net operating profit 250 and margin 25%. Product example: cost 1,000 and selling price 1,200 gives markup 20%. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
-        "ur": ''
+        "en": "",
+        "ur": "",
     },
     "discount-calculator": {
         "en": 'A 20% discount on a price of 1,000 saves 200 and leaves a final price of 800 before tax or extra charges. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
@@ -1931,20 +1931,7 @@ def tool_page(t):
         '<li aria-current="page"><span aria-hidden="true" class="mr-2">/</span>' + t["name"] + "</li></ol></nav>"
     )
     primary_tool_content = calculator_section + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "") + answer_note
-    profit_reference_table = (
-        '<section class="mt-8" aria-labelledby="markup-margin-comparison">'
-        '<h2 id="markup-margin-comparison" class="' + H2 + '">Markup versus margin at a glance</h2>'
-        '<p class="' + P + '">Both percentages describe profit against a different base. The base must be named before comparing results.</p>'
-        '<div class="mt-4 overflow-x-auto rounded-xl border border-stone-300 dark:border-stone-700">'
-        '<table class="w-full min-w-[600px] border-collapse text-left text-sm"><caption class="sr-only">Profit, markup and margin formulas with worked examples</caption>'
-        '<thead class="bg-slate-100 dark:bg-stone-800"><tr><th scope="col" class="p-3">Measure</th><th scope="col" class="p-3">Formula</th><th scope="col" class="p-3">Worked example</th></tr></thead>'
-        '<tbody>'
-        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Product profit</th><td class="p-3">Selling price − cost price</td><td class="p-3">1,000 − 800 = 200</td></tr>'
-        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Markup on cost</th><td class="p-3">Profit ÷ cost × 100</td><td class="p-3">200 ÷ 800 × 100 = 25%</td></tr>'
-        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Product gross margin</th><td class="p-3">Profit ÷ selling price × 100</td><td class="p-3">200 ÷ 1,000 × 100 = 20%</td></tr>'
-        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Business operating margin</th><td class="p-3">Operating profit ÷ revenue × 100</td><td class="p-3">(1,000 − 600 − 150) ÷ 1,000 × 100 = 25%</td></tr>'
-        '</tbody></table></div></section>'
-    ) if t["slug"] == "profit-loss-calculator" else ""
+    profit_reference_table = ""
     priority_first_screen = t["slug"] in {"tasbih-counter", "profit-loss-calculator", "years-to-days-calculator"}
     opening_lead = '<p class="ca-tool-lead mt-3 text-base leading-relaxed text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
     body = (
