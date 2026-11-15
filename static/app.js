@@ -3,11 +3,13 @@
 
   var MSG = {
     en: {
-      zakatNoPrice: "Net zakatable wealth is {net}. Enter the silver price per gram to check Nisab. No Zakat amount is shown until Nisab is verified.",
-      zakatInput: "Enter zero or a positive value for each amount and silver price.",
-      zakatBelow: "Net wealth {net} is below Nisab of {nisab}. Zakat is not due on this wealth.",
-      zakatHawl: "Net wealth {net} is above Nisab of {nisab}. Zakat is due only after one full lunar year (hawl). Tick the lunar year box when that period is complete.",
-      zakatDue: "Zakat payable at 2.5 percent: {amount}. Confirm the calculation and rules with a qualified scholar before you pay.",
+      zakatNoPrice: "Enter a positive silver or gold price per gram in the selected currency to calculate the chosen Nisab.",
+      zakatInput: "Check every amount and the three-letter currency code. Amounts must be finite and zero or greater.",
+      zakatBelow: "Your net zakatable wealth is {net}, below the selected Nisab of {nisab}. This estimate does not show Zakat as payable.",
+      zakatHawl: "Your net wealth is {net} and meets the selected Nisab of {nisab}. Zakat is calculated only when your lunar Zakat year (hawl) is complete.",
+      zakatDue: "Zakat calculation at 2.5 percent. Net zakatable wealth: {net}. Nisab: {nisab}. Zakat before prior payments: {gross}. Already paid: {paid}. Remaining balance: {amount}.",
+      zakatOverpaid: "The entered prior payment is higher than this calculated Zakat. Remaining balance is zero. Confirm any credit or excess payment with a qualified scholar.",
+      zakatEngineError: "The calculator could not validate these entries. Check the currency code and selected metal price.",
       bmiInput: "Enter a weight from 2 to 500 kg and a height from 50 to 300 cm.",
       bmiInputImp: "Enter a weight from 4 to 1100 lb, a height of 1 to 9 ft, and inches from 0 to 11.9.",
       bmiWeightError: "Enter a weight from 20 to 300 kg using digits and an optional decimal point.",
@@ -65,11 +67,13 @@
       cats: { weight: "weight", length: "length", temp: "temperature" }
     },
     ur: {
-      zakatNoPrice: "خالص قابلِ زکوٰۃ مال {net} ہے۔ نصاب چیک کرنے کے لیے چاندی کی فی گرام قیمت لکھیں۔ نصاب کی تصدیق تک زکوٰۃ کی رقم نہیں دکھائی جائے گی۔",
-      zakatInput: "تمام رقوم صفر یا اس سے زیادہ درج کریں۔",
-      zakatBelow: "خالص مال {net} نصاب {nisab} سے کم ہے۔ اس مال پر زکوٰۃ واجب نہیں۔",
-      zakatHawl: "خالص مال {net} نصاب {nisab} سے زیادہ ہے۔ زکوٰۃ قمری سال مکمل ہونے کے بعد واجب ہوگی۔ مدت پوری ہونے پر قمری سال والا خانہ نشان زد کریں۔",
-      zakatDue: "2.5 فیصد زکوٰۃ واجب الادا: {amount}۔ ادائیگی سے پہلے حساب اور اصولوں کی تصدیق کسی مستند عالم سے کریں۔",
+      zakatNoPrice: "منتخب نصاب کا حساب کرنے کے لیے منتخب کرنسی میں سونے یا چاندی کی فی گرام موجودہ قیمت درج کریں۔",
+      zakatInput: "تمام رقوم اور تین حروف پر مشتمل کرنسی کوڈ چیک کریں۔ ہر رقم صفر یا اس سے زیادہ اور محدود ہونی چاہیے۔",
+      zakatBelow: "آپ کا خالص قابلِ زکوٰۃ مال {net} ہے، جو منتخب نصاب {nisab} سے کم ہے۔ اس حساب میں زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
+      zakatHawl: "آپ کا خالص مال {net} منتخب نصاب {nisab} تک پہنچتا ہے۔ زکوٰۃ صرف قمری سال (حول) مکمل ہونے پر نکالی جائے گی۔",
+      zakatDue: "2.5 فیصد کے حساب سے زکوٰۃ۔ خالص قابلِ زکوٰۃ مال: {net}۔ نصاب: {nisab}۔ پہلے کی ادائیگی سے پہلے زکوٰۃ: {gross}۔ پہلے ادا شدہ رقم: {paid}۔ باقی واجب الادا رقم: {amount}۔",
+      zakatOverpaid: "درج کردہ پہلے کی ادائیگی اس حساب کی زکوٰۃ سے زیادہ ہے۔ باقی رقم صفر ہے۔ زائد ادائیگی کے حکم کے لیے مستند عالم سے تصدیق کریں۔",
+      zakatEngineError: "کیلکولیٹر درج کردہ معلومات کی تصدیق نہیں کر سکا۔ کرنسی کوڈ اور منتخب دھات کی قیمت چیک کریں۔",
       bmiInput: "وزن 2 سے 500 کلو گرام اور قد 50 سے 300 سینٹی میٹر کے درمیان لکھیں۔",
       bmiInputImp: "وزن 4 سے 1100 پاؤنڈ، قد 1 سے 9 فٹ، اور انچ 0 سے 11.9 کے درمیان لکھیں۔",
       bmiWeightError: "وزن 20 سے 300 کلوگرام کے درمیان درج کریں۔ عدد کے ساتھ زیادہ سے زیادہ ایک اعشاری نقطہ استعمال کریں۔",
@@ -455,40 +459,62 @@
   function initZakat () {
     var form = $("zakat-form")
     if (!form) return
-    var assetIds = ["z-cash", "z-gold", "z-silver", "z-stock", "z-recv"]
+    var assetFields = [
+      ["cash", "z-cash"], ["bank", "z-bank"], ["savings", "z-savings"],
+      ["gold", "z-gold"], ["silver", "z-silver"], ["investments", "z-investments"],
+      ["businessCash", "z-businesscash"], ["stock", "z-stock"],
+      ["receivables", "z-recv"], ["pension", "z-pension"],
+      ["crypto", "z-crypto"], ["property", "z-property"]
+    ]
+    function money(value, currency) {
+      return new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", {
+        style: "currency", currency: currency, maximumFractionDigits: 2
+      }).format(value)
+    }
     form.addEventListener("submit", function (e) {
       e.preventDefault()
-      var allIds = assetIds.concat(["z-debts", "z-silverprice"])
-      var hasInvalidAmount = allIds.some(function (id) {
-        var el = $(id)
-        if (!el || el.value === "") return false
-        var value = Number(el.value)
-        return !isFinite(value) || value < 0
+      if (!window.ZakatCalculator || typeof window.ZakatCalculator.calculate !== "function") {
+        say("zakat-result", t("zakatEngineError"))
+        return
+      }
+      var assets = {}
+      assetFields.forEach(function (entry) {
+        assets[entry[0]] = num(entry[1])
       })
-      if (hasInvalidAmount) {
-        say("zakat-result", t("zakatInput"))
-        return
+      var currency = ($("z-currency") && $("z-currency").value || "PKR").trim().toUpperCase()
+      var method = $("z-nisab-method") ? $("z-nisab-method").value : "silver"
+      try {
+        var result = window.ZakatCalculator.calculate({
+          currency: currency,
+          nisabMethod: method,
+          silverPricePerGram: num("z-silverprice"),
+          goldPricePerGram: num("z-goldprice"),
+          assets: assets,
+          liabilities: num("z-debts"),
+          zakatPaid: num("z-paid"),
+          hawlComplete: !!($("z-hawl") && $("z-hawl").checked)
+        })
+        var formatted = {
+          net: money(result.netAssets, result.currency),
+          nisab: money(result.nisabThreshold, result.currency),
+          gross: money(result.zakatBeforePaid, result.currency),
+          paid: money(result.zakatPaid, result.currency),
+          amount: money(result.balanceDue, result.currency)
+        }
+        if (result.status === "below_nisab") {
+          say("zakat-result", t("zakatBelow", formatted))
+          return
+        }
+        if (result.status === "hawl_incomplete") {
+          say("zakat-result", t("zakatHawl", formatted))
+          return
+        }
+        var message = t("zakatDue", formatted)
+        if (result.overpayment > 0) message += " " + t("zakatOverpaid")
+        say("zakat-result", message)
+      } catch (error) {
+        say("zakat-result", t("zakatEngineError"))
       }
-      var assets = 0
-      assetIds.forEach(function (id) {
-        assets += num(id) || 0
-      })
-      var net = Math.max(0, assets - (num("z-debts") || 0))
-      var price = num("z-silverprice")
-      if (price === null || price <= 0) {
-        say("zakat-result", t("zakatNoPrice", { net: fmt(net) }))
-        return
-      }
-      var nisab = 612.36 * price
-      if (net < nisab) {
-        say("zakat-result", t("zakatBelow", { net: fmt(net), nisab: fmt(nisab) }))
-        return
-      }
-      if (!$("z-hawl").checked) {
-        say("zakat-result", t("zakatHawl", { net: fmt(net), nisab: fmt(nisab) }))
-        return
-      }
-      say("zakat-result", t("zakatDue", { amount: fmt(net * 0.025) }))
     })
   }
 
