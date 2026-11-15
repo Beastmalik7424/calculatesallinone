@@ -172,7 +172,8 @@ def normalize_meta(raw, path, lang):
     title = html.unescape(title_match.group(1).strip())
     title_overrides = {
         "/about/": "About CalculatesAll | Project, Methods & Privacy",
-        "/zakat-calculator/": "Zakat Calculator: Nisab Check & 2.5% Zakat | CalculatesAll",
+        "/zakat-calculator/": "Global Zakat Calculator | Nisab & Currency | CalculatesAll",
+        "/ur/zakat-calculator/": "عالمی زکوٰۃ کیلکولیٹر | نصاب اور کرنسی",
         "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
         "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
         "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
@@ -215,7 +216,7 @@ def normalize_meta(raw, path, lang):
     "/years-to-days-calculator/": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",
     "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
-    "/zakat-calculator/": "Calculate 2.5 percent Zakat on net wealth, check the silver Nisab threshold and lunar-year condition. Confirm personal rulings with a qualified scholar."
+    "/zakat-calculator/": "Estimate Zakat worldwide with silver or gold Nisab, ISO currency, eligible assets and short-term debts. Includes Pakistan's separate bank-deduction rule."
 }
     urdu_description_overrides = {
     "/ur/age-calculator/": "تاریخ پیدائش اور مطلوبہ تاریخ درج کرکے عمر سال، مہینوں اور دنوں میں معلوم کریں۔ کل گزرے دن بھی دیکھیں اور کیلکولیٹر کے تاریخوں کے حساب کا طریقہ سمجھیں۔",
@@ -226,7 +227,7 @@ def normalize_meta(raw, path, lang):
     "/ur/stopwatch/": "براؤزر میں وقت شروع، روکیں اور دوبارہ صفر کریں۔ اسٹاپ واچ سیکنڈ کے سو حصوں تک وقت دکھاتی ہے، مگر درستگی آلے اور براؤزر کی کارکردگی پر منحصر ہو سکتی ہے۔",
     "/ur/tasbih-counter/": "ڈیجیٹل تسبیح کاؤنٹر میں گنتی، منتخب عبارت اور ہدف اسی براؤزر میں محفوظ رکھیں، جب مقامی اسٹوریج دستیاب ہو۔ گنتی واپس لینے اور ری سیٹ کرنے کا طریقہ دیکھیں۔",
     "/ur/unit-converter/": "وزن، لمبائی اور درجہ حرارت کی اکائیاں تبدیل کریں، جیسے کلوگرام سے پاؤنڈ، سینٹی میٹر سے انچ اور سیلسیئس سے فارن ہائیٹ۔ ہر تبدیلی کا نتیجہ فوری دیکھیں۔",
-    "/ur/zakat-calculator/": "چاندی کے نصاب کے مطابق خالص مال پر 2.5 فیصد زکوٰۃ کا حساب کریں۔ نقدی، سونا، چاندی، کاروباری مال اور واجب الادا قرض درج کریں، پھر قمری سال کی شرط کی تصدیق کریں۔"
+    "/ur/zakat-calculator/": "پاکستان اور دنیا بھر میں زکوٰۃ کا تخمینہ لگائیں۔ چاندی یا سونے کا نصاب، کرنسی کوڈ، اثاثے، واجب الادا قرض اور قمری سال منتخب کریں۔"
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
