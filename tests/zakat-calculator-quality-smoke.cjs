@@ -84,6 +84,14 @@ const pumpUshr = calculateUshr({ sect: "sunni", school: "hanafi", crop: "rice", 
 assert.equal(pumpUshr.rate, 0.05);
 assert.equal(pumpUshr.amountDue, 2500, "Hanafi Abu Hanifa position must not impose the five-wasq threshold");
 assert.equal(pumpUshr.produceDueKg, 5);
+const zeroHanafiHarvest = calculateUshr({ sect: "sunni", school: "hanafi", crop: "wheat", eligibleCropConfirmed: true, quantityKg: 0, marketValue: 50000, irrigation: "cost" });
+assert.equal(zeroHanafiHarvest.status, "no_harvest", "A market value without harvested produce must not create an Ushr obligation");
+assert.equal(zeroHanafiHarvest.amountDue, 0);
+assert.equal(zeroHanafiHarvest.produceDueKg, 0);
+const zeroSistaniHarvest = calculateUshr({ sect: "shia", marja: "sistani", crop: "wheat", quantityKg: 0, marketValue: 50000, irrigation: "rain" });
+assert.equal(zeroSistaniHarvest.status, "no_harvest", "No crop quantity must not be represented as a below-Nisab harvest");
+assert.equal(zeroSistaniHarvest.amountDue, 0);
+assert.equal(zeroSistaniHarvest.produceDueKg, 0);
 const belowMajority = calculateUshr({ sect: "sunni", school: "maliki", crop: "wheat", eligibleCropConfirmed: true, quantityKg: 500, marketValue: 100000, irrigation: "rain" });
 assert.equal(belowMajority.status, "below_nisab");
 assert.equal(belowMajority.amountDue, 0);
