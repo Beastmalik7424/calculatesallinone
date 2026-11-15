@@ -90,7 +90,7 @@ assert.equal(zeroHanafiHarvest.amountDue, 0);
 assert.equal(zeroHanafiHarvest.produceDueKg, 0);
 assert.equal(zeroHanafiHarvest.rate, null);
 assert.equal(zeroHanafiHarvest.meetsNisab, false);
-assert.match(zeroHanafiHarvest.guidanceUr, /مثبت مقدار/);
+assert.match(zeroHanafiHarvest.guidance, /No harvested produce was entered/i);
 const zeroSistaniHarvest = calculateUshr({ sect: "shia", marja: "sistani", crop: "wheat", quantityKg: 0, marketValue: 50000, irrigation: "rain" });
 assert.equal(zeroSistaniHarvest.status, "no_harvest", "No crop quantity must not be represented as a below-Nisab harvest");
 assert.equal(zeroSistaniHarvest.amountDue, 0);
