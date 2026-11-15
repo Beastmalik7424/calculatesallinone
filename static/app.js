@@ -515,7 +515,10 @@
         if (result.overpayment > 0) message += " " + t("zakatOverpaid")
         say("zakat-result", message)
       } catch (error) {
-        say("zakat-result", t("zakatEngineError"))
+        var reason = String(error && error.message || "")
+        if (/metal price/i.test(reason)) say("zakat-result", t("zakatNoPrice"))
+        else if (/currency|finite|amount|Nisab method|supported range/i.test(reason)) say("zakat-result", t("zakatInput"))
+        else say("zakat-result", t("zakatEngineError"))
       }
     })
   }
