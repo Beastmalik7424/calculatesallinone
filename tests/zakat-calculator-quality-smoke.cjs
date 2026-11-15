@@ -106,7 +106,7 @@ for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
 }
 assert.throws(() => calculate({ ...base, nisabMethod: "unknown" }), /Nisab method/);
 assert.throws(() => calculate({ ...base, currency: "ZZZ" }), /not supported/);
-assert.throws(() => calculate({ ...base, assets: { cash: Number.MAX_VALUE, bank: Number.MAX_VALUE } }), /supported range/);
+assert.throws(() => calculate({ ...base, assets: { cash: Number.MAX_VALUE, bank: Number.MAX_VALUE } }), /supported calculation range/);
 
 // Deterministic property simulation: 2,000 varied asset/liability combinations.
 let seed = 20261115;
