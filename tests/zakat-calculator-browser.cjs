@@ -38,7 +38,7 @@ const { chromium } = require("playwright");
 
   await page.locator("#z-currency").fill("ZZZ");
   await page.locator('#zakat-form button[type="submit"]').click();
-  assert.match(await page.locator("#zakat-result").innerText(), /could not validate/i);
+  assert.match(await page.locator("#zakat-result").innerText(), /three-letter ISO currency code/i);
 
   await page.locator("#z-currency").fill("PKR");
   await page.locator("#z-nisab-method").selectOption("silver");
