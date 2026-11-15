@@ -1257,7 +1257,9 @@ assert "does not ask for waist measurements" not in _ur_bmi_2026, "English BMI l
 _profit_2026 = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 for _phrase in ("Opening inventory + net purchases + direct inward costs − closing inventory",
                 "PKR 150,000", "PKR 70,000", "PKR 30,000", "13.64%",
-                "does not calculate cash flow"):
+                "does not calculate cash flow",
+                "loaded unit cost is PKR 1,200", "PKR 300", "20%",
+                "before those omitted costs"):
     assert _phrase.lower() in _profit_2026.lower(), "Profit and Loss COGS/cash-flow guidance missing: " + _phrase
 assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement" in _profit_2026, "Profit and Loss must cite the checked OpenStax income-statement source"
 
@@ -1271,6 +1273,7 @@ assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement
 _zakat_2026 = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
 for _phrase in ("Illustrative small-shop Nisab comparison", "PKR 650,000",
                 "PKR 122,472", "PKR 2,187,000", "PKR 16,250",
+                "JazzCash", "Easypaisa", "count those available balances once",
                 "not a live market quote",
                 "do not choose a Nisab method based on which result is lower"):
     assert _phrase.lower() in _zakat_2026.lower(), "Zakat worked Nisab comparison missing: " + _phrase
