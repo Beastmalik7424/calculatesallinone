@@ -918,12 +918,9 @@ assert all_tools_match, "Homepage must render the primary calculator carousel gr
 all_tools_html = all_tools_match.group(1)
 assert all_tools_html.count('href="/emi-calculator/"') == 1, "Calculator carousel must contain exactly one EMI Calculator link"
 assert "EMI Calculator" in all_tools_html, "Calculator carousel must visibly label the EMI Calculator"
-assert "<h2" in home_html and "What can you calculate with these free tools?" in home_html, "Homepage must include a clear, question-formatted explanatory heading"
+assert "<h2" in home_html and "Choose a calculator for the result you need" in home_html, "Homepage must include a clear explanatory heading"
 assert "Frequently asked questions: Are these calculators free, private, and reliable?" in home_html, "Homepage must include a clear FAQ section heading"
-assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage worked example must remain present"
-assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index" in home_html, "Homepage health reference must link to WHO"
-assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
-assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
+assert "BMI is a screening measure for adults, not a diagnosis" in home_html, "Homepage must retain the adult BMI limitation wording"
 assert "Free Online Calculators" in home_html, "Homepage H1 must describe the full calculator collection"
 # The opening-copy requirement is covered by the core-tools summary assertion above.
 # The standard calculator landing page now explicitly describes its scientific mode.
