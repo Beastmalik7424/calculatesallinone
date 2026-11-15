@@ -49,6 +49,15 @@ for (const term of [
 }
 assert.ok(enText.split(/\s+/).length >= 1000, "English Zakat guide is too thin (<1000 visible words)");
 assert.ok(urText.split(/\s+/).length >= 700, "Urdu Zakat guide is too thin (<700 visible words)");
+for (const term of ["Ushr is separate from annual wealth Zakat", "rain-fed", "five wasqs", "653 kg", "dry-weight", "847 kg", "948 kg", "crop eligibility", "mixed irrigation", "Pakistan Code"]) {
+  assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English Ushr guidance missing: " + term);
+}
+for (const term of ["عشر", "زرعی پیداوار", "بارش", "آبپاشی", "پانچ وسق", "653", "847", "948", "امام ابو حنیفہ", "مخلوط آبپاشی"]) {
+  assert.ok(urText.includes(term), "Urdu Ushr guidance missing: " + term);
+}
+assert.match(en, /href="https:\/\/www\.sistani\.org\/english\/book\/49\/2410\//, "English Ushr guidance must link to Sistani's primary ruling");
+assert.match(en, /href="https:\/\/pakistancode\.gov\.pk\/pdffiles\/administratorfd19eec0a97080f151dac2a8406dea88\.pdf/, "Pakistan statutory Ushr must link to Pakistan Code");
+assert.match(ur, /id="u-quantity"/, "Urdu Ushr form must expose harvest quantity");
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const submitAt = html.indexOf('type="submit"');
   const assetAt = html.indexOf('id="z-cash"');
