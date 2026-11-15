@@ -15,7 +15,7 @@ HUB_EXTRA = {
         ("Currency, precision and limits", [
             "Enter every amount in one consistent currency for a single calculation. The tools do not convert currencies or fetch live exchange rates. The currency label in a worked example is illustrative and does not change the arithmetic.",
             "Displayed values may be rounded. Keep the unrounded values for intermediate calculations when the tool provides them, and confirm the rounding method required by your bank, accountant or tax authority before using a result in a formal record. The calculators do not provide tax, investment, lending or religious advice."
-        ])
+        ]),
         ("Why every percentage needs a named base", [
             "A percentage has no useful meaning until its base is clear. In a product calculation, markup uses cost as the base, while gross margin uses the selling price. In a business calculation, an operating margin uses revenue. These figures can describe the same transaction but answer different questions, so they must not be compared as though they use the same denominator.",
             "Example: a product costs PKR 800 and sells for PKR 1,000. The PKR 200 difference is a 25% markup on cost (200 ÷ 800) but a 20% gross margin on selling price (200 ÷ 1,000). If a business earns PKR 25,000 net operating profit on PKR 100,000 revenue, its operating margin is 25% of revenue. Naming the base prevents a correct calculation from being misunderstood.",
