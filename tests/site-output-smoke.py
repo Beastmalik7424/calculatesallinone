@@ -1256,7 +1256,7 @@ assert "does not ask for waist measurements" not in _ur_bmi_2026, "English BMI l
 
 _profit_2026 = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 for _phrase in ("Opening inventory + net purchases + direct inward costs − closing inventory",
-                "PKR 150,000", "PKR 70,000", "PKR 30,000", "13.64%",
+                "PKR 150,000", "PKR 70,000", "PKR 10,000", "PKR 30,000", "13.64%",
                 "does not calculate cash flow",
                 "loaded unit cost is PKR 1,200", "PKR 300", "20%",
                 "before those omitted costs"):
