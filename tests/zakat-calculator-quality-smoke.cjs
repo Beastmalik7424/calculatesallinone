@@ -87,6 +87,9 @@ assert.equal(mixedUshr.status, "scholar_review_required", "Sunni mixed irrigatio
 const confirmedMixedUshr = calculateUshr({ sect: "sunni", school: "hanbali", crop: "wheat", quantityKg: 700, marketValue: 100000, irrigation: "mixed", mixedRateConfirmed: true });
 assert.equal(confirmedMixedUshr.rate, 0.075);
 const sistaniUshr = calculateUshr({ sect: "shia", marja: "sistani", crop: "wheat", quantityKg: 900, marketValue: 100000, irrigation: "mixed" });
+const sistaniRaisins = calculateUshr({ sect: "shia", marja: "sistani", crop: "raisins", quantityKg: 900, marketValue: 100000, irrigation: "rain" });
+assert.equal(sistaniRaisins.status, "payable");
+assert.throws(() => calculateUshr({ sect: "shia", marja: "sistani", crop: "grapes", quantityKg: 900, marketValue: 100000, irrigation: "rain" }), /four specified crops/i);
 assert.equal(sistaniUshr.rate, 0.075);
 assert.equal(sistaniUshr.nisabKg, 847);
 assert.throws(() => calculateUshr({ sect: "shia", marja: "sistani", crop: "maize", quantityKg: 900, marketValue: 100000, irrigation: "rain" }), /four specified crops/i);
