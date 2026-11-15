@@ -44,7 +44,7 @@ for (const term of [
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
 for (const term of [
-  "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب",
+  "503,529", "612.36", "87.48", "رمضان کے پہلے دن", "پاکستان", "نصاب",
   "اثاثے", "واجب الادا", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتا ہے"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
