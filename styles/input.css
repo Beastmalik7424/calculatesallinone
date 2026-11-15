@@ -2351,8 +2351,9 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
 html[lang="ur"] body,
 html[lang="ur"] body :is(h1,h2,h3,h4,p,li,label,summary,a,button,blockquote) {
   font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", serif;
-  line-height: 2.15;
+  line-height: 2.0;
 }
+html[lang="ur"] :is(button,a[role="button"],input[type="button"],input[type="submit"]) { line-height: 1.35; }
 html[lang="ur"] :is(input,select,textarea,output,code,kbd) {
   font-family: system-ui, "Noto Naskh Arabic", sans-serif;
   line-height: 1.6;
