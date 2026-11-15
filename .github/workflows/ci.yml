@@ -141,6 +141,7 @@ jobs:
           done
           node tests/seo-seven-pages-browser.cjs
           node tests/extra-calculators-browser.cjs
+          node tests/zakat-calculator-browser.cjs
           node tests/calorie-calculator-browser.cjs
           node tests/years-to-days-browser.cjs
           node tests/homepage-responsive-browser.cjs
