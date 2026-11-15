@@ -813,6 +813,7 @@ URDU = {
             ("Nisab method", "نصاب کا طریقہ"),
             ("Silver Nisab (612.36 g)", "چاندی کا نصاب (612.36 گرام)"),
             ("Gold Nisab (87.48 g)", "سونے کا نصاب (87.48 گرام)"),
+            ("Gold Nisab (87.28 g, Islamic Relief Pakistan)", "سونے کا نصاب (87.28 گرام، اسلامی ریلیف پاکستان)"),
             ("Gold Nisab (85 g)", "سونے کا نصاب (85 گرام)"),
             ("Eligible assets", "قابلِ زکوٰۃ اثاثے"),
             ("Enter market values in the selected currency. Leave categories you do not own at zero.", "منتخب کرنسی میں موجودہ مالیت درج کریں۔ جو اثاثہ آپ کے پاس نہیں، اسے صفر رہنے دیں۔"),
