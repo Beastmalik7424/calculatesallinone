@@ -1091,14 +1091,14 @@ assert "gives back 5 kilometres" not in _unit_quality, "Misleading exact round-t
 # Editorial content regression checks for approved four-page guide updates.
 from content_v5 import GUIDE_EXTRA
 for slug, phrases in {
-    "bmi-calculator": ["22.8571", "18.5 to below 25", "not a diagnosis"],
-    "zakat-calculator": ["PKR 612,360", "PKR 27,500", "PKR 22,500", "not a religious ruling"],
+    "bmi-calculator": ["WHO adult BMI table", "23.0", "27.5", "70 kg", "1.70 m", "24.2", "not a diagnosis"],
+    "zakat-calculator": ["PKR 503,529", "87.48 g", "612.36 g", "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000"],
+    "profit-loss-calculator": ["COGS = opening inventory + purchases", "45,000", "55,000", "55%", "profit is not cash"],
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
     "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice"],
-    "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
-    if slug in {"tasbih-counter", "zakat-calculator"}:
+    if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator", "profit-loss-calculator"}:
         guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     else:
         guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
