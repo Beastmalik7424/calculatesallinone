@@ -1756,8 +1756,8 @@ def canon_override(doc, path):
 
 ANSWER_BLOCKS = {
     "zakat-calculator": {
-        "en": 'This calculator uses the silver Nisab standard of 612.36 grams and applies 2.5% to eligible net wealth when the required conditions are met. Nisab standards differ, so this page names the silver standard it uses. Source: <a class="' + LINK + '" href="https://islamicrelief.org.au/our-work/islamic-giving/nisab/" target="_blank" rel="noopener noreferrer">Islamic Relief Australia Nisab guidance</a>.',
-        "ur": 'یہ کیلکولیٹر چاندی کے 612.36 گرام نصاب اور اہل خالص مال پر 2.5٪ شرح استعمال کرتا ہے۔ نصاب کے معیار مختلف ہو سکتے ہیں، اس لیے یہاں چاندی کا معیار واضح کیا گیا ہے۔ ماخذ: <a class="' + LINK + '" href="https://islamicrelief.org.au/our-work/islamic-giving/nisab/" target="_blank" rel="noopener noreferrer">اسلامک ریلیف آسٹریلیا کی نصاب رہنمائی</a>۔'
+        "en": 'This calculator lets you compare silver and gold Nisab reference weights and formats the result in your selected ISO currency. It does not fetch live metal prices or issue a religious ruling. The Pakistan PKR 503,529 figure shown below is a separate, year-specific bank source-deduction threshold for 1446–1447 AH, not a universal personal Nisab. Sources: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">Islamic Relief</a> and <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan</a>.',
+        "ur": 'یہ کیلکولیٹر چاندی اور سونے کے نصاب کے مختلف وزن منتخب کرنے اور نتیجہ منتخب کرنسی میں دکھانے کی سہولت دیتا ہے۔ یہ لائیو دھات کی قیمت حاصل نہیں کرتا اور نہ ہی شرعی فتویٰ دیتا ہے۔ پاکستان کی 503,529 روپے کی رقم 1446–1447 ہجری کے مخصوص بینک اکاؤنٹس کی سرکاری کٹوتی کی حد تھی، ہر شخص کا ذاتی نصاب نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">اسلامک ریلیف</a> اور <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">اسٹیٹ بینک آف پاکستان</a>۔'
     },
     "bmi-calculator": {
         "en": 'For adults, the CDC classifies a BMI from 25.0 to less than 30.0 as overweight; BMI is a screening measure, not a diagnosis. Source: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC adult BMI categories</a>.',
@@ -1915,7 +1915,24 @@ def tool_page(t):
         {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
         {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION, "logo": SITE_URL + "/assets/favicon.svg", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
-    if t["slug"] == "bmi-calculator":
+    if t["slug"] == "zakat-calculator":
+        schema[1]["@id"] = url + "#breadcrumb"
+        schema.append({
+            "@context": "https://schema.org", "@type": "WebPage", "@id": url + "#webpage",
+            "name": title, "url": url, "description": desc,
+            "author": {"@id": SITE_URL + "/#maintainer"},
+            "publisher": {"@id": SITE_URL + "/#organization"},
+            "isPartOf": {"@id": SITE_URL + "/#website"},
+            "breadcrumb": {"@id": url + "#breadcrumb"},
+            "dateModified": "2026-11-15",
+            "citation": [
+                "https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/",
+                "https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf",
+                "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026",
+            ],
+            "inLanguage": "en",
+        })
+    elif t["slug"] == "bmi-calculator":
         # Link the page entity to the visible maintainer, site publisher, source citation and breadcrumb.
         # Do not claim medical review, ratings, or a dateModified that has not been verified.
         schema[1]["@id"] = url + "#breadcrumb"
@@ -2050,7 +2067,22 @@ def urdu_tool_page(t):
             {"@type": "ListItem", "position": 2, "name": cat_ur, "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": u["name"], "item": url}]},
     ]
-    if t["slug"] == "bmi-calculator":
+    if t["slug"] == "zakat-calculator":
+        schema[0]["author"] = {"@id": SITE_URL + "/#maintainer"}
+        schema[0]["publisher"] = {"@id": SITE_URL + "/#organization"}
+        schema.append({
+            "@context": "https://schema.org", "@type": "WebPage",
+            "name": u["title"], "url": url, "inLanguage": "ur",
+            "author": {"@id": SITE_URL + "/#maintainer"},
+            "publisher": {"@id": SITE_URL + "/#organization"},
+            "dateModified": "2026-11-15",
+            "citation": [
+                "https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/",
+                "https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf",
+                "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026",
+            ],
+        })
+    elif t["slug"] == "bmi-calculator":
         schema[0]["author"] = {"@id": SITE_URL + "/#maintainer"}
         schema[0]["publisher"] = {"@id": SITE_URL + "/#organization"}
         schema.append({
@@ -2094,8 +2126,18 @@ def urdu_tool_page(t):
     else:
         body += _urdu_lead + primary_tool_content
     how_section = how if t["slug"] == "bmi-calculator" else ('<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how)
-    source_checked = ('<p class="mt-3 text-sm text-stone-700 dark:text-stone-300">ماخذ کی آخری جانچ: 6 نومبر 2026۔</p>' if t["slug"] == "bmi-calculator" else "")
-    maintainer_note = ('<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">صفحے کے منتظم: <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>۔ یہ صفحہ عمومی معلومات فراہم کرتا ہے، طبی تشخیص یا علاج کا متبادل نہیں۔</p>' if t["slug"] == "bmi-calculator" else "")
+    source_checked = (
+        '<p class="mt-3 text-sm text-stone-700 dark:text-stone-300">ماخذ کی آخری جانچ اور صفحے کی تازہ کاری: 15 نومبر 2026۔</p>'
+        if t["slug"] == "zakat-calculator" else
+        '<p class="mt-3 text-sm text-stone-700 dark:text-stone-300">ماخذ کی آخری جانچ: 6 نومبر 2026۔</p>'
+        if t["slug"] == "bmi-calculator" else ""
+    )
+    maintainer_note = (
+        '<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">صفحے کے منتظم: <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>۔ یہ زکوٰۃ کا حسابی تخمینہ ہے، فتویٰ نہیں۔</p>'
+        if t["slug"] == "zakat-calculator" else
+        '<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">صفحے کے منتظم: <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>۔ یہ صفحہ عمومی معلومات فراہم کرتا ہے، طبی تشخیص یا علاج کا متبادل نہیں۔</p>'
+        if t["slug"] == "bmi-calculator" else ""
+    )
     related_urdu = ""
     if t["slug"] == "bmi-calculator":
         related_urdu = (
