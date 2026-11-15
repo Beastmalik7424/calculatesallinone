@@ -201,16 +201,30 @@ for (let i = 0; i < 1000; i++) {
   }
   profitCases++;
 
-  // Zakat: vary net wealth around the calculated silver Nisab, and verify 0 or 2.5%.
-  const price = priorityInt(1, 10000);
-  const threshold = 612.36 * price;
-  const net = i % 2 === 0 ? Math.max(0, Math.floor(threshold - 1)) : Math.ceil(threshold + priorityInt(0, 1000000));
-  const result = context.window.ZakatCalculator.calculate({
-    currency:"PKR", nisabMethod:"silver", silverPricePerGram:price, goldPricePerGram:1,
-    assets:{cash:net}, liabilities:0, zakatPaid:0, hawlComplete:true
-  });
-  if (net < threshold) assert.equal(result.zakatBeforePaid, 0);
-  else assert.equal(result.zakatBeforePaid, net * 0.025);
+  // Zakat: 800 valid threshold outcomes and 200 invalid empty/zero/negative/oversized inputs.
+  if (i < 800) {
+    const price = priorityInt(1, 10000);
+    const threshold = 612.36 * price;
+    const net = i % 2 === 0 ? Math.max(0, Math.floor(threshold - 1)) : Math.ceil(threshold + priorityInt(0, 1000000));
+    const result = context.window.ZakatCalculator.calculate({
+      currency:"PKR", nisabMethod:"silver", silverPricePerGram:price, goldPricePerGram:1,
+      assets:{cash:net}, liabilities:0, zakatPaid:0, hawlComplete:true
+    });
+    if (net < threshold) assert.equal(result.zakatBeforePaid, 0);
+    else assert.equal(result.zakatBeforePaid, net * 0.025);
+  } else {
+    const invalidCase = (i - 800) % 4;
+    const input = {
+      currency: invalidCase === 2 ? "" : "PKR",
+      nisabMethod:"silver",
+      silverPricePerGram: invalidCase === 1 ? 0 : 3000,
+      goldPricePerGram:1,
+      assets:{cash: invalidCase === 0 ? -1 : (invalidCase === 3 ? Number.MAX_VALUE : 0),
+              bank: invalidCase === 3 ? Number.MAX_VALUE : 0},
+      liabilities:0, zakatPaid:0, hawlComplete:true
+    };
+    assert.throws(() => context.window.ZakatCalculator.calculate(input), /must be|valid|supported|range/i);
+  }
   zakatCases++;
 }
 assert.equal(bmiCases, 1000);
