@@ -50,14 +50,6 @@ NOTICE_BADGES = {
         "تشخیص نہیں",
         "BMI صرف اسکریننگ ہے، تشخیص نہیں۔ یہ جسمانی چربی براہِ راست نہیں ناپتا۔"
     ),
-    ("en", "zakat-calculator"): (
-        "Silver 612.36g · 2.5%",
-        "This calculator uses the silver Nisab of 612.36 g and a 2.5% rate. Gold Nisab and some rulings differ by madhhab. It is not a fatwa. Ask a qualified scholar."
-    ),
-    ("ur", "zakat-calculator"): (
-        "چاندی 612.36g · 2.5٪",
-        "یہ کیلکولیٹر چاندی کا نصاب 612.36 گرام اور 2.5 فیصد شرح استعمال کرتا ہے۔ سونے کے نصاب اور بعض احکام میں فقہی اختلاف ہے۔ مستند عالم سے رجوع کریں۔"
-    ),
 }
 
 
@@ -79,8 +71,6 @@ def attach_notice_badge(ui, slug, language):
         return ui
     if slug == "bmi-calculator":
         return ui.replace("</legend>", badge + "</legend>", 1)
-    if slug == "zakat-calculator":
-        return ui.replace('</label><input id="z-cash"', badge + '</label><input id="z-cash"', 1)
     return ui
 
 
