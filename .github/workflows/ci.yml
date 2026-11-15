@@ -50,6 +50,8 @@ jobs:
         run: python3 tests/architecture-baseline-contract.py
       - name: Build the site
         run: npm run build
+      - name: Verify Urdu Nastaliq typography and localized content
+        run: python3 tests/urdu-nastaliq-content-smoke.py
       - name: Test percentage, fraction, compound interest and date engines
         run: node tests/extra-calculators-smoke.cjs
       - name: Verify contextual links
