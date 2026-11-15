@@ -1837,7 +1837,7 @@ def tool_page(t):
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
     updated_date = LASTMOD.get(path)
     if t["slug"] in {"bmi-calculator", "profit-loss-calculator", "zakat-calculator"}:
-        updated = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last reviewed: 2026-11-16</p>'
+        updated = ""
     else:
         updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + "</p>") if updated_date else ""
     calculator_section = (
