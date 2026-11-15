@@ -36,6 +36,9 @@ URDU_DESCRIPTION_FALLBACKS = {
 VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the verified Urdu BMI threshold-copy correction and source check in this change.
     "/ur/bmi-calculator/": "2026-11-09",
+    # This date records the new global Nisab, currency, asset and Urdu guidance update.
+    "/zakat-calculator/": "2026-11-15",
+    "/ur/zakat-calculator/": "2026-11-15",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
     # This date records the verified Years-to-Days answer examples, calendar distinction and source review.
@@ -333,9 +336,11 @@ def main():
         update_stamp = re.compile(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', re.S)
         verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
         def retain_verified_update(match):
+            if not verified_date:
+                return ""
             stamp = match.group(0)
             expected_prefix = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + verified_date + '</p>'
-            return stamp if verified_date and stamp.startswith(expected_prefix) else ""
+            return stamp if stamp.startswith(expected_prefix) else ""
         raw = update_stamp.sub(retain_verified_update, raw, count=1)
         schemas = []
         jsonld_script_pattern = r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>"""
