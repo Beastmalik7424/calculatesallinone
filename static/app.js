@@ -516,6 +516,11 @@
           say("zakat-result", shiaGuidance)
           return
         }
+        var schoolLabels = { hanafi: "Hanafi", shafii: "Shafi'i", maliki: "Maliki", hanbali: "Hanbali" }
+        var schoolLabelsUr = { hanafi: "حنفی", shafii: "شافعی", maliki: "مالکی", hanbali: "حنبلی" }
+        var schoolNote = lang() === "ur"
+          ? "منتخب سنی فقہی مسلک: " + (schoolLabelsUr[result.school] || result.school) + "۔ یہ حساب آپ کے منتخب نصاب اور درج کردہ اثاثوں پر مبنی ہے۔ زیورات، قرض، سرمایہ کاری، پنشن اور حول کے اختلافی احکام اپنے مستند عالم سے تصدیق کریں۔"
+          : "Selected Sunni madhhab: " + (schoolLabels[result.school] || result.school) + ". This arithmetic uses the Nisab and asset values you entered. Confirm disputed jewellery, debt, investment, pension and Hawl rulings with your qualified scholar."
         var formatted = {
           assets: money(result.totalAssets, result.currency),
           liabilities: money(result.totalLiabilities, result.currency),
@@ -526,14 +531,14 @@
           amount: money(result.balanceDue, result.currency)
         }
         if (result.status === "below_nisab") {
-          say("zakat-result", t("zakatBelow", formatted))
+          say("zakat-result", t("zakatBelow", formatted) + " " + schoolNote)
           return
         }
         if (result.status === "hawl_incomplete") {
-          say("zakat-result", t("zakatHawl", formatted))
+          say("zakat-result", t("zakatHawl", formatted) + " " + schoolNote)
           return
         }
-        var message = t("zakatDue", formatted)
+        var message = t("zakatDue", formatted) + " " + schoolNote
         if (result.overpayment > 0) message += " " + t("zakatOverpaid")
         say("zakat-result", message)
       } catch (error) {
