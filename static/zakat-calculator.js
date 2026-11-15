@@ -124,6 +124,18 @@
         guidance: "No harvested produce was entered. Ushr is estimated from eligible harvested produce, not from a market-value-only entry."
       });
     }
+    // Five wasqs is a volume threshold, not a universal mass threshold.
+    // The 653 kg approximation in this tool is only grounded for wheat.
+    // Do not reuse wheat's mass conversion for other crops.
+    const usesFiveWasq = sect === "sunni" && !(school === "hanafi" && nisabPosition === "abu-hanifa");
+    if (usesFiveWasq && crop !== "wheat") {
+      return Object.freeze({
+        sect, school, currency, crop, quantityKg, marketValue, irrigation,
+        rate: null, nisabKg: null, nisabPosition, meetsNisab: null,
+        status: "scholar_review_required", produceDueKg: null, amountDue: null,
+        guidance: "The five-wasq threshold is a volume measure. Its mass equivalent varies by crop and measurement conditions. A verified crop-specific conversion is not available here, so confirm the threshold with a qualified scholar or agricultural authority. No Ushr amount is estimated."
+      });
+    }
     if (sect === "sunni" && irrigation === "mixed" && input.mixedRateConfirmed !== true) {
       return Object.freeze({
         sect, school, status: "scholar_review_required", currency,
