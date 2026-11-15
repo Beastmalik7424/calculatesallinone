@@ -19,7 +19,7 @@ PAGES = {
     "zakat-calculator": {
         "required": ["503,529", "1447 AH", "first day of Ramazan", "saving", "2.5%", "87.48 g", "612.36 g", "1,837,080", "700,000", "2,000,000", "50,000", "changes yearly", "Limitations", "Sources", "Last reviewed"],
         "faqs": 3,
-        "sources": ["sbp.org.pk", "doi.org"],
+        "sources": ["sbp.org.pk", "islamic-relief.org.uk"],
     },
 }
 def read(slug):
