@@ -49,7 +49,7 @@ for (const term of [
 }
 assert.ok(enText.split(/\s+/).length >= 1000, "English Zakat guide is too thin (<1000 visible words)");
 assert.ok(urText.split(/\s+/).length >= 700, "Urdu Zakat guide is too thin (<700 visible words)");
-for (const term of ["Ushr is separate from annual wealth Zakat", "rain-fed", "five wasqs", "653 kg", "dry-weight", "847 kg", "948 kg", "crop eligibility", "mixed irrigation", "Pakistan Code", "Sudan Zakat Chamber", "21-karat", "Singapore MUIS", "86 g", "investment-held jewellery", "87.28 g", "87.48 g", "NZF Worldwide", "not national laws", "raisins"]) {
+for (const term of ["Ushr is separate from annual wealth Zakat", "rain-fed", "five wasqs", "653 kg", "dry-weight", "same dry produce", "847 kg", "948 kg", "crop eligibility", "mixed irrigation", "Pakistan Code", "Sudan Zakat Chamber", "21-karat", "Singapore MUIS", "86 g", "investment-held jewellery", "87.28 g", "87.48 g", "NZF Worldwide", "not national laws", "raisins"]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English Ushr guidance missing: " + term);
 }
 for (const term of ["عشر", "زرعی پیداوار", "بارش", "آبپاشی", "پانچ وسق", "653", "847", "948", "امام ابو حنیفہ", "مخلوط آبپاشی", "سوڈان", "سنگاپور", "ملائیشیا", "کشمش", "87.28", "87.48", "اسلامی ریلیف پاکستان", "87.28 گرام"]) {
