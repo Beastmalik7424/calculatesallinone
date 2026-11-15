@@ -136,7 +136,7 @@ assert.equal(elements["yd-submit"].textContent, "Convert Years");
 
 // Zakat: reject invalid negative input before the representative outcomes.
 setValues({"z-cash":-1,"z-silverprice":1}); submit("zakat-form");
-assert.match(elements["zakat-result"].textContent, /zero or a positive value/i, "negative zakatable amounts must be rejected");
+assert.match(elements["zakat-result"].textContent, /zero or greater/i, "negative zakatable amounts must be rejected");
 setValues({"z-cash":500,"z-silverprice":1}); submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /below Nisab/i);
 setValues({"z-cash":1000,"z-silverprice":1}); elements["z-hawl"].checked = false; submit("zakat-form");
