@@ -131,7 +131,7 @@ const irPakistanGold = calculate({ ...base, nisabMethod: "gold-87-28", assets: {
 assert.match(en, /value="gold-87-28"/, "Current Islamic Relief Pakistan gold Nisab must be selectable");
 assert.equal(irPakistanGold.nisabGrams, 87.28);
 assert.equal(irPakistanGold.nisabThreshold, 872800);
-assert.match(irPakistanGold.nisabLabel, /IR Pakistan/i);
+assert.match(irPakistanGold.nisabLabel, /Islamic Relief Pakistan/i);
 result = calculate({ ...base, assets: { cash: 61236 }, liabilities: 0 });
 assert.equal(result.status, "payable", "wealth exactly equal to Nisab must qualify");
 result = calculate({ ...base, assets: { cash: 70000 }, hawlComplete: false });
