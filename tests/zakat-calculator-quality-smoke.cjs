@@ -24,7 +24,7 @@ const enText = visibleText(en);
 const urText = visibleText(ur);
 
 for (const id of [
-  "z-currency", "z-sect", "z-sunni-school", "z-marja", "z-nisab-method", "z-silverprice", "z-goldprice",
+  "z-currency", "z-sect", "z-sunni-school", "z-marja", "z-nisab-method", "z-silverprice", "z-goldprice", "z-sunni-school-wrap", "z-marja-wrap",
   "z-cash", "z-bank", "z-savings", "z-gold", "z-silver",
   "z-investments", "z-businesscash", "z-stock", "z-recv",
   "z-pension", "z-crypto", "z-property", "z-debts", "z-paid",
@@ -42,7 +42,7 @@ for (const term of [
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing useful topic: " + term);
 }
 for (const term of [
-  "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب",
+  "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب", "سنی", "شیعہ", "سیستانی", "جعفری",
   "اثاثے", "واجب الادا", "2.5"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing localized topic: " + term);
