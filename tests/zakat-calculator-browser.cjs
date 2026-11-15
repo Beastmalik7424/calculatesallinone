@@ -4,6 +4,7 @@ const { chromium } = require("playwright");
 
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
+  try {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
@@ -83,6 +84,12 @@ const { chromium } = require("playwright");
   await page.locator('#ushr-form button[type="submit"]').click();
   assert.match(await page.locator("#ushr-result").innerText(), /10,000/);
   assert.match(await page.locator("#ushr-result").innerText(), /70 kg/);
+  await page.locator("#u-crop").selectOption("rice");
+  await page.locator('#ushr-form button[type="submit"]').click();
+  const riceReviewEn = await page.locator("#ushr-result").innerText();
+  assert.match(riceReviewEn, /five-wasq threshold is a volume measure/i);
+  assert.doesNotMatch(riceReviewEn, /Estimated Ushr:/i);
+  await page.locator("#u-crop").selectOption("wheat");
   await page.locator("#u-school").selectOption("hanafi");
   await page.locator("#u-hanafi-position").selectOption("abu-hanifa");
   await page.locator("#u-quantity").fill("100");
@@ -92,8 +99,9 @@ const { chromium } = require("playwright");
   assert.match(await page.locator("#ushr-result").innerText(), /2,500/);
   await page.locator("#u-quantity").fill("0");
   await page.locator('#ushr-form button[type="submit"]').click();
-  assert.match(await page.locator("#ushr-result").innerText(), /No harvested produce was entered/i);
-  assert.doesNotMatch(await page.locator("#ushr-result").innerText(), /2,500/);
+  const noHarvestEn = await page.locator("#ushr-result").innerText();
+  assert.match(noHarvestEn, /No harvested produce was entered/i);
+  assert.doesNotMatch(noHarvestEn, /2,500|null%|Estimated Ushr:/i);
   await page.locator("#u-quantity").fill("100");
   await page.locator("#u-irrigation").selectOption("mixed");
   await page.locator('#ushr-form button[type="submit"]').click();
@@ -148,13 +156,28 @@ const { chromium } = require("playwright");
   assert.match(urUshrResult, /(?:10|۱۰)/);
   await page.locator("#u-quantity").fill("0");
   await page.locator('#ushr-form button[type="submit"]').click();
-  assert.match(await page.locator("#ushr-result").innerText(), /مثبت مقدار درج کریں/);
+  const noHarvestUr = await page.locator("#ushr-result").innerText();
+  assert.match(noHarvestUr, /مثبت مقدار درج کریں/);
+  assert.doesNotMatch(noHarvestUr, /عشر کا تخمینہ/);
+  await page.locator("#u-sect").selectOption("sunni");
+  await page.locator("#u-school").selectOption("shafii");
+  await page.locator("#u-crop").selectOption("rice");
+  await page.locator("#u-quantity").fill("700");
+  await page.locator("#u-value").fill("100000");
+  await page.locator("#u-irrigation").selectOption("rain");
+  await page.locator("#u-eligible").check();
+  await page.locator("#ushr-form button[type=\"submit\"]").click();
+  const riceReviewUr = await page.locator("#ushr-result").innerText();
+  assert.match(riceReviewUr, /پانچ وسق حجم کی پیمائش ہے/);
+  assert.doesNotMatch(riceReviewUr, /عشر کا تخمینہ/);
   const urOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   assert.equal(urOverflow, false, "Urdu page must not overflow a 375px viewport");
 
   assert.deepEqual(pageErrors, [], "Zakat pages must have no browser console or page errors");
-  await browser.close();
-  console.log("Zakat browser regression: English and Urdu flows, ISO currency, Nisab methods, Hawl, labels and 375px layout passed");
+  console.log("Zakat browser regression: English and Urdu flows, ISO currency, Nisab methods, Hawl, crop-specific Nisab safeguards, labels and 375px layout passed");
+  } finally {
+    await browser.close();
+  }
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
