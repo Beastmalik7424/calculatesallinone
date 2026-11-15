@@ -431,7 +431,7 @@ assert organization_schema is not None, "Homepage Organization schema is require
 contact_point = organization_schema.get("contactPoint", {})
 assert contact_point.get("@type") == "ContactPoint" and contact_point.get("email"), "Organization schema must expose the configured support email"
 assert contact_point.get("url") == SITE + "/contact/", "Organization schema must link to the canonical contact page"
-assert "silver or gold Nisab" in home_html and "25.0 to 29.9" in home_html, "Homepage proof points must describe selectable Zakat methods and WHO adult BMI ranges"
+assert "personal gold or silver Nisab" in home_html and "WHO adult categories" in home_html, "Homepage descriptions must identify the personal Nisab comparison and adult BMI category tool"
 # The Urdu root is a localized site homepage, not a standard-calculator landing page.
 urdu_home_url = SITE + "/ur/"
 ur_home_html = output_for_url(urdu_home_url).read_text(encoding="utf-8")
