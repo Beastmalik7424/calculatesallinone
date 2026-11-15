@@ -1070,7 +1070,7 @@ _profit_page = Path("public/profit-loss-calculator/index.html").read_text(encodi
 for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses", "pl-product-fields", "p-cost", "p-sell", "pl-result"):
     assert 'id="' + _id + '"' in _profit_page, "Missing profit field: " + _id
 assert "Business P&amp;L" in _profit_page, "Business profit mode missing"
-assert "net operating" in _profit_page.lower(), "Profit page must explain net operating profit"
+assert "gross profit" in _profit_page.lower() and "gross margin" in _profit_page.lower(), "Profit page must explain gross profit and gross margin"
 assert "ca-profit-mode" in site_css, "Profit mode CSS missing"
 
 # Fraction inputs must use the same whole-number constraint documented on the page.
