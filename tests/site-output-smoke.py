@@ -73,7 +73,7 @@ for phrase in ("online calculator", "profit and loss calculator", "tasbih counte
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
-assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
+assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the displayed result" in home_html and "page-specific limitations" in home_html, "Homepage should explain the calculator workflow"
 assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
 assert "Free Online Calculators" in home_html and "The Money and Business hub includes a recommended monthly close checklist" in home_html, "Homepage should describe its tools in task-specific language"
