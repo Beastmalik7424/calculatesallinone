@@ -150,6 +150,7 @@ TOOLS = [
         "lead": "Estimate Zakat in your own currency. Choose a silver or gold Nisab method, enter the current metal price per gram and list eligible assets and short-term liabilities. The calculator shows its assumptions and separates Pakistan's year-specific bank deduction threshold from personal Zakat.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
+            '<p class="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
             '<div class="grid sm:grid-cols-2 gap-4">'
             '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
             '<input id="z-currency" name="z-currency" class="@I@" type="text" value="PKR" maxlength="3" minlength="3" pattern="[A-Za-z]{3}" autocapitalize="characters" autocomplete="off" spellcheck="false">'
@@ -717,6 +718,7 @@ URDU = {
         "h1": "چاندی اور سونے کے نصاب کے ساتھ عالمی زکوٰۃ کیلکولیٹر",
         "lead": "اپنی کرنسی میں زکوٰۃ کا تخمینہ لگائیں۔ چاندی یا سونے کا نصاب منتخب کریں، فی گرام موجودہ قیمت اور قابلِ زکوٰۃ اثاثے درج کریں۔ پاکستان میں بینک سے کٹوتی کے سرکاری سالانہ نصاب کو ذاتی شرعی نصاب سے الگ سمجھیں۔",
         "labels": [
+            ("Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.", "چاندی یا سونے کا نصاب منتخب کریں۔ 2.5٪ کا تخمینہ صرف منتخب نصاب اور حول کی شرائط پوری ہونے پر لاگو ہوتا ہے۔"),
             ("Currency code (ISO 4217)", "کرنسی کوڈ (ISO 4217)"),
             ("Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.", "مثالیں: PKR، USD، GBP، EUR، SAR، AED، INR۔ تمام رقوم اور دھاتوں کی قیمت ایک ہی کرنسی میں درج کریں۔"),
             ("Nisab method", "نصاب کا طریقہ"),
