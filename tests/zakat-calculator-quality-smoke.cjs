@@ -78,10 +78,12 @@ const { calculate, calculateUshr, validateCurrency } = require("../static/zakat-
 assert.equal(typeof calculateUshr, "function", "Ushr must have its own calculation engine");
 const rainUshr = calculateUshr({ sect: "sunni", school: "shafii", crop: "wheat", eligibleCropConfirmed: true, quantityKg: 700, marketValue: 100000, irrigation: "rain" });
 assert.equal(rainUshr.rate, 0.10);
-assert.equal(rainUshr.amountDue, 10000);\nassert.equal(rainUshr.produceDueKg, 70);
+assert.equal(rainUshr.amountDue, 10000);
+assert.equal(rainUshr.produceDueKg, 70);
 const pumpUshr = calculateUshr({ sect: "sunni", school: "hanafi", crop: "rice", eligibleCropConfirmed: true, quantityKg: 100, marketValue: 50000, irrigation: "cost" });
 assert.equal(pumpUshr.rate, 0.05);
-assert.equal(pumpUshr.amountDue, 2500, "Hanafi Abu Hanifa position must not impose the five-wasq threshold");\nassert.equal(pumpUshr.produceDueKg, 5);
+assert.equal(pumpUshr.amountDue, 2500, "Hanafi Abu Hanifa position must not impose the five-wasq threshold");
+assert.equal(pumpUshr.produceDueKg, 5);
 const belowMajority = calculateUshr({ sect: "sunni", school: "maliki", crop: "wheat", eligibleCropConfirmed: true, quantityKg: 500, marketValue: 100000, irrigation: "rain" });
 assert.equal(belowMajority.status, "below_nisab");
 assert.equal(belowMajority.amountDue, 0);
@@ -91,7 +93,10 @@ const confirmedMixedUshr = calculateUshr({ sect: "sunni", school: "hanbali", cro
 assert.equal(confirmedMixedUshr.rate, 0.075);
 const sistaniUshr = calculateUshr({ sect: "shia", marja: "sistani", crop: "wheat", quantityKg: 900, marketValue: 100000, irrigation: "mixed" });
 const sistaniRaisins = calculateUshr({ sect: "shia", marja: "sistani", crop: "raisins", quantityKg: 900, marketValue: 100000, irrigation: "rain" });
-assert.equal(sistaniRaisins.status, "payable");\nassert.equal(sistaniRaisins.produceDueKg, 90);\nassert.match(sistaniRaisins.guidance, /raisins/i);\nassert.doesNotMatch(sistaniRaisins.guidance, /grapes/i);
+assert.equal(sistaniRaisins.status, "payable");
+assert.equal(sistaniRaisins.produceDueKg, 90);
+assert.match(sistaniRaisins.guidance, /raisins/i);
+assert.doesNotMatch(sistaniRaisins.guidance, /grapes/i);
 assert.throws(() => calculateUshr({ sect: "shia", marja: "sistani", crop: "grapes", quantityKg: 900, marketValue: 100000, irrigation: "rain" }), /four specified crops/i);
 assert.equal(sistaniUshr.rate, 0.075);
 assert.equal(sistaniUshr.nisabKg, 847);
