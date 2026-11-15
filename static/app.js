@@ -595,7 +595,7 @@
           say("ushr-result", result.guidance)
           return
         }
-        var formatted = money(result.amountDue, result.currency)
+        var formatted = new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", { style: "currency", currency: result.currency, maximumFractionDigits: 2 }).format(result.amountDue)
         if (lang() === "ur") {
           var cropNames = { wheat: "گندم", barley: "جو", dates: "کھجور", grapes: "انگور", rice: "چاول", maize: "مکئی", other: "دیگر فصل" }
           var rateText = (result.rate * 100).toLocaleString("ur-PK") + "٪"
