@@ -721,6 +721,10 @@ for url in urls:
                 assert item.get("dateModified") == "2026-11-15", (
                     "Tasbih Counter dateModified must match the verified target-persistence and content update."
                 )
+            elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
+                assert item.get("dateModified") == "2026-11-15", (
+                    "Zakat dateModified must match the verified global Nisab, currency, asset and bilingual content update."
+                )
             else:
                 assert "dateModified" not in item, (
                     f"Do not publish unverified dateModified on {url}."
