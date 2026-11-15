@@ -151,10 +151,10 @@ assert len(bmi_breadcrumbs) == 1 and bmi_breadcrumbs[0].get("@id") == SITE + "/b
 assert [item["name"] for item in bmi_breadcrumbs[0]["itemListElement"]] == ["Home", "Health", "BMI Calculator"], "BMI breadcrumb schema must match the visible page hierarchy"
 assert "Maintained by <a" in bmi_html and "Muhammad Fayyaz Adeel" in bmi_html and 'href="/about/"' in bmi_html, "BMI page schema author must be supported by a visible maintainer byline"
 assert 'href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"' in bmi_html, "BMI structured citation must be visible on the page"
-assert "category using the unrounded BMI" in bmi_html and "rounds only the displayed number to one decimal place" in bmi_html, "BMI guidance must distinguish exact category thresholds from rounded display values"
-assert "rounds BMI to one decimal place before assigning the displayed category" not in bmi_html, "BMI guidance must not claim that rounded values determine the category"
+assert "WHO adult BMI table" in bmi_html and "23.0" in bmi_html and "27.5" in bmi_html, "BMI page must show WHO categories and distinguish Asian-population action points"
+assert "70 kg" in bmi_html and "1.70 m" in bmi_html and "24.2" in bmi_html, "BMI worked example must use approved values"
 health_html = output_for_url(SITE + "/health/").read_text(encoding="utf-8")
-assert "unrounded BMI" in health_html and "rounds only the displayed number to one decimal place" in health_html, "Health hub BMI guidance must match the exact-threshold calculator behavior"
+assert "adult BMI" in health_html.lower(), "Health hub must retain its adult BMI description"
 assert not [node for node in bmi_nodes if node.get("@type") == "WebApplication"], "BMI page must not restore ineligible WebApplication rich-result markup"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 profit_nodes = jsonld_nodes(profit_html)
@@ -162,8 +162,9 @@ profit_orgs = [node for node in profit_nodes if node.get("@type") == "Organizati
 assert len(profit_orgs) == 1 and profit_orgs[0].get("@id") == SITE + "/#organization", "Profit and Loss page must reference one canonical Organization entity"
 assert re.search(r"profit.{0,40}loss", profit_html, re.IGNORECASE), "Profit and Loss page should open with a concise definition and calculation scope"
 assert 'href="https://openstax.org/books/introduction-business/pages/14-5-the-income-statement"' in profit_html, "Profit and Loss page should cite the checked OpenStax inventory and income-statement source"
-assert 'href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"' in profit_html, "Profit and Loss page should cite ACCA ratio-analysis guidance"
-assert "Markup versus margin at a glance" in profit_html and "<table" in profit_html, "Profit and Loss page should include a useful comparison table"
+assert "COGS = opening inventory + purchases" in profit_html and "closing inventory" in profit_html, "Profit and Loss page must state the approved COGS formula"
+assert "gross margin" in profit_html.lower() and "55,000" in profit_html and "55%" in profit_html, "Profit and Loss page must show the approved worked example"
+assert "profit is not cash" in profit_html.lower(), "Profit and Loss page must distinguish profit from cash"
 contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
 for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy"):
     assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
@@ -1237,43 +1238,46 @@ print("PASS: header brand logo links to the root homepage on all locale routes")
 
 
 # 2026 priority-page content quality regression checks.
-# These checks guard source-backed, page-specific value rather than word-count targets.
 _bmi_2026 = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
-assert "2026 Standards of Care in Overweight and Obesity" in _bmi_2026, "BMI must explain the current 2026 clinical assessment context"
-assert "waist-to-height ratio" in _bmi_2026.lower(), "BMI must explain waist-to-height ratio alongside BMI"
-assert "does not ask for waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply waist-based clinical criteria"
-assert "doi.org/10.2337/doci26-0003" in _bmi_2026, "BMI must link the 2026 clinical standards source"
-assert "https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" in _bmi_2026, "BMI must link the NHS adult BMI benchmark"
-assert "https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" in _bmi_2026, "BMI must link the NHS waist-to-height benchmark"
-assert "This note is general educational information." not in _bmi_2026, "BMI must replace the redundant generic South Asia disclaimer with useful clinical context"
+for _phrase in ("WHO adult BMI table", "Underweight", "18.5 to 24.9", "25.0 to 29.9",
+                "30.0 and above", "23.0", "27.5", "public-health action points",
+                "not replacement categories", "waist circumference",
+                "70 kg", "1.70 m", "24.2",
+                "https://doi.org/10.1016/S0140-6736(03)15268-3"):
+    assert _phrase.lower() in _bmi_2026.lower(), "BMI page is missing approved WHO content: " + _phrase
+assert "2026 Standards of Care in Overweight and Obesity" not in _bmi_2026, "Unapproved BMI guideline detail must not remain"
+assert "Last reviewed: 2026-11-16" in _bmi_2026, "BMI page needs the requested review date"
 
 _ur_bmi_2026 = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
-assert "کمر کے گھیر اور قد کا تناسب" in _ur_bmi_2026, "Urdu BMI must explain waist-to-height ratio"
-assert "2026 Standards of Care" in _ur_bmi_2026, "Urdu BMI must cite the current 2026 clinical context"
-assert "https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" in _ur_bmi_2026, "Urdu BMI must cite the NHS adult BMI benchmark"
-assert "https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" in _ur_bmi_2026, "Urdu BMI must cite the NHS waist-to-height benchmark"
-assert "does not ask for waist measurements" not in _ur_bmi_2026, "English BMI limitation text must not leak into Urdu"
+assert "کمر کے گھیر اور قد کا تناسب" in _ur_bmi_2026, "Existing Urdu BMI waist-to-height content must remain intact"
+assert "2026 Standards of Care" in _ur_bmi_2026, "Existing Urdu BMI clinical source content remains a separately scoped translation item"
 
 _profit_2026 = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
-for _phrase in ("Opening inventory + net purchases + direct inward costs − closing inventory",
-                "PKR 150,000", "PKR 70,000", "PKR 10,000", "PKR 30,000", "13.64%",
-                "does not calculate cash flow",
-                "loaded unit cost is PKR 1,200", "PKR 300", "20%",
-                "before those omitted costs"):
-    assert _phrase.lower() in _profit_2026.lower(), "Profit and Loss COGS/cash-flow guidance missing: " + _phrase
-assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement" in _profit_2026, "Profit and Loss must cite the checked OpenStax income-statement source"
+for _phrase in ("COGS = opening inventory + purchases", "closing inventory",
+                "gross profit = revenue", "gross margin", "100,000", "20,000",
+                "50,000", "25,000", "45,000", "55,000", "55%",
+                "profit is not cash", "payout delays", "inventory up front",
+                "Last reviewed: 2026-11-16",
+                "openstax.org/books/introduction-business/pages/14-5-the-income-statement"):
+    assert _phrase.lower() in _profit_2026.lower(), "Profit and Loss page is missing approved content: " + _phrase
+assert "PKR 150,000" not in _profit_2026, "Old, unrequested Profit and Loss example must be removed"
+assert "Markup versus margin at a glance" not in _profit_2026, "Duplicate formula table must be removed"
 
 _money_2026 = output_for_url(SITE + "/money/").read_text(encoding="utf-8")
-for _phrase in ("A practical monthly close: from sales to operating profit",
-                "opening inventory", "closing inventory", "reconcile profit to cash",
-                "do not calculate cash flow"):
-    assert _phrase.lower() in _money_2026.lower(), "Money hub workflow guidance missing: " + _phrase
-assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement" in _money_2026, "Money hub must cite its inventory and income-statement method"
+for _phrase in ("Recommended monthly close process", "recommended working process",
+                "Step 1:", "Reconcile platform payouts", "Step 2:", "Count the inventory",
+                "Step 3:", "Record the month's expenses", "Step 4:", "Reconcile the bank or wallet",
+                "Step 5:", "Review gross profit, net profit and the cash position",
+                "Step 6:", "Lock the reviewed period", "not an official accounting standard",
+                "Sources", "Last reviewed: 2026-11-16", "Muhammad Fayyaz Adeel"):
+    assert _phrase.lower() in _money_2026.lower(), "Money hub is missing monthly-close requirement: " + _phrase
 
 _zakat_2026 = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
-for _phrase in ("Illustrative small-shop Nisab comparison", "PKR 650,000",
-                "PKR 122,472", "PKR 2,187,000", "PKR 16,250",
-                "JazzCash", "Easypaisa", "count those available balances once",
-                "not a live market quote",
-                "do not choose a Nisab method based on which result is lower"):
-    assert _phrase.lower() in _zakat_2026.lower(), "Zakat worked Nisab comparison missing: " + _phrase
+for _phrase in ("PKR 503,529", "1447 AH (2026)", "first day of Ramazan",
+                "saving, profit and loss sharing", "2.5%", "87.48 g of gold",
+                "612.36 g of silver", "hypothetical silver price of PKR 3,000",
+                "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000",
+                "PKR 50,000", "changes yearly", "Last reviewed: 2026-11-16",
+                "bprd-circular-letter-no-03-of-2026"):
+    assert _phrase.lower() in _zakat_2026.lower(), "Zakat page is missing approved threshold/example: " + _phrase
+assert 'value="gold-85"' not in _zakat_2026, "Unapproved 85 g gold option must not be offered on this page"
