@@ -138,7 +138,7 @@ assert.equal(elements["yd-submit"].textContent, "Convert Years");
 setValues({"z-cash":-1,"z-silverprice":1}); submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /zero or greater/i, "negative zakatable amounts must be rejected");
 setValues({"z-cash":500,"z-silverprice":1}); submit("zakat-form");
-assert.match(elements["zakat-result"].textContent, /below Nisab/i);
+assert.match(elements["zakat-result"].textContent, /below the threshold/i);
 setValues({"z-cash":1000,"z-silverprice":1}); elements["z-hawl"].checked = false; submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /lunar year/i);
 elements["z-hawl"].checked = true; submit("zakat-form");
