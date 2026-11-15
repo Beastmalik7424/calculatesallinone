@@ -22,11 +22,13 @@ def main():
         assert '<html lang="ur" dir="rtl">' in raw, f"{slug}: language/RTL metadata missing"
         assert "Noto+Nastaliq+Urdu" in raw, f"{slug}: Nastaliq font stylesheet missing"
         assert "fonts.googleapis.com" in raw, f"{slug}: Google Fonts stylesheet not linked"
+        assert "display=swap" in raw, f"{slug}: Google Fonts swap strategy is missing"
         text = visible(raw)
         assert len(text.split()) >= 500, f"{slug}: thin Urdu page ({len(text.split())} words)"
     css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
     assert 'lang=ur' in css and 'Noto Nastaliq Urdu' in css, "Urdu Nastaliq font stack missing from compiled CSS"
-    assert "display=swap" in raw, f"{slug}: Google Fonts swap strategy is missing"
+    assert "html[lang=ur] #zakat-form" in css, "Urdu Zakat first-screen compact layout rule missing"
+    assert "line-height: 1.5" in css, "Urdu Zakat form text line-height regression guard missing"
     print(f"PASS: {len(SLUGS)} Urdu routes retain RTL and load Noto Nastaliq Urdu")
     print("PASS: every Urdu route meets the site's editorial minimum and compiled CSS applies the font")
     return 0
