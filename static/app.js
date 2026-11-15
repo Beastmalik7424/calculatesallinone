@@ -543,6 +543,77 @@
         else say("zakat-result", t("zakatEngineError"))
       }
     })
+    initUshr()
+  }
+
+  function initUshr() {
+    var form = $("ushr-form")
+    if (!form) return
+    var sect = $("u-sect")
+    var school = $("u-school")
+    var schoolWrap = $("u-school-wrap")
+    var marjaWrap = $("u-marja-wrap")
+    var hanafiWrap = $("u-hanafi-position-wrap")
+    var eligibleWrap = $("u-eligible-wrap")
+    var mixedWrap = $("u-mixed-wrap")
+    var irrigation = $("u-irrigation")
+    function updateUshrFields() {
+      var shia = !!(sect && sect.value === "shia")
+      var hanafi = !shia && !!(school && school.value === "hanafi")
+      var mixed = !!(irrigation && irrigation.value === "mixed")
+      if (schoolWrap) schoolWrap.hidden = shia
+      if (marjaWrap) marjaWrap.hidden = !shia
+      if (hanafiWrap) hanafiWrap.hidden = !hanafi
+      if (eligibleWrap) eligibleWrap.hidden = shia
+      if (mixedWrap) mixedWrap.hidden = shia || !mixed
+    }
+    if (sect) sect.addEventListener("change", updateUshrFields)
+    if (school) school.addEventListener("change", updateUshrFields)
+    if (irrigation) irrigation.addEventListener("change", updateUshrFields)
+    updateUshrFields()
+    form.addEventListener("submit", function (e) {
+      e.preventDefault()
+      if (!window.ZakatCalculator || typeof window.ZakatCalculator.calculateUshr !== "function") {
+        say("ushr-result", lang() === "ur" ? "عشر کیلکولیٹر دستیاب نہیں۔ صفحہ دوبارہ کھولیں۔" : "Ushr calculator is unavailable. Reload the page.")
+        return
+      }
+      try {
+        var result = window.ZakatCalculator.calculateUshr({
+          sect: sect ? sect.value : "sunni",
+          school: school ? school.value : "hanafi",
+          marja: $("u-marja") ? $("u-marja").value : "",
+          nisabPosition: $("u-hanafi-position") ? $("u-hanafi-position").value : "abu-hanifa",
+          crop: $("u-crop") ? $("u-crop").value : "",
+          quantityKg: num("u-quantity"),
+          marketValue: num("u-value"),
+          currency: ($("u-currency") && $("u-currency").value || "PKR").trim().toUpperCase(),
+          irrigation: irrigation ? irrigation.value : "rain",
+          eligibleCropConfirmed: !!($("u-eligible") && $("u-eligible").checked),
+          mixedRateConfirmed: !!($("u-mixed-confirm") && $("u-mixed-confirm").checked)
+        })
+        if (result.status === "scholar_review_required") {
+          say("ushr-result", result.guidance)
+          return
+        }
+        var formatted = money(result.amountDue, result.currency)
+        if (lang() === "ur") {
+          var cropNames = { wheat: "گندم", barley: "جو", dates: "کھجور", grapes: "انگور", rice: "چاول", maize: "مکئی", other: "دیگر فصل" }
+          var rateText = (result.rate * 100).toLocaleString("ur-PK") + "٪"
+          var msg = result.status === "below_nisab"
+            ? "فصل کی مقدار مقررہ نصاب (" + result.nisabKg.toLocaleString("ur-PK") + " کلوگرام) سے کم ہے۔ اس منتخب طریقے کے مطابق اس فصل پر عشر واجب نہیں بنتا۔"
+            : "عشر کا تخمینہ: " + formatted + "۔ شرح: " + rateText + "۔ فصل: " + (cropNames[result.crop] || result.crop) + "۔ مقدار: " + result.quantityKg.toLocaleString("ur-PK") + " کلوگرام۔"
+          say("ushr-result", msg + " " + (result.guidance || ""))
+        } else {
+          var message = result.status === "below_nisab"
+            ? "Harvest is below the selected crop Nisab of " + result.nisabKg + " kg. No Ushr is estimated under this selected position."
+            : "Estimated Ushr: " + formatted + " (" + (result.rate * 100) + "%). Crop: " + result.crop + ". Harvest: " + result.quantityKg + " kg."
+          say("ushr-result", message + " " + (result.guidance || ""))
+        }
+      } catch (error) {
+        var reason = String(error && error.message || "")
+        say("ushr-result", reason)
+      }
+    })
   }
 
   /* BMI: WHO adult ranges. Imperial inches must be 0 to 11.9. */
