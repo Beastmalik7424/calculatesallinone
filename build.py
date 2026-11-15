@@ -889,10 +889,10 @@ def bmi_urdu_guide_html():
 
 EXTRA = {
     "zakat-calculator": {
-        "quick": "Zakat is 2.5 percent of net zakatable wealth, due when that wealth is at least the Nisab (612.36 grams of silver) and has been held for one lunar year.",
+        "quick": "Total eligible assets minus eligible liabilities equals net zakatable wealth. Compare that amount with the silver or gold Nisab you selected using the current price per gram you entered. If the selected threshold is met and the lunar year (hawl) is complete, the estimate applies 2.5 percent and subtracts Zakat already paid for the same year.",
         "faq": [
-            ("Is Zakat due on my home?", "Your home that you live in is not zakatable wealth. Rental property income and goods held for sale can be zakatable, so check the rules for each asset with a scholar."),
-            ("Do I subtract debts?", "Debts due now are commonly subtracted from zakatable wealth. Whether particular long-term debts are deducted is a point scholars discuss, so confirm your case."),
+            ("Is Zakat due on my home?", "A home used for your own residence is generally not trade inventory. Property held for resale is a different category. Rental property and saved rental income need separate scholarly guidance."),
+            ("Do I subtract debts?", "Only subtract liabilities that your chosen scholarly approach permits. Many guides focus on amounts due immediately or within the next twelve lunar months. Do not automatically deduct the full balance of a long-term loan."),
         ],
     },
     "bmi-calculator": {
