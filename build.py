@@ -1636,7 +1636,8 @@ def shell(main_html, lang="en", current_path=None):
         + lang_links(lang, s, current_path) +
         '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
         '</div></footer>\n'
-        '<script src="/assets/app.js?v=20261103-result-sharing-1" defer></script>\n'
+        '<script src="/assets/zakat-calculator.js?v=20261115-global-1" defer></script>\n'
+        '<script src="/assets/app.js?v=20261115-zakat-global-1" defer></script>\n'
         '</body>\n</html>\n'
     )
 
@@ -1837,7 +1838,14 @@ def tool_page(t):
     path = "/" + t["slug"] + "/"
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
-    if t["slug"] == "bmi-calculator":
+    if t["slug"] == "zakat-calculator":
+        title = "Global Zakat Calculator | Gold, Silver Nisab & Currency"
+        desc = "Estimate Zakat worldwide with silver or gold Nisab, an ISO currency code, eligible assets, short-term liabilities and lunar-year confirmation. Pakistan bank deductions explained separately."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
+    elif t["slug"] == "bmi-calculator":
         title = "BMI Calculator for Adults | cm or ft/in | CalculatesAll"
         desc = "Calculate adult BMI using kilograms and centimetres or kilograms with feet and inches. See WHO adult BMI ranges and their limitations."
         ui = BMI_UI
