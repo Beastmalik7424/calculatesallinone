@@ -607,15 +607,13 @@ TOOLS = [
 
 HUB_CONTENT = {
     "money": {
-        "intro": "Compare loan instalments, Zakat arithmetic, business profit, discounts and compound growth. Each tool states the inputs and method it uses. The worked examples below show how to check the arithmetic and where a calculator estimate differs from a lender quote, tax calculation or religious ruling.",
+        "intro": "The Money and Business hub brings together calculators for business figures and personal money calculations. Use the monthly close checklist below to organise the review of payouts, stock, expenses, balances, profit and cash.",
         "faq": [
-            ("What does the EMI calculator estimate?", "It estimates the monthly instalment, total interest and repayment schedule from the loan amount, annual rate and term. Lender fees, insurance and contract-specific charges can change the amount quoted by a lender."),
-            ("How is profit margin calculated?", "Gross margin = gross profit divided by sales revenue, multiplied by 100. With PKR 40,000 gross profit on PKR 100,000 sales, gross margin is 40% of sales. If operating profit is PKR 25,000, operating margin is 25% of sales. These measures use different profit figures and should not be confused."),
-            ("Does the EMI estimate include lender fees?", "No. The EMI estimate uses the principal, annual interest rate and repayment term entered. Processing fees, insurance, variable-rate clauses, taxes and payment-date rules may change the lender's actual quotation."),
-            ("Does the compound interest estimate include deposits or taxes?", "No. It assumes a fixed starting principal, a fixed nominal annual rate and the compounding frequency entered. It excludes additional deposits, withdrawals, fees, taxes and inflation. Check whether a provider quotes a nominal rate or an effective annual yield before comparing results."),
-            ("Are these tools accurate for business accounts?", "They calculate the arithmetic for the inputs you give, but they do not replace an accountant. Tax rules, inventory valuation, payment fees and accounting policies are not included."),
-            ("Does the Zakat calculator give a religious ruling?", "No. It lets you select a silver or gold Nisab reference, enter your own metal price and currency, and estimates the arithmetic when the stated conditions are met. Scholarly views can differ, so consult a qualified scholar about your circumstances."),
+            ("What does it mean to lock the period?", "It means marking the month as reviewed so the same period is not casually changed while preparing the next month's opening figures."),
+            ("What becomes next month's opening stock?", "Use the closing inventory count from the month just completed as the next month's opening stock figure."),
+            ("Can I reconcile a wallet as well as a bank account?", "Yes. The checklist names a bank or wallet balance, so use the account that receives or holds the business funds.")
         ],
+
     },
     "health": {
         "intro": "The health tools on CalculatesAll give screening estimates, not diagnoses. The BMI calculator uses the standard formula, weight in kilograms divided by height in metres squared, and the adult weight categories published by the World Health Organization. Use the result as a starting point for a conversation with a doctor or another health professional.",
@@ -655,11 +653,11 @@ HUB_CONTENT = {
 }
 
 CATEGORIES = [
-    {"slug": "money", "name": "Money and Business", "desc": "Compare EMI, Zakat, profit and loss, discounts and compound interest with worked examples, formulas and clear assumptions."},
-    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI and estimated maintenance calories in metric or imperial units, with worked examples, clear methods and limitations."},
-    {"slug": "time", "name": "Date and Time", "desc": "Use age, date-difference and years-to-days calculators, plus a browser stopwatch, to check calendar spans, time conversions and everyday timing."},
-    {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages, percentage change and percentage difference, ratios, fractions, scientific arithmetic and unit conversions with clear worked examples."},
-    {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
+    {"slug": "money", "name": "Money and Business", "desc": "Calculate business gross profit and margin, compare personal Zakat Nisab values, and work out discounts and loan instalments."},
+    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI from weight and height, view the WHO adult categories and understand the limits of this screening measure."},
+    {"slug": "time", "name": "Date and Time", "desc": "Calculate age from a birth date, count days between calendar dates, convert years and days, and time an activity."},
+    {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages, percentage changes, ratios and fractions, or convert values between weight, length and temperature units."},
+    {"slug": "worship", "name": "Worship and Daily Use", "desc": "Count tasbih recitations with a target and track elapsed time with a browser stopwatch."},
 ]
 
 URDU = {
@@ -2150,8 +2148,9 @@ def category_page(c):
             '<p class="mt-4 text-base leading-relaxed text-stone-800 dark:text-stone-200">' + HUB_CONTENT[c["slug"]]["intro"] + '</p>'
             '<ul class="mt-8 grid gap-4">' + items + "</ul>"
         + '<nav aria-label="Other calculator categories" class="mt-8"><h2 class="text-xl font-semibold">Explore other calculator categories</h2><ul class="mt-3 flex flex-wrap gap-4">' + related + "</ul></nav>"
-        + guide_html(HUB_EXTRA[c["slug"]]) +
-            '<h2 class="' + H2 + '">Questions</h2><div class="mt-3">' + faq_html(HUB_CONTENT[c["slug"]]["faq"]) + "</div>")
+        + guide_html(HUB_EXTRA[c["slug"]])
+        + ('<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p><p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Last reviewed: 2026-11-16</p>' if c["slug"] == "money" else "")
+        + '<h2 class="' + H2 + '">Questions</h2><div class="mt-3">' + faq_html(HUB_CONTENT[c["slug"]]["faq"]) + "</div>")
     write(path, head(title, c["desc"], path, schema) + shell(body))
     return path
 
@@ -2258,14 +2257,14 @@ def home_page(lang="en"):
         path = "/"
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for Zakat, BMI, profit and loss, age, discounts, unit conversion, a standard calculator, tasbih counter and stopwatch."
-        h1 = "EMI, BMI and Zakat Calculators"
-        lead = "CalculatesAll is a free online calculator for everyday maths. Tap the buttons or use your keyboard."
+        h1 = "Free Online Calculators for Money, Business and Health"
+        lead = "Calculate adult BMI, business gross profit and margin, Zakat Nisab values, discounts, percentages, dates and unit conversions. Choose a category below to open the calculator for your task."
         cards = ""
         for c in CATEGORIES:
             cards += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
                       '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + c["slug"] + '/">' + c["name"] + "</a>"
                       '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + c["desc"] + "</p></li>")
-    alternates = home_alts_all()
+    # Hreflang alternates are intentionally unchanged; verify the locale matrix before any future edit.\n    alternates = home_alts_all()
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
