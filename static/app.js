@@ -592,7 +592,10 @@
           mixedRateConfirmed: !!($("u-mixed-confirm") && $("u-mixed-confirm").checked)
         })
         if (result.status === "scholar_review_required") {
-          say("ushr-result", result.guidance)
+          var mixedGuidance = lang() === "ur"
+            ? "مخلوط آبپاشی میں سنی فقہی مسلک کے مطابق شرح مختلف ہو سکتی ہے اور اس کا انحصار غالب طریقے اور تفصیلات پر ہے۔ اپنے مستند عالم سے شرح کی تصدیق کریں۔ تصدیق کے بغیر کیلکولیٹر کوئی رقم نہیں دکھاتا۔"
+            : result.guidance
+          say("ushr-result", mixedGuidance)
           return
         }
         var formatted = new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", { style: "currency", currency: result.currency, maximumFractionDigits: 2 }).format(result.amountDue)
@@ -602,7 +605,10 @@
           var msg = result.status === "below_nisab"
             ? "فصل کی مقدار مقررہ نصاب (" + result.nisabKg.toLocaleString("ur-PK") + " کلوگرام) سے کم ہے۔ اس منتخب طریقے کے مطابق اس فصل پر عشر واجب نہیں بنتا۔"
             : "عشر کا تخمینہ: " + formatted + "۔ شرح: " + rateText + "۔ فصل: " + (cropNames[result.crop] || result.crop) + "۔ مقدار: " + result.quantityKg.toLocaleString("ur-PK") + " کلوگرام۔"
-          say("ushr-result", msg + " " + (result.guidance || ""))
+          var guidanceUr = result.sect === "shia"
+            ? "آیت اللہ سیستانی کے سرکاری حکم کے مطابق یہ زکوٰۃ صرف گندم، جو، کھجور اور کشمش پر ہے۔ 847 کلوگرام کی حد فصل خشک ہونے کے بعد دیکھی جاتی ہے۔ بارش یا قدرتی پانی پر 10٪، پمپ یا آلات سے آبپاشی پر 5٪، اور دونوں طریقے نمایاں طور پر استعمال ہوں تو 7.5٪ ہے۔ اگر ایک طریقہ معمولی ہو تو غالب طریقے کی شرح منتخب کریں۔ فصل کی ملکیت اور دیگر شرائط کے لیے اپنے مرجع سے رجوع کریں۔"
+            : "یہ فصل کا عشر ہے، سالانہ مالی زکوٰۃ نہیں۔ فصل کی اہلیت، پیمائش، ملکیت، فصل کے مرحلے اور مقامی قانونی کٹوتی کی تصدیق اپنے مستند عالم یا متعلقہ اتھارٹی سے کریں۔"
+          say("ushr-result", msg + " " + guidanceUr)
         } else {
           var message = result.status === "below_nisab"
             ? "Harvest is below the selected crop Nisab of " + result.nisabKg + " kg. No Ushr is estimated under this selected position."
