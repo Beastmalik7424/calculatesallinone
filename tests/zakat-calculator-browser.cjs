@@ -68,6 +68,43 @@ const { chromium } = require("playwright");
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /15,309/);
 
+  for (const id of ["u-sect","u-school","u-marja","u-hanafi-position","u-crop","u-quantity","u-value","u-currency","u-irrigation","u-eligible","u-mixed-confirm"]) {
+    assert.equal(await page.locator("#" + id).count(), 1, "Missing Ushr field " + id);
+  }
+  await page.locator("#u-sect").selectOption("sunni");
+  await page.locator("#u-school").selectOption("shafii");
+  await page.locator("#u-crop").selectOption("wheat");
+  await page.locator("#u-quantity").fill("700");
+  await page.locator("#u-value").fill("100000");
+  await page.locator("#u-irrigation").selectOption("rain");
+  await page.locator("#u-eligible").check();
+  await page.locator('#ushr-form button[type="submit"]').click();
+  assert.match(await page.locator("#ushr-result").innerText(), /10,000/);
+  await page.locator("#u-school").selectOption("hanafi");
+  await page.locator("#u-hanafi-position").selectOption("abu-hanifa");
+  await page.locator("#u-quantity").fill("100");
+  await page.locator("#u-value").fill("50000");
+  await page.locator("#u-irrigation").selectOption("cost");
+  await page.locator('#ushr-form button[type="submit"]').click();
+  assert.match(await page.locator("#ushr-result").innerText(), /2,500/);
+  await page.locator("#u-irrigation").selectOption("mixed");
+  await page.locator("#ushr-form button[type="submit"]').click();
+  assert.match(await page.locator("#ushr-result").innerText(), /mixed irrigation/i);
+  await page.locator("#u-mixed-confirm").check();
+  await page.locator('#ushr-form button[type="submit"]').click();
+  assert.match(await page.locator("#ushr-result").innerText(), /3,750/);
+  await page.locator("#u-sect").selectOption("shia");
+  assert.equal(await page.locator("#u-marja-wrap").isVisible(), true);
+  await page.locator("#u-crop").selectOption("wheat");
+  await page.locator("#u-quantity").fill("900");
+  await page.locator("#u-value").fill("100000");
+  await page.locator("#u-irrigation").selectOption("mixed");
+  await page.locator('#ushr-form button[type="submit"]').click();
+  assert.match(await page.locator("#ushr-result").innerText(), /7,500/);
+  await page.locator("#u-crop").selectOption("maize");
+  await page.locator('#ushr-form button[type="submit"]').click();
+  assert.match(await page.locator("#ushr-result").innerText(), /four specified crops/i);
+
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   assert.equal(overflow, false, "English page must not overflow a 375px viewport");
   await page.locator('#zakat-form button[type="submit"]').scrollIntoViewIfNeeded();
