@@ -109,24 +109,10 @@ GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
 # Distinctive, query-matched explanations benchmarked against calculator competitors.
 # Keep one canonical page per intent and explain assumptions instead of duplicating pages.
 
-GUIDE_EXTRA["profit-loss-calculator"].extend([
-    ("Build cost of goods sold from stock records", [
-        "Before entering Business P&L, calculate cost of goods sold (COGS) for the same accounting period: opening inventory + net purchases + direct inward costs − closing inventory, where net purchases exclude the inward freight or handling shown separately. Closing stock remains an asset, so it is not charged to this period's COGS. If your purchase total already includes inward freight or handling, do not add it again. Use a consistent inventory valuation method and avoid counting a purchase, freight charge or item twice.",
-        "Worked shop example: opening saleable stock is PKR 100,000, net purchases excluding inward freight are PKR 70,000, direct inward freight and handling are PKR 10,000, and closing saleable stock is PKR 30,000. COGS is PKR 100,000 + PKR 70,000 + PKR 10,000 − PKR 30,000 = PKR 150,000. If net sales for the same period are PKR 220,000, gross profit is PKR 70,000. After PKR 40,000 of other operating expenses, operating profit is PKR 30,000 and operating margin is PKR 30,000 ÷ PKR 220,000 × 100 = 13.64%. Enter PKR 150,000 in the COGS field, not the full purchases figure.",
-    ]),
-    ("Profit is not the same as cash available", [
-        "A business can report operating profit while some customers have not paid. If PKR 35,000 of the example's sales remain unpaid at month-end, that receivable may be part of reported sales but is not money in the bank. Supplier payment timing, stock purchases, loan principal, tax timing and owner withdrawals also change cash movement.",
-        "This calculator estimates product profit or a simplified operating result from the values entered. It does not calculate cash flow, working capital, receivables, payables, depreciation or a complete statutory income statement. Reconcile the estimate with your accounting records before using it for tax, lending or formal reporting.",
-    ]),
-])
 
 
-GUIDE_EXTRA["profit-loss-calculator"].append(
-    ("Load the full per-item cost before trusting product margin", [
-        "Product Profit mode accepts one unit-cost figure and one selling price. It does not separately model payment or marketplace fees, customer-acquisition cost, packaging, storage, seller-paid delivery or returns. If you want those costs included in the per-item result, allocate the relevant amount to each unit and include it in the unit-cost input. If you enter purchase cost alone, read the result as pre-fee product contribution, not take-home profit.",
-        "Worked example: purchase cost is PKR 1,000 per item, allocated marketplace and payment fees are PKR 60, seller-paid delivery and packaging are PKR 90, and advertising cost per acquired sale is PKR 50. The loaded unit cost is PKR 1,200. At a selling price of PKR 1,500, estimated product profit is PKR 300 and margin is 20%. If you enter only the PKR 1,000 purchase cost, the calculator shows PKR 500 and 33.33% margin before those omitted costs. Do not include the same fee in both loaded unit cost and Business P&L expenses.",
-    ])
-)
+
+
 
 GUIDE_EXTRA["years-to-days-calculator"].append(
     ("365 days, 365.25 days and 365.2425 days per year", [
@@ -250,28 +236,13 @@ GUIDE_EXTRA["query-calculator"].extend([
 
 # Phase 1 priority-page additions: query-specific examples and practical limits.
 
-GUIDE_EXTRA["profit-loss-calculator"].append(
-    ("Pakistan shop example: include direct selling costs", [
-        "Suppose a shop buys an item for PKR 800 and pays PKR 50 freight plus PKR 30 packaging before sale. If those direct costs are included, the product cost is PKR 880. Selling it for PKR 1,100 gives PKR 220 profit. Markup on cost is 220 / 880 x 100 = 25%, while gross margin on selling price is 220 / 1,100 x 100 = 20%.",
-        "If the PKR 50 freight and PKR 30 packaging are not included in the product cost, the displayed product profit will be overstated by PKR 80. Enter the full cost relevant to the calculation, and keep tax, refunds, platform charges and other operating expenses separate unless the selected mode and inputs include them.",
-    ])
-)
+
 
 # Focused educational depth for the Zakat, BMI and profit/loss tools.
 # Zakat guidance is maintained in build.py's bilingual Zakat page entry.
-GUIDE_EXTRA["bmi-calculator"].append(
-    ("Pakistan and South Asia context", [
-        "Body composition and the distribution of body fat can differ between populations, and some South Asian guidance discusses cardiometabolic risk at lower BMI values than the standard international adult cut-offs. The WHO 2004 Expert Consultation identified 23.0 and 27.5 kg/m² as additional public-health action points, while noting that one new cutoff could not be set for every Asian population. These action points are not a replacement for the standard WHO adult categories shown by this calculator. A qualified local health professional can interpret BMI alongside waist measurement, medical history and other relevant information. This page does not assign a South Asian diagnosis or provide a personal risk estimate.",
-        "Clinical guidance adds a second layer to those public-health action points. The 2026 Standards of Care in Overweight and Obesity recommends screening Asian-background adults for excess adiposity from BMI 23 kg/m². For a clinical diagnosis of obesity, it uses BMI 27.5 kg/m² or above, or BMI 23–27.4 together with central adiposity (waist-to-height ratio at least 0.5 or waist circumference at least 80 cm for women or 90 cm for men). The standards note that some Asian countries may need population-specific cutoffs. NHS guidance also advises adults with BMI below 35 to keep their waist below half their height; for a height of 175 cm, half is 87.5 cm. These are clinical screening and assessment criteria, not a diagnosis from this calculator. This tool does not ask for waist measurements or apply ethnicity-specific categories.",
-    ])
-)
 
-GUIDE_EXTRA["profit-loss-calculator"].extend([
-    ("When product profit differs from operating profit", [
-        "Suppose a business records PKR 100,000 in revenue, PKR 60,000 in cost of goods sold and PKR 15,000 in entered operating expenses. Gross profit is PKR 40,000. Net operating profit is PKR 25,000, and operating margin is PKR 25,000 ÷ PKR 100,000 × 100 = 25%. This business-level result is not the same as the markup or gross margin on one product.",
-        "Product mode compares one item's cost price with its selling price. Business mode uses total revenue, cost of goods sold and the other operating expenses entered. Costs not entered, including interest, tax, refunds or other charges, are not inferred. Use the mode that matches the question and reconcile the estimate with invoices and business records.",
-    ]),
-])
+
+
 
 GUIDE_EXTRA["years-to-days-calculator"].append(
     ("Search questions about years, months and exact dates", [
