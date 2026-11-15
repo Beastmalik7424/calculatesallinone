@@ -169,6 +169,19 @@ for source_path, raw in pages.items():
             candidate = candidate / "index.html"
         check(candidate.exists(), source_path + ": broken internal link " + href)
 
+
+# The South Asian BMI action points must be attributed to the WHO expert consultation,
+# while the local Pakistan dietary guideline is also cited for national context.
+bmi_page = read(ROOT / "bmi-calculator" / "index.html")
+bmi_text = visible_main(bmi_page)
+check('href="https://pubmed.ncbi.nlm.nih.gov/14726171/"' in bmi_page,
+      "BMI South Asia note must cite the WHO expert consultation for 23 and 27.5 action points")
+check("WHO expert consultation" in bmi_text and "23" in bmi_text and "27.5" in bmi_text,
+      "BMI South Asia note must explain the WHO Asian-population action points")
+check('href="https://pc.gov.pk/uploads/report/Pakistan_Dietary_Nutrition_2019.pdf"' in bmi_page and
+      "Pakistan's 2019 Dietary Guidelines for Better Nutrition" in bmi_text,
+      "BMI South Asia note must cite Pakistan's national dietary guideline for local context")
+
 if errors:
     print("SEO SEVEN-PAGE AUDIT: FAIL")
     for error in errors:
