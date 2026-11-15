@@ -171,15 +171,16 @@ for source_path, raw in pages.items():
 
 
 # The South Asian BMI action points must be attributed to the WHO expert consultation,
-# not to Pakistan's national dietary guidelines.
+# while the local Pakistan dietary guideline is also cited for national context.
 bmi_page = read(ROOT / "bmi-calculator" / "index.html")
 bmi_text = visible_main(bmi_page)
 check('href="https://pubmed.ncbi.nlm.nih.gov/14726171/"' in bmi_page,
       "BMI South Asia note must cite the WHO expert consultation for 23 and 27.5 action points")
 check("WHO expert consultation" in bmi_text and "23" in bmi_text and "27.5" in bmi_text,
       "BMI South Asia note must explain the WHO Asian-population action points")
-check("Pakistan's 2019 Dietary Guidelines for Better Nutrition describe Asian-population public-health action points" not in bmi_text,
-      "BMI South Asia note must not attribute WHO action points to Pakistan's dietary guidelines")
+check('href="https://pc.gov.pk/uploads/report/Pakistan_Dietary_Nutrition_2019.pdf"' in bmi_page and
+      "Pakistan's 2019 Dietary Guidelines for Better Nutrition" in bmi_text,
+      "BMI South Asia note must cite Pakistan's national dietary guideline for local context")
 
 if errors:
     print("SEO SEVEN-PAGE AUDIT: FAIL")
