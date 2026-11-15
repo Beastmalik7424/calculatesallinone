@@ -195,7 +195,7 @@ TOOLS = [
                 "Using a hypothetical silver price of PKR 3,000 per gram, 612.36 × 3,000 = PKR 1,837,080. If net wealth is PKR 700,000, it is below this personal silver Nisab and the estimate is zero. If net wealth is PKR 2,000,000, 2.5% is PKR 50,000."
             ]),
             ("Limitations and professional opinion", [
-                "The calculator uses the asset values, liabilities and metal price entered by the user. It does not fetch a live metal price or decide whether a particular asset or liability qualifies under a personal religious ruling. Ask a qualified scholar about the method and eligibility that apply to your circumstances. Confirm the bank deduction threshold for the relevant year before relying on it."
+                "The calculator uses the asset values, liabilities and metal price entered by the user. It does not fetch a live metal price or decide whether a particular asset or liability qualifies under a personal religious ruling. Ask a qualified scholar about the method and eligibility that apply to your circumstances. The bank deduction threshold changes yearly. Confirm the amount for the relevant year before relying on it."
             ]),
         ],
         "faq": [
