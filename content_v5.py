@@ -11,32 +11,7 @@ REVIEW_STATUS = {
 }
 
 GUIDE_EXTRA = {
-    "zakat-calculator": [
-        ("Who must pay Zakat", [
-            "Zakat is an obligation on a Muslim who owns zakatable wealth above the Nisab threshold for a full lunar year. The rules apply to net wealth after the debts due now are subtracted.",
-            "Scholars agree on the general obligation, but they differ on details. This is why the calculator states its method and asks you to confirm lunar year timing yourself.",
-        ]),
-        ("Assets usually included", [
-            "Cash in hand, bank savings, gold and silver held as wealth, goods held for sale in a business, and money owed to you that you expect to receive are the most common zakatable items.",
-            "Gold and silver jewelry worn for personal use is treated differently by different schools. Check your own school's ruling or ask a scholar before you count it.",
-        ]),
-        ("Assets usually excluded", [
-            "Your home that you live in, your everyday furniture, your vehicle used for daily travel, and tools used for work are generally not zakatable wealth.",
-            "Rental income and property held for rent follow their own rules. The rent itself, or the value of property bought for resale, can be zakatable depending on the ruling you follow.",
-        ]),
-        ("Lunar year and timing", [
-            "The hawl is one lunar year, which is about 354 days. It starts from the date your wealth first reached Nisab and stays above it.",
-            "If your wealth falls below Nisab during the year, the count usually restarts once it rises above Nisab again. Keep a dated record of your balances to make this easier to check.",
-        ]),
-        ("Zakat arithmetic and worked example", [
-            "For commonly zakatable wealth, the calculation is 2.5% of net zakatable wealth when the applicable Nisab and lunar-year requirements are met. This tool uses a silver-based Nisab of 612.36 grams multiplied by the entered silver price per gram. A gold-based reference sometimes used is 87.48 grams; the applicable basis depends on scholarly guidance.",
-            "Example: PKR 500,000 savings + PKR 200,000 precious metals + PKR 100,000 trading inventory = PKR 800,000 gross assets. After PKR 150,000 qualifying debts, net wealth is PKR 650,000. At PKR 250 per gram of silver, Nisab = 612.36 × 250 = PKR 153,090. The arithmetic gives Zakat = 650,000 × 0.025 = PKR 16,250.",
-        ]),
-        ("Zakat limitations and common questions", [
-            "Only deduct debts qualifying under the method you follow; treatment of near-term instalments, mortgages and other liabilities varies. Do not assume all long-term debt is deductible. Check current valuations, Nisab basis and lunar-year timing.",
-            "Is Zakat always 2.5%? Not for every asset category. Is a primary home zakatable? A home used as a residence is generally treated differently from trading inventory, but circumstances vary. This is a calculation aid, not a religious ruling. Consult a qualified scholar. Reference: https://islamic-relief.org/news/how-to-calculate-and-pay-zakat/",
-        ]),
-    ],
+    "zakat-calculator": [],
     "bmi-calculator": [
         ("Why BMI is used", [
             "BMI is a simple, low cost measure that is used in large population studies and in clinics as a first step. It needs only weight and height, so it is easy to repeat over time.",
@@ -186,13 +161,13 @@ HOME_EXTRA = {
     "en": {
         "heading": "What can you calculate with these free tools?",
         "paragraphs": [
-            "CalculatesAll brings together free browser-based tools for everyday calculations. Use the Zakat calculator to estimate net zakatable wealth after eligible debts, check a silver Nisab threshold using the price you enter, and confirm the lunar-year condition yourself. Religious rulings can differ, so review the stated method and consult a trusted qualified scholar for your circumstances.",
+            "CalculatesAll brings together free browser-based tools for everyday calculations. Use the Zakat calculator to compare silver or gold Nisab methods, enter a supported ISO currency code, list eligible assets and debts, and confirm the lunar-year condition. Pakistan's statutory bank deduction threshold is explained separately. Religious rulings can differ, so review the stated method and consult a trusted qualified scholar for your circumstances.",
             "Use the profit and loss calculator to compare selling price with cost, and the discount calculator to work out savings and a final price. For example, a 20% discount on a price of 1,000 leaves 800 before any applicable tax or fees. Your actual business profit may also depend on shipping, packaging, payment fees, tax and other costs not entered into a simple calculator.",
             "The adult BMI calculator uses weight divided by height squared, with unit handling for metric and imperial inputs. BMI is a screening measure, not a diagnosis, and it does not directly measure body fat. Read the limitations and the World Health Organization's adult BMI information before using the result to discuss health with a clinician: <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index\">WHO body mass index information</a>.",
             "The age calculator works with calendar dates, the unit converter applies defined conversion factors, and the stopwatch and tasbih counter support simple timing and counting tasks. For a reference example, one inch is defined as exactly 25.4 millimetres. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.nist.gov/pml/owm/si-units-length\">National Institute of Standards and Technology's length-unit reference</a> for the inch definition.",
             "How are results checked? Each calculator page explains its formula, includes a worked example where it helps, and states important limitations. Worked examples are recalculated whenever a tool changes, and reported errors are corrected on the affected page. For high-stakes financial, medical or religious decisions, confirm the result with a qualified professional.",
             "Calculations are designed to run in your browser without sending calculator entries to our server. The tasbih counter stores its count on your device. The site may load third-party advertising or other resources, which are described in the privacy policy. Avoid entering sensitive personal information into any online tool unless you understand how it handles data.",
-            "The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/calorie-calculator/\">adult calorie calculator</a> estimates maintenance energy for adults using the Mifflin–St Jeor equation and a stated activity factor. It is an estimate, not a measured metabolic rate or a diet prescription. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/emi-calculator/\">EMI calculator</a> estimates a fixed-rate monthly installment and shows a repayment schedule. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/compound-interest-calculator/\">compound interest calculator</a> models one starting balance at a fixed nominal annual rate and compounding frequency, excluding additional deposits, fees and taxes. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/percentage-calculator/\">percentage calculator</a> and <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/fraction-calculator/\">fraction calculator</a> explain the arithmetic steps, while the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/date-calculator/\">date calculator</a> counts signed Gregorian calendar days and the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/years-to-days-calculator/\">Years to Days calculator</a> distinguishes fixed-year conversions from exact calendar-date results. The Zakat calculator applies the stated silver Nisab of 612.36 grams and a 2.5% rate to net zakatable wealth when the stated conditions are met. Read the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/zakat-calculator/\">Zakat method</a> and note that scholarly rulings can differ. The adult BMI tool uses the WHO adult categories: below 18.5, 18.5 to 24.9, 25.0 to 29.9, and 30 or above. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight\" rel=\"noopener noreferrer\">WHO fact sheet</a> for context.",
+            "The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/calorie-calculator/\">adult calorie calculator</a> estimates maintenance energy for adults using the Mifflin–St Jeor equation and a stated activity factor. It is an estimate, not a measured metabolic rate or a diet prescription. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/emi-calculator/\">EMI calculator</a> estimates a fixed-rate monthly installment and shows a repayment schedule. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/compound-interest-calculator/\">compound interest calculator</a> models one starting balance at a fixed nominal annual rate and compounding frequency, excluding additional deposits, fees and taxes. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/percentage-calculator/\">percentage calculator</a> and <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/fraction-calculator/\">fraction calculator</a> explain the arithmetic steps, while the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/date-calculator/\">date calculator</a> counts signed Gregorian calendar days and the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/years-to-days-calculator/\">Years to Days calculator</a> distinguishes fixed-year conversions from exact calendar-date results. The Zakat calculator compares selectable silver or gold Nisab methods, accepts a browser-supported ISO currency code and separates Pakistan's year-specific bank deduction threshold from personal Zakat. It uses user-entered metal prices and does not claim live market data. Read the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/zakat-calculator/\">Zakat method</a> and note that scholarly rulings can differ. The adult BMI tool uses the WHO adult categories: below 18.5, 18.5 to 24.9, 25.0 to 29.9, and 30 or above. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight\" rel=\"noopener noreferrer\">WHO fact sheet</a> for context.",
         ],
         "faq": [
             ("Are the calculators free?", "Yes. The calculators and utility tools are free to use."),
@@ -205,7 +180,7 @@ HOME_EXTRA = {
         "paragraphs": [
             "CalculatesAll میں وہ ٹولز اکٹھے ہیں جو لوگ ہر ہفتے استعمال کرتے ہیں۔ زکوٰۃ اور منافع کے حساب مالی فیصلوں میں مدد دیتے ہیں۔ BMI بالغوں کے لیے ایک اسکریننگ نمبر دیتا ہے۔ عمر، ڈسکاؤنٹ اور یونٹ کے ٹولز روزمرہ حساب کرتے ہیں۔ اسٹاپ واچ اور تسبیح کاؤنٹر وقت اور ذکر کے لیے ہیں۔",
             "ہر ٹول کا صفحہ اس کا فارمولا، ایک مثال اور اس کی حدود بتاتا ہے۔ اس سے آپ نتیجہ خود جانچ سکتے ہیں اور جان سکتے ہیں کہ کب کسی ماہر سے رجوع کرنا ہے۔",
-            "مالی حساب کے لیے زکوٰۃ کیلکولیٹر میں نقد رقم، بچت، متعلقہ اثاثے، واجب الادا قرض اور چاندی کی فی گرام قیمت درج کریں۔ منافع اور نقصان کے ٹول میں قیمت خرید اور قیمت فروخت ایک ہی کرنسی میں لکھیں۔ ڈسکاؤنٹ کیلکولیٹر اصل قیمت اور رعایت کا فیصد استعمال کرتا ہے، مگر ٹیکس، شپنگ اور دکان کی اضافی فیس خود شامل نہیں کرتا۔",
+            "مالی حساب کے لیے زکوٰۃ کیلکولیٹر میں اپنی کرنسی کا ISO کوڈ، چاندی یا سونے کا نصاب، اثاثے، قابلِ کٹوتی قرض اور متعلقہ دھات کی فی گرام قیمت درج کریں۔ پاکستان کی بینک کٹوتی کی سرکاری حد ذاتی شرعی نصاب سے الگ بیان کی گئی ہے۔ منافع اور نقصان کے ٹول میں قیمت خرید اور قیمت فروخت ایک ہی کرنسی میں لکھیں۔ ڈسکاؤنٹ کیلکولیٹر اصل قیمت اور رعایت کا فیصد استعمال کرتا ہے، مگر ٹیکس، شپنگ اور دکان کی اضافی فیس خود شامل نہیں کرتا۔",
             "صحت کے لیے BMI کیلکولیٹر بالغ افراد کے وزن اور قد سے ایک عمومی اسکریننگ نمبر نکالتا ہے، تشخیص نہیں کرتا۔ عمر کیلکولیٹر تاریخ پیدائش سے سال، مہینے اور دن گنتا ہے، جبکہ یونٹ کنورٹر وزن، لمبائی اور درجہ حرارت کی اکائیاں بدلتا ہے۔ نتیجہ استعمال کرنے سے پہلے درج کردہ اکائیوں اور مثال کو دوبارہ دیکھیں۔",
             "تسبیح کاؤنٹر کی گنتی اسی آلے کے براؤزر میں رہتی ہے اور ڈیٹا صاف کرنے سے مٹ سکتی ہے۔ اسٹاپ واچ روزمرہ کاموں کے وقت کے لیے ہے، سرکاری کھیلوں یا سائنسی پیمائش کے لیے تصدیق شدہ آلے کا متبادل نہیں۔ حساب براؤزر میں کیا جاتا ہے، تاہم اہم مالی، طبی یا دینی فیصلے کے لیے متعلقہ ماہر سے تصدیق ضروری ہے۔",
         ],
@@ -226,7 +201,7 @@ TRUST_EXTRA = {
         "We read every message. Confirmed formula or content errors are corrected on the affected tool page.",
     ],
     "/methodology": [
-        "Zakat uses the silver Nisab of 612.36 grams and 2.5 percent of net wealth. It does not show an amount until the Nisab and lunar year checks are complete.",
+        "Zakat compares eligible net wealth with the selected silver or gold Nisab, uses the metal price and ISO currency entered by the user, and applies 2.5 percent only when the selected threshold and lunar-year conditions are confirmed. Pakistan's statutory bank deduction threshold is a separate year-specific rule.",
         "BMI uses weight divided by height squared in metric units, and the equivalent 703 factor in imperial units. Categories follow the World Health Organization adult ranges.",
         "Profit and discount calculations use percentages with a clear base. Age is calculated from calendar dates on the Gregorian calendar. Unit conversions use fixed factors from published definitions.",
         "For a money calculation, the most important first check is the base used for the percentage. Profit percentage is calculated on cost price, while a discount is calculated on the original price. A business margin uses selling price as its base, so it should not be confused with markup. If shipping, taxes, platform charges or refunds affect the real result, include them separately rather than assuming a simple calculator knows those costs.",
@@ -285,20 +260,7 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
 )
 
 # Focused educational depth for the Zakat, BMI and profit/loss tools.
-GUIDE_EXTRA["zakat-calculator"].extend([
-    ("Pre-payment checklist", [
-        "1. Choose the calculation method you intend to follow and confirm the applicable Nisab basis with a qualified scholar. This page calculates with its stated silver-based Nisab; it does not compare every school or asset rule. 2. Record the date your zakatable wealth first reached the relevant Nisab. 3. List the cash, bank balances, precious metals, trading stock and receivables that your chosen method treats as zakatable. 4. Value those items consistently at the valuation date you are using. 5. List only debts or liabilities that your chosen method permits you to deduct, and do not automatically subtract every future instalment. 6. Check the current silver price per gram from a source you trust and record the date and currency of that quote. 7. Confirm that the required lunar year has elapsed and ask a qualified scholar about any unusual assets, ownership changes or disputed deductions before payment.",
-        "Worked arithmetic check: if eligible net wealth is PKR 650,000 and the entered silver price is PKR 250 per gram, the stated silver Nisab is 612.36 × 250 = PKR 153,090. The net wealth is above that example threshold. If the stated 2.5% method and lunar-year condition also apply, the arithmetic is PKR 650,000 × 0.025 = PKR 16,250. The example does not decide whether those inputs or conditions apply to a particular person.",
-    ]),
-    ("Why silver price and lunar-year confirmation are required", [
-        "The silver price converts the calculator's fixed 612.36-gram silver Nisab into the currency amount used for the comparison. A missing or zero price leaves that threshold unknown, so the tool withholds a Zakat amount rather than silently assuming a market value. Enter a dated price per gram in the same currency as the assets and debts; the calculator does not fetch or verify a live market quote.",
-        "The lunar-year confirmation is a separate condition from the arithmetic. The checkbox records that the user has checked the hawl requirement; it cannot verify the date wealth first reached Nisab or determine how a scholar applies the rule to interruptions or changing balances. The tool withholds the amount until the user confirms this condition. This is a user confirmation, not an automated religious assessment.",
-    ]),
-    ("Arithmetic aid, not a scholarly ruling", [
-        "This calculator performs arithmetic using the silver Nisab, 2.5% rate and inputs shown on the page. It cannot decide which assets count, how personal-use jewellery is treated, which debts may be deducted, whether a lunar year has been completed, or which scholarly opinion applies to your circumstances. Schools and qualified scholars may differ on these questions. Treat the displayed figure as a calculation under the stated assumptions only, not a fatwa or personal religious advice. Before paying, confirm the method and any uncertain asset or liability with a qualified scholar.",
-    ]),
-])
-
+# Zakat guidance is maintained in build.py's bilingual Zakat page entry.
 GUIDE_EXTRA["bmi-calculator"].extend([
     ("What a BMI result is useful for and what it is not", [
         "For adults, BMI is useful as a quick, repeatable screening measure based on weight and height. It can help describe a broad weight category, compare measurements taken consistently over time, and identify when a fuller health discussion may be useful. It is not a direct measurement of body fat, waist fat, muscle, fitness or an individual's disease risk.",

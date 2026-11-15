@@ -36,6 +36,9 @@ URDU_DESCRIPTION_FALLBACKS = {
 VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the verified Urdu BMI threshold-copy correction and source check in this change.
     "/ur/bmi-calculator/": "2026-11-09",
+    # This date records the new global Nisab, currency, asset and Urdu guidance update.
+    "/zakat-calculator/": "2026-11-15",
+    "/ur/zakat-calculator/": "2026-11-15",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
     # This date records the verified Years-to-Days answer examples, calendar distinction and source review.
@@ -169,7 +172,8 @@ def normalize_meta(raw, path, lang):
     title = html.unescape(title_match.group(1).strip())
     title_overrides = {
         "/about/": "About CalculatesAll | Project, Methods & Privacy",
-        "/zakat-calculator/": "Zakat Calculator: Nisab Check & 2.5% Zakat | CalculatesAll",
+        "/zakat-calculator/": "Global Zakat Calculator | Nisab & Currency | CalculatesAll",
+        "/ur/zakat-calculator/": "عالمی زکوٰۃ کیلکولیٹر | نصاب اور کرنسی",
         "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
         "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
         "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
@@ -212,7 +216,7 @@ def normalize_meta(raw, path, lang):
     "/years-to-days-calculator/": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",
     "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
-    "/zakat-calculator/": "Calculate 2.5 percent Zakat on net wealth, check the silver Nisab threshold and lunar-year condition. Confirm personal rulings with a qualified scholar."
+    "/zakat-calculator/": "Estimate Zakat worldwide with silver or gold Nisab, ISO currency, eligible assets and short-term debts. Includes Pakistan's separate bank-deduction rule."
 }
     urdu_description_overrides = {
     "/ur/age-calculator/": "تاریخ پیدائش اور مطلوبہ تاریخ درج کرکے عمر سال، مہینوں اور دنوں میں معلوم کریں۔ کل گزرے دن بھی دیکھیں اور کیلکولیٹر کے تاریخوں کے حساب کا طریقہ سمجھیں۔",
@@ -223,7 +227,7 @@ def normalize_meta(raw, path, lang):
     "/ur/stopwatch/": "براؤزر میں وقت شروع، روکیں اور دوبارہ صفر کریں۔ اسٹاپ واچ سیکنڈ کے سو حصوں تک وقت دکھاتی ہے، مگر درستگی آلے اور براؤزر کی کارکردگی پر منحصر ہو سکتی ہے۔",
     "/ur/tasbih-counter/": "ڈیجیٹل تسبیح کاؤنٹر میں گنتی، منتخب عبارت اور ہدف اسی براؤزر میں محفوظ رکھیں، جب مقامی اسٹوریج دستیاب ہو۔ گنتی واپس لینے اور ری سیٹ کرنے کا طریقہ دیکھیں۔",
     "/ur/unit-converter/": "وزن، لمبائی اور درجہ حرارت کی اکائیاں تبدیل کریں، جیسے کلوگرام سے پاؤنڈ، سینٹی میٹر سے انچ اور سیلسیئس سے فارن ہائیٹ۔ ہر تبدیلی کا نتیجہ فوری دیکھیں۔",
-    "/ur/zakat-calculator/": "چاندی کے نصاب کے مطابق خالص مال پر 2.5 فیصد زکوٰۃ کا حساب کریں۔ نقدی، سونا، چاندی، کاروباری مال اور واجب الادا قرض درج کریں، پھر قمری سال کی شرط کی تصدیق کریں۔"
+    "/ur/zakat-calculator/": "پاکستان اور دنیا بھر میں زکوٰۃ کا تخمینہ لگائیں۔ چاندی یا سونے کا نصاب، کرنسی کوڈ، اثاثے، واجب الادا قرض اور قمری سال منتخب کریں۔"
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
@@ -333,9 +337,11 @@ def main():
         update_stamp = re.compile(r'<p class="mt-8 text-sm text-stone-(?:800|700) dark:text-stone-(?:200|300)">(?:Last updated:|Last reviewed:|آخری جائزہ:) [0-9]{4}-[0-9]{2}-[0-9]{2}.*?</p>', re.S)
         verified_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
         def retain_verified_update(match):
+            if not verified_date:
+                return ""
             stamp = match.group(0)
             expected_prefix = '<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + verified_date + '</p>'
-            return stamp if verified_date and stamp.startswith(expected_prefix) else ""
+            return stamp if stamp.startswith(expected_prefix) else ""
         raw = update_stamp.sub(retain_verified_update, raw, count=1)
         schemas = []
         jsonld_script_pattern = r"""<script\b(?=[^>]*\btype=["']application/ld\+json["'])[^>]*>(.*?)</script>"""

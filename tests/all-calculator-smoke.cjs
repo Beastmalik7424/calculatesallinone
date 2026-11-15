@@ -24,7 +24,7 @@ function element(id, value = "") {
   };
 }
 [
-  "zakat-form","z-cash","z-gold","z-silver","z-stock","z-recv","z-debts","z-silverprice","z-hawl","zakat-result",
+  "zakat-form","z-currency","z-nisab-method","z-cash","z-bank","z-savings","z-gold","z-silver","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-silverprice","z-goldprice","z-hawl","zakat-result",
   "bmi-form","bmi-unit","bmi-height-cm","bmi-height-ftin","bmi-metric","bmi-imperial",
   "b-kg","b-kg-error","b-lb","b-lb-error","bmi-weight-kg","bmi-weight-lb","bmi-weight-kg-group","bmi-weight-lb-group","b-cm","b-cm-error","b-ft","b-ft-error","b-in","b-in-error","bmi-result",
   "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
@@ -32,6 +32,8 @@ function element(id, value = "") {
   "sw-display","sw-start","sw-stop","sw-reset",
   "years-days-form","yd-direction","yd-value","yd-value-label","yd-method","yd-calendar-option","yd-exact-fields","yd-start-date","yd-submit","yd-result","extra-result","calorie-result","qt-result","calc-display"
 ].forEach(id => element(id));
+elements["z-currency"].value = "PKR";
+elements["z-nisab-method"].value = "silver";
 elements["u-cat"].value = "weight";
 elements["bmi-unit"].value = "metric";
 elements["bmi-height-cm"].checked = true;
@@ -70,6 +72,7 @@ const context = {
   clearInterval() {},
   performance: { now: () => clock }
 };
+vm.runInNewContext(fs.readFileSync("static/zakat-calculator.js", "utf8"), context, { filename: "static/zakat-calculator.js" });
 vm.runInNewContext(fs.readFileSync("static/app.js", "utf8"), context, { filename: "static/app.js" });
 handlers.ready();
 function submit(form) {
@@ -133,13 +136,32 @@ assert.equal(elements["yd-submit"].textContent, "Convert Years");
 
 // Zakat: reject invalid negative input before the representative outcomes.
 setValues({"z-cash":-1,"z-silverprice":1}); submit("zakat-form");
-assert.match(elements["zakat-result"].textContent, /zero or a positive value/i, "negative zakatable amounts must be rejected");
+assert.match(elements["zakat-result"].textContent, /zero or greater/i, "negative zakatable amounts must be rejected");
 setValues({"z-cash":500,"z-silverprice":1}); submit("zakat-form");
-assert.match(elements["zakat-result"].textContent, /below Nisab/i);
+assert.match(elements["zakat-result"].textContent, /below the threshold/i);
 setValues({"z-cash":1000,"z-silverprice":1}); elements["z-hawl"].checked = false; submit("zakat-form");
-assert.match(elements["zakat-result"].textContent, /lunar year/i);
+assert.match(elements["zakat-result"].textContent, /lunar Zakat year/i);
 elements["z-hawl"].checked = true; submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /2\.5 percent.*25/i);
+
+// Global currency, gold Nisab, expanded assets, prior payment and transparent result breakdown.
+setValues({
+  "z-cash": 100000, "z-bank": 50000, "z-savings": 0, "z-debts": 10000,
+  "z-goldprice": 1000, "z-paid": 1000
+});
+elements["z-currency"].value = "USD";
+elements["z-nisab-method"].value = "gold-87";
+elements["z-hawl"].checked = true;
+submit("zakat-form");
+assert.match(elements["zakat-result"].textContent, /2\.5 percent/i);
+assert.match(elements["zakat-result"].textContent, /Assets:/i);
+assert.match(elements["zakat-result"].textContent, /Eligible liabilities:/i);
+assert.match(elements["zakat-result"].textContent, /Remaining balance:/i);
+assert.match(elements["zakat-result"].textContent, /2,500/);
+elements["z-currency"].value = "ZZZ";
+submit("zakat-form");
+assert.match(elements["zakat-result"].textContent, /three-letter ISO currency code/i);
+
 
 // BMI: kg/lb weight units, cm/ft-in height, category boundaries, invalid input and hidden fields.
 assert.equal(elements["b-cm"].disabled, false);
@@ -339,7 +361,7 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   assert.match(generated, /id="yd-start-date"/);
   assert.match(generated, /id="yd-calendar-option" value="calendar"/);
   assert.match(generated, /href="https:\/\/calculateallinone\.vercel\.app\/years-to-days-calculator\/"/);
-  assert.match(generated, /20261103-result-sharing-1/);
+  assert.match(generated, /20261115-zakat-global-1/);
   console.log("PASS: exact calendar day count, leap years, invalid dates and generated controls");
 }
 

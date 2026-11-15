@@ -24,6 +24,7 @@ CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").st
 SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
+    "/zakat-calculator/": "2026-11-15",
     "/years-to-days-calculator/": "2026-11-14",
     "/unit-converter/": "2026-11-14",
     "/tasbih-counter/": "2026-11-15",
@@ -49,14 +50,6 @@ NOTICE_BADGES = {
         "تشخیص نہیں",
         "BMI صرف اسکریننگ ہے، تشخیص نہیں۔ یہ جسمانی چربی براہِ راست نہیں ناپتا۔"
     ),
-    ("en", "zakat-calculator"): (
-        "Silver 612.36g · 2.5%",
-        "This calculator uses the silver Nisab of 612.36 g and a 2.5% rate. Gold Nisab and some rulings differ by madhhab. It is not a fatwa. Ask a qualified scholar."
-    ),
-    ("ur", "zakat-calculator"): (
-        "چاندی 612.36g · 2.5٪",
-        "یہ کیلکولیٹر چاندی کا نصاب 612.36 گرام اور 2.5 فیصد شرح استعمال کرتا ہے۔ سونے کے نصاب اور بعض احکام میں فقہی اختلاف ہے۔ مستند عالم سے رجوع کریں۔"
-    ),
 }
 
 
@@ -78,8 +71,6 @@ def attach_notice_badge(ui, slug, language):
         return ui
     if slug == "bmi-calculator":
         return ui.replace("</legend>", badge + "</legend>", 1)
-    if slug == "zakat-calculator":
-        return ui.replace('</label><input id="z-cash"', badge + '</label><input id="z-cash"', 1)
     return ui
 
 
@@ -144,54 +135,108 @@ TOOLS = [
         "category": "money",
         "name": "Zakat Calculator",
         "app": "FinanceApplication",
-        "description": "Calculate Zakat at 2.5 percent on net wealth with a silver Nisab check and lunar year (hawl) confirmation.",
-        "h1": "Zakat Calculator with Nisab Check",
-        "lead": "Enter your savings and assets, then the silver price per gram. The calculator checks Nisab first and shows a Zakat amount only after the Nisab and lunar year conditions are confirmed.",
+        "description": "Estimate Zakat on eligible wealth worldwide with silver or gold Nisab, ISO currency codes, a full asset and liability breakdown, and lunar-year confirmation.",
+        "h1": "Global Zakat Calculator with Silver and Gold Nisab",
+        "lead": "Estimate Zakat in your own currency. Choose a silver or gold Nisab method, enter the current metal price per gram and list eligible assets and short-term liabilities. The calculator shows its assumptions and separates Pakistan's year-specific bank deduction threshold from personal Zakat.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
+            + '<div class="sticky top-20 z-20 shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
+            '<p class="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
             '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-cash", "Cash / savings")
-            + field("z-gold", "Gold value")
-            + field("z-silver", "Silver value")
-            + field("z-stock", "Stock for sale")
-            + field("z-recv", "Expected receivables")
-            + field("z-debts", "Debts due now")
+            '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
+            '<input id="z-currency" name="z-currency" class="@I@" type="text" value="PKR" maxlength="3" minlength="3" pattern="[A-Za-z]{3}" autocapitalize="characters" autocomplete="off" spellcheck="false">'
+            '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.</p></div>'
+            '<div><label class="@L@" for="z-nisab-method">Nisab method</label>'
+            '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
+            '<option value="silver" selected>Silver Nisab (612.36 g)</option>'
+            '<option value="gold-87">Gold Nisab (87.48 g)</option>'
+            '<option value="gold-85">Gold Nisab (85 g)</option>'
+            '</select></div></div>'
+            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300">Enter market values in the selected currency. Leave categories you do not own at zero.</p>'
+            '<div class="grid sm:grid-cols-2 gap-4">'
+            + field("z-cash", "Cash held at home")
+            + field("z-bank", "Bank and current account balances")
+            + field("z-savings", "Savings, deposits and cash equivalents")
+            + field("z-gold", "Eligible gold value")
+            + field("z-silver", "Eligible silver value")
+            + field("z-investments", "Zakatable shares and investments")
+            + field("z-businesscash", "Business cash and bank balance")
+            + field("z-stock", "Trade inventory at current sale value")
+            + field("z-recv", "Recoverable loans and receivables")
+            + field("z-pension", "Accessible pension or retirement amount")
+            + field("z-crypto", "Eligible cryptocurrency holdings")
+            + field("z-property", "Property held for resale")
             + "</div>"
-            + field("z-silverprice", "Silver price per gram", hint="Required to check Nisab. Without it, no Zakat amount is shown.")
-            + check("z-hawl", "Held for one full lunar year (hawl)")
-            + '<button type="submit" class="@B@">Calculate Zakat</button></form>'
+            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal prices for Nisab</h2>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300">Enter a current local market price per gram in the same currency as your assets. Use the price for the selected Nisab method.</p>'
+            '<div class="grid sm:grid-cols-2 gap-4">'
+            + field("z-silverprice", "Silver price per gram")
+            + field("z-goldprice", "24-karat gold price per gram")
+            + "</div>"
+            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible liabilities and payments</h2>'
+            '<div class="grid sm:grid-cols-2 gap-4">'
+            + field("z-debts", "Eligible short-term debts and dues")
+            + field("z-paid", "Zakat already paid for this Zakat year")
+            + "</div>"
+            + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">This is an estimate, not a fatwa. Debt, jewellery, investments and retirement rules differ. Review the guidance below and ask a qualified scholar about your circumstances.</p>'
+            + '</form>'
             + result("zakat-result")
         ),
         "guide": [
-            ("What Zakat is", [
-                "Zakat is 2.5 percent of net zakatable wealth. It is due when wealth is at or above Nisab and has been held for one full lunar year (hawl).",
+            ("What this calculator does", [
+                "This calculator estimates annual Zakat on eligible monetary wealth. It adds the asset values you enter, subtracts the eligible liabilities you report, checks the remaining net wealth against the Nisab method you selected, and applies 2.5 percent when the conditions are met. It is a transparent arithmetic aid, not a religious ruling or a substitute for a scholar who understands your school of law and financial circumstances.",
+                "Use the figures that apply on your own Zakat due date, usually the Hijri date on which your Zakat year completes. The date is personal to you. It is not automatically 1 January, the tax year, Ramadan, or the date you open this page. Keep a record of the date and the price sources you used so you can review the calculation next year."
             ]),
-            ("Step by step", [
-                "Step 1. Add cash, bank savings, gold, silver, business goods for sale and money owed to you that you expect to receive.",
-                "Step 2. Subtract debts due now. If the result is below zero, use zero.",
-                "Step 3. Nisab is 612.36 grams of silver. Multiply 612.36 by the silver price per gram you entered.",
-                "Step 4. If net wealth is below Nisab, no Zakat is due. If it is above Nisab and the lunar year is complete, Zakat equals net wealth multiplied by 0.025.",
+            ("Choose a Nisab method carefully", [
+                "Nisab is the minimum qualifying level of wealth. This calculator offers three clearly labelled reference weights: 612.36 grams of silver, 87.48 grams of gold, and 85 grams of gold. Islamic Relief publishes the 612.36 g silver and 87.48 g gold standards. Some other guidance uses 85 g for gold. These amounts are not interchangeable. The monetary threshold changes with the market price of the selected metal and the currency you use.",
+                "Enter the current local price per gram for the selected metal in the same currency as your assets. For silver Nisab, enter the silver price. For either gold Nisab option, enter a 24-karat gold price. This page does not fetch live commodity prices, convert currencies, or claim that an old sample rate is today's rate. Confirm the metal price with a reliable local bullion or jewellers' source on your calculation date. Ask a qualified scholar which Nisab basis applies to your circumstances."
             ]),
-            ("Worked example", [
-                "Cash and bank savings are 1,000,000. Debts due now are 100,000. Net wealth is 900,000.",
-                "Silver price is 1,000 per gram. Nisab is 612.36 multiplied by 1,000, which is 612,360.",
-                "Net wealth of 900,000 is above Nisab. If one lunar year is complete, Zakat is 900,000 multiplied by 0.025, which is 22,500.",
+            ("Which assets to include", [
+                "Cash includes notes and coins you own. Bank balances include current, savings and similar accounts. Add other savings, fixed deposits, cash equivalents and money set aside for a future purchase when they remain your wealth. Avoid counting the same money twice. If a bank balance is already included in your savings total, do not enter it again in another field.",
+                "Gold and silver should be entered at their eligible current monetary value, not at the original purchase price. Jewellery valuation can depend on the school of law, use, purity, stones and local practice. For mixed jewellery, estimate the metal value separately from stones and workmanship where appropriate. Do not assume that every scholar treats personal jewellery in the same way.",
+                "Investments should reflect the zakatable portion and valuation method relevant to the investment and the scholarly approach you follow. Listed shares, funds, certificates and similar holdings may be treated differently depending on whether they are held for trading, investment income or long-term ownership. Do not automatically enter the full face value of a bond, retirement account or fund without checking its actual eligible value.",
+                "Business owners can include business cash, bank balances, trade inventory valued at its current sale value, and receivables that are reasonably expected to be recovered. Do not enter machinery, shop fittings, tools, delivery vehicles or premises used to operate the business as trade inventory. A loan given to another person should only be included when recovery is expected under the method you follow.",
+                "A pension or retirement account is included here only as the amount you can access or withdraw under the method you follow. Tax, penalties, vesting restrictions and access conditions can materially change that amount. Cryptocurrency is an optional field for holdings treated as zakatable wealth by the scholar or authority you follow. Property is included in this tool only when it is held for resale or trade. Property held for personal use or rental income needs a different analysis."
             ]),
-            ("Common mistakes", [
-                "Using the gold Nisab (87.48 grams) when the silver Nisab applies, or the reverse. This tool uses silver, which is the lower threshold and the more cautious choice for most people.",
-                "Forgetting that the lunar year counts from when the wealth reached Nisab, not from the start of the calendar year.",
-                "Counting personal items that are not held for trade. Rules on personal jewelry and some debts differ between scholars.",
+            ("Which liabilities may be deducted", [
+                "Enter only liabilities that your chosen scholarly approach permits you to deduct. Many contemporary calculation guides focus on debts and instalments due immediately or within the next twelve lunar months, including overdue bills, supplier invoices, rent, taxes and near-term instalments. The treatment of longer-term debts differs. Do not subtract the full outstanding balance of a long mortgage or student loan automatically when only near-term instalments may be deductible under the guidance you follow.",
+                "Do not subtract future household spending that is not yet due, an estimate of ordinary living costs, or interest as though it were an eligible Zakat liability. If you have several debts, list only the amount due within the permitted period and avoid counting the same instalment twice. If you are unsure whether a debt is deductible, calculate both ways for discussion with a qualified scholar rather than presenting one disputed answer as universal."
             ]),
-            ("Limits of this tool", [
-                "This tool follows the common silver Nisab method. Rulings on jewelry, property held for rent, loans to others and debts can differ between legal schools. Confirm your figures with a qualified scholar before you pay.",
+            ("How the calculation works", [
+                "The arithmetic is: total eligible assets minus eligible liabilities equals net zakatable wealth. Net wealth cannot be less than zero in this estimate. The selected Nisab threshold equals the selected metal weight multiplied by the current price per gram you entered. If net wealth is below that threshold, the calculator reports that the threshold is not met. If net wealth reaches or exceeds the threshold but you have not confirmed completion of the lunar year, it explains that the Hawl condition is not confirmed.",
+                "When the selected Nisab is met and you confirm that the lunar Zakat year is complete, the estimate applies 2.5 percent to net zakatable wealth. Zakat already paid for this same Zakat year is then subtracted from the calculated amount. The remaining balance cannot fall below zero. If the amount entered as already paid is greater than the calculated Zakat, the tool flags the excess for review rather than treating it as a negative payment."
             ]),
+            ("Worked example with checkable arithmetic", [
+                "Assume the values are all in PKR. Cash is 300,000, bank balances are 400,000, savings are 100,000, eligible gold is 150,000, business stock is 200,000, and recoverable receivables are 50,000. Total eligible assets are 1,200,000. Assume eligible short-term liabilities are 100,000. Net zakatable wealth is 1,200,000 minus 100,000, which equals 1,100,000.",
+                "For illustration only, assume silver costs PKR 1,000 per gram on the Zakat date. Silver Nisab is 612.36 multiplied by 1,000, which equals PKR 612,360. Net wealth of PKR 1,100,000 is above that threshold. At 2.5 percent, the initial Zakat is PKR 27,500. If PKR 5,000 has already been paid toward this same Zakat year, the remaining balance is PKR 22,500. The example price is hypothetical and must not be reused as a current market quote."
+            ]),
+            ("Personal-use property and other exclusions", [
+                "Personal-use belongings such as your main home, ordinary clothing, household furniture, personal car and tools used for your work are generally not treated as trade inventory in a basic monetary Zakat calculation. A property purchased with the intention of resale is different from the home in which you live. Rental property itself and the rent saved from it can be treated differently, so do not enter the entire value of a rental building in the resale-property field without qualified guidance.",
+                "Agricultural produce, livestock, treasure, business structures, jointly owned assets and complex retirement arrangements can have separate Nisab rules, rates, dates or ownership tests. This calculator is not designed to calculate agricultural or livestock Zakat. It should not force every kind of wealth into a single 2.5 percent formula."
+            ]),
+            ("Pakistan bank deduction threshold is separate", [
+                "Pakistan's official notification for Zakat year 1446–1447 AH set PKR 503,529 as the threshold for source deduction from specified savings, profit-and-loss-sharing and similar bank accounts on the notified Ramadan 2026 deduction date. The State Bank of Pakistan circular forwarded that notification to banks. This is a year-specific statutory bank-deduction threshold for the account types named in the notification. It is not a universal personal Shariah Nisab, does not replace your selected gold or silver method, and must not be carried forward to a later Zakat year without a new official notification.",
+                "If you live in Pakistan, use the currency code PKR and check the latest Ministry of Poverty Alleviation and Social Safety or State Bank of Pakistan notice for the relevant Zakat year. Whether a bank deduction applies to your account can depend on the law, account type, declaration and applicable exemptions. Your personal Zakat calculation may be different from an automatic bank deduction."
+            ]),
+            ("Worldwide currency support, privacy and limitations", [
+                "The currency field accepts a three-letter ISO 4217 currency code, such as PKR, USD, GBP, EUR, SAR, AED or INR, when the browser supports that currency. Every asset, liability and metal price must be entered in the same currency. The currency code changes how the result is labelled and formatted. It does not convert amounts between currencies. If you own assets in several currencies, convert them to one chosen currency using a reliable exchange rate for your Zakat date before entering them, and keep the conversion record.",
+                "The calculator runs in your browser. It does not need your name, bank login, account number or personal financial documents. Do not enter sensitive account credentials. The page does not save your entries to a personal account or provide a secure financial record. Save your own calculation privately if you need a record. Browser support for currency formatting can vary, so use a standard ISO code supported by your device.",
+                "This tool does not decide the religious status of every asset, whether a debt is deductible, whether jewellery is exempt, how jointly owned wealth is divided, how a pension is treated, or how missed Zakat from earlier years should be repaid. It does not calculate agricultural produce or livestock. Its result is only as reliable as the amounts, market prices, currency conversion and scholarly assumptions you enter. Consult a qualified local scholar for a personal ruling."
+            ])
         ],
         "faq": [
-            ("What is Nisab for silver?", "The Nisab used on this page is 612.36 grams of silver. Its money value depends on the silver price you enter."),
-            ("Why does the calculator not show an amount?", "It needs the silver price to check Nisab, and it needs you to confirm the lunar year. The Zakat amount appears only after both conditions are met."),
-            ("Is this a religious ruling?", "No. It is a calculation tool. For a ruling on your situation, consult a qualified scholar."),
+            ("Does this calculator work outside Pakistan?", "Yes. Enter a supported three-letter ISO 4217 currency code and use that same currency for all assets, debts and metal prices. It formats the result in that currency but does not convert currencies."),
+            ("Does it use live gold or silver prices?", "No. Enter the current local price per gram on your Zakat date. The page does not claim to fetch live prices."),
+            ("Which Nisab should I choose?", "The page offers silver 612.36 g, gold 87.48 g and gold 85 g references. Scholars and authorities differ. Follow the qualified scholar or authority relevant to your circumstances."),
+            ("Why are there separate silver and gold price fields?", "Silver Nisab needs the silver price per gram. Either gold Nisab option needs the 24-karat gold price per gram. Enter prices in the same currency as your other figures."),
+            ("Can I deduct my full mortgage or long-term loan?", "Do not automatically deduct the full balance. Debt treatment differs, and many guides focus on amounts due immediately or within the next twelve lunar months. Follow qualified scholarly guidance."),
+            ("Is my home or personal car included?", "Ordinary personal-use property is generally not trade inventory. Property held for resale is a separate category. Rental property and saved rental income need specific guidance."),
+            ("Why is Pakistan's PKR 503,529 figure shown separately?", "It was the statutory source-deduction threshold for specified bank accounts in Zakat year 1446–1447 AH. It is not a universal personal Nisab and is not a current-year figure unless a later official notice confirms it."),
+            ("Is this a fatwa or a guarantee of the amount due?", "No. It is an arithmetic estimate. Jewellery, pensions, investments, debt, business ownership and other cases can require a qualified scholar's decision.")
         ],
-        "sources": "Method based on the silver Nisab of 612.36 grams, which is widely used in South Asian Zakat guidance. Rules differ between schools of law.",
+        "sources": 'Method references: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">Islamic Relief Nisab and Zakat calculation guidance</a>; <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide Zakat calculation principles</a>; <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan 2026 circular</a> and <a class="' + LINK + '" href="https://www.sbp.org.pk/assets/documents/circulars/CL3-Notification_%282%29.pdf" rel="noopener noreferrer">official 1446–1447 AH notification</a>. These sources describe particular methods and statutory rules. They do not establish one ruling for every person.'
     },
     {
         "slug": "bmi-calculator",
@@ -608,7 +653,7 @@ HUB_CONTENT = {
             ("Does the EMI estimate include lender fees?", "No. The EMI estimate uses the principal, annual interest rate and repayment term entered. Processing fees, insurance, variable-rate clauses, taxes and payment-date rules may change the lender's actual quotation."),
             ("Does the compound interest estimate include deposits or taxes?", "No. It assumes a fixed starting principal, a fixed nominal annual rate and the compounding frequency entered. It excludes additional deposits, withdrawals, fees, taxes and inflation. Check whether a provider quotes a nominal rate or an effective annual yield before comparing results."),
             ("Are these tools accurate for business accounts?", "They calculate the arithmetic for the inputs you give, but they do not replace an accountant. Tax rules, inventory valuation, payment fees and accounting policies are not included."),
-            ("Does the Zakat calculator give a religious ruling?", "No. It applies the silver Nisab method described on its page and shows the rules it uses. Scholarly views can differ, so consult a qualified scholar about your circumstances."),
+            ("Does the Zakat calculator give a religious ruling?", "No. It lets you select a silver or gold Nisab reference, enter your own metal price and currency, and estimates the arithmetic when the stated conditions are met. Scholarly views can differ, so consult a qualified scholar about your circumstances."),
         ],
     },
     "health": {
@@ -659,36 +704,80 @@ CATEGORIES = [
 URDU = {
     "zakat-calculator": {
         "name": "زکوٰۃ کیلکولیٹر",
-        "title": "نصاب چیک کے ساتھ زکوٰۃ کیلکولیٹر | CalculatesAll",
-        "description": "چاندی کے نصاب کے ساتھ خالص مال پر 2.5 فیصد زکوٰۃ کا حساب کریں اور قمری سال مکمل ہونے کی تصدیق کریں۔",
-        "h1": "نصاب چیک کے ساتھ زکوٰۃ کیلکولیٹر",
-        "lead": "اپنی بچت اور اثاثے درج کریں، پھر چاندی کی فی گرام قیمت لکھیں۔ کیلکولیٹر پہلے نصاب چیک کرتا ہے اور زکوٰۃ کی رقم اسی وقت دکھاتا ہے جب نصاب اور قمری سال کی شرط پوری ہو۔",
+        "title": "عالمی زکوٰۃ کیلکولیٹر: چاندی اور سونے کا نصاب | CalculatesAll",
+        "description": "پاکستان اور دنیا بھر کے لیے زکوٰۃ کا تخمینہ بنائیں۔ کرنسی کوڈ، چاندی یا سونے کا نصاب، اثاثے، واجب الادا قرض اور قمری سال منتخب کریں۔",
+        "h1": "چاندی اور سونے کے نصاب کے ساتھ عالمی زکوٰۃ کیلکولیٹر",
+        "lead": "اپنی کرنسی میں زکوٰۃ کا تخمینہ لگائیں۔ چاندی یا سونے کا نصاب منتخب کریں، فی گرام موجودہ قیمت اور قابلِ زکوٰۃ اثاثے درج کریں۔ پاکستان میں بینک سے کٹوتی کے سرکاری سالانہ نصاب کو ذاتی شرعی نصاب سے الگ سمجھیں۔",
         "labels": [
-            ("Cash / savings", "نقد اور بینک بچت"),
-            ("Gold value", "سونے کی قیمت"),
-            ("Silver value", "چاندی کی قیمت"),
-            ("Stock for sale", "فروخت کا کاروباری مال"),
-            ("Expected receivables", "وصول ہونے والی رقم"),
-            ("Debts due now", "موجودہ واجب الادا قرض"),
+            ("Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.", "چاندی یا سونے کا نصاب منتخب کریں۔ 2.5٪ کا تخمینہ صرف منتخب نصاب اور حول کی شرائط پوری ہونے پر لاگو ہوتا ہے۔"),
+            ("Currency code (ISO 4217)", "کرنسی کوڈ (ISO 4217)"),
+            ("Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.", "مثالیں: PKR، USD، GBP، EUR، SAR، AED، INR۔ تمام رقوم اور دھاتوں کی قیمت ایک ہی کرنسی میں درج کریں۔"),
+            ("Nisab method", "نصاب کا طریقہ"),
+            ("Silver Nisab (612.36 g)", "چاندی کا نصاب (612.36 گرام)"),
+            ("Gold Nisab (87.48 g)", "سونے کا نصاب (87.48 گرام)"),
+            ("Gold Nisab (85 g)", "سونے کا نصاب (85 گرام)"),
+            ("Eligible assets", "قابلِ زکوٰۃ اثاثے"),
+            ("Enter market values in the selected currency. Leave categories you do not own at zero.", "منتخب کرنسی میں موجودہ مالیت درج کریں۔ جو اثاثہ آپ کے پاس نہیں، اسے صفر رہنے دیں۔"),
+            ("Cash held at home", "گھر میں موجود نقد رقم"),
+            ("Bank and current account balances", "بینک اور کرنٹ اکاؤنٹ کی رقم"),
+            ("Savings, deposits and cash equivalents", "بچت، ڈپازٹس اور نقد کے متبادل"),
+            ("Eligible gold value", "قابلِ زکوٰۃ سونے کی مالیت"),
+            ("Eligible silver value", "قابلِ زکوٰۃ چاندی کی مالیت"),
+            ("Zakatable shares and investments", "قابلِ زکوٰۃ شیئرز اور سرمایہ کاری"),
+            ("Business cash and bank balance", "کاروبار کی نقد اور بینک رقم"),
+            ("Trade inventory at current sale value", "فروخت کے لیے کاروباری مال کی موجودہ قیمت"),
+            ("Recoverable loans and receivables", "واپس ملنے والے قرض اور قابلِ وصول رقوم"),
+            ("Accessible pension or retirement amount", "قابلِ رسائی پنشن یا ریٹائرمنٹ کی رقم"),
+            ("Eligible cryptocurrency holdings", "قابلِ زکوٰۃ کرپٹو کرنسی کی مالیت"),
+            ("Property held for resale", "دوبارہ فروخت کے لیے رکھی گئی جائیداد"),
+            ("Metal prices for Nisab", "نصاب کے لیے دھاتوں کی قیمت"),
+            ("Enter a current local market price per gram in the same currency as your assets. Use the price for the selected Nisab method.", "اپنے اثاثوں والی کرنسی میں فی گرام موجودہ مقامی قیمت درج کریں۔ منتخب نصاب کے مطابق متعلقہ دھات کی قیمت استعمال کریں۔"),
             ("Silver price per gram", "چاندی کی فی گرام قیمت"),
-            ("Held for one full lunar year (hawl)", "یہ مال ایک مکمل قمری سال (حول) تک رکھا گیا ہے"),
-            ("Calculate Zakat", "زکوٰۃ کا حساب کریں"),
-            ("Required to check Nisab. Without it, no Zakat amount is shown.", "نصاب چیک کرنے کے لیے ضروری ہے۔ اس کے بغیر زکوٰۃ کی رقم نہیں دکھائی جائے گی۔"),
+            ("24-karat gold price per gram", "24 قیراط سونے کی فی گرام قیمت"),
+            ("Eligible liabilities and payments", "قابلِ کٹوتی واجبات اور ادائیگیاں"),
+            ("Eligible short-term debts and dues", "قابلِ کٹوتی قلیل مدتی قرض اور واجبات"),
+            ("Zakat already paid for this Zakat year", "اس زکوٰۃ سال میں پہلے ادا کی گئی زکوٰۃ"),
+            ("One full lunar Zakat year (hawl) is complete", "ایک مکمل قمری زکوٰۃ سال (حول) پورا ہو چکا ہے"),
+            ("This is an estimate, not a fatwa. Debt, jewellery, investments and retirement rules differ. Review the guidance below and ask a qualified scholar about your circumstances.", "یہ صرف تخمینہ ہے، فتویٰ نہیں۔ قرض، زیورات، سرمایہ کاری اور پنشن کے احکام میں اختلاف ہو سکتا ہے۔ نیچے دی گئی وضاحت پڑھیں اور اپنے حالات کے مطابق مستند عالم سے رجوع کریں۔"),
+            ("Calculate Zakat", "زکوٰۃ کا حساب کریں")
         ],
-        "how_heading": "حساب کا طریقہ",
-        "faq_heading": "سوالات",
+        "how_heading": "زکوٰۃ کا حساب، نصاب اور ضروری وضاحت",
+        "faq_heading": "اکثر پوچھے جانے والے سوالات",
         "how": [
-            "زکوٰۃ خالص قابلِ زکوٰۃ مال کا 2.5 فیصد ہے۔ یہ اس وقت واجب ہوتی ہے جب مال نصاب کے برابر یا اس سے زیادہ ہو اور ایک مکمل قمری سال تک رکھا گیا ہو۔",
-            "پہلے نقد، بینک بچت، سونا، چاندی، فروخت کے سامان اور وصول ہونے والی رقم کو جمع کریں۔ پھر ابھی واجب الادا قرض منہا کریں۔",
-            "چاندی کا نصاب 612.36 گرام ہے۔ اس کو فی گرام قیمت سے ضرب دیں۔ اگر خالص مال نصاب سے کم ہو تو زکوٰۃ واجب نہیں۔",
-            "مثال: نقد 1,000,000 ہے اور قرض 100,000 ہے تو خالص مال 900,000 ہوگا۔ چاندی 1,000 فی گرام ہو تو نصاب 612,360 ہوگا۔ قمری سال مکمل ہونے پر زکوٰۃ 900,000 کا 2.5 فیصد، یعنی 22,500 ہوگی۔",
-            "زیورات، کرایے کی جائیداد اور قرض کے بعض معاملات میں فقہاء کی آراء مختلف ہیں۔ ادائیگی سے پہلے کسی مستند عالم سے تصدیق کریں۔",
+            "یہ کیلکولیٹر قابلِ زکوٰۃ مالی اثاثوں پر سالانہ زکوٰۃ کا حسابی تخمینہ بناتا ہے۔ پہلے آپ کے درج کردہ اثاثے جمع ہوتے ہیں، پھر وہ واجبات منہا ہوتے ہیں جنہیں آپ کے اختیار کردہ شرعی طریقے کے مطابق منہا کیا جا سکتا ہے۔ اس کے بعد خالص مال کو منتخب نصاب سے ملایا جاتا ہے۔ اگر نصاب اور قمری سال کی شرط پوری ہو تو 2.5 فیصد کا حساب دکھایا جاتا ہے۔ یہ حسابی سہولت ہے، شرعی فتویٰ یا کسی مستند عالم کا متبادل نہیں۔",
+            "اپنی زکوٰۃ کی تاریخ پر موجود مالیت درج کریں۔ عام طور پر یہ وہ ہجری تاریخ ہوتی ہے جب آپ کا زکوٰۃ کا سال مکمل ہوتا ہے۔ ہر شخص کی تاریخ مختلف ہو سکتی ہے۔ یہ خود بخود یکم جنوری، مالی سال، رمضان یا صفحہ کھولنے کی تاریخ نہیں بن جاتی۔ بہتر ہے کہ آپ اپنی تاریخ، دھات کی قیمت کا ماخذ اور استعمال شدہ طریقہ لکھ کر محفوظ رکھیں تاکہ اگلے سال موازنہ کر سکیں۔",
+            "نصاب وہ کم از کم مالیت ہے جس کے پہنچنے پر زکوٰۃ کی ذمہ داری کے دیگر شرائط دیکھی جاتی ہیں۔ اس کیلکولیٹر میں چاندی 612.36 گرام، سونا 87.48 گرام اور سونا 85 گرام کے تین الگ طریقے ہیں۔ اسلامی ریلیف چاندی کے 612.36 گرام اور سونے کے 87.48 گرام کے معیار بیان کرتا ہے۔ بعض دیگر رہنمائی میں سونے کے لیے 85 گرام استعمال ہوتا ہے۔ یہ مقداریں ایک دوسرے کے برابر نہیں ہیں۔ اپنے فقہی مسلک اور مقامی معتبر رہنمائی کے مطابق طریقہ منتخب کریں۔",
+            "چاندی کا نصاب منتخب ہو تو چاندی کی فی گرام موجودہ قیمت درج کریں۔ سونے کے دونوں طریقوں کے لیے 24 قیراط سونے کی فی گرام قیمت درکار ہے۔ قیمت اسی کرنسی میں ہونی چاہیے جس میں آپ نے اپنے اثاثے اور قرض درج کیے ہیں۔ یہ صفحہ لائیو مارکیٹ قیمت حاصل کرنے کا دعویٰ نہیں کرتا۔ اپنی زکوٰۃ کی تاریخ پر مقامی معتبر صرافہ، بلین یا جیولرز کے ذریعے قیمت کی تصدیق کریں۔ پرانی مثال کی قیمت کو آج کی قیمت نہ سمجھیں۔",
+            "نقد رقم میں گھر کے نوٹ اور سکے شامل ہو سکتے ہیں۔ بینک بیلنس میں کرنٹ، سیونگ اور ملتے جلتے اکاؤنٹس شامل کریں۔ دوسری بچت، فکسڈ ڈپازٹ اور نقد کے متبادل بھی شامل ہو سکتے ہیں، بشرطیکہ وہ آپ کی ملکیت ہوں اور آپ کے اختیار کردہ طریقے میں قابلِ زکوٰۃ ہوں۔ ایک ہی رقم کو دو خانوں میں نہ لکھیں۔ اگر بینک بیلنس پہلے ہی بچت کے مجموعے میں شامل ہے تو اسے دوبارہ شامل نہ کریں۔",
+            "سونے اور چاندی کی مالیت موجودہ قابلِ اطلاق مارکیٹ ویلیو کے مطابق درج کریں، خریداری کی پرانی قیمت کے مطابق نہیں۔ زیورات کے حکم میں فقہی مسلک، استعمال، خالص دھات، پتھر اور مقامی عمل کے لحاظ سے اختلاف ہو سکتا ہے۔ اگر زیور میں پتھر یا دیگر مواد شامل ہو تو مناسب طریقے سے دھات کی مالیت الگ دیکھیں۔ ہر عالم یا ادارے کا ذاتی زیورات کے بارے میں ایک ہی حکم نہیں ہوتا۔",
+            "شیئرز، فنڈز، سرٹیفکیٹس اور دوسری سرمایہ کاری کے لیے صرف وہ مالیت درج کریں جو آپ کے اختیار کردہ شرعی طریقے میں قابلِ زکوٰۃ ہو۔ تجارت کے لیے رکھی گئی سرمایہ کاری اور طویل مدت کے لیے رکھی گئی سرمایہ کاری کا حکم مختلف ہو سکتا ہے۔ کسی بانڈ، پنشن یا فنڈ کی پوری اصل رقم کو خود بخود قابلِ زکوٰۃ نہ سمجھیں۔ اس کی حقیقی قابلِ وصول یا قابلِ زکوٰۃ مالیت معلوم کریں اور ضرورت ہو تو عالم سے پوچھیں۔",
+            "کاروبار کے لیے کاروباری نقد، بینک رقم، فروخت کے لیے موجود مال کی موجودہ فروختی قیمت اور وہ قابلِ وصول رقم شامل ہو سکتی ہے جس کی وصولی کی توقع ہو۔ دکان کی مشینری، فرنیچر، کام کے اوزار، ڈیلیوری گاڑی یا کاروبار میں استعمال ہونے والی عمارت کو فروخت کے مال کے طور پر شامل نہ کریں۔ کسی دوسرے کو دیا گیا قرض اسی وقت شامل کریں جب آپ کے اختیار کردہ طریقے کے مطابق اس کی واپسی متوقع ہو۔",
+            "پنشن یا ریٹائرمنٹ اکاؤنٹ کے خانے میں صرف وہ رقم درج کریں جو متعلقہ طریقے کے مطابق واقعی قابلِ رسائی یا نکلوائی جا سکتی ہو۔ ٹیکس، جرمانہ، ویسٹنگ کی شرط اور رقم نکالنے کی پابندیاں اصل قابلِ وصول رقم بدل سکتی ہیں۔ کرپٹو کرنسی کا خانہ اختیاری ہے۔ اسے صرف اسی وقت شامل کریں جب آپ کا معتبر عالم یا ادارہ اسے قابلِ زکوٰۃ مال شمار کرتا ہو۔ جائیداد کا خانہ صرف دوبارہ فروخت یا تجارت کے لیے رکھی گئی جائیداد کے لیے ہے۔",
+            "قرض میں صرف وہ واجبات درج کریں جنہیں آپ کے اختیار کردہ فقہی طریقے کے مطابق منہا کیا جا سکتا ہے۔ بہت سے معاصر رہنما فوری واجب الادا قرض، بقایا بل، سپلائر کی رقم، کرایہ، ٹیکس اور اگلے بارہ قمری مہینوں میں واجب ہونے والی قسطوں پر توجہ دیتے ہیں۔ طویل مدتی قرض کا پورا بقایا خود بخود منہا نہ کریں۔ رہن، ہوم لون اور تعلیمی قرض کے بارے میں احکام مختلف ہو سکتے ہیں۔",
+            "آنے والے گھریلو اخراجات جو ابھی واجب نہیں ہوئے، عام مستقبل کے اخراجات کا اندازہ، یا سود کو خود بخود قابلِ کٹوتی قرض نہ سمجھیں۔ اگر کئی قسطیں ہیں تو صرف وہ رقم درج کریں جو مقررہ مدت میں واجب ہوتی ہے۔ ایک ہی قسط کو دو مرتبہ منہا نہ کریں۔ اگر کسی قرض کی کٹوتی کے بارے میں یقین نہیں تو دونوں صورتوں کا حساب بنا کر مستند عالم سے پوچھیں، اختلافی مسئلے کو سب کے لیے ایک ہی حکم نہ بنائیں۔",
+            "حساب کا بنیادی طریقہ یہ ہے: کل قابلِ زکوٰۃ اثاثے منفی قابلِ کٹوتی واجبات برابر خالص قابلِ زکوٰۃ مال۔ خالص مال صفر سے کم نہیں دکھایا جاتا۔ منتخب نصاب کی رقم منتخب دھات کے وزن کو فی گرام قیمت سے ضرب دے کر بنتی ہے۔ اگر خالص مال نصاب سے کم ہو تو کیلکولیٹر بتاتا ہے کہ منتخب نصاب پورا نہیں ہوا۔ اگر نصاب پورا ہو مگر آپ قمری سال مکمل ہونے کی تصدیق نہ کریں تو زکوٰۃ کی واجب رقم نہیں دکھائی جاتی۔",
+            "جب منتخب نصاب پورا ہو اور آپ قمری زکوٰۃ سال مکمل ہونے کی تصدیق کریں تو خالص قابلِ زکوٰۃ مال پر 2.5 فیصد لگایا جاتا ہے۔ اسی زکوٰۃ سال میں پہلے ادا کی گئی رقم اس حساب سے منہا کی جاتی ہے۔ باقی رقم صفر سے کم نہیں ہو سکتی۔ اگر پہلے ادا کی گئی رقم موجودہ حساب سے زیادہ ہو تو کیلکولیٹر زائد ادائیگی کو الگ دکھاتا ہے۔ اس زائد رقم کے اگلے سال یا کسی اور مد میں استعمال کے بارے میں مستند عالم سے رہنمائی لیں۔",
+            "مثال کے طور پر تمام رقوم پاکستانی روپے میں ہیں۔ گھر کی نقد رقم 300,000، بینک بیلنس 400,000، دوسری بچت 100,000، قابلِ زکوٰۃ سونا 150,000، کاروباری مال 200,000 اور قابلِ وصول رقم 50,000 ہے۔ کل اثاثے 1,200,000 بنتے ہیں۔ اگر قابلِ کٹوتی قلیل مدتی قرض 100,000 ہو تو خالص مال 1,100,000 ہوگا۔",
+            "صرف مثال کے لیے فرض کریں کہ زکوٰۃ کی تاریخ پر چاندی کی فی گرام قیمت 1,000 روپے ہے۔ چاندی کا نصاب 612.36 ضرب 1,000 یعنی 612,360 روپے بنتا ہے۔ خالص مال 1,100,000 روپے اس نصاب سے زیادہ ہے۔ 2.5 فیصد کے حساب سے ابتدائی زکوٰۃ 27,500 روپے ہوگی۔ اگر اسی زکوٰۃ سال میں 5,000 روپے پہلے ادا کیے جا چکے ہوں تو باقی رقم 22,500 روپے ہوگی۔ مثال کی قیمت فرضی ہے، اسے موجودہ بازار کی قیمت نہ سمجھیں۔",
+            "ذاتی استعمال کی چیزیں مثلاً رہائشی گھر، عام لباس، گھریلو فرنیچر، ذاتی گاڑی اور کام کے اوزار عام طور پر فروخت کے کاروباری مال کے برابر نہیں ہوتے۔ دوبارہ فروخت کے ارادے سے خریدی گئی جائیداد ذاتی رہائش سے مختلف ہے۔ کرایے کی عمارت کی پوری مالیت اور اس سے حاصل ہونے والی بچت کا حکم الگ ہو سکتا ہے۔ رہائشی یا کرایے کی جائیداد کی پوری قیمت اس خانے میں درج نہ کریں جب تک مستند رہنمائی نہ لے لیں۔",
+            "زرعی پیداوار، مویشی، خزانہ، مشترکہ ملکیت، کاروباری مستقل اثاثے اور پیچیدہ پنشن کے لیے الگ نصاب، شرح، تاریخ یا ملکیت کے اصول ہو سکتے ہیں۔ یہ کیلکولیٹر زرعی یا مویشیوں کی زکوٰۃ نہیں نکالتا۔ ہر قسم کے مال کو ایک ہی 2.5 فیصد کے فارمولے میں شامل کرنا درست نہیں ہوگا۔",
+            "پاکستان میں 1446–1447 ہجری زکوٰۃ سال کے لیے سرکاری نوٹیفکیشن نے مخصوص سیونگ، منافع و نقصان شراکتی اور اسی نوعیت کے بینک اکاؤنٹس سے زکوٰۃ کی کٹوتی کے لیے 503,529 روپے کا نصاب مقرر کیا تھا۔ اس نوٹیفکیشن کو اسٹیٹ بینک آف پاکستان نے بینکوں تک پہنچایا۔ یہ مخصوص اکاؤنٹس اور ایک مخصوص سال کے لیے قانونی کٹوتی کی حد تھی۔ یہ ہر شخص کے ذاتی شرعی نصاب کا متبادل نہیں، نہ ہی اسے نئے سال میں نئی سرکاری اطلاع کے بغیر موجودہ نصاب سمجھنا چاہیے۔",
+            "پاکستان میں رہنے والے افراد کرنسی کوڈ PKR منتخب کریں اور متعلقہ زکوٰۃ سال کے لیے وزارتِ غربت میں کمی اور سماجی تحفظ یا اسٹیٹ بینک آف پاکستان کی تازہ سرکاری اطلاع دیکھیں۔ بینک سے خودکار کٹوتی کا اطلاق اکاؤنٹ کی قسم، قانون، بیان اور قابلِ اطلاق استثنا پر منحصر ہو سکتا ہے۔ آپ کی ذاتی زکوٰۃ اور بینک کی کٹوتی ایک جیسی ہونا ضروری نہیں۔",
+            "یہ کیلکولیٹر PKR، USD، GBP، EUR، SAR، AED، INR جیسے تین حروف والے ISO 4217 کرنسی کوڈ قبول کرتا ہے، بشرطیکہ آپ کا براؤزر اسے سپورٹ کرے۔ تمام اثاثے، قرض اور دھات کی قیمت ایک ہی کرنسی میں درج کریں۔ کرنسی کوڈ صرف نتیجے کی علامت اور فارمیٹنگ بدلتا ہے، یہ مختلف کرنسیوں کو خود تبدیل نہیں کرتا۔ اگر آپ کے اثاثے کئی کرنسیوں میں ہیں تو زکوٰۃ کی تاریخ کے قابلِ اعتماد ایکسچینج ریٹ سے پہلے انہیں ایک کرنسی میں تبدیل کریں اور ریکارڈ رکھیں۔",
+            "حساب آپ کے براؤزر میں ہوتا ہے۔ اس کے لیے نام، بینک لاگ اِن، اکاؤنٹ نمبر یا مالی دستاویزات درکار نہیں۔ حساس معلومات یا پاس ورڈ درج نہ کریں۔ صفحہ آپ کے اندراجات کو ذاتی اکاؤنٹ میں محفوظ نہیں کرتا۔ اگر آپ کو ریکارڈ چاہیے تو اسے اپنے محفوظ طریقے سے الگ محفوظ کریں۔ مختلف براؤزرز میں کرنسی فارمیٹنگ کی سپورٹ مختلف ہو سکتی ہے، اس لیے معیاری ISO کوڈ استعمال کریں۔",
+            "یہ ٹول ہر اثاثے کا شرعی حکم، قرض کی کٹوتی، زیورات کی حیثیت، مشترکہ مال کی تقسیم، پنشن کا حکم یا پچھلے سالوں کی رہ جانے والی زکوٰۃ کا طریقہ طے نہیں کرتا۔ اس کا نتیجہ آپ کے درج کردہ اعداد، دھات کی قیمت، کرنسی کی تبدیلی اور فقہی مفروضوں پر منحصر ہے۔ ذاتی فتویٰ اور پیچیدہ مالی صورت حال کے لیے مستند مقامی عالم سے رجوع کریں۔"
         ],
         "faq": [
-            ("چاندی کا نصاب کیا ہے؟", "اس صفحے پر نصاب 612.36 گرام چاندی ہے۔ اس کی رقمی قیمت آپ کی درج کردہ چاندی کی قیمت پر ہے۔"),
-            ("کیلکولیٹر رقم کیوں نہیں دکھاتا؟", "نصاب چیک کرنے کے لیے چاندی کی قیمت اور قمری سال کی تصدیق دونوں ضروری ہیں۔"),
-            ("کیا یہ شرعی فتویٰ ہے؟", "نہیں۔ یہ حساب کا ایک آلہ ہے۔ اپنے معاملے کے فتوے کے لیے کسی مستند عالم سے رجوع کریں۔"),
+            ("کیا یہ کیلکولیٹر پاکستان سے باہر بھی کام کرتا ہے؟", "جی ہاں۔ تین حروف والا ISO 4217 کرنسی کوڈ درج کریں اور تمام اثاثے، قرض اور دھات کی قیمت اسی کرنسی میں رکھیں۔ یہ نتیجہ اسی کرنسی میں دکھاتا ہے لیکن خود کرنسی تبدیل نہیں کرتا۔"),
+            ("کیا سونے اور چاندی کی لائیو قیمت آتی ہے؟", "نہیں۔ اپنی زکوٰۃ کی تاریخ پر فی گرام موجودہ مقامی قیمت درج کریں۔ صفحہ لائیو قیمت حاصل کرنے کا دعویٰ نہیں کرتا۔"),
+            ("کون سا نصاب منتخب کرنا چاہیے؟", "یہاں چاندی 612.36 گرام، سونا 87.48 گرام اور سونا 85 گرام کے طریقے ہیں۔ علماء اور اداروں کی رہنمائی مختلف ہو سکتی ہے۔ اپنے حالات کے مطابق مستند عالم یا معتبر ادارے کا طریقہ اختیار کریں۔"),
+            ("سونے اور چاندی کی قیمت الگ کیوں درج کرنی ہے؟", "چاندی کے نصاب کے لیے چاندی کی فی گرام قیمت درکار ہے۔ دونوں سونے کے طریقوں کے لیے 24 قیراط سونے کی فی گرام قیمت درکار ہے۔"),
+            ("کیا پورا ہوم لون یا طویل مدتی قرض منہا کر سکتا ہوں؟", "پورا بقایا خود بخود منہا نہ کریں۔ بہت سے طریقوں میں فوری یا اگلے بارہ قمری مہینوں میں واجب قسطوں کو دیکھا جاتا ہے۔ اپنے فقہی طریقے کے مطابق مستند رہنمائی لیں۔"),
+            ("کیا میرا ذاتی گھر یا گاڑی شامل ہے؟", "ذاتی استعمال کی عام چیزیں فروخت کے کاروباری مال میں شامل نہیں ہوتیں۔ دوبارہ فروخت کے لیے رکھی گئی جائیداد الگ ہے۔ کرایے کی جائیداد اور اس سے بچائی گئی آمدنی کے لیے مخصوص رہنمائی درکار ہو سکتی ہے۔"),
+            ("پاکستان کے 503,529 روپے الگ کیوں دکھائے گئے ہیں؟", "یہ 1446–1447 ہجری زکوٰۃ سال میں مخصوص بینک اکاؤنٹس سے سرکاری کٹوتی کی حد تھی۔ یہ ہر شخص کا ذاتی نصاب نہیں اور نئی سرکاری اطلاع کے بغیر موجودہ سال کی حد نہیں سمجھی جا سکتی۔"),
+            ("کیا یہ فتویٰ یا حتمی ضمانت ہے؟", "نہیں۔ یہ حسابی تخمینہ ہے۔ زیورات، پنشن، سرمایہ کاری، قرض اور کاروباری ملکیت کے لیے مستند عالم کا فیصلہ درکار ہو سکتا ہے۔")
         ],
+        "sources": 'ماخذ: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">اسلامک ریلیف کی نصاب اور زکوٰۃ رہنمائی</a>؛ <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide کے زکوٰۃ اصول</a>؛ <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">اسٹیٹ بینک کا 2026 سرکلر</a> اور <a class="' + LINK + '" href="https://www.sbp.org.pk/assets/documents/circulars/CL3-Notification_%282%29.pdf" rel="noopener noreferrer">1446–1447 ہجری کا سرکاری نوٹیفکیشن</a>۔ یہ ماخذ مخصوص طریقوں اور قانونی کٹوتی کی وضاحت کرتے ہیں، ہر شخص کے لیے ایک ہی شرعی حکم مقرر نہیں کرتے۔'
     },
     "bmi-calculator": {
         "name": "BMI کیلکولیٹر",
@@ -793,10 +882,10 @@ def bmi_urdu_guide_html():
 
 EXTRA = {
     "zakat-calculator": {
-        "quick": "Zakat is 2.5 percent of net zakatable wealth, due when that wealth is at least the Nisab (612.36 grams of silver) and has been held for one lunar year.",
+        "quick": "Total eligible assets minus eligible liabilities equals net zakatable wealth. Compare that amount with the silver or gold Nisab you selected using the current price per gram you entered. If the selected threshold is met and the lunar year (hawl) is complete, the estimate applies 2.5 percent and subtracts Zakat already paid for the same year.",
         "faq": [
-            ("Is Zakat due on my home?", "Your home that you live in is not zakatable wealth. Rental property income and goods held for sale can be zakatable, so check the rules for each asset with a scholar."),
-            ("Do I subtract debts?", "Debts due now are commonly subtracted from zakatable wealth. Whether particular long-term debts are deducted is a point scholars discuss, so confirm your case."),
+            ("Is Zakat due on my home?", "A home used for your own residence is generally not trade inventory. Property held for resale is a different category. Rental property and saved rental income need separate scholarly guidance."),
+            ("Do I subtract debts?", "Only subtract liabilities that your chosen scholarly approach permits. Many guides focus on amounts due immediately or within the next twelve lunar months. Do not automatically deduct the full balance of a long-term loan."),
         ],
     },
     "bmi-calculator": {
@@ -1540,7 +1629,8 @@ def shell(main_html, lang="en", current_path=None):
         + lang_links(lang, s, current_path) +
         '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
         '</div></footer>\n'
-        '<script src="/assets/app.js?v=20261103-result-sharing-1" defer></script>\n'
+        '<script src="/assets/zakat-calculator.js?v=20261115-global-1" defer></script>\n'
+        '<script src="/assets/app.js?v=20261115-zakat-global-1" defer></script>\n'
         '</body>\n</html>\n'
     )
 
@@ -1659,8 +1749,8 @@ def canon_override(doc, path):
 
 ANSWER_BLOCKS = {
     "zakat-calculator": {
-        "en": 'This calculator uses the silver Nisab standard of 612.36 grams and applies 2.5% to eligible net wealth when the required conditions are met. Nisab standards differ, so this page names the silver standard it uses. Source: <a class="' + LINK + '" href="https://islamicrelief.org.au/our-work/islamic-giving/nisab/" target="_blank" rel="noopener noreferrer">Islamic Relief Australia Nisab guidance</a>.',
-        "ur": 'یہ کیلکولیٹر چاندی کے 612.36 گرام نصاب اور اہل خالص مال پر 2.5٪ شرح استعمال کرتا ہے۔ نصاب کے معیار مختلف ہو سکتے ہیں، اس لیے یہاں چاندی کا معیار واضح کیا گیا ہے۔ ماخذ: <a class="' + LINK + '" href="https://islamicrelief.org.au/our-work/islamic-giving/nisab/" target="_blank" rel="noopener noreferrer">اسلامک ریلیف آسٹریلیا کی نصاب رہنمائی</a>۔'
+        "en": 'This calculator lets you compare silver and gold Nisab reference weights and formats the result in your selected ISO currency. It does not fetch live metal prices or issue a religious ruling. The Pakistan PKR 503,529 figure shown below is a separate, year-specific bank source-deduction threshold for 1446–1447 AH, not a universal personal Nisab. Sources: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">Islamic Relief</a> and <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan</a>.',
+        "ur": 'یہ کیلکولیٹر چاندی اور سونے کے نصاب کے مختلف وزن منتخب کرنے اور نتیجہ منتخب کرنسی میں دکھانے کی سہولت دیتا ہے۔ یہ لائیو دھات کی قیمت حاصل نہیں کرتا اور نہ ہی شرعی فتویٰ دیتا ہے۔ پاکستان کی 503,529 روپے کی رقم 1446–1447 ہجری کے مخصوص بینک اکاؤنٹس کی سرکاری کٹوتی کی حد تھی، ہر شخص کا ذاتی نصاب نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">اسلامک ریلیف</a> اور <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">اسٹیٹ بینک آف پاکستان</a>۔'
     },
     "bmi-calculator": {
         "en": 'For adults, the CDC classifies a BMI from 25.0 to less than 30.0 as overweight; BMI is a screening measure, not a diagnosis. Source: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC adult BMI categories</a>.',
@@ -1741,7 +1831,14 @@ def tool_page(t):
     path = "/" + t["slug"] + "/"
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
-    if t["slug"] == "bmi-calculator":
+    if t["slug"] == "zakat-calculator":
+        title = "Global Zakat Calculator | Gold, Silver Nisab & Currency"
+        desc = "Estimate Zakat worldwide with silver or gold Nisab, an ISO currency code, eligible assets, short-term liabilities and lunar-year confirmation. Pakistan bank deductions explained separately."
+        ui = t["ui"]
+        guide = t["guide"]
+        faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
+        sources = t["sources"]
+    elif t["slug"] == "bmi-calculator":
         title = "BMI Calculator for Adults | cm or ft/in | CalculatesAll"
         desc = "Calculate adult BMI using kilograms and centimetres or kilograms with feet and inches. See WHO adult BMI ranges and their limitations."
         ui = BMI_UI
@@ -1811,7 +1908,24 @@ def tool_page(t):
         {"@context": "https://schema.org", "@type": "Person", "@id": SITE_URL + "/#maintainer", "name": "Muhammad Fayyaz Adeel", "url": SITE_URL + "/about/", "worksFor": {"@id": SITE_URL + "/#organization"}},
         {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization", "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION, "logo": SITE_URL + "/assets/favicon.svg", "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
     ]
-    if t["slug"] == "bmi-calculator":
+    if t["slug"] == "zakat-calculator":
+        schema[1]["@id"] = url + "#breadcrumb"
+        schema.append({
+            "@context": "https://schema.org", "@type": "WebPage", "@id": url + "#webpage",
+            "name": title, "url": url, "description": desc,
+            "author": {"@id": SITE_URL + "/#maintainer"},
+            "publisher": {"@id": SITE_URL + "/#organization"},
+            "isPartOf": {"@id": SITE_URL + "/#website"},
+            "breadcrumb": {"@id": url + "#breadcrumb"},
+            "dateModified": "2026-11-15",
+            "citation": [
+                "https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/",
+                "https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf",
+                "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026",
+            ],
+            "inLanguage": "en",
+        })
+    elif t["slug"] == "bmi-calculator":
         # Link the page entity to the visible maintainer, site publisher, source citation and breadcrumb.
         # Do not claim medical review, ratings, or a dateModified that has not been verified.
         schema[1]["@id"] = url + "#breadcrumb"
@@ -1946,7 +2060,25 @@ def urdu_tool_page(t):
             {"@type": "ListItem", "position": 2, "name": cat_ur, "item": SITE_URL + "/" + cat["slug"] + "/"},
             {"@type": "ListItem", "position": 3, "name": u["name"], "item": url}]},
     ]
-    if t["slug"] == "bmi-calculator":
+    if t["slug"] == "zakat-calculator":
+        schema[0]["author"] = {"@id": SITE_URL + "/#maintainer"}
+        schema[0]["publisher"] = {"@id": SITE_URL + "/#organization"}
+        schema.append({
+            "@context": "https://schema.org", "@type": "WebPage",
+            "name": u["title"], "url": url, "inLanguage": "ur",
+            "author": {"@id": SITE_URL + "/#maintainer"},
+            "publisher": {"@id": SITE_URL + "/#organization"},
+            "dateModified": "2026-11-15",
+            "citation": [
+                "https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/",
+                "https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf",
+                "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026",
+            ],
+        })
+        how = ""
+        for p in u["how"]:
+            how += '<p class="' + P + '">' + p + "</p>"
+    elif t["slug"] == "bmi-calculator":
         schema[0]["author"] = {"@id": SITE_URL + "/#maintainer"}
         schema[0]["publisher"] = {"@id": SITE_URL + "/#organization"}
         schema.append({
@@ -1990,8 +2122,18 @@ def urdu_tool_page(t):
     else:
         body += _urdu_lead + primary_tool_content
     how_section = how if t["slug"] == "bmi-calculator" else ('<h2 class="' + H2 + '">' + u["how_heading"] + '</h2>' + how)
-    source_checked = ('<p class="mt-3 text-sm text-stone-700 dark:text-stone-300">ماخذ کی آخری جانچ: 6 نومبر 2026۔</p>' if t["slug"] == "bmi-calculator" else "")
-    maintainer_note = ('<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">صفحے کے منتظم: <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>۔ یہ صفحہ عمومی معلومات فراہم کرتا ہے، طبی تشخیص یا علاج کا متبادل نہیں۔</p>' if t["slug"] == "bmi-calculator" else "")
+    source_checked = (
+        '<p class="mt-3 text-sm text-stone-700 dark:text-stone-300">ماخذ کی آخری جانچ اور صفحے کی تازہ کاری: 15 نومبر 2026۔</p>'
+        if t["slug"] == "zakat-calculator" else
+        '<p class="mt-3 text-sm text-stone-700 dark:text-stone-300">ماخذ کی آخری جانچ: 6 نومبر 2026۔</p>'
+        if t["slug"] == "bmi-calculator" else ""
+    )
+    maintainer_note = (
+        '<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">صفحے کے منتظم: <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>۔ یہ زکوٰۃ کا حسابی تخمینہ ہے، فتویٰ نہیں۔</p>'
+        if t["slug"] == "zakat-calculator" else
+        '<p class="mt-8 text-sm text-stone-700 dark:text-stone-300">صفحے کے منتظم: <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>۔ یہ صفحہ عمومی معلومات فراہم کرتا ہے، طبی تشخیص یا علاج کا متبادل نہیں۔</p>'
+        if t["slug"] == "bmi-calculator" else ""
+    )
     related_urdu = ""
     if t["slug"] == "bmi-calculator":
         related_urdu = (
@@ -2612,7 +2754,7 @@ def main():
             "Date example: from 28 February 2024 to 1 March 2024 there are 2 elapsed calendar days because 2024 includes 29 February. The same dates in 2025 are 1 elapsed day. Elapsed-day counts normally exclude the starting date. Inclusive counting, working days, public holidays, time-zone changes and legal deadline rules are separate conventions and should not be inferred from a simple calendar-day result.",
             "Unit conversion example: one inch is exactly 25.4 millimetres. To convert inches to millimetres, multiply by 25.4. To convert millimetres to inches, divide by 25.4. Temperature conversion is different because it includes an offset: Celsius to Fahrenheit is (°C × 9/5) + 32. Confirm that both selected units measure the same physical quantity before converting.",
             "Health calculation limits: adult BMI is calculated as weight in kilograms divided by height in metres squared. For example, 70 kg at 1.75 m gives 70 ÷ (1.75 × 1.75) = 22.86, approximately. BMI is a screening measure, not a diagnosis, and it does not directly measure body fat or individual health. Age, pregnancy, body composition and clinical context can affect interpretation. Seek qualified medical advice for personal decisions.",
-            "Religious calculation limits: the Zakat calculator identifies the Nisab basis and asset assumptions used by that page. This site uses a silver Nisab reference of 612.36 grams in the relevant tool, but rulings about eligible assets, debts, jewellery, business stock, agricultural wealth and the due date can differ by scholarly method and personal circumstances. Treat the result as an estimate based on the displayed assumptions and confirm a personal ruling with a qualified scholar.",
+            "Religious calculation limits: the Zakat calculator offers selectable silver and gold Nisab reference weights, including 612.36 grams of silver, 87.48 grams of gold and 85 grams of gold. These are alternative references, not one universal personal method. The page accepts a user-entered metal price and ISO currency, and applies the stated arithmetic only after the selected threshold and lunar-year conditions are confirmed. Rulings about eligible assets, debts, jewellery, business stock, agricultural wealth, pensions and the due date can differ by scholarly method and personal circumstances. Pakistan's PKR 503,529 source-deduction threshold is a separate, year-specific bank rule for 1446–1447 AH, not personal Nisab. Treat the result as an estimate based on the displayed assumptions and confirm a personal ruling with a qualified scholar.",
             "Rounding and precision: a displayed value may be rounded to make it easier to read. Rounding a final display is not the same as rounding every intermediate step. Where a calculation has several stages, retain sufficient precision through intermediate operations and round at the stage required by the relevant tool, institution or standard. Currency settlement, tax filings, engineering work and legal calculations may require rules that differ from a general online estimate.",
             "Input validation: inputs should be checked before a result is presented. Examples of invalid inputs include a zero denominator, division by zero, a date that does not exist, a negative physical length, a missing value, a non-finite number or incompatible units. Some tools also set practical input limits to prevent unsafe calculations or misleading output. If a tool rejects an input, check its supported range and units rather than trying to force a result.",
             "How we check tools: representative examples should be compared with independently calculated expected results. Boundary cases and invalid inputs should also be checked where applicable. Automated tests can detect regressions in formulas, page generation, required content and links, but passing tests does not mean every device, browser, language or real-world situation has been independently certified. We do not describe automated checks as professional certification.",

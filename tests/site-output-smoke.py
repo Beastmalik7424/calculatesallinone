@@ -332,7 +332,7 @@ for url in urls:
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
 # Keep titles specific to each calculator's actual job, without promising unsupported features.
 EXPECTED_INTENT_TITLES = {
-    "/zakat-calculator/": "Zakat Calculator: Nisab Check & 2.5% Zakat | CalculatesAll",
+    "/zakat-calculator/": "Global Zakat Calculator | Nisab & Currency | CalculatesAll",
     "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
     "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
     "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
@@ -424,7 +424,7 @@ assert organization_schema is not None, "Homepage Organization schema is require
 contact_point = organization_schema.get("contactPoint", {})
 assert contact_point.get("@type") == "ContactPoint" and contact_point.get("email"), "Organization schema must expose the configured support email"
 assert contact_point.get("url") == SITE + "/contact/", "Organization schema must link to the canonical contact page"
-assert "612.36 grams" in home_html and "25.0 to 29.9" in home_html, "Homepage proof points must include the calculator method and WHO adult BMI ranges"
+assert "silver or gold Nisab" in home_html and "25.0 to 29.9" in home_html, "Homepage proof points must describe selectable Zakat methods and WHO adult BMI ranges"
 # The Urdu root is a localized site homepage, not a standard-calculator landing page.
 urdu_home_url = SITE + "/ur/"
 ur_home_html = output_for_url(urdu_home_url).read_text(encoding="utf-8")
@@ -720,6 +720,10 @@ for url in urls:
             elif url == SITE + "/tasbih-counter/":
                 assert item.get("dateModified") == "2026-11-15", (
                     "Tasbih Counter dateModified must match the verified target-persistence and content update."
+                )
+            elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
+                assert item.get("dateModified") == "2026-11-15", (
+                    "Zakat dateModified must match the verified global Nisab, currency, asset and bilingual content update."
                 )
             else:
                 assert "dateModified" not in item, (
@@ -1084,13 +1088,13 @@ assert "gives back 5 kilometres" not in _unit_quality, "Misleading exact round-t
 from content_v5 import GUIDE_EXTRA
 for slug, phrases in {
     "bmi-calculator": ["22.8571", "18.5 to below 25", "not a diagnosis"],
-    "zakat-calculator": ["PKR 153,090", "PKR 16,250", "not a religious ruling"],
+    "zakat-calculator": ["PKR 612,360", "PKR 27,500", "PKR 22,500", "not a religious ruling"],
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
     "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice"],
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
-    if slug == "tasbih-counter":
+    if slug in {"tasbih-counter", "zakat-calculator"}:
         guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     else:
         guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
@@ -1180,15 +1184,17 @@ for _lang_path in ("/ar/", "/es/", "/fr/"):
 
 # Compact Zakat fields must remain fully localized on the Urdu calculator.
 _ur_zakat_compact = output_for_url(SITE + "/ur/zakat-calculator/").read_text(encoding="utf-8")
-for _label in ("نقد اور بینک بچت", "سونے کی قیمت", "چاندی کی قیمت", "فروخت کا کاروباری مال",
-               "وصول ہونے والی رقم", "موجودہ واجب الادا قرض", "چاندی کی فی گرام قیمت",
-               "یہ مال ایک مکمل قمری سال (حول) تک رکھا گیا ہے", "زکوٰۃ کا حساب کریں"):
+for _label in ("گھر میں موجود نقد رقم", "بینک اور کرنٹ اکاؤنٹ کی رقم", "قابلِ زکوٰۃ سونے کی مالیت",
+               "قابلِ زکوٰۃ چاندی کی مالیت", "فروخت کے لیے کاروباری مال کی موجودہ قیمت",
+               "واپس ملنے والے قرض اور قابلِ وصول رقوم", "قابلِ کٹوتی قلیل مدتی قرض اور واجبات",
+               "چاندی کی فی گرام قیمت", "ایک مکمل قمری زکوٰۃ سال (حول) پورا ہو چکا ہے", "زکوٰۃ کا حساب کریں"):
     assert _label in _ur_zakat_compact, "Urdu Zakat label missing: " + _label
-for _english_label in ("Cash / savings", "Gold value", "Silver value", "Stock for sale",
-                       "Expected receivables", "Debts due now", "Silver price per gram",
-                       "Held for one full lunar year (hawl)", "Calculate Zakat"):
+for _english_label in ("Cash held at home", "Eligible gold value", "Eligible silver value",
+                       "Trade inventory at current sale value", "Recoverable loans and receivables",
+                       "Eligible short-term debts and dues", "Silver price per gram",
+                       "One full lunar Zakat year (hawl) is complete", "Calculate Zakat"):
     assert _english_label not in _ur_zakat_compact, "English Zakat label leaked into Urdu page: " + _english_label
-for _field_id in ("z-cash", "z-gold", "z-silver", "z-stock", "z-recv", "z-debts", "z-silverprice", "z-hawl", "zakat-result"):
+for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-investments", "z-businesscash", "z-stock", "z-recv", "z-pension", "z-crypto", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
     assert 'id="' + _field_id + '"' in _ur_zakat_compact, "Urdu Zakat field ID changed: " + _field_id
 
 # Urdu calculator templates must carry the same page-specific responsive hooks as English tools.
@@ -1208,8 +1214,8 @@ assert 'id="tool-calculator" class="ca-tool-standard-calculator mt-4"' in _ur_st
 for page_path, input_id, notice in (
     ("/bmi-calculator/", 'id="b-kg"', "Not a diagnosis"),
     ("/ur/bmi-calculator/", 'id="b-kg"', "تشخیص نہیں"),
-    ("/zakat-calculator/", 'id="z-cash"', "Silver 612.36g · 2.5%"),
-    ("/ur/zakat-calculator/", 'id="z-cash"', "چاندی 612.36g · 2.5٪"),
+    ("/zakat-calculator/", 'id="z-currency"', "Choose a silver or gold Nisab method."),
+    ("/ur/zakat-calculator/", 'id="z-currency"', "چاندی یا سونے کا نصاب منتخب کریں۔"),
 ):
     page_html = output_for_url(SITE + page_path).read_text(encoding="utf-8")
     assert notice in page_html, f"Missing prominent method/safety notice on {page_path}"

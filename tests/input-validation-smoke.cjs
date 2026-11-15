@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const vm = require("node:vm");
 
 const ids = [
-  "zakat-form", "z-cash", "z-gold", "z-silver", "z-stock", "z-recv", "z-debts", "z-silverprice", "z-hawl", "zakat-result",
+  "zakat-form", "z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-investments", "z-businesscash", "z-stock", "z-recv", "z-pension", "z-crypto", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result",
   "conv-form", "u-cat", "u-val", "u-from", "u-to", "conv-result"
 ];
 const elements = {};
@@ -23,6 +23,8 @@ for (const id of ids) {
   };
 }
 elements["u-cat"].value = "temp";
+elements["z-currency"].value = "PKR";
+elements["z-nisab-method"].value = "silver";
 elements["z-cash"].value = "-1";
 elements["z-silverprice"].value = "1";
 elements["u-val"].value = "-300";
@@ -41,11 +43,12 @@ const context = {
   document, window: {}, console, isFinite, Number, String, Math, Date,
   setInterval, clearInterval, performance: { now: () => 0 }
 };
+vm.runInNewContext(fs.readFileSync("static/zakat-calculator.js", "utf8"), context, { filename: "static/zakat-calculator.js" });
 vm.runInNewContext(fs.readFileSync("static/app.js", "utf8"), context, { filename: "static/app.js" });
 handlers.ready();
 
 elements["zakat-form"]._handlers.submit({ preventDefault() {} });
-assert.match(elements["zakat-result"].textContent, /zero or a positive value/i, "negative Zakat inputs must be rejected");
+assert.match(elements["zakat-result"].textContent, /zero or greater/i, "negative Zakat inputs must be rejected");
 
 elements["u-from"].value = "C";
 elements["u-to"].value = "K";
