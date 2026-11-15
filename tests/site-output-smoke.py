@@ -1234,3 +1234,39 @@ for _logo_path in ("/", "/ur/", "/ur/bmi-calculator/", "/ar/", "/es/", "/fr/", "
         "Header logo must link to the root homepage: " + _logo_path
     )
 print("PASS: header brand logo links to the root homepage on all locale routes")
+
+
+# 2026 priority-page content quality regression checks.
+# These checks guard source-backed, page-specific value rather than word-count targets.
+_bmi_2026 = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
+assert "2026 Standards of Care in Overweight and Obesity" in _bmi_2026, "BMI must explain the current 2026 clinical assessment context"
+assert "waist-to-height ratio" in _bmi_2026.lower(), "BMI must explain waist-to-height ratio alongside BMI"
+assert "does not ask for waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply waist-based clinical criteria"
+assert "diabetesjournals.org/docm-care/article/1/4/536/170058" in _bmi_2026, "BMI must link the 2026 clinical standards source"
+assert "This note is general educational information." not in _bmi_2026, "BMI must replace the redundant generic South Asia disclaimer with useful clinical context"
+
+_ur_bmi_2026 = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
+assert "کمر کے گھیر اور قد کا تناسب" in _ur_bmi_2026, "Urdu BMI must explain waist-to-height ratio"
+assert "2026 Standards of Care" in _ur_bmi_2026, "Urdu BMI must cite the current 2026 clinical context"
+assert "does not ask for waist measurements" not in _ur_bmi_2026, "English BMI limitation text must not leak into Urdu"
+
+_profit_2026 = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
+for _phrase in ("Opening inventory + net purchases + direct inward costs − closing inventory",
+                "PKR 150,000", "PKR 70,000", "PKR 30,000", "13.64%",
+                "does not calculate cash flow"):
+    assert _phrase.lower() in _profit_2026.lower(), "Profit and Loss COGS/cash-flow guidance missing: " + _phrase
+assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement" in _profit_2026, "Profit and Loss must cite the checked OpenStax income-statement source"
+
+_money_2026 = output_for_url(SITE + "/money/").read_text(encoding="utf-8")
+for _phrase in ("A practical monthly close: from sales to operating profit",
+                "opening inventory", "closing inventory", "reconcile profit to cash",
+                "does not calculate cash flow"):
+    assert _phrase.lower() in _money_2026.lower(), "Money hub workflow guidance missing: " + _phrase
+assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement" in _money_2026, "Money hub must cite its inventory and income-statement method"
+
+_zakat_2026 = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
+for _phrase in ("Illustrative small-shop Nisab comparison", "PKR 650,000",
+                "PKR 122,472", "PKR 2,187,000", "PKR 16,250",
+                "not a live market quote",
+                "do not choose a Nisab method based on which result is lower"):
+    assert _phrase.lower() in _zakat_2026.lower(), "Zakat worked Nisab comparison missing: " + _phrase
