@@ -242,7 +242,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Profit loss calculator: calculate COGS, gross profit and gross margin from revenue and inventory values. See a worked example and cash-flow limits.",
         "h1": "Profit and Loss Calculator",
-        "lead": "Calculate gross profit and gross margin from revenue and COGS in Business P&L mode. Product mode compares a unit cost with its selling price.",
+        "lead": "This profit loss calculator shows gross profit and gross margin from revenue and COGS in Business P&L mode. Product mode compares a unit cost with its selling price.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
