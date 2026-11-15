@@ -22,6 +22,13 @@
   function validateCurrency(code) {
     const value = String(code || "").trim().toUpperCase();
     if (!/^[A-Z]{3}$/.test(value)) throw new RangeError("Enter a valid three-letter ISO 4217 currency code");
+    let supported = null;
+    if (typeof Intl.supportedValuesOf === "function") {
+      supported = Intl.supportedValuesOf("currency");
+    } else {
+      supported = ["PKR","USD","GBP","EUR","SAR","AED","INR","BDT","NPR","LKR","QAR","KWD","BHD","OMR","JPY","CNY","CAD","AUD","NZD","CHF","SGD","MYR","IDR","THB","PHP","KRW","HKD","ZAR","NGN","EGP","BRL","MXN","TRY","SEK","NOK","DKK","PLN","CZK","HUF","ILS"];
+    }
+    if (!supported.includes(value)) throw new RangeError("Currency code is not supported by this browser");
     try {
       new Intl.NumberFormat("en", { style: "currency", currency: value }).format(0);
     } catch (_) {
