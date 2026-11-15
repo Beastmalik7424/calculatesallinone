@@ -24,6 +24,7 @@ CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").st
 SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
+    "/zakat-calculator/": "2026-11-15",
     "/years-to-days-calculator/": "2026-11-14",
     "/unit-converter/": "2026-11-14",
     "/tasbih-counter/": "2026-11-15",
@@ -144,54 +145,106 @@ TOOLS = [
         "category": "money",
         "name": "Zakat Calculator",
         "app": "FinanceApplication",
-        "description": "Calculate Zakat at 2.5 percent on net wealth with a silver Nisab check and lunar year (hawl) confirmation.",
-        "h1": "Zakat Calculator with Nisab Check",
-        "lead": "Enter your savings and assets, then the silver price per gram. The calculator checks Nisab first and shows a Zakat amount only after the Nisab and lunar year conditions are confirmed.",
+        "description": "Estimate Zakat on eligible wealth worldwide with silver or gold Nisab, ISO currency codes, a full asset and liability breakdown, and lunar-year confirmation.",
+        "h1": "Global Zakat Calculator with Silver and Gold Nisab",
+        "lead": "Estimate Zakat in your own currency. Choose a silver or gold Nisab method, enter the current metal price per gram and list eligible assets and short-term liabilities. The calculator shows its assumptions and separates Pakistan's year-specific bank deduction threshold from personal Zakat.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-cash", "Cash / savings")
-            + field("z-gold", "Gold value")
-            + field("z-silver", "Silver value")
-            + field("z-stock", "Stock for sale")
-            + field("z-recv", "Expected receivables")
-            + field("z-debts", "Debts due now")
+            '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
+            '<input id="z-currency" name="z-currency" class="@I@" type="text" value="PKR" maxlength="3" minlength="3" pattern="[A-Za-z]{3}" autocapitalize="characters" autocomplete="off" spellcheck="false">'
+            '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.</p></div>'
+            '<div><label class="@L@" for="z-nisab-method">Nisab method</label>'
+            '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
+            '<option value="silver" selected>Silver Nisab (612.36 g)</option>'
+            '<option value="gold-87">Gold Nisab (87.48 g)</option>'
+            '<option value="gold-85">Gold Nisab (85 g)</option>'
+            '</select></div></div>'
+            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300">Enter market values in the selected currency. Leave categories you do not own at zero.</p>'
+            '<div class="grid sm:grid-cols-2 gap-4">'
+            + field("z-cash", "Cash held at home")
+            + field("z-bank", "Bank and current account balances")
+            + field("z-savings", "Savings, deposits and cash equivalents")
+            + field("z-gold", "Eligible gold value")
+            + field("z-silver", "Eligible silver value")
+            + field("z-investments", "Zakatable shares and investments")
+            + field("z-businesscash", "Business cash and bank balance")
+            + field("z-stock", "Trade inventory at current sale value")
+            + field("z-recv", "Recoverable loans and receivables")
+            + field("z-pension", "Accessible pension or retirement amount")
+            + field("z-crypto", "Eligible cryptocurrency holdings")
+            + field("z-property", "Property held for resale")
             + "</div>"
-            + field("z-silverprice", "Silver price per gram", hint="Required to check Nisab. Without it, no Zakat amount is shown.")
-            + check("z-hawl", "Held for one full lunar year (hawl)")
+            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal prices for Nisab</h2>'
+            '<p class="text-sm text-stone-700 dark:text-stone-300">Enter a current local market price per gram in the same currency as your assets. Use the price for the selected Nisab method.</p>'
+            '<div class="grid sm:grid-cols-2 gap-4">'
+            + field("z-silverprice", "Silver price per gram")
+            + field("z-goldprice", "24-karat gold price per gram")
+            + "</div>"
+            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible liabilities and payments</h2>'
+            '<div class="grid sm:grid-cols-2 gap-4">'
+            + field("z-debts", "Eligible short-term debts and dues")
+            + field("z-paid", "Zakat already paid for this Zakat year")
+            + "</div>"
+            + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">This is an estimate, not a fatwa. Debt, jewellery, investments and retirement rules differ. Review the guidance below and ask a qualified scholar about your circumstances.</p>'
             + '<button type="submit" class="@B@">Calculate Zakat</button></form>'
             + result("zakat-result")
         ),
         "guide": [
-            ("What Zakat is", [
-                "Zakat is 2.5 percent of net zakatable wealth. It is due when wealth is at or above Nisab and has been held for one full lunar year (hawl).",
+            ("What this calculator does", [
+                "This calculator estimates annual Zakat on eligible monetary wealth. It adds the asset values you enter, subtracts the eligible liabilities you report, checks the remaining net wealth against the Nisab method you selected, and applies 2.5 percent when the conditions are met. It is a transparent arithmetic aid, not a religious ruling or a substitute for a scholar who understands your school of law and financial circumstances.",
+                "Use the figures that apply on your own Zakat due date, usually the Hijri date on which your Zakat year completes. The date is personal to you. It is not automatically 1 January, the tax year, Ramadan, or the date you open this page. Keep a record of the date and the price sources you used so you can review the calculation next year."
             ]),
-            ("Step by step", [
-                "Step 1. Add cash, bank savings, gold, silver, business goods for sale and money owed to you that you expect to receive.",
-                "Step 2. Subtract debts due now. If the result is below zero, use zero.",
-                "Step 3. Nisab is 612.36 grams of silver. Multiply 612.36 by the silver price per gram you entered.",
-                "Step 4. If net wealth is below Nisab, no Zakat is due. If it is above Nisab and the lunar year is complete, Zakat equals net wealth multiplied by 0.025.",
+            ("Choose a Nisab method carefully", [
+                "Nisab is the minimum qualifying level of wealth. This calculator offers three clearly labelled reference weights: 612.36 grams of silver, 87.48 grams of gold, and 85 grams of gold. Islamic Relief publishes the 612.36 g silver and 87.48 g gold standards. Some other guidance uses 85 g for gold. These amounts are not interchangeable. The monetary threshold changes with the market price of the selected metal and the currency you use.",
+                "Enter the current local price per gram for the selected metal in the same currency as your assets. For silver Nisab, enter the silver price. For either gold Nisab option, enter a 24-karat gold price. This page does not fetch live commodity prices, convert currencies, or claim that an old sample rate is today's rate. Confirm the metal price with a reliable local bullion or jewellers' source on your calculation date. Ask a qualified scholar which Nisab basis applies to your circumstances."
             ]),
-            ("Worked example", [
-                "Cash and bank savings are 1,000,000. Debts due now are 100,000. Net wealth is 900,000.",
-                "Silver price is 1,000 per gram. Nisab is 612.36 multiplied by 1,000, which is 612,360.",
-                "Net wealth of 900,000 is above Nisab. If one lunar year is complete, Zakat is 900,000 multiplied by 0.025, which is 22,500.",
+            ("Which assets to include", [
+                "Cash includes notes and coins you own. Bank balances include current, savings and similar accounts. Add other savings, fixed deposits, cash equivalents and money set aside for a future purchase when they remain your wealth. Avoid counting the same money twice. If a bank balance is already included in your savings total, do not enter it again in another field.",
+                "Gold and silver should be entered at their eligible current monetary value, not at the original purchase price. Jewellery valuation can depend on the school of law, use, purity, stones and local practice. For mixed jewellery, estimate the metal value separately from stones and workmanship where appropriate. Do not assume that every scholar treats personal jewellery in the same way.",
+                "Investments should reflect the zakatable portion and valuation method relevant to the investment and the scholarly approach you follow. Listed shares, funds, certificates and similar holdings may be treated differently depending on whether they are held for trading, investment income or long-term ownership. Do not automatically enter the full face value of a bond, retirement account or fund without checking its actual eligible value.",
+                "Business owners can include business cash, bank balances, trade inventory valued at its current sale value, and receivables that are reasonably expected to be recovered. Do not enter machinery, shop fittings, tools, delivery vehicles or premises used to operate the business as trade inventory. A loan given to another person should only be included when recovery is expected under the method you follow.",
+                "A pension or retirement account is included here only as the amount you can access or withdraw under the method you follow. Tax, penalties, vesting restrictions and access conditions can materially change that amount. Cryptocurrency is an optional field for holdings treated as zakatable wealth by the scholar or authority you follow. Property is included in this tool only when it is held for resale or trade. Property held for personal use or rental income needs a different analysis."
             ]),
-            ("Common mistakes", [
-                "Using the gold Nisab (87.48 grams) when the silver Nisab applies, or the reverse. This tool uses silver, which is the lower threshold and the more cautious choice for most people.",
-                "Forgetting that the lunar year counts from when the wealth reached Nisab, not from the start of the calendar year.",
-                "Counting personal items that are not held for trade. Rules on personal jewelry and some debts differ between scholars.",
+            ("Which liabilities may be deducted", [
+                "Enter only liabilities that your chosen scholarly approach permits you to deduct. Many contemporary calculation guides focus on debts and instalments due immediately or within the next twelve lunar months, including overdue bills, supplier invoices, rent, taxes and near-term instalments. The treatment of longer-term debts differs. Do not subtract the full outstanding balance of a long mortgage or student loan automatically when only near-term instalments may be deductible under the guidance you follow.",
+                "Do not subtract future household spending that is not yet due, an estimate of ordinary living costs, or interest as though it were an eligible Zakat liability. If you have several debts, list only the amount due within the permitted period and avoid counting the same instalment twice. If you are unsure whether a debt is deductible, calculate both ways for discussion with a qualified scholar rather than presenting one disputed answer as universal."
             ]),
-            ("Limits of this tool", [
-                "This tool follows the common silver Nisab method. Rulings on jewelry, property held for rent, loans to others and debts can differ between legal schools. Confirm your figures with a qualified scholar before you pay.",
+            ("How the calculation works", [
+                "The arithmetic is: total eligible assets minus eligible liabilities equals net zakatable wealth. Net wealth cannot be less than zero in this estimate. The selected Nisab threshold equals the selected metal weight multiplied by the current price per gram you entered. If net wealth is below that threshold, the calculator reports that the threshold is not met. If net wealth reaches or exceeds the threshold but you have not confirmed completion of the lunar year, it explains that the Hawl condition is not confirmed.",
+                "When the selected Nisab is met and you confirm that the lunar Zakat year is complete, the estimate applies 2.5 percent to net zakatable wealth. Zakat already paid for this same Zakat year is then subtracted from the calculated amount. The remaining balance cannot fall below zero. If the amount entered as already paid is greater than the calculated Zakat, the tool flags the excess for review rather than treating it as a negative payment."
             ]),
+            ("Worked example with checkable arithmetic", [
+                "Assume the values are all in PKR. Cash is 300,000, bank balances are 400,000, savings are 100,000, eligible gold is 150,000, business stock is 200,000, and recoverable receivables are 50,000. Total eligible assets are 1,200,000. Assume eligible short-term liabilities are 100,000. Net zakatable wealth is 1,200,000 minus 100,000, which equals 1,100,000.",
+                "For illustration only, assume silver costs PKR 1,000 per gram on the Zakat date. Silver Nisab is 612.36 multiplied by 1,000, which equals PKR 612,360. Net wealth of PKR 1,100,000 is above that threshold. At 2.5 percent, the initial Zakat is PKR 27,500. If PKR 5,000 has already been paid toward this same Zakat year, the remaining balance is PKR 22,500. The example price is hypothetical and must not be reused as a current market quote."
+            ]),
+            ("Personal-use property and other exclusions", [
+                "Personal-use belongings such as your main home, ordinary clothing, household furniture, personal car and tools used for your work are generally not treated as trade inventory in a basic monetary Zakat calculation. A property purchased with the intention of resale is different from the home in which you live. Rental property itself and the rent saved from it can be treated differently, so do not enter the entire value of a rental building in the resale-property field without qualified guidance.",
+                "Agricultural produce, livestock, treasure, business structures, jointly owned assets and complex retirement arrangements can have separate Nisab rules, rates, dates or ownership tests. This calculator is not designed to calculate agricultural or livestock Zakat. It should not force every kind of wealth into a single 2.5 percent formula."
+            ]),
+            ("Pakistan bank deduction threshold is separate", [
+                "Pakistan's official notification for Zakat year 1446–1447 AH set PKR 503,529 as the threshold for source deduction from specified savings, profit-and-loss-sharing and similar bank accounts on the notified Ramadan 2026 deduction date. The State Bank of Pakistan circular forwarded that notification to banks. This is a year-specific statutory bank-deduction threshold for the account types named in the notification. It is not a universal personal Shariah Nisab, does not replace your selected gold or silver method, and must not be carried forward to a later Zakat year without a new official notification.",
+                "If you live in Pakistan, use the currency code PKR and check the latest Ministry of Poverty Alleviation and Social Safety or State Bank of Pakistan notice for the relevant Zakat year. Whether a bank deduction applies to your account can depend on the law, account type, declaration and applicable exemptions. Your personal Zakat calculation may be different from an automatic bank deduction."
+            ]),
+            ("Worldwide currency support, privacy and limitations", [
+                "The currency field accepts a three-letter ISO 4217 currency code, such as PKR, USD, GBP, EUR, SAR, AED or INR, when the browser supports that currency. Every asset, liability and metal price must be entered in the same currency. The currency code changes how the result is labelled and formatted. It does not convert amounts between currencies. If you own assets in several currencies, convert them to one chosen currency using a reliable exchange rate for your Zakat date before entering them, and keep the conversion record.",
+                "The calculator runs in your browser. It does not need your name, bank login, account number or personal financial documents. Do not enter sensitive account credentials. The page does not save your entries to a personal account or provide a secure financial record. Save your own calculation privately if you need a record. Browser support for currency formatting can vary, so use a standard ISO code supported by your device.",
+                "This tool does not decide the religious status of every asset, whether a debt is deductible, whether jewellery is exempt, how jointly owned wealth is divided, how a pension is treated, or how missed Zakat from earlier years should be repaid. It does not calculate agricultural produce or livestock. Its result is only as reliable as the amounts, market prices, currency conversion and scholarly assumptions you enter. Consult a qualified local scholar for a personal ruling."
+            ])
         ],
         "faq": [
-            ("What is Nisab for silver?", "The Nisab used on this page is 612.36 grams of silver. Its money value depends on the silver price you enter."),
-            ("Why does the calculator not show an amount?", "It needs the silver price to check Nisab, and it needs you to confirm the lunar year. The Zakat amount appears only after both conditions are met."),
-            ("Is this a religious ruling?", "No. It is a calculation tool. For a ruling on your situation, consult a qualified scholar."),
+            ("Does this calculator work outside Pakistan?", "Yes. Enter a supported three-letter ISO 4217 currency code and use that same currency for all assets, debts and metal prices. It formats the result in that currency but does not convert currencies."),
+            ("Does it use live gold or silver prices?", "No. Enter the current local price per gram on your Zakat date. The page does not claim to fetch live prices."),
+            ("Which Nisab should I choose?", "The page offers silver 612.36 g, gold 87.48 g and gold 85 g references. Scholars and authorities differ. Follow the qualified scholar or authority relevant to your circumstances."),
+            ("Why are there separate silver and gold price fields?", "Silver Nisab needs the silver price per gram. Either gold Nisab option needs the 24-karat gold price per gram. Enter prices in the same currency as your other figures."),
+            ("Can I deduct my full mortgage or long-term loan?", "Do not automatically deduct the full balance. Debt treatment differs, and many guides focus on amounts due immediately or within the next twelve lunar months. Follow qualified scholarly guidance."),
+            ("Is my home or personal car included?", "Ordinary personal-use property is generally not trade inventory. Property held for resale is a separate category. Rental property and saved rental income need specific guidance."),
+            ("Why is Pakistan's PKR 503,529 figure shown separately?", "It was the statutory source-deduction threshold for specified bank accounts in Zakat year 1446–1447 AH. It is not a universal personal Nisab and is not a current-year figure unless a later official notice confirms it."),
+            ("Is this a fatwa or a guarantee of the amount due?", "No. It is an arithmetic estimate. Jewellery, pensions, investments, debt, business ownership and other cases can require a qualified scholar's decision.")
         ],
-        "sources": "Method based on the silver Nisab of 612.36 grams, which is widely used in South Asian Zakat guidance. Rules differ between schools of law.",
+        "sources": 'Method references: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">Islamic Relief Nisab and Zakat calculation guidance</a>; <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide Zakat calculation principles</a>; <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan 2026 circular</a> and <a class="' + LINK + '" href="https://www.sbp.org.pk/assets/documents/circulars/CL3-Notification_%282%29.pdf" rel="noopener noreferrer">official 1446–1447 AH notification</a>. These sources describe particular methods and statutory rules. They do not establish one ruling for every person.'
     },
     {
         "slug": "bmi-calculator",
