@@ -54,7 +54,7 @@ assert.equal((ur.match(/<summary\b/gi) || []).length, 3, "Urdu Zakat page must h
 assert.doesNotMatch(en, /value="gold-85"/, "English UI must not offer the unapproved 85 g threshold");
 assert.doesNotMatch(ur, /value="gold-85"/, "Urdu UI must not offer the unapproved 85 g threshold");
 for (const term of [
-  "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب",
+  "503,529", "612.36", "87.48", "زکوٰۃ سال", "پاکستان", "نصاب",
   "اثاثے", "واجب الادا", "2.5"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing localized topic: " + term);
