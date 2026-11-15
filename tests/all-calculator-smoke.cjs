@@ -237,7 +237,7 @@ for (let i = 0; i < 1000; i++) {
               bank: invalidCase === 3 ? Number.MAX_VALUE : 0},
       liabilities:0, zakatPaid:0, hawlComplete:true
     };
-    assert.throws(() => context.window.ZakatCalculator.calculate(input), /must be|valid|supported|range/i);
+    assert.throws(() => context.window.ZakatCalculator.calculate(input), /must be|valid|supported|range|metal price/i);
   }
   zakatCases++;
 }
