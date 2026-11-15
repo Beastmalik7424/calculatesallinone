@@ -24,7 +24,7 @@ const enText = visibleText(en);
 const urText = visibleText(ur);
 
 for (const id of [
-  "z-currency", "z-nisab-method", "z-silverprice", "z-goldprice",
+  "z-currency", "z-sect", "z-sunni-school", "z-marja", "z-nisab-method", "z-silverprice", "z-goldprice",
   "z-cash", "z-bank", "z-savings", "z-gold", "z-silver",
   "z-investments", "z-businesscash", "z-stock", "z-recv",
   "z-pension", "z-crypto", "z-property", "z-debts", "z-paid",
@@ -35,7 +35,7 @@ for (const id of [
 }
 for (const term of [
   "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48",
-  "503,529", "State Bank of Pakistan", "Hawl", "short-term liabilities",
+  "503,529", "State Bank of Pakistan", "Hawl", "Sunni", "Shia", "Hanafi", "Shafi'i", "Maliki", "Hanbali", "Ja'fari", "Sistani", "short-term liabilities",
   "personal-use", "trade inventory", "receivables",
   "2.5%", "Worked example", "This tool does not decide"
 ]) {
@@ -111,6 +111,12 @@ for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
   assert.throws(() => calculate({ ...base, zakatPaid: bad }));
 }
 assert.throws(() => calculate({ ...base, nisabMethod: "unknown" }), /Nisab method/);
+const sistaniResult = calculate({ ...base, sect: "shia", marja: "sistani" });
+assert.equal(sistaniResult.status, "scholar_review_required", "Ja'fari/Sistani must not be run through the generic Sunni 2.5% cash calculator");
+assert.equal(sistaniResult.balanceDue, null, "Unsupported Shia cases must not display a fabricated numeric amount");
+assert.match(sistaniResult.guidance, /banknotes|paper money/i);
+assert.throws(() => calculate({ ...base, sect: "shia", marja: "unverified" }), /verified Marja/);
+assert.throws(() => calculate({ ...base, sect: "unknown" }), /sect/);
 assert.throws(() => calculate({ ...base, currency: "ZZZ" }), /not supported/);
 assert.throws(() => calculate({ ...base, assets: { cash: Number.MAX_VALUE, bank: Number.MAX_VALUE } }), /supported calculation range/);
 
