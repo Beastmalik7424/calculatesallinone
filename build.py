@@ -2082,6 +2082,9 @@ def urdu_tool_page(t):
                 "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026",
             ],
         })
+        how = ""
+        for p in u["how"]:
+            how += '<p class="' + P + '">' + p + "</p>"
     elif t["slug"] == "bmi-calculator":
         schema[0]["author"] = {"@id": SITE_URL + "/#maintainer"}
         schema[0]["publisher"] = {"@id": SITE_URL + "/#organization"}
