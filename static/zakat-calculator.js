@@ -8,6 +8,7 @@
   const NISAB = Object.freeze({
     silver: Object.freeze({ grams: 612.36, priceKey: "silverPricePerGram", label: "Silver 612.36 g" }),
     "gold-87": Object.freeze({ grams: 87.48, priceKey: "goldPricePerGram", label: "Gold 87.48 g" }),
+    "gold-87-28": Object.freeze({ grams: 87.28, priceKey: "goldPricePerGram", label: "Gold 87.28 g (Islamic Relief Pakistan)" }),
     "gold-85": Object.freeze({ grams: 85, priceKey: "goldPricePerGram", label: "Gold 85 g" })
   });
   const ASSET_KEYS = Object.freeze([
