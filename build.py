@@ -618,7 +618,7 @@ HUB_CONTENT = {
 
 CATEGORIES = [
     {"slug": "money", "name": "Money and Business", "desc": "Calculate business gross profit and margin, compare personal Zakat Nisab values, and work out discounts and loan instalments."},
-    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI from weight and height, view WHO adult categories, see a worked example and understand screening limits."},
+    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI from weight and height, view WHO adult categories, see worked examples and understand screening limits."},
     {"slug": "time", "name": "Date and Time", "desc": "Calculate age from a birth date, count days between calendar dates, convert years and days, and time an activity."},
     {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages, percentage changes, ratios and fractions, or convert values between weight, length and temperature units."},
     {"slug": "worship", "name": "Worship and Daily Use", "desc": "Count tasbih recitations with a target and track elapsed time with a browser stopwatch."},
