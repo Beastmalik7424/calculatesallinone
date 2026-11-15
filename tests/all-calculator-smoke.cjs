@@ -144,6 +144,25 @@ assert.match(elements["zakat-result"].textContent, /lunar year/i);
 elements["z-hawl"].checked = true; submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /2\.5 percent.*25/i);
 
+// Global currency, gold Nisab, expanded assets, prior payment and transparent result breakdown.
+setValues({
+  "z-cash": 100000, "z-bank": 50000, "z-savings": 0, "z-debts": 10000,
+  "z-goldprice": 1000, "z-paid": 1000
+});
+elements["z-currency"].value = "USD";
+elements["z-nisab-method"].value = "gold-87";
+elements["z-hawl"].checked = true;
+submit("zakat-form");
+assert.match(elements["zakat-result"].textContent, /2\.5 percent/i);
+assert.match(elements["zakat-result"].textContent, /Assets:/i);
+assert.match(elements["zakat-result"].textContent, /Eligible liabilities:/i);
+assert.match(elements["zakat-result"].textContent, /Remaining balance:/i);
+assert.match(elements["zakat-result"].textContent, /2,500/);
+elements["z-currency"].value = "ZZZ";
+submit("zakat-form");
+assert.match(elements["zakat-result"].textContent, /could not validate/i);
+
+
 // BMI: kg/lb weight units, cm/ft-in height, category boundaries, invalid input and hidden fields.
 assert.equal(elements["b-cm"].disabled, false);
 assert.equal(elements["b-ft"].disabled, true);
