@@ -160,7 +160,7 @@ assert.match(elements["zakat-result"].textContent, /Remaining balance:/i);
 assert.match(elements["zakat-result"].textContent, /2,500/);
 elements["z-currency"].value = "ZZZ";
 submit("zakat-form");
-assert.match(elements["zakat-result"].textContent, /could not validate/i);
+assert.match(elements["zakat-result"].textContent, /three-letter ISO currency code/i);
 
 
 // BMI: kg/lb weight units, cm/ft-in height, category boundaries, invalid input and hidden fields.
