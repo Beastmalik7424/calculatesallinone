@@ -149,7 +149,7 @@ TOOLS = [
             '<div><label class="@L@" for="z-nisab-method">Nisab method</label>'
             '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
             '<option value="silver" selected>Silver Nisab (612.36 g)</option>'
-            '<option value="gold-87">Gold Nisab (87.48 g)</option>'
+            '<option value="gold-87">Gold Nisab (87.48 g)</option>' '<option value="gold-87-28">Gold Nisab (87.28 g, Islamic Relief Pakistan)</option>'
             '<option value="gold-85">Gold Nisab (85 g)</option>'
             '</select></div></div>'
             '<div class="grid sm:grid-cols-2 gap-4">'
