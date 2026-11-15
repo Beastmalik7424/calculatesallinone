@@ -697,9 +697,9 @@ for url in urls:
         assert len(faq_schemas) == 1, "Homepage must have one FAQPage schema"
         names = {item.get("name") for item in faq_schemas[0].get("mainEntity", [])}
         expected = {
-            "Are the calculators free?",
-            "Do you store the numbers I enter?",
-            "Are the results accurate enough for important decisions?",
+            "Where can I find the monthly close checklist?",
+            "Which page explains the adult BMI categories?",
+            "Where are the Zakat thresholds explained?",
         }
         assert expected.issubset(names), f"Homepage FAQ schema must contain the concise visible questions: {expected - names}"
     if url.endswith("/emi-calculator/"):
