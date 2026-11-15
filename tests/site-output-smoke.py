@@ -81,11 +81,14 @@ assert re.search(r"<summary[^>]*>\s*Choose a free calculator\s*<span[^>]*>⌄</s
 assert "<h2>Calculator tools</h2>" in home_html, "Homepage tools section should explicitly identify calculator tools"
 assert 'href="#ca-all-tools-menu"' in home_html and "Browse all free calculators</a>" in home_html, "Homepage must expose a recognisable link-based calculator browsing action"
 assert "Free Online Standard Calculator" not in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." not in home_html, "Homepage must not retain the outdated calculator-only headline or tool list"
-for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
-    assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
+for phrase in ("The BMI calculator uses an adult's weight and height",
+               "The Profit and Loss Calculator compares revenue with cost of goods sold",
+               "The Zakat Calculator compares personal gold or silver Nisab values",
+               "The Money and Business hub includes a recommended monthly close checklist"):
+    assert phrase.lower() in home_html.lower(), ("homepage tool description", phrase)
 for href in ("/calorie-calculator/", "/emi-calculator/", "/compound-interest-calculator/", "/percentage-calculator/", "/fraction-calculator/", "/date-calculator/", "/years-to-days-calculator/"):
     assert f'href="{href}"' in home_html, f"Homepage should link to the relevant calculator: {href}"
-assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
+assert "Calculations run in your browser, and calculator entries are not sent to our server." in home_html, "Homepage should state the browser privacy claim once"
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 assert "https://github.com/Beastmalik7424" in about_html and "source repository" in about_html, "About page should expose the verified public maintainer profile and source repository"
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
