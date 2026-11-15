@@ -88,6 +88,8 @@ const zeroHanafiHarvest = calculateUshr({ sect: "sunni", school: "hanafi", crop:
 assert.equal(zeroHanafiHarvest.status, "no_harvest", "A market value without harvested produce must not create an Ushr obligation");
 assert.equal(zeroHanafiHarvest.amountDue, 0);
 assert.equal(zeroHanafiHarvest.produceDueKg, 0);
+assert.equal(zeroHanafiHarvest.rate, null);
+assert.equal(zeroHanafiHarvest.meetsNisab, false);
 const zeroSistaniHarvest = calculateUshr({ sect: "shia", marja: "sistani", crop: "wheat", quantityKg: 0, marketValue: 50000, irrigation: "rain" });
 assert.equal(zeroSistaniHarvest.status, "no_harvest", "No crop quantity must not be represented as a below-Nisab harvest");
 assert.equal(zeroSistaniHarvest.amountDue, 0);

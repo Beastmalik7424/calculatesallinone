@@ -116,6 +116,14 @@
         else throw new RangeError("Choose a verified Hanafi crop Nisab position");
       }
     }
+    if (quantityKg === 0) {
+      return Object.freeze({
+        sect, school, currency, crop, quantityKg, marketValue, irrigation,
+        rate: null, nisabKg, nisabPosition, meetsNisab: false, status: "no_harvest",
+        produceDueKg: 0, amountDue: 0,
+        guidance: "No harvested produce was entered. Ushr is estimated from eligible harvested produce, not from a market-value-only entry."
+      });
+    }
     if (sect === "sunni" && irrigation === "mixed" && input.mixedRateConfirmed !== true) {
       return Object.freeze({
         sect, school, status: "scholar_review_required", currency,
