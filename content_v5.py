@@ -17,6 +17,9 @@ GUIDE_EXTRA = {
             "For a useful comparison, use the same scale and similar conditions each time. Measure height without shoes, stand upright and look straight ahead. Record weight and height in the units selected above, and check that centimetres have not been entered as metres.",
             "If you track changes over time, compare measurements taken under similar conditions rather than treating one reading as a diagnosis. The input limits shown by this calculator are technical limits for the form, not target weights or medical recommendations.",
         ]),
+        ("Exact-value worked example", [
+            "For an adult weighing 70 kg and measuring 175 cm, convert height to 1.75 m and calculate 70 ÷ (1.75 × 1.75) = 22.8571 kg/m², displayed as 22.9. This falls in the adult WHO normal weight range of 18.5 to below 25 kg/m². It is a screening category, not a diagnosis.",
+        ]),
     ],
     "profit-loss-calculator": [],
     "discount-calculator": [
