@@ -26,14 +26,21 @@ math = page("math")
 time = page("time")
 
 for phrase in (
-    "How is profit margin calculated?",
-    "gross margin is 40% of sales",
-    "operating margin is 25% of sales",
-    "Does the EMI estimate include lender fees?",
-    "fixed nominal annual rate",
-    "Does the compound interest estimate include deposits or taxes?",
+    "Recommended monthly close process",
+    "recommended working process",
+    "Reconcile platform payouts",
+    "Count the inventory",
+    "Record the month's expenses and platform or payment fees",
+    "Reconcile the bank or wallet balance",
+    "Review gross profit, net profit and the cash position",
+    "Lock the reviewed period",
+    "not an official accounting standard",
+    "openstax.org/books/introduction-business/pages/14-5-the-income-statement",
 ):
     assert phrase.lower() in money.lower(), ("money", phrase)
+assert "Last reviewed: 2026-11-16" in money
+assert "Muhammad Fayyaz Adeel" in money
+
 
 for phrase in (
     "What is 25% of 200?",
