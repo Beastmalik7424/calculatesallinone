@@ -140,7 +140,7 @@ assert.match(elements["zakat-result"].textContent, /zero or greater/i, "negative
 setValues({"z-cash":500,"z-silverprice":1}); submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /below the threshold/i);
 setValues({"z-cash":1000,"z-silverprice":1}); elements["z-hawl"].checked = false; submit("zakat-form");
-assert.match(elements["zakat-result"].textContent, /lunar year/i);
+assert.match(elements["zakat-result"].textContent, /lunar Zakat year/i);
 elements["z-hawl"].checked = true; submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /2\.5 percent.*25/i);
 
