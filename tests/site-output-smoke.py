@@ -69,7 +69,7 @@ assert "The BMI calculator uses an adult's weight and height" in home_html, "Hom
 assert "The Profit and Loss Calculator compares revenue with cost of goods sold" in home_html, "Homepage must explain what the P&L tool calculates"
 assert "The Zakat Calculator compares personal gold or silver Nisab values" in home_html, "Homepage must explain what the Zakat tool compares"
 assert "Browse all free calculators" in home_html, "Homepage must expose a clear calculator-browsing action"
-for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
+for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "calculations run in your browser"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
