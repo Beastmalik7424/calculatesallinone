@@ -103,7 +103,7 @@ def main():
         home_text = visible_text(home_path)
         for phrase in [
             "Free Online Calculators",
-            "Calculate adult BMI, business gross profit and margin, Zakat Nisab values, discounts, percentages, dates and unit conversions.",
+            "The BMI calculator uses an adult's weight and height",
             "Browse all free calculators",
         ]:
             if phrase not in home_text:
