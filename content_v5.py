@@ -116,6 +116,18 @@ GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
 
 # Distinctive, query-matched explanations benchmarked against calculator competitors.
 # Keep one canonical page per intent and explain assumptions instead of duplicating pages.
+
+GUIDE_EXTRA["profit-loss-calculator"].extend([
+    ("Build cost of goods sold from stock records", [
+        "Before entering Business P&L, calculate cost of goods sold (COGS) for the same accounting period: opening inventory + net purchases + directly attributable inward freight or handling − closing inventory. Closing stock remains an asset, so it is not charged to this period's COGS. Use a consistent inventory valuation method and avoid counting a purchase, freight charge or item twice.",
+        "Worked shop example: opening saleable stock is PKR 100,000, net purchases including inward freight are PKR 80,000, and closing saleable stock is PKR 30,000. COGS is PKR 100,000 + PKR 80,000 − PKR 30,000 = PKR 150,000. If net sales for the same period are PKR 220,000, gross profit is PKR 70,000. After PKR 40,000 of other operating expenses, operating profit is PKR 30,000 and operating margin is PKR 30,000 ÷ PKR 220,000 × 100 = 13.64%. Enter PKR 150,000 in the COGS field, not the full purchases figure.",
+    ]),
+    ("Profit is not the same as cash available", [
+        "A business can report operating profit while some customers have not paid. If PKR 35,000 of the example's sales remain unpaid at month-end, that receivable may be part of reported sales but is not money in the bank. Supplier payment timing, stock purchases, loan principal, tax timing and owner withdrawals also change cash movement.",
+        "This calculator estimates product profit or a simplified operating result from the values entered. It does not calculate cash flow, working capital, receivables, payables, depreciation or a complete statutory income statement. Reconcile the estimate with your accounting records before using it for tax, lending or formal reporting.",
+    ]),
+])
+
 GUIDE_EXTRA["years-to-days-calculator"].append(
     ("365 days, 365.25 days and 365.2425 days per year", [
         "A fixed 365-day year is useful for simple arithmetic. A Julian year is exactly 365.25 days, a fixed duration used in astronomy. The Gregorian mean is 365.2425 days because its 400-year cycle has 97 leap days: (400 x 365 + 97) / 400 = 365.2425. These methods are not identical over long durations.",
@@ -251,7 +263,7 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
 GUIDE_EXTRA["bmi-calculator"].append(
     ("Pakistan and South Asia context", [
         "Body composition and the distribution of body fat can differ between populations, and some South Asian guidance discusses cardiometabolic risk at lower BMI values than the standard international adult cut-offs. The WHO 2004 Expert Consultation identified 23.0 and 27.5 kg/m² as additional public-health action points, while noting that one new cutoff could not be set for every Asian population. These action points are not a replacement for the standard WHO adult categories shown by this calculator. A qualified local health professional can interpret BMI alongside waist measurement, medical history and other relevant information. This page does not assign a South Asian diagnosis or provide a personal risk estimate.",
-        "This note is general educational information. It does not assign a South Asian diagnosis, provide a personal risk estimate or replace an assessment by a local doctor. The appropriate interpretation can vary by individual and clinical context.",
+        "Clinical guidance adds a second layer to those public-health action points. The 2026 Standards of Care in Overweight and Obesity identifies BMI of 23 kg/m² or above as a screening indicator of excess adiposity for adults of Asian background. For adults in the 23 to 27.4 range, its clinical assessment also considers central adiposity, including a waist-to-height ratio of 0.5 or above or waist circumference of at least 80 cm for women and 90 cm for men. NHS guidance also advises adults with BMI below 35 to keep their waist below half their height; for a height of 175 cm, half is 87.5 cm. These are clinical assessment and screening references, not a diagnosis from this calculator. Thresholds can vary by population, and this tool does not collect waist measurements or apply ethnicity-specific categories.",
     ])
 )
 
