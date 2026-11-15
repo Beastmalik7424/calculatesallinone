@@ -119,7 +119,7 @@ GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
 
 GUIDE_EXTRA["profit-loss-calculator"].extend([
     ("Build cost of goods sold from stock records", [
-        "Before entering Business P&L, calculate cost of goods sold (COGS) for the same accounting period: opening inventory + net purchases + direct inward costs − closing inventory. Direct inward costs can include freight or handling.. Closing stock remains an asset, so it is not charged to this period's COGS. Use a consistent inventory valuation method and avoid counting a purchase, freight charge or item twice.",
+        "Before entering Business P&L, calculate cost of goods sold (COGS) for the same accounting period: opening inventory + net purchases + direct inward costs − closing inventory. Direct inward costs can include freight or handling. Closing stock remains an asset, so it is not charged to this period's COGS. Use a consistent inventory valuation method and avoid counting a purchase, freight charge or item twice.",
         "Worked shop example: opening saleable stock is PKR 100,000, net purchases including inward freight are PKR 80,000, and closing saleable stock is PKR 30,000. COGS is PKR 100,000 + PKR 80,000 − PKR 30,000 = PKR 150,000. If net sales for the same period are PKR 220,000, gross profit is PKR 70,000. After PKR 40,000 of other operating expenses, operating profit is PKR 30,000 and operating margin is PKR 30,000 ÷ PKR 220,000 × 100 = 13.64%. Enter PKR 150,000 in the COGS field, not the full purchases figure.",
     ]),
     ("Profit is not the same as cash available", [
@@ -127,6 +127,14 @@ GUIDE_EXTRA["profit-loss-calculator"].extend([
         "This calculator estimates product profit or a simplified operating result from the values entered. It does not calculate cash flow, working capital, receivables, payables, depreciation or a complete statutory income statement. Reconcile the estimate with your accounting records before using it for tax, lending or formal reporting.",
     ]),
 ])
+
+
+GUIDE_EXTRA["profit-loss-calculator"].append(
+    ("Load the full per-item cost before trusting product margin", [
+        "Product Profit mode accepts one unit-cost figure and one selling price. It does not separately model payment or marketplace fees, customer-acquisition cost, packaging, storage, seller-paid delivery or returns. If you want those costs included in the per-item result, allocate the relevant amount to each unit and include it in the unit-cost input. If you enter purchase cost alone, read the result as pre-fee product contribution, not take-home profit.",
+        "Worked example: purchase cost is PKR 1,000 per item, allocated marketplace and payment fees are PKR 60, seller-paid delivery and packaging are PKR 90, and advertising cost per acquired sale is PKR 50. The loaded unit cost is PKR 1,200. At a selling price of PKR 1,500, estimated product profit is PKR 300 and margin is 20%. If you enter only the PKR 1,000 purchase cost, the calculator shows PKR 500 and 33.33% margin before those omitted costs. Do not include the same fee in both loaded unit cost and Business P&L expenses.",
+    ])
+)
 
 GUIDE_EXTRA["years-to-days-calculator"].append(
     ("365 days, 365.25 days and 365.2425 days per year", [
