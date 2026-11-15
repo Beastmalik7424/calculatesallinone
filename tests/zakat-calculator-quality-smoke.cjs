@@ -45,7 +45,7 @@ for (const term of [
 }
 for (const term of [
   "503,529", "612.36", "87.48", "رمضان کے پہلے دن", "پاکستان", "نصاب",
-  "اثاثے", "واجب الادا", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتا ہے"
+  "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتا ہے"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
 }
