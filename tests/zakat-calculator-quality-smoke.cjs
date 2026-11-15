@@ -49,6 +49,12 @@ for (const term of [
 }
 assert.ok(enText.split(/\s+/).length >= 1000, "English Zakat guide is too thin (<1000 visible words)");
 assert.ok(urText.split(/\s+/).length >= 700, "Urdu Zakat guide is too thin (<700 visible words)");
+for (const [name, html] of [["English", en], ["Urdu", ur]]) {
+  const submitAt = html.indexOf('type="submit"');
+  const assetAt = html.indexOf('id="z-cash"');
+  assert.ok(submitAt > 0 && submitAt < assetAt, name + " Zakat submit action must precede the long asset-entry section");
+  assert.match(html.slice(submitAt - 100, submitAt + 250), /sticky/, name + " Zakat submit action must remain reachable while entering assets");
+}
 assert.match(en, /application\/ld\+json/, "English page must retain structured data");
 assert.match(ur, /application\/ld\+json/, "Urdu page must retain structured data");
 assert.match(en, /canonical/i, "English page must retain canonical metadata");
