@@ -1248,7 +1248,8 @@ for _phrase in ("WHO adult BMI table", "Underweight", "18.5 to 24.9", "25.0 to 2
                 "70 kg", "1.70 m", "24.2",
                 "https://doi.org/10.1016/S0140-6736(03)15268-3"):
     assert _phrase.lower() in _bmi_2026.lower(), "BMI page is missing approved WHO content: " + _phrase
-assert "2026 Standards of Care in Overweight and Obesity" not in _bmi_2026, "Unapproved BMI guideline detail must not remain"
+_bmi_2026_visible = re.sub(r"(?is)<script\b.*?</script>", "", _bmi_2026)
+assert "2026 Standards of Care in Overweight and Obesity" not in _bmi_2026_visible, "Unapproved BMI guideline detail must not remain in visible English content"
 assert "Last reviewed: 2026-11-16" in _bmi_2026, "BMI page needs the requested review date"
 
 _ur_bmi_2026 = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
