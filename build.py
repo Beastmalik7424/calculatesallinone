@@ -137,7 +137,7 @@ TOOLS = [
         "app": "FinanceApplication",
         "description": "Estimate Zakat on eligible wealth worldwide with silver or gold Nisab, ISO currency codes, a full asset and liability breakdown, and lunar-year confirmation.",
         "h1": "Global Zakat Calculator with Silver and Gold Nisab",
-        "lead": "Compare Pakistan's 1447 AH (2026) bank deduction threshold with the separate personal gold or silver Nisab. Enter your own metal price and net wealth to see an arithmetic estimate, not a religious ruling.",
+        "lead": "Estimate Zakat in your own currency. Choose a silver or gold Nisab method, enter the current metal price per gram and list eligible assets and short-term liabilities. The calculator shows its assumptions and separates Pakistan's year-specific bank deduction threshold from personal Zakat.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             + '<div class="sticky top-20 z-20 shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
@@ -188,15 +188,9 @@ TOOLS = [
                 "Pakistan's bank deduction Nisab for 1447 AH (2026) is PKR 503,529. Under State Bank of Pakistan BPRD Circular Letter No. 03 dated 17 February 2026, the 2.5% source deduction applies to saving, profit and loss sharing, and similar accounts on the first day of Ramazan. This bank threshold is not the personal Zakat Nisab.",
                 "For personal Zakat, the two reference weights are 87.48 g of gold or 612.36 g of silver. Their monetary value depends on the per-gram price you enter. Do not substitute the bank deduction threshold for either personal threshold."
             ]),
-            ("Formula", [
-                "Personal Nisab value = selected metal weight × user-entered price per gram. The estimate applies 2.5% to net qualifying wealth when it reaches the selected personal Nisab and the entered lunar-year condition is complete."
-            ]),
-            ("Worked example: personal silver Nisab", [
-                "Using a hypothetical silver price of PKR 3,000 per gram, 612.36 × 3,000 = PKR 1,837,080. If net wealth is PKR 700,000, it is below this personal silver Nisab and the estimate is zero. If net wealth is PKR 2,000,000, 2.5% is PKR 50,000."
-            ]),
-            ("Limitations and professional opinion", [
-                "The calculator uses the asset values, liabilities and metal price entered by the user. It does not fetch a live metal price or decide whether a particular asset or liability qualifies under a personal religious ruling. Ask a qualified scholar about the method and eligibility that apply to your circumstances. The bank deduction threshold changes yearly. Confirm the amount for the relevant year before relying on it."
-            ]),
+            ("Formula", ["Personal Nisab value = selected metal weight × user-entered price per gram. The estimate applies 2.5% to net qualifying wealth when it reaches the selected personal Nisab and the entered lunar-year condition is complete."]),
+            ("Worked example: personal silver Nisab", ["Using a hypothetical silver price of PKR 3,000 per gram, 612.36 × 3,000 = PKR 1,837,080. If net wealth is PKR 700,000, it is below this personal silver Nisab and the estimate is zero. If net wealth is PKR 2,000,000, 2.5% is PKR 50,000."]),
+            ("Limitations and professional opinion", ["The calculator uses the asset values, liabilities and metal price entered by the user. It does not fetch a live metal price or decide whether a particular asset or liability qualifies under a personal religious ruling. Ask a qualified scholar about the method and eligibility that apply to your circumstances. The bank deduction threshold changes yearly. Confirm the amount for the relevant year before relying on it."]),
         ],
         "faq": [
             ("Does PKR 503,529 set my personal Zakat Nisab?", "No. It is the Pakistan bank source-deduction threshold for specified account types in 1447 AH (2026), not the personal gold or silver Nisab."),
@@ -271,7 +265,7 @@ TOOLS = [
         "app": "UtilitiesApplication",
         "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
         "h1": "Profit and Loss Calculator",
-        "lead": "This profit loss calculator compares business operating profit with product-level profit or loss, markup and margin.",
+        "lead": "Use Business P&L mode to calculate gross profit and net operating profit from revenue, COGS and expenses. Use Product mode to compare a unit cost with its selling price.",
         "ui": (
             '<form id="pl-form" class="space-y-5" novalidate>'
             '<fieldset class="ca-profit-modes"><legend class="@L@">Calculation type</legend>'
@@ -290,18 +284,10 @@ TOOLS = [
             + result("pl-result")
         ),
         "guide": [
-            ("Formulas", [
-                "COGS = opening inventory + purchases − closing inventory. Gross profit = revenue − COGS. Gross margin % = gross profit ÷ revenue × 100."
-            ]),
-            ("Worked example", [
-                "Revenue is 100,000. Opening inventory is 20,000, purchases are 50,000 and closing inventory is 25,000. COGS = 20,000 + 50,000 − 25,000 = 45,000. Gross profit = 100,000 − 45,000 = 55,000. Gross margin = 55,000 ÷ 100,000 × 100 = 55%."
-            ]),
-            ("Cash flow is separate from profit", [
-                "Profit is not cash. A platform may owe a payout that has not reached the bank, so payout delays can leave reported sales ahead of cash received. Buying inventory up front also reduces cash before those goods are sold. Review payout timing and inventory payments alongside the profit result."
-            ]),
-            ("Limitations and professional opinion", [
-                "The calculator uses the revenue, inventory and purchase values entered. It does not reconcile platform statements, verify stock counts, or prepare a complete set of accounts. Ask an accountant to review inventory valuation, expense classification and formal reporting when the result will be used for tax, lending or statutory accounts."
-            ]),
+            ("Formulas", ["COGS = opening inventory + purchases − closing inventory. Gross profit = revenue − COGS. Gross margin % = gross profit ÷ revenue × 100."]),
+            ("Worked example", ["Revenue is 100,000. Opening inventory is 20,000, purchases are 50,000 and closing inventory is 25,000. COGS = 20,000 + 50,000 − 25,000 = 45,000. Gross profit = 100,000 − 45,000 = 55,000. Gross margin = 55,000 ÷ 100,000 × 100 = 55%."]),
+            ("Cash flow is separate from profit", ["Profit is not cash. A platform may owe a payout that has not reached the bank, so payout delays can leave reported sales ahead of cash received. Buying inventory up front also reduces cash before those goods are sold. Review payout timing and inventory payments alongside the profit result."]),
+            ("Limitations and professional opinion", ["The calculator uses the revenue, inventory and purchase values entered. It does not reconcile platform statements, verify stock counts, or prepare a complete set of accounts. Ask an accountant to review inventory valuation, expense classification and formal reporting when the result will be used for tax, lending or statutory accounts."]),
         ],
         "faq": [
             ("Which period should the inventory figures cover?", "Use opening inventory, purchases, closing inventory and revenue from the same accounting period."),
@@ -831,19 +817,212 @@ def bmi_urdu_guide_html():
 
 EXTRA = {
     "zakat-calculator": {
-        "quick": "Total eligible assets minus eligible liabilities equals net zakatable wealth. Compare that amount with the silver or gold Nisab you selected using the current price per gram you entered. If the selected threshold is met and the lunar year (hawl) is complete, the estimate applies 2.5 percent and subtracts Zakat already paid for the same year.",
+        "quick": "",
         "faq": [],
     },
     "bmi-calculator": {
-        "quick": "BMI uses weight in kg divided by height in metres squared when kg is selected, or 703 × weight in lb divided by height in total inches squared when lb is selected. For adults, 18.5 to 24.9 is the WHO normal weight range.",
-        "faq": [
-            ("Is a BMI of 25 unhealthy?", "A BMI of 25 is at the start of the overweight range. It is a screening number only. Waist size, blood pressure and blood tests give a fuller picture, and a clinician can interpret them with you."),
-            ("Does BMI work for athletes?", "BMI can overstate body fat in people with high muscle mass. A clinician can use other measures for athletes."),
-        ],
+        "quick": "",
+        "faq": [],
     },
     "profit-loss-calculator": {
         "quick": "",
         "faq": [],
+    },
+    "discount-calculator": {
+        "quick": "",
+        "faq": [
+            ("How do I calculate two discounts together?", "Apply the first discount to the original price, then apply the second discount to the reduced price. Stacked discounts are not the same as adding the percentages."),
+        ],
+    },
+    "age-calculator": {
+        "quick": "Age is calculated by subtracting the birth date from today's date, year by year, month by month and day by day, then borrowing from the previous month where needed.",
+        "faq": [
+            ("How do I find my age in days?", "Enter your date of birth. The total days lived figure is shown with your years, months and days."),
+        ],
+    },
+    "unit-converter": {
+        "quick": "Convert by multiplying the value by the factor from the starting unit to the base unit, then dividing by the factor from the target unit to the base unit.",
+        "faq": [
+            ("How do I convert centimeters to inches?", "Divide centimeters by 2.54. For example, 10 cm is about 3.94 inches. One inch is exactly 2.54 centimeters."),
+            ("How do I convert kilograms to pounds?", "Multiply kilograms by about 2.20462262. For example, 1 kg is about 2.2046 lb. The exact reference is 1 lb = 0.45359237 kg."),
+            ("How do I convert Celsius to Fahrenheit?", "Multiply Celsius by 9, divide by 5, then add 32."),
+        ],
+    },
+    "standard-calculator": {
+        "quick": "Multiplication and division run before addition and subtraction. The percent key divides the last number by 100.",
+        "faq": [
+            ("Does this calculator handle parentheses?", "Yes. Use the ( and ) buttons to group calculations. Multiplication and division run before addition and subtraction."),
+        ],
+    },
+    "tasbih-counter": {
+        "quick": "",
+        "faq": [],
+    },
+    "stopwatch": {
+        "quick": "Press Start to begin timing, Stop to pause, and Reset to clear. The display shows hours, minutes, seconds and hundredths.",
+        "faq": [
+            ("Does the stopwatch continue after I close the tab?", "No. Closing or reloading the page stops and clears the stopwatch."),
+        ],
+    },
+}
+
+
+DIGIT = "bg-white dark:bg-stone-800 border border-slate-200 dark:border-stone-600 text-slate-900 dark:text-stone-100 text-2xl font-semibold rounded-xl min-h-[64px] shadow-sm hover:bg-teal-50 dark:hover:bg-stone-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+OPS = "bg-teal-700 hover:bg-teal-800 dark:bg-teal-700 dark:hover:bg-teal-600 text-white text-2xl font-bold rounded-xl min-h-[64px] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+SPECIAL = "bg-slate-100 hover:bg-teal-50 dark:bg-stone-700 dark:hover:bg-stone-600 border border-slate-200 dark:border-stone-600 text-slate-900 dark:text-stone-100 text-xl font-bold rounded-xl min-h-[64px] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+EQUALS = "bg-slate-900 hover:bg-slate-800 dark:bg-teal-700 dark:hover:bg-teal-600 text-white text-2xl font-bold rounded-xl min-h-[64px] shadow-md col-span-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+
+CALC_UI = (
+    '<div class="ca-calculator-engine max-w-xl mx-auto">'
+    '<output id="calc-display" class="block text-right text-4xl font-bold bg-white dark:bg-stone-950 border border-slate-200 dark:border-stone-600 rounded-2xl px-5 py-6 min-h-[5rem] break-all text-slate-900 dark:text-stone-100 shadow-inner" aria-live="polite">0</output>'
+    '<button id="calc-mode-toggle" type="button" class="' + SPECIAL + ' mt-3 w-full" aria-pressed="false">Scientific Mode</button>'
+    '<p id="calc-history" class="mt-2 min-h-6 text-right text-xs text-stone-600 dark:text-stone-300 break-words" aria-live="polite"></p>'
+    '<div id="calc-pad" class="grid grid-cols-4 gap-3 mt-3">'
+    '<button class="' + SPECIAL + '" data-key="C">C</button>'
+    '<button class="' + DIGIT + '" data-key="(" aria-label="Open parenthesis">(</button>'
+    '<button class="' + DIGIT + '" data-key=")" aria-label="Close parenthesis">)</button>'
+    '<button class="' + SPECIAL + '" data-key="BS" aria-label="Delete last character">⌫</button>'
+    '<button class="' + DIGIT + '" data-key="7">7</button>'
+    '<button class="' + DIGIT + '" data-key="8">8</button>'
+    '<button class="' + DIGIT + '" data-key="9">9</button>'
+    '<button class="' + OPS + '" data-key="/" aria-label="Divide">÷</button>'
+    '<button class="' + DIGIT + '" data-key="4">4</button>'
+    '<button class="' + DIGIT + '" data-key="5">5</button>'
+    '<button class="' + DIGIT + '" data-key="6">6</button>'
+    '<button class="' + OPS + '" data-key="*" aria-label="Multiply">×</button>'
+    '<button class="' + DIGIT + '" data-key="1">1</button>'
+    '<button class="' + DIGIT + '" data-key="2">2</button>'
+    '<button class="' + DIGIT + '" data-key="3">3</button>'
+    '<button class="' + OPS + '" data-key="-" aria-label="Subtract">−</button>'
+    '<button class="' + DIGIT + '" data-key="00">00</button>'
+    '<button class="' + DIGIT + '" data-key="0">0</button>'
+    '<button class="' + DIGIT + '" data-key=".">.</button>'
+    '<button class="' + OPS + '" data-key="+" aria-label="Add">+</button>'
+    '<button class="' + SPECIAL + '" data-key="sqrt" aria-label="Square root">√</button>'
+    '<button class="' + SPECIAL + '" data-key="%">%</button>'
+    '<button class="' + EQUALS + '" data-key="=">=</button>'
+    '</div>'
+    '<div id="scientific-pad" class="grid grid-cols-5 gap-2 mt-3" hidden>'
+    '<button id="calc-angle-toggle" type="button" class="' + SPECIAL + '" data-key="angle-toggle" aria-pressed="false">DEG</button>'
+    '<button class="' + SPECIAL + '" data-key="C">AC</button>'
+    '<button class="' + SPECIAL + '" data-key="BS" aria-label="Delete last character">⌫</button>'
+    '<button class="' + SPECIAL + '" data-key="M+">M+</button>'
+    '<button class="' + SPECIAL + '" data-key="MR">MR</button>'
+    '<button class="' + SPECIAL + '" data-key="MC">MC</button>'
+    '<button class="' + DIGIT + '" data-key="(">(</button>'
+    '<button class="' + DIGIT + '" data-key=")">)</button>'
+    '<button class="' + DIGIT + '" data-key="pi">π</button>'
+    '<button class="' + DIGIT + '" data-key="e">e</button>'
+    '<button class="' + SPECIAL + '" data-key="Ans">Ans</button>'
+    '<button class="' + SPECIAL + '" data-key="sin">sin</button>'
+    '<button class="' + SPECIAL + '" data-key="cos">cos</button>'
+    '<button class="' + SPECIAL + '" data-key="tan">tan</button>'
+    '<button class="' + SPECIAL + '" data-key="asin">sin⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="acos">cos⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="atan">tan⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="acsc">csc⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="asec">sec⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="acot">cot⁻¹</button>'
+    '<button class="' + SPECIAL + '" data-key="sec">sec</button>'
+    '<button class="' + SPECIAL + '" data-key="csc">csc</button>'
+    '<button class="' + SPECIAL + '" data-key="cot">cot</button>'
+    '<button class="' + SPECIAL + '" data-key="sqrt">√</button>'
+    '<button class="' + SPECIAL + '" data-key="cbrt">∛</button>'
+    '<button class="' + SPECIAL + '" data-key="root">ⁿ√</button>'
+    '<button class="' + SPECIAL + '" data-key="square">x²</button>'
+    '<button class="' + SPECIAL + '" data-key="cube">x³</button>'
+    '<button class="' + SPECIAL + '" data-key="^">xʸ</button>'
+    '<button class="' + SPECIAL + '" data-key="log">log</button>'
+    '<button class="' + SPECIAL + '" data-key="ln">ln</button>'
+    '<button class="' + SPECIAL + '" data-key="exp">eˣ</button>'
+    '<button class="' + SPECIAL + '" data-key="tenpow">10ˣ</button>'
+    '<button class="' + SPECIAL + '" data-key="reciprocal">1/x</button>'
+    '<button class="' + SPECIAL + '" data-key="sinh">sinh</button>'
+    '<button class="' + SPECIAL + '" data-key="cosh">cosh</button>'
+    '<button class="' + SPECIAL + '" data-key="tanh">tanh</button>'
+    '<button class="' + SPECIAL + '" data-key="csch">csch</button>'
+    '<button class="' + SPECIAL + '" data-key="sech">sech</button>'
+    '<button class="' + SPECIAL + '" data-key="coth">coth</button>'
+    '<button class="' + SPECIAL + '" data-key="abs">abs</button>'
+    '<button class="' + SPECIAL + '" data-key="floor">floor</button>'
+    '<button class="' + SPECIAL + '" data-key="ceil">ceil</button>'
+    '<button class="' + SPECIAL + '" data-key="round">round</button>'
+    '<button class="' + SPECIAL + '" data-key="!">n!</button>'
+    '<button class="' + SPECIAL + '" data-key="%">%</button>'
+    '<button class="' + SPECIAL + '" data-key="nPr">nPr</button>'
+    '<button class="' + SPECIAL + '" data-key="nCr">nCr</button>'
+    '<button class="' + SPECIAL + '" data-key="mod">mod</button>'
+    '<button class="' + SPECIAL + '" data-key="mean">mean</button>'
+    '<button class="' + SPECIAL + '" data-key="median">median</button>'
+    '<button class="' + SPECIAL + '" data-key="stdev">stdev</button>'
+    '<button class="' + SPECIAL + '" data-key="stdevp">stdevp</button>'
+    '<button class="' + SPECIAL + '" data-key="var">var</button>'
+    '<button class="' + SPECIAL + '" data-key="varp">varp</button>'
+    '<button class="' + SPECIAL + '" data-key="min">min</button>'
+    '<button class="' + SPECIAL + '" data-key="max">max</button>'
+    '<button class="' + SPECIAL + '" data-key="sum">sum</button>'
+    '<button class="' + SPECIAL + '" data-key="gcd">gcd</button>'
+    '<button class="' + SPECIAL + '" data-key="lcm">lcm</button>'
+    '<button class="' + DIGIT + '" data-key="7">7</button>'
+    '<button class="' + DIGIT + '" data-key="8">8</button>'
+    '<button class="' + DIGIT + '" data-key="9">9</button>'
+    '<button class="' + OPS + '" data-key="/">÷</button>'
+    '<button class="' + OPS + '" data-key="*">×</button>'
+    '<button class="' + DIGIT + '" data-key="4">4</button>'
+    '<button class="' + DIGIT + '" data-key="5">5</button>'
+    '<button class="' + DIGIT + '" data-key="6">6</button>'
+    '<button class="' + OPS + '" data-key="-">−</button>'
+    '<button class="' + OPS + '" data-key="+">+</button>'
+    '<button class="' + DIGIT + '" data-key="1">1</button>'
+    '<button class="' + DIGIT + '" data-key="2">2</button>'
+    '<button class="' + DIGIT + '" data-key="3">3</button>'
+    '<button class="' + DIGIT + '" data-key="0">0</button>'
+    '<button class="' + DIGIT + '" data-key=".">.</button>'
+    '<button class="' + EQUALS + '" data-key="=">=</button>'
+    '</div></div>'
+)
+
+
+# Independent time-conversion and question calculators. Both are linked automatically
+# in the navigation, category pages, home tool list, sitemap, and SEO metadata.
+TOOLS.extend([
+    {
+        "slug": "years-to-days-calculator", "category": "time",
+        "name": "Years to Days Calculator", "app": "UtilitiesApplication",
+        "description": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",
+        "h1": "Years to Days Calculator",
+        "lead": "Convert years and days with 365, 365.25 or 365.2425-day methods. Use a start date to count exact calendar days.",
+        "ui": (
+            '<form id="years-days-form" class="space-y-3" novalidate>'
+            '<div class="grid grid-cols-2 gap-3">'
+            '<div><label class="@L@" for="yd-direction">Convert</label>'
+            '<select class="@I@" id="yd-direction"><option value="years-to-days">Years to days</option><option value="days-to-years">Days to years</option></select></div>'
+            '<div><label class="@L@" for="yd-method">Year length</label>'
+            '<select class="@I@" id="yd-method"><option value="365">365-day year</option><option value="365.25">Julian average (365.25)</option><option value="365.2425">Gregorian average (365.2425)</option><option id="yd-calendar-option" value="calendar">Exact calendar years (years to days only)</option></select></div>'
+            '</div>'
+            '<label class="@L@" id="yd-value-label" for="yd-value">Number of years</label>'
+            '<input class="@I@" id="yd-value" type="number" min="0" max="1000000" step="any" inputmode="decimal" value="80" required>'
+            '<div id="yd-exact-fields" hidden><label class="@L@" for="yd-start-date">Start date (Gregorian calendar)</label>'
+            '<input class="@I@" id="yd-start-date" type="date" min="0001-01-01" max="9999-12-31" disabled>'
+            '<p class="mt-2 text-sm">Exact mode accepts whole years and counts actual days from the start date up to, but not including, the anniversary. For 29 February, a non-leap anniversary uses 1 March.</p></div>'
+            '<button id="yd-submit" class="@B@" type="submit">Convert Years</button></form>'
+            '<div id="yd-result" class="@R@" role="status" aria-live="polite"></div>'
+        ),
+        "guide": [
+            ("Quick answers to common years-to-days questions", [
+                "Using the 365.2425-day Gregorian mean, 5 years = 1,826.2125 days using the Gregorian average. The 365-day method gives 1,825 days, while the 365.25-day Julian average gives 1,826.25 days.",
+                "Using the 365.2425-day Gregorian mean, 30 years = 10,957.275 days using the Gregorian average. The 365-day method gives 10,950 days, while the 365.25-day Julian average gives 10,957.5 days.",
+                "For the reverse question, 70,000 days ÷ 365.2425 = 191.6535 years using the Gregorian mean. This is a decimal-year estimate, not an exact calendar age.",
+                "Exact calendar days depend on the start date because the actual Gregorian interval may include leap days. Enter the start date and a whole number of years in Exact calendar years when you need the elapsed day count for a specific anniversary.",
+                "The Gregorian rule adds 97 leap days in each 400-year cycle, which produces the 365.2425-day average. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory leap-year explanation</a> describes the rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST's year definition</a> identifies the average Gregorian year as 365.2425 days."
+            ])
+        ],
+        "faq": [
+            ("Which year-length methods can I use?", "Choose 365 days, the 365.25-day Julian year or the 365.2425-day Gregorian average. These are fixed-duration conversions; the exact calendar option counts actual days from a start date."),
+            ("Does exact calendar mode include leap days?", "Yes. It counts actual Gregorian calendar days up to, but not including, the ending anniversary. A 29 February start uses 1 March when the ending year is not a leap year."),
+            ("Can I convert days to years?", "Yes. Select Days to years and choose one of the three fixed year lengths. The result is a decimal-year estimate with an approximate years, months and days breakdown."),
+            ("Can exact calendar mode use decimal years?", "No. Exact calendar mode accepts whole years and a valid Gregorian start date. The fixed 365, 365.25 and 365.2425 methods accept decimal values."),
+        ],
         "sources": 'Julian year: exactly 365.25 days (<a class="' + LINK + '" href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noopener noreferrer">NASA/JPL astrodynamic parameters</a>). Gregorian mean year: 365.2425 days over the 400-year cycle (<a class="' + LINK + '" href="https://aa.usno.navy.mil/faq/leap_years" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory leap-year guidance</a>).'
     },
     {
@@ -927,13 +1106,13 @@ def home_extra_html(lang):
     answer_first = (
         "جی ہاں۔ CalculatesAll کے ٹولز مفت ہیں، حساب آپ کے براؤزر میں ہوتا ہے اور درج کردہ اعداد ہمارے سرور کو نہیں بھیجے جاتے۔ ہر کیلکولیٹر اپنا فارمولا اور حدود بتاتا ہے۔ اہم مالی، طبی یا دینی فیصلے کے لیے متعلقہ ماہر سے تصدیق کریں۔"
         if lang == "ur" else
-        "Choose the tool that matches the task, then read its method and limitations before relying on the result."
+        "Yes. CalculatesAll tools are free, calculations run in your browser, and calculator entries are not sent to our server. Each tool explains its formula and limits. Confirm important financial, medical or religious decisions with a qualified professional."
     )
     out += '<h2 class="' + H2 + '">' + heading + '</h2><p class="' + P + '">' + answer_first + '</p><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     if lang == "en":
         out += '<p class="' + P + '">Choose a tool for the task at hand. The <a class="' + LINK + '" href="/profit-loss-calculator/">Profit and Loss Calculator</a> separates product markup from gross margin, the <a class="' + LINK + '" href="/years-to-days-calculator/">Years to Days Calculator</a> distinguishes fixed-year and calendar-date methods, and the <a class="' + LINK + '" href="/tasbih-counter/">Tasbih Counter</a> keeps its count on your device.</p>'
         out += '<p class="' + P + '">CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel. ' + SITE_DESCRIPTION + ' <a class="' + LINK + '" href="/about/">About the maintainer</a>.</p>'
-        out += '<section aria-labelledby="how-it-works" class="mt-8"><h2 id="how-it-works" class="' + H2 + '">How it works</h2><ol class="mt-3 list-decimal pl-6 space-y-2 text-base leading-relaxed text-stone-800 dark:text-stone-200"><li>Choose a calculator for the task you want to complete.</li><li>Enter your values and select the units or options the tool requests.</li><li>Review the displayed result and the page-specific limitations.</li></ol></section>'
+        out += '<section aria-labelledby="how-it-works" class="mt-8"><h2 id="how-it-works" class="' + H2 + '">How it works</h2><ol class="mt-3 list-decimal pl-6 space-y-2 text-base leading-relaxed text-stone-800 dark:text-stone-200"><li>Choose a calculator for the task you want to complete.</li><li>Enter your values and select the units or options the tool requests.</li><li>Review the result and formula, including the worked example and stated limitations, before relying on it.</li></ol><p class="' + P + '">No account or download is required. Calculator entries are processed in your browser and are not sent to our server.</p></section>'
         out += '<p class="' + P + '"><a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools">Browse all free calculators</a></p>'
     return out
 
@@ -1540,21 +1719,11 @@ def answer_block(slug, lang="en"):
 
 
 BMI_GUIDE = [
-    ("Formula", [
-        "Adult BMI = weight in kilograms ÷ height in metres squared. Convert centimetres to metres before calculating. The calculator also accepts pounds and feet/inches through its unit controls."
-    ]),
-    ("Adult BMI categories", [
-        "The World Health Organization adult categories are shown in this table. They are screening categories for adults, not a diagnosis."
-    ]),
-    ("WHO Expert Consultation and Asian population action points", [
-        "The WHO Expert Consultation published in The Lancet in 2004 retained the standard WHO BMI cutoffs. It identified 23.0, 27.5, 32.5 and 37.5 kg/m² as additional public-health action points for Asian populations. These points sit alongside the standard categories. They are not replacement categories and this calculator does not relabel them as categories."
-    ]),
-    ("Worked example", [
-        "For an adult weighing 70 kg at a height of 1.70 m: 70 ÷ (1.70 × 1.70) = 24.2 kg/m² when rounded to one decimal place."
-    ]),
-    ("Limitations and professional opinion", [
-        "This calculator is for adults only. BMI is a screening measure and does not diagnose a health condition. Waist circumference adds information that BMI alone does not provide. Discuss your result with a qualified health professional when you need an individual assessment or advice about a health decision."
-    ]),
+    ("Formula", ["Adult BMI = weight in kilograms ÷ height in metres squared. Convert centimetres to metres before calculating. The calculator also accepts pounds and feet/inches through its unit controls."]),
+    ("Adult BMI categories", ["The World Health Organization adult categories are shown in this table. They are screening categories for adults, not a diagnosis."]),
+    ("WHO Expert Consultation and Asian population action points", ["The WHO Expert Consultation published in The Lancet in 2004 retained the standard WHO BMI cutoffs. It identified 23.0, 27.5, 32.5 and 37.5 kg/m² as additional public-health action points for Asian populations. These points sit alongside the standard categories. They are not replacement categories and this calculator does not relabel them as categories."]),
+    ("Worked example", ["For an adult weighing 70 kg at a height of 1.70 m: 70 ÷ (1.70 × 1.70) = 24.2 kg/m² when rounded to one decimal place."]),
+    ("Limitations and professional opinion", ["This calculator is for adults only. BMI is a screening measure and does not diagnose a health condition. Waist circumference adds information that BMI alone does not provide. Discuss your result with a qualified health professional when you need an individual assessment or advice about a health decision."]),
 ]
 BMI_FAQ = [
     ("Which weight units can I enter?", "Select kilograms or pounds before entering your weight."),
@@ -2050,7 +2219,8 @@ def home_page(lang="en"):
             cards += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
                       '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + c["slug"] + '/">' + c["name"] + "</a>"
                       '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + c["desc"] + "</p></li>")
-    # Hreflang alternates are intentionally unchanged; verify the locale matrix before any future edit.\n    alternates = home_alts_all()
+    # Hreflang alternates are intentionally unchanged; verify the locale matrix before any future edit.
+    alternates = home_alts_all()
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
         {"@context": "https://schema.org", "@type": "Organization", "name": "CalculatesAll", "url": SITE_URL + "/",
