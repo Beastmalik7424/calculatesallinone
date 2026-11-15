@@ -156,6 +156,20 @@ for (const invalid of ["", -1, "not-a-number", 1e309]) {
   assert.match(elements["pl-result"].textContent, /zero or positive numbers/i);
 }
 
+// Exact Zakat worked-example unit cases from the approved silver Nisab input.
+const zakatBelowExample = context.window.ZakatCalculator.calculate({
+  currency:"PKR", nisabMethod:"silver", silverPricePerGram:3000, goldPricePerGram:1,
+  assets:{cash:700000}, liabilities:0, zakatPaid:0, hawlComplete:true
+});
+assert.equal(zakatBelowExample.nisabThreshold, 1837080);
+assert.equal(zakatBelowExample.zakatBeforePaid, 0);
+const zakatDueExample = context.window.ZakatCalculator.calculate({
+  currency:"PKR", nisabMethod:"silver", silverPricePerGram:3000, goldPricePerGram:1,
+  assets:{cash:2000000}, liabilities:0, zakatPaid:0, hawlComplete:true
+});
+assert.equal(zakatDueExample.nisabThreshold, 1837080);
+assert.equal(zakatDueExample.zakatBeforePaid, 50000);
+
 // Deterministic randomized checks against the real calculator handlers and the Zakat engine.
 let prioritySeed = 20261116;
 function priorityRandom() {
