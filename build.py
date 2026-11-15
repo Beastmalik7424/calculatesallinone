@@ -652,7 +652,7 @@ HUB_CONTENT = {
             ("Does the EMI estimate include lender fees?", "No. The EMI estimate uses the principal, annual interest rate and repayment term entered. Processing fees, insurance, variable-rate clauses, taxes and payment-date rules may change the lender's actual quotation."),
             ("Does the compound interest estimate include deposits or taxes?", "No. It assumes a fixed starting principal, a fixed nominal annual rate and the compounding frequency entered. It excludes additional deposits, withdrawals, fees, taxes and inflation. Check whether a provider quotes a nominal rate or an effective annual yield before comparing results."),
             ("Are these tools accurate for business accounts?", "They calculate the arithmetic for the inputs you give, but they do not replace an accountant. Tax rules, inventory valuation, payment fees and accounting policies are not included."),
-            ("Does the Zakat calculator give a religious ruling?", "No. It applies the silver Nisab method described on its page and shows the rules it uses. Scholarly views can differ, so consult a qualified scholar about your circumstances."),
+            ("Does the Zakat calculator give a religious ruling?", "No. It lets you select a silver or gold Nisab reference, enter your own metal price and currency, and estimates the arithmetic when the stated conditions are met. Scholarly views can differ, so consult a qualified scholar about your circumstances."),
         ],
     },
     "health": {
