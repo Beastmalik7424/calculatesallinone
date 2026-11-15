@@ -90,6 +90,40 @@ final_price_formula_count = discount_html.count("Final price equals original pri
 check(final_price_formula_count == 1,
       f"/discount-calculator/ must show its final-price formula exactly once (found {final_price_formula_count})")
 
+bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
+for repeated_heading in (
+    "Why BMI is used",
+    "Groups where BMI needs care",
+    "BMI formula and worked example",
+    "BMI questions and mistakes",
+    "What a BMI result is useful for and what it is not",
+):
+    check(not has_heading("bmi-calculator", repeated_heading),
+          f"/bmi-calculator/ repeats material already covered in '{repeated_heading}'")
+check(has_heading("bmi-calculator", "How to measure consistently"),
+      "/bmi-calculator/ must retain its practical measurement guidance")
+check(has_heading("bmi-calculator", "Pakistan and South Asia context"),
+      "/bmi-calculator/ must retain its distinct South Asian context and thresholds")
+
+check(has_heading("profit-loss-calculator", "When product profit differs from operating profit"),
+      "/profit-loss-calculator/ must distinguish product profit from business operating profit with a worked example")
+
+def faq_questions(slug):
+    raw = (ROOT / slug / "index.html").read_text(encoding="utf-8")
+    main = re.search(r"<main\b[^>]*>(.*?)</main>", raw, re.S | re.I)
+    if not main:
+        return []
+    return [
+        re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", item))).strip()
+        for item in re.findall(r"<summary\b[^>]*>(.*?)</summary>", main.group(1), re.S | re.I)
+    ]
+
+zakat_questions = faq_questions("zakat-calculator")
+check(len(zakat_questions) == len(set(question.casefold() for question in zakat_questions)),
+      "/zakat-calculator/ must not repeat FAQ questions")
+check("Is Zakat due on my home?" not in zakat_questions and "Do I subtract debts?" not in zakat_questions,
+      "/zakat-calculator/ must not repeat the home and debt topics already answered in its main FAQs")
+
 profit_html = (ROOT / "profit-loss-calculator" / "index.html").read_text(encoding="utf-8")
 for repeated_heading in (
     "Profit and loss in a business",

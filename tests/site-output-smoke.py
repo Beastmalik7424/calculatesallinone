@@ -1107,9 +1107,9 @@ assert "PKR 36,153" not in emi_guide
 
 # Regression: the specialized BMI template must include the supplemental editorial guide.
 _bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
-assert "BMI formula and worked example" in _bmi_html, "BMI supplemental guide missing from generated page"
+assert "Exact-value worked example" in _bmi_html, "BMI exact-value worked example missing from generated page"
 assert "22.8571" in _bmi_html and "22.9" in _bmi_html, "BMI 70 kg / 1.75 m example missing"
-assert "BMI questions and mistakes" in _bmi_html, "BMI supplemental FAQ guide missing"
+assert "Common questions" in _bmi_html, "BMI FAQ guide missing"
 
 # Urdu Profit and Loss: all visible form labels are localized, without altering IDs.
 _ur_profit = (ROOT / "ur/profit-loss-calculator" / "index.html").read_text(encoding="utf-8")
