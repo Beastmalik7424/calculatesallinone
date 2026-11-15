@@ -49,6 +49,8 @@ const { chromium } = require("playwright");
   await page.locator("#z-sunni-school").selectOption("maliki");
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
+  assert.match(await page.locator("#zakat-result").innerText(), /Selected Sunni madhhab: Maliki/);
+  assert.match(await page.locator("#zakat-result").innerText(), /Confirm disputed jewellery, debt, investment, pension and Hawl rulings/);
 
   await page.locator("#z-currency").fill("ZZZ");
   await page.locator('#zakat-form button[type="submit"]').click();
@@ -122,6 +124,7 @@ const { chromium } = require("playwright");
   await page.locator("#z-hawl").check();
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /واجب الادا/);
+  assert.match(await page.locator("#zakat-result").innerText(), /منتخب سنی فقہی مسلک: حنفی/);
   for (const id of ["u-sect","u-school","u-marja","u-hanafi-position","u-crop","u-quantity","u-value","u-currency","u-irrigation","u-eligible","u-mixed-confirm"]) {
     assert.equal(await page.locator("#" + id).count(), 1, "Missing Urdu Ushr field " + id);
   }
