@@ -61,8 +61,8 @@ for left in paragraph_sets:
 
 money_source = read("money")
 money = visible(money_source)
-for phrase in ["recommended process", "reconcile platform payouts", "count inventory", "record expenses and fees",
-               "reconcile the bank or wallet balance", "review gross and net profit", "lock the period",
+for phrase in ["recommended working process", "reconcile platform payouts", "count inventory", "record expenses and fees",
+               "reconcile the bank or wallet balance", "review gross profit, net profit", "lock the period",
                "next month's opening stock", "monthly close"]:
     assert phrase.casefold() in money.casefold(), f"/money/ missing monthly-close step: {phrase}"
 assert "not an official accounting standard" in money.casefold(), "Money hub must label the checklist as a recommendation"
