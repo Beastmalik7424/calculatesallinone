@@ -55,7 +55,7 @@ assert.doesNotMatch(en, /value="gold-85"/, "English UI must not offer the unappr
 assert.doesNotMatch(ur, /value="gold-85"/, "Urdu UI must not offer the unapproved 85 g threshold");
 for (const term of [
   "503,529", "612.36", "87.48", "زکوٰۃ سال", "پاکستان", "نصاب",
-  "اثاثے", "واجب الادا", "2.5"
+  "اثاثے", "واجبات", "2.5"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing localized topic: " + term);
 }
