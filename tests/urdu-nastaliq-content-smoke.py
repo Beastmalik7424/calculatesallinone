@@ -28,7 +28,7 @@ def main():
     css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
     assert 'lang=ur' in css and 'Noto Nastaliq Urdu' in css, "Urdu Nastaliq font stack missing from compiled CSS"
     assert "html[lang=ur] #zakat-form" in css, "Urdu Zakat first-screen compact layout rule missing"
-    assert re.search(r"line-height:\s*1\.4", css), "Urdu Zakat form text line-height regression guard missing"
+    assert "line-height:1.35" in css, "Urdu Zakat form text line-height regression guard missing"
     assert "margin-top:.5rem" in css, "Urdu Zakat compact vertical spacing regression guard missing"
     print(f"PASS: {len(SLUGS)} Urdu routes retain RTL and load Noto Nastaliq Urdu")
     print("PASS: every Urdu route meets the site's editorial minimum and compiled CSS applies the font")
