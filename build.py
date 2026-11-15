@@ -1451,6 +1451,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
+        + ('<link rel="preconnect" href="https://fonts.googleapis.com">\\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\\n<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">\\n' if lang == "ur" else '')
         + '<link rel="stylesheet" href="/assets/site.css?v=20261026-standard-mobile-v6">\n'
         + ld + ads + "</head>\n"
     )
