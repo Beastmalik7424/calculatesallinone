@@ -11,8 +11,8 @@ SLUGS = (
 )
 
 def visible(raw):
-    raw = re.sub(r"(?is)<(script|style)\\b.*?</\\1>", " ", raw)
-    return re.sub(r"\\s+", " ", re.sub(r"<[^>]+>", " ", raw)).strip()
+    raw = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", raw)
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw)).strip()
 
 def main():
     for slug in SLUGS:
