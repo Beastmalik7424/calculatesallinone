@@ -2359,3 +2359,20 @@ html[lang="ur"] :is(input,select,textarea,output,code,kbd) {
   line-height: 1.6;
 }
 html[lang="ur"] h1 { line-height: 1.9; }
+
+
+/* Keep the Urdu Zakat inputs readable while fitting the primary action above the fold. */
+html[lang="ur"] #zakat-form {
+  line-height: 1.5;
+}
+html[lang="ur"] #zakat-form > :not([hidden]) ~ :not([hidden]) {
+  margin-top: .75rem;
+}
+html[lang="ur"] #zakat-form > .grid {
+  gap: .75rem;
+}
+html[lang="ur"] #zakat-form label,
+html[lang="ur"] #zakat-form label span,
+html[lang="ur"] #zakat-form p {
+  line-height: 1.5;
+}
