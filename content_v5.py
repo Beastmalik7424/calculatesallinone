@@ -161,7 +161,7 @@ HOME_EXTRA = {
         "heading": "Choose a calculator for the result you need",
         "paragraphs": [
             "Calculations run in your browser, and calculator entries are not sent to our server.",
-            "The BMI calculator uses an adult's weight and height to return a BMI result and the matching WHO adult screening category.",
+            "The BMI calculator uses an adult's weight and height to return a BMI result and the matching WHO adult screening category. BMI is a screening measure for adults, not a diagnosis.",
             "The Profit and Loss Calculator compares revenue with cost of goods sold and shows gross profit and gross margin. Its product mode compares a unit cost with a selling price.",
             "The Zakat Calculator compares personal gold or silver Nisab values using the metal price you enter. Pakistan's bank source-deduction Nisab is a separate, year-specific threshold.",
             "The Money and Business hub includes a recommended monthly close checklist for reviewing payouts, stock, expenses, account balances, profit and cash.",
