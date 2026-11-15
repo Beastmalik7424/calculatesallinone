@@ -161,7 +161,7 @@ profit_nodes = jsonld_nodes(profit_html)
 profit_orgs = [node for node in profit_nodes if node.get("@type") == "Organization" and node.get("name") == "CalculatesAll"]
 assert len(profit_orgs) == 1 and profit_orgs[0].get("@id") == SITE + "/#organization", "Profit and Loss page must reference one canonical Organization entity"
 assert re.search(r"profit.{0,40}loss", profit_html, re.IGNORECASE), "Profit and Loss page should open with a concise definition and calculation scope"
-assert 'href="https://openstax.org/books/principles-finance/pages/5-1-the-income-statement"' in profit_html, "Profit and Loss page should cite the OpenStax income-statement source"
+assert 'href="https://openstax.org/books/introduction-business/pages/14-5-the-income-statement"' in profit_html, "Profit and Loss page should cite the checked OpenStax inventory and income-statement source"
 assert 'href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"' in profit_html, "Profit and Loss page should cite ACCA ratio-analysis guidance"
 assert "Markup versus margin at a glance" in profit_html and "<table" in profit_html, "Profit and Loss page should include a useful comparison table"
 contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
