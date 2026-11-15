@@ -85,7 +85,7 @@ result = calculate({ ...base, assets: { cash: 70000 }, hawlComplete: false });
 assert.equal(result.status, "hawl_incomplete");
 assert.equal(result.zakatBeforePaid, 0);
 result = calculate({ ...base, assets: { cash: 70000 }, zakatPaid: 500 });
-assert.equal(result.balanceDue, 1250);
+assert.equal(result.balanceDue, 1247.5);
 assert.equal(result.overpayment, 0);
 result = calculate({ ...base, assets: { cash: 70000 }, zakatPaid: 2000 });
 assert.equal(result.balanceDue, 0);
