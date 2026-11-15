@@ -119,7 +119,7 @@ GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
 
 GUIDE_EXTRA["profit-loss-calculator"].extend([
     ("Build cost of goods sold from stock records", [
-        "Before entering Business P&L, calculate cost of goods sold (COGS) for the same accounting period: opening inventory + net purchases + direct inward costs (such as freight or handling) − closing inventory. Closing stock remains an asset, so it is not charged to this period's COGS. Use a consistent inventory valuation method and avoid counting a purchase, freight charge or item twice.",
+        "Before entering Business P&L, calculate cost of goods sold (COGS) for the same accounting period: opening inventory + net purchases + direct inward costs − closing inventory. Direct inward costs can include freight or handling.. Closing stock remains an asset, so it is not charged to this period's COGS. Use a consistent inventory valuation method and avoid counting a purchase, freight charge or item twice.",
         "Worked shop example: opening saleable stock is PKR 100,000, net purchases including inward freight are PKR 80,000, and closing saleable stock is PKR 30,000. COGS is PKR 100,000 + PKR 80,000 − PKR 30,000 = PKR 150,000. If net sales for the same period are PKR 220,000, gross profit is PKR 70,000. After PKR 40,000 of other operating expenses, operating profit is PKR 30,000 and operating margin is PKR 30,000 ÷ PKR 220,000 × 100 = 13.64%. Enter PKR 150,000 in the COGS field, not the full purchases figure.",
     ]),
     ("Profit is not the same as cash available", [
