@@ -24,7 +24,7 @@ const enText = visibleText(en);
 const urText = visibleText(ur);
 
 for (const id of [
-  "z-currency", "z-sect", "z-sunni-school", "z-marja", "z-nisab-method", "z-silverprice", "z-goldprice", "z-sunni-school-wrap", "z-marja-wrap",
+  "z-currency", "z-sect", "z-sunni-school", "z-marja", "z-nisab-method", "z-silverprice", "z-goldprice", "z-sunni-school-wrap", "z-marja-wrap", "u-currency", "u-sect", "u-school", "u-marja", "u-crop", "u-quantity", "u-value", "u-irrigation", "ushr-result",
   "z-cash", "z-bank", "z-savings", "z-gold", "z-silver",
   "z-investments", "z-businesscash", "z-stock", "z-recv",
   "z-pension", "z-crypto", "z-property", "z-debts", "z-paid",
@@ -34,7 +34,7 @@ for (const id of [
   assert.match(ur, new RegExp('id="' + id + '"'), "Urdu calculator missing " + id);
 }
 for (const term of [
-  "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48",
+  "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48", "Ushr", "agricultural produce", "rain-fed", "irrigated", "five wasqs", "653 kg", "847 kg", "Hanafi", "Sistani",
   "503,529", "State Bank of Pakistan", "Hawl", "Sunni", "Shia", "Hanafi", "Shafi'i", "Maliki", "Hanbali", "Ja'fari", "Sistani", "short-term liabilities",
   "personal-use", "trade inventory", "receivables",
   "2.5%", "Worked example", "This tool does not decide"
@@ -42,7 +42,7 @@ for (const term of [
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing useful topic: " + term);
 }
 for (const term of [
-  "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب", "سنی", "شیعہ", "سیستانی", "جعفری",
+  "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب", "سنی", "شیعہ", "سیستانی", "جعفری", "عشر", "زرعی پیداوار", "بارش", "آبپاشی",
   "اثاثے", "واجب الادا", "2.5"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing localized topic: " + term);
@@ -62,7 +62,27 @@ assert.match(ur, /canonical/i, "Urdu page must retain canonical metadata");
 console.log("Zakat global calculator content and localization gates: PASS");
 
 // Pure calculation-engine tests. These are independent of page rendering.
-const { calculate, validateCurrency } = require("../static/zakat-calculator.js");
+const { calculate, calculateUshr, validateCurrency } = require("../static/zakat-calculator.js");
+assert.equal(typeof calculateUshr, "function", "Ushr must have its own calculation engine");
+const rainUshr = calculateUshr({ sect: "sunni", school: "shafii", crop: "wheat", quantityKg: 700, marketValue: 100000, irrigation: "rain" });
+assert.equal(rainUshr.rate, 0.10);
+assert.equal(rainUshr.amountDue, 10000);
+const pumpUshr = calculateUshr({ sect: "sunni", school: "hanafi", crop: "rice", quantityKg: 100, marketValue: 50000, irrigation: "cost" });
+assert.equal(pumpUshr.rate, 0.05);
+assert.equal(pumpUshr.amountDue, 2500, "Hanafi Abu Hanifa position must not impose the five-wasq threshold");
+const belowMajority = calculateUshr({ sect: "sunni", school: "maliki", crop: "wheat", quantityKg: 500, marketValue: 100000, irrigation: "rain" });
+assert.equal(belowMajority.status, "below_nisab");
+assert.equal(belowMajority.amountDue, 0);
+const mixedUshr = calculateUshr({ sect: "sunni", school: "hanbali", crop: "wheat", quantityKg: 700, marketValue: 100000, irrigation: "mixed" });
+assert.equal(mixedUshr.rate, 0.075);
+const sistaniUshr = calculateUshr({ sect: "shia", marja: "sistani", crop: "wheat", quantityKg: 900, marketValue: 100000, irrigation: "mixed" });
+assert.equal(sistaniUshr.rate, 0.075);
+assert.equal(sistaniUshr.nisabKg, 847);
+assert.throws(() => calculateUshr({ sect: "shia", marja: "sistani", crop: "maize", quantityKg: 900, marketValue: 100000, irrigation: "rain" }), /four specified crops/i);
+assert.throws(() => calculateUshr({ sect: "shia", marja: "other", crop: "wheat", quantityKg: 900, marketValue: 100000, irrigation: "rain" }), /verified Marja/i);
+assert.throws(() => calculateUshr({ sect: "sunni", school: "unknown", crop: "wheat", quantityKg: 700, marketValue: 100000, irrigation: "rain" }), /madhhab/i);
+assert.throws(() => calculateUshr({ sect: "sunni", school: "hanafi", crop: "wheat", quantityKg: -1, marketValue: 100000, irrigation: "rain" }), /non-negative/i);
+assert.throws(() => calculateUshr({ sect: "sunni", school: "hanafi", crop: "wheat", quantityKg: 700, marketValue: 100000, irrigation: "unknown" }), /irrigation/i);
 assert.equal(validateCurrency("pkr"), "PKR");
 assert.equal(validateCurrency("usd"), "USD");
 assert.throws(() => validateCurrency("PK"), /three-letter/);
