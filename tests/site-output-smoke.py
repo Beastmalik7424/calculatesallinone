@@ -159,7 +159,7 @@ assert 'href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overw
 assert "WHO adult BMI table" in bmi_html and "23.0" in bmi_html and "27.5" in bmi_html, "BMI page must show WHO categories and distinguish Asian-population action points"
 assert "70 kg" in bmi_html and "1.70 m" in bmi_html and "24.2" in bmi_html, "BMI worked example must use approved values"
 health_html = output_for_url(SITE + "/health/").read_text(encoding="utf-8")
-assert "adult BMI" in health_html.lower(), "Health hub must retain its adult BMI description"
+assert "bmi calculator" in health_html.lower(), "Health hub must retain its BMI tool link"
 assert not [node for node in bmi_nodes if node.get("@type") == "WebApplication"], "BMI page must not restore ineligible WebApplication rich-result markup"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 profit_nodes = jsonld_nodes(profit_html)
