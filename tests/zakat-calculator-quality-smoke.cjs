@@ -49,15 +49,18 @@ for (const term of [
 }
 assert.ok(enText.split(/\s+/).length >= 1000, "English Zakat guide is too thin (<1000 visible words)");
 assert.ok(urText.split(/\s+/).length >= 700, "Urdu Zakat guide is too thin (<700 visible words)");
-for (const term of ["Ushr is separate from annual wealth Zakat", "rain-fed", "five wasqs", "653 kg", "dry-weight", "847 kg", "948 kg", "crop eligibility", "mixed irrigation", "Pakistan Code"]) {
+for (const term of ["Ushr is separate from annual wealth Zakat", "rain-fed", "five wasqs", "653 kg", "dry-weight", "847 kg", "948 kg", "crop eligibility", "mixed irrigation", "Pakistan Code", "Sudan Zakat Chamber", "21-karat", "Singapore MUIS", "86 g", "investment-held jewellery", "87.28 g", "87.48 g", "NZF Worldwide", "not national laws", "raisins"]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English Ushr guidance missing: " + term);
 }
-for (const term of ["عشر", "زرعی پیداوار", "بارش", "آبپاشی", "پانچ وسق", "653", "847", "948", "امام ابو حنیفہ", "مخلوط آبپاشی"]) {
+for (const term of ["عشر", "زرعی پیداوار", "بارش", "آبپاشی", "پانچ وسق", "653", "847", "948", "امام ابو حنیفہ", "مخلوط آبپاشی", "سوڈان", "سنگاپور", "ملائیشیا", "کشمش", "87.28", "87.48"]) {
   assert.ok(urText.includes(term), "Urdu Ushr guidance missing: " + term);
 }
 assert.match(en, /href="https:\/\/www\.sistani\.org\/english\/book\/49\/2410\//, "English Ushr guidance must link to Sistani's primary ruling");
 assert.match(en, /href="https:\/\/pakistancode\.gov\.pk\/pdffiles\/administratorfd19eec0a97080f151dac2a8406dea88\.pdf/, "Pakistan statutory Ushr must link to Pakistan Code");
 assert.match(ur, /id="u-quantity"/, "Urdu Ushr form must expose harvest quantity");
+assert.match(en, /value="raisins"/, "Sistani crop list must use the official English term raisins");
+assert.doesNotMatch(en, /value="grapes"/, "Grapes must not be substituted for the official raisins crop wording");
+assert.doesNotMatch(enText, /35,700,000/, "Outdated 2025 Sudanese-pound Nisab must not be presented as current");
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const submitAt = html.indexOf('type="submit"');
   const assetAt = html.indexOf('id="z-cash"');
