@@ -24,7 +24,7 @@ function element(id, value = "") {
   };
 }
 [
-  "zakat-form","z-cash","z-gold","z-silver","z-stock","z-recv","z-debts","z-silverprice","z-hawl","zakat-result",
+  "zakat-form","z-currency","z-nisab-method","z-cash","z-bank","z-savings","z-gold","z-silver","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-silverprice","z-goldprice","z-hawl","zakat-result",
   "bmi-form","bmi-unit","bmi-height-cm","bmi-height-ftin","bmi-metric","bmi-imperial",
   "b-kg","b-kg-error","b-lb","b-lb-error","bmi-weight-kg","bmi-weight-lb","bmi-weight-kg-group","bmi-weight-lb-group","b-cm","b-cm-error","b-ft","b-ft-error","b-in","b-in-error","bmi-result",
   "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
@@ -32,6 +32,8 @@ function element(id, value = "") {
   "sw-display","sw-start","sw-stop","sw-reset",
   "years-days-form","yd-direction","yd-value","yd-value-label","yd-method","yd-calendar-option","yd-exact-fields","yd-start-date","yd-submit","yd-result","extra-result","calorie-result","qt-result","calc-display"
 ].forEach(id => element(id));
+elements["z-currency"].value = "PKR";
+elements["z-nisab-method"].value = "silver";
 elements["u-cat"].value = "weight";
 elements["bmi-unit"].value = "metric";
 elements["bmi-height-cm"].checked = true;
@@ -70,6 +72,7 @@ const context = {
   clearInterval() {},
   performance: { now: () => clock }
 };
+vm.runInNewContext(fs.readFileSync("static/zakat-calculator.js", "utf8"), context, { filename: "static/zakat-calculator.js" });
 vm.runInNewContext(fs.readFileSync("static/app.js", "utf8"), context, { filename: "static/app.js" });
 handlers.ready();
 function submit(form) {
