@@ -1243,11 +1243,15 @@ assert "2026 Standards of Care in Overweight and Obesity" in _bmi_2026, "BMI mus
 assert "waist-to-height ratio" in _bmi_2026.lower(), "BMI must explain waist-to-height ratio alongside BMI"
 assert "does not ask for waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply waist-based clinical criteria"
 assert "doi.org/10.2337/doci26-0003" in _bmi_2026, "BMI must link the 2026 clinical standards source"
+assert "https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" in _bmi_2026, "BMI must link the NHS adult BMI benchmark"
+assert "https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" in _bmi_2026, "BMI must link the NHS waist-to-height benchmark"
 assert "This note is general educational information." not in _bmi_2026, "BMI must replace the redundant generic South Asia disclaimer with useful clinical context"
 
 _ur_bmi_2026 = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
 assert "کمر کے گھیر اور قد کا تناسب" in _ur_bmi_2026, "Urdu BMI must explain waist-to-height ratio"
 assert "2026 Standards of Care" in _ur_bmi_2026, "Urdu BMI must cite the current 2026 clinical context"
+assert "https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" in _ur_bmi_2026, "Urdu BMI must cite the NHS adult BMI benchmark"
+assert "https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" in _ur_bmi_2026, "Urdu BMI must cite the NHS waist-to-height benchmark"
 assert "does not ask for waist measurements" not in _ur_bmi_2026, "English BMI limitation text must not leak into Urdu"
 
 _profit_2026 = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
