@@ -786,7 +786,7 @@ URDU = {
             ("Maize", "مکئی"),
             ("Other crop", "دیگر فصل"),
             ("Eligible harvest quantity (kg)", "قابلِ عشر فصل کی مقدار (کلوگرام)"),
-            ("For Ayatollah Sistani's 847 kg threshold, enter the crop weight after drying. Five-wasq kilogram conversions for Sunni methods are approximate and crop-dependent.", "آیت اللہ سیستانی کے 847 کلوگرام نصاب کے لیے فصل خشک ہونے کے بعد اس کا وزن درج کریں۔ سنی فقہی طریقوں میں پانچ وسق کا کلوگرام میں بدلنا تخمینی ہے اور فصل کے مطابق مختلف ہو سکتا ہے۔"),
+            ("For Ayatollah Sistani's 847 kg threshold, enter the crop weight after drying and use the market value of that same dry produce. Five-wasq kilogram conversions for Sunni methods are approximate and crop-dependent.", "آیت اللہ سیستانی کے 847 کلوگرام نصاب کے لیے فصل خشک ہونے کے بعد اس کا وزن اور اسی خشک پیداوار کی مالیت درج کریں۔ سنی فقہی طریقوں میں پانچ وسق کا کلوگرام میں بدلنا تخمینی ہے اور فصل کے مطابق مختلف ہو سکتا ہے۔"),
             ("Harvest market value", "فصل کی موجودہ بازاری مالیت"),
             ("Irrigation method", "آبپاشی کا طریقہ"),
             ("For Sistani's ruling, choose Mixed only when both methods are used materially. If one method is used sparingly, choose the predominant method (Rain / natural water or Pump / well). Sunni mixed-irrigation rates require confirmation from your own scholar.", "سیستانی کے حکم میں مخلوط طریقہ اسی وقت منتخب کریں جب دونوں طریقے نمایاں طور پر استعمال ہوں۔ اگر ایک طریقہ معمولی ہو تو غالب طریقہ (بارش / قدرتی پانی یا پمپ / کنواں) منتخب کریں۔ سنی مخلوط آبپاشی کی شرح اپنے مستند عالم سے تصدیق کریں۔"),
