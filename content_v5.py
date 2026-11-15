@@ -11,32 +11,7 @@ REVIEW_STATUS = {
 }
 
 GUIDE_EXTRA = {
-    "zakat-calculator": [
-        ("Who must pay Zakat", [
-            "Zakat is an obligation on a Muslim who owns zakatable wealth above the Nisab threshold for a full lunar year. The rules apply to net wealth after the debts due now are subtracted.",
-            "Scholars agree on the general obligation, but they differ on details. This is why the calculator states its method and asks you to confirm lunar year timing yourself.",
-        ]),
-        ("Assets usually included", [
-            "Cash in hand, bank savings, gold and silver held as wealth, goods held for sale in a business, and money owed to you that you expect to receive are the most common zakatable items.",
-            "Gold and silver jewelry worn for personal use is treated differently by different schools. Check your own school's ruling or ask a scholar before you count it.",
-        ]),
-        ("Assets usually excluded", [
-            "Your home that you live in, your everyday furniture, your vehicle used for daily travel, and tools used for work are generally not zakatable wealth.",
-            "Rental income and property held for rent follow their own rules. The rent itself, or the value of property bought for resale, can be zakatable depending on the ruling you follow.",
-        ]),
-        ("Lunar year and timing", [
-            "The hawl is one lunar year, which is about 354 days. It starts from the date your wealth first reached Nisab and stays above it.",
-            "If your wealth falls below Nisab during the year, the count usually restarts once it rises above Nisab again. Keep a dated record of your balances to make this easier to check.",
-        ]),
-        ("Zakat arithmetic and worked example", [
-            "For commonly zakatable wealth, the calculation is 2.5% of net zakatable wealth when the applicable Nisab and lunar-year requirements are met. This tool uses a silver-based Nisab of 612.36 grams multiplied by the entered silver price per gram. A gold-based reference sometimes used is 87.48 grams; the applicable basis depends on scholarly guidance.",
-            "Example: PKR 500,000 savings + PKR 200,000 precious metals + PKR 100,000 trading inventory = PKR 800,000 gross assets. After PKR 150,000 qualifying debts, net wealth is PKR 650,000. At PKR 250 per gram of silver, Nisab = 612.36 × 250 = PKR 153,090. The arithmetic gives Zakat = 650,000 × 0.025 = PKR 16,250.",
-        ]),
-        ("Zakat limitations and common questions", [
-            "Only deduct debts qualifying under the method you follow; treatment of near-term instalments, mortgages and other liabilities varies. Do not assume all long-term debt is deductible. Check current valuations, Nisab basis and lunar-year timing.",
-            "Is Zakat always 2.5%? Not for every asset category. Is a primary home zakatable? A home used as a residence is generally treated differently from trading inventory, but circumstances vary. This is a calculation aid, not a religious ruling. Consult a qualified scholar. Reference: https://islamic-relief.org/news/how-to-calculate-and-pay-zakat/",
-        ]),
-    ],
+    "zakat-calculator": [],
     "bmi-calculator": [
         ("Why BMI is used", [
             "BMI is a simple, low cost measure that is used in large population studies and in clinics as a first step. It needs only weight and height, so it is easy to repeat over time.",
@@ -285,24 +260,7 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
 )
 
 # Focused educational depth for the Zakat, BMI and profit/loss tools.
-GUIDE_EXTRA["zakat-calculator"].extend([
-    ("Pre-payment checklist", [
-        "1. Choose the calculation method you intend to follow and confirm the applicable Nisab basis with a qualified scholar. This page calculates with its stated silver-based Nisab; it does not compare every school or asset rule. 2. Record the date your zakatable wealth first reached the relevant Nisab. 3. List the cash, bank balances, precious metals, trading stock and receivables that your chosen method treats as zakatable. 4. Value those items consistently at the valuation date you are using. 5. List only debts or liabilities that your chosen method permits you to deduct, and do not automatically subtract every future instalment. 6. Check the current silver price per gram from a source you trust and record the date and currency of that quote. 7. Confirm that the required lunar year has elapsed and ask a qualified scholar about any unusual assets, ownership changes or disputed deductions before payment.",
-        "Worked arithmetic check: if eligible net wealth is PKR 650,000 and the entered silver price is PKR 250 per gram, the stated silver Nisab is 612.36 × 250 = PKR 153,090. The net wealth is above that example threshold. If the stated 2.5% method and lunar-year condition also apply, the arithmetic is PKR 650,000 × 0.025 = PKR 16,250. The example does not decide whether those inputs or conditions apply to a particular person.",
-    ]),
-    ("Why silver price and lunar-year confirmation are required", [
-        "The silver price converts the calculator's fixed 612.36-gram silver Nisab into the currency amount used for the comparison. A missing or zero price leaves that threshold unknown, so the tool withholds a Zakat amount rather than silently assuming a market value. Enter a dated price per gram in the same currency as the assets and debts; the calculator does not fetch or verify a live market quote.",
-        "The lunar-year confirmation is a separate condition from the arithmetic. The checkbox records that the user has checked the hawl requirement; it cannot verify the date wealth first reached Nisab or determine how a scholar applies the rule to interruptions or changing balances. The tool withholds the amount until the user confirms this condition. This is a user confirmation, not an automated religious assessment.",
-    ]),
-    ("Arithmetic aid, not a scholarly ruling", [
-        "This calculator performs arithmetic using the silver Nisab, 2.5% rate and inputs shown on the page. It cannot decide which assets count, how personal-use jewellery is treated, which debts may be deducted, whether a lunar year has been completed, or which scholarly opinion applies to your circumstances. Schools and qualified scholars may differ on these questions. Treat the displayed figure as a calculation under the stated assumptions only, not a fatwa or personal religious advice. Before paying, confirm the method and any uncertain asset or liability with a qualified scholar.",
-    ]),
-])
-
-# The Zakat guide now lives in the page's dedicated, current bilingual content entry.
-# Do not append legacy silver-only copy or its outdated PKR worked example.
-GUIDE_EXTRA["zakat-calculator"] = []
-
+# Zakat guidance is maintained in build.py's bilingual Zakat page entry.
 GUIDE_EXTRA["bmi-calculator"].extend([
     ("What a BMI result is useful for and what it is not", [
         "For adults, BMI is useful as a quick, repeatable screening measure based on weight and height. It can help describe a broad weight category, compare measurements taken consistently over time, and identify when a fuller health discussion may be useful. It is not a direct measurement of body fat, waist fat, muscle, fitness or an individual's disease risk.",
