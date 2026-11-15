@@ -191,6 +191,7 @@ TOOLS = [
             ("Formula", ["Personal Nisab value = selected metal weight × user-entered price per gram. The estimate applies 2.5% to net qualifying wealth when it reaches the selected personal Nisab and the entered lunar-year condition is complete."]),
             ("Worked example: personal silver Nisab", ["Using a hypothetical silver price of PKR 3,000 per gram, 612.36 × 3,000 = PKR 1,837,080. If net wealth is PKR 700,000, it is below this personal silver Nisab and the estimate is zero. If net wealth is PKR 2,000,000, 2.5% is PKR 50,000."]),
             ("Limitations and professional opinion", ["The calculator uses the asset values, liabilities and metal price entered by the user. It does not fetch a live metal price or decide whether a particular asset or liability qualifies under a personal religious ruling. Ask a qualified scholar about the method and eligibility that apply to your circumstances. The bank deduction threshold changes yearly. Confirm the amount for the relevant year before relying on it."]),
+            ("Review record", ["Last reviewed: 2026-11-16."]),
         ],
         "faq": [
             ("Does PKR 503,529 set my personal Zakat Nisab?", "No. It is the Pakistan bank source-deduction threshold for specified account types in 1447 AH (2026), not the personal gold or silver Nisab."),
@@ -264,6 +265,7 @@ TOOLS = [
             ("Worked example", ["Revenue is 100,000. Opening inventory is 20,000, purchases are 50,000 and closing inventory is 25,000. COGS = 20,000 + 50,000 − 25,000 = 45,000. Gross profit = 100,000 − 45,000 = 55,000. Gross margin = 55,000 ÷ 100,000 × 100 = 55%."]),
             ("Cash flow is separate from profit", ["Profit is not cash. A platform may owe a payout that has not reached the bank, so payout delays can leave reported sales ahead of cash received. Buying inventory up front also reduces cash before those goods are sold. Review payout timing and inventory payments alongside the profit result."]),
             ("Limitations and professional opinion", ["The calculator uses the revenue, inventory and purchase values entered. It does not reconcile platform statements, verify stock counts, or prepare a complete set of accounts. Ask an accountant to review inventory valuation, expense classification and formal reporting when the result will be used for tax, lending or statutory accounts."]),
+            ("Review record", ["Last reviewed: 2026-11-16."]),
         ],
         "faq": [
             ("Which period should the inventory figures cover?", "Use opening inventory, purchases, closing inventory and revenue from the same accounting period."),
@@ -1676,6 +1678,7 @@ BMI_GUIDE = [
     ("WHO Expert Consultation and Asian population action points", ["The WHO Expert Consultation published in The Lancet in 2004 retained the standard WHO BMI cutoffs. It identified 23.0, 27.5, 32.5 and 37.5 kg/m² as additional public-health action points for Asian populations. These points sit alongside the standard categories. They are not replacement categories and this calculator does not relabel them as categories."]),
     ("Worked example", ["For an adult weighing 70 kg at a height of 1.70 m: 70 ÷ (1.70 × 1.70) = 24.2 kg/m² when rounded to one decimal place."]),
     ("Limitations and professional opinion", ["This calculator is for adults only. BMI is a screening measure and does not diagnose a health condition. Waist circumference adds information that BMI alone does not provide. Discuss your result with a qualified health professional when you need an individual assessment or advice about a health decision."]),
+    ("Review record", ["Last reviewed: 2026-11-16."]),
 ]
 BMI_FAQ = [
     ("Which weight units can I enter?", "Select kilograms or pounds before entering your weight."),
