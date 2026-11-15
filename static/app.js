@@ -4,7 +4,7 @@
   var MSG = {
     en: {
       zakatNoPrice: "Enter a positive silver or gold price per gram in the selected currency to calculate the chosen Nisab.",
-      zakatInput: "Check every amount and the three-letter currency code. Amounts must be finite and zero or greater.",
+      zakatInput: "Enter a valid three-letter ISO currency code supported by your browser. Check every amount. Values must be finite and zero or greater.",
       zakatBelow: "Assets: {assets}. Eligible liabilities: {liabilities}. Net wealth: {net}. Selected Nisab: {nisab}. Net wealth is below the threshold, so this estimate does not show Zakat as payable.",
       zakatHawl: "Assets: {assets}. Eligible liabilities: {liabilities}. Net wealth: {net}. Selected Nisab: {nisab}. The threshold is met, but the lunar Zakat year (hawl) is not confirmed as complete.",
       zakatDue: "Zakat calculation at 2.5 percent. Assets: {assets}. Eligible liabilities: {liabilities}. Net zakatable wealth: {net}. Nisab: {nisab}. Zakat before prior payments: {gross}. Already paid: {paid}. Remaining balance: {amount}.",
@@ -68,7 +68,7 @@
     },
     ur: {
       zakatNoPrice: "منتخب نصاب کا حساب کرنے کے لیے منتخب کرنسی میں سونے یا چاندی کی فی گرام موجودہ قیمت درج کریں۔",
-      zakatInput: "تمام رقوم اور تین حروف پر مشتمل کرنسی کوڈ چیک کریں۔ ہر رقم صفر یا اس سے زیادہ اور محدود ہونی چاہیے۔",
+      zakatInput: "اپنے براؤزر میں معاون تین حروف والا درست ISO کرنسی کوڈ درج کریں۔ تمام رقوم چیک کریں۔ ہر رقم صفر یا اس سے زیادہ اور محدود ہونی چاہیے۔",
       zakatBelow: "اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص مال: {net}۔ منتخب نصاب: {nisab}۔ خالص مال نصاب سے کم ہے، اس لیے زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
       zakatHawl: "اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص مال: {net}۔ منتخب نصاب: {nisab}۔ نصاب پورا ہے، لیکن قمری زکوٰۃ سال (حول) مکمل ہونے کی تصدیق نہیں ہوئی۔",
       zakatDue: "2.5 فیصد کے حساب سے زکوٰۃ۔ اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص قابلِ زکوٰۃ مال: {net}۔ نصاب: {nisab}۔ پہلے کی ادائیگی سے پہلے زکوٰۃ: {gross}۔ پہلے ادا شدہ رقم: {paid}۔ باقی واجب الادا رقم: {amount}۔",
