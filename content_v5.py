@@ -116,6 +116,26 @@ GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
 
 # Distinctive, query-matched explanations benchmarked against calculator competitors.
 # Keep one canonical page per intent and explain assumptions instead of duplicating pages.
+
+GUIDE_EXTRA["profit-loss-calculator"].extend([
+    ("Build cost of goods sold from stock records", [
+        "Before entering Business P&L, calculate cost of goods sold (COGS) for the same accounting period: opening inventory + net purchases + direct inward costs − closing inventory, where net purchases exclude the inward freight or handling shown separately. Closing stock remains an asset, so it is not charged to this period's COGS. If your purchase total already includes inward freight or handling, do not add it again. Use a consistent inventory valuation method and avoid counting a purchase, freight charge or item twice.",
+        "Worked shop example: opening saleable stock is PKR 100,000, net purchases excluding inward freight are PKR 70,000, direct inward freight and handling are PKR 10,000, and closing saleable stock is PKR 30,000. COGS is PKR 100,000 + PKR 70,000 + PKR 10,000 − PKR 30,000 = PKR 150,000. If net sales for the same period are PKR 220,000, gross profit is PKR 70,000. After PKR 40,000 of other operating expenses, operating profit is PKR 30,000 and operating margin is PKR 30,000 ÷ PKR 220,000 × 100 = 13.64%. Enter PKR 150,000 in the COGS field, not the full purchases figure.",
+    ]),
+    ("Profit is not the same as cash available", [
+        "A business can report operating profit while some customers have not paid. If PKR 35,000 of the example's sales remain unpaid at month-end, that receivable may be part of reported sales but is not money in the bank. Supplier payment timing, stock purchases, loan principal, tax timing and owner withdrawals also change cash movement.",
+        "This calculator estimates product profit or a simplified operating result from the values entered. It does not calculate cash flow, working capital, receivables, payables, depreciation or a complete statutory income statement. Reconcile the estimate with your accounting records before using it for tax, lending or formal reporting.",
+    ]),
+])
+
+
+GUIDE_EXTRA["profit-loss-calculator"].append(
+    ("Load the full per-item cost before trusting product margin", [
+        "Product Profit mode accepts one unit-cost figure and one selling price. It does not separately model payment or marketplace fees, customer-acquisition cost, packaging, storage, seller-paid delivery or returns. If you want those costs included in the per-item result, allocate the relevant amount to each unit and include it in the unit-cost input. If you enter purchase cost alone, read the result as pre-fee product contribution, not take-home profit.",
+        "Worked example: purchase cost is PKR 1,000 per item, allocated marketplace and payment fees are PKR 60, seller-paid delivery and packaging are PKR 90, and advertising cost per acquired sale is PKR 50. The loaded unit cost is PKR 1,200. At a selling price of PKR 1,500, estimated product profit is PKR 300 and margin is 20%. If you enter only the PKR 1,000 purchase cost, the calculator shows PKR 500 and 33.33% margin before those omitted costs. Do not include the same fee in both loaded unit cost and Business P&L expenses.",
+    ])
+)
+
 GUIDE_EXTRA["years-to-days-calculator"].append(
     ("365 days, 365.25 days and 365.2425 days per year", [
         "A fixed 365-day year is useful for simple arithmetic. A Julian year is exactly 365.25 days, a fixed duration used in astronomy. The Gregorian mean is 365.2425 days because its 400-year cycle has 97 leap days: (400 x 365 + 97) / 400 = 365.2425. These methods are not identical over long durations.",
@@ -251,7 +271,7 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
 GUIDE_EXTRA["bmi-calculator"].append(
     ("Pakistan and South Asia context", [
         "Body composition and the distribution of body fat can differ between populations, and some South Asian guidance discusses cardiometabolic risk at lower BMI values than the standard international adult cut-offs. The WHO 2004 Expert Consultation identified 23.0 and 27.5 kg/m² as additional public-health action points, while noting that one new cutoff could not be set for every Asian population. These action points are not a replacement for the standard WHO adult categories shown by this calculator. A qualified local health professional can interpret BMI alongside waist measurement, medical history and other relevant information. This page does not assign a South Asian diagnosis or provide a personal risk estimate.",
-        "This note is general educational information. It does not assign a South Asian diagnosis, provide a personal risk estimate or replace an assessment by a local doctor. The appropriate interpretation can vary by individual and clinical context.",
+        "Clinical guidance adds a second layer to those public-health action points. The 2026 Standards of Care in Overweight and Obesity recommends screening Asian-background adults for excess adiposity from BMI 23 kg/m². For a clinical diagnosis of obesity, it uses BMI 27.5 kg/m² or above, or BMI 23–27.4 together with central adiposity (waist-to-height ratio at least 0.5 or waist circumference at least 80 cm for women or 90 cm for men). The standards note that some Asian countries may need population-specific cutoffs. NHS guidance also advises adults with BMI below 35 to keep their waist below half their height; for a height of 175 cm, half is 87.5 cm. These are clinical screening and assessment criteria, not a diagnosis from this calculator. This tool does not ask for waist measurements or apply ethnicity-specific categories.",
     ])
 )
 

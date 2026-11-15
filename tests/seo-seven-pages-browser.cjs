@@ -239,12 +239,12 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
         scrollWidth: document.documentElement.scrollWidth
       }));
       assert.ok(viewportWidth.scrollWidth <= viewportWidth.clientWidth + 1, "Urdu BMI page must not overflow horizontally");
-      const summaryFollowsForm = await bmiPage.evaluate(() => {
+      const explanationFollowsForm = await bmiPage.evaluate(() => {
         const form = document.querySelector("#bmi-form");
-        const summary = document.querySelector("#bmi-urdu-summary");
-        return Boolean(form && summary && (form.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING));
+        const explanation = document.querySelector("#bmi-urdu-measurement");
+        return Boolean(form && explanation && (form.compareDocumentPosition(explanation) & Node.DOCUMENT_POSITION_FOLLOWING));
       });
-      assert.equal(summaryFollowsForm, true, "Urdu BMI explanatory content must remain after the calculator");
+      assert.equal(explanationFollowsForm, true, "Urdu BMI measurement guidance must remain after the calculator");
       console.log("/ur/bmi-calculator/ " + viewport.width + "x" + viewport.height + " formBottom=" + Math.round(bmiFormBox.y + bmiFormBox.height) + " firstViewportFit=" + (bmiFormBox.y + bmiFormBox.height <= viewport.height));
       if (viewport.width === 390) {
         await bmiPage.locator("#b-kg").fill("70");
