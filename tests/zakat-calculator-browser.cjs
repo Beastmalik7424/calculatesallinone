@@ -122,6 +122,20 @@ const { chromium } = require("playwright");
   await page.locator("#z-hawl").check();
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /واجب الادا/);
+  for (const id of ["u-sect","u-school","u-marja","u-hanafi-position","u-crop","u-quantity","u-value","u-currency","u-irrigation","u-eligible","u-mixed-confirm"]) {
+    assert.equal(await page.locator("#" + id).count(), 1, "Missing Urdu Ushr field " + id);
+  }
+  await page.locator("#u-sect").selectOption("shia");
+  await page.locator("#u-crop").selectOption("raisins");
+  await page.locator("#u-quantity").fill("900");
+  await page.locator("#u-value").fill("100000");
+  await page.locator("#u-irrigation").selectOption("rain");
+  await page.locator('#ushr-form button[type="submit"]').click();
+  const urUshrResult = await page.locator("#ushr-result").innerText();
+  assert.match(urUshrResult, /عشر کا تخمینہ/);
+  assert.match(urUshrResult, /کشمش/);
+  assert.doesNotMatch(urUshrResult, /Sistani's|Estimated Ushr|Crop:/i, "Urdu Ushr result must not leak English guidance");
+  assert.match(urUshrResult, /10/);
   const urOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   assert.equal(urOverflow, false, "Urdu page must not overflow a 375px viewport");
 
