@@ -137,10 +137,10 @@ const { chromium } = require("playwright");
   await page.locator('#ushr-form button[type="submit"]').click();
   const urUshrResult = await page.locator("#ushr-result").innerText();
   assert.match(urUshrResult, /عشر کا تخمینہ/);
-  assert.match(urUshrResult, /90 کلوگرام/);
+  assert.match(urUshrResult, /(?:90|۹۰) کلوگرام/);
   assert.match(urUshrResult, /کشمش/);
   assert.doesNotMatch(urUshrResult, /Sistani's|Estimated Ushr|Crop:/i, "Urdu Ushr result must not leak English guidance");
-  assert.match(urUshrResult, /10/);
+  assert.match(urUshrResult, /(?:10|۱۰)/);
   const urOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   assert.equal(urOverflow, false, "Urdu page must not overflow a 375px viewport");
 
