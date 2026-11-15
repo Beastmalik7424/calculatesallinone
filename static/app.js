@@ -604,10 +604,14 @@
           mixedRateConfirmed: !!($("u-mixed-confirm") && $("u-mixed-confirm").checked)
         })
         if (result.status === "scholar_review_required") {
-          var mixedGuidance = lang() === "ur"
-            ? "مخلوط آبپاشی میں سنی فقہی مسلک کے مطابق شرح مختلف ہو سکتی ہے اور اس کا انحصار غالب طریقے اور تفصیلات پر ہے۔ اپنے مستند عالم سے شرح کی تصدیق کریں۔ تصدیق کے بغیر کیلکولیٹر کوئی رقم نہیں دکھاتا۔"
-            : result.guidance
-          say("ushr-result", mixedGuidance)
+          var reviewGuidance = result.nisabKg === null
+            ? (lang() === "ur"
+              ? "پانچ وسق حجم کی پیمائش ہے، وزن کی نہیں۔ اس کا کلوگرام میں اندازہ فصل کی قسم اور پیمائش کے حالات کے مطابق بدلتا ہے۔ اس فصل کے لیے مستند مخصوص وزن دستیاب نہ ہونے کی وجہ سے کیلکولیٹر عشر کی رقم نہیں بتاتا۔ اپنے مستند عالم یا زرعی اتھارٹی سے تصدیق کریں۔"
+              : result.guidance)
+            : (lang() === "ur"
+              ? "مخلوط آبپاشی میں سنی فقہی مسلک کے مطابق شرح مختلف ہو سکتی ہے اور اس کا انحصار غالب طریقے اور تفصیلات پر ہے۔ اپنے مستند عالم سے شرح کی تصدیق کریں۔ تصدیق کے بغیر کیلکولیٹر کوئی رقم نہیں دکھاتا۔"
+              : result.guidance)
+          say("ushr-result", reviewGuidance)
           return
         }
         var formatted = new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", { style: "currency", currency: result.currency, maximumFractionDigits: 2 }).format(result.amountDue)
