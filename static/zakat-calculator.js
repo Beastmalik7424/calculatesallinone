@@ -96,7 +96,7 @@
     if (sect === "shia") {
       if (input.marja !== "sistani") throw new RangeError("Choose a verified Marja");
       school = "jafari";
-      if (!["wheat", "barley", "dates", "grapes"].includes(crop)) {
+      if (!["wheat", "barley", "dates", "raisins"].includes(crop)) {
         throw new RangeError("Sistani's verified Ushr ruling covers only the four specified crops");
       }
       nisabKg = 847;
