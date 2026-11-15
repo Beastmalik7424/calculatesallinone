@@ -20,7 +20,7 @@ def main():
         assert page.is_file(), f"Missing Urdu page: {slug}"
         raw = page.read_text(encoding="utf-8")
         assert '<html lang="ur" dir="rtl">' in raw, f"{slug}: language/RTL metadata missing"
-        assert "Noto Nastaliq Urdu" in raw, f"{slug}: Nastaliq font stylesheet missing"
+        assert "Noto+Nastaliq+Urdu" in raw, f"{slug}: Nastaliq font stylesheet missing"
         assert "fonts.googleapis.com" in raw, f"{slug}: Google Fonts stylesheet not linked"
         text = visible(raw)
         assert len(text.split()) >= 500, f"{slug}: thin Urdu page ({len(text.split())} words)"
