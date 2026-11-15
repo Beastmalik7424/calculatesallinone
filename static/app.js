@@ -609,7 +609,7 @@
           var rateText = (result.rate * 100).toLocaleString("ur-PK") + "٪"
           var msg = result.status === "below_nisab"
             ? "فصل کی مقدار مقررہ نصاب (" + result.nisabKg.toLocaleString("ur-PK") + " کلوگرام) سے کم ہے۔ اس منتخب طریقے کے مطابق اس فصل پر عشر واجب نہیں بنتا۔"
-            : "عشر کا تخمینہ: " + formatted + "۔ شرح: " + rateText + "۔ فصل: " + (cropNames[result.crop] || result.crop) + "۔ مقدار: " + result.quantityKg.toLocaleString("ur-PK") + " کلوگرام۔"
+            : "عشر کا تخمینہ: " + formatted + "۔ شرح: " + rateText + "۔ پیداوار کی صورت میں عشر: " + result.produceDueKg.toLocaleString("ur-PK") + " کلوگرام۔ فصل: " + (cropNames[result.crop] || result.crop) + "۔ مقدار: " + result.quantityKg.toLocaleString("ur-PK") + " کلوگرام۔"
           var guidanceUr = result.sect === "shia"
             ? "آیت اللہ سیستانی کے سرکاری حکم کے مطابق یہ زکوٰۃ صرف گندم، جو، کھجور اور کشمش پر ہے۔ 847 کلوگرام کی حد فصل خشک ہونے کے بعد دیکھی جاتی ہے۔ بارش یا قدرتی پانی پر 10٪، پمپ یا آلات سے آبپاشی پر 5٪، اور دونوں طریقے نمایاں طور پر استعمال ہوں تو 7.5٪ ہے۔ اگر ایک طریقہ معمولی ہو تو غالب طریقے کی شرح منتخب کریں۔ فصل کی ملکیت اور دیگر شرائط کے لیے اپنے مرجع سے رجوع کریں۔"
             : "یہ فصل کا عشر ہے، سالانہ مالی زکوٰۃ نہیں۔ فصل کی اہلیت، پیمائش، ملکیت، فصل کے مرحلے اور مقامی قانونی کٹوتی کی تصدیق اپنے مستند عالم یا متعلقہ اتھارٹی سے کریں۔"
@@ -617,7 +617,7 @@
         } else {
           var message = result.status === "below_nisab"
             ? "Harvest is below the selected crop Nisab of " + result.nisabKg + " kg. No Ushr is estimated under this selected position."
-            : "Estimated Ushr: " + formatted + " (" + (result.rate * 100) + "%). Crop: " + result.crop + ". Harvest: " + result.quantityKg + " kg."
+            : "Estimated Ushr: " + formatted + " (" + (result.rate * 100) + "%). In-kind produce due: " + result.produceDueKg + " kg. Crop: " + result.crop + ". Harvest: " + result.quantityKg + " kg."
           say("ushr-result", message + " " + (result.guidance || ""))
         }
       } catch (error) {
