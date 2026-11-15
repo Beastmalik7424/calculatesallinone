@@ -87,7 +87,7 @@ assert.equal(belowMajority.status, "below_nisab");
 assert.equal(belowMajority.amountDue, 0);
 const mixedUshr = calculateUshr({ sect: "sunni", school: "hanbali", crop: "wheat", eligibleCropConfirmed: true, quantityKg: 700, marketValue: 100000, irrigation: "mixed" });
 assert.equal(mixedUshr.status, "scholar_review_required", "Sunni mixed irrigation must not assume a universal midpoint");
-const confirmedMixedUshr = calculateUshr({ sect: "sunni", school: "hanbali", crop: "wheat", quantityKg: 700, marketValue: 100000, irrigation: "mixed", mixedRateConfirmed: true });
+const confirmedMixedUshr = calculateUshr({ sect: "sunni", school: "hanbali", crop: "wheat", eligibleCropConfirmed: true, quantityKg: 700, marketValue: 100000, irrigation: "mixed", mixedRateConfirmed: true });
 assert.equal(confirmedMixedUshr.rate, 0.075);
 const sistaniUshr = calculateUshr({ sect: "shia", marja: "sistani", crop: "wheat", quantityKg: 900, marketValue: 100000, irrigation: "mixed" });
 const sistaniRaisins = calculateUshr({ sect: "shia", marja: "sistani", crop: "raisins", quantityKg: 900, marketValue: 100000, irrigation: "rain" });
