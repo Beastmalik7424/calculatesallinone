@@ -65,7 +65,7 @@ assert re.match(r"\s*<meta\s+charset=", home_head.group(1), re.I), "Homepage UTF
 assert home_head.group(1).find('name="msvalidate.01"') > home_head.group(1).find('charset='), "Bing verification must follow the charset declaration"
 assert not re.search(r"\r?\n[ \t\r]*\r?\n", home_head.group(1)), "Homepage head must not contain blank-line pollution"
 assert "Free Online Calculators" in home_html, "Homepage H1 must identify the calculator collection"
-assert "Free online calculators for health, money, business, dates, maths and everyday tasks." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
+assert "Calculate adult BMI, business gross profit and margin, Zakat Nisab values, discounts, percentages, dates and unit conversions." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
 assert "Browse all free calculators" in home_html, "Homepage must expose a clear calculator-browsing action"
 for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
