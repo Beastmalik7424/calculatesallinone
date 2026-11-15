@@ -52,7 +52,7 @@ assert.ok(urText.split(/\s+/).length >= 700, "Urdu Zakat guide is too thin (<700
 for (const term of ["Ushr is separate from annual wealth Zakat", "rain-fed", "five wasqs", "653 kg", "dry-weight", "847 kg", "948 kg", "crop eligibility", "mixed irrigation", "Pakistan Code", "Sudan Zakat Chamber", "21-karat", "Singapore MUIS", "86 g", "investment-held jewellery", "87.28 g", "87.48 g", "NZF Worldwide", "not national laws", "raisins"]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English Ushr guidance missing: " + term);
 }
-for (const term of ["عشر", "زرعی پیداوار", "بارش", "آبپاشی", "پانچ وسق", "653", "847", "948", "امام ابو حنیفہ", "مخلوط آبپاشی", "سوڈان", "سنگاپور", "ملائیشیا", "کشمش", "87.28", "87.48"]) {
+for (const term of ["عشر", "زرعی پیداوار", "بارش", "آبپاشی", "پانچ وسق", "653", "847", "948", "امام ابو حنیفہ", "مخلوط آبپاشی", "سوڈان", "سنگاپور", "ملائیشیا", "کشمش", "87.28", "87.48", "اسلامی ریلیف پاکستان", "87.28 گرام"]) {
   assert.ok(urText.includes(term), "Urdu Ushr guidance missing: " + term);
 }
 assert.match(en, /href="https:\/\/www\.sistani\.org\/english\/book\/49\/2410\//, "English Ushr guidance must link to Sistani's primary ruling");
