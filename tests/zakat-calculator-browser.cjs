@@ -13,10 +13,10 @@ const { chromium } = require("playwright");
 
   await page.goto("http://127.0.0.1:4174/zakat-calculator/", { waitUntil: "networkidle" });
   assert.equal(await page.locator("html").getAttribute("lang"), "en");
-  for (const id of ["z-currency","z-nisab-method","z-bank","z-savings","z-investments","z-businesscash","z-pension","z-crypto","z-property","z-goldprice","z-silverprice","z-paid"]) {
+  for (const id of ["z-currency","z-sect","z-sunni-school","z-marja","z-nisab-method","z-bank","z-savings","z-investments","z-businesscash","z-pension","z-crypto","z-property","z-goldprice","z-silverprice","z-paid"]) {
     assert.equal(await page.locator("#" + id).count(), 1, "Missing English field " + id);
   }
-  for (const id of ["z-currency","z-nisab-method","z-cash","z-bank","z-goldprice","z-debts","z-paid"]) {
+  for (const id of ["z-currency","z-sect","z-sunni-school","z-marja","z-nisab-method","z-cash","z-bank","z-goldprice","z-debts","z-paid"]) {
     assert.ok(await page.locator('label[for="' + id + '"]').count() === 1, "Missing accessible label for " + id);
   }
 
@@ -35,6 +35,20 @@ const { chromium } = require("playwright");
   assert.match(globalResult, /Eligible liabilities:/i);
   assert.match(globalResult, /Remaining balance:/i);
   assert.match(globalResult, /2,500/);
+  assert.equal(await page.locator("#z-sunni-school-wrap").isVisible(), true);
+  assert.equal(await page.locator("#z-marja-wrap").isVisible(), false);
+  await page.locator("#z-sect").selectOption("shia");
+  assert.equal(await page.locator("#z-sunni-school-wrap").isVisible(), false);
+  assert.equal(await page.locator("#z-marja-wrap").isVisible(), true);
+  await page.locator('#zakat-form button[type="submit"]').click();
+  const sistaniResult = await page.locator("#zakat-result").innerText();
+  assert.match(sistaniResult, /Ayatollah Sistani/i);
+  assert.match(sistaniResult, /paper banknotes/i);
+  assert.doesNotMatch(sistaniResult, /Remaining balance:/i);
+  await page.locator("#z-sect").selectOption("sunni");
+  await page.locator("#z-sunni-school").selectOption("maliki");
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
 
   await page.locator("#z-currency").fill("ZZZ");
   await page.locator('#zakat-form button[type="submit"]').click();
