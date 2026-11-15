@@ -2346,3 +2346,15 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
 .dark .ca-home-wrap nav[aria-label="Related calculators"] a,
 .dark .ca-home-wrap nav[aria-label="Other languages"] a { color: #e6f3f1; }
 /* End approved premium soft-teal homepage theme. */
+
+/* Urdu pages use the requested Noto Nastaliq Urdu script with a safe fallback. */
+html[lang="ur"] body,
+html[lang="ur"] body :is(h1,h2,h3,h4,p,li,label,summary,a,button,blockquote) {
+  font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", serif;
+  line-height: 2.15;
+}
+html[lang="ur"] :is(input,select,textarea,output,code,kbd) {
+  font-family: system-ui, "Noto Naskh Arabic", sans-serif;
+  line-height: 1.6;
+}
+html[lang="ur"] h1 { line-height: 1.9; }
