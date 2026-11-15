@@ -80,5 +80,60 @@
       overpayment: Math.max(0, zakatPaid - zakatBeforePaid)
     });
   }
-  return Object.freeze({ calculate, validateCurrency, assetKeys: ASSET_KEYS, nisabMethods: NISAB });
+  function calculateUshr(input) {
+    if (!input || typeof input !== "object") throw new TypeError("Ushr calculation input is required");
+    const sect = input.sect || "sunni";
+    if (sect !== "sunni" && sect !== "shia") throw new RangeError("Choose a supported sect");
+    const quantityKg = amount(input.quantityKg, "harvest quantity");
+    const marketValue = amount(input.marketValue, "harvest market value");
+    const currency = validateCurrency(input.currency || "PKR");
+    const irrigation = input.irrigation;
+    if (!["rain", "cost", "mixed"].includes(irrigation)) throw new RangeError("Choose a supported irrigation method");
+    const crop = String(input.crop || "").toLowerCase();
+    let school = input.school || "hanafi";
+    let nisabKg = 653;
+    let nisabPosition = "five-wasq";
+    if (sect === "shia") {
+      if (input.marja !== "sistani") throw new RangeError("Choose a verified Marja");
+      school = "jafari";
+      if (!["wheat", "barley", "dates", "grapes"].includes(crop)) {
+        throw new RangeError("Sistani's verified Ushr ruling covers only the four specified crops");
+      }
+      nisabKg = 847;
+      nisabPosition = "sistani-300-saa";
+    } else {
+      if (!["hanafi", "shafii", "maliki", "hanbali"].includes(school)) {
+        throw new RangeError("Choose a supported Sunni madhhab");
+      }
+      if (input.eligibleCropConfirmed !== true) {
+        throw new RangeError("Confirm that this crop is eligible under your selected madhhab");
+      }
+      if (school === "hanafi") {
+        nisabPosition = input.nisabPosition || "abu-hanifa";
+        if (nisabPosition === "abu-hanifa") nisabKg = 0;
+        else if (nisabPosition === "sahibayn") nisabKg = 653;
+        else throw new RangeError("Choose a verified Hanafi crop Nisab position");
+      }
+    }
+    if (sect === "sunni" && irrigation === "mixed" && input.mixedRateConfirmed !== true) {
+      return Object.freeze({
+        sect, school, status: "scholar_review_required", currency,
+        amountDue: null, rate: null, nisabKg, nisabPosition,
+        guidance: "Mixed irrigation is treated differently in detailed Sunni school rulings and depends on which method predominates. Confirm the applicable rate with your qualified scholar. The calculator will not assume a universal 7.5% midpoint."
+      });
+    }
+    const rate = irrigation === "rain" ? 0.10 : (irrigation === "cost" ? 0.05 : 0.075);
+    if (!Number.isFinite(marketValue * rate)) throw new RangeError("Ushr amount exceeds the supported calculation range");
+    const meetsNisab = quantityKg >= nisabKg;
+    const status = meetsNisab ? "payable" : "below_nisab";
+    return Object.freeze({
+      sect, school, currency, crop, quantityKg, marketValue, irrigation,
+      rate, nisabKg, nisabPosition, meetsNisab, status,
+      amountDue: meetsNisab ? marketValue * rate : 0,
+      guidance: sect === "shia"
+        ? "Sistani's crop Zakat applies only to wheat, barley, dates and grapes at approximately 847 kg. Rain or natural irrigation: 10%; irrigation requiring tools or pumping: 5%; where both methods are commonly regarded as jointly used: 7.5%. Crop expenses and seed are not deducted before checking Nisab under the cited rulings."
+        : "This is a crop-specific Ushr estimate, not wealth Zakat. It is due at harvest, with no lunar-year wait. Confirm crop eligibility, crop measurement stage, ownership and any local statutory rules with your qualified scholar or authority."
+    });
+  }
+  return Object.freeze({ calculate, calculateUshr, validateCurrency, assetKeys: ASSET_KEYS, nisabMethods: NISAB });
 });
