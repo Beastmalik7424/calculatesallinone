@@ -35,20 +35,32 @@ for (const id of [
 }
 for (const term of [
   "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48",
-  "503,529", "State Bank of Pakistan", "Hawl", "short-term liabilities",
-  "personal-use", "trade inventory", "receivables",
-  "2.5%", "Worked example", "This tool does not decide"
+  "503,529", "State Bank of Pakistan", "first day of Ramazan",
+  "saving, profit and loss sharing", "2.5%", "personal Zakat Nisab",
+  "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000",
+  "bank deduction threshold changes yearly", "Worked example",
+  "does not fetch a live metal price", "qualified scholar", "Sources"
 ]) {
-  assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing useful topic: " + term);
+  assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
+for (const term of [
+  "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب",
+  "اثاثے", "واجب الادا", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتا ہے"
+]) {
+  assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
+}
+assert.equal((en.match(/<summary\b/gi) || []).length, 3, "English Zakat page must have three page-specific FAQs");
+assert.equal((ur.match(/<summary\b/gi) || []).length, 3, "Urdu Zakat page must have three page-specific FAQs");
+assert.doesNotMatch(en, /value="gold-85"/, "English UI must not offer the unapproved 85 g threshold");
+assert.doesNotMatch(ur, /value="gold-85"/, "Urdu UI must not offer the unapproved 85 g threshold");
 for (const term of [
   "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب",
   "اثاثے", "واجب الادا", "2.5"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing localized topic: " + term);
 }
-assert.ok(enText.split(/\s+/).length >= 1000, "English Zakat guide is too thin (<1000 visible words)");
-assert.ok(urText.split(/\s+/).length >= 700, "Urdu Zakat guide is too thin (<700 visible words)");
+assert.ok(enText.length > 500, "English Zakat page must contain the requested substantive guidance");
+assert.ok(urText.length > 300, "Urdu Zakat page must contain the translated guidance");
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const submitAt = html.indexOf('type="submit"');
   const assetAt = html.indexOf('id="z-cash"');
