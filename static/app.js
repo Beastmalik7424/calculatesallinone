@@ -509,13 +509,6 @@
           zakatPaid: num("z-paid"),
           hawlComplete: !!($("z-hawl") && $("z-hawl").checked)
         })
-        if (result.status === "no_harvest") {
-          var noHarvestMessage = lang() === "ur"
-            ? "فصل کی مقدار صفر ہے۔ عشر کا اندازہ لگانے کے لیے مثبت مقدار درج کریں۔"
-            : "No harvested produce was entered. Enter a positive harvest quantity to estimate Ushr."
-          say("ushr-result", noHarvestMessage)
-          return
-        }
         if (result.status === "scholar_review_required") {
           var shiaGuidance = lang() === "ur"
             ? "آیت اللہ سیستانی کے سرکاری احکام کے مطابق عام کاغذی نوٹ اور عام بینک بیلنس سونے یا چاندی کے سکّوں والی واجب زکوٰۃ کے حکم میں شامل نہیں۔ سونے اور چاندی پر زکوٰۃ مخصوص شرائط کے ساتھ صرف ایسے ڈھلے ہوئے سکّوں پر ہے جو عام لین دین میں استعمال ہوتے ہوں۔ تجارتی سرمائے کا الگ حکم احتیاطِ واجب کے تحت ہے۔ اس کیلکولیٹر میں سکّوں کی نوعیت، تجارتی نیت اور تمام ضروری شرائط درج نہیں ہوتیں، اس لیے غلط عدد دینے کے بجائے اپنے مرجع کے دفتر سے رجوع کریں۔"
@@ -603,6 +596,13 @@
           eligibleCropConfirmed: !!($("u-eligible") && $("u-eligible").checked),
           mixedRateConfirmed: !!($("u-mixed-confirm") && $("u-mixed-confirm").checked)
         })
+        if (result.status === "no_harvest") {
+          var noHarvestMessage = lang() === "ur"
+            ? "فصل کی مقدار صفر ہے۔ عشر کا اندازہ لگانے کے لیے مثبت مقدار درج کریں۔"
+            : "No harvested produce was entered. Enter a positive harvest quantity to estimate Ushr."
+          say("ushr-result", noHarvestMessage)
+          return
+        }
         if (result.status === "scholar_review_required") {
           var reviewGuidance = result.nisabKg === null
             ? (lang() === "ur"
