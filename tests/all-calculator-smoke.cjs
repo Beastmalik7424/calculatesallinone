@@ -353,6 +353,11 @@ assert.notEqual(elements["b-ft-error"].textContent, "", "empty feet must be reje
 setValues({"b-kg":70,"b-ft":5,"b-in":""}); submit("bmi-form");
 assert.notEqual(elements["b-in-error"].textContent, "", "empty inches must be rejected");
 
+// Restore the pre-existing product-mode state after the randomized business-mode simulation.
+elements["pl-mode-product"].checked = true;
+elements["pl-mode-business"].checked = false;
+elements["pl-mode-product"]._handlers.change();
+
 // Profit/loss: profit, loss and zero-cost edge case.
 for (const [cost, sell, expected] of [[100,150,/Profit: 50/],[100,80,/Loss: 20/],[0,10,/N\/A/]]) {
   setValues({"p-cost":cost,"p-sell":sell}); submit("pl-form");
