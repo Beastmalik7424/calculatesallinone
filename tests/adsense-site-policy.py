@@ -100,13 +100,17 @@ for repeated_heading in (
 ):
     check(not has_heading("bmi-calculator", repeated_heading),
           f"/bmi-calculator/ repeats material already covered in '{repeated_heading}'")
-check(has_heading("bmi-calculator", "How to measure consistently"),
-      "/bmi-calculator/ must retain its practical measurement guidance")
-check(has_heading("bmi-calculator", "Pakistan and South Asia context"),
-      "/bmi-calculator/ must retain its distinct South Asian context and thresholds")
+check(has_heading("bmi-calculator", "Adult BMI categories"),
+      "/bmi-calculator/ must show the adult WHO categories")
+check(has_heading("bmi-calculator", "WHO Expert Consultation and Asian population action points"),
+      "/bmi-calculator/ must explain the Asian action points as additional action points")
+check(has_heading("bmi-calculator", "Limitations and professional opinion"),
+      "/bmi-calculator/ must explain adult-only scope and professional limitations")
 
-check(has_heading("profit-loss-calculator", "When product profit differs from operating profit"),
-      "/profit-loss-calculator/ must distinguish product profit from business operating profit with a worked example")
+check(has_heading("profit-loss-calculator", "Cash flow is separate from profit"),
+      "/profit-loss-calculator/ must distinguish accounting profit from cash flow")
+check(has_heading("profit-loss-calculator", "Formulas"),
+      "/profit-loss-calculator/ must explain COGS, gross profit and gross margin")
 
 def faq_questions(slug):
     raw = (ROOT / slug / "index.html").read_text(encoding="utf-8")
@@ -134,8 +138,8 @@ for repeated_heading in (
 ):
     check(not has_heading("profit-loss-calculator", repeated_heading),
           f"/profit-loss-calculator/ repeats material already explained in '{repeated_heading}'")
-check(has_heading("profit-loss-calculator", "Pakistan shop example: include direct selling costs"),
-      "/profit-loss-calculator/ must retain its distinctive local-cost example")
+check(has_heading("profit-loss-calculator", "Worked example"),
+      "/profit-loss-calculator/ must retain the requested inventory and gross-margin worked example")
 
 # Urdu content must accurately describe the calculator modes exposed in the UI.
 ur_profit = page_text("ur/profit-loss-calculator")
