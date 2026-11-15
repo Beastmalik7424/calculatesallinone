@@ -459,6 +459,18 @@
   function initZakat () {
     var form = $("zakat-form")
     if (!form) return
+    var sectInput = $("z-sect")
+    var sunniSchoolWrap = $("z-sunni-school-wrap")
+    var marjaWrap = $("z-marja-wrap")
+    function updateFiqhFields() {
+      var shia = !!(sectInput && sectInput.value === "shia")
+      if (sunniSchoolWrap) sunniSchoolWrap.hidden = shia
+      if (marjaWrap) marjaWrap.hidden = !shia
+    }
+    if (sectInput) {
+      sectInput.addEventListener("change", updateFiqhFields)
+      updateFiqhFields()
+    }
     var assetFields = [
       ["cash", "z-cash"], ["bank", "z-bank"], ["savings", "z-savings"],
       ["gold", "z-gold"], ["silver", "z-silver"], ["investments", "z-investments"],
@@ -486,6 +498,9 @@
       try {
         var result = window.ZakatCalculator.calculate({
           currency: currency,
+          sect: sectInput ? sectInput.value : "sunni",
+          school: $("z-sunni-school") ? $("z-sunni-school").value : "hanafi",
+          marja: $("z-marja") ? $("z-marja").value : "",
           nisabMethod: method,
           silverPricePerGram: num("z-silverprice"),
           goldPricePerGram: num("z-goldprice"),
@@ -494,6 +509,18 @@
           zakatPaid: num("z-paid"),
           hawlComplete: !!($("z-hawl") && $("z-hawl").checked)
         })
+        if (result.status === "scholar_review_required") {
+          var shiaGuidance = lang() === "ur"
+            ? "آیت اللہ سیستانی کے سرکاری احکام کے مطابق عام کاغذی نوٹ اور عام بینک بیلنس سونے یا چاندی کے سکّوں والی واجب زکوٰۃ کے حکم میں شامل نہیں۔ سونے اور چاندی پر زکوٰۃ مخصوص شرائط کے ساتھ صرف ایسے ڈھلے ہوئے سکّوں پر ہے جو عام لین دین میں استعمال ہوتے ہوں۔ تجارتی سرمائے کا الگ حکم احتیاطِ واجب کے تحت ہے۔ اس کیلکولیٹر میں سکّوں کی نوعیت، تجارتی نیت اور تمام ضروری شرائط درج نہیں ہوتیں، اس لیے غلط عدد دینے کے بجائے اپنے مرجع کے دفتر سے رجوع کریں۔"
+            : result.guidance
+          say("zakat-result", shiaGuidance)
+          return
+        }
+        var schoolLabels = { hanafi: "Hanafi", shafii: "Shafi'i", maliki: "Maliki", hanbali: "Hanbali" }
+        var schoolLabelsUr = { hanafi: "حنفی", shafii: "شافعی", maliki: "مالکی", hanbali: "حنبلی" }
+        var schoolNote = lang() === "ur"
+          ? "منتخب سنی فقہی مسلک: " + (schoolLabelsUr[result.school] || result.school) + "۔ یہ حساب آپ کے منتخب نصاب اور درج کردہ اثاثوں پر مبنی ہے۔ زیورات، قرض، سرمایہ کاری، پنشن اور حول کے اختلافی احکام اپنے مستند عالم سے تصدیق کریں۔"
+          : "Selected Sunni madhhab: " + (schoolLabels[result.school] || result.school) + ". This arithmetic uses the Nisab and asset values you entered. Confirm disputed jewellery, debt, investment, pension and Hawl rulings with your qualified scholar."
         var formatted = {
           assets: money(result.totalAssets, result.currency),
           liabilities: money(result.totalLiabilities, result.currency),
@@ -504,14 +531,14 @@
           amount: money(result.balanceDue, result.currency)
         }
         if (result.status === "below_nisab") {
-          say("zakat-result", t("zakatBelow", formatted))
+          say("zakat-result", t("zakatBelow", formatted) + " " + schoolNote)
           return
         }
         if (result.status === "hawl_incomplete") {
-          say("zakat-result", t("zakatHawl", formatted))
+          say("zakat-result", t("zakatHawl", formatted) + " " + schoolNote)
           return
         }
-        var message = t("zakatDue", formatted)
+        var message = t("zakatDue", formatted) + " " + schoolNote
         if (result.overpayment > 0) message += " " + t("zakatOverpaid")
         say("zakat-result", message)
       } catch (error) {
@@ -519,6 +546,94 @@
         if (/metal price/i.test(reason)) say("zakat-result", t("zakatNoPrice"))
         else if (/currency|finite|amount|Nisab method|supported range/i.test(reason)) say("zakat-result", t("zakatInput"))
         else say("zakat-result", t("zakatEngineError"))
+      }
+    })
+    initUshr()
+  }
+
+  function initUshr() {
+    var form = $("ushr-form")
+    if (!form) return
+    var sect = $("u-sect")
+    var school = $("u-school")
+    var schoolWrap = $("u-school-wrap")
+    var marjaWrap = $("u-marja-wrap")
+    var hanafiWrap = $("u-hanafi-position-wrap")
+    var eligibleWrap = $("u-eligible-wrap")
+    var mixedWrap = $("u-mixed-wrap")
+    var irrigation = $("u-irrigation")
+    function updateUshrFields() {
+      var shia = !!(sect && sect.value === "shia")
+      var hanafi = !shia && !!(school && school.value === "hanafi")
+      var mixed = !!(irrigation && irrigation.value === "mixed")
+      if (schoolWrap) schoolWrap.hidden = shia
+      if (marjaWrap) marjaWrap.hidden = !shia
+      if (hanafiWrap) hanafiWrap.hidden = !hanafi
+      if (eligibleWrap) eligibleWrap.hidden = shia
+      if (mixedWrap) mixedWrap.hidden = shia || !mixed
+    }
+    if (sect) sect.addEventListener("change", updateUshrFields)
+    if (school) school.addEventListener("change", updateUshrFields)
+    if (irrigation) irrigation.addEventListener("change", updateUshrFields)
+    updateUshrFields()
+    form.addEventListener("submit", function (e) {
+      e.preventDefault()
+      if (!window.ZakatCalculator || typeof window.ZakatCalculator.calculateUshr !== "function") {
+        say("ushr-result", lang() === "ur" ? "عشر کیلکولیٹر دستیاب نہیں۔ صفحہ دوبارہ کھولیں۔" : "Ushr calculator is unavailable. Reload the page.")
+        return
+      }
+      try {
+        var result = window.ZakatCalculator.calculateUshr({
+          sect: sect ? sect.value : "sunni",
+          school: school ? school.value : "hanafi",
+          marja: $("u-marja") ? $("u-marja").value : "",
+          nisabPosition: $("u-hanafi-position") ? $("u-hanafi-position").value : "abu-hanifa",
+          crop: $("u-crop") ? $("u-crop").value : "",
+          quantityKg: num("u-quantity"),
+          marketValue: num("u-value"),
+          currency: ($("u-currency") && $("u-currency").value || "PKR").trim().toUpperCase(),
+          irrigation: irrigation ? irrigation.value : "rain",
+          eligibleCropConfirmed: !!($("u-eligible") && $("u-eligible").checked),
+          mixedRateConfirmed: !!($("u-mixed-confirm") && $("u-mixed-confirm").checked)
+        })
+        if (result.status === "no_harvest") {
+          var noHarvestMessage = lang() === "ur"
+            ? "فصل کی مقدار صفر ہے۔ عشر کا اندازہ لگانے کے لیے مثبت مقدار درج کریں۔"
+            : "No harvested produce was entered. Enter a positive harvest quantity to estimate Ushr."
+          say("ushr-result", noHarvestMessage)
+          return
+        }
+        if (result.status === "scholar_review_required") {
+          var reviewGuidance = result.nisabKg === null
+            ? (lang() === "ur"
+              ? "پانچ وسق حجم کی پیمائش ہے، وزن کی نہیں۔ اس کا کلوگرام میں اندازہ فصل کی قسم اور پیمائش کے حالات کے مطابق بدلتا ہے۔ اس فصل کے لیے مستند مخصوص وزن دستیاب نہ ہونے کی وجہ سے کیلکولیٹر عشر کی رقم نہیں بتاتا۔ اپنے مستند عالم یا زرعی اتھارٹی سے تصدیق کریں۔"
+              : result.guidance)
+            : (lang() === "ur"
+              ? "مخلوط آبپاشی میں سنی فقہی مسلک کے مطابق شرح مختلف ہو سکتی ہے اور اس کا انحصار غالب طریقے اور تفصیلات پر ہے۔ اپنے مستند عالم سے شرح کی تصدیق کریں۔ تصدیق کے بغیر کیلکولیٹر کوئی رقم نہیں دکھاتا۔"
+              : result.guidance)
+          say("ushr-result", reviewGuidance)
+          return
+        }
+        var formatted = new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", { style: "currency", currency: result.currency, maximumFractionDigits: 2 }).format(result.amountDue)
+        if (lang() === "ur") {
+          var cropNames = { wheat: "گندم", barley: "جو", dates: "کھجور", raisins: "کشمش", rice: "چاول", maize: "مکئی", other: "دیگر فصل" }
+          var rateText = (result.rate * 100).toLocaleString("ur-PK") + "٪"
+          var msg = result.status === "below_nisab"
+            ? "فصل کی مقدار مقررہ نصاب (" + result.nisabKg.toLocaleString("ur-PK") + " کلوگرام) سے کم ہے۔ اس منتخب طریقے کے مطابق اس فصل پر عشر واجب نہیں بنتا۔"
+            : "عشر کا تخمینہ: " + formatted + "۔ شرح: " + rateText + "۔ پیداوار کی صورت میں عشر: " + result.produceDueKg.toLocaleString("ur-PK") + " کلوگرام۔ فصل: " + (cropNames[result.crop] || result.crop) + "۔ مقدار: " + result.quantityKg.toLocaleString("ur-PK") + " کلوگرام۔"
+          var guidanceUr = result.sect === "shia"
+            ? "آیت اللہ سیستانی کے سرکاری حکم کے مطابق یہ زکوٰۃ صرف گندم، جو، کھجور اور کشمش پر ہے۔ 847 کلوگرام کی حد فصل خشک ہونے کے بعد دیکھی جاتی ہے۔ بارش یا قدرتی پانی پر 10٪، پمپ یا آلات سے آبپاشی پر 5٪، اور دونوں طریقے نمایاں طور پر استعمال ہوں تو 7.5٪ ہے۔ اگر ایک طریقہ معمولی ہو تو غالب طریقے کی شرح منتخب کریں۔ فصل کی ملکیت اور دیگر شرائط کے لیے اپنے مرجع سے رجوع کریں۔"
+            : "یہ فصل کا عشر ہے، سالانہ مالی زکوٰۃ نہیں۔ فصل کی اہلیت، پیمائش، ملکیت، فصل کے مرحلے اور مقامی قانونی کٹوتی کی تصدیق اپنے مستند عالم یا متعلقہ اتھارٹی سے کریں۔"
+          say("ushr-result", msg + " " + guidanceUr)
+        } else {
+          var message = result.status === "below_nisab"
+            ? "Harvest is below the selected crop Nisab of " + result.nisabKg + " kg. No Ushr is estimated under this selected position."
+            : "Estimated Ushr: " + formatted + " (" + (result.rate * 100) + "%). In-kind produce due: " + result.produceDueKg + " kg. Crop: " + result.crop + ". Harvest: " + result.quantityKg + " kg."
+          say("ushr-result", message + " " + (result.guidance || ""))
+        }
+      } catch (error) {
+        var reason = String(error && error.message || "")
+        say("ushr-result", reason)
       }
     })
   }
