@@ -5,9 +5,9 @@
     en: {
       zakatNoPrice: "Enter a positive silver or gold price per gram in the selected currency to calculate the chosen Nisab.",
       zakatInput: "Check every amount and the three-letter currency code. Amounts must be finite and zero or greater.",
-      zakatBelow: "Your net zakatable wealth is {net}, below the selected Nisab of {nisab}. This estimate does not show Zakat as payable.",
-      zakatHawl: "Your net wealth is {net} and meets the selected Nisab of {nisab}. Zakat is calculated only when your lunar Zakat year (hawl) is complete.",
-      zakatDue: "Zakat calculation at 2.5 percent. Net zakatable wealth: {net}. Nisab: {nisab}. Zakat before prior payments: {gross}. Already paid: {paid}. Remaining balance: {amount}.",
+      zakatBelow: "Assets: {assets}. Eligible liabilities: {liabilities}. Net wealth: {net}. Selected Nisab: {nisab}. Net wealth is below the threshold, so this estimate does not show Zakat as payable.",
+      zakatHawl: "Assets: {assets}. Eligible liabilities: {liabilities}. Net wealth: {net}. Selected Nisab: {nisab}. The threshold is met, but the lunar Zakat year (hawl) is not confirmed as complete.",
+      zakatDue: "Zakat calculation at 2.5 percent. Assets: {assets}. Eligible liabilities: {liabilities}. Net zakatable wealth: {net}. Nisab: {nisab}. Zakat before prior payments: {gross}. Already paid: {paid}. Remaining balance: {amount}.",
       zakatOverpaid: "The entered prior payment is higher than this calculated Zakat. Remaining balance is zero. Confirm any credit or excess payment with a qualified scholar.",
       zakatEngineError: "The calculator could not validate these entries. Check the currency code and selected metal price.",
       bmiInput: "Enter a weight from 2 to 500 kg and a height from 50 to 300 cm.",
@@ -69,9 +69,9 @@
     ur: {
       zakatNoPrice: "منتخب نصاب کا حساب کرنے کے لیے منتخب کرنسی میں سونے یا چاندی کی فی گرام موجودہ قیمت درج کریں۔",
       zakatInput: "تمام رقوم اور تین حروف پر مشتمل کرنسی کوڈ چیک کریں۔ ہر رقم صفر یا اس سے زیادہ اور محدود ہونی چاہیے۔",
-      zakatBelow: "آپ کا خالص قابلِ زکوٰۃ مال {net} ہے، جو منتخب نصاب {nisab} سے کم ہے۔ اس حساب میں زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
-      zakatHawl: "آپ کا خالص مال {net} منتخب نصاب {nisab} تک پہنچتا ہے۔ زکوٰۃ صرف قمری سال (حول) مکمل ہونے پر نکالی جائے گی۔",
-      zakatDue: "2.5 فیصد کے حساب سے زکوٰۃ۔ خالص قابلِ زکوٰۃ مال: {net}۔ نصاب: {nisab}۔ پہلے کی ادائیگی سے پہلے زکوٰۃ: {gross}۔ پہلے ادا شدہ رقم: {paid}۔ باقی واجب الادا رقم: {amount}۔",
+      zakatBelow: "اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص مال: {net}۔ منتخب نصاب: {nisab}۔ خالص مال نصاب سے کم ہے، اس لیے زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
+      zakatHawl: "اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص مال: {net}۔ منتخب نصاب: {nisab}۔ نصاب پورا ہے، لیکن قمری زکوٰۃ سال (حول) مکمل ہونے کی تصدیق نہیں ہوئی۔",
+      zakatDue: "2.5 فیصد کے حساب سے زکوٰۃ۔ اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص قابلِ زکوٰۃ مال: {net}۔ نصاب: {nisab}۔ پہلے کی ادائیگی سے پہلے زکوٰۃ: {gross}۔ پہلے ادا شدہ رقم: {paid}۔ باقی واجب الادا رقم: {amount}۔",
       zakatOverpaid: "درج کردہ پہلے کی ادائیگی اس حساب کی زکوٰۃ سے زیادہ ہے۔ باقی رقم صفر ہے۔ زائد ادائیگی کے حکم کے لیے مستند عالم سے تصدیق کریں۔",
       zakatEngineError: "کیلکولیٹر درج کردہ معلومات کی تصدیق نہیں کر سکا۔ کرنسی کوڈ اور منتخب دھات کی قیمت چیک کریں۔",
       bmiInput: "وزن 2 سے 500 کلو گرام اور قد 50 سے 300 سینٹی میٹر کے درمیان لکھیں۔",
@@ -495,6 +495,8 @@
           hawlComplete: !!($("z-hawl") && $("z-hawl").checked)
         })
         var formatted = {
+          assets: money(result.totalAssets, result.currency),
+          liabilities: money(result.totalLiabilities, result.currency),
           net: money(result.netAssets, result.currency),
           nisab: money(result.nisabThreshold, result.currency),
           gross: money(result.zakatBeforePaid, result.currency),
