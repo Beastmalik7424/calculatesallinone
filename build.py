@@ -225,38 +225,14 @@ TOOLS = [
             '<button type="submit" class="@B@">Calculate BMI</button></form>'
             + result("bmi-result")
         ),
-        "guide": [
-            ("The formula", [
-                "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit. When kg is selected, BMI equals weight in kilograms divided by height in meters, squared.",
-                "When lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches, squared. The calculator converts feet and inches into total inches for this formula.",
-                "If you select kg with feet and inches, the calculator converts the height to centimeters and uses the metric formula. Switching weight units clears the previous result so you can recalculate with the new unit.",
-            ]),
-            ("Adult weight categories", [
-                "The World Health Organization uses these ranges for adults: below 18.5 is underweight, 18.5 to 24.9 is normal weight, 25.0 to 29.9 is overweight, and 30.0 or above is in the obesity range.",
-            ]),
-            ("Worked example, metric", [
-                "A person weighs 70 kg and is 175 cm tall. Height in meters is 1.75. Squared, that is 3.0625.",
-                "BMI equals 70 divided by 3.0625, which is 22.9 to one decimal place. This is in the normal weight range.",
-            ]),
-            ("Worked example, imperial", [
-                "A person weighs 154 lb and is 5 ft 9 in tall. Total height is 69 inches.",
-                "BMI equals 703 multiplied by 154, divided by 69 squared (4,761). The result is 22.7, which is in the normal weight range.",
-            ]),
-            ("Common mistakes", [
-                "Entering height in feet with decimals. 5.9 feet is 5 feet 10.8 inches, not 5 feet 9 inches. Use feet and inches separately.",
-                "Using BMI for children or teenagers. Their assessment uses age and sex specific percentile charts.",
-                "Treating BMI as body fat. Muscle, frame size and age change what the same number means.",
-            ]),
-            ("When to speak to a clinician", [
-                "BMI is a starting point. A doctor or qualified health professional can assess weight in the context of your history, waist size, blood pressure, blood tests and other factors.",
-            ]),
-        ],
+        "guide": [],
         "faq": [
-            ("Can I use this for children?", "No. This page covers adults. Children and teenagers are assessed with age and sex specific percentile charts."),
-            ("Is BMI a diagnosis?", "No. It is a screening measure. Discuss your result with a doctor or qualified health professional."),
-            ("What does 0 to 11.9 inches mean?", "Inches must be at least 0 and less than 12. For example, 5 ft 11 in is valid, while 5 ft 13 in is not."),
+            ("Which weight units can I enter?", "Select kilograms or pounds before entering your weight."),
+            ("Which height units can I enter?", "Select centimetres or feet and inches, then enter the matching height fields."),
+            ("Why is the result shown to one decimal place?", "The displayed BMI is rounded to one decimal place for readability.")
         ],
-        "sources": 'Adult BMI categories follow the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization</a> classification. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" target="_blank" rel="noopener noreferrer">NHS adult BMI calculator</a> explains ethnicity-specific interpretation. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" target="_blank" rel="noopener noreferrer">NHS waist-to-height ratio calculator</a> explains the half-height check. The <a class="' + LINK + '" href="https://doi.org/10.2337/doci26-0003" target="_blank" rel="noopener noreferrer">2026 Standards of Care in Overweight and Obesity</a> describes current clinical assessment criteria. The calculator itself continues to display the standard adult WHO categories and does not diagnose a condition.',
+        "sources": 'Sources: <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization: Obesity and overweight</a>; <a class="' + LINK + '" href="https://doi.org/10.1016/S0140-6736(03)15268-3" target="_blank" rel="noopener noreferrer">WHO Expert Consultation, The Lancet (2004), DOI 10.1016/S0140-6736(03)15268-3</a>.',
+
     },
     {
         "slug": "profit-loss-calculator",
