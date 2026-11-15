@@ -38,6 +38,19 @@
   }
   function calculate(input) {
     if (!input || typeof input !== "object") throw new TypeError("Zakat calculation input is required");
+    const sect = input.sect || "sunni";
+    if (sect !== "sunni" && sect !== "shia") throw new RangeError("Choose a supported sect");
+    if (sect === "shia") {
+      if (input.marja !== "sistani") throw new RangeError("Choose a verified Marja");
+      return Object.freeze({
+        sect: "shia", school: "jafari", marja: "sistani",
+        status: "scholar_review_required", currency: null,
+        balanceDue: null, zakatBeforePaid: null,
+        guidance: "Under Ayatollah Sistani's published rulings, ordinary paper banknotes and non-gold/silver coins are not subject to the obligatory Zakat rules for gold and silver money. Zakat on gold and silver applies only to qualifying minted coins used commonly in transactions and subject to the stated Nisab and time conditions. Trading capital has a separate obligatory-precaution ruling. This calculator does not collect the coinage, trading-intention, ownership-duration or other facts needed for a valid Ja'fari ruling, so it will not invent a numeric amount. Consult your Marja's office for your case."
+      });
+    }
+    const school = input.school || "hanafi";
+    if (!["hanafi", "shafii", "maliki", "hanbali"].includes(school)) throw new RangeError("Choose a supported Sunni madhhab");
     const currency = validateCurrency(input.currency || "PKR");
     const method = NISAB[input.nisabMethod || "silver"];
     if (!method) throw new RangeError("Choose a supported Nisab method");
@@ -58,7 +71,7 @@
     const zakatBeforePaid = status === "payable" ? netAssets * 0.025 : 0;
     if (!Number.isFinite(zakatBeforePaid)) throw new RangeError("Zakat result exceeds the supported calculation range");
     return Object.freeze({
-      currency, nisabMethod: input.nisabMethod || "silver", nisabLabel: method.label,
+      sect, school, currency, nisabMethod: input.nisabMethod || "silver", nisabLabel: method.label,
       nisabGrams: method.grams, metalPricePerGram: metalPrice,
       totalAssets, totalLiabilities, netAssets, nisabThreshold,
       meetsNisab, hawlComplete, status, zakatRate: 0.025,
