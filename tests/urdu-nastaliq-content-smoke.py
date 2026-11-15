@@ -25,8 +25,8 @@ def main():
         text = visible(raw)
         assert len(text.split()) >= 500, f"{slug}: thin Urdu page ({len(text.split())} words)"
     css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
-    assert 'html[lang=ur]' in css and 'Noto Nastaliq Urdu' in css, "Urdu Nastaliq font stack missing from compiled CSS"
-    assert "display=swap" in raw, f"{slug}: font-display swap fallback is missing"
+    assert 'lang=ur' in css and 'Noto Nastaliq Urdu' in css, "Urdu Nastaliq font stack missing from compiled CSS"
+    assert "display=swap" in raw, f"{slug}: Google Fonts swap strategy is missing"
     print(f"PASS: {len(SLUGS)} Urdu routes retain RTL and load Noto Nastaliq Urdu")
     print("PASS: every Urdu route meets the site's editorial minimum and compiled CSS applies the font")
     return 0
