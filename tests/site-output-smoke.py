@@ -1260,7 +1260,7 @@ assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement
 _money_2026 = output_for_url(SITE + "/money/").read_text(encoding="utf-8")
 for _phrase in ("A practical monthly close: from sales to operating profit",
                 "opening inventory", "closing inventory", "reconcile profit to cash",
-                "does not calculate cash flow"):
+                "do not calculate cash flow"):
     assert _phrase.lower() in _money_2026.lower(), "Money hub workflow guidance missing: " + _phrase
 assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement" in _money_2026, "Money hub must cite its inventory and income-statement method"
 
