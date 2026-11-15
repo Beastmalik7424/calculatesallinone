@@ -91,7 +91,7 @@ const { chromium } = require("playwright");
   await page.locator('#ushr-form button[type="submit"]').click();
   assert.match(await page.locator("#ushr-result").innerText(), /2,500/);
   await page.locator("#u-irrigation").selectOption("mixed");
-  await page.locator("#ushr-form button[type="submit"]').click();
+  await page.locator('#ushr-form button[type="submit"]').click();
   assert.match(await page.locator("#ushr-result").innerText(), /mixed irrigation/i);
   await page.locator("#u-mixed-confirm").check();
   await page.locator('#ushr-form button[type="submit"]').click();
