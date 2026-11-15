@@ -135,9 +135,9 @@ TOOLS = [
         "category": "money",
         "name": "Zakat Calculator",
         "app": "FinanceApplication",
-        "description": "Estimate Zakat on eligible wealth worldwide with silver or gold Nisab, ISO currency codes, a full asset and liability breakdown, and lunar-year confirmation.",
-        "h1": "Global Zakat Calculator with Silver and Gold Nisab",
-        "lead": "Estimate Zakat in your own currency. Choose a silver or gold Nisab method, enter the current metal price per gram and list eligible assets and short-term liabilities. The calculator shows its assumptions and separates Pakistan's year-specific bank deduction threshold from personal Zakat.",
+        "description": "Compare Pakistan's 1447 AH bank deduction Nisab with personal gold or silver Nisab using the metal price you enter.",
+        "h1": "Zakat Calculator: Personal and Bank Nisab",
+        "lead": "Compare Pakistan's 1447 AH (2026) bank deduction threshold with the separate personal gold or silver Nisab. Enter your own metal price and net wealth for an arithmetic estimate, not a religious ruling.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             + '<div class="sticky top-20 z-20 shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
@@ -205,7 +205,7 @@ TOOLS = [
         "category": "health",
         "name": "BMI Calculator",
         "app": "HealthApplication",
-        "description": "Calculate adult body mass index in metric or imperial units with WHO weight category ranges.",
+        "description": "Calculate adult BMI in kilograms or pounds. See WHO adult categories, Asian population action points, a worked example and limitations.",
         "h1": "BMI Calculator for Adults",
         "lead": "Calculate your body mass index in metric or imperial units. BMI is a screening measure for adults. It is not a diagnosis.",
         "ui": (
@@ -263,7 +263,7 @@ TOOLS = [
         "category": "money",
         "name": "Profit and Loss Calculator",
         "app": "UtilitiesApplication",
-        "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
+        "description": "Calculate COGS, gross profit and gross margin from revenue and inventory values. See a worked example and separate cash-flow limitations.",
         "h1": "Profit and Loss Calculator",
         "lead": "Use Business P&L mode to calculate gross profit and net operating profit from revenue, COGS and expenses. Use Product mode to compare a unit cost with its selling price.",
         "ui": (
