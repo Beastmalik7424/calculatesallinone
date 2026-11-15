@@ -46,12 +46,16 @@ def main():
     assert "تشخیص نہیں" in opening, "Opening must clarify that BMI is not a diagnosis"
 
     assert 'id="bmi-form"' in body and "BMI کا حساب کریں" in body, "Existing BMI calculator form or action is missing"
-    assert 'id="bmi-urdu-summary"' in body, "A concise, visible answer summary is missing"
-    assert "BMI کیا ہے اور اسے کیسے نکالتے ہیں?" in body, "Missing question-led BMI definition section"
-    assert "بالغوں کے BMI کی معیاری حدود کیا ہیں?" in body, "Missing question-led adult BMI category section"
+    assert 'id="bmi-urdu-summary"' not in body, "Redundant summary must not repeat the opening formula and category explanation"
+    assert "وزن اور قد کی پیمائش کیسے درست رکھیں?" in body, "Missing practical measurement guidance"
     assert "جنوبی ایشیائی افراد کے لیے اضافی BMI حدود کیا ہیں?" in body, "Missing South Asian risk-threshold explanation"
-    assert "BMI کن باتوں کی نشاندہی نہیں کرتا?" in body, "Missing BMI limitation section"
-    assert "BMI کے نتیجے کے بعد کیا کرنا چاہیے?" in body, "Missing next-step section"
+    for repeated_heading in (
+        "BMI کیا ہے اور اسے کیسے نکالتے ہیں?",
+        "بالغوں کے BMI کی معیاری حدود کیا ہیں?",
+        "BMI کن باتوں کی نشاندہی نہیں کرتا?",
+        "BMI کے نتیجے کے بعد کیا کرنا چاہیے?",
+    ):
+        assert repeated_heading not in body, f"Redundant Urdu BMI section remains: {repeated_heading}"
 
     # The international WHO categories stay unchanged; Asian action points are explicitly contextualised.
     for phrase in ("18.5", "25", "30", "23.0", "27.5", "WHO"):
@@ -95,10 +99,10 @@ def main():
     schema_questions = [item.get("name") for item in faq.get("mainEntity", [])]
     assert len(visible_questions) >= 6, "Expected useful visible FAQ coverage"
     assert schema_questions == visible_questions, "FAQ JSON-LD must exactly match visible FAQ questions"
-    assert len(re.findall(r"<h2\b[^>]*>.*?\?</h2>", body, re.S | re.I)) >= 5, "Expected at least five question-led answer sections"
+    assert len(re.findall(r"<h2\b[^>]*>.*?\?</h2>", body, re.S | re.I)) >= 2, "Expected distinct question-led answer sections"
 
     print("PASS: Urdu BMI title, description, canonical and indexability")
-    print("PASS: answer-first definition, summary and question-led self-contained sections")
+    print("PASS: answer-first definition, non-repetitive measurement guidance and South Asian context")
     print("PASS: WHO and South Asian BMI thresholds are distinguished accurately")
     print("PASS: visible authoritative citations, maintainer disclosure and medical-review limitation")
     print("PASS: WebPage, FAQ, BreadcrumbList and Organization structured data match visible content; no unsupported app rating is invented")
