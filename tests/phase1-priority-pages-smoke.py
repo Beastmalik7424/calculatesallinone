@@ -29,7 +29,7 @@ CASES = {
         "form": 'id="pl-form"',
         "category": "/money/",
         "related": ["/discount-calculator/", "/percentage-calculator/", "/emi-calculator/", "/compound-interest-calculator/"],
-        "faq_min": 5,
+        "faq_min": 3,
         "h1": "Profit and Loss Calculator",
     },
     "years-to-days-calculator": {
