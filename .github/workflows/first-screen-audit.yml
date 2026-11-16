@@ -25,6 +25,7 @@ on:
       - 'tests/zakat-fiqh-methods.cjs'
       - 'tests/zakat-calculator-quality-smoke.cjs'
       - '.github/workflows/first-screen-audit.yml'
+      - '.github/workflows/vercel-preview-fallback.yml'
   workflow_dispatch:
 permissions:
   contents: read
