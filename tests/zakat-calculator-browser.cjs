@@ -1,6 +1,7 @@
 "use strict";
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
+const BASE_URL = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/+$/, "");
 
 let browser;
 (async () => {
@@ -12,7 +13,7 @@ let browser;
     if (message.type() === "error") pageErrors.push(message.text());
   });
 
-  await page.goto("http://127.0.0.1:4174/zakat-calculator/", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/zakat-calculator/", { waitUntil: "networkidle" });
   assert.equal(await page.locator("html").getAttribute("lang"), "en");
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-jafari-nisab-method","z-jafari-trade-value","z-jafari-owner","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jewellery","z-bank","z-savings","z-investments","z-businesscash","z-pension","z-crypto","z-property","z-goldprice","z-silverprice","z-paid"]) {
     assert.equal(await page.locator("#" + id).count(), 1, "Missing English field " + id);
@@ -113,7 +114,7 @@ let browser;
   await page.locator('#zakat-form button[type="submit"]').scrollIntoViewIfNeeded();
   assert.equal(await page.locator('#zakat-form button[type="submit"]').isVisible(), true);
 
-  await page.goto("http://127.0.0.1:4174/ur/zakat-calculator/", { waitUntil: "networkidle" });
+  await page.goto(BASE_URL + "/ur/zakat-calculator/", { waitUntil: "networkidle" });
   assert.equal(await page.locator("html").getAttribute("lang"), "ur");
   assert.equal(await page.locator("html").getAttribute("dir"), "rtl");
   for (const id of ["z-currency","z-nisab-method","z-bank","z-savings","z-investments","z-goldprice","z-silverprice","z-paid"]) {
@@ -135,6 +136,18 @@ let browser;
   const urOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   assert.equal(urOverflow, false, "Urdu page must not overflow a 375px viewport");
 
+  for (const width of [320, 375, 390, 768, 1366]) {
+    await page.setViewportSize({ width, height: 900 });
+    const dimensions = await page.evaluate(() => ({
+      viewport: window.innerWidth,
+      document: document.documentElement.scrollWidth,
+      body: document.body.scrollWidth
+    }));
+    assert.ok(
+      dimensions.document <= dimensions.viewport && dimensions.body <= dimensions.viewport,
+      "Zakat page must not overflow horizontally at " + width + "px: " + JSON.stringify(dimensions)
+    );
+  }
   assert.deepEqual(pageErrors, [], "Zakat pages must have no browser console or page errors");
   await browser.close();
   console.log("Zakat browser regression: English and Urdu flows, ISO currency, Nisab methods, Hawl, labels and 375px layout passed");
