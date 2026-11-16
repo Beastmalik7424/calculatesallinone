@@ -59,7 +59,7 @@ let browser;
   await page.locator("#z-cash").fill("8748");
   await page.locator("#z-goldprice").fill("100");
   await page.locator('#zakat-form button[type="submit"]').click();
-  assert.match(await page.locator("#zakat-result").innerText(), /218\\.7/);
+  assert.match(await page.locator("#zakat-result").innerText(), /218\.7/);
 
   // The only supported Sunni method is Hanafi, including qualifying jewellery.
   await page.locator("#z-school-of-thought").selectOption("sunni-hanafi");
