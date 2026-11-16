@@ -1,6 +1,33 @@
 HUB_EXTRA = {
     "money": [
-        ("Recommended monthly close process", [
+        ("Choose the right money calculator", [
+            "Use the Profit and Loss Calculator when you know sales revenue, cost of goods sold and operating expenses and want to see the difference between gross and net operating profit. Use the Discount Calculator when you need a reduced selling price. Use the EMI Calculator when a loan is repaid through fixed periodic instalments. Use the Compound Interest Calculator only for a fixed starting balance and rate with no recurring deposits or withdrawals.",
+            "For Zakat planning, open the Zakat Calculator and enter the assets, debts due now, current silver price per gram and lunar-year confirmation it requests. Its result follows the method stated on that page. It is an arithmetic aid, not a ruling for every school of law or personal circumstance."
+        ]),
+        ("Worked examples and how to check a result", [
+            "Discount example: an item priced at PKR 4,500 with a 20% discount has a discount amount of PKR 900 (4,500 × 20 ÷ 100) and a reduced price of PKR 3,600 before any separately added tax or delivery. Check whether a seller applies tax before or after a discount because that changes the tax base.",
+            "Profit example: if sales are PKR 100,000, cost of goods sold is PKR 60,000 and operating expenses are PKR 15,000, gross profit is PKR 40,000 and net operating profit is PKR 25,000. Do not call revenue minus product cost 'net profit' when operating expenses remain."
+        ]),
+        ("Loan and interest assumptions", [
+            "An EMI result depends on the principal, interest rate, term, payment frequency and the rate convention used by the lender. Compare the calculator's assumptions with the lender's offer, including processing fees, insurance, variable-rate clauses and the exact payment dates. A calculated instalment is not a loan approval or a lender quotation.",
+            "Compound interest assumes the fixed nominal annual rate and compounding frequency entered on the tool page. It excludes recurring contributions, withdrawals, fees, taxes and inflation. Do not enter an advertised APY as though it were a nominal rate unless the product documentation confirms they are equivalent."
+        ]),
+        ("Currency, precision and limits", [
+            "Enter every amount in one consistent currency for a single calculation. The tools do not convert currencies or fetch live exchange rates. The currency label in a worked example is illustrative and does not change the arithmetic.",
+            "Displayed values may be rounded. Keep the unrounded values for intermediate calculations when the tool provides them, and confirm the rounding method required by your bank, accountant or tax authority before using a result in a formal record. The calculators do not provide tax, investment, lending or religious advice."
+        ]),
+        ("Why every percentage needs a named base", [
+            "A percentage has no useful meaning until its base is clear. In a product calculation, markup uses cost as the base, while gross margin uses the selling price. In a business calculation, an operating margin uses revenue. These figures can describe the same transaction but answer different questions, so they must not be compared as though they use the same denominator.",
+            "Example: a product costs PKR 800 and sells for PKR 1,000. The PKR 200 difference is a 25% markup on cost (200 ÷ 800) but a 20% gross margin on selling price (200 ÷ 1,000). If a business earns PKR 25,000 net operating profit on PKR 100,000 revenue, its operating margin is 25% of revenue. Naming the base prevents a correct calculation from being misunderstood.",
+            "Each money tool on this site states the method it uses and the important items it excludes. A discount is calculated from the original listed price and does not automatically add tax or delivery. Product profit depends on the cost and selling price entered. Business profit depends on the revenue, cost of goods sold and operating expenses entered. EMI estimates depend on the stated rate and repayment assumptions and are not lender quotations. Compound-interest estimates use the stated starting balance, rate and compounding frequency and exclude unentered deposits, withdrawals, fees, taxes and inflation. Read the method and exclusions before relying on a result, and confirm formal financial, accounting or tax decisions with a qualified professional.",
+        ]),
+        ("A practical monthly close: from sales to operating profit", [
+            "Start with the sales records for one defined period. Reconcile invoices and till totals, then account for sales returns, allowances and discounts before treating the balance as net sales. Keep amounts collected on behalf of government, such as sales tax where applicable, separate from business revenue according to the accounting rules that apply to you.",
+            "Next derive cost of goods sold for that same period: opening inventory + net purchases + direct inward freight or handling − closing inventory. Keep inward freight separate from net purchases in this formula; if your purchase total already includes it, do not add it again. Count the stock remaining at period end using a consistent valuation method. OpenStax explains this inventory-to-cost-of-goods-sold calculation in its income-statement guidance: <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://openstax.org/books/introduction-business/pages/14-5-the-income-statement\" target=\"_blank\" rel=\"noopener noreferrer\">OpenStax: The Income Statement</a>.",
+            "Then calculate gross profit as net sales minus COGS. Subtract the period's operating expenses to estimate operating profit. Use the Profit and Loss Calculator only after you have prepared the COGS figure from your stock records; the calculator does not count inventory or derive COGS for you. It also does not automatically calculate interest or income tax.",
+            "Finally reconcile profit to cash. Unpaid customer invoices, supplier balances, inventory purchases, loan-principal payments, tax timing and owner withdrawals can make the bank balance move differently from reported profit. Profit and cash flow answer different questions; these calculators do not calculate cash flow or replace a cash-flow statement or complete bookkeeping records."
+        ]),
+    ("Recommended monthly close process", [
             "This is a recommended working process, not an official accounting standard.",
             "Step 1: Reconcile platform payouts against the sales records for the month.",
             "Step 2: Count the inventory remaining at the month end.",
