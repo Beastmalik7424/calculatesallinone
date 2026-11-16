@@ -2362,6 +2362,11 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
 body:has(#zakat-form) > div[aria-hidden="true"].fixed {
   contain: paint;
 }
+@media (max-width: 599px) {
+  body:has(#zakat-form) > div[aria-hidden="true"].fixed {
+    display: none;
+  }
+}
 
 /* Static all-calculators navigation on inner pages only. Keep the homepage carousel unchanged. */
 body:has(#zakat-form) header nav:has(.ca-site-nav-topline) .ca-calculator-carousel,
