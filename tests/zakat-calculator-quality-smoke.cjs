@@ -65,11 +65,11 @@ assert.ok(enNisab && urNisab, "Both locales must expose the Nisab selector");
 assert.equal((enNisab[1].match(/<option\b/g) || []).length, 2, "English UI must expose only the two approved personal Nisab choices");
 assert.equal((urNisab[1].match(/<option\b/g) || []).length, 2, "Urdu UI must expose only the two approved personal Nisab choices");
 
-const enSchool = en.match(/<select id="z-school-of-thought"[^>]*>([\\s\\S]*?)<\\/select>/);
-const urSchool = ur.match(/<select id="z-school-of-thought"[^>]*>([\\s\\S]*?)<\\/select>/);
+const enSchool = en.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
+const urSchool = ur.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
 assert.ok(enSchool && urSchool, "Both locales must expose the school-of-thought selector");
-assert.equal((enSchool[1].match(/<option\\b/g) || []).length, 5, "English UI must expose four Sunni madhhabs and one named Ja'fari authority");
-assert.equal((urSchool[1].match(/<option\\b/g) || []).length, 5, "Urdu UI must expose the same five methods");
+assert.equal((enSchool[1].match(/<option\b/g) || []).length, 5, "English UI must expose four Sunni madhhabs and one named Ja'fari authority");
+assert.equal((urSchool[1].match(/<option\b/g) || []).length, 5, "Urdu UI must expose the same five methods");
 assert.match(en, /value="jafari-sistani"/, "Sistani calculation path must be explicitly named");
 assert.match(en, /value="tola"/, "Pakistani tola unit must be selectable");
 assert.match(en, /11\\.6638 g/, "Pakistani tola conversion must be visible");
