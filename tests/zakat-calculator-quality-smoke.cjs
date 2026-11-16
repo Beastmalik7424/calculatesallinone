@@ -222,3 +222,16 @@ for (let i = 0; i < 2000; i++) {
   assert.ok(r.zakatBeforePaid === 0 || Math.abs(r.zakatBeforePaid - r.netAssets * 0.025) < 1e-7);
 }
 console.log("Zakat calculation engine: 2,000 deterministic scenarios passed");
+
+
+// Regression coverage for the Urdu first-screen heading and the revised search snippet.
+assert.ok(urText.includes("نصاب کے لیے دھاتوں کی قیمت"), "Urdu calculator must translate the metal-prices heading");
+assert.ok(!urText.includes("Metal prices for Nisab"), "Urdu calculator must not expose the English metal-prices heading");
+assert.ok(enText.includes("No sign-up is required"), "English first-screen copy must explain that no account is required");
+assert.ok(urText.includes("اکاؤنٹ بنانے کی ضرورت نہیں"), "Urdu first-screen copy must explain that no account is required");
+const enTitle = en.match(/<title>(.*?)<\/title>/i);
+const urTitle = ur.match(/<title>(.*?)<\/title>/i);
+const enDescription = en.match(/<meta name="description" content="([^"]*)"/i);
+assert.ok(enTitle && enTitle[1] === "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab", "English title must target the calculator's actual supported methods");
+assert.ok(urTitle && urTitle[1].includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
+assert.ok(enDescription && enDescription[1].includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
