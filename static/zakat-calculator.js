@@ -17,7 +17,7 @@
     gold: Object.freeze({ grams: 69.12, priceKey: "goldPricePerGram", label: "Sistani coined gold 69.12 g" }),
     silver: Object.freeze({ grams: 483.84, priceKey: "silverPricePerGram", label: "Sistani coined silver 483.84 g" })
   });
-  const SUNNI_SCHOOLS = Object.freeze(["sunni-hanafi", "sunni-shafii", "sunni-maliki", "sunni-hanbali"]);
+  const SUNNI_SCHOOLS = Object.freeze(["sunni-hanafi"]);
   const ASSET_KEYS = Object.freeze([
     "cash", "bank", "savings", "gold", "silver", "jewellery", "investments",
     "businessCash", "stock", "receivables", "pension", "crypto", "property"
@@ -113,7 +113,7 @@
     const metalPriceUnit = input.metalPriceUnit || "gram";
     if (!["gram", "tola"].includes(metalPriceUnit)) throw new RangeError("Choose a supported metal price unit");
     if (schoolOfThought === "jafari-sistani") return calculateJafari(input, currency, metalPriceUnit);
-    if (!SUNNI_SCHOOLS.includes(schoolOfThought)) throw new RangeError("Choose a supported Sunni or Ja'fari school of thought");
+    if (!SUNNI_SCHOOLS.includes(schoolOfThought)) throw new RangeError("Choose Hanafi or the supported Ja'fari method");
     const defaultNisabMethod = schoolOfThought === "sunni-hanafi" ? "silver" : "gold-85";
     const nisabMethod = input.nisabMethod || defaultNisabMethod;
     const method = NISAB[nisabMethod];
