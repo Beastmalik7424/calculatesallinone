@@ -36,20 +36,20 @@ for (const id of [
   assert.match(ur, new RegExp('id="' + id + '"'), "Urdu calculator missing " + id);
 }
 for (const term of [
-  "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48", "595 g", "85 g", "96 g", "96 g",
+  "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48", 
   "503,529", "1446–1447 AH", "1447 AH (2026)", "State Bank of Pakistan", "first day of Ramazan",
   "saving, profit and loss sharing", "2.5%", "personal Zakat Nisab",
   "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000",
   "bank deduction threshold changes yearly", "Which assets to include", "Which liabilities may be deducted", "How the calculation works", "Worked example with checkable arithmetic", "Personal-use property and other exclusions", "Pakistan bank deduction threshold is separate", "Worldwide currency support, privacy and limitations", "Worked example",
   "does not fetch a live metal price", "qualified scholar", "Sources",
-  "Sunni", "Hanafi", "Shafi'i", "Maliki", "Hanbali", "Sayyid Sistani",
+  "Hanafi", "Sayyid Sistani",
   "obligatory precaution", "Khums", "69.12 g", "483.84 g",
   "11.6638", "trading goods", "personal-use gold/silver jewellery",
   "ordinary banknotes", "right of disposal", "capital cost", "contract of exchange",
-  "liabilities field subtracts exactly the amount you enter in every Sunni preset",
-  "relied-upon Shafi'i view does not allow debts to prevent Zakat",
+  
+  
   "Hawl checkbox is self-reported", "does not track balances throughout the lunar year",
-  "Hanafi and Maliki", "Shafi'i and Hanbali", "does not model every school-specific gold/silver aggregation rule",
+   "does not model every school-specific gold/silver aggregation rule",
   "Do not enter the same jewellery value in both", "Muhammad Fayyaz Adeel"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
@@ -68,14 +68,14 @@ assert.equal((ur.match(/<summary\b/gi) || []).length, 4, "Urdu Zakat page must r
 const enNisab = en.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
 const urNisab = ur.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
 assert.ok(enNisab && urNisab, "Both locales must expose the Nisab selector");
-assert.equal((enNisab[1].match(/<option\b/g) || []).length, 5, "English UI must expose five explicit Nisab weight conventions");
-assert.equal((urNisab[1].match(/<option\b/g) || []).length, 5, "Urdu UI must expose the same five explicit weight conventions");
+assert.equal((enNisab[1].match(/<option\b/g) || []).length, 2, "English UI must expose only the Hanafi gold and silver Nisab choices");
+assert.equal((urNisab[1].match(/<option\b/g) || []).length, 2, "Urdu UI must expose the same two Hanafi Nisab choices");
 
 const enSchool = en.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
 const urSchool = ur.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
 assert.ok(enSchool && urSchool, "Both locales must expose the school-of-thought selector");
-assert.equal((enSchool[1].match(/<option\b/g) || []).length, 5, "English UI must expose four Sunni madhhabs and one named Ja'fari authority");
-assert.equal((urSchool[1].match(/<option\b/g) || []).length, 5, "Urdu UI must expose the same five methods");
+assert.equal((enSchool[1].match(/<option\b/g) || []).length, 2, "English UI must expose only Hanafi and the named Ja'fari authority");
+assert.equal((urSchool[1].match(/<option\b/g) || []).length, 2, "Urdu UI must expose the same two methods");
 assert.match(en, /value="jafari-sistani"/, "Sistani calculation path must be explicitly named");
 assert.match(en, /value="tola"/, "Sindh Government standard tola unit must be selectable");
 assert.match(en, /11\.6638 g/, "Sindh Government standard tola conversion must be visible");
@@ -104,14 +104,14 @@ assert.match(ur, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "Urdu 
 assert.match(ur, /zatca\.gov\.sa/, "Urdu content must cite Saudi ZATCA's official modern Nisab guidance");
 assert.match(ur, /aliftaa\.jo/, "Urdu content must cite Jordan General Iftaa's 85 g and 96 g gold reference");
 
-assert.match(enNisab[1], /value="gold-85"/, "85 g gold reference must be selectable in English");
-assert.match(enNisab[1], /value="silver-595"/, "595 g silver reference must be selectable in English");
-assert.match(enNisab[1], /value="gold-96"/, "96 g gold reference must be selectable in English");
-assert.match(urNisab[1], /value="gold-85"/, "85 g gold reference must be selectable in Urdu");
-assert.match(urNisab[1], /value="silver-595"/, "595 g silver reference must be selectable in Urdu");
-assert.match(urNisab[1], /value="gold-96"/, "96 g gold reference must be selectable in Urdu");
-assert.match(enNisab[1], /value="gold-96"/, "96 g Shafi'i text reference must be selectable in English");
-assert.match(urNisab[1], /value="gold-96"/, "96 g Shafi'i text reference must be selectable in Urdu");
+assert.match(enNisab[1], /value="gold-87"/);
+assert.doesNotMatch(enNisab[1], /gold-85|silver-595|gold-96/);
+
+assert.match(urNisab[1], /value="gold-87"/);
+assert.doesNotMatch(urNisab[1], /gold-85|silver-595|gold-96/);
+
+
+
 for (const term of [
   "503,529", "612.36", "87.48", "595", "85", "96", "زکوٰۃ سال", "پاکستان", "نصاب",
   "اثاثے", "واجبات", "2.5"
@@ -173,7 +173,7 @@ assert.equal(result.overpayment, 252.5);
 result = calculate({ ...base, nisabMethod: "gold-87", assets: { cash: 900000 }, goldPricePerGram: 10000 });
 assert.equal(result.nisabThreshold, 874800);
 assert.equal(result.nisabGrams, 87.48);
-for (const [nisabMethod, grams, priceKey] of [["gold-85", 85, "goldPricePerGram"], ["silver-595", 595, "silverPricePerGram"], ["gold-96", 96, "goldPricePerGram"]]) {
+for (const [nisabMethod, grams, priceKey] of [["gold-87", 87.48, "goldPricePerGram"], ["silver", 612.36, "silverPricePerGram"]]) {
   const result = calculate({ ...base, nisabMethod, [priceKey]: 100, assets: { cash: grams * 100 }, hawlComplete: true });
   assert.equal(result.nisabGrams, grams, nisabMethod + " must remain a supported Nisab choice");
 }
