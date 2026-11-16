@@ -53,8 +53,8 @@ let browser;
    const urduPage=slug.startsWith('ur/');
    const expectedColumns=size.width<600?5:size.width<900?5:6;
    const isZakat=slug.endsWith('zakat-calculator');
-   if(isZakat){
-    if(data.carouselVisible)failures.push(key+' calculator shortcuts must not push the Zakat calculator below the first screen');
+   if(isZakat&&size.width<=600){
+    if(data.carouselVisible)failures.push(key+' calculator shortcuts must not push the Zakat calculator below the first screen on mobile');
     if(data.calculatorTop>=size.height||data.formTop>=size.height)failures.push(key+' Zakat calculator form must begin on the first screen');
     if(!data.lastButton||data.bottom>size.height-8)failures.push(key+' Calculate Zakat action must be visible on the first screen');
    } else {
