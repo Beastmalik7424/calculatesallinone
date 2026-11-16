@@ -33,9 +33,9 @@ PAGES = {
     },
     "zakat-calculator": {
         "required": [
-            "503,529", "1446–1447 AH", "first day of Ramazan",
+            "503,529", "1446–1447 AH", "1447 AH (2026)", "first day of Ramazan",
             "saving", "profit and loss sharing", "2.5%",
-            "85 g", "87.48 g", "612.36 g",
+            "87.48 g", "612.36 g",
             "Which assets to include", "Which liabilities may be deducted",
             "How the calculation works", "Worked example with checkable arithmetic",
             "1,837,080", "700,000", "2,000,000", "50,000",
@@ -118,7 +118,8 @@ assert zakat_words >= 1000, f"English Zakat page must contain at least 1,000 use
 assert urdu_zakat_words >= 700, f"Urdu Zakat page must contain at least 700 useful visible words, got {urdu_zakat_words}"
 
 zakat_html = read("zakat-calculator")
-assert 'value="silver"' in zakat_html and 'value="gold-87"' in zakat_html and 'value="gold-85"' in zakat_html
+assert 'value="silver"' in zakat_html and 'value="gold-87"' in zakat_html and 'value="gold-85"' not in zakat_html
+assert "85 g" not in visible(zakat_html), "Zakat page must not present the unapproved 85 g gold method"
 assert re.search(r'"dateModified"\s*:\s*"2026-11-16"', zakat_html), "Zakat WebPage dateModified must match the visible review date"
 
 money_source = read("money")
