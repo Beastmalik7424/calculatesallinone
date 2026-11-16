@@ -56,21 +56,30 @@ jobs:
           node -e 'const v=require("playwright/package.json").version; if(v!=="1.64.1") throw new Error("Expected locked Playwright 1.64.1, got "+v); console.log("Locked Playwright version:",v);'
       - name: Install Chromium for locked Playwright
         run: npx playwright install --with-deps chromium
-      - name: Audit actual rendered first-screen buttons and profit calculations
+      - name: Start local browser-test servers
         run: |
           python3 -m http.server 8123 --directory public >/tmp/site-server.log 2>&1 &
-          node tests/viewport-audit.cjs
-          node tests/emi-viewport-audit.cjs
           python3 -m http.server 4174 --directory public >/tmp/calorie-browser-server.log 2>&1 &
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null; then break; fi
-            sleep 1
+          for port in 8123 4174; do
+            ready=false
+            for i in $(seq 1 30); do
+              if curl -fsS "http://127.0.0.1:$port/zakat-calculator/" >/dev/null; then ready=true; break; fi
+              sleep 1
+            done
+            test "$ready" = true || { echo "Local browser-test server failed on port $port"; cat /tmp/site-server.log /tmp/calorie-browser-server.log; exit 1; }
           done
-          curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null
-          node tests/zakat-calculator-browser.cjs
-          node tests/calorie-calculator-browser.cjs
-          node tests/query-calculator-browser.cjs
-          node tests/extra-calculators-browser.cjs
+      - name: Audit Zakat first-screen navigation and profit interactions
+        run: timeout 240s node tests/viewport-audit.cjs
+      - name: Audit EMI viewport and calculator placement
+        run: timeout 180s node tests/emi-viewport-audit.cjs
+      - name: Audit Zakat English and Urdu browser flows
+        run: timeout 240s node tests/zakat-calculator-browser.cjs
+      - name: Audit calorie calculator browser flow
+        run: timeout 180s node tests/calorie-calculator-browser.cjs
+      - name: Audit query calculator browser flow
+        run: timeout 180s node tests/query-calculator-browser.cjs
+      - name: Audit extra calculator browser regressions
+        run: timeout 240s node tests/extra-calculators-browser.cjs
       - name: Save actual first-screen screenshots
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
