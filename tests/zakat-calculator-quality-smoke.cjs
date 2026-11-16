@@ -24,9 +24,11 @@ const enText = visibleText(en);
 const urText = visibleText(ur);
 
 for (const id of [
-  "z-currency", "z-nisab-method", "z-silverprice", "z-goldprice",
-  "z-cash", "z-bank", "z-savings", "z-gold", "z-silver",
-  "z-investments", "z-businesscash", "z-stock", "z-recv",
+  "z-currency", "z-school-of-thought", "z-nisab-method", "z-metal-price-unit",
+  "z-jafari-nisab-method", "z-jafari-trade-value", "z-jafari-owner",
+  "z-jafari-hawl", "z-jafari-intent", "z-jafari-access", "z-jafari-market",
+  "z-silverprice", "z-goldprice", "z-cash", "z-bank", "z-savings",
+  "z-gold", "z-silver", "z-jewellery", "z-investments", "z-businesscash", "z-stock", "z-recv",
   "z-pension", "z-crypto", "z-property", "z-debts", "z-paid",
   "z-hawl", "zakat-result"
 ]) {
@@ -39,13 +41,19 @@ for (const term of [
   "saving, profit and loss sharing", "2.5%", "personal Zakat Nisab",
   "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000",
   "bank deduction threshold changes yearly", "Which assets to include", "Which liabilities may be deducted", "How the calculation works", "Worked example with checkable arithmetic", "Personal-use property and other exclusions", "Pakistan bank deduction threshold is separate", "Worldwide currency support, privacy and limitations", "Worked example",
-  "does not fetch a live metal price", "qualified scholar", "Sources"
+  "does not fetch a live metal price", "qualified scholar", "Sources",
+  "Sunni", "Hanafi", "Shafi'i", "Maliki", "Hanbali", "Sayyid Sistani",
+  "obligatory precaution", "Khums", "69.12 g", "483.84 g",
+  "11.6638", "trading goods", "personal-use gold/silver jewellery",
+  "ordinary banknotes", "right of disposal", "capital cost"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
 for (const term of [
   "503,529", "612.36", "87.48", "1446–1447", "رمضان کے پہلے دن", "پاکستان", "نصاب",
-  "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتی ہے"
+  "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتی ہے",
+  "سیستانی", "جعفری", "احتیاطِ واجب", "خمس", "69.12", "483.84",
+  "11.6638", "حنفی", "شافعی", "مالکی", "حنبلی", "تجارتی مال"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
 }
@@ -56,6 +64,22 @@ const urNisab = ur.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/
 assert.ok(enNisab && urNisab, "Both locales must expose the Nisab selector");
 assert.equal((enNisab[1].match(/<option\b/g) || []).length, 2, "English UI must expose only the two approved personal Nisab choices");
 assert.equal((urNisab[1].match(/<option\b/g) || []).length, 2, "Urdu UI must expose only the two approved personal Nisab choices");
+
+const enSchool = en.match(/<select id="z-school-of-thought"[^>]*>([\\s\\S]*?)<\\/select>/);
+const urSchool = ur.match(/<select id="z-school-of-thought"[^>]*>([\\s\\S]*?)<\\/select>/);
+assert.ok(enSchool && urSchool, "Both locales must expose the school-of-thought selector");
+assert.equal((enSchool[1].match(/<option\\b/g) || []).length, 5, "English UI must expose four Sunni madhhabs and one named Ja'fari authority");
+assert.equal((urSchool[1].match(/<option\\b/g) || []).length, 5, "Urdu UI must expose the same five methods");
+assert.match(en, /value="jafari-sistani"/, "Sistani calculation path must be explicitly named");
+assert.match(en, /value="tola"/, "Pakistani tola unit must be selectable");
+assert.match(en, /11\\.6638 g/, "Pakistani tola conversion must be visible");
+assert.match(en, /id="z-sunni-fields"/, "Sunni fields must have a separate visibility container");
+assert.match(en, /id="z-jafari-fields"[^>]*hidden/, "Sistani fields must be separately hidden by default");
+assert.match(en, /sistani\\.org\\/english\\/book\\/48\\/2323/, "English content must cite Sistani's official trading-goods ruling");
+assert.match(ur, /sistani\\.org\\/english\\/book\\/48\\/2323/, "Urdu content must cite Sistani's official trading-goods ruling");
+assert.match(en, /sindhlaws\\.gov\\.pk/, "English content must cite the Sindh Government conversion table");
+assert.match(ur, /sindhlaws\\.gov\\.pk/, "Urdu content must cite the Sindh Government conversion table");
+
 assert.doesNotMatch(enNisab[1], /gold-85/, "Unapproved 85 g gold option must not be exposed in English");
 assert.doesNotMatch(urNisab[1], /gold-85/, "Unapproved 85 g gold option must not be exposed in Urdu");
 for (const term of [
@@ -136,7 +160,7 @@ let seed = 20261115;
 function random() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
 for (let i = 0; i < 2000; i++) {
   const assets = {};
-  for (const key of ["cash","bank","savings","gold","silver","investments","businessCash","stock","receivables","pension","crypto","property"]) {
+  for (const key of ["cash","bank","savings","gold","silver","jewellery","investments","businessCash","stock","receivables","pension","crypto","property"]) {
     assets[key] = Math.floor(random() * 25000000) / 100;
   }
   const liabilities = Math.floor(random() * 10000000) / 100;
