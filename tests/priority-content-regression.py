@@ -51,7 +51,7 @@ PAGES = {
 
 
 def read(slug):
-    path = ROOT / slug / "index.html"
+    path = ROOT / "index.html" if slug == "index" else ROOT / slug / "index.html"
     assert path.is_file(), f"Missing generated page: {path}"
     return path.read_text(encoding="utf-8")
 
