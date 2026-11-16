@@ -2521,7 +2521,7 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
 }
 #main .ca-home-calculator .ca-calculator-engine {
   width: 100% !important;
-  max-width: 36rem !important;
+  max-width: 100% !important;
   margin-inline: auto !important;
 }
 #main .ca-home-tools {
