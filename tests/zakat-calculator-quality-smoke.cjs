@@ -78,6 +78,9 @@ assert.equal((enSchool[1].match(/<option\b/g) || []).length, 2, "English UI must
 assert.equal((urSchool[1].match(/<option\b/g) || []).length, 2, "Urdu UI must expose the same two methods");
 assert.match(en, /value="jafari-sistani"/, "Sistani calculation path must be explicitly named");
 assert.match(en, /value="tola"/, "Sindh Government standard tola unit must be selectable");
+assert.match(en, /value="ounce"/, "Troy ounce unit must be selectable");
+assert.match(en, /31\\.1034768 g/, "Troy ounce conversion must be visible");
+assert.match(ur, /31\\.1034768 گرام/, "Urdu page must explain the troy ounce conversion");
 assert.match(en, /11\.6638 g/, "Sindh Government standard tola conversion must be visible");
 assert.match(en, /Sindh Government standard tola/, "The 11.6638 g unit must be named as the Sindh Government standard, not a universal Pakistani market tola");
 assert.match(en, /12\.5 g/, "The 12.5 g competing convention must be disclosed");
@@ -185,6 +188,10 @@ for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
   assert.throws(() => calculate({ ...base, zakatPaid: bad }));
 }
 assert.throws(() => calculate({ ...base, nisabMethod: "unknown" }), /Nisab method/);
+assert.throws(() => calculate({ ...base, metalPriceUnit: "unknown" }), /unit/i);
+result = calculate({ ...base, metalPriceUnit: "ounce", silverPricePerGram: 100 * 31.1034768, assets: { cash: 70000 } });
+assert.ok(Math.abs(result.metalPricePerGram - 100) < 1e-10);
+assert.ok(Math.abs(result.nisabThreshold - 61236) < 1e-7);
 assert.throws(() => calculate({ ...base, currency: "ZZZ" }), /not supported/);
 assert.throws(() => calculate({ ...base, assets: { cash: Number.MAX_VALUE, bank: Number.MAX_VALUE } }), /supported calculation range/);
 
