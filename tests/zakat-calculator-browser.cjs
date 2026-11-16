@@ -54,7 +54,7 @@ let browser;
   await page.locator("#z-hawl").check();
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /15,309/);
-  assert.equal(await page.locator("#z-nisab-method option").count(), 5, "Classical, modern and cited Shafi'i Nisab weights must be available");
+  assert.equal(await page.locator("#z-nisab-method option").count(), 2, "Only the Hanafi silver and gold Nisab references must be available");
   await page.locator("#z-nisab-method").selectOption("gold-85");
   await page.locator("#z-cash").fill("8500");
   await page.locator("#z-goldprice").fill("100");
@@ -76,7 +76,7 @@ let browser;
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /240/);
 
-  // Sunni school distinction: Hanafi includes ordinary qualifying jewellery.
+  // The only supported Sunni method is Hanafi, including qualifying jewellery.
   await page.locator("#z-school-of-thought").selectOption("sunni-hanafi");
   await page.locator("#z-metal-price-unit").selectOption("gram");
   await page.locator("#z-currency").fill("PKR");
@@ -90,14 +90,6 @@ let browser;
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /16,250/);
 
-  // Shafi'i excludes ordinary permissible personal-use jewellery in this limited model.
-  await page.locator("#z-school-of-thought").selectOption("sunni-shafii");
-  await page.locator("#z-cash").fill("100000");
-  await page.locator("#z-jewellery").fill("50000");
-  await page.locator("#z-goldprice").fill("1000");
-  await page.locator('#zakat-form button[type="submit"]').click();
-  assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
-
   // Sindh Government standard tola price must normalize to the same gram-based Nisab result.
   assert.match(await page.locator('#z-metal-price-unit option[value="tola"]').innerText(), /Sindh Government standard tola/);
   await page.locator("#z-metal-price-unit").selectOption("tola");
@@ -105,7 +97,8 @@ let browser;
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
 
-  // Sistani path must hide the Sunni form and require all six published conditions.
+  // Ja'fari is explicitly limited to Sayyid Sistani and requires all six published conditions.
+  assert.equal(await page.locator("#z-school-of-thought option").count(), 2, "Only Hanafi and Ja'fari Sistani methods must be selectable");
   await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
   assert.equal(await page.locator("#z-sunni-fields").isVisible(), false);
   assert.equal(await page.locator("#z-jafari-fields").isVisible(), true);
