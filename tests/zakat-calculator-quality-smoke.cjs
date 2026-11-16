@@ -132,7 +132,7 @@ for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const submitAt = html.indexOf('type="submit"');
   const assetAt = html.indexOf('id="z-cash"');
   assert.ok(submitAt > 0 && submitAt < assetAt, name + " Zakat submit action must precede the long asset-entry section");
-  assert.match(html.slice(submitAt - 100, submitAt + 250), /sticky/, name + " Zakat submit action must remain reachable while entering assets");
+  assert.doesNotMatch(html.slice(submitAt - 120, submitAt + 250), /sticky|top-20|z-20/, name + " Zakat submit action must stay in normal document flow and never overlap the header navigation");
 }
 assert.match(en, /application\/ld\+json/, "English page must retain structured data");
 assert.match(ur, /application\/ld\+json/, "Urdu page must retain structured data");
