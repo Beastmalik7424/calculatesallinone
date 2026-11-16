@@ -2401,10 +2401,10 @@ body:has(#zakat-form) .ca-calculator-track {
 body:has(#zakat-form) .ca-calculator-group[data-tool-set="duplicate"] { display: none !important; }
 body:has(#zakat-form) .ca-calculator-group[data-tool-set="primary"] {
   display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   width: 100% !important;
   min-width: 0 !important;
-  gap: .3rem !important;
+  gap: .2rem !important;
   padding: 0 !important;
 }
 body:has(#zakat-form) .ca-calculator-link {
@@ -2414,14 +2414,14 @@ body:has(#zakat-form) .ca-calculator-link {
   height: auto !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: .35rem .4rem !important;
+  padding: .15rem .12rem !important;
   border: 1px solid #cbd5e1 !important;
   border-radius: .45rem !important;
   background: #fff !important;
   color: #164e48 !important;
-  font-size: .76rem !important;
+  font-size: .68rem !important;
   font-weight: 650 !important;
-  line-height: 1.2 !important;
+  line-height: 1.05 !important;
   text-align: center !important;
   text-decoration: none !important;
   white-space: normal !important;
