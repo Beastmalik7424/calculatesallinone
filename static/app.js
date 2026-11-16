@@ -476,6 +476,7 @@
     var nisabField = $("z-nisab-method")
     var unitField = $("z-metal-price-unit")
     var sunniFields = $("z-sunni-fields")
+    var sunniAssetFields = $("z-sunni-asset-fields")
     var jafariFields = $("z-jafari-fields")
     function money(value, currency) {
       return new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", {
@@ -486,6 +487,7 @@
       var school = schoolField ? schoolField.value : "sunni-hanafi"
       var isJafari = school === "jafari-sistani"
       if (sunniFields) sunniFields.hidden = isJafari
+      if (sunniAssetFields) sunniAssetFields.hidden = isJafari
       if (jafariFields) jafariFields.hidden = !isJafari
       if (resetNisab && nisabField && !isJafari) {
         nisabField.value = school === "sunni-hanafi" ? "silver" : "gold-87"
