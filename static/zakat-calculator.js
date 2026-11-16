@@ -6,6 +6,7 @@
 })(typeof window !== "undefined" ? window : globalThis, function () {
   "use strict";
   const SINDH_STANDARD_TOLA_GRAMS = 11.6638;
+  const TROY_OUNCE_GRAMS = 31.1034768;
   const NISAB = Object.freeze({
     silver: Object.freeze({ grams: 612.36, priceKey: "silverPricePerGram", label: "Silver 612.36 g (classical South Asian conversion)" }),
     "gold-87": Object.freeze({ grams: 87.48, priceKey: "goldPricePerGram", label: "Gold 87.48 g (classical South Asian conversion)" }),
@@ -44,7 +45,8 @@
   function pricePerGram(input, priceKey, unit) {
     const raw = amount(input[priceKey], priceKey);
     if (raw <= 0) throw new RangeError("Enter a current metal price in the selected currency and unit");
-    return raw / (unit === "tola" ? SINDH_STANDARD_TOLA_GRAMS : 1);
+    const gramsPerUnit = unit === "tola" ? SINDH_STANDARD_TOLA_GRAMS : (unit === "ounce" ? TROY_OUNCE_GRAMS : 1);
+    return raw / gramsPerUnit;
   }
   function finishResult(values) {
     const zakatBeforePaid = values.status === "payable" ? values.netAssets * 0.025 : 0;
@@ -108,7 +110,7 @@
     const currency = validateCurrency(input.currency || "PKR");
     const schoolOfThought = input.schoolOfThought || "sunni-hanafi";
     const metalPriceUnit = input.metalPriceUnit || "gram";
-    if (!["gram", "tola"].includes(metalPriceUnit)) throw new RangeError("Choose a supported metal price unit");
+    if (!["gram", "tola", "ounce"].includes(metalPriceUnit)) throw new RangeError("Choose a supported metal price unit");
     if (schoolOfThought === "jafari-sistani") return calculateJafari(input, currency, metalPriceUnit);
     if (!SUNNI_SCHOOLS.includes(schoolOfThought)) throw new RangeError("Choose Hanafi or the supported Ja'fari method");
     const nisabMethod = input.nisabMethod || "silver";
@@ -158,6 +160,7 @@
     nisabMethods: NISAB,
     jafariNisabMethods: JAFARI_NISAB,
     sunniSchools: SUNNI_SCHOOLS,
-    sindhStandardTolaGrams: SINDH_STANDARD_TOLA_GRAMS
+    sindhStandardTolaGrams: SINDH_STANDARD_TOLA_GRAMS,
+    troyOunceGrams: TROY_OUNCE_GRAMS
   });
 });
