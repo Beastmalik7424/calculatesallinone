@@ -2476,7 +2476,7 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
 #main .ca-home-header { width: 100% !important; max-width: 60rem !important; margin: 0 auto .4rem !important; text-align: center !important; }
 #main .ca-home-header .ca-home-badge, #main .ca-home-header .ca-home-lead { display: none !important; }
 #main .ca-home-header h1 { margin: 0 !important; font-size: clamp(1rem, 2vw, 1.7rem) !important; line-height: 1.15 !important; }
-#main .ca-home-layout { display: flex !important; flex-direction: column !important; align-items: center !important; gap: .75rem !important; width: 100% !important; max-width: 100% !important; margin: 0 auto !important; }
+#main .ca-home-layout { display: grid !important; grid-template-columns: minmax(0, 1fr) !important; justify-content: center !important; align-items: start !important; gap: .75rem !important; width: 100% !important; max-width: 60rem !important; margin: 0 auto !important; }
 #main .ca-home-side-left { display: none !important; }
 #main .ca-home-calculator { order: 0 !important; width: 100% !important; max-width: 44rem !important; margin: 0 auto !important; padding: .65rem !important; box-sizing: border-box !important; }
 #main .ca-home-calculator .ca-calculator-engine { width: 100% !important; max-width: 36rem !important; margin: 0 auto !important; }
