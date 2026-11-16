@@ -35,7 +35,7 @@ PAGES = {
         "required": [
             "503,529", "1446–1447 AH", "1447 AH (2026)", "first day of Ramazan",
             "saving", "profit and loss sharing", "2.5%",
-            "87.48 g", "612.36 g",
+            "87.48 g", "612.36 g", "Hanafi", "Sayyid Sistani", "11.6638",
             "Which assets to include", "Which liabilities may be deducted",
             "How the calculation works", "Worked example with checkable arithmetic",
             "1,837,080", "700,000", "2,000,000", "50,000",
@@ -116,7 +116,7 @@ urdu_zakat_html = (ROOT / "ur" / "zakat-calculator" / "index.html").read_text(en
 zakat_text = visible(zakat_html)
 urdu_zakat_text = visible(urdu_zakat_html)
 for phrase in [
-    "This calculator offers five selectable reference weights",
+    "This calculator provides two reference choices",
     "612.36 g of silver",
     "87.48 g of gold",
     "595 g of silver",
@@ -128,10 +128,10 @@ for phrase in [
     "Last reviewed: 2026-11-16",
 ]:
     assert phrase.lower() in zakat_text.lower(), f"English Zakat page missing useful, sourced guidance: {phrase}"
-for phrase in ["612.36", "87.48", "595", "85", "96", "مستند عالم"]:
+for phrase in ["612.36", "87.48", "مستند عالم", "حنفی", "سیستانی", "11.6638"]:
     assert phrase.lower() in urdu_zakat_text.lower(), f"Urdu Zakat page missing Nisab or scholarly limitation detail: {phrase}"
 
-assert all(f'value="{method}"' in zakat_html for method in ["silver", "gold-87", "silver-595", "gold-85", "gold-96"]), "All five sourced Nisab weight conventions must remain selectable"
+assert all(f'value="{method}"' in zakat_html for method in ["silver", "gold-87"]), "Only the Hanafi silver and gold Nisab references must be selectable"
 assert re.search(r'"dateModified"\s*:\s*"2026-11-16"', zakat_html), "Zakat WebPage dateModified must match the visible review date"
 
 money_source = read("money")
