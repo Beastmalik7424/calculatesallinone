@@ -97,7 +97,7 @@ zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
 assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat calculator navigation must not duplicate links"
 assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
-assert "grid-template-columns:repeat(4,minmax(0,1fr))" in css.replace(" ", ""), "Phone navigation must preserve its compact four-column layout"
+assert "grid-template-columns:repeat(5,minmax(0,1fr))" in css.replace(" ", ""), "Phone navigation must fit all calculator shortcuts in a compact five-column layout"
 assert "grid-template-columns:repeat(5,minmax(0,1fr))" in css.replace(" ", ""), "Tablet navigation must preserve five columns"
 assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Desktop navigation must use six columns"
 assert "white-space:normal!important" in css.replace(" ", ""), "Calculator shortcut labels must wrap instead of clipping or ellipsizing"
@@ -110,3 +110,5 @@ assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.i
 assert "ca-site-nav-topline" in markup, "Header must keep its separate top controls row"
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
 print("Calculator grid, all 17 unique tools, responsive columns, header layout and Tasbih action smoke tests PASS")
+
+assert '<link rel="stylesheet" href="/assets/site.css?v=20261116-zakat-first-screen-v1">' in zakat_markup, "Zakat pages must use a fresh stylesheet URL so browsers do not reuse cached pre-fix CSS"
