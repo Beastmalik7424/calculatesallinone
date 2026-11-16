@@ -236,3 +236,4 @@ const decodeMeta = (value) => value.replace(/&#x27;|&#39;/gi, "'").replace(/&quo
 assert.ok(enTitle && decodeMeta(enTitle[1]) === "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab", "English title must target the calculator's actual supported methods");
 assert.ok(urTitle && decodeMeta(urTitle[1]).includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
 assert.ok(enDescription && decodeMeta(enDescription[1]).includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
+assert.ok(urText.includes("احتیاطِ واجب کی بنا پر"), "Urdu Sistani guidance must explicitly retain the obligatory-precaution qualification");
