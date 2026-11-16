@@ -91,7 +91,11 @@ assert re.search(
 tasbih = output_for("/tasbih-counter/")
 assert 'id="t-tap"' in tasbih, "Tasbih Count one action must remain in generated HTML"
 css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
-assert 'data-tool-set="duplicate"' not in markup, "Calculator shortcuts must not duplicate links"
+homepage_markup = output_for("/")
+zakat_markup = output_for("/zakat-calculator/")
+assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
+assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat calculator navigation must not duplicate links"
+assert 'data-tool-set="duplicate"' not in markup, "Inner-page calculator shortcuts must not duplicate links"
 assert "grid-template-columns:repeat(3,minmax(0,1fr))" in css.replace(" ", ""), "Phone navigation must use a compact three-column grid"
 assert "grid-template-columns:repeat(4,minmax(0,1fr))" in css.replace(" ", ""), "Tablet navigation must use four columns"
 assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Desktop navigation must use six columns"
