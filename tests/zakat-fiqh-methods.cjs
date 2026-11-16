@@ -103,8 +103,8 @@ r = calculate({
   assets: { cash: 100000 },
   hawlComplete: true
 });
-assert.equal(r.metalPricePerGram, 100);
-assert.equal(r.nisabThreshold, 61236);
+assert.ok(Math.abs(r.metalPricePerGram - 100) < 1e-10, "tola price must normalize to per-gram price");
+assert.ok(Math.abs(r.nisabThreshold - 61236) < 1e-8, "tola conversion must preserve the silver Nisab threshold");
 
 assert.throws(() => calculate({ ...base, schoolOfThought: "unknown" }), /school/i);
 assert.throws(() => calculate({ ...base, metalPriceUnit: "ounce" }), /metal price unit/i);
