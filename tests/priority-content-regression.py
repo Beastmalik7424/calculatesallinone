@@ -102,9 +102,20 @@ for control_id in (
     assert f'id="{control_id}"' in bmi_html, f"BMI page lost independent unit control: {control_id}"
 assert 'id="bmi-unit"' not in bmi_html, "BMI must retain independent weight and height unit selectors"
 
+bmi_worked_sections = re.findall(r"<h2\b[^>]*>\s*Worked examples?\s*</h2>", bmi_html, re.I)
+assert len(bmi_worked_sections) == 1, f"BMI must contain one consolidated worked-example section, got {len(bmi_worked_sections)}"
+
 pnl_html = read("profit-loss-calculator")
 assert 'id="p-cogs"' in pnl_html and 'id="p-cost"' in pnl_html and 'id="p-sell"' in pnl_html
+assert "COGS = opening inventory + purchases" in visible(pnl_html), "P&L must state the exact approved COGS formula"
+assert visible(pnl_html).count("COGS = opening inventory + purchases") == 1, "P&L must state the COGS formula once"
 assert "does not count inventory or derive COGS for you" in visible(pnl_html), "P&L must distinguish the COGS guide formula from calculator inputs"
+
+zakat_words = len(re.findall(r"\b[\w’'-]+\b", visible(zakat_html)))
+urdu_zakat_html = (ROOT / "ur" / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
+urdu_zakat_words = len(re.findall(r"\b[\w’'-]+\b", visible(urdu_zakat_html)))
+assert zakat_words >= 1000, f"English Zakat page must contain at least 1,000 useful visible words, got {zakat_words}"
+assert urdu_zakat_words >= 700, f"Urdu Zakat page must contain at least 700 useful visible words, got {urdu_zakat_words}"
 
 zakat_html = read("zakat-calculator")
 assert 'value="silver"' in zakat_html and 'value="gold-87"' in zakat_html and 'value="gold-85"' in zakat_html
