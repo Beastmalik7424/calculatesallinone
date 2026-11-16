@@ -237,3 +237,7 @@ assert.ok(enTitle && decodeMeta(enTitle[1]) === "Zakat Calculator Online | Hanaf
 assert.ok(urTitle && decodeMeta(urTitle[1]).includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
 assert.ok(enDescription && decodeMeta(enDescription[1]).includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
 assert.ok(urText.includes("احتیاطِ واجب کی بنا پر"), "Urdu Sistani guidance must explicitly retain the obligatory-precaution qualification");
+const banuriFatwaUrl = "https://www.banuri.edu.pk/readquestion/144608101364/17-02-2025";
+assert.ok(enText.includes("Banuri Town") && enText.includes("fatwa 144608101364"), "English Hanafi guide must identify the Pakistan-specific Banuri Town Nisab position");
+assert.ok(urText.includes("بنوری ٹاؤن") && urText.includes("فتویٰ نمبر 144608101364"), "Urdu Hanafi guide must identify the Pakistan-specific Banuri Town Nisab position");
+assert.ok(en.includes(banuriFatwaUrl) && ur.includes(banuriFatwaUrl), "Both language pages must link to the same primary Hanafi source");
