@@ -13,7 +13,7 @@ PAGES = {
             "independently of the height unit", "Limitations", "Sources",
             "Last reviewed",
         ],
-        "faqs": 6,
+        "faqs": 4,
         "sources": ["who.int", "cdc.gov", "doi.org/10.1016/S0140-6736(03)15268-3"],
     },
     "profit-loss-calculator": {
@@ -28,7 +28,7 @@ PAGES = {
             "does not count inventory or derive COGS for you",
             "Limitations", "Sources", "Last reviewed",
         ],
-        "faqs": 6,
+        "faqs": 4,
         "sources": ["openstax.org", "accaglobal.com"],
     },
     "zakat-calculator": {
@@ -44,8 +44,8 @@ PAGES = {
             "Worldwide currency support, privacy and limitations",
             "changes yearly", "qualified scholar", "Sources", "Last reviewed",
         ],
-        "faqs": 8,
-        "sources": ["sbp.org.pk", "islamic-relief.org.uk", "islamweb.net"],
+        "faqs": 4,
+        "sources": ["sbp.org.pk", "islamic-relief.org.uk", "nzfworldwide.com"],
     },
 }
 
