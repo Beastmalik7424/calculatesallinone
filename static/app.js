@@ -3,7 +3,7 @@
 
   var MSG = {
     en: {
-      zakatNoPrice: "Enter a positive silver or gold price in the selected currency and selected unit (gram or Pakistani tola).",
+      zakatNoPrice: "Enter a positive silver or gold price in the selected currency and selected unit (gram or Sindh Government standard tola).",
       zakatSistaniConditions: "No Zakat amount has been calculated. Confirm all six Sayyid Sistani trading-goods conditions. If any condition is uncertain, ask his office or your qualified scholar.",
       zakatSistaniBelow: "Qualifying trading goods: {net}. Selected Sistani Nisab: {nisab}. The trading-goods value is below this threshold, so this estimate does not show Zakat as payable.",
       zakatSistaniDue: "Under Sayyid Sistani's published trading-goods ruling (obligatory precaution), the estimated amount at 2.5% is {amount}. Eligible trading goods: {net}. Nisab: {nisab}. This is not a calculation of ordinary cash, banknotes, Khums, crops, livestock or every Zakat category.",
@@ -70,7 +70,7 @@
       cats: { weight: "weight", length: "length", temp: "temperature" }
     },
     ur: {
-      zakatNoPrice: "منتخب نصاب کے لیے منتخب کرنسی اور اکائی (گرام یا پاکستانی تولہ) میں سونے یا چاندی کی مثبت قیمت درج کریں۔",
+      zakatNoPrice: "منتخب نصاب کے لیے منتخب کرنسی اور اکائی (گرام یا حکومتِ سندھ کا سرکاری تولہ) میں سونے یا چاندی کی مثبت قیمت درج کریں۔",
       zakatSistaniConditions: "زکوٰۃ کی رقم نہیں نکالی گئی۔ آیت اللہ سیستانی کے تجارتی مال کی چھوں شرائط کی تصدیق کریں۔ اگر کسی شرط میں شک ہو تو ان کے دفتر یا اپنے مستند عالم سے پوچھیں۔",
       zakatSistaniBelow: "اہل تجارتی مال: {net}۔ سیستانی کے منتخب نصاب کی مالیت: {nisab}۔ تجارتی مال کی قیمت اس حد سے کم ہے، اس لیے اس حساب میں زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
       zakatSistaniDue: "آیت اللہ سیستانی کے شائع شدہ تجارتی مال کے حکم (احتیاطِ واجب) کے مطابق 2.5 فیصد کا تخمینی حساب {amount} ہے۔ اہل تجارتی مال: {net}۔ نصاب: {nisab}۔ یہ عام نقد رقم، بینک نوٹ، خمس، فصل، مویشی یا زکوٰۃ کی تمام اقسام کا حساب نہیں ہے۔",
