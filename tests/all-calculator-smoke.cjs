@@ -27,11 +27,15 @@ function element(id, value = "") {
   "zakat-form","z-currency","z-nisab-method","z-cash","z-bank","z-savings","z-gold","z-silver","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-silverprice","z-goldprice","z-hawl","zakat-result",
   "bmi-form","bmi-unit","bmi-height-cm","bmi-height-ftin","bmi-metric","bmi-imperial",
   "b-kg","b-kg-error","b-lb","b-lb-error","bmi-weight-kg","bmi-weight-lb","bmi-weight-kg-group","bmi-weight-lb-group","b-cm","b-cm-error","b-ft","b-ft-error","b-in","b-in-error","bmi-result",
-  "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
+  "pl-form","pl-business-fields","pl-product-fields","p-revenue","p-cogs","p-expenses","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
   "conv-form","u-cat","u-val","u-from","u-to","conv-result","t-count","t-target","t-progress","t-tap","t-reset",
   "sw-display","sw-start","sw-stop","sw-reset",
   "years-days-form","yd-direction","yd-value","yd-value-label","yd-method","yd-calendar-option","yd-exact-fields","yd-start-date","yd-submit","yd-result","extra-result","calorie-result","qt-result","calc-display"
 ].forEach(id => element(id));
+element("pl-mode-business").value = "business";
+element("pl-mode-product").value = "product";
+elements["pl-mode-business"].checked = true;
+elements["pl-mode-product"].checked = false;
 elements["z-currency"].value = "PKR";
 elements["z-nisab-method"].value = "silver";
 elements["u-cat"].value = "weight";
@@ -56,7 +60,10 @@ const document = {
   documentElement: { lang: "en", classList: { contains: () => false, toggle() {} } },
   addEventListener(type, fn) { if (type === "DOMContentLoaded") handlers.ready = fn; },
   getElementById(id) { return elements[id] || null; },
-  querySelectorAll(selector) { return selector && selector.includes("-result") ? Object.values(elements).filter(el => el.id && el.id.endsWith("-result")) : []; },
+  querySelectorAll(selector) {
+    if (selector === 'input[name="pl-mode"]') return [elements["pl-mode-business"], elements["pl-mode-product"]];
+    return selector && selector.includes("-result") ? Object.values(elements).filter(el => el.id && el.id.endsWith("-result")) : [];
+  },
   querySelector(selector) { return selector === "#tool-calculator #calc-display" ? elements["calc-display"] : null; },
   title: "CalculatesAll Test",
   createElement(tag) { return { tag, value: "", textContent: "", hidden: false, attributes: {}, _handlers: {}, className: "", style: {}, addEventListener(type, fn) { this._handlers[type] = fn; }, setAttribute(name, value) { this.attributes[name] = String(value); }, select() {} }; },
@@ -134,6 +141,122 @@ assert.equal(elements["yd-calendar-option"].disabled, false);
 assert.equal(elements["yd-value-label"].textContent, "Number of years");
 assert.equal(elements["yd-submit"].textContent, "Convert Years");
 
+// Profit and Loss: exercise the actual submit handler and reject invalid values.
+elements["pl-mode-business"].checked = true;
+elements["pl-mode-product"].checked = false;
+elements["pl-mode-business"]._handlers.change();
+const openingInventory = 20000, purchases = 50000, closingInventory = 25000;
+const exampleCogs = openingInventory + purchases - closingInventory;
+assert.equal(exampleCogs, 45000);
+setValues({"p-revenue":100000,"p-cogs":exampleCogs,"p-expenses":0});
+submit("pl-form");
+assert.match(elements["pl-result"].textContent, /Gross profit\/loss: 55,000/);
+assert.match(elements["pl-result"].textContent, /Net operating profit\/loss: 55,000/);
+assert.match(elements["pl-result"].textContent, /Net operating margin: 55\.00%/);
+for (const invalid of ["", -1, "not-a-number", 1e309]) {
+  setValues({"p-revenue":invalid,"p-cogs":45000,"p-expenses":0});
+  submit("pl-form");
+  assert.match(elements["pl-result"].textContent, /zero or positive numbers/i);
+}
+
+// Exact Zakat worked-example unit cases from the approved silver Nisab input.
+const zakatBelowExample = context.window.ZakatCalculator.calculate({
+  currency:"PKR", nisabMethod:"silver", silverPricePerGram:3000, goldPricePerGram:1,
+  assets:{cash:700000}, liabilities:0, zakatPaid:0, hawlComplete:true
+});
+assert.equal(zakatBelowExample.nisabThreshold, 1837080);
+assert.equal(zakatBelowExample.zakatBeforePaid, 0);
+const zakatDueExample = context.window.ZakatCalculator.calculate({
+  currency:"PKR", nisabMethod:"silver", silverPricePerGram:3000, goldPricePerGram:1,
+  assets:{cash:2000000}, liabilities:0, zakatPaid:0, hawlComplete:true
+});
+assert.equal(zakatDueExample.nisabThreshold, 1837080);
+assert.equal(zakatDueExample.zakatBeforePaid, 50000);
+
+// Deterministic randomized checks against the real calculator handlers and the Zakat engine.
+let prioritySeed = 20261116;
+function priorityRandom() {
+  prioritySeed ^= prioritySeed << 13; prioritySeed ^= prioritySeed >>> 17; prioritySeed ^= prioritySeed << 5;
+  return (prioritySeed >>> 0) / 4294967296;
+}
+function priorityInt(min, max) { return min + Math.floor(priorityRandom() * (max - min + 1)); }
+let bmiCases = 0, profitCases = 0, zakatCases = 0;
+for (let i = 0; i < 1000; i++) {
+  // BMI: 800 valid values and 200 empty/zero/negative/oversized inputs.
+  if (i < 800) {
+    const kg = priorityInt(2000, 30000) / 100;
+    const cm = priorityInt(5000, 26000) / 100;
+    setValues({"b-kg":kg,"b-cm":cm});
+    submit("bmi-form");
+    const expected = (kg / Math.pow(cm / 100, 2)).toFixed(1);
+    assert.match(elements["bmi-result"].textContent, new RegExp(expected.replace(".", "\\.") ));
+  } else {
+    const bad = ["", 0, -1, 999999][i % 4];
+    setValues({"b-kg":bad,"b-cm":170});
+    submit("bmi-form");
+    assert.equal(elements["bmi-result"].textContent, "");
+  }
+  bmiCases++;
+
+  // Profit and Loss: compare output to independent arithmetic, including invalid edge cases.
+  if (i < 800) {
+    const revenue = priorityInt(0, 100000000);
+    const cogs = priorityInt(0, 100000000);
+    const expenses = priorityInt(0, 100000000);
+    setValues({"p-revenue":revenue,"p-cogs":cogs,"p-expenses":expenses});
+    submit("pl-form");
+    const gross = revenue - cogs, net = gross - expenses;
+    assert.ok(elements["pl-result"].textContent.includes(gross.toLocaleString("en-US")));
+    assert.ok(elements["pl-result"].textContent.includes(net.toLocaleString("en-US")));
+    const margin = revenue === 0 ? "N/A (revenue is zero)" : (net / revenue * 100).toFixed(2) + "%";
+    assert.ok(elements["pl-result"].textContent.includes(margin));
+  } else {
+    const bad = ["", -1, "invalid", 1e309][i % 4];
+    setValues({"p-revenue":bad,"p-cogs":0,"p-expenses":0});
+    submit("pl-form");
+    assert.match(elements["pl-result"].textContent, /zero or positive numbers/i);
+  }
+  profitCases++;
+
+  // Zakat: 800 valid threshold outcomes and 200 invalid empty/zero/negative/oversized inputs.
+  if (i < 800) {
+    const price = priorityInt(1, 10000);
+    const threshold = 612.36 * price;
+    const net = i % 2 === 0 ? Math.max(0, Math.floor(threshold - 1)) : Math.ceil(threshold + priorityInt(0, 1000000));
+    const result = context.window.ZakatCalculator.calculate({
+      currency:"PKR", nisabMethod:"silver", silverPricePerGram:price, goldPricePerGram:1,
+      assets:{cash:net}, liabilities:0, zakatPaid:0, hawlComplete:true
+    });
+    if (net < threshold) assert.equal(result.zakatBeforePaid, 0);
+    else assert.equal(result.zakatBeforePaid, net * 0.025);
+  } else {
+    const invalidCase = (i - 800) % 4;
+    if (invalidCase === 2) {
+      const emptyAsset = context.window.ZakatCalculator.calculate({
+        currency:"PKR", nisabMethod:"silver", silverPricePerGram:3000, goldPricePerGram:1,
+        assets:{cash:""}, liabilities:0, zakatPaid:0, hawlComplete:true
+      });
+      assert.equal(emptyAsset.totalAssets, 0, "empty amount must be treated as zero");
+      assert.equal(emptyAsset.zakatBeforePaid, 0);
+    } else {
+      const input = {
+        currency:"PKR", nisabMethod:"silver",
+        silverPricePerGram: invalidCase === 1 ? 0 : 3000,
+        goldPricePerGram:1,
+        assets:{cash: invalidCase === 0 ? -1 : Number.MAX_VALUE,
+                bank: invalidCase === 3 ? Number.MAX_VALUE : 0},
+        liabilities:0, zakatPaid:0, hawlComplete:true
+      };
+      assert.throws(() => context.window.ZakatCalculator.calculate(input), /must be|valid|supported|range|metal price/i);
+    }
+  }
+  zakatCases++;
+}
+assert.equal(bmiCases, 1000);
+assert.equal(profitCases, 1000);
+assert.equal(zakatCases, 1000);
+console.log("PASS: 1,000 BMI, 1,000 Profit and Loss, and 1,000 Zakat deterministic randomized cases (seed 20261116)");
+
 // Zakat: reject invalid negative input before the representative outcomes.
 setValues({"z-cash":-1,"z-silverprice":1}); submit("zakat-form");
 assert.match(elements["zakat-result"].textContent, /zero or greater/i, "negative zakatable amounts must be rejected");
@@ -201,6 +324,15 @@ assert.equal(elements["b-kg"].disabled, true);
 assert.equal(elements["b-lb"].disabled, false);
 setValues({"b-lb":154.324,"b-ft":5,"b-in":7}); submit("bmi-form");
 assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i, "pounds input should calculate equivalent BMI");
+elements["bmi-height-cm"].checked = true;
+elements["bmi-height-ftin"].checked = false;
+elements["bmi-height-cm"]._handlers.change();
+assert.equal(elements["b-ft"].disabled, true, "switching back to centimetres must disable feet");
+setValues({"b-lb":154.324,"b-cm":170}); submit("bmi-form");
+assert.match(elements["bmi-result"].textContent, /24\.2.*normal weight/i, "pounds with centimetres should calculate equivalent BMI");
+elements["bmi-height-ftin"].checked = true;
+elements["bmi-height-cm"].checked = false;
+elements["bmi-height-ftin"]._handlers.change();
 setValues({"b-lb":"5abc","b-ft":5,"b-in":7}); submit("bmi-form");
 assert.notEqual(elements["b-lb-error"].textContent, "", "malformed pounds input must be rejected");
 setValues({"b-lb":154.324,"b-ft":5,"b-in":7}); submit("bmi-form");
@@ -229,6 +361,11 @@ setValues({"b-kg":70,"b-ft":"","b-in":7}); submit("bmi-form");
 assert.notEqual(elements["b-ft-error"].textContent, "", "empty feet must be rejected");
 setValues({"b-kg":70,"b-ft":5,"b-in":""}); submit("bmi-form");
 assert.notEqual(elements["b-in-error"].textContent, "", "empty inches must be rejected");
+
+// Restore the pre-existing product-mode state after the randomized business-mode simulation.
+elements["pl-mode-product"].checked = true;
+elements["pl-mode-business"].checked = false;
+elements["pl-mode-product"]._handlers.change();
 
 // Profit/loss: profit, loss and zero-cost edge case.
 for (const [cost, sell, expected] of [[100,150,/Profit: 50/],[100,80,/Loss: 20/],[0,10,/N\/A/]]) {

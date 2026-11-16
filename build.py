@@ -24,7 +24,7 @@ CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").st
 SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
-    "/zakat-calculator/": "2026-11-15",
+    "/zakat-calculator/": "2026-11-16",
     "/years-to-days-calculator/": "2026-11-14",
     "/unit-converter/": "2026-11-14",
     "/tasbih-counter/": "2026-11-15",
@@ -150,7 +150,7 @@ TOOLS = [
             '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
             '<option value="silver" selected>Silver Nisab (612.36 g)</option>'
             '<option value="gold-87">Gold Nisab (87.48 g)</option>'
-            '<option value="gold-85">Gold Nisab (85 g)</option>'
+
             '</select></div></div>'
             '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
             '<p class="text-sm text-stone-700 dark:text-stone-300">Enter market values in the selected currency. Leave categories you do not own at zero.</p>'
@@ -190,12 +190,12 @@ TOOLS = [
                 "Use the figures that apply on your own Zakat due date, usually the Hijri date on which your Zakat year completes. The date is personal to you. It is not automatically 1 January, the tax year, Ramadan, or the date you open this page. Keep a record of the date and the price sources you used so you can review the calculation next year."
             ]),
             ("Choose a Nisab method carefully", [
-                "Nisab is the minimum qualifying level of wealth. This calculator offers three clearly labelled reference weights: 612.36 grams of silver, 87.48 grams of gold, and 85 grams of gold. Islamic Relief publishes the 612.36 g silver and 87.48 g gold standards. Some other guidance uses 85 g for gold. These amounts are not interchangeable. The monetary threshold changes with the market price of the selected metal and the currency you use.",
-                "Enter the current local price per gram for the selected metal in the same currency as your assets. For silver Nisab, enter the silver price. For either gold Nisab option, enter a 24-karat gold price. This page does not fetch live commodity prices, convert currencies, or claim that an old sample rate is today's rate. Confirm the metal price with a reliable local bullion or jewellers' source on your calculation date. Ask a qualified scholar which Nisab basis applies to your circumstances."
+                "Nisab is the minimum qualifying level of wealth. This calculator offers two personal Nisab reference weights: 612.36 g of silver and 87.48 g of gold. Enter the current local price per gram for the selected metal in the same currency as your assets. The monetary threshold changes with the market price and currency you use. These reference weights do not replace qualified religious guidance for your circumstances.",
+                "Enter the current local price per gram for the selected metal in the same currency as your assets. For silver Nisab, enter the silver price. For either gold Nisab option, enter a 24-karat gold price. This calculator does not fetch a live metal price or other live commodity prices, convert currencies, or claim that an old sample rate is today's rate. Confirm the metal price with a reliable local bullion or jewellers' source on your calculation date. Ask a qualified scholar which Nisab basis applies to your circumstances."
             ]),
             ("Illustrative small-shop Nisab comparison", [
                 "Consider a hypothetical shop on its Zakat date: cash and bank balances total PKR 180,000, saleable trade stock at its current eligible value is PKR 520,000, and recoverable receivables are PKR 70,000. The PKR 180,000 cash figure already includes, for illustration, PKR 15,000 in JazzCash and PKR 20,000 in Easypaisa; count those available balances once, not again as separate assets. If eligible short-term supplier debts are PKR 120,000, the illustrative net wealth is PKR 180,000 + PKR 520,000 + PKR 70,000 − PKR 120,000 = PKR 650,000. This assumes the amounts qualify under the scholarly method the owner follows; shop equipment and personal-use assets are not added as trade stock. Ask a qualified scholar about restricted or disputed balances.",
-                "To demonstrate the arithmetic only, suppose the local silver price were PKR 200 per gram and 24-karat gold were PKR 25,000 per gram. Silver Nisab at 612.36 g would be PKR 122,472. Gold Nisab at 87.48 g would be PKR 2,187,000, while 85 g would be PKR 2,125,000. These sample prices are hypothetical, not a live market quote, and must not be used as today's metal prices.",
+                "To demonstrate the arithmetic only, suppose the local silver price were PKR 200 per gram and 24-karat gold were PKR 25,000 per gram. Silver Nisab at 612.36 g would be PKR 122,472. Gold Nisab at 87.48 g would be PKR 2,187,000. These sample prices are hypothetical, not a live market quote, and must not be used as today's metal prices.",
                 "At PKR 650,000, the example exceeds the illustrative silver threshold but not either illustrative gold threshold. If the silver method is the one the owner has been advised to follow and the Hawl condition is met, 2.5% of PKR 650,000 is PKR 16,250 before subtracting any eligible Zakat already paid for that year. Under either gold threshold in this example, the amount does not reach Nisab. This shows why the method must be selected according to qualified religious guidance before entering figures; do not choose a Nisab method based on which result is lower or preferred."
             ]),
             ("Which assets to include", [
@@ -217,12 +217,14 @@ TOOLS = [
                 "Assume the values are all in PKR. Cash is 300,000, bank balances are 400,000, savings are 100,000, eligible gold is 150,000, business stock is 200,000, and recoverable receivables are 50,000. Total eligible assets are 1,200,000. Assume eligible short-term liabilities are 100,000. Net zakatable wealth is 1,200,000 minus 100,000, which equals 1,100,000.",
                 "For illustration only, assume silver costs PKR 1,000 per gram on the Zakat date. Silver Nisab is 612.36 multiplied by 1,000, which equals PKR 612,360. Net wealth of PKR 1,100,000 is above that threshold. At 2.5 percent, the initial Zakat is PKR 27,500. If PKR 5,000 has already been paid toward this same Zakat year, the remaining balance is PKR 22,500. The example price is hypothetical and must not be reused as a current market quote."
             ]),
-            ("Personal-use property and other exclusions", [
+    ("Worked example: personal silver Nisab", ["Using a hypothetical silver price of PKR 3,000 per gram, 612.36 × 3,000 = PKR 1,837,080. If net wealth is PKR 700,000, it is below this personal silver Nisab and the estimate is zero. If net wealth is PKR 2,000,000, 2.5% is PKR 50,000."]),
+                    ("Personal-use property and other exclusions", [
                 "Personal-use belongings such as your main home, ordinary clothing, household furniture, personal car and tools used for your work are generally not treated as trade inventory in a basic monetary Zakat calculation. A property purchased with the intention of resale is different from the home in which you live. Rental property itself and the rent saved from it can be treated differently, so do not enter the entire value of a rental building in the resale-property field without qualified guidance.",
                 "Agricultural produce, livestock, treasure, business structures, jointly owned assets and complex retirement arrangements can have separate Nisab rules, rates, dates or ownership tests. This calculator is not designed to calculate agricultural or livestock Zakat. It should not force every kind of wealth into a single 2.5 percent formula."
             ]),
+            ("Review record", ["Last reviewed: 2026-11-16. This page was checked against the linked Nisab guidance and the State Bank of Pakistan's 2026 bank-deduction notification. The page maintainer is not presenting this as an independent religious ruling."]),
             ("Pakistan bank deduction threshold is separate", [
-                "Pakistan's official notification for Zakat year 1446–1447 AH set PKR 503,529 as the threshold for source deduction from specified savings, profit-and-loss-sharing and similar bank accounts on the notified Ramadan 2026 deduction date. The State Bank of Pakistan circular forwarded that notification to banks. This is a year-specific statutory bank-deduction threshold for the account types named in the notification. It is not a universal personal Shariah Nisab, does not replace your selected gold or silver method, and must not be carried forward to a later Zakat year without a new official notification.",
+                "For the 1447 AH (2026) Ramazan cycle, Pakistan's official notification identifies the Zakat year as 1446–1447 AH and sets PKR 503,529 as the threshold for source deduction from specified saving, profit and loss sharing (PLS), and similar bank accounts on the first day of Ramazan. The State Bank of Pakistan circular forwarded that notification to banks. This is a year-specific statutory bank-deduction threshold for the account types named in the notification. It is not a universal personal Zakat Nisab, does not replace your selected gold or silver method, and the bank deduction threshold changes yearly. Do not carry it forward to a later Zakat year without a new official notification.",
                 "If you live in Pakistan, use the currency code PKR and check the latest Ministry of Poverty Alleviation and Social Safety or State Bank of Pakistan notice for the relevant Zakat year. Whether a bank deduction applies to your account can depend on the law, account type, declaration and applicable exemptions. Your personal Zakat calculation may be different from an automatic bank deduction."
             ]),
             ("Worldwide currency support, privacy and limitations", [
@@ -234,12 +236,8 @@ TOOLS = [
         "faq": [
             ("Does this calculator work outside Pakistan?", "Yes. Enter a supported three-letter ISO 4217 currency code and use that same currency for all assets, debts and metal prices. It formats the result in that currency but does not convert currencies."),
             ("Does it use live gold or silver prices?", "No. Enter the current local price per gram on your Zakat date. The page does not claim to fetch live prices."),
-            ("Which Nisab should I choose?", "The page offers silver 612.36 g, gold 87.48 g and gold 85 g references. Scholars and authorities differ. Follow the qualified scholar or authority relevant to your circumstances."),
-            ("Why are there separate silver and gold price fields?", "Silver Nisab needs the silver price per gram. Either gold Nisab option needs the 24-karat gold price per gram. Enter prices in the same currency as your other figures."),
-            ("Can I deduct my full mortgage or long-term loan?", "Do not automatically deduct the full balance. Debt treatment differs, and many guides focus on amounts due immediately or within the next twelve lunar months. Follow qualified scholarly guidance."),
-            ("Is my home or personal car included?", "Ordinary personal-use property is generally not trade inventory. Property held for resale is a separate category. Rental property and saved rental income need specific guidance."),
+            ("Which Nisab should I choose?", "The page offers two personal Nisab references: silver 612.36 g and gold 87.48 g. Follow the qualified scholar or authority relevant to your circumstances."),
             ("Why is Pakistan's PKR 503,529 figure shown separately?", "It was the statutory source-deduction threshold for specified bank accounts in Zakat year 1446–1447 AH. It is not a universal personal Nisab and is not a current-year figure unless a later official notice confirms it."),
-            ("Is this a fatwa or a guarantee of the amount due?", "No. It is an arithmetic estimate. Jewellery, pensions, investments, debt, business ownership and other cases can require a qualified scholar's decision.")
         ],
         "sources": 'Method references: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">Islamic Relief Nisab and Zakat calculation guidance</a>; <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide Zakat calculation principles</a>; <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan 2026 circular</a> and <a class="' + LINK + '" href="https://www.sbp.org.pk/assets/documents/circulars/CL3-Notification_%282%29.pdf" rel="noopener noreferrer">official 1446–1447 AH notification</a>. These sources describe particular methods and statutory rules. They do not establish one ruling for every person.'
     },
@@ -248,7 +246,7 @@ TOOLS = [
         "category": "health",
         "name": "BMI Calculator",
         "app": "HealthApplication",
-        "description": "Calculate adult body mass index in metric or imperial units with WHO weight category ranges.",
+        "description": "Calculate adult BMI in kilograms or pounds. See WHO adult categories, Asian population action points, a worked example and limitations.",
         "h1": "BMI Calculator for Adults",
         "lead": "Calculate your body mass index in metric or imperial units. BMI is a screening measure for adults. It is not a diagnosis.",
         "ui": (
@@ -268,38 +266,14 @@ TOOLS = [
             '<button type="submit" class="@B@">Calculate BMI</button></form>'
             + result("bmi-result")
         ),
-        "guide": [
-            ("The formula", [
-                "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit. When kg is selected, BMI equals weight in kilograms divided by height in meters, squared.",
-                "When lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches, squared. The calculator converts feet and inches into total inches for this formula.",
-                "If you select kg with feet and inches, the calculator converts the height to centimeters and uses the metric formula. Switching weight units clears the previous result so you can recalculate with the new unit.",
-            ]),
-            ("Adult weight categories", [
-                "The World Health Organization uses these ranges for adults: below 18.5 is underweight, 18.5 to 24.9 is normal weight, 25.0 to 29.9 is overweight, and 30.0 or above is in the obesity range.",
-            ]),
-            ("Worked example, metric", [
-                "A person weighs 70 kg and is 175 cm tall. Height in meters is 1.75. Squared, that is 3.0625.",
-                "BMI equals 70 divided by 3.0625, which is 22.9 to one decimal place. This is in the normal weight range.",
-            ]),
-            ("Worked example, imperial", [
-                "A person weighs 154 lb and is 5 ft 9 in tall. Total height is 69 inches.",
-                "BMI equals 703 multiplied by 154, divided by 69 squared (4,761). The result is 22.7, which is in the normal weight range.",
-            ]),
-            ("Common mistakes", [
-                "Entering height in feet with decimals. 5.9 feet is 5 feet 10.8 inches, not 5 feet 9 inches. Use feet and inches separately.",
-                "Using BMI for children or teenagers. Their assessment uses age and sex specific percentile charts.",
-                "Treating BMI as body fat. Muscle, frame size and age change what the same number means.",
-            ]),
-            ("When to speak to a clinician", [
-                "BMI is a starting point. A doctor or qualified health professional can assess weight in the context of your history, waist size, blood pressure, blood tests and other factors.",
-            ]),
-        ],
+        "guide": [],
         "faq": [
-            ("Can I use this for children?", "No. This page covers adults. Children and teenagers are assessed with age and sex specific percentile charts."),
-            ("Is BMI a diagnosis?", "No. It is a screening measure. Discuss your result with a doctor or qualified health professional."),
-            ("What does 0 to 11.9 inches mean?", "Inches must be at least 0 and less than 12. For example, 5 ft 11 in is valid, while 5 ft 13 in is not."),
+            ("Which weight units can I enter?", "Select kilograms or pounds before entering your weight."),
+            ("Which height units can I enter?", "Select centimetres or feet and inches, then enter the matching height fields."),
+            ("Why is the result shown to one decimal place?", "The displayed BMI is rounded to one decimal place for readability.")
         ],
-        "sources": 'Adult BMI categories follow the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization</a> classification. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" target="_blank" rel="noopener noreferrer">NHS adult BMI calculator</a> explains ethnicity-specific interpretation. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" target="_blank" rel="noopener noreferrer">NHS waist-to-height ratio calculator</a> explains the half-height check. The <a class="' + LINK + '" href="https://doi.org/10.2337/doci26-0003" target="_blank" rel="noopener noreferrer">2026 Standards of Care in Overweight and Obesity</a> describes current clinical assessment criteria. The calculator itself continues to display the standard adult WHO categories and does not diagnose a condition.',
+        "sources": 'Sources: <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization: Obesity and overweight</a>; <a class="' + LINK + '" href="https://doi.org/10.1016/S0140-6736(03)15268-3" target="_blank" rel="noopener noreferrer">WHO Expert Consultation, The Lancet (2004), DOI 10.1016/S0140-6736(03)15268-3</a>.',
+
     },
     {
         "slug": "profit-loss-calculator",
@@ -328,30 +302,58 @@ TOOLS = [
         ),
         "guide": [
             ("Business P&L formulas", [
-                "Gross profit equals total revenue minus cost of goods sold. Net operating profit equals gross profit minus other business expenses.",
-                "Net operating margin equals net operating profit divided by total revenue, multiplied by 100. When revenue is zero, margin is not available.",
-                "This simplified operating P&L excludes separate interest and income tax calculations. Enter those amounts in other expenses only when appropriate.",
+                "Gross profit = revenue − COGS. Gross margin % = gross profit ÷ revenue × 100. If revenue is zero, gross margin is not available. Business mode also subtracts the other operating expenses you enter to show an operating result; it does not infer costs you leave out.",
+                "This simplified operating P&L excludes separate interest and income tax calculations. Use the limitations below before treating the estimate as a formal statement."
             ]),
             ("Product profit formulas", [
                 "Product profit or loss equals selling price minus cost price. A negative result is a loss.",
-                "Product markup percentage equals profit divided by cost price, multiplied by 100. Gross margin equals profit divided by selling price, multiplied by 100. Either percentage is unavailable when its denominator is zero.",
+                "Markup on cost is profit divided by cost price, multiplied by 100. Gross margin on selling price is profit divided by selling price, multiplied by 100. Either percentage is unavailable when its denominator is zero."
+            ]),
+            ("How to calculate cost of goods sold", [
+                "COGS = opening inventory + purchases − closing inventory. Use figures from the same accounting period and the same inventory valuation basis. In the worked example, 20,000 + 50,000 − 25,000 = 45,000.",
+                "This calculator asks you to enter the resulting COGS total. It does not collect opening inventory, purchases or closing inventory separately, and it does not derive COGS from them. Prepare the total from your stock records before using Business mode."
+            ]),
+            ("Markup versus margin at a glance", [
+                "Markup uses cost as its base; gross margin uses selling price as its base. If an item costs 800 and sells for 1,000, profit is 200, markup is 25 percent of cost, and gross margin is 20 percent of selling price. These percentages describe the same 200 profit with different denominators.",
+                "Do not label a markup percentage as a margin. A 25 percent markup does not mean a 25 percent gross margin."
+            ]),
+            ("Worked example", [
+                "Assume revenue is 100,000, opening inventory is 20,000, purchases are 50,000 and closing inventory is 25,000. COGS is 20,000 + 50,000 − 25,000 = 45,000. Gross profit is 100,000 − 45,000 = 55,000, and gross margin is 55,000 ÷ 100,000 × 100 = 55%.",
+                "If other operating expenses are 15,000, net operating profit is 40,000. The calculator's business mode takes revenue, COGS and other expenses as separate inputs. It does not ask for inventory components."
             ]),
             ("Worked example, profit", [
                 "Cost price is 800. Selling price is 1,000. Profit is 200.",
-                "Percentage is 200 divided by 800, multiplied by 100, which is 25 percent of cost.",
+                "Percentage is 200 divided by 800, multiplied by 100, which is 25 percent of cost."
             ]),
             ("Worked example, loss", [
                 "Cost price is 500. Selling price is 450. The result is a loss of 50.",
-                "Percentage is minus 50 divided by 500, multiplied by 100, which is a loss of 10 percent of cost.",
+                "Percentage is minus 50 divided by 500, multiplied by 100, which is a loss of 10 percent of cost."
             ]),
             ("Common mistakes", [
                 "Calculating the percentage on selling price instead of cost. Margin on selling price is a different figure.",
-                "Forgetting other costs such as shipping, packaging, platform fees and tax. Include them in cost price for a true result.",
+                "Forgetting other costs such as shipping, packaging, platform fees and tax. Include costs that belong in the product's cost base before comparing it with the selling price."
             ]),
+            ("Pakistan shop example: include direct selling costs", [
+                "Suppose a shop buys an item for PKR 800 and pays PKR 50 freight and PKR 30 packaging. Its cost base is PKR 880. If it sells for PKR 1,100, profit is PKR 220, markup is 25 percent of cost, and gross margin is 20 percent of selling price.",
+                "This example is illustrative. Include only costs that belong in the item's cost base, and keep business overheads separate when preparing an operating P&L."
+            ]),
+            ("Cash flow is separate from profit", [
+                "Profit is not cash. A sale can increase revenue before the customer pays. Buying inventory up front can use cash before those goods are sold; the stock cost is reflected in COGS as the inventory is sold. Supplier bills, card settlements, marketplace payouts and refunds can clear on different dates. Payout delays can leave reported sales ahead of cash received.",
+                "A marketplace may show an order as complete while a payout is still pending. Reconcile the payout statement, fees, refunds and bank receipt before treating the full sale value as available cash."
+            ]),
+            ("Limitations and professional opinion", [
+                "The calculator is a simplified estimate, not a formal income statement, tax return or accounting opinion. It does not calculate tax, interest, depreciation, inventory valuation or cash-flow timing unless you include an appropriate amount in the fields provided.",
+                "The calculator does not count inventory or derive COGS for you. Enter a prepared COGS total in business mode. Check your accounting records and ask a qualified accountant about tax treatment, inventory methods or unusual transactions."
+            ]),
+            ("Review record", [
+                "Last reviewed: 2026-11-16. The formulas and examples were checked against the linked accounting references. The examples are illustrative and are not financial or tax advice."
+            ])
         ],
         "faq": [
-            ("Why is margin different from markup?", "Product mode shows both markup on cost and gross margin on selling price. Business mode shows net operating margin on revenue."),
+            ("Why is margin different from markup?", "Markup uses cost as its base, while gross margin uses selling price as its base. Business mode reports net operating margin on revenue."),
             ("Why does it show N/A?", "Product markup is unavailable when cost is zero. Business margin is unavailable when revenue is zero."),
+            ("Does the business result include tax and interest?", "No. This is a simplified operating estimate. Enter appropriate expenses in the other-expenses field, and use a qualified accountant for tax and formal reporting."),
+            ("How do I calculate COGS from inventory?", "Record the opening inventory, purchases and closing inventory for the same period, calculate the COGS total from your stock records, then enter that total in business mode. The calculator does not calculate it from separate inventory fields.")
         ],
         "sources": 'Formula references: <a class="' + LINK + '" href="https://openstax.org/books/introduction-business/pages/14-5-the-income-statement" target="_blank" rel="noopener noreferrer">OpenStax: The Income Statement</a> explains inventory, cost of goods sold, gross profit, operating expenses and why profit is not cash. <a class="' + LINK + '" href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html" target="_blank" rel="noopener noreferrer">ACCA Ratio Analysis</a> explains gross and operating profit margin ratios. This calculator is a simplified estimate, not a formal financial statement.',
     },
@@ -651,15 +653,13 @@ TOOLS = [
 
 HUB_CONTENT = {
     "money": {
-        "intro": "Compare loan instalments, Zakat arithmetic, business profit, discounts and compound growth. Each tool states the inputs and method it uses. The worked examples below show how to check the arithmetic and where a calculator estimate differs from a lender quote, tax calculation or religious ruling.",
+        "intro": "The Money and Business hub brings together calculators for business figures and personal money calculations. Use the monthly close checklist below to organise the review of payouts, stock, expenses, balances, profit and cash.",
         "faq": [
-            ("What does the EMI calculator estimate?", "It estimates the monthly instalment, total interest and repayment schedule from the loan amount, annual rate and term. Lender fees, insurance and contract-specific charges can change the amount quoted by a lender."),
-            ("How is profit margin calculated?", "Gross margin = gross profit divided by sales revenue, multiplied by 100. With PKR 40,000 gross profit on PKR 100,000 sales, gross margin is 40% of sales. If operating profit is PKR 25,000, operating margin is 25% of sales. These measures use different profit figures and should not be confused."),
-            ("Does the EMI estimate include lender fees?", "No. The EMI estimate uses the principal, annual interest rate and repayment term entered. Processing fees, insurance, variable-rate clauses, taxes and payment-date rules may change the lender's actual quotation."),
-            ("Does the compound interest estimate include deposits or taxes?", "No. It assumes a fixed starting principal, a fixed nominal annual rate and the compounding frequency entered. It excludes additional deposits, withdrawals, fees, taxes and inflation. Check whether a provider quotes a nominal rate or an effective annual yield before comparing results."),
-            ("Are these tools accurate for business accounts?", "They calculate the arithmetic for the inputs you give, but they do not replace an accountant. Tax rules, inventory valuation, payment fees and accounting policies are not included."),
-            ("Does the Zakat calculator give a religious ruling?", "No. It lets you select a silver or gold Nisab reference, enter your own metal price and currency, and estimates the arithmetic when the stated conditions are met. Scholarly views can differ, so consult a qualified scholar about your circumstances."),
+            ("What does it mean to lock the period?", "It means marking the month as reviewed so the same period is not casually changed while preparing the next month's opening figures."),
+            ("What becomes next month's opening stock?", "Use the closing inventory count from the month just completed as the next month's opening stock figure."),
+            ("Can I reconcile a wallet as well as a bank account?", "Yes. The checklist names a bank or wallet balance, so use the account that receives or holds the business funds.")
         ],
+
     },
     "health": {
         "intro": "The health tools on CalculatesAll give screening estimates, not diagnoses. The BMI calculator uses the standard formula, weight in kilograms divided by height in metres squared, and the adult weight categories published by the World Health Organization. Use the result as a starting point for a conversation with a doctor or another health professional.",
@@ -699,11 +699,11 @@ HUB_CONTENT = {
 }
 
 CATEGORIES = [
-    {"slug": "money", "name": "Money and Business", "desc": "Compare EMI, Zakat, profit and loss, discounts and compound interest with worked examples, formulas and clear assumptions."},
-    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI and estimated maintenance calories in metric or imperial units, with worked examples, clear methods and limitations."},
-    {"slug": "time", "name": "Date and Time", "desc": "Use age, date-difference and years-to-days calculators, plus a browser stopwatch, to check calendar spans, time conversions and everyday timing."},
-    {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages, percentage change and percentage difference, ratios, fractions, scientific arithmetic and unit conversions with clear worked examples."},
-    {"slug": "worship", "name": "Worship and Daily Use", "desc": "Use a private browser-based tasbih counter for dhikr, with target tracking and local-only count storage on your device."},
+    {"slug": "money", "name": "Money and Business", "desc": "Calculate business gross profit and margin, compare personal Zakat Nisab values, and work out discounts and loan instalments."},
+    {"slug": "health", "name": "Health", "desc": "Calculate adult BMI from weight and height, view WHO adult categories, see worked examples and understand screening limits."},
+    {"slug": "time", "name": "Date and Time", "desc": "Calculate age from a birth date, count days between calendar dates, convert years and days, and time an activity."},
+    {"slug": "math", "name": "Math and Converters", "desc": "Calculate percentages, percentage changes, ratios and fractions, or convert values between weight, length and temperature units."},
+    {"slug": "worship", "name": "Worship and Daily Use", "desc": "Count tasbih recitations with a target and track elapsed time with a browser stopwatch."},
 ]
 
 URDU = {
@@ -720,7 +720,7 @@ URDU = {
             ("Nisab method", "نصاب کا طریقہ"),
             ("Silver Nisab (612.36 g)", "چاندی کا نصاب (612.36 گرام)"),
             ("Gold Nisab (87.48 g)", "سونے کا نصاب (87.48 گرام)"),
-            ("Gold Nisab (85 g)", "سونے کا نصاب (85 گرام)"),
+
             ("Eligible assets", "قابلِ زکوٰۃ اثاثے"),
             ("Enter market values in the selected currency. Leave categories you do not own at zero.", "منتخب کرنسی میں موجودہ مالیت درج کریں۔ جو اثاثہ آپ کے پاس نہیں، اسے صفر رہنے دیں۔"),
             ("Cash held at home", "گھر میں موجود نقد رقم"),
@@ -751,7 +751,7 @@ URDU = {
         "how": [
             "یہ کیلکولیٹر قابلِ زکوٰۃ مالی اثاثوں پر سالانہ زکوٰۃ کا حسابی تخمینہ بناتا ہے۔ پہلے آپ کے درج کردہ اثاثے جمع ہوتے ہیں، پھر وہ واجبات منہا ہوتے ہیں جنہیں آپ کے اختیار کردہ شرعی طریقے کے مطابق منہا کیا جا سکتا ہے۔ اس کے بعد خالص مال کو منتخب نصاب سے ملایا جاتا ہے۔ اگر نصاب اور قمری سال کی شرط پوری ہو تو 2.5 فیصد کا حساب دکھایا جاتا ہے۔ یہ حسابی سہولت ہے، شرعی فتویٰ یا کسی مستند عالم کا متبادل نہیں۔",
             "اپنی زکوٰۃ کی تاریخ پر موجود مالیت درج کریں۔ عام طور پر یہ وہ ہجری تاریخ ہوتی ہے جب آپ کا زکوٰۃ کا سال مکمل ہوتا ہے۔ ہر شخص کی تاریخ مختلف ہو سکتی ہے۔ یہ خود بخود یکم جنوری، مالی سال، رمضان یا صفحہ کھولنے کی تاریخ نہیں بن جاتی۔ بہتر ہے کہ آپ اپنی تاریخ، دھات کی قیمت کا ماخذ اور استعمال شدہ طریقہ لکھ کر محفوظ رکھیں تاکہ اگلے سال موازنہ کر سکیں۔",
-            "نصاب وہ کم از کم مالیت ہے جس کے پہنچنے پر زکوٰۃ کی ذمہ داری کے دیگر شرائط دیکھی جاتی ہیں۔ اس کیلکولیٹر میں چاندی 612.36 گرام، سونا 87.48 گرام اور سونا 85 گرام کے تین الگ طریقے ہیں۔ اسلامی ریلیف چاندی کے 612.36 گرام اور سونے کے 87.48 گرام کے معیار بیان کرتا ہے۔ بعض دیگر رہنمائی میں سونے کے لیے 85 گرام استعمال ہوتا ہے۔ یہ مقداریں ایک دوسرے کے برابر نہیں ہیں۔ اپنے فقہی مسلک اور مقامی معتبر رہنمائی کے مطابق طریقہ منتخب کریں۔",
+            "نصاب وہ کم از کم مالیت ہے جس کے پہنچنے پر زکوٰۃ کی ذمہ داری کی دیگر شرائط دیکھی جاتی ہیں۔ اس کیلکولیٹر میں ذاتی نصاب کے لیے دو حوالہ جاتی وزن دستیاب ہیں: چاندی 612.36 گرام اور سونا 87.48 گرام۔ منتخب دھات کی موجودہ فی گرام قیمت اسی کرنسی میں درج کریں جس میں اثاثے درج کیے ہیں۔ یہ حوالہ جاتی وزن ذاتی شرعی رہنمائی کا متبادل نہیں ہیں۔ اپنے حالات کے مطابق مستند عالم سے رہنمائی لیں۔",
             "چاندی کا نصاب منتخب ہو تو چاندی کی فی گرام موجودہ قیمت درج کریں۔ سونے کے دونوں طریقوں کے لیے 24 قیراط سونے کی فی گرام قیمت درکار ہے۔ قیمت اسی کرنسی میں ہونی چاہیے جس میں آپ نے اپنے اثاثے اور قرض درج کیے ہیں۔ یہ صفحہ لائیو مارکیٹ قیمت حاصل کرنے کا دعویٰ نہیں کرتا۔ اپنی زکوٰۃ کی تاریخ پر مقامی معتبر صرافہ، بلین یا جیولرز کے ذریعے قیمت کی تصدیق کریں۔ پرانی مثال کی قیمت کو آج کی قیمت نہ سمجھیں۔",
             "نقد رقم میں گھر کے نوٹ اور سکے شامل ہو سکتے ہیں۔ بینک بیلنس میں کرنٹ، سیونگ اور ملتے جلتے اکاؤنٹس شامل کریں۔ دوسری بچت، فکسڈ ڈپازٹ اور نقد کے متبادل بھی شامل ہو سکتے ہیں، بشرطیکہ وہ آپ کی ملکیت ہوں اور آپ کے اختیار کردہ طریقے میں قابلِ زکوٰۃ ہوں۔ ایک ہی رقم کو دو خانوں میں نہ لکھیں۔ اگر بینک بیلنس پہلے ہی بچت کے مجموعے میں شامل ہے تو اسے دوبارہ شامل نہ کریں۔",
             "سونے اور چاندی کی مالیت موجودہ قابلِ اطلاق مارکیٹ ویلیو کے مطابق درج کریں، خریداری کی پرانی قیمت کے مطابق نہیں۔ زیورات کے حکم میں فقہی مسلک، استعمال، خالص دھات، پتھر اور مقامی عمل کے لحاظ سے اختلاف ہو سکتا ہے۔ اگر زیور میں پتھر یا دیگر مواد شامل ہو تو مناسب طریقے سے دھات کی مالیت الگ دیکھیں۔ ہر عالم یا ادارے کا ذاتی زیورات کے بارے میں ایک ہی حکم نہیں ہوتا۔",
@@ -766,7 +766,7 @@ URDU = {
             "صرف مثال کے لیے فرض کریں کہ زکوٰۃ کی تاریخ پر چاندی کی فی گرام قیمت 1,000 روپے ہے۔ چاندی کا نصاب 612.36 ضرب 1,000 یعنی 612,360 روپے بنتا ہے۔ خالص مال 1,100,000 روپے اس نصاب سے زیادہ ہے۔ 2.5 فیصد کے حساب سے ابتدائی زکوٰۃ 27,500 روپے ہوگی۔ اگر اسی زکوٰۃ سال میں 5,000 روپے پہلے ادا کیے جا چکے ہوں تو باقی رقم 22,500 روپے ہوگی۔ مثال کی قیمت فرضی ہے، اسے موجودہ بازار کی قیمت نہ سمجھیں۔",
             "ذاتی استعمال کی چیزیں مثلاً رہائشی گھر، عام لباس، گھریلو فرنیچر، ذاتی گاڑی اور کام کے اوزار عام طور پر فروخت کے کاروباری مال کے برابر نہیں ہوتے۔ دوبارہ فروخت کے ارادے سے خریدی گئی جائیداد ذاتی رہائش سے مختلف ہے۔ کرایے کی عمارت کی پوری مالیت اور اس سے حاصل ہونے والی بچت کا حکم الگ ہو سکتا ہے۔ رہائشی یا کرایے کی جائیداد کی پوری قیمت اس خانے میں درج نہ کریں جب تک مستند رہنمائی نہ لے لیں۔",
             "زرعی پیداوار، مویشی، خزانہ، مشترکہ ملکیت، کاروباری مستقل اثاثے اور پیچیدہ پنشن کے لیے الگ نصاب، شرح، تاریخ یا ملکیت کے اصول ہو سکتے ہیں۔ یہ کیلکولیٹر زرعی یا مویشیوں کی زکوٰۃ نہیں نکالتا۔ ہر قسم کے مال کو ایک ہی 2.5 فیصد کے فارمولے میں شامل کرنا درست نہیں ہوگا۔",
-            "پاکستان میں 1446–1447 ہجری زکوٰۃ سال کے لیے سرکاری نوٹیفکیشن نے مخصوص سیونگ، منافع و نقصان شراکتی اور اسی نوعیت کے بینک اکاؤنٹس سے زکوٰۃ کی کٹوتی کے لیے 503,529 روپے کا نصاب مقرر کیا تھا۔ اس نوٹیفکیشن کو اسٹیٹ بینک آف پاکستان نے بینکوں تک پہنچایا۔ یہ مخصوص اکاؤنٹس اور ایک مخصوص سال کے لیے قانونی کٹوتی کی حد تھی۔ یہ ہر شخص کے ذاتی شرعی نصاب کا متبادل نہیں، نہ ہی اسے نئے سال میں نئی سرکاری اطلاع کے بغیر موجودہ نصاب سمجھنا چاہیے۔",
+            "1447 ہجری (2026) کے رمضان کے پہلے دن کے لیے سرکاری اطلاع میں زکوٰۃ سال 1446–1447 ہجری درج ہے اور مخصوص سیونگ، منافع و نقصان شراکتی (PLS) اور اسی نوعیت کے بینک اکاؤنٹس سے کٹوتی کی حد 503,529 روپے مقرر کی گئی ہے۔ اسٹیٹ بینک آف پاکستان نے یہ اطلاع بینکوں تک پہنچائی۔ یہ مخصوص اکاؤنٹس کے لیے سالانہ قانونی بینک کٹوتی کی حد ہے، ذاتی زکوٰۃ کا نصاب نہیں۔ یہ حد ہر سال بدلتی ہے، اس لیے نئی سرکاری اطلاع کے بغیر اسے اگلے زکوٰۃ سال پر لاگو نہ کریں۔",
             "پاکستان میں رہنے والے افراد کرنسی کوڈ PKR منتخب کریں اور متعلقہ زکوٰۃ سال کے لیے وزارتِ غربت میں کمی اور سماجی تحفظ یا اسٹیٹ بینک آف پاکستان کی تازہ سرکاری اطلاع دیکھیں۔ بینک سے خودکار کٹوتی کا اطلاق اکاؤنٹ کی قسم، قانون، بیان اور قابلِ اطلاق استثنا پر منحصر ہو سکتا ہے۔ آپ کی ذاتی زکوٰۃ اور بینک کی کٹوتی ایک جیسی ہونا ضروری نہیں۔",
             "یہ کیلکولیٹر PKR، USD، GBP، EUR، SAR، AED، INR جیسے تین حروف والے ISO 4217 کرنسی کوڈ قبول کرتا ہے، بشرطیکہ آپ کا براؤزر اسے سپورٹ کرے۔ تمام اثاثے، قرض اور دھات کی قیمت ایک ہی کرنسی میں درج کریں۔ کرنسی کوڈ صرف نتیجے کی علامت اور فارمیٹنگ بدلتا ہے، یہ مختلف کرنسیوں کو خود تبدیل نہیں کرتا۔ اگر آپ کے اثاثے کئی کرنسیوں میں ہیں تو زکوٰۃ کی تاریخ کے قابلِ اعتماد ایکسچینج ریٹ سے پہلے انہیں ایک کرنسی میں تبدیل کریں اور ریکارڈ رکھیں۔",
             "حساب آپ کے براؤزر میں ہوتا ہے۔ اس کے لیے نام، بینک لاگ اِن، اکاؤنٹ نمبر یا مالی دستاویزات درکار نہیں۔ حساس معلومات یا پاس ورڈ درج نہ کریں۔ صفحہ آپ کے اندراجات کو ذاتی اکاؤنٹ میں محفوظ نہیں کرتا۔ اگر آپ کو ریکارڈ چاہیے تو اسے اپنے محفوظ طریقے سے الگ محفوظ کریں۔ مختلف براؤزرز میں کرنسی فارمیٹنگ کی سپورٹ مختلف ہو سکتی ہے، اس لیے معیاری ISO کوڈ استعمال کریں۔",
@@ -775,12 +775,8 @@ URDU = {
         "faq": [
             ("کیا یہ کیلکولیٹر پاکستان سے باہر بھی کام کرتا ہے؟", "جی ہاں۔ تین حروف والا ISO 4217 کرنسی کوڈ درج کریں اور تمام اثاثے، قرض اور دھات کی قیمت اسی کرنسی میں رکھیں۔ یہ نتیجہ اسی کرنسی میں دکھاتا ہے لیکن خود کرنسی تبدیل نہیں کرتا۔"),
             ("کیا سونے اور چاندی کی لائیو قیمت آتی ہے؟", "نہیں۔ اپنی زکوٰۃ کی تاریخ پر فی گرام موجودہ مقامی قیمت درج کریں۔ صفحہ لائیو قیمت حاصل کرنے کا دعویٰ نہیں کرتا۔"),
-            ("کون سا نصاب منتخب کرنا چاہیے؟", "یہاں چاندی 612.36 گرام، سونا 87.48 گرام اور سونا 85 گرام کے طریقے ہیں۔ علماء اور اداروں کی رہنمائی مختلف ہو سکتی ہے۔ اپنے حالات کے مطابق مستند عالم یا معتبر ادارے کا طریقہ اختیار کریں۔"),
-            ("سونے اور چاندی کی قیمت الگ کیوں درج کرنی ہے؟", "چاندی کے نصاب کے لیے چاندی کی فی گرام قیمت درکار ہے۔ دونوں سونے کے طریقوں کے لیے 24 قیراط سونے کی فی گرام قیمت درکار ہے۔"),
-            ("کیا پورا ہوم لون یا طویل مدتی قرض منہا کر سکتا ہوں؟", "پورا بقایا خود بخود منہا نہ کریں۔ بہت سے طریقوں میں فوری یا اگلے بارہ قمری مہینوں میں واجب قسطوں کو دیکھا جاتا ہے۔ اپنے فقہی طریقے کے مطابق مستند رہنمائی لیں۔"),
-            ("کیا میرا ذاتی گھر یا گاڑی شامل ہے؟", "ذاتی استعمال کی عام چیزیں فروخت کے کاروباری مال میں شامل نہیں ہوتیں۔ دوبارہ فروخت کے لیے رکھی گئی جائیداد الگ ہے۔ کرایے کی جائیداد اور اس سے بچائی گئی آمدنی کے لیے مخصوص رہنمائی درکار ہو سکتی ہے۔"),
-            ("پاکستان کے 503,529 روپے الگ کیوں دکھائے گئے ہیں؟", "یہ 1446–1447 ہجری زکوٰۃ سال میں مخصوص بینک اکاؤنٹس سے سرکاری کٹوتی کی حد تھی۔ یہ ہر شخص کا ذاتی نصاب نہیں اور نئی سرکاری اطلاع کے بغیر موجودہ سال کی حد نہیں سمجھی جا سکتی۔"),
-            ("کیا یہ فتویٰ یا حتمی ضمانت ہے؟", "نہیں۔ یہ حسابی تخمینہ ہے۔ زیورات، پنشن، سرمایہ کاری، قرض اور کاروباری ملکیت کے لیے مستند عالم کا فیصلہ درکار ہو سکتا ہے۔")
+            ("کون سا نصاب منتخب کرنا چاہیے؟", "یہاں ذاتی نصاب کے لیے چاندی 612.36 گرام اور سونا 87.48 گرام کے دو حوالہ جاتی طریقے ہیں۔ اپنے حالات کے مطابق مستند عالم یا معتبر ادارے کی رہنمائی اختیار کریں۔"),
+            ("پاکستان کے 503,529 روپے الگ کیوں دکھائے گئے ہیں؟", "یہ 1447 ہجری (2026) کے رمضان کے لیے مخصوص بینک اکاؤنٹس سے سرکاری کٹوتی کی حد تھی۔ سرکاری نوٹیفکیشن میں زکوٰۃ سال 1446–1447 ہجری درج ہے۔ یہ ہر شخص کا ذاتی نصاب نہیں اور نئی سرکاری اطلاع کے بغیر اگلے سال کی حد نہیں سمجھی جا سکتی۔"),
         ],
         "sources": 'ماخذ: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">اسلامک ریلیف کی نصاب اور زکوٰۃ رہنمائی</a>؛ <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide کے زکوٰۃ اصول</a>؛ <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">اسٹیٹ بینک کا 2026 سرکلر</a> اور <a class="' + LINK + '" href="https://www.sbp.org.pk/assets/documents/circulars/CL3-Notification_%282%29.pdf" rel="noopener noreferrer">1446–1447 ہجری کا سرکاری نوٹیفکیشن</a>۔ یہ ماخذ مخصوص طریقوں اور قانونی کٹوتی کی وضاحت کرتے ہیں، ہر شخص کے لیے ایک ہی شرعی حکم مقرر نہیں کرتے۔'
     },
@@ -877,24 +873,16 @@ def bmi_urdu_guide_html():
 
 EXTRA = {
     "zakat-calculator": {
-        "quick": "Total eligible assets minus eligible liabilities equals net zakatable wealth. Compare that amount with the silver or gold Nisab you selected using the current price per gram you entered. If the selected threshold is met and the lunar year (hawl) is complete, the estimate applies 2.5 percent and subtracts Zakat already paid for the same year.",
+        "quick": "",
         "faq": [],
     },
     "bmi-calculator": {
-        "quick": "BMI uses weight in kg divided by height in metres squared when kg is selected, or 703 × weight in lb divided by height in total inches squared when lb is selected. For adults, 18.5 to 24.9 is the WHO normal weight range.",
-        "faq": [
-            ("Is a BMI of 25 unhealthy?", "A BMI of 25 is at the start of the overweight range. It is a screening number only. Waist size, blood pressure and blood tests give a fuller picture, and a clinician can interpret them with you."),
-            ("Does BMI work for athletes?", "BMI can overstate body fat in people with high muscle mass. A clinician can use other measures for athletes."),
-        ],
+        "quick": "",
+        "faq": [],
     },
     "profit-loss-calculator": {
         "quick": "",
-        "faq": [
-            ("What is the difference between markup and margin?", "Product markup uses cost as its base; product gross margin uses selling price. Business operating margin uses revenue after listed expenses. These percentages are not interchangeable."),
-            ("How do I include shipping?", "Add shipping, packaging and platform fees to the cost price before you calculate."),
-            ("Does this calculator include tax automatically?", "No. Enter relevant direct costs and expenses in the appropriate fields. Sales tax, income tax, refunds and statutory accounting treatment are not inferred by the calculator."),
-            ("What does net operating profit mean here?", "In Business P&L mode it is revenue minus cost of goods sold and the other expenses you enter. It is not a full audited income statement and may exclude interest, tax or costs that you have not entered."),
-        ],
+        "faq": [],
     },
     "discount-calculator": {
         "quick": "",
@@ -1174,13 +1162,13 @@ def home_extra_html(lang):
     answer_first = (
         "جی ہاں۔ CalculatesAll کے ٹولز مفت ہیں، حساب آپ کے براؤزر میں ہوتا ہے اور درج کردہ اعداد ہمارے سرور کو نہیں بھیجے جاتے۔ ہر کیلکولیٹر اپنا فارمولا اور حدود بتاتا ہے۔ اہم مالی، طبی یا دینی فیصلے کے لیے متعلقہ ماہر سے تصدیق کریں۔"
         if lang == "ur" else
-        "Yes. CalculatesAll tools are free, calculations run in your browser, and calculator entries are not sent to our server. Each tool explains its formula and limits. Confirm important financial, medical or religious decisions with a qualified professional."
+        "Choose the tool that matches the task, then read its method and limitations before relying on the result."
     )
     out += '<h2 class="' + H2 + '">' + heading + '</h2><p class="' + P + '">' + answer_first + '</p><div class="mt-3">' + faq_html(block["faq"]) + "</div>"
     if lang == "en":
         out += '<p class="' + P + '">Choose a tool for the task at hand. The <a class="' + LINK + '" href="/profit-loss-calculator/">Profit and Loss Calculator</a> separates product markup from gross margin, the <a class="' + LINK + '" href="/years-to-days-calculator/">Years to Days Calculator</a> distinguishes fixed-year and calendar-date methods, and the <a class="' + LINK + '" href="/tasbih-counter/">Tasbih Counter</a> keeps its count on your device.</p>'
         out += '<p class="' + P + '">CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel. ' + SITE_DESCRIPTION + ' <a class="' + LINK + '" href="/about/">About the maintainer</a>.</p>'
-        out += '<section aria-labelledby="how-it-works" class="mt-8"><h2 id="how-it-works" class="' + H2 + '">How it works</h2><ol class="mt-3 list-decimal pl-6 space-y-2 text-base leading-relaxed text-stone-800 dark:text-stone-200"><li>Choose a calculator for the task you want to complete.</li><li>Enter your values and select the units or options the tool requests.</li><li>Review the result and formula, including the worked example and stated limitations, before relying on it.</li></ol><p class="' + P + '">No account or download is required. Calculator entries are processed in your browser and are not sent to our server.</p></section>'
+        out += '<section aria-labelledby="how-it-works" class="mt-8"><h2 id="how-it-works" class="' + H2 + '">How it works</h2><ol class="mt-3 list-decimal pl-6 space-y-2 text-base leading-relaxed text-stone-800 dark:text-stone-200"><li>Choose a calculator for the task you want to complete.</li><li>Enter your values and select the units or options the tool requests.</li><li>Review the displayed result and the page-specific limitations.</li></ol></section>'
         out += '<p class="' + P + '"><a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools">Browse all free calculators</a></p>'
     return out
 
@@ -1741,16 +1729,16 @@ def canon_override(doc, path):
 
 ANSWER_BLOCKS = {
     "zakat-calculator": {
-        "en": 'This calculator lets you compare silver and gold Nisab reference weights and formats the result in your selected ISO currency. It does not fetch live metal prices or issue a religious ruling. The Pakistan PKR 503,529 figure shown below is a separate, year-specific bank source-deduction threshold for 1446–1447 AH, not a universal personal Nisab. Sources: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">Islamic Relief</a> and <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan</a>.',
-        "ur": 'یہ کیلکولیٹر چاندی اور سونے کے نصاب کے مختلف وزن منتخب کرنے اور نتیجہ منتخب کرنسی میں دکھانے کی سہولت دیتا ہے۔ یہ لائیو دھات کی قیمت حاصل نہیں کرتا اور نہ ہی شرعی فتویٰ دیتا ہے۔ پاکستان کی 503,529 روپے کی رقم 1446–1447 ہجری کے مخصوص بینک اکاؤنٹس کی سرکاری کٹوتی کی حد تھی، ہر شخص کا ذاتی نصاب نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/" rel="noopener noreferrer">اسلامک ریلیف</a> اور <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">اسٹیٹ بینک آف پاکستان</a>۔'
+        "en": "",
+        "ur": "",
     },
     "bmi-calculator": {
-        "en": 'For adults, the CDC classifies a BMI from 25.0 to less than 30.0 as overweight; BMI is a screening measure, not a diagnosis. Source: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC adult BMI categories</a>.',
-        "ur": 'بالغ افراد میں CDC کے مطابق BMI کی 25.0 سے 30.0 سے کم حد کو زائد وزن کہا جاتا ہے؛ BMI صرف ابتدائی جانچ ہے، تشخیص نہیں۔ ماخذ: <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">CDC کی بالغوں کے لیے BMI درجہ بندی</a>۔'
+        "en": "",
+        "ur": "",
     },
     "profit-loss-calculator": {
-        "en": 'Business example: revenue 1,000, cost of goods sold 600 and other expenses 150 gives net operating profit 250 and margin 25%. Product example: cost 1,000 and selling price 1,200 gives markup 20%. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
-        "ur": ''
+        "en": "",
+        "ur": "",
     },
     "discount-calculator": {
         "en": 'A 20% discount on a price of 1,000 saves 200 and leaves a final price of 800 before tax or extra charges. Source: <a class="' + LINK + '" href="/methodology/">CalculatesAll calculation methodology</a>.',
@@ -1788,36 +1776,47 @@ def answer_block(slug, lang="en"):
 
 BMI_GUIDE = [
     ("The formula", [
-        "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit. When kg is selected, adult BMI is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first.",
+        "Select kilograms or pounds before entering your weight. The weight unit is selected independently of the height unit. Weight can be entered in kilograms (kg) or pounds (lb). When kg is selected, adult BMI is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first.",
         "For feet and inches, convert total height to centimetres with (feet × 12 + inches) × 2.54. If kg is selected, the calculator uses the metric formula. If lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches squared.",
     ]),
     ("Adult BMI categories", [
         "For adults, the standard WHO categories are underweight below 18.5, normal weight from 18.5 to below 25, overweight from 25 to below 30, and obesity from 30 upward. This calculator assigns the category using the unrounded BMI and rounds only the displayed number to one decimal place. A displayed value of 25.0 can therefore remain in the normal weight category when the exact BMI is just below 25.",
         "These categories are population-level screening ranges. They do not determine whether an individual is healthy, and they should not be used as a personal diagnosis or treatment plan.",
     ]),
-    ("Worked examples", [
-        "If an adult weighs 70 kg and is 170 cm tall, the calculation is 70 ÷ (1.70 × 1.70), giving a BMI of 24.2 after rounding. The displayed adult category is normal weight.",
-        "For someone who is 5 ft 7 in tall, total height is 67 inches. Converting that to centimetres gives 170.18 cm. With a weight of 70 kg, BMI is also about 24.2. Enter feet and inches separately rather than entering a decimal number such as 5.7 feet.",
+    ("WHO Expert Consultation and Asian population action points", ["The WHO Expert Consultation published in The Lancet in 2004 retained the standard WHO BMI cutoffs. It identified 23.0, 27.5, 32.5 and 37.5 kg/m² as additional public-health action points for Asian populations. These points sit alongside the standard categories. They are not replacement categories and this calculator does not relabel them as categories."]),
+    ("Worked example", [
+        "For an adult weighing 70 kg at a height of 1.70 m: 70 ÷ (1.70 × 1.70) = 24.2 kg/m² when rounded to one decimal place. The displayed adult category is normal weight.",
+        "For someone using imperial height input, 5 ft 7 in is 67 inches. At 70 kg, the BMI is also about 24.2. Enter feet and inches separately rather than entering a decimal number such as 5.7 feet.",
     ]),
     ("What BMI cannot tell you", [
-        "BMI does not measure body fat directly or show where fat is stored. A person with substantial muscle mass may have a higher BMI without having the same body-fat level as another person with the same BMI. Body frame, fat distribution, health history and other measurements can change how the result should be interpreted.",
+        "BMI does not measure body fat directly or show where fat is stored. A person with substantial muscle mass may have a higher BMI without having the same body-fat level as another person with the same BMI. Body frame, fat distribution, health history and other measurements can change how the result should be interpreted. Waist circumference adds information that BMI alone does not provide. It offers a separate measure of abdominal fat distribution. WHO notes that it can help identify overweight or obesity alongside BMI, but it does not change the BMI number or the standard WHO category.",
         "BMI categories for adults are not suitable for children and teenagers, who need age- and sex-specific growth charts. BMI also needs special interpretation during pregnancy and may be less informative for some older adults or people with fluid retention, recent illness or changes in muscle mass.",
     ]),
-    ("Using the result responsibly", [
-        "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor.",
+    ("Limitations and professional opinion", [
+        "This calculator is for adults only. BMI is a screening measure and does not diagnose a health condition. It does not measure body fat directly and does not replace advice from a doctor.",
         "Use the number as one starting point, not as a complete assessment of health. A healthcare professional may consider waist circumference, blood pressure, blood tests, medicines, family history, activity and nutrition alongside BMI.",
         "Speak with a qualified clinician if you are worried about weight changes, have symptoms, are pregnant, have a medical condition, or need advice for a child or teenager. Do not change medication, restrict food severely or start a treatment plan based on this calculator alone.",
         "The calculator accepts adult heights from 50 to 260 cm, or feet from 1 to 8 and inches from 0 to 11.99. Weight input limits are 20 to 300 kg or 44.1 to 661.3 lb. These are input limits for this tool, not medical recommendations.",
     ]),
+    ("Review record", ["Last reviewed: 2026-11-16."]),
 ]
 BMI_FAQ = [
     ("Can I use this BMI calculator for children or teenagers?", "No. This calculator uses adult BMI categories. Children and teenagers need age- and sex-specific BMI-for-age growth charts interpreted in the right context."),
     ("Does BMI measure body fat?", "No. BMI uses height and weight only. It cannot directly measure body fat or distinguish muscle from fat."),
     ("Is a BMI of 25 a diagnosis?", "No. An exact adult BMI of 25.0 is the start of the overweight screening category, not a diagnosis. A displayed value of 25.0 may be rounded from a slightly lower exact BMI, so the category is based on the unrounded value. A clinician can interpret it with other health information."),
-    ("Why can the displayed BMI and category appear to differ near a boundary?", "The category is selected using the unrounded BMI. The displayed number is rounded to one decimal place. For example, an exact BMI of 24.98 displays as 25.0 but remains in the normal weight category. At exactly 25.0, the adult screening category is overweight."),
-    ("What should I do with my result?", "Treat it as general information. Discuss concerns or major weight changes with a qualified healthcare professional, especially if you have symptoms or a medical condition."),
+    ("What do the 23.0 and 27.5 BMI action points mean?", "The WHO Expert Consultation identified additional public-health action points for some Asian populations. They are not separate diagnostic categories or a diagnosis for an individual. A clinician can consider waist circumference and other risk factors alongside BMI."),
 ]
-BMI_SOURCES = 'Adult BMI categories follow the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization</a> classification. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" target="_blank" rel="noopener noreferrer">NHS adult BMI calculator</a> explains ethnicity-specific interpretation. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" target="_blank" rel="noopener noreferrer">NHS waist-to-height ratio calculator</a> explains the half-height check. The <a class="' + LINK + '" href="https://doi.org/10.2337/doci26-0003" target="_blank" rel="noopener noreferrer">2026 Standards of Care in Overweight and Obesity</a> describes current clinical assessment criteria. This calculator displays standard adult WHO categories and does not diagnose a condition.'
+BMI_SOURCES = 'Adult BMI categories follow the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization</a> classification. The <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/index.html" target="_blank" rel="noopener noreferrer">CDC adult BMI calculator</a> is intended for adults aged 20 and older. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" target="_blank" rel="noopener noreferrer">NHS adult BMI calculator</a> explains ethnicity-specific interpretation. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" target="_blank" rel="noopener noreferrer">NHS waist-to-height ratio calculator</a> explains the half-height check. The <a class="' + LINK + '" href="https://doi.org/10.2337/doci26-0003" target="_blank" rel="noopener noreferrer">2026 Standards of Care in Overweight and Obesity</a> describes current clinical assessment criteria. The <a class="' + LINK + '" href="https://doi.org/10.1016/S0140-6736(03)15268-3" target="_blank" rel="noopener noreferrer">WHO Expert Consultation in The Lancet (2004)</a> describes additional action points for some Asian populations. This calculator displays standard adult WHO categories and does not diagnose a condition.'
+BMI_TABLE_HTML = (
+    '<h2 class="' + H2 + '">WHO adult BMI table</h2>'
+    '<div class="mt-3 overflow-x-auto"><table class="w-full border-collapse text-left text-base">'
+    '<thead><tr><th class="border p-3">Category</th><th class="border p-3">BMI (kg/m²)</th></tr></thead><tbody>'
+    '<tr><td class="border p-3">Underweight</td><td class="border p-3">Below 18.5</td></tr>'
+    '<tr><td class="border p-3">Normal</td><td class="border p-3">18.5 to 24.9</td></tr>'
+    '<tr><td class="border p-3">Overweight</td><td class="border p-3">25.0 to 29.9</td></tr>'
+    '<tr><td class="border p-3">Obesity</td><td class="border p-3">30.0 and above</td></tr>'
+    '</tbody></table></div>'
+)
 
 def tool_page(t):
     path = "/" + t["slug"] + "/"
@@ -1832,7 +1831,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "bmi-calculator":
         title = "BMI Calculator for Adults | cm or ft/in | CalculatesAll"
-        desc = "Calculate adult BMI using kilograms and centimetres or kilograms with feet and inches. See WHO adult BMI ranges and their limitations."
+        desc = "Calculate adult BMI using kilograms or pounds and height in centimetres or feet and inches. See WHO categories, Asian action points and limitations."
         ui = BMI_UI
         guide = BMI_GUIDE + GUIDE_EXTRA.get(t["slug"], [])
         faqs = BMI_FAQ
@@ -1909,7 +1908,7 @@ def tool_page(t):
             "publisher": {"@id": SITE_URL + "/#organization"},
             "isPartOf": {"@id": SITE_URL + "/#website"},
             "breadcrumb": {"@id": url + "#breadcrumb"},
-            "dateModified": "2026-11-15",
+            "dateModified": "2026-11-16",
             "citation": [
                 "https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/",
                 "https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf",
@@ -1958,7 +1957,10 @@ def tool_page(t):
     if t["slug"] in URDU:
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
     updated_date = LASTMOD.get(path)
-    updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + "</p>") if updated_date else ""
+    if t["slug"] in {"bmi-calculator", "profit-loss-calculator", "zakat-calculator"}:
+        updated = ""
+    else:
+        updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + "</p>") if updated_date else ""
     calculator_section = (
         ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
          if t["slug"] != "standard-calculator" else
@@ -1973,20 +1975,7 @@ def tool_page(t):
         '<li aria-current="page"><span aria-hidden="true" class="mr-2">/</span>' + t["name"] + "</li></ol></nav>"
     )
     primary_tool_content = calculator_section + (breadcrumb_html if t["slug"] == "profit-loss-calculator" else "") + answer_note
-    profit_reference_table = (
-        '<section class="mt-8" aria-labelledby="markup-margin-comparison">'
-        '<h2 id="markup-margin-comparison" class="' + H2 + '">Markup versus margin at a glance</h2>'
-        '<p class="' + P + '">Both percentages describe profit against a different base. The base must be named before comparing results.</p>'
-        '<div class="mt-4 overflow-x-auto rounded-xl border border-stone-300 dark:border-stone-700">'
-        '<table class="w-full min-w-[600px] border-collapse text-left text-sm"><caption class="sr-only">Profit, markup and margin formulas with worked examples</caption>'
-        '<thead class="bg-slate-100 dark:bg-stone-800"><tr><th scope="col" class="p-3">Measure</th><th scope="col" class="p-3">Formula</th><th scope="col" class="p-3">Worked example</th></tr></thead>'
-        '<tbody>'
-        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Product profit</th><td class="p-3">Selling price − cost price</td><td class="p-3">1,000 − 800 = 200</td></tr>'
-        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Markup on cost</th><td class="p-3">Profit ÷ cost × 100</td><td class="p-3">200 ÷ 800 × 100 = 25%</td></tr>'
-        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Product gross margin</th><td class="p-3">Profit ÷ selling price × 100</td><td class="p-3">200 ÷ 1,000 × 100 = 20%</td></tr>'
-        '<tr class="border-t border-stone-200 dark:border-stone-700"><th scope="row" class="p-3">Business operating margin</th><td class="p-3">Operating profit ÷ revenue × 100</td><td class="p-3">(1,000 − 600 − 150) ÷ 1,000 × 100 = 25%</td></tr>'
-        '</tbody></table></div></section>'
-    ) if t["slug"] == "profit-loss-calculator" else ""
+    profit_reference_table = ""
     priority_first_screen = t["slug"] in {"tasbih-counter", "profit-loss-calculator", "years-to-days-calculator"}
     opening_lead = '<p class="ca-tool-lead mt-3 text-base leading-relaxed text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
     body = (
@@ -2004,6 +1993,7 @@ def tool_page(t):
         + profit_reference_table
         + (years_to_days_reference_html() + guide_html(guide[:2]) + guide_html(guide[2:]) + days_to_years_reference_html()
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
+        + (BMI_TABLE_HTML if t["slug"] == "bmi-calculator" else "")
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">' + ("Scope and religious guidance" if t["slug"] == "tasbih-counter" else "Sources") + '</h2><p class="' + P + '">' + sources + '</p>'
         + '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p>'
@@ -2060,7 +2050,7 @@ def urdu_tool_page(t):
             "name": u["title"], "url": url, "inLanguage": "ur",
             "author": {"@id": SITE_URL + "/#maintainer"},
             "publisher": {"@id": SITE_URL + "/#organization"},
-            "dateModified": "2026-11-15",
+            "dateModified": "2026-11-16",
             "citation": [
                 "https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/",
                 "https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf",
@@ -2189,8 +2179,9 @@ def category_page(c):
             '<p class="mt-4 text-base leading-relaxed text-stone-800 dark:text-stone-200">' + HUB_CONTENT[c["slug"]]["intro"] + '</p>'
             '<ul class="mt-8 grid gap-4">' + items + "</ul>"
         + '<nav aria-label="Other calculator categories" class="mt-8"><h2 class="text-xl font-semibold">Explore other calculator categories</h2><ul class="mt-3 flex flex-wrap gap-4">' + related + "</ul></nav>"
-        + guide_html(HUB_EXTRA[c["slug"]]) +
-            '<h2 class="' + H2 + '">Questions</h2><div class="mt-3">' + faq_html(HUB_CONTENT[c["slug"]]["faq"]) + "</div>")
+        + guide_html(HUB_EXTRA[c["slug"]])
+        + ('<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p><p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Last reviewed: 2026-11-16</p>' if c["slug"] == "money" else "")
+        + '<h2 class="' + H2 + '">Questions</h2><div class="mt-3">' + faq_html(HUB_CONTENT[c["slug"]]["faq"]) + "</div>")
     write(path, head(title, c["desc"], path, schema) + shell(body))
     return path
 
@@ -2297,13 +2288,14 @@ def home_page(lang="en"):
         path = "/"
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
         desc = "Free online calculators for Zakat, BMI, profit and loss, age, discounts, unit conversion, a standard calculator, tasbih counter and stopwatch."
-        h1 = "EMI, BMI and Zakat Calculators"
-        lead = "CalculatesAll is a free online calculator for everyday maths. Tap the buttons or use your keyboard."
+        h1 = "Free Online Calculators for Money, Business and Health"
+        lead = "Calculate adult BMI, business gross profit and margin, Zakat Nisab values, discounts, percentages, dates and unit conversions. Choose a category below to open the calculator for your task."
         cards = ""
         for c in CATEGORIES:
             cards += ('<li class="rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5">'
                       '<a class="text-lg font-semibold text-sky-800 dark:text-sky-300 underline min-h-[44px] inline-flex items-center" href="/' + c["slug"] + '/">' + c["name"] + "</a>"
                       '<p class="mt-2 text-base text-stone-800 dark:text-stone-200">' + c["desc"] + "</p></li>")
+    # Hreflang alternates are intentionally unchanged; verify the locale matrix before any future edit.
     alternates = home_alts_all()
     schema = [
         {"@context": "https://schema.org", "@type": "WebSite", "name": "CalculatesAll", "url": SITE_URL + "/", "inLanguage": lang},
@@ -2746,7 +2738,7 @@ def main():
             "Date example: from 28 February 2024 to 1 March 2024 there are 2 elapsed calendar days because 2024 includes 29 February. The same dates in 2025 are 1 elapsed day. Elapsed-day counts normally exclude the starting date. Inclusive counting, working days, public holidays, time-zone changes and legal deadline rules are separate conventions and should not be inferred from a simple calendar-day result.",
             "Unit conversion example: one inch is exactly 25.4 millimetres. To convert inches to millimetres, multiply by 25.4. To convert millimetres to inches, divide by 25.4. Temperature conversion is different because it includes an offset: Celsius to Fahrenheit is (°C × 9/5) + 32. Confirm that both selected units measure the same physical quantity before converting.",
             "Health calculation limits: adult BMI is calculated as weight in kilograms divided by height in metres squared. For example, 70 kg at 1.75 m gives 70 ÷ (1.75 × 1.75) = 22.86, approximately. BMI is a screening measure, not a diagnosis, and it does not directly measure body fat or individual health. Age, pregnancy, body composition and clinical context can affect interpretation. Seek qualified medical advice for personal decisions.",
-            "Religious calculation limits: the Zakat calculator offers selectable silver and gold Nisab reference weights, including 612.36 grams of silver, 87.48 grams of gold and 85 grams of gold. These are alternative references, not one universal personal method. The page accepts a user-entered metal price and ISO currency, and applies the stated arithmetic only after the selected threshold and lunar-year conditions are confirmed. Rulings about eligible assets, debts, jewellery, business stock, agricultural wealth, pensions and the due date can differ by scholarly method and personal circumstances. Pakistan's PKR 503,529 source-deduction threshold is a separate, year-specific bank rule for 1446–1447 AH, not personal Nisab. Treat the result as an estimate based on the displayed assumptions and confirm a personal ruling with a qualified scholar.",
+            "Religious calculation limits: the Zakat calculator offers two selectable personal Nisab reference weights: 612.36 grams of silver and 87.48 grams of gold. The page accepts a user-entered metal price and ISO currency, and applies the stated arithmetic only after the selected threshold and lunar-year conditions are confirmed. Rulings about eligible assets, debts, jewellery, business stock, agricultural wealth, pensions and the due date can differ by scholarly method and personal circumstances. Pakistan's PKR 503,529 source-deduction threshold is a separate, year-specific bank rule for 1446–1447 AH, not personal Nisab. Treat the result as an estimate based on the displayed assumptions and confirm a personal ruling with a qualified scholar.",
             "Rounding and precision: a displayed value may be rounded to make it easier to read. Rounding a final display is not the same as rounding every intermediate step. Where a calculation has several stages, retain sufficient precision through intermediate operations and round at the stage required by the relevant tool, institution or standard. Currency settlement, tax filings, engineering work and legal calculations may require rules that differ from a general online estimate.",
             "Input validation: inputs should be checked before a result is presented. Examples of invalid inputs include a zero denominator, division by zero, a date that does not exist, a negative physical length, a missing value, a non-finite number or incompatible units. Some tools also set practical input limits to prevent unsafe calculations or misleading output. If a tool rejects an input, check its supported range and units rather than trying to force a result.",
             "How we check tools: representative examples should be compared with independently calculated expected results. Boundary cases and invalid inputs should also be checked where applicable. Automated tests can detect regressions in formulas, page generation, required content and links, but passing tests does not mean every device, browser, language or real-world situation has been independently certified. We do not describe automated checks as professional certification.",

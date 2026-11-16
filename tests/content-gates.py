@@ -103,7 +103,7 @@ def main():
         home_text = visible_text(home_path)
         for phrase in [
             "Free Online Calculators",
-            "Free online calculators for health, money, business, dates, maths and everyday tasks.",
+            "The BMI calculator uses an adult's weight and height",
             "Browse all free calculators",
         ]:
             if phrase not in home_text:

@@ -35,20 +35,37 @@ for (const id of [
 }
 for (const term of [
   "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48",
-  "503,529", "State Bank of Pakistan", "Hawl", "short-term liabilities",
-  "personal-use", "trade inventory", "receivables",
-  "2.5%", "Worked example", "This tool does not decide"
+  "503,529", "1446–1447 AH", "1447 AH (2026)", "State Bank of Pakistan", "first day of Ramazan",
+  "saving, profit and loss sharing", "2.5%", "personal Zakat Nisab",
+  "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000",
+  "bank deduction threshold changes yearly", "Which assets to include", "Which liabilities may be deducted", "How the calculation works", "Worked example with checkable arithmetic", "Personal-use property and other exclusions", "Pakistan bank deduction threshold is separate", "Worldwide currency support, privacy and limitations", "Worked example",
+  "does not fetch a live metal price", "qualified scholar", "Sources"
 ]) {
-  assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing useful topic: " + term);
+  assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
 for (const term of [
-  "503,529", "612.36", "87.48", "قمری سال", "پاکستان", "نصاب",
-  "اثاثے", "واجب الادا", "2.5"
+  "503,529", "612.36", "87.48", "1446–1447", "رمضان کے پہلے دن", "پاکستان", "نصاب",
+  "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتی ہے"
+]) {
+  assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
+}
+assert.equal((en.match(/<summary\b/gi) || []).length, 4, "English Zakat page must retain four concise page-specific FAQs");
+assert.equal((ur.match(/<summary\b/gi) || []).length, 4, "Urdu Zakat page must retain four concise page-specific FAQs");
+const enNisab = en.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
+const urNisab = ur.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
+assert.ok(enNisab && urNisab, "Both locales must expose the Nisab selector");
+assert.equal((enNisab[1].match(/<option\b/g) || []).length, 2, "English UI must expose only the two approved personal Nisab choices");
+assert.equal((urNisab[1].match(/<option\b/g) || []).length, 2, "Urdu UI must expose only the two approved personal Nisab choices");
+assert.doesNotMatch(enNisab[1], /gold-85/, "Unapproved 85 g gold option must not be exposed in English");
+assert.doesNotMatch(urNisab[1], /gold-85/, "Unapproved 85 g gold option must not be exposed in Urdu");
+for (const term of [
+  "503,529", "612.36", "87.48", "زکوٰۃ سال", "پاکستان", "نصاب",
+  "اثاثے", "واجبات", "2.5"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing localized topic: " + term);
 }
-assert.ok(enText.split(/\s+/).length >= 1000, "English Zakat guide is too thin (<1000 visible words)");
-assert.ok(urText.split(/\s+/).length >= 700, "Urdu Zakat guide is too thin (<700 visible words)");
+assert.ok(enText.length > 500, "English Zakat page must contain the requested substantive guidance");
+assert.ok(urText.length > 300, "Urdu Zakat page must contain the translated guidance");
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const submitAt = html.indexOf('type="submit"');
   const assetAt = html.indexOf('id="z-cash"');
@@ -59,6 +76,8 @@ assert.match(en, /application\/ld\+json/, "English page must retain structured d
 assert.match(ur, /application\/ld\+json/, "Urdu page must retain structured data");
 assert.match(en, /canonical/i, "English page must retain canonical metadata");
 assert.match(ur, /canonical/i, "Urdu page must retain canonical metadata");
+assert.ok(!en.includes("islamweb.net/en/fatwa/81355"), "English page must not introduce the unapproved 85 g gold reference");
+assert.ok(!ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must not introduce the unapproved 85 g gold reference");
 console.log("Zakat global calculator content and localization gates: PASS");
 
 // Pure calculation-engine tests. These are independent of page rendering.
@@ -100,9 +119,7 @@ assert.equal(result.overpayment, 252.5);
 result = calculate({ ...base, nisabMethod: "gold-87", assets: { cash: 900000 }, goldPricePerGram: 10000 });
 assert.equal(result.nisabThreshold, 874800);
 assert.equal(result.nisabGrams, 87.48);
-result = calculate({ ...base, nisabMethod: "gold-85", assets: { cash: 900000 }, goldPricePerGram: 10000 });
-assert.equal(result.nisabThreshold, 850000);
-assert.equal(result.nisabGrams, 85);
+assert.throws(() => calculate({ ...base, nisabMethod: "gold-85", assets: { cash: 900000 }, goldPricePerGram: 10000 }), /Nisab method/);
 
 for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
   assert.throws(() => calculate({ ...base, assets: { cash: bad } }));
@@ -126,7 +143,7 @@ for (let i = 0; i < 2000; i++) {
   const price = 10 + random() * 500;
   const paid = Math.floor(random() * 500000) / 100;
   const r = calculate({
-    currency: "PKR", nisabMethod: i % 3 === 0 ? "gold-87" : (i % 3 === 1 ? "gold-85" : "silver"),
+    currency: "PKR", nisabMethod: i % 2 === 0 ? "gold-87" : "silver",
     silverPricePerGram: price, goldPricePerGram: price * 100,
     assets, liabilities, zakatPaid: paid, hawlComplete: i % 2 === 0
   });

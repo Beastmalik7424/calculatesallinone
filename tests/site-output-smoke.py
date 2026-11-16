@@ -65,25 +65,30 @@ assert re.match(r"\s*<meta\s+charset=", home_head.group(1), re.I), "Homepage UTF
 assert home_head.group(1).find('name="msvalidate.01"') > home_head.group(1).find('charset='), "Bing verification must follow the charset declaration"
 assert not re.search(r"\r?\n[ \t\r]*\r?\n", home_head.group(1)), "Homepage head must not contain blank-line pollution"
 assert "Free Online Calculators" in home_html, "Homepage H1 must identify the calculator collection"
-assert "Free online calculators for health, money, business, dates, maths and everyday tasks." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
+assert "The BMI calculator uses an adult's weight and height" in home_html, "Homepage must explain what the BMI tool calculates"
+assert "The Profit and Loss Calculator compares revenue with cost of goods sold" in home_html, "Homepage must explain what the P&L tool calculates"
+assert "The Zakat Calculator compares personal gold or silver Nisab values" in home_html, "Homepage must explain what the Zakat tool compares"
 assert "Browse all free calculators" in home_html, "Homepage must expose a clear calculator-browsing action"
-for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
+for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "calculations run in your browser"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
 assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_html, "Homepage entity graph should use stable Organization and Person @id values"
-assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
+assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the displayed result" in home_html and "page-specific limitations" in home_html, "Homepage should explain the calculator workflow"
 assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
-assert "Free Online Calculators" in home_html and "Free online calculators for health, money, business, dates, maths and everyday tasks." in home_html, "Homepage should describe its full calculator scope in the opening copy"
+assert "Free Online Calculators" in home_html and "The Money and Business hub includes a recommended monthly close checklist" in home_html, "Homepage should describe its tools in task-specific language"
 assert re.search(r"<summary[^>]*>\s*Choose a free calculator\s*<span[^>]*>⌄</span></summary>", home_html), "Homepage tools menu must provide a clear free-calculator call to action"
 assert "<h2>Calculator tools</h2>" in home_html, "Homepage tools section should explicitly identify calculator tools"
 assert 'href="#ca-all-tools-menu"' in home_html and "Browse all free calculators</a>" in home_html, "Homepage must expose a recognisable link-based calculator browsing action"
 assert "Free Online Standard Calculator" not in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." not in home_html, "Homepage must not retain the outdated calculator-only headline or tool list"
-for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
-    assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
+for phrase in ("The BMI calculator uses an adult's weight and height",
+               "The Profit and Loss Calculator compares revenue with cost of goods sold",
+               "The Zakat Calculator compares personal gold or silver Nisab values",
+               "The Money and Business hub includes a recommended monthly close checklist"):
+    assert phrase.lower() in home_html.lower(), ("homepage tool description", phrase)
 for href in ("/calorie-calculator/", "/emi-calculator/", "/compound-interest-calculator/", "/percentage-calculator/", "/fraction-calculator/", "/date-calculator/", "/years-to-days-calculator/"):
     assert f'href="{href}"' in home_html, f"Homepage should link to the relevant calculator: {href}"
-assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
+assert "Calculations run in your browser, and calculator entries are not sent to our server." in home_html, "Homepage should state the browser privacy claim once"
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 assert "https://github.com/Beastmalik7424" in about_html and "source repository" in about_html, "About page should expose the verified public maintainer profile and source repository"
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
@@ -151,10 +156,10 @@ assert len(bmi_breadcrumbs) == 1 and bmi_breadcrumbs[0].get("@id") == SITE + "/b
 assert [item["name"] for item in bmi_breadcrumbs[0]["itemListElement"]] == ["Home", "Health", "BMI Calculator"], "BMI breadcrumb schema must match the visible page hierarchy"
 assert "Maintained by <a" in bmi_html and "Muhammad Fayyaz Adeel" in bmi_html and 'href="/about/"' in bmi_html, "BMI page schema author must be supported by a visible maintainer byline"
 assert 'href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"' in bmi_html, "BMI structured citation must be visible on the page"
-assert "category using the unrounded BMI" in bmi_html and "rounds only the displayed number to one decimal place" in bmi_html, "BMI guidance must distinguish exact category thresholds from rounded display values"
-assert "rounds BMI to one decimal place before assigning the displayed category" not in bmi_html, "BMI guidance must not claim that rounded values determine the category"
+assert "WHO adult BMI table" in bmi_html and "23.0" in bmi_html and "27.5" in bmi_html, "BMI page must show WHO categories and distinguish Asian-population action points"
+assert "70 kg" in bmi_html and "1.70 m" in bmi_html and "24.2" in bmi_html, "BMI worked example must use approved values"
 health_html = output_for_url(SITE + "/health/").read_text(encoding="utf-8")
-assert "unrounded BMI" in health_html and "rounds only the displayed number to one decimal place" in health_html, "Health hub BMI guidance must match the exact-threshold calculator behavior"
+assert "bmi calculator" in health_html.lower(), "Health hub must retain its BMI tool link"
 assert not [node for node in bmi_nodes if node.get("@type") == "WebApplication"], "BMI page must not restore ineligible WebApplication rich-result markup"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 profit_nodes = jsonld_nodes(profit_html)
@@ -162,8 +167,9 @@ profit_orgs = [node for node in profit_nodes if node.get("@type") == "Organizati
 assert len(profit_orgs) == 1 and profit_orgs[0].get("@id") == SITE + "/#organization", "Profit and Loss page must reference one canonical Organization entity"
 assert re.search(r"profit.{0,40}loss", profit_html, re.IGNORECASE), "Profit and Loss page should open with a concise definition and calculation scope"
 assert 'href="https://openstax.org/books/introduction-business/pages/14-5-the-income-statement"' in profit_html, "Profit and Loss page should cite the checked OpenStax inventory and income-statement source"
-assert 'href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"' in profit_html, "Profit and Loss page should cite ACCA ratio-analysis guidance"
-assert "Markup versus margin at a glance" in profit_html and "<table" in profit_html, "Profit and Loss page should include a useful comparison table"
+assert "COGS = opening inventory + purchases" in profit_html and "closing inventory" in profit_html, "Profit and Loss page must state the approved COGS formula"
+assert "gross margin" in profit_html.lower() and "55,000" in profit_html and "55%" in profit_html, "Profit and Loss page must show the approved worked example"
+assert "profit is not cash" in profit_html.lower(), "Profit and Loss page must distinguish profit from cash"
 contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
 for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy"):
     assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
@@ -376,8 +382,9 @@ assert 'id="b-ft" name="b-ft"' in bmi_html and 'type="text" inputmode="numeric" 
 assert 'id="b-kg" name="b-kg"' in bmi_html and 'type="text" inputmode="decimal" pattern="[0-9]+([.][0-9]+)?"' in bmi_html, "Weight input must preserve raw text for strict validation"
 assert 'id="b-lb"' in bmi_html and 'id="bmi-weight-lb"' in bmi_html, "Target BMI page must offer pounds alongside kilograms"
 assert "<title>BMI Calculator for Adults | cm or ft/in | CalculatesAll</title>" in bmi_html, "BMI title must be complete and unique"
-assert "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor." in bmi_html, "English BMI disclaimer must be visible in page content"
-assert "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit." in bmi_html, "English BMI guide must document independent weight units"
+assert "This calculator is for adults only." in bmi_html and "BMI is a screening measure and does not diagnose a health condition." in bmi_html, "English BMI limitations must match the approved adult-only scope"
+assert "Waist circumference adds information that BMI alone does not provide." in bmi_html, "English BMI page must explain the additional information from waist circumference"
+assert "Select kilograms or pounds before entering your weight." in bmi_html, "English BMI guide must document weight units"
 urdu_bmi_html = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
 for control_name in ("bmi-height-unit", "bmi-weight-unit", "b-kg", "b-lb", "b-cm", "b-ft", "b-in"):
     assert 'name="' + control_name + '"' in urdu_bmi_html, f"Urdu BMI control missing form name: {control_name}"
@@ -424,7 +431,7 @@ assert organization_schema is not None, "Homepage Organization schema is require
 contact_point = organization_schema.get("contactPoint", {})
 assert contact_point.get("@type") == "ContactPoint" and contact_point.get("email"), "Organization schema must expose the configured support email"
 assert contact_point.get("url") == SITE + "/contact/", "Organization schema must link to the canonical contact page"
-assert "silver or gold Nisab" in home_html and "25.0 to 29.9" in home_html, "Homepage proof points must describe selectable Zakat methods and WHO adult BMI ranges"
+assert "personal gold or silver Nisab" in home_html and "WHO adult screening category" in home_html, "Homepage descriptions must identify the personal Nisab comparison and adult BMI category tool"
 # The Urdu root is a localized site homepage, not a standard-calculator landing page.
 urdu_home_url = SITE + "/ur/"
 ur_home_html = output_for_url(urdu_home_url).read_text(encoding="utf-8")
@@ -690,9 +697,9 @@ for url in urls:
         assert len(faq_schemas) == 1, "Homepage must have one FAQPage schema"
         names = {item.get("name") for item in faq_schemas[0].get("mainEntity", [])}
         expected = {
-            "Are the calculators free?",
-            "Do you store the numbers I enter?",
-            "Are the results accurate enough for important decisions?",
+            "Where can I find the monthly close checklist?",
+            "Which page explains the adult BMI categories?",
+            "Where are the Zakat thresholds explained?",
         }
         assert expected.issubset(names), f"Homepage FAQ schema must contain the concise visible questions: {expected - names}"
     if url.endswith("/emi-calculator/"):
@@ -722,7 +729,7 @@ for url in urls:
                     "Tasbih Counter dateModified must match the verified target-persistence and content update."
                 )
             elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
-                assert item.get("dateModified") == "2026-11-15", (
+                assert item.get("dateModified") == "2026-11-16", (
                     "Zakat dateModified must match the verified global Nisab, currency, asset and bilingual content update."
                 )
             else:
@@ -911,12 +918,9 @@ assert all_tools_match, "Homepage must render the primary calculator carousel gr
 all_tools_html = all_tools_match.group(1)
 assert all_tools_html.count('href="/emi-calculator/"') == 1, "Calculator carousel must contain exactly one EMI Calculator link"
 assert "EMI Calculator" in all_tools_html, "Calculator carousel must visibly label the EMI Calculator"
-assert "<h2" in home_html and "What can you calculate with these free tools?" in home_html, "Homepage must include a clear, question-formatted explanatory heading"
+assert "<h2" in home_html and "Choose a calculator for the result you need" in home_html, "Homepage must include a clear explanatory heading"
 assert "Frequently asked questions: Are these calculators free, private, and reliable?" in home_html, "Homepage must include a clear FAQ section heading"
-assert "a 20% discount on a price of 1,000 leaves 800" in home_html, "Homepage worked example must remain present"
-assert "https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index" in home_html, "Homepage health reference must link to WHO"
-assert "https://www.nist.gov/pml/owm/si-units-length" in home_html, "Homepage conversion reference must link to NIST"
-assert "BMI is a screening measure, not a diagnosis" in home_html, "Homepage must retain BMI limitation wording"
+assert "BMI is a screening measure for adults, not a diagnosis" in home_html, "Homepage must retain the adult BMI limitation wording"
 assert "Free Online Calculators" in home_html, "Homepage H1 must describe the full calculator collection"
 # The opening-copy requirement is covered by the core-tools summary assertion above.
 # The standard calculator landing page now explicitly describes its scientific mode.
@@ -1066,7 +1070,7 @@ _profit_page = Path("public/profit-loss-calculator/index.html").read_text(encodi
 for _id in ("pl-form", "pl-business-fields", "p-revenue", "p-cogs", "p-expenses", "pl-product-fields", "p-cost", "p-sell", "pl-result"):
     assert 'id="' + _id + '"' in _profit_page, "Missing profit field: " + _id
 assert "Business P&amp;L" in _profit_page, "Business profit mode missing"
-assert "net operating" in _profit_page.lower(), "Profit page must explain net operating profit"
+assert "gross profit" in _profit_page.lower() and "gross margin" in _profit_page.lower(), "Profit page must explain gross profit and gross margin"
 assert "ca-profit-mode" in site_css, "Profit mode CSS missing"
 
 # Fraction inputs must use the same whole-number constraint documented on the page.
@@ -1087,14 +1091,14 @@ assert "gives back 5 kilometres" not in _unit_quality, "Misleading exact round-t
 # Editorial content regression checks for approved four-page guide updates.
 from content_v5 import GUIDE_EXTRA
 for slug, phrases in {
-    "bmi-calculator": ["22.8571", "18.5 to below 25", "not a diagnosis"],
-    "zakat-calculator": ["PKR 612,360", "PKR 27,500", "PKR 22,500", "not a religious ruling"],
+    "bmi-calculator": ["WHO adult BMI table", "23.0", "27.5", "70 kg", "1.70 m", "24.2", "not a diagnosis"],
+    "zakat-calculator": ["PKR 503,529", "87.48 g", "612.36 g", "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000"],
+    "profit-loss-calculator": ["COGS = opening inventory + purchases", "45,000", "55,000", "55%", "profit is not cash"],
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
     "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice"],
-    "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
-    if slug in {"tasbih-counter", "zakat-calculator"}:
+    if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator", "profit-loss-calculator"}:
         guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     else:
         guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
@@ -1107,8 +1111,8 @@ assert "PKR 36,153" not in emi_guide
 
 # Regression: the specialized BMI template must include the supplemental editorial guide.
 _bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
-assert "Exact-value worked example" in _bmi_html, "BMI exact-value worked example missing from generated page"
-assert "22.8571" in _bmi_html and "22.9" in _bmi_html, "BMI 70 kg / 1.75 m example missing"
+assert "Worked example" in _bmi_html, "BMI worked example missing from generated page"
+assert "70 kg" in _bmi_html and "1.70 m" in _bmi_html and "24.2" in _bmi_html, "BMI approved 70 kg / 1.70 m example missing"
 assert "Common questions" in _bmi_html, "BMI FAQ guide missing"
 
 # Urdu Profit and Loss: all visible form labels are localized, without altering IDs.
@@ -1237,43 +1241,45 @@ print("PASS: header brand logo links to the root homepage on all locale routes")
 
 
 # 2026 priority-page content quality regression checks.
-# These checks guard source-backed, page-specific value rather than word-count targets.
 _bmi_2026 = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
-assert "2026 Standards of Care in Overweight and Obesity" in _bmi_2026, "BMI must explain the current 2026 clinical assessment context"
-assert "waist-to-height ratio" in _bmi_2026.lower(), "BMI must explain waist-to-height ratio alongside BMI"
-assert "does not ask for waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply waist-based clinical criteria"
-assert "doi.org/10.2337/doci26-0003" in _bmi_2026, "BMI must link the 2026 clinical standards source"
-assert "https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" in _bmi_2026, "BMI must link the NHS adult BMI benchmark"
-assert "https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" in _bmi_2026, "BMI must link the NHS waist-to-height benchmark"
-assert "This note is general educational information." not in _bmi_2026, "BMI must replace the redundant generic South Asia disclaimer with useful clinical context"
+for _phrase in ("WHO adult BMI table", "Underweight", "18.5 to 24.9", "25.0 to 29.9",
+                "30.0 and above", "23.0", "27.5", "public-health action points",
+                "not replacement categories", "waist circumference",
+                "70 kg", "1.70 m", "24.2",
+                "https://doi.org/10.1016/S0140-6736(03)15268-3"):
+    assert _phrase.lower() in _bmi_2026.lower(), "BMI page is missing approved WHO content: " + _phrase
+assert "Last reviewed: 2026-11-16" in _bmi_2026, "BMI page needs the requested review date"
 
 _ur_bmi_2026 = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
-assert "کمر کے گھیر اور قد کا تناسب" in _ur_bmi_2026, "Urdu BMI must explain waist-to-height ratio"
-assert "2026 Standards of Care" in _ur_bmi_2026, "Urdu BMI must cite the current 2026 clinical context"
-assert "https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" in _ur_bmi_2026, "Urdu BMI must cite the NHS adult BMI benchmark"
-assert "https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" in _ur_bmi_2026, "Urdu BMI must cite the NHS waist-to-height benchmark"
-assert "does not ask for waist measurements" not in _ur_bmi_2026, "English BMI limitation text must not leak into Urdu"
+assert "کمر کے گھیر اور قد کا تناسب" in _ur_bmi_2026, "Existing Urdu BMI waist-to-height content must remain intact"
+assert "2026 Standards of Care" in _ur_bmi_2026, "Existing Urdu BMI clinical source content remains a separately scoped translation item"
 
 _profit_2026 = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
-for _phrase in ("Opening inventory + net purchases + direct inward costs − closing inventory",
-                "PKR 150,000", "PKR 70,000", "PKR 10,000", "PKR 30,000", "13.64%",
-                "does not calculate cash flow",
-                "loaded unit cost is PKR 1,200", "PKR 300", "20%",
-                "before those omitted costs"):
-    assert _phrase.lower() in _profit_2026.lower(), "Profit and Loss COGS/cash-flow guidance missing: " + _phrase
-assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement" in _profit_2026, "Profit and Loss must cite the checked OpenStax income-statement source"
+for _phrase in ("COGS = opening inventory + purchases", "closing inventory",
+                "gross profit = revenue", "gross margin", "100,000", "20,000",
+                "50,000", "25,000", "45,000", "55,000", "55%",
+                "profit is not cash", "payout delays", "inventory up front",
+                "Last reviewed: 2026-11-16",
+                "openstax.org/books/introduction-business/pages/14-5-the-income-statement"):
+    assert _phrase.lower() in _profit_2026.lower(), "Profit and Loss page is missing approved content: " + _phrase
+assert "PKR 150,000" not in _profit_2026, "Old, unrequested Profit and Loss example must be removed"
+assert 'id="markup-margin-comparison"' not in _profit_2026, "Duplicate markup/margin comparison table must be removed"
 
 _money_2026 = output_for_url(SITE + "/money/").read_text(encoding="utf-8")
-for _phrase in ("A practical monthly close: from sales to operating profit",
-                "opening inventory", "closing inventory", "reconcile profit to cash",
-                "do not calculate cash flow"):
-    assert _phrase.lower() in _money_2026.lower(), "Money hub workflow guidance missing: " + _phrase
-assert "openstax.org/books/introduction-business/pages/14-5-the-income-statement" in _money_2026, "Money hub must cite its inventory and income-statement method"
+for _phrase in ("Recommended monthly close process", "recommended working process",
+                "Step 1:", "Reconcile platform payouts", "Step 2:", "Count the inventory",
+                "Step 3:", "Record the month's expenses", "Step 4:", "Reconcile the bank or wallet",
+                "Step 5:", "Review gross profit, net profit and the cash position",
+                "Step 6:", "Lock the reviewed period", "not an official accounting standard",
+                "Sources", "Last reviewed: 2026-11-16", "Muhammad Fayyaz Adeel"):
+    assert _phrase.lower() in _money_2026.lower(), "Money hub is missing monthly-close requirement: " + _phrase
 
 _zakat_2026 = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
-for _phrase in ("Illustrative small-shop Nisab comparison", "PKR 650,000",
-                "PKR 122,472", "PKR 2,187,000", "PKR 16,250",
-                "JazzCash", "Easypaisa", "count those available balances once",
-                "not a live market quote",
-                "do not choose a Nisab method based on which result is lower"):
-    assert _phrase.lower() in _zakat_2026.lower(), "Zakat worked Nisab comparison missing: " + _phrase
+for _phrase in ("PKR 503,529", "1447 AH (2026)", "first day of Ramazan",
+                "saving, profit and loss sharing", "2.5%", "87.48 g of gold",
+                "612.36 g of silver", "hypothetical silver price of PKR 3,000",
+                "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000",
+                "PKR 50,000", "changes yearly", "Last reviewed: 2026-11-16",
+                "bprd-circular-letter-no-03-of-2026"):
+    assert _phrase.lower() in _zakat_2026.lower(), "Zakat page is missing approved threshold/example: " + _phrase
+assert 'value="gold-85"' not in _zakat_2026, "Unapproved 85 g gold option must not be offered on this page"

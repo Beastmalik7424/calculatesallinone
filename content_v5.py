@@ -12,15 +12,7 @@ REVIEW_STATUS = {
 
 GUIDE_EXTRA = {
     "zakat-calculator": [],
-    "bmi-calculator": [
-        ("How to measure consistently", [
-            "For a useful comparison, use the same scale and similar conditions each time. Measure height without shoes, stand upright and look straight ahead. Record weight and height in the units selected above, and check that centimetres have not been entered as metres.",
-            "If you track changes over time, compare measurements taken under similar conditions rather than treating one reading as a diagnosis. The input limits shown by this calculator are technical limits for the form, not target weights or medical recommendations.",
-        ]),
-        ("Exact-value worked example", [
-            "For an adult weighing 70 kg and measuring 175 cm, convert height to 1.75 m and calculate 70 ÷ (1.75 × 1.75) = 22.8571 kg/m², displayed as 22.9. This falls in the adult WHO normal weight range of 18.5 to below 25 kg/m². It is a screening category, not a diagnosis.",
-        ]),
-    ],
+    "bmi-calculator": [],
     "profit-loss-calculator": [],
     "discount-calculator": [
         ("Worked example: discount and sales tax", [
@@ -117,24 +109,10 @@ GUIDE_EXTRA.setdefault("years-to-days-calculator", []).append(
 # Distinctive, query-matched explanations benchmarked against calculator competitors.
 # Keep one canonical page per intent and explain assumptions instead of duplicating pages.
 
-GUIDE_EXTRA["profit-loss-calculator"].extend([
-    ("Build cost of goods sold from stock records", [
-        "Before entering Business P&L, calculate cost of goods sold (COGS) for the same accounting period: opening inventory + net purchases + direct inward costs − closing inventory, where net purchases exclude the inward freight or handling shown separately. Closing stock remains an asset, so it is not charged to this period's COGS. If your purchase total already includes inward freight or handling, do not add it again. Use a consistent inventory valuation method and avoid counting a purchase, freight charge or item twice.",
-        "Worked shop example: opening saleable stock is PKR 100,000, net purchases excluding inward freight are PKR 70,000, direct inward freight and handling are PKR 10,000, and closing saleable stock is PKR 30,000. COGS is PKR 100,000 + PKR 70,000 + PKR 10,000 − PKR 30,000 = PKR 150,000. If net sales for the same period are PKR 220,000, gross profit is PKR 70,000. After PKR 40,000 of other operating expenses, operating profit is PKR 30,000 and operating margin is PKR 30,000 ÷ PKR 220,000 × 100 = 13.64%. Enter PKR 150,000 in the COGS field, not the full purchases figure.",
-    ]),
-    ("Profit is not the same as cash available", [
-        "A business can report operating profit while some customers have not paid. If PKR 35,000 of the example's sales remain unpaid at month-end, that receivable may be part of reported sales but is not money in the bank. Supplier payment timing, stock purchases, loan principal, tax timing and owner withdrawals also change cash movement.",
-        "This calculator estimates product profit or a simplified operating result from the values entered. It does not calculate cash flow, working capital, receivables, payables, depreciation or a complete statutory income statement. Reconcile the estimate with your accounting records before using it for tax, lending or formal reporting.",
-    ]),
-])
 
 
-GUIDE_EXTRA["profit-loss-calculator"].append(
-    ("Load the full per-item cost before trusting product margin", [
-        "Product Profit mode accepts one unit-cost figure and one selling price. It does not separately model payment or marketplace fees, customer-acquisition cost, packaging, storage, seller-paid delivery or returns. If you want those costs included in the per-item result, allocate the relevant amount to each unit and include it in the unit-cost input. If you enter purchase cost alone, read the result as pre-fee product contribution, not take-home profit.",
-        "Worked example: purchase cost is PKR 1,000 per item, allocated marketplace and payment fees are PKR 60, seller-paid delivery and packaging are PKR 90, and advertising cost per acquired sale is PKR 50. The loaded unit cost is PKR 1,200. At a selling price of PKR 1,500, estimated product profit is PKR 300 and margin is 20%. If you enter only the PKR 1,000 purchase cost, the calculator shows PKR 500 and 33.33% margin before those omitted costs. Do not include the same fee in both loaded unit cost and Business P&L expenses.",
-    ])
-)
+
+
 
 GUIDE_EXTRA["years-to-days-calculator"].append(
     ("365 days, 365.25 days and 365.2425 days per year", [
@@ -166,20 +144,19 @@ GUIDE_EXTRA["stopwatch"].append(
 
 HOME_EXTRA = {
     "en": {
-        "heading": "What can you calculate with these free tools?",
+        "heading": "Choose a calculator for the result you need",
         "paragraphs": [
-            "CalculatesAll brings together free browser-based tools for everyday calculations. Use the Zakat calculator to compare silver or gold Nisab methods, enter a supported ISO currency code, list eligible assets and debts, and confirm the lunar-year condition. Pakistan's statutory bank deduction threshold is explained separately. Religious rulings can differ, so review the stated method and consult a trusted qualified scholar for your circumstances.",
-            "Use the profit and loss calculator to compare selling price with cost, and the discount calculator to work out savings and a final price. For example, a 20% discount on a price of 1,000 leaves 800 before any applicable tax or fees. Your actual business profit may also depend on shipping, packaging, payment fees, tax and other costs not entered into a simple calculator.",
-            "The adult BMI calculator uses weight divided by height squared, with unit handling for metric and imperial inputs. BMI is a screening measure, not a diagnosis, and it does not directly measure body fat. Read the limitations and the World Health Organization's adult BMI information before using the result to discuss health with a clinician: <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/data/gho/data/themes/topics/topic-details/GHO/body-mass-index\">WHO body mass index information</a>.",
-            "The age calculator works with calendar dates, the unit converter applies defined conversion factors, and the stopwatch and tasbih counter support simple timing and counting tasks. For a reference example, one inch is defined as exactly 25.4 millimetres. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.nist.gov/pml/owm/si-units-length\">National Institute of Standards and Technology's length-unit reference</a> for the inch definition.",
-            "How are results checked? Each calculator page explains its formula, includes a worked example where it helps, and states important limitations. Worked examples are recalculated whenever a tool changes, and reported errors are corrected on the affected page. For high-stakes financial, medical or religious decisions, confirm the result with a qualified professional.",
-            "Calculations are designed to run in your browser without sending calculator entries to our server. The tasbih counter stores its count on your device. The site may load third-party advertising or other resources, which are described in the privacy policy. Avoid entering sensitive personal information into any online tool unless you understand how it handles data.",
-            "The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/calorie-calculator/\">adult calorie calculator</a> estimates maintenance energy for adults using the Mifflin–St Jeor equation and a stated activity factor. It is an estimate, not a measured metabolic rate or a diet prescription. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/emi-calculator/\">EMI calculator</a> estimates a fixed-rate monthly installment and shows a repayment schedule. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/compound-interest-calculator/\">compound interest calculator</a> models one starting balance at a fixed nominal annual rate and compounding frequency, excluding additional deposits, fees and taxes. The <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/percentage-calculator/\">percentage calculator</a> and <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/fraction-calculator/\">fraction calculator</a> explain the arithmetic steps, while the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/date-calculator/\">date calculator</a> counts signed Gregorian calendar days and the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/years-to-days-calculator/\">Years to Days calculator</a> distinguishes fixed-year conversions from exact calendar-date results. The Zakat calculator compares selectable silver or gold Nisab methods, accepts a browser-supported ISO currency code and separates Pakistan's year-specific bank deduction threshold from personal Zakat. It uses user-entered metal prices and does not claim live market data. Read the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"/zakat-calculator/\">Zakat method</a> and note that scholarly rulings can differ. The adult BMI tool uses the WHO adult categories: below 18.5, 18.5 to 24.9, 25.0 to 29.9, and 30 or above. See the <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight\" rel=\"noopener noreferrer\">WHO fact sheet</a> for context.",
+            "Calculations run in your browser, and calculator entries are not sent to our server.",
+            "The BMI calculator uses an adult's weight and height to return a BMI result and the matching WHO adult screening category. BMI is a screening measure for adults, not a diagnosis.",
+            "The Profit and Loss Calculator compares revenue with cost of goods sold and shows gross profit and gross margin. Its product mode compares a unit cost with a selling price.",
+            "The Zakat Calculator compares personal gold or silver Nisab values using the metal price you enter. Pakistan's bank source-deduction Nisab is a separate, year-specific threshold.",
+            "The Money and Business hub includes a recommended monthly close checklist for reviewing payouts, stock, expenses, account balances, profit and cash.",
+            "Other tools calculate discount savings, loan instalments, compound growth, ages and date spans, percentages, ratios and fractions, unit conversions, elapsed time and tasbih counts."
         ],
         "faq": [
-            ("Are the calculators free?", "Yes. The calculators and utility tools are free to use."),
-            ("Do you store the numbers I enter?", "Calculator entries are processed in your browser and are not sent to our server. The tasbih counter keeps its count on your device. See the privacy policy for third-party resources and advertising."),
-            ("Are the results accurate enough for important decisions?", "The tools use stated methods and examples, but results depend on correct inputs and each tool's limitations. Confirm financial, health or religious decisions with an appropriate qualified professional."),
+            ("Where can I find the monthly close checklist?", "Open Money and Business, then read the recommended monthly close process below the calculator links."),
+            ("Which page explains the adult BMI categories?", "Open the BMI Calculator page for the WHO adult category table and the explanation of the Asian-population action points."),
+            ("Where are the Zakat thresholds explained?", "Open the Zakat Calculator page to see the separate Pakistan bank deduction threshold and personal gold or silver Nisab.")
         ],
     },
     "ur": {
@@ -259,28 +236,13 @@ GUIDE_EXTRA["query-calculator"].extend([
 
 # Phase 1 priority-page additions: query-specific examples and practical limits.
 
-GUIDE_EXTRA["profit-loss-calculator"].append(
-    ("Pakistan shop example: include direct selling costs", [
-        "Suppose a shop buys an item for PKR 800 and pays PKR 50 freight plus PKR 30 packaging before sale. If those direct costs are included, the product cost is PKR 880. Selling it for PKR 1,100 gives PKR 220 profit. Markup on cost is 220 / 880 x 100 = 25%, while gross margin on selling price is 220 / 1,100 x 100 = 20%.",
-        "If the PKR 50 freight and PKR 30 packaging are not included in the product cost, the displayed product profit will be overstated by PKR 80. Enter the full cost relevant to the calculation, and keep tax, refunds, platform charges and other operating expenses separate unless the selected mode and inputs include them.",
-    ])
-)
+
 
 # Focused educational depth for the Zakat, BMI and profit/loss tools.
 # Zakat guidance is maintained in build.py's bilingual Zakat page entry.
-GUIDE_EXTRA["bmi-calculator"].append(
-    ("Pakistan and South Asia context", [
-        "Body composition and the distribution of body fat can differ between populations, and some South Asian guidance discusses cardiometabolic risk at lower BMI values than the standard international adult cut-offs. The WHO 2004 Expert Consultation identified 23.0 and 27.5 kg/m² as additional public-health action points, while noting that one new cutoff could not be set for every Asian population. These action points are not a replacement for the standard WHO adult categories shown by this calculator. A qualified local health professional can interpret BMI alongside waist measurement, medical history and other relevant information. This page does not assign a South Asian diagnosis or provide a personal risk estimate.",
-        "Clinical guidance adds a second layer to those public-health action points. The 2026 Standards of Care in Overweight and Obesity recommends screening Asian-background adults for excess adiposity from BMI 23 kg/m². For a clinical diagnosis of obesity, it uses BMI 27.5 kg/m² or above, or BMI 23–27.4 together with central adiposity (waist-to-height ratio at least 0.5 or waist circumference at least 80 cm for women or 90 cm for men). The standards note that some Asian countries may need population-specific cutoffs. NHS guidance also advises adults with BMI below 35 to keep their waist below half their height; for a height of 175 cm, half is 87.5 cm. These are clinical screening and assessment criteria, not a diagnosis from this calculator. This tool does not ask for waist measurements or apply ethnicity-specific categories.",
-    ])
-)
 
-GUIDE_EXTRA["profit-loss-calculator"].extend([
-    ("When product profit differs from operating profit", [
-        "Suppose a business records PKR 100,000 in revenue, PKR 60,000 in cost of goods sold and PKR 15,000 in entered operating expenses. Gross profit is PKR 40,000. Net operating profit is PKR 25,000, and operating margin is PKR 25,000 ÷ PKR 100,000 × 100 = 25%. This business-level result is not the same as the markup or gross margin on one product.",
-        "Product mode compares one item's cost price with its selling price. Business mode uses total revenue, cost of goods sold and the other operating expenses entered. Costs not entered, including interest, tax, refunds or other charges, are not inferred. Use the mode that matches the question and reconcile the estimate with invoices and business records.",
-    ]),
-])
+
+
 
 GUIDE_EXTRA["years-to-days-calculator"].append(
     ("Search questions about years, months and exact dates", [

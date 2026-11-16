@@ -23,9 +23,24 @@ HUB_EXTRA = {
         ]),
         ("A practical monthly close: from sales to operating profit", [
             "Start with the sales records for one defined period. Reconcile invoices and till totals, then account for sales returns, allowances and discounts before treating the balance as net sales. Keep amounts collected on behalf of government, such as sales tax where applicable, separate from business revenue according to the accounting rules that apply to you.",
-            "Next derive cost of goods sold for that same period: opening inventory + net purchases + direct inward freight or handling − closing inventory. Keep inward freight separate from net purchases in this formula; if your purchase total already includes it, do not add it again. Count the stock remaining at period end using a consistent valuation method. OpenStax explains this inventory-to-cost-of-goods-sold calculation in its income-statement guidance: <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://openstax.org/books/introduction-business/pages/14-5-the-income-statement\" target=\"_blank\" rel=\"noopener noreferrer\">OpenStax: The Income Statement</a>.",
-            "Then calculate gross profit as net sales minus COGS. Subtract the period's operating expenses to estimate operating profit. Use the Profit and Loss Calculator only after you have prepared the COGS figure from your stock records; the calculator does not count inventory or derive COGS for you. It also does not automatically calculate interest or income tax.",
+            "Next derive cost of goods sold for that same period: COGS = opening inventory + purchases − closing inventory. Use the same accounting period and a consistent inventory valuation basis for all three figures. Count the stock remaining at period end before closing the period. OpenStax explains the inventory-to-cost-of-goods-sold relationship in its income-statement guidance: <a class=\"underline text-sky-800 dark:text-sky-300\" href=\"https://openstax.org/books/introduction-business/pages/14-5-the-income-statement\" target=\"_blank\" rel=\"noopener noreferrer\">OpenStax: The Income Statement</a>.",
+            "Then calculate gross profit as revenue minus COGS. Subtract the period's operating expenses to estimate operating profit. Use the Profit and Loss Calculator only after you have prepared the COGS figure from your stock records; the calculator does not count inventory or derive COGS for you. It also does not automatically calculate interest or income tax.",
             "Finally reconcile profit to cash. Unpaid customer invoices, supplier balances, inventory purchases, loan-principal payments, tax timing and owner withdrawals can make the bank balance move differently from reported profit. Profit and cash flow answer different questions; these calculators do not calculate cash flow or replace a cash-flow statement or complete bookkeeping records."
+        ]),
+    ("Recommended monthly close process", [
+            "This is a recommended working process, not an official accounting standard.",
+            "Step 1: Reconcile platform payouts against the sales records for the month.",
+            "Step 2: Count the inventory remaining at the month end.",
+            "Step 3: Record the month's expenses and platform or payment fees.",
+            "Step 4: Reconcile the bank or wallet balance against the records.",
+            "Step 5: Review gross profit, net profit and the cash position together.",
+            "Step 6: Lock the reviewed period and set the next month's opening stock from the closing count."
+        ]),
+        ("Limitations and professional opinion", [
+            "This checklist organises a monthly review. It does not determine tax treatment, audit records or prescribe an accounting policy. Ask an accountant to review the process when the figures will be used for tax filings, lending or formal financial statements."
+        ]),
+        ("Sources", [
+            'Inventory and income-statement context: <a class="underline text-sky-800 dark:text-sky-300" href="https://openstax.org/books/introduction-business/pages/14-5-the-income-statement" target="_blank" rel="noopener noreferrer">OpenStax: The Income Statement</a>.'
         ]),
     ],
     "health": [
