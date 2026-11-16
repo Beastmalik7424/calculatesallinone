@@ -49,8 +49,8 @@ for (const term of [
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
 }
-assert.equal((en.match(/<summary\b/gi) || []).length, 8, "English Zakat page must retain eight useful page-specific FAQs");
-assert.equal((ur.match(/<summary\b/gi) || []).length, 8, "Urdu Zakat page must retain eight useful page-specific FAQs");
+assert.equal((en.match(/<summary\b/gi) || []).length, 4, "English Zakat page must retain four concise page-specific FAQs");
+assert.equal((ur.match(/<summary\b/gi) || []).length, 4, "Urdu Zakat page must retain four concise page-specific FAQs");
 const enNisab = en.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
 const urNisab = ur.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
 assert.ok(enNisab && urNisab, "Both locales must expose the Nisab selector");
