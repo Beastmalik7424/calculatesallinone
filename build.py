@@ -756,8 +756,8 @@ CATEGORIES = [
 URDU = {
     "zakat-calculator": {
         "name": "زکوٰۃ کیلکولیٹر",
-        "title": "حنفی اور جعفری زکوٰۃ کیلکولیٹر | گرام، تولہ، سونا اور چاندی | CalculatesAll",
-        "description": "حنفی یا آیت اللہ سید سیستانی کے مخصوص جعفری تجارتی مال کے طریقے سے زکوٰۃ کا تخمینہ لگائیں۔ سونے اور چاندی کا نصاب، گرام اور حکومتِ سندھ کے معیاری تولہ کی قیمت درج کریں۔",
+        "title": "حنفی اور جعفری زکوٰۃ کیلکولیٹر | گرام اور تولہ | CalculatesAll",
+        "description": "حنفی یا سید سیستانی کے جعفری طریقے سے زکوٰۃ کا تخمینہ لگائیں۔ سونے اور چاندی کی قیمت گرام یا معیاری تولہ میں درج کریں۔",
         "h1": "حنفی اور جعفری زکوٰۃ کیلکولیٹر",
         "lead": "دو الگ حسابی طریقوں میں سے انتخاب کریں: سنی حنفی، یا آیت اللہ سید سیستانی کا مخصوص جعفری تجارتی مال کا حکم۔ سونے اور چاندی کی قیمت فی گرام یا واضح طور پر متعین سندھ کے معیاری تولہ کے مطابق درج کریں۔ حساب کے مفروضے، ماخذ اور حدود ضرور پڑھیں۔",
         "labels": [
@@ -1899,8 +1899,8 @@ def tool_page(t):
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     if t["slug"] == "zakat-calculator":
-        title = "Zakat Calculator | Hanafi and Ja'fari (Sayyid Sistani) | Gold, Silver, Gram and Tola"
-        desc = "Calculate a source-based Hanafi Zakat estimate or Sayyid Sistani's limited Ja'fari trading-goods estimate. Compare gold and silver Nisab, enter prices per gram or Sindh-standard tola, and review worked examples, assumptions and exclusions."
+        title = "Zakat Calculator | Hanafi & Ja'fari | Gram and Tola"
+        desc = "Estimate Hanafi or Sayyid Sistani Ja'fari Zakat with gold or silver Nisab. Enter metal prices per gram or Sindh-standard tola."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
