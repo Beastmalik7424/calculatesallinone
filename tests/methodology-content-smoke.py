@@ -58,6 +58,8 @@ for phrase in (
     "BMI is a screening measure, not a diagnosis",
     "612.36 grams",
     "87.48 grams",
+    "85 grams of gold",
+    "595 grams of silver",
     "ISO currency",
     "PKR 503,529",
     "not personal Nisab",
@@ -69,7 +71,7 @@ for phrase in (
 ):
     assert phrase.lower() in method.lower(), f"Methodology missing useful detail: {phrase}"
 
-assert "85 grams of gold" not in method.lower(), "Methodology must not advertise the unapproved gold-85 reference"
+assert "85 grams of gold" in method.lower() and "595 grams of silver" in method.lower(), "Methodology must disclose the sourced modern Nisab references"
 
 editorial = visible("editorial-policy")
 for phrase in (
