@@ -31,7 +31,14 @@ const { chromium } = require('playwright');
    });
    const key=slug+' '+size.width+'x'+size.height;
    console.log(key,JSON.stringify(data));
-   if(data.overflow)failures.push(key+' horizontal overflow');
+   if(data.overflow) {
+    const offenders=await page.evaluate(()=>[...document.querySelectorAll('body *')].map(e=>{
+     const r=e.getBoundingClientRect(),s=getComputedStyle(e);
+     return {tag:e.tagName,id:e.id,cls:typeof e.className==='string'?e.className.slice(0,100):'',left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,overflowX:s.overflowX,text:(e.innerText||'').trim().slice(0,90)};
+    }).filter(x=>x.right>innerWidth+2||x.left< -2).sort((a,b)=>Math.max(b.right-innerWidth,-b.left)-Math.max(a.right-innerWidth,-a.left)).slice(0,18));
+    console.log('OVERFLOW DIAGNOSTIC '+key,JSON.stringify({docWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,scrollX,offenders}));
+    failures.push(key+' horizontal overflow');
+   }
    const urduPage=slug.startsWith('ur/');
    if(!data.carouselVisible||data.carouselCount!==17)failures.push(key+' calculator carousel must show all 17 destinations');
    if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
