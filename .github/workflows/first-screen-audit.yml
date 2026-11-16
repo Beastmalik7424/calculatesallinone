@@ -6,6 +6,8 @@ on:
       - 'content_v5.py'
       - 'tests/all-calculator-smoke.cjs'
       - 'tests/site-output-smoke.py'
+      - 'tests/methodology-content-smoke.py'
+      - 'tests/priority-content-regression.py'
       - 'calorie_calculator.py'
       - 'static/calorie-calculator.js'
       - 'tests/calorie-calculator-browser.cjs'
