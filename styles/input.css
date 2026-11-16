@@ -2499,4 +2499,5 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
   #main .ca-home-calculator #calc-display { min-height: 3rem !important; height: 3rem !important; padding: .25rem .5rem !important; font-size: clamp(1.8rem, 9vw, 2.4rem) !important; }
   #main .ca-home-calculator #calc-mode-toggle { margin-top: .2rem !important; }
   #main .ca-home-calculator #calc-pad { gap: .2rem !important; margin-top: .2rem !important; }
+  #main .ca-home-calculator #calc-history { display: none !important; }
 }
