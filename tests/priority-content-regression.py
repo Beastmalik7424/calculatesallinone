@@ -122,6 +122,7 @@ for phrase in [
     "595 g of silver",
     "85 g of gold",
     "96 g of gold",
+    "96 g of gold",
     "does not fetch a live metal price",
     "qualified scholar",
     "Last reviewed: 2026-11-16",
