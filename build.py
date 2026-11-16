@@ -1454,7 +1454,8 @@ CAROUSEL_SHORT_UR = {
 def calculator_carousel(lang="en", current_path=None):
     s = shell_strings(lang)
     groups = []
-    for group_name, duplicate in (("primary", False),):
+    groups_to_render = (("primary", False), ("duplicate", True)) if current_path == "/" else (("primary", False),)
+    for group_name, duplicate in groups_to_render:
         links = []
         for slug, english_name, short_name in CAROUSEL_TOOLS:
             if lang == "ur":
