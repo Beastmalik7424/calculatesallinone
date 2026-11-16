@@ -217,5 +217,33 @@ class RepositoryWorkflowActionPinIntegrationTests(unittest.TestCase):
         self.assertEqual(failures, [], "\n".join(failures))
 
 
+class VercelPreviewWorkflowContractTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.workflow = (ROOT / ".github/workflows/vercel-preview-fallback.yml").read_text(encoding="utf-8")
+
+    def test_vercel_fallback_is_manual_only_not_push_triggered(self):
+        self.assertRegex(self.workflow, r"(?m)^  workflow_dispatch:")
+        self.assertNotRegex(self.workflow, r"(?m)^  push:")
+        self.assertNotIn("branches:", self.workflow.split("jobs:", 1)[0])
+
+    def test_vercel_fallback_is_preview_only_not_production(self):
+        self.assertIn("environment: preview", self.workflow)
+        self.assertNotIn("VERCEL_TARGET", self.workflow)
+        self.assertNotRegex(self.workflow, r"(?m)^\s*vercel deploy .*--prod")
+        self.assertRegex(self.workflow, r"(?m)^\s*url=\$\(vercel deploy --prebuilt --token")
+
+    def test_vercel_fallback_checks_exact_commit_and_token(self):
+        self.assertIn("inputs.commit_sha", self.workflow)
+        self.assertRegex(self.workflow, r"\[\[ \"\$TARGET_SHA\" =~ \^\[0-9a-f\]\{40\}\$ \]\]")
+        self.assertIn('ref: ${{ inputs.commit_sha }}', self.workflow)
+        self.assertIn('test "$(git rev-parse HEAD)" = "$TARGET_SHA"', self.workflow)
+        self.assertIn('test -n "$VERCEL_TOKEN"', self.workflow)
+
+    def test_vercel_fallback_verifies_english_and_urdu_zakat_routes(self):
+        self.assertIn("/zakat-calculator/", self.workflow)
+        self.assertIn("/ur/zakat-calculator/", self.workflow)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
