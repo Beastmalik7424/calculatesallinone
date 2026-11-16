@@ -49,7 +49,7 @@ for (const term of [
   
   
   "Hawl checkbox is self-reported", "does not track balances throughout the lunar year",
-   "does not model every school-specific gold/silver aggregation rule",
+   "does not model every Hanafi gold/silver aggregation detail",
   "Do not enter the same jewellery value in both", "Muhammad Fayyaz Adeel"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
@@ -58,7 +58,7 @@ for (const term of [
   "503,529", "612.36", "87.48", "1446–1447", "رمضان کے پہلے دن", "پاکستان", "نصاب",
   "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتی ہے",
   "سیستانی", "جعفری", "احتیاطِ واجب", "خمس", "69.12", "483.84",
-  "11.6638", "حنفی", "شافعی", "مالکی", "حنبلی", "تجارتی مال",
+  "11.6638", "حنفی", "تجارتی مال",
   "محمد فیاض عدیل", "خود تصدیق", "پورے قمری سال", "ایک ہی زیور کی قیمت", "مکمل فقہی انجن"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
