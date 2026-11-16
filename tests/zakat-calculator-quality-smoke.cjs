@@ -101,8 +101,8 @@ assert.match(en, /sindhlaws\.gov\.pk/, "English content must cite the Sindh Gove
 assert.match(ur, /sindhlaws\.gov\.pk/, "Urdu content must cite the Sindh Government conversion table");
 assert.match(en, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "English content must cite scholarly debt-rule guidance");
 assert.match(ur, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "Urdu content must cite scholarly debt-rule guidance");
-assert.match(ur, /zatca\.gov\.sa/, "Urdu content must cite Saudi ZATCA's official modern Nisab guidance");
-assert.match(ur, /aliftaa\.jo/, "Urdu content must cite Jordan General Iftaa's 85 g and 96 g gold reference");
+assert.match(ur, /answerstofatawa\/118729/, "Urdu content must cite the Hanafi gold and silver Nisab reference");
+assert.doesNotMatch(ur, /zatca\.gov\.sa|aliftaa\.jo/, "The two-option calculator must not promote unrelated Nisab conversion systems as its own methods");
 
 assert.match(enNisab[1], /value="gold-87"/);
 assert.doesNotMatch(enNisab[1], /gold-85|silver-595|gold-96/);
