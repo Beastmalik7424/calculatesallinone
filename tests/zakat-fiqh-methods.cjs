@@ -187,7 +187,7 @@ for (let i = 0; i < 2000; i++) {
   const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
   const silverPerGram = 50 + random() * 300;
   const goldPerGram = 5000 + random() * 15000;
-  const selectedPerGram = nisabMethod === "silver" ? silverPerGram : goldPerGram;
+  const selectedPerGram = nisabMethod.startsWith("silver") ? silverPerGram : goldPerGram;
   const assets = Object.fromEntries(assetKeys.map(key => [key, Math.floor(random() * 1000000) / 100]));
   const result = calculate({
     currency: "PKR",
