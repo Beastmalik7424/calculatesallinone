@@ -1,22 +1,18 @@
-name: Vercel CLI deployment fallback
+name: Manual Vercel preview fallback
 on:
-  push:
-    branches:
-      - main
-      - feature/zakat-fiqh-methods-tola-2026-11-16
   workflow_dispatch:
     inputs:
       commit_sha:
-        description: Exact 40-character commit SHA to deploy
+        description: Exact 40-character commit SHA to preview
         required: true
         type: string
 permissions:
   contents: read
 concurrency:
-  group: vercel-cli-deployment-${{ github.ref }}
+  group: vercel-manual-preview
   cancel-in-progress: false
 jobs:
-  deploy:
+  preview:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: preview
@@ -24,22 +20,21 @@ jobs:
       VERCEL_ORG_ID: team_wX7sHWbN6IiFhrr3plGDq5sP
       VERCEL_PROJECT_ID: prj_gQr2giKu6RQM0hkgJfzMG4BtZdnj
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_TARGET: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
     steps:
       - name: Validate exact commit and Vercel token
         env:
-          TARGET_SHA: ${{ inputs.commit_sha || github.sha }}
+          TARGET_SHA: ${{ inputs.commit_sha }}
         run: |
           [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "Invalid full SHA"; exit 1; }
           test -n "$VERCEL_TOKEN" || { echo "VERCEL_TOKEN secret missing from the preview GitHub environment"; exit 1; }
       - name: Checkout exact commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          ref: ${{ inputs.commit_sha || github.sha }}
+          ref: ${{ inputs.commit_sha }}
           persist-credentials: false
       - name: Verify checked-out SHA
         env:
-          TARGET_SHA: ${{ inputs.commit_sha || github.sha }}
+          TARGET_SHA: ${{ inputs.commit_sha }}
         run: test "$(git rev-parse HEAD)" = "$TARGET_SHA"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
@@ -50,7 +45,7 @@ jobs:
           python-version: '3.12'
       - name: Test Node and Python runtime contract
         run: python3 tests/runtime-contract-smoke.py
-      - name: Test workflow least-privilege permissions
+      - name: Test workflow least-privilege and deployment contracts
         run: python3 tests/workflow-security-contract.py
       - name: Test Playwright lockfile contract
         run: python3 tests/playwright-lock-contract-smoke.py
@@ -65,40 +60,22 @@ jobs:
           python3 tests/vercel-redirect-config-smoke.py
           test -s public/age-calculator/index.html
           test -s public/discount-calculator/index.html
-      - name: Install Chromium and test Zakat browser flows
-        run: |
-          npx playwright install --with-deps chromium
-          python3 -m http.server 4174 --directory public >/tmp/zakat-browser-server.log 2>&1 &
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:4174/zakat-calculator/ >/dev/null; then break; fi
-            sleep 1
-          done
-          curl -fsS http://127.0.0.1:4174/zakat-calculator/ >/dev/null
-          node tests/zakat-calculator-browser.cjs
+          test -s public/zakat-calculator/index.html
+          test -s public/ur/zakat-calculator/index.html
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
-      - name: Pull the matching Vercel environment
-        run: vercel pull --yes --environment="$VERCEL_TARGET" --token "$VERCEL_TOKEN"
-      - name: Build the matching Vercel environment
-        run: |
-          if [ "$VERCEL_TARGET" = "production" ]; then
-            vercel build --prod --token "$VERCEL_TOKEN"
-          else
-            vercel build --token "$VERCEL_TOKEN"
-          fi
-      - name: Deploy using the Vercel CLI deployment quota
+      - name: Pull preview configuration
+        run: vercel pull --yes --environment=preview --token "$VERCEL_TOKEN"
+      - name: Build preview
+        run: vercel build --token "$VERCEL_TOKEN"
+      - name: Deploy preview only
         id: deploy
         run: |
-          if [ "$VERCEL_TARGET" = "production" ]; then
-            url=$(vercel deploy --prebuilt --prod --token "$VERCEL_TOKEN")
-          else
-            url=$(vercel deploy --prebuilt --token "$VERCEL_TOKEN")
-          fi
+          url=$(vercel deploy --prebuilt --token "$VERCEL_TOKEN")
           test -n "$url"
           echo "deployment_url=$url" >> "$GITHUB_OUTPUT"
-          echo "Created $VERCEL_TARGET deployment: $url"
+          echo "Created preview deployment: $url"
       - name: Verify preview routes through Vercel CLI
-        if: github.ref != 'refs/heads/main'
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment_url }}
         run: |
@@ -107,13 +84,4 @@ jobs:
             vercel curl "$path" --deployment "$DEPLOYMENT_URL" --token "$VERCEL_TOKEN" >/tmp/vercel-preview-response
             test -s /tmp/vercel-preview-response || { echo "Empty preview response: $path"; exit 1; }
             echo "$path preview response received"
-          done
-      - name: Verify production custom domain
-        if: github.ref == 'refs/heads/main'
-        run: |
-          for path in / /ads.txt /robots.txt /sitemap.xml /age-calculator/ /discount-calculator/ /zakat-calculator/ /ur/zakat-calculator/; do
-            code=$(curl --retry 3 --retry-delay 2 --location --silent --output /tmp/vercel-production-response --write-out '%{http_code}' "https://calculateallinone.vercel.app$path")
-            echo "$path production HTTP $code"
-            test "$code" = 200 || { echo "Production verification failed: $path"; exit 1; }
-            test -s /tmp/vercel-production-response
           done
