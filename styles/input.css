@@ -2358,6 +2358,18 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
 }
 
 
+/* Constrain the Zakat document and body to the actual viewport, clipping decorative glows. */
+html:has(body #zakat-form) {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+}
+body:has(#zakat-form) {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
 /* Contain the fixed decorative glows so their blurred edges cannot widen Zakat pages. */
 body:has(#zakat-form) > div[aria-hidden="true"].fixed {
   contain: paint;
