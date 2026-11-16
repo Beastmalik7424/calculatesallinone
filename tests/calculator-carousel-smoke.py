@@ -97,7 +97,7 @@ zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
 assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat calculator navigation must not duplicate links"
 assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
-assert "grid-template-columns:repeat(4,minmax(0,1fr))" in css.replace(" ", ""), "Phone navigation must use a compact three-column grid"
+assert "grid-template-columns:repeat(4,minmax(0,1fr))" in css.replace(" ", ""), "Phone navigation must use a compact four-column grid"
 assert "grid-template-columns:repeat(5,minmax(0,1fr))" in css.replace(" ", ""), "Tablet navigation must use five columns"
 assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Desktop navigation must use six columns"
 assert "@keyframes ca-calculator-marquee" in css, "Homepage must retain its existing carousel animation"
