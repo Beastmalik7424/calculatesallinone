@@ -109,7 +109,7 @@ check(has_heading("bmi-calculator", "Limitations and professional opinion"),
 
 check(has_heading("profit-loss-calculator", "Cash flow is separate from profit"),
       "/profit-loss-calculator/ must distinguish accounting profit from cash flow")
-check(has_heading("profit-loss-calculator", "Formulas"),
+check(has_heading("profit-loss-calculator", "Business P&L formulas"),
       "/profit-loss-calculator/ must explain COGS, gross profit and gross margin")
 
 def faq_questions(slug):
