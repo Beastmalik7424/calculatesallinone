@@ -86,6 +86,13 @@ let browser;
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
 
+  // Troy-ounce price must produce the same Hanafi result as gram and tola input.
+  assert.match(await page.locator('#z-metal-price-unit option[value="ounce"]').innerText(), /troy ounce/i);
+  await page.locator("#z-metal-price-unit").selectOption("ounce");
+  await page.locator("#z-goldprice").fill(String(1000 * 31.1034768));
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
+
   // Ja'fari is explicitly limited to Sayyid Sistani and requires all six published conditions.
   assert.equal(await page.locator("#z-school-of-thought option").count(), 2, "Only Hanafi and Ja'fari Sistani methods must be selectable");
   await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
