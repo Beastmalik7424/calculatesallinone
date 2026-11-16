@@ -25,7 +25,7 @@ const urText = visibleText(ur);
 
 for (const id of [
   "z-currency", "z-school-of-thought", "z-nisab-method", "z-metal-price-unit",
-  "z-jafari-nisab-method", "z-jafari-trade-value", "z-jafari-owner",
+  "z-jafari-nisab-method", "z-jafari-trade-value", "z-jafari-owner", "z-jafari-acquired",
   "z-jafari-hawl", "z-jafari-intent", "z-jafari-access", "z-jafari-market",
   "z-silverprice", "z-goldprice", "z-cash", "z-bank", "z-savings",
   "z-gold", "z-silver", "z-jewellery", "z-investments", "z-businesscash", "z-stock", "z-recv",
@@ -45,7 +45,7 @@ for (const term of [
   "Sunni", "Hanafi", "Shafi'i", "Maliki", "Hanbali", "Sayyid Sistani",
   "obligatory precaution", "Khums", "69.12 g", "483.84 g",
   "11.6638", "trading goods", "personal-use gold/silver jewellery",
-  "ordinary banknotes", "right of disposal", "capital cost"
+  "ordinary banknotes", "right of disposal", "capital cost", "contract of exchange"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
