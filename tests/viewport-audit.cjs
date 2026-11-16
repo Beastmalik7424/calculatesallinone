@@ -1,6 +1,7 @@
 const { chromium } = require('playwright');
+let browser;
 (async () => {
- const browser = await chromium.launch({headless:true,args:['--no-sandbox']});
+ browser = await chromium.launch({headless:true,args:['--no-sandbox']});
 // This task changes the shared navigation on the English and Urdu Zakat pages. Other routes retain their existing build and dedicated browser regression suites.
  const slugs=['zakat-calculator','ur/zakat-calculator'];
  let failures=[];
@@ -148,4 +149,4 @@ const { chromium } = require('playwright');
  await browser.close();
  if(failures.length){console.error('VIEWPORT/INTERACTION FAILURES:',failures.join('; '));process.exitCode=1;}
  else console.log('All viewport and profit interaction checks PASS');
-})().catch(e=>{console.error(e);process.exitCode=1});
+})().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exitCode=1;});
