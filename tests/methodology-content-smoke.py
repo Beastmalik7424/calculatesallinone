@@ -67,6 +67,9 @@ for phrase in (
     "Input validation",
     "Automated tests",
     "Reference sources and what they support",
+    "islamqa.org/hanafi/answerstofatawa/118729",
+    "zatca.gov.sa",
+    "aliftaa.jo",
     "Report a suspected error",
 ):
     assert phrase.lower() in method.lower(), f"Methodology missing useful detail: {phrase}"
