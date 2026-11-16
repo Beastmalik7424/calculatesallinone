@@ -2346,3 +2346,13 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
 .dark .ca-home-wrap nav[aria-label="Related calculators"] a,
 .dark .ca-home-wrap nav[aria-label="Other languages"] a { color: #e6f3f1; }
 /* End approved premium soft-teal homepage theme. */
+
+/* Keep Zakat form grid cells shrinkable on narrow RTL/LTR viewports. */
+#zakat-form .grid,
+#zakat-form .grid > * {
+  min-width: 0;
+}
+#zakat-form .grid > * :is(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+}
