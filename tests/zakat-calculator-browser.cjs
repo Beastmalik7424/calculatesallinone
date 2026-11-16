@@ -13,7 +13,7 @@ const { chromium } = require("playwright");
 
   await page.goto("http://127.0.0.1:4174/zakat-calculator/", { waitUntil: "networkidle" });
   assert.equal(await page.locator("html").getAttribute("lang"), "en");
-  for (const id of ["z-currency","z-nisab-method","z-bank","z-savings","z-investments","z-businesscash","z-pension","z-crypto","z-property","z-goldprice","z-silverprice","z-paid"]) {
+  for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-jafari-nisab-method","z-jafari-trade-value","z-jafari-owner","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jewellery","z-bank","z-savings","z-investments","z-businesscash","z-pension","z-crypto","z-property","z-goldprice","z-silverprice","z-paid"]) {
     assert.equal(await page.locator("#" + id).count(), 1, "Missing English field " + id);
   }
   for (const id of ["z-currency","z-nisab-method","z-cash","z-bank","z-goldprice","z-debts","z-paid"]) {
@@ -53,6 +53,51 @@ const { chromium } = require("playwright");
   await page.locator("#z-hawl").check();
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /15,309/);
+
+  // Sunni school distinction: Hanafi includes ordinary qualifying jewellery.
+  await page.locator("#z-school-of-thought").selectOption("sunni-hanafi");
+  await page.locator("#z-metal-price-unit").selectOption("gram");
+  await page.locator("#z-currency").fill("PKR");
+  await page.locator("#z-nisab-method").selectOption("silver");
+  await page.locator("#z-cash").fill("500000");
+  await page.locator("#z-jewellery").fill("150000");
+  await page.locator("#z-silverprice").fill("1000");
+  await page.locator("#z-debts").fill("0");
+  await page.locator("#z-paid").fill("0");
+  await page.locator("#z-hawl").check();
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /16,250/);
+
+  // Shafi'i excludes ordinary permissible personal-use jewellery in this limited model.
+  await page.locator("#z-school-of-thought").selectOption("sunni-shafii");
+  await page.locator("#z-cash").fill("100000");
+  await page.locator("#z-jewellery").fill("50000");
+  await page.locator("#z-goldprice").fill("1000");
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
+
+  // Pakistani tola price must normalize to the same gram-based Nisab result.
+  await page.locator("#z-metal-price-unit").selectOption("tola");
+  await page.locator("#z-goldprice").fill("11663.8");
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
+
+  // Sistani path must hide the Sunni form and require all six published conditions.
+  await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
+  assert.equal(await page.locator("#z-sunni-fields").isVisible(), false);
+  assert.equal(await page.locator("#z-jafari-fields").isVisible(), true);
+  await page.locator("#z-metal-price-unit").selectOption("gram");
+  await page.locator("#z-jafari-nisab-method").selectOption("gold");
+  await page.locator("#z-goldprice").fill("1000");
+  await page.locator("#z-jafari-trade-value").fill("1000000");
+  for (const id of ["z-jafari-owner","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market"]) {
+    await page.locator("#" + id).check();
+  }
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /25,000/);
+  await page.locator("#z-jafari-acquired").uncheck();
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /all six Sayyid Sistani/i);
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   assert.equal(overflow, false, "English page must not overflow a 375px viewport");
