@@ -71,6 +71,7 @@ r = calculate({
   jafariNisabMethod: "silver",
   silverPricePerGram: 100,
   tradeGoodsValue: 100000,
+  tradeGoodsAcquiredByExchange: true,
   tradeGoodsHawlComplete: true,
   tradeGoodsProfitIntentContinuous: true,
   tradeGoodsAccessContinuous: true,
@@ -87,6 +88,7 @@ r = calculate({
   jafariNisabMethod: "gold",
   tradeGoodsValue: 1000000,
   assets: { cash: 1000000, bank: 500000 },
+  tradeGoodsAcquiredByExchange: true,
   tradeGoodsHawlComplete: true,
   tradeGoodsProfitIntentContinuous: true,
   tradeGoodsAccessContinuous: true,
@@ -101,6 +103,7 @@ r = calculate({
   schoolOfThought: "jafari-sistani",
   jafariNisabMethod: "gold",
   tradeGoodsValue: 1000000,
+  tradeGoodsAcquiredByExchange: true,
   tradeGoodsHawlComplete: true,
   tradeGoodsProfitIntentContinuous: true,
   tradeGoodsAccessContinuous: true,
@@ -109,6 +112,26 @@ r = calculate({
 });
 assert.equal(r.status, "conditions_incomplete");
 assert.equal(r.zakatBeforePaid, 0);
+
+const validSistaniConditions = {
+  ownerAdultAndSane: true,
+  tradeGoodsAcquiredByExchange: true,
+  tradeGoodsHawlComplete: true,
+  tradeGoodsProfitIntentContinuous: true,
+  tradeGoodsAccessContinuous: true,
+  tradeGoodsMarketValueAtLeastCost: true
+};
+for (const condition of Object.keys(validSistaniConditions)) {
+  const incomplete = calculate({
+    ...base,
+    schoolOfThought: "jafari-sistani",
+    jafariNisabMethod: "gold",
+    tradeGoodsValue: 1000000,
+    ...validSistaniConditions,
+    [condition]: false
+  });
+  assert.equal(incomplete.status, "conditions_incomplete", "Sistani condition must be mandatory: " + condition);
+}
 
 r = calculate({
   ...base,
