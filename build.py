@@ -341,7 +341,7 @@ TOOLS = [
                 "This example is illustrative. Include only costs that belong in the item's cost base, and keep business overheads separate when preparing an operating P&L."
             ]),
             ("Cash flow is separate from profit", [
-                "Profit is not cash. A sale can increase revenue before the customer pays. Supplier bills, card settlements, marketplace payouts and refunds can clear on different dates. Payout delays can leave reported sales ahead of cash received.",
+                "Profit is not cash. A sale can increase revenue before the customer pays. Buying inventory up front can use cash before those goods are sold; the stock cost is reflected in COGS as the inventory is sold. Supplier bills, card settlements, marketplace payouts and refunds can clear on different dates. Payout delays can leave reported sales ahead of cash received.",
                 "A marketplace may show an order as complete while a payout is still pending. Reconcile the payout statement, fees, refunds and bank receipt before treating the full sale value as available cash."
             ]),
             ("Limitations and professional opinion", [
