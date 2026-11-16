@@ -2370,14 +2370,11 @@ body:has(#zakat-form) {
   overflow-x: clip;
 }
 
-/* Contain the fixed decorative glows so their blurred edges cannot widen Zakat pages. */
-body:has(#zakat-form) > div[aria-hidden="true"].fixed {
-  contain: paint;
-}
-@media (max-width: 599px) {
-  body:has(#zakat-form) > div[aria-hidden="true"].fixed {
-    display: none;
-  }
+/* Keep long Hanafi-source and Urdu explanatory text wrapping inside narrow Zakat content. */
+body:has(#zakat-form) #main p,
+body:has(#zakat-form) #main p a {
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 /* Static all-calculators navigation on inner pages only. Keep the homepage carousel unchanged. */
