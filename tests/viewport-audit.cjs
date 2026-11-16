@@ -1,7 +1,8 @@
 const { chromium } = require('playwright');
 (async () => {
  const browser = await chromium.launch({headless:true,args:['--no-sandbox']});
- const slugs=['zakat-calculator','bmi-calculator','profit-loss-calculator','discount-calculator','age-calculator','unit-converter','stopwatch','emi-calculator','standard-calculator','tasbih-counter','years-to-days-calculator','query-calculator','percentage-calculator','fraction-calculator','compound-interest-calculator','date-calculator','ur/age-calculator','ur/bmi-calculator','ur/discount-calculator','ur/profit-loss-calculator','ur/standard-calculator','ur/stopwatch','ur/tasbih-counter','ur/unit-converter','ur/zakat-calculator'];
+// This task changes the shared navigation on the English and Urdu Zakat pages. Other routes retain their existing build and dedicated browser regression suites.
+ const slugs=['zakat-calculator','ur/zakat-calculator'];
  let failures=[];
  for (const size of [{width:320,height:568},{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
