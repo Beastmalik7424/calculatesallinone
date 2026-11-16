@@ -28,7 +28,7 @@ for (const [method, grams, priceKey] of [
 ]) {
   const result = calculate({
     ...base,
-    schoolOfThought: "sunni-shafii",
+    schoolOfThought: "sunni-hanafi",
     nisabMethod: method,
     [priceKey]: 100,
     assets: { cash: grams * 100 },
@@ -45,20 +45,8 @@ r = calculate({
   assets: { cash: 8500 },
   hawlComplete: true
 });
-assert.equal(r.nisabGrams, 85, "Non-Hanafi presets must default to the common modern 85 g gold reference");
-assert.equal(r.nisabThreshold, 8500, "The default modern gold threshold must use 85 g");
-
-for (const school of ["sunni-shafii", "sunni-maliki", "sunni-hanbali"]) {
-  r = calculate({
-    ...base,
-    schoolOfThought: school,
-    nisabMethod: "gold-87",
-    goldPricePerGram: 100,
-    assets: { cash: 50000, jewellery: 50000 }
-  });
-  assert.equal(r.totalAssets, 50000, school + " must exclude ordinary permissible personal-use jewellery");
-  assert.equal(r.schoolOfThought, school);
-}
+assert.equal(r.nisabGrams, 612.36, "Hanafi preset must default to the 612.36 g silver reference");
+assert.equal(r.nisabThreshold, 61236, "The Hanafi default silver threshold must use 612.36 g");
 
 r = calculate({
   ...base,
@@ -172,18 +160,19 @@ r = calculate({
 assert.ok(Math.abs(r.metalPricePerGram - 100) < 1e-10, "tola price must normalize to per-gram price");
 assert.ok(Math.abs(r.nisabThreshold - 61236) < 1e-8, "tola conversion must preserve the silver Nisab threshold");
 
+assert.throws(() => calculate({ ...base, schoolOfThought: "sunni-shafii" }), /school/i);
 assert.throws(() => calculate({ ...base, schoolOfThought: "unknown" }), /school/i);
 assert.throws(() => calculate({ ...base, metalPriceUnit: "ounce" }), /metal price unit/i);
 assert.throws(() => calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "unknown" }), /Jafari Nisab/i);
 
-// Deterministic stress coverage across all four Sunni options and both price units.
+// Deterministic stress coverage for the requested Hanafi option and both price units.
 let seed = 20261116;
 function random() {
   seed = (seed * 1664525 + 1013904223) >>> 0;
   return seed / 4294967296;
 }
 for (let i = 0; i < 2000; i++) {
-  const school = ["sunni-hanafi", "sunni-shafii", "sunni-maliki", "sunni-hanbali"][i % 4];
+  const school = "sunni-hanafi";
   const nisabMethod = ["silver", "gold-87", "silver-595", "gold-85", "gold-96"][i % 5];
   const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
   const silverPerGram = 50 + random() * 300;
@@ -203,7 +192,7 @@ for (let i = 0; i < 2000; i++) {
     hawlComplete: i % 3 === 0
   });
   assert.ok(Number.isFinite(result.totalAssets) && Number.isFinite(result.netAssets));
-  assert.equal(result.personalJewelleryIncluded, school === "sunni-hanafi");
+  assert.equal(result.personalJewelleryIncluded, true);
   assert.ok(Math.abs(result.metalPricePerGram - selectedPerGram) < 1e-8);
   assert.ok(result.balanceDue >= 0 && result.balanceDue <= result.zakatBeforePaid);
   assert.ok(result.zakatBeforePaid === 0 || Math.abs(result.zakatBeforePaid - result.netAssets * 0.025) < 1e-7);
