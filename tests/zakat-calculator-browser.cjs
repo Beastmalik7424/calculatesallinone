@@ -87,6 +87,11 @@ const { chromium } = require("playwright");
   await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
   assert.equal(await page.locator("#z-sunni-fields").isVisible(), false);
   assert.equal(await page.locator("#z-jafari-fields").isVisible(), true);
+  assert.equal(await page.locator("#z-sunni-asset-fields").count(), 1, "Sunni-only asset and liability section must have a dedicated wrapper");
+  assert.equal(await page.locator("#z-sunni-asset-fields").isVisible(), false, "Sunni assets, liabilities and Hawl must be hidden in the Sistani method");
+  for (const id of ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-hawl"]) {
+    assert.equal(await page.locator("#" + id).isVisible(), false, "Sunni-only field must be hidden in the Sistani method: " + id);
+  }
   await page.locator("#z-metal-price-unit").selectOption("gram");
   await page.locator("#z-jafari-nisab-method").selectOption("gold");
   await page.locator("#z-goldprice").fill("1000");
