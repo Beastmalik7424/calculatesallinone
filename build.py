@@ -1793,6 +1793,7 @@ BMI_GUIDE = [
         "These categories are population-level screening ranges. They do not determine whether an individual is healthy, and they should not be used as a personal diagnosis or treatment plan.",
     ]),
     ("WHO Expert Consultation and Asian population action points", ["The WHO Expert Consultation published in The Lancet in 2004 retained the standard WHO BMI cutoffs. It identified 23.0, 27.5, 32.5 and 37.5 kg/m² as additional public-health action points for Asian populations. These points sit alongside the standard categories. They are not replacement categories and this calculator does not relabel them as categories."]),
+    ("Worked example", ["For an adult weighing 70 kg at a height of 1.70 m: 70 ÷ (1.70 × 1.70) = 24.2 kg/m² when rounded to one decimal place."]),
     ("Worked examples", [
         "If an adult weighs 70 kg and is 170 cm tall, the calculation is 70 ÷ (1.70 × 1.70), giving a BMI of 24.2 after rounding. The displayed adult category is normal weight.",
         "For someone who is 5 ft 7 in tall, total height is 67 inches. Converting that to centimetres gives 170.18 cm. With a weight of 70 kg, BMI is also about 24.2. Enter feet and inches separately rather than entering a decimal number such as 5.7 feet.",
