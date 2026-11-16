@@ -43,7 +43,8 @@ r = calculate({
   assets: { cash: 8500 },
   hawlComplete: true
 });
-assert.equal(r.nisabMethod, "gold-85", "Non-Hanafi presets must default to the common modern 85 g gold reference");
+assert.equal(r.nisabGrams, 85, "Non-Hanafi presets must default to the common modern 85 g gold reference");
+assert.equal(r.nisabThreshold, 8500, "The default modern gold threshold must use 85 g");
 
 for (const school of ["sunni-shafii", "sunni-maliki", "sunni-hanbali"]) {
   r = calculate({
