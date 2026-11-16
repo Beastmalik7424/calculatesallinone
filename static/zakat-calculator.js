@@ -73,6 +73,7 @@
     }
     const conditions = {
       adultAndSane: input.ownerAdultAndSane === true,
+      acquiredThroughExchange: input.tradeGoodsAcquiredByExchange === true,
       hawlComplete: input.tradeGoodsHawlComplete === true,
       profitIntentionContinuous: input.tradeGoodsProfitIntentContinuous === true,
       accessContinuous: input.tradeGoodsAccessContinuous === true,
