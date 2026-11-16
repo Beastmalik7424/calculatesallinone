@@ -1275,11 +1275,12 @@ for _phrase in ("Recommended monthly close process", "recommended working proces
     assert _phrase.lower() in _money_2026.lower(), "Money hub is missing monthly-close requirement: " + _phrase
 
 _zakat_2026 = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
-for _phrase in ("PKR 503,529", "1447 AH (2026)", "first day of Ramazan",
+for _phrase in ("PKR 503,529", "85 g of gold", "595 g of silver", "1447 AH (2026)", "first day of Ramazan",
                 "saving, profit and loss sharing", "2.5%", "87.48 g of gold",
                 "612.36 g of silver", "hypothetical silver price of PKR 3,000",
                 "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000",
                 "PKR 50,000", "changes yearly", "Last reviewed: 2026-11-16",
                 "bprd-circular-letter-no-03-of-2026"):
     assert _phrase.lower() in _zakat_2026.lower(), "Zakat page is missing approved threshold/example: " + _phrase
-assert 'value="gold-85"' not in _zakat_2026, "Unapproved 85 g gold option must not be offered on this page"
+assert 'value="gold-85"' in _zakat_2026, "85 g gold reference must be selectable"
+assert 'value="silver-595"' in _zakat_2026, "595 g silver reference must be selectable"
