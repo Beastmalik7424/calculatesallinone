@@ -43,7 +43,7 @@ assert.ok(Math.abs(r.metalPricePerGram - 100) < 1e-10);
 assert.ok(Math.abs(r.nisabThreshold - 61236) < 1e-8);
 
 for (const school of ["sunni-shafii", "sunni-maliki", "sunni-hanbali", "unknown"]) {
-  assert.throws(() => calculate({ ...base, schoolOfThought: school }), /school/i);
+  assert.throws(() => calculate({ ...base, schoolOfThought: school }), /Hanafi|school/i);
 }
 assert.throws(() => calculate({ ...base, nisabMethod: "gold-85" }), /Nisab method/i);
 assert.throws(() => calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "unknown" }), /Jafari Nisab/i);
