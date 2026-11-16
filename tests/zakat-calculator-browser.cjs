@@ -148,11 +148,14 @@ let browser;
     const dimensions = await page.evaluate(() => ({
       viewport: window.innerWidth,
       document: document.documentElement.scrollWidth,
-      body: document.body.scrollWidth
+      body: document.body.scrollWidth,
+      rootOverflowX: getComputedStyle(document.documentElement).overflowX
     }));
+    // Fixed decorative background glows can extend the body's scrollWidth, but html clips them.
+    // The document root is the actual horizontally scrollable page viewport.
     assert.ok(
-      dimensions.document <= dimensions.viewport && dimensions.body <= dimensions.viewport,
-      "Zakat page must not overflow horizontally at " + width + "px: " + JSON.stringify(dimensions)
+      dimensions.document <= dimensions.viewport && dimensions.rootOverflowX === "clip",
+      "Zakat page must not expose horizontal page scrolling at " + width + "px: " + JSON.stringify(dimensions)
     );
   }
   assert.deepEqual(pageErrors, [], "Zakat pages must have no browser console or page errors");
