@@ -72,13 +72,13 @@ assert.equal((enSchool[1].match(/<option\b/g) || []).length, 5, "English UI must
 assert.equal((urSchool[1].match(/<option\b/g) || []).length, 5, "Urdu UI must expose the same five methods");
 assert.match(en, /value="jafari-sistani"/, "Sistani calculation path must be explicitly named");
 assert.match(en, /value="tola"/, "Pakistani tola unit must be selectable");
-assert.match(en, /11\\.6638 g/, "Pakistani tola conversion must be visible");
+assert.match(en, /11\.6638 g/, "Pakistani tola conversion must be visible");
 assert.match(en, /id="z-sunni-fields"/, "Sunni fields must have a separate visibility container");
 assert.match(en, /id="z-jafari-fields"[^>]*hidden/, "Sistani fields must be separately hidden by default");
-assert.match(en, /sistani\\.org\\/english\\/book\\/48\\/2323/, "English content must cite Sistani's official trading-goods ruling");
-assert.match(ur, /sistani\\.org\\/english\\/book\\/48\\/2323/, "Urdu content must cite Sistani's official trading-goods ruling");
-assert.match(en, /sindhlaws\\.gov\\.pk/, "English content must cite the Sindh Government conversion table");
-assert.match(ur, /sindhlaws\\.gov\\.pk/, "Urdu content must cite the Sindh Government conversion table");
+assert.match(en, /sistani\.org\/english\/book\/48\/2323/, "English content must cite Sistani's official trading-goods ruling");
+assert.match(ur, /sistani\.org\/english\/book\/48\/2323/, "Urdu content must cite Sistani's official trading-goods ruling");
+assert.match(en, /sindhlaws\.gov\.pk/, "English content must cite the Sindh Government conversion table");
+assert.match(ur, /sindhlaws\.gov\.pk/, "Urdu content must cite the Sindh Government conversion table");
 
 assert.doesNotMatch(enNisab[1], /gold-85/, "Unapproved 85 g gold option must not be exposed in English");
 assert.doesNotMatch(urNisab[1], /gold-85/, "Unapproved 85 g gold option must not be exposed in Urdu");
