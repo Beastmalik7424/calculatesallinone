@@ -1776,7 +1776,7 @@ def answer_block(slug, lang="en"):
 
 BMI_GUIDE = [
     ("The formula", [
-        "Select kilograms or pounds before entering your weight. Weight and height units are selected independently. Weight can be entered in kilograms (kg) or pounds (lb). When kg is selected, adult BMI is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first.",
+        "Select kilograms or pounds before entering your weight. The weight unit is selected independently of the height unit. Weight can be entered in kilograms (kg) or pounds (lb). When kg is selected, adult BMI is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first.",
         "For feet and inches, convert total height to centimetres with (feet × 12 + inches) × 2.54. If kg is selected, the calculator uses the metric formula. If lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches squared.",
     ]),
     ("Adult BMI categories", [
