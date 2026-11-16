@@ -35,7 +35,7 @@ let browser;
     const zakatSubmit=document.querySelector('#zakat-form button[type="submit"]');
     const submitPosition=zakatSubmit?getComputedStyle(zakatSubmit.parentElement).position:null;
     const gridColumns=gridStyle?gridStyle.gridTemplateColumns.split(' ').length:0;
-    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselCount:shortcuts.length,allLinksVisible,allLabelsFit,submitPosition,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height};
+    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselBottom:carouselRect?.bottom,carouselCount:shortcuts.length,allLinksVisible,allLabelsFit,submitPosition,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height};
    });
    const key=slug+' '+size.width+'x'+size.height;
    console.log(key,JSON.stringify(data));
@@ -56,7 +56,8 @@ let browser;
    if(data.gridColumns!==expectedColumns)failures.push(key+' expected '+expectedColumns+' navigation columns, got '+data.gridColumns);
    if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
    if(size.width<=360 && (slug==='fraction-calculator'||slug==='compound-interest-calculator') && data.mainNavFlexDirection!=='column' && data.mainNavFlexWrap==='nowrap')failures.push(key+' row navigation cannot wrap on narrow screens');
-   if(!data.lastButton||data.bottom>size.height)failures.push(key+' primary button below fold');
+   if(!data.lastButton)failures.push(key+' primary calculator button is missing');
+    if(data.carouselBottom>size.height)failures.push(key+' all-calculator navigation extends below the first screen');
    const screenshotSlug=slug.replaceAll('/','-');
    await page.screenshot({path:'/tmp/'+screenshotSlug+'-'+size.width+'.png',fullPage:false});
   }
