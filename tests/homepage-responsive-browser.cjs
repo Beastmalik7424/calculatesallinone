@@ -83,7 +83,20 @@ const axe = require("axe-core");
       assert.ok(layout.keypadButtons.every(button => button.width >= 44 && button.height >= 44), scenario.label + ": keys must remain touch-accessible");
       assert.ok(layout.calculator.bottom <= layout.viewportHeight + 1, scenario.label + ": complete calculator must fit above the first fold; " + JSON.stringify(layout));
       assert.ok(layout.documentWidth <= layout.viewportWidth + 1, scenario.label + ": no horizontal scrolling is allowed");
+      if (scenario.width <= 600) {
+        for (const key of ["7", "+", "3", "="]) {
+          await page.locator('.ca-home-calculator #calc-pad button[data-key="' + key + '"]').click();
+        }
+        const afterCalculation = await page.evaluate(() => ({
+          calculatorBottom: document.querySelector(".ca-home-calculator").getBoundingClientRect().bottom,
+          historyDisplay: getComputedStyle(document.querySelector(".ca-home-calculator #calc-history")).display,
+          viewportHeight: window.innerHeight,
+        }));
+        assert.equal(afterCalculation.historyDisplay, "none", scenario.label + ": history line must not push the mobile keypad below the fold");
+        assert.ok(afterCalculation.calculatorBottom <= afterCalculation.viewportHeight + 1, scenario.label + ": full calculator must remain visible after a calculation");
+      }
     }
+    await page.reload({ waitUntil: "domcontentloaded" });
     await page.setViewportSize({ width: 1280, height: 800 });
 
     let scenarios = 0;
