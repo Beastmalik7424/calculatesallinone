@@ -2468,40 +2468,17 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
 /* Homepage standard calculator: match the focused, centered structure used by calculator pages. */
 #main:has(.ca-home-wrap) { padding: .25rem .75rem 1rem !important; }
 #main .ca-home-wrap {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  width: 100% !important;
-  max-width: 60rem !important;
-  margin: .25rem auto 1rem !important;
-  padding: 0 !important;
-  overflow: visible !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
+  display: flex !important; flex-direction: column !important; align-items: center !important;
+  width: 100% !important; max-width: 60rem !important; margin: .25rem auto 1rem !important;
+  padding: 0 !important; overflow: visible !important; border: 0 !important;
+  border-radius: 0 !important; background: transparent !important; box-shadow: none !important;
 }
 #main .ca-home-header { width: 100% !important; max-width: 60rem !important; margin: 0 auto .4rem !important; text-align: center !important; }
 #main .ca-home-header .ca-home-badge, #main .ca-home-header .ca-home-lead { display: none !important; }
-#main .ca-home-header h1 { margin: 0 !important; font-size: clamp(1.25rem, 2vw, 1.7rem) !important; line-height: 1.15 !important; }
-#main .ca-home-layout {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  gap: .75rem !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 auto !important;
-}
+#main .ca-home-header h1 { margin: 0 !important; font-size: clamp(1rem, 2vw, 1.7rem) !important; line-height: 1.15 !important; }
+#main .ca-home-layout { display: flex !important; flex-direction: column !important; align-items: center !important; gap: .75rem !important; width: 100% !important; max-width: 100% !important; margin: 0 auto !important; }
 #main .ca-home-side-left { display: none !important; }
-#main .ca-home-calculator {
-  order: 0 !important;
-  width: 100% !important;
-  max-width: 44rem !important;
-  margin: 0 auto !important;
-  padding: .65rem !important;
-  box-sizing: border-box !important;
-}
+#main .ca-home-calculator { order: 0 !important; width: 100% !important; max-width: 44rem !important; margin: 0 auto !important; padding: .65rem !important; box-sizing: border-box !important; }
 #main .ca-home-calculator .ca-calculator-engine { width: 100% !important; max-width: 36rem !important; margin: 0 auto !important; }
 #main .ca-home-card-heading { margin-bottom: .35rem !important; }
 #main .ca-home-calculator #calc-display { min-height: 3.75rem !important; height: auto !important; padding: .45rem .65rem !important; font-size: clamp(2rem, 5vw, 3rem) !important; line-height: 1.1 !important; }
@@ -2511,3 +2488,15 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
 #main .ca-home-calculator #calc-pad { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: .35rem !important; margin-top: .35rem !important; }
 #main .ca-home-calculator #calc-pad button { min-height: clamp(44px, 5.8vh, 54px) !important; height: auto !important; padding: .2rem !important; border-radius: .55rem !important; font-size: clamp(1.15rem, 2.5vw, 1.5rem) !important; line-height: 1.05 !important; }
 #main .ca-home-tools { order: 1 !important; width: 100% !important; max-width: 60rem !important; margin: 0 auto !important; box-sizing: border-box !important; }
+@media (max-width: 600px) {
+  #main:has(.ca-home-wrap) { padding: .1rem .5rem .25rem !important; }
+  #main .ca-home-wrap { margin: .1rem auto .25rem !important; }
+  #main .ca-home-header { margin: 0 auto .15rem !important; }
+  #main .ca-home-header h1 { font-size: 1rem !important; line-height: 1.1 !important; }
+  #main .ca-home-layout { gap: .35rem !important; }
+  #main .ca-home-calculator { padding: .45rem !important; }
+  #main .ca-home-card-heading { margin-bottom: .2rem !important; }
+  #main .ca-home-calculator #calc-display { min-height: 3rem !important; height: 3rem !important; padding: .25rem .5rem !important; font-size: clamp(1.8rem, 9vw, 2.4rem) !important; }
+  #main .ca-home-calculator #calc-mode-toggle { margin-top: .2rem !important; }
+  #main .ca-home-calculator #calc-pad { gap: .2rem !important; margin-top: .2rem !important; }
+}
