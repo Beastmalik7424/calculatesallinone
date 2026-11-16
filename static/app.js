@@ -490,7 +490,7 @@
       if (sunniAssetFields) sunniAssetFields.hidden = isJafari
       if (jafariFields) jafariFields.hidden = !isJafari
       if (resetNisab && nisabField && !isJafari) {
-        nisabField.value = school === "sunni-hanafi" ? "silver" : "gold-85"
+        nisabField.value = "silver"
       }
     }
     if (schoolField) schoolField.addEventListener("change", function () { updateMethodUI(true) })
@@ -522,7 +522,7 @@
       } else {
         var assets = {}
         assetFields.forEach(function (entry) { assets[entry[0]] = num(entry[1]) })
-        input.nisabMethod = nisabField ? nisabField.value : (school === "sunni-hanafi" ? "silver" : "gold-85")
+        input.nisabMethod = nisabField ? nisabField.value : "silver"
         input.assets = assets
         input.liabilities = num("z-debts")
         input.zakatPaid = num("z-paid")
