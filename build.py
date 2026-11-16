@@ -301,7 +301,7 @@ TOOLS = [
             + result("pl-result")
         ),
         "guide": [
-            ("Formulas", [
+            ("Business P&L formulas", [
                 "Gross profit = revenue − COGS. Gross margin % = gross profit ÷ revenue × 100. If revenue is zero, gross margin is not available. Business mode also subtracts the other operating expenses you enter to show an operating result; it does not infer costs you leave out.",
                 "This simplified operating P&L excludes separate interest and income tax calculations. Use the limitations below before treating the estimate as a formal statement."
             ]),
