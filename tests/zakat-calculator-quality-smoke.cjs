@@ -36,7 +36,7 @@ for (const id of [
   assert.match(ur, new RegExp('id="' + id + '"'), "Urdu calculator missing " + id);
 }
 for (const term of [
-  "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48", "595 g", "85 g", "96 g",
+  "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48", "595 g", "85 g", "96 g", "96 g",
   "503,529", "1446–1447 AH", "1447 AH (2026)", "State Bank of Pakistan", "first day of Ramazan",
   "saving, profit and loss sharing", "2.5%", "personal Zakat Nisab",
   "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000",
@@ -68,8 +68,8 @@ assert.equal((ur.match(/<summary\b/gi) || []).length, 4, "Urdu Zakat page must r
 const enNisab = en.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
 const urNisab = ur.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
 assert.ok(enNisab && urNisab, "Both locales must expose the Nisab selector");
-assert.equal((enNisab[1].match(/<option\b/g) || []).length, 4, "English UI must expose four explicit gold/silver weight conventions");
-assert.equal((urNisab[1].match(/<option\b/g) || []).length, 4, "Urdu UI must expose the same four explicit weight conventions");
+assert.equal((enNisab[1].match(/<option\b/g) || []).length, 5, "English UI must expose five explicit Nisab weight conventions");
+assert.equal((urNisab[1].match(/<option\b/g) || []).length, 5, "Urdu UI must expose the same five explicit weight conventions");
 
 const enSchool = en.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
 const urSchool = ur.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
@@ -106,12 +106,14 @@ assert.match(ur, /aliftaa\\.jo/, "Urdu content must cite Jordan General Iftaa's 
 
 assert.match(enNisab[1], /value="gold-85"/, "85 g gold reference must be selectable in English");
 assert.match(enNisab[1], /value="silver-595"/, "595 g silver reference must be selectable in English");
+assert.match(enNisab[1], /value="gold-96"/, "96 g gold reference must be selectable in English");
 assert.match(urNisab[1], /value="gold-85"/, "85 g gold reference must be selectable in Urdu");
 assert.match(urNisab[1], /value="silver-595"/, "595 g silver reference must be selectable in Urdu");
+assert.match(urNisab[1], /value="gold-96"/, "96 g gold reference must be selectable in Urdu");
 assert.match(enNisab[1], /value="gold-96"/, "96 g Shafi'i text reference must be selectable in English");
 assert.match(urNisab[1], /value="gold-96"/, "96 g Shafi'i text reference must be selectable in Urdu");
 for (const term of [
-  "503,529", "612.36", "87.48", "595", "85", "زکوٰۃ سال", "پاکستان", "نصاب",
+  "503,529", "612.36", "87.48", "595", "85", "96", "زکوٰۃ سال", "پاکستان", "نصاب",
   "اثاثے", "واجبات", "2.5"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing localized topic: " + term);
