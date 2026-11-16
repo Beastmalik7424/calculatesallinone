@@ -101,8 +101,8 @@ assert.match(en, /sindhlaws\.gov\.pk/, "English content must cite the Sindh Gove
 assert.match(ur, /sindhlaws\.gov\.pk/, "Urdu content must cite the Sindh Government conversion table");
 assert.match(en, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "English content must cite scholarly debt-rule guidance");
 assert.match(ur, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "Urdu content must cite scholarly debt-rule guidance");
-assert.match(ur, /zatca\\.gov\\.sa/, "Urdu content must cite Saudi ZATCA's official modern Nisab guidance");
-assert.match(ur, /aliftaa\\.jo/, "Urdu content must cite Jordan General Iftaa's 85 g and 96 g gold reference");
+assert.match(ur, /zatca\.gov\.sa/, "Urdu content must cite Saudi ZATCA's official modern Nisab guidance");
+assert.match(ur, /aliftaa\.jo/, "Urdu content must cite Jordan General Iftaa's 85 g and 96 g gold reference");
 
 assert.match(enNisab[1], /value="gold-85"/, "85 g gold reference must be selectable in English");
 assert.match(enNisab[1], /value="silver-595"/, "595 g silver reference must be selectable in English");
