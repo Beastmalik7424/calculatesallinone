@@ -54,6 +54,17 @@ let browser;
   await page.locator("#z-hawl").check();
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /15,309/);
+  assert.equal(await page.locator("#z-nisab-method option").count(), 4, "Both classical and modern gold/silver weights must be available");
+  await page.locator("#z-nisab-method").selectOption("gold-85");
+  await page.locator("#z-cash").fill("8500");
+  await page.locator("#z-goldprice").fill("100");
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /212\.5/);
+  await page.locator("#z-nisab-method").selectOption("silver-595");
+  await page.locator("#z-cash").fill("59500");
+  await page.locator("#z-silverprice").fill("100");
+  await page.locator('#zakat-form button[type="submit"]').click();
+  assert.match(await page.locator("#zakat-result").innerText(), /1,487\.5/);
 
   // Sunni school distinction: Hanafi includes ordinary qualifying jewellery.
   await page.locator("#z-school-of-thought").selectOption("sunni-hanafi");
