@@ -111,13 +111,13 @@ assert "COGS = opening inventory + purchases" in visible(pnl_html), "P&L must st
 assert visible(pnl_html).count("COGS = opening inventory + purchases") == 1, "P&L must state the COGS formula once"
 assert "does not count inventory or derive COGS for you" in visible(pnl_html), "P&L must distinguish the COGS guide formula from calculator inputs"
 
+zakat_html = read("zakat-calculator")
 zakat_words = len(re.findall(r"\b[\w’'-]+\b", visible(zakat_html)))
 urdu_zakat_html = (ROOT / "ur" / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
 urdu_zakat_words = len(re.findall(r"\b[\w’'-]+\b", visible(urdu_zakat_html)))
 assert zakat_words >= 1000, f"English Zakat page must contain at least 1,000 useful visible words, got {zakat_words}"
 assert urdu_zakat_words >= 700, f"Urdu Zakat page must contain at least 700 useful visible words, got {urdu_zakat_words}"
 
-zakat_html = read("zakat-calculator")
 assert 'value="silver"' in zakat_html and 'value="gold-87"' in zakat_html and 'value="gold-85"' not in zakat_html
 assert "85 g" not in visible(zakat_html), "Zakat page must not present the unapproved 85 g gold method"
 assert re.search(r'"dateModified"\s*:\s*"2026-11-16"', zakat_html), "Zakat WebPage dateModified must match the visible review date"
