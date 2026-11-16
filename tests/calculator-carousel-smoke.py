@@ -66,6 +66,7 @@ LANGUAGE_LABELS = {
 }
 for lang, required_labels in LANGUAGE_LABELS.items():
     markup = output_for("/" + lang + "/")
+    assert 'data-tool-set="duplicate"' in markup, f"{lang} homepage must retain the moving carousel duplicate"
     group = primary_group(markup, "/" + lang + "/")
     found = set(re.findall(r'data-tool-shortcut="([^"]+)"', group))
     assert found == ENGLISH_TOOLS, f"{lang} carousel must include all 17 calculators"
@@ -91,17 +92,18 @@ assert re.search(
 tasbih = output_for("/tasbih-counter/")
 assert 'id="t-tap"' in tasbih, "Tasbih Count one action must remain in generated HTML"
 css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
-assert "@keyframes ca-calculator-marquee" in css, "Calculator shortcuts must auto-slide"
-assert ".ca-calculator-carousel:focus-within" in css, "Keyboard focus must pause the moving carousel"
-assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must be in the upper header row before the full-width tools slide"
-assert "ca-site-nav-topline" in markup, "Header must separate the top controls from the full-width tools slide"
-assert "prefers-reduced-motion" in css and ".ca-calculator-track" in css, (
-    "Reduced-motion users must get a non-animated, manually scrollable carousel"
-)
-assert "#t-tap" in css and "min-height:48px" in css, (
-    "Tasbih Count one button must retain a visible, accessible touch target"
-)
-
-assert ".ca-calculator-carousel" in css and re.search(r"\.ca-calculator-carousel[^{}]*\{[^}]*width:\s*100%", css), "Tools slide must span the full available header row"
-assert "ca-site-nav-topline" in css and "justify-content:space-between" in css.replace(" ", ""), "Theme control and brand must stay on opposite ends of the top row"
-print("Calculator carousel, all 17 tools, header layout, reduced-motion support and Tasbih action smoke tests PASS")
+homepage_markup = output_for("/")
+zakat_markup = output_for("/zakat-calculator/")
+assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
+assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat calculator navigation must not duplicate links"
+assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
+assert "grid-template-columns:repeat(4,minmax(0,1fr))" in css.replace(" ", ""), "Phone navigation must use a compact four-column grid"
+assert "grid-template-columns:repeat(5,minmax(0,1fr))" in css.replace(" ", ""), "Tablet navigation must use five columns"
+assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Desktop navigation must use six columns"
+assert "min-height:38px" in css.replace(" ", ""), "Calculator shortcut links must retain a comfortable mobile tap target"
+assert "@keyframes ca-calculator-marquee" in css, "Homepage must retain its existing carousel animation"
+assert ".ca-calculator-track" in css and "animation:none" in css.replace(" ", ""), "Inner-page calculator navigation must be static, not a moving marquee"
+assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
+assert "ca-site-nav-topline" in markup, "Header must keep its separate top controls row"
+assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
+print("Calculator grid, all 17 unique tools, responsive columns, header layout and Tasbih action smoke tests PASS")

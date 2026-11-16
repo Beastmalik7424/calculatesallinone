@@ -137,7 +137,7 @@ TOOLS = [
         "app": "FinanceApplication",
         "description": "Calculate Hanafi or Sayyid Sistani Ja'fari Zakat estimates with gold or silver Nisab and gram, Sindh-standard tola or troy-ounce metal price inputs.",
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
-        "lead": "Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
+        "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             + '<div class="sticky top-20 z-20 shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
@@ -229,6 +229,7 @@ TOOLS = [
             ]),
             ("Hanafi method and calculation limits", [
                 "Choose Sunni — Hanafi only if you follow the Hanafi school. The calculator defaults to the 612.36 g silver Nisab and also provides the 87.48 g gold reference. The silver and gold prices are entered separately, and the calculator converts a selected Sindh-standard tola quote to a per-gram price before valuing Nisab. The asset fields are a structured estimate, not an automatic religious classification of every holding. The liabilities field subtracts the amount you enter, but the tool cannot decide whether a specific loan, instalment or business liability is deductible under your circumstances. The Hawl checkbox is self-reported and does not track balances throughout the lunar year. This is not a complete Hanafi fiqh engine. Follow a qualified Hanafi scholar for personal rulings and exceptional cases.",
+                "Pakistan-specific Hanafi note: Darul Ifta Banuri Town's fatwa 144608101364 (17 February 2025) says the 7.5-tola gold Nisab applies when gold is the only zakatable asset. If gold is held with cash, silver or trade goods, it tests the combined zakatable value against the 52.5-tola silver Nisab. This is that institution's published position, not a claim that every Hanafi authority uses the same rule. Follow the qualified scholar you trust. Source: [Banuri Town fatwa 144608101364](https://www.banuri.edu.pk/readquestion/144608101364/17-02-2025).",
                 "For jewellery, enter only the eligible metal value. Do not enter the same jewellery value in both the jewellery field and the eligible gold or silver fields. Purity, stones, workmanship, trade use and personal use can affect valuation or classification. The calculator cannot inspect jewellery or determine its eligible weight. Obtain a reliable valuation and ask a qualified Hanafi scholar about uncertain cases."
             ]),
             ("Shia Ja'fari method: Sayyid Sistani", [
@@ -758,7 +759,7 @@ URDU = {
         "title": "حنفی اور جعفری زکوٰۃ کیلکولیٹر | گرام اور تولہ | CalculatesAll",
         "description": "حنفی یا سید سیستانی کے جعفری طریقے سے زکوٰۃ کا تخمینہ لگائیں۔ سونے اور چاندی کی قیمت گرام یا معیاری تولہ میں درج کریں۔",
         "h1": "حنفی اور جعفری زکوٰۃ کیلکولیٹر",
-        "lead": "دو الگ حسابی طریقوں میں سے انتخاب کریں: سنی حنفی، یا آیت اللہ سید سیستانی کا مخصوص جعفری تجارتی مال کا حکم۔ سونے اور چاندی کی قیمت فی گرام یا واضح طور پر متعین سندھ کے معیاری تولہ کے مطابق درج کریں۔ حساب کے مفروضے، ماخذ اور حدود ضرور پڑھیں۔",
+        "lead": "یہ کیلکولیٹر مفت ہے اور اکاؤنٹ بنانے کی ضرورت نہیں۔ حساب آپ کے براؤزر میں ہوتا ہے۔ دھاتوں کی قیمت خود درج کریں کیونکہ یہاں لائیو مارکیٹ ریٹس حاصل نہیں کیے جاتے۔ دو الگ حسابی طریقوں میں سے انتخاب کریں: سنی حنفی، یا آیت اللہ سید سیستانی کا مخصوص جعفری تجارتی مال کا حکم۔ سونے اور چاندی کی قیمت فی گرام یا واضح طور پر متعین سندھ کے معیاری تولہ کے مطابق درج کریں۔ حساب کے مفروضے، ماخذ اور حدود ضرور پڑھیں۔",
         "labels": [
             ("Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.", "چاندی یا سونے کا نصاب منتخب کریں۔ 2.5٪ کا تخمینہ صرف منتخب نصاب اور حول کی شرائط پوری ہونے پر لاگو ہوتا ہے۔"),
             ("Currency code (ISO 4217)", "کرنسی کوڈ (ISO 4217)"),
@@ -799,6 +800,7 @@ URDU = {
             ("Owner retained the right to dispose of the goods throughout the year", "مالک کو پورے سال مال میں تصرف کا حق حاصل رہا ہو"),
             ("Market value did not fall below the purchase cost during the year", "سال کے دوران مال کی بازاری قیمت خریداری کی لاگت سے کم نہ ہوئی ہو"),
             ("This path excludes cash, banknotes, ordinary savings, personal jewellery, crops and livestock. It is not a complete Zakat or Khums assessment.", "اس طریقے میں نقد رقم، بینک نوٹ، عام بچت، ذاتی زیورات، زرعی پیداوار اور مویشی شامل نہیں۔ یہ زکوٰۃ یا خمس کا مکمل حساب نہیں ہے۔"),
+            ("Metal prices for Nisab", "نصاب کے لیے دھاتوں کی قیمت"),
             ("Metal price unit", "دھات کی قیمت کی اکائی"),
             ("Price per gram", "فی گرام قیمت"),
             ("Price per Sindh Government standard tola (11.6638 g)", "حکومتِ سندھ کے سرکاری تولہ کے حساب سے قیمت (11.6638 گرام)"),
@@ -821,9 +823,10 @@ URDU = {
             "اپنی زکوٰۃ کی تاریخ پر موجود مالیت درج کریں۔ عام طور پر یہ وہ ہجری تاریخ ہوتی ہے جب آپ کا زکوٰۃ کا سال مکمل ہوتا ہے۔ ہر شخص کی تاریخ مختلف ہو سکتی ہے۔ یہ خود بخود یکم جنوری، مالی سال، رمضان یا صفحہ کھولنے کی تاریخ نہیں بن جاتی۔ بہتر ہے کہ آپ اپنی تاریخ، دھات کی قیمت کا ماخذ اور استعمال شدہ طریقہ لکھ کر محفوظ رکھیں تاکہ اگلے سال موازنہ کر سکیں۔",
             "نصاب وہ کم از کم مالیت ہے جس کے پہنچنے پر زکوٰۃ کی دوسری شرائط دیکھی جاتی ہیں۔ اس حنفی کیلکولیٹر میں جنوبی ایشیائی حنفی رہنمائی میں عام طور پر بیان کردہ دو وزن دستیاب ہیں: چاندی 612.36 گرام یا سونا 87.48 گرام۔ ابتدا میں چاندی کا نصاب منتخب ہے۔ نقد حد منتخب دھات کے وزن کو زکوٰۃ کی تاریخ پر فی گرام مقامی قیمت سے ضرب دے کر بنتی ہے۔ اپنے حالات کے مطابق نصاب منتخب کرنے کے لیے مستند حنفی عالم کی رہنمائی لیں.",
             "سنی اختیار میں صرف حنفی طریقہ دستیاب ہے۔ یہ 612.36 گرام چاندی کے نصاب کو ابتدائی انتخاب رکھتا ہے اور 87.48 گرام سونے کا متبادل بھی دیتا ہے۔ یہ محدود حسابی تخمینہ ہے، مکمل فقہی انجن نہیں۔ واجبات کے خانے میں درج رقم منہا ہوتی ہے، مگر کیلکولیٹر خود فیصلہ نہیں کرتا کہ کوئی مخصوص قرض یا قسط حنفی حکم کے مطابق قابلِ کٹوتی ہے یا نہیں۔ حول کا چیک باکس آپ کی خود تصدیق ہے، یہ پورے قمری سال میں مال کا ریکارڈ نہیں رکھتا.",
+            "پاکستانی حنفی قارئین کے لیے مقامی فقہی وضاحت: جامعہ علوم اسلامیہ بنوری ٹاؤن کے فتویٰ نمبر 144608101364 (17 فروری 2025) کے مطابق 7.5 تولہ سونے کا نصاب اس وقت لاگو ہوتا ہے جب قابلِ زکوٰۃ مال صرف سونا ہو۔ اگر سونے کے ساتھ نقد رقم، چاندی یا مالِ تجارت بھی ہو تو مجموعی قابلِ زکوٰۃ مال کا موازنہ 52.5 تولہ چاندی کے نصاب سے کیا جاتا ہے۔ یہ بنوری ٹاؤن کا شائع شدہ موقف ہے، ہر حنفی دارالافتاء کی رائے کا دعویٰ نہیں۔ اپنے مستند عالم کی ہدایت پر عمل کریں۔ ماخذ: [بنوری ٹاؤن کا فتویٰ 144608101364](https://www.banuri.edu.pk/readquestion/144608101364/17-02-2025)۔",
             "ایک ہی زیور کی قیمت کو زیورات، سونے اور چاندی کے خانوں میں دوبارہ درج نہ کریں۔ خالص پن، نگینے، کاریگری، ذاتی استعمال اور تجارت کا مقصد مالیت یا شرعی درجہ بندی بدل سکتے ہیں۔ کیلکولیٹر زیور کا وزن یا خالص پن خود نہیں جانچتا۔ غیر یقینی صورت میں مستند حنفی عالم اور قابلِ اعتماد جیولر سے رجوع کریں.",
             "شیعہ جعفری اختیار صرف آیت اللہ سید سیستانی کی پیروی کرنے والوں کے لیے ہے۔ ان کے سرکاری سوال و جواب کے مطابق عام بینک ڈپازٹس اور بینک نوٹوں پر واجب زکوٰۃ نہیں، جبکہ سالانہ اخراجات کے بعد بچت پر خمس کا الگ حکم ہو سکتا ہے۔ اس لیے اس اختیار میں سنی نقد اور بینک بیلنس والا فارمولا استعمال نہیں ہوتا۔",
-            "یہ کیلکولیٹر سیستانی کے ایک محدود حکم کا حساب کرتا ہے: ایسا تجارتی مال جو تبادلے کے معاہدے سے حاصل کیا گیا ہو اور نفع کے لیے رکھا گیا ہو۔ سرکاری حکم کے مطابق مالک بالغ اور عاقل ہو، مال کا نصاب کم از کم 15 مثقالِ صیرفی سونا یا 105 مثقالِ صیرفی چاندی ہو، نفع کی نیت سے ایک سال گزرے، نفع کی نیت پورے سال برقرار رہے، مالک کو پورے سال مال میں تصرف کا حق حاصل ہو، اور مال پورے سال کم از کم اپنی لاگت کے برابر فروخت ہونے کے قابل ہو۔ اس مال پر شرح 2.5 فیصد ہے۔ اگر ان شرائط میں سے کسی کی تصدیق نہ ہو تو کیلکولیٹر رقم نہیں دکھاتا۔",
+            "یہ کیلکولیٹر سیستانی کے ایک محدود حکم کا حساب کرتا ہے: ایسا تجارتی مال جو تبادلے کے معاہدے سے حاصل کیا گیا ہو اور نفع کے لیے رکھا گیا ہو۔ یہ حکم احتیاطِ واجب کی بنا پر لاگو ہوتا ہے۔ سرکاری حکم کے مطابق مالک بالغ اور عاقل ہو، مال کا نصاب کم از کم 15 مثقالِ صیرفی سونا یا 105 مثقالِ صیرفی چاندی ہو، نفع کی نیت سے ایک سال گزرے، نفع کی نیت پورے سال برقرار رہے، مالک کو پورے سال مال میں تصرف کا حق حاصل ہو، اور مال پورے سال کم از کم اپنی لاگت کے برابر فروخت ہونے کے قابل ہو۔ اس مال پر شرح 2.5 فیصد ہے۔ اگر ان شرائط میں سے کسی کی تصدیق نہ ہو تو کیلکولیٹر رقم نہیں دکھاتا۔",
             "سیستانی کے تجارتی مال کے لیے استعمال شدہ نصاب سونے کے 69.12 گرام اور چاندی کے 483.84 گرام ہیں۔ ان کے سرکاری احکام میں سونے اور چاندی کے ایسے سکوں کا الگ ذکر ہے جو عام لین دین میں بطور کرنسی استعمال ہوتے ہوں۔ یہ کیلکولیٹر زرعی پیداوار، مویشی، سکے بطور کرنسی یا خمس کا حساب نہیں کرتا۔ دوسرے جعفری مراجع کے احکام مختلف ہو سکتے ہیں، اس لیے اپنے مرجع کے دفتر سے تصدیق کریں۔",
             "سونے اور چاندی کی قیمت تین اکائیوں میں درج کریں: گرام (1 گرام)، حکومتِ سندھ کا سرکاری تولہ (11.6638 گرام)، یا ٹرائے اونس (31.1034768 گرام)۔ کیلکولیٹر قیمت کو فی گرام میں تبدیل کر کے نصاب نکالتا ہے۔ بعض پاکستانی بازاروں میں تولہ 12.5 گرام بھی استعمال ہوتا ہے، اس لیے صراف سے اصل وزن کی تصدیق کریں۔",
             "تمام اثاثوں اور دھات کی قیمت ایک ہی کرنسی میں درج کریں۔ یہ کیلکولیٹر لائیو قیمت حاصل نہیں کرتا۔ سرکاری تولہ صرف 11.6638 گرام کے نرخ پر اور ٹرائے اونس صرف 31.1034768 گرام کے نرخ پر منتخب کریں۔ اگر بازار کا تولہ 12.5 گرام ہو تو قیمت فی گرام میں تبدیل کر کے گرام منتخب کریں۔",
@@ -1451,7 +1454,8 @@ CAROUSEL_SHORT_UR = {
 def calculator_carousel(lang="en", current_path=None):
     s = shell_strings(lang)
     groups = []
-    for group_name, duplicate in (("primary", False), ("duplicate", True)):
+    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else (("primary", False),)
+    for group_name, duplicate in groups_to_render:
         links = []
         for slug, english_name, short_name in CAROUSEL_TOOLS:
             if lang == "ur":

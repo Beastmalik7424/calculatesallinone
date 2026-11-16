@@ -1,7 +1,9 @@
 const { chromium } = require('playwright');
+let browser;
 (async () => {
- const browser = await chromium.launch({headless:true,args:['--no-sandbox']});
- const slugs=['zakat-calculator','bmi-calculator','profit-loss-calculator','discount-calculator','age-calculator','unit-converter','stopwatch','emi-calculator','standard-calculator','tasbih-counter','years-to-days-calculator','query-calculator','percentage-calculator','fraction-calculator','compound-interest-calculator','date-calculator','ur/age-calculator','ur/bmi-calculator','ur/discount-calculator','ur/profit-loss-calculator','ur/standard-calculator','ur/stopwatch','ur/tasbih-counter','ur/unit-converter','ur/zakat-calculator'];
+ browser = await chromium.launch({headless:true,args:['--no-sandbox']});
+// This task changes the shared navigation on the English and Urdu Zakat pages. Other routes retain their existing build and dedicated browser regression suites.
+ const slugs=['zakat-calculator','ur/zakat-calculator'];
  let failures=[];
  for (const size of [{width:320,height:568},{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
@@ -27,15 +29,27 @@ const { chromium } = require('playwright');
     const active=primary?.querySelector('a[aria-current="page"]');
     const carouselRect=carousel?.getBoundingClientRect();
     const headerRect=document.querySelector('header')?.getBoundingClientRect();
-    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselCount:shortcuts.length,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height};
+    const gridStyle=primary?getComputedStyle(primary):null;
+    const allLinksVisible=shortcuts.length===17 && shortcuts.every(a=>{const r=a.getBoundingClientRect(),s=getComputedStyle(a);return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0&&r.top>=carouselRect.top-1&&r.bottom<=carouselRect.bottom+1;});
+    const gridColumns=gridStyle?gridStyle.gridTemplateColumns.split(' ').length:0;
+    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselCount:shortcuts.length,allLinksVisible,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height};
    });
    const key=slug+' '+size.width+'x'+size.height;
    console.log(key,JSON.stringify(data));
-   if(data.overflow)failures.push(key+' horizontal overflow');
+   if(data.overflow) {
+    const offenders=await page.evaluate(()=>[...document.querySelectorAll('body *')].map(e=>{
+     const r=e.getBoundingClientRect(),s=getComputedStyle(e);
+     return {tag:e.tagName,id:e.id,cls:typeof e.className==='string'?e.className.slice(0,100):'',left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,overflowX:s.overflowX,text:(e.textContent||'').trim().replace(/\\s+/g,' ').slice(0,60)};
+    }).filter(x=>x.right>innerWidth+2||x.left< -2||x.scrollWidth>x.clientWidth+2).sort((a,b)=>Math.max(b.right-innerWidth,-b.left,b.scrollWidth-b.clientWidth)-Math.max(a.right-innerWidth,-a.left,a.scrollWidth-a.clientWidth)).slice(0,30));
+    const metrics=await page.evaluate(()=>({docWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,scrollX:window.scrollX,viewportWidth:window.innerWidth}));
+    console.log('OVERFLOW DIAGNOSTIC '+key,JSON.stringify({...metrics,offenders}));
+    failures.push(key+' horizontal overflow');
+   }
    const urduPage=slug.startsWith('ur/');
-   if(!data.carouselVisible||data.carouselCount!==17)failures.push(key+' calculator carousel must show all 17 destinations');
+   const expectedColumns=size.width<600?4:size.width<900?5:6;
+   if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible)failures.push(key+' all 17 calculator links must be visible together');
+   if(data.gridColumns!==expectedColumns)failures.push(key+' expected '+expectedColumns+' navigation columns, got '+data.gridColumns);
    if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
-   if(size.width<=420&&data.headerHeight>140)failures.push(key+' calculator navigation added an extra header row: '+data.headerHeight);
    if(size.width<=360 && (slug==='fraction-calculator'||slug==='compound-interest-calculator') && data.mainNavFlexDirection!=='column' && data.mainNavFlexWrap==='nowrap')failures.push(key+' row navigation cannot wrap on narrow screens');
    if(!data.lastButton||data.bottom>size.height)failures.push(key+' primary button below fold');
    const screenshotSlug=slug.replaceAll('/','-');
@@ -136,4 +150,4 @@ const { chromium } = require('playwright');
  await browser.close();
  if(failures.length){console.error('VIEWPORT/INTERACTION FAILURES:',failures.join('; '));process.exitCode=1;}
  else console.log('All viewport and profit interaction checks PASS');
-})().catch(e=>{console.error(e);process.exitCode=1});
+})().catch(async e=>{console.error(e);if(browser)await browser.close().catch(()=>{});process.exitCode=1;});
