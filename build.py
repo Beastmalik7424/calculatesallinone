@@ -146,6 +146,16 @@ TOOLS = [
             '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
             '<input id="z-currency" name="z-currency" class="@I@" type="text" value="PKR" maxlength="3" minlength="3" pattern="[A-Za-z]{3}" autocapitalize="characters" autocomplete="off" spellcheck="false">'
             '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.</p></div>'
+            '<div><label class="@L@" for="z-school-of-thought">School of thought / calculation method</label>'
+            '<select id="z-school-of-thought" name="z-school-of-thought" class="@I@">'
+            '<option value="sunni-hanafi" selected>Sunni — Hanafi</option>'
+            '<option value="sunni-shafii">Sunni — Shafi\'i</option>'
+            '<option value="sunni-maliki">Sunni — Maliki</option>'
+            '<option value="sunni-hanbali">Sunni — Hanbali</option>'
+            '<option value="jafari-sistani">Shia Ja\'fari — Sayyid Sistani</option>'
+            '</select>'
+            '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p></div>'
+            '<div id="z-sunni-fields" class="space-y-5">'
             '<div><label class="@L@" for="z-nisab-method">Nisab method</label>'
             '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
             '<option value="silver" selected>Silver Nisab (612.36 g)</option>'
@@ -160,6 +170,7 @@ TOOLS = [
             + field("z-savings", "Savings, deposits and cash equivalents")
             + field("z-gold", "Eligible gold value")
             + field("z-silver", "Eligible silver value")
+            + field("z-jewellery", "Permissible personal-use gold/silver jewellery")
             + field("z-investments", "Zakatable shares and investments")
             + field("z-businesscash", "Business cash and bank balance")
             + field("z-stock", "Trade inventory at current sale value")
@@ -168,19 +179,42 @@ TOOLS = [
             + field("z-crypto", "Eligible cryptocurrency holdings")
             + field("z-property", "Property held for resale")
             + "</div>"
-            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal prices for Nisab</h2>'
-            '<p class="text-sm text-stone-700 dark:text-stone-300">Enter a current local market price per gram in the same currency as your assets. Use the price for the selected Nisab method.</p>'
-            '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-silverprice", "Silver price per gram")
-            + field("z-goldprice", "24-karat gold price per gram")
-            + "</div>"
             '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible liabilities and payments</h2>'
             '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-debts", "Eligible short-term debts and dues")
             + field("z-paid", "Zakat already paid for this Zakat year")
             + "</div>"
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
-            + '<p class="text-sm text-stone-700 dark:text-stone-300">This is an estimate, not a fatwa. Debt, jewellery, investments and retirement rules differ. Review the guidance below and ask a qualified scholar about your circumstances.</p>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">For the Sunni methods, the Hanafi option includes qualifying personal-use gold/silver jewellery. The Shafi\'i, Maliki and Hanbali options exclude ordinary permissible personal-use jewellery; investment, trade or excessive jewellery may be treated differently. Confirm edge cases with your scholar.</p>'
+            + '</div>'
+            + '<div id="z-jafari-fields" class="space-y-4" hidden>'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Shia Ja\'fari method — Sayyid Sistani</h2>'
+            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">This is not the Sunni cash-and-bank calculation. Under Sayyid Sistani\'s published rulings, ordinary banknotes and bank deposits do not carry obligatory Zakat. This limited calculator estimates only qualifying trading goods under obligatory precaution. Other Ja\'fari authorities may have different rulings. Khums is separate and is not calculated here.</p>'
+            + '<div><label class="@L@" for="z-jafari-nisab-method">Trading-goods Nisab reference</label>'
+            + '<select id="z-jafari-nisab-method" name="z-jafari-nisab-method" class="@I@">'
+            + '<option value="gold" selected>Gold: 69.12 g (15 common mithqals)</option>'
+            + '<option value="silver">Silver: 483.84 g (105 common mithqals)</option>'
+            + '</select></div>'
+            + field("z-jafari-trade-value", "Current market value of qualifying trading goods")
+            + check("z-jafari-owner", "Owner is adult and sane")
+            + check("z-jafari-hawl", "One full lunar year has passed since the intention to profit")
+            + check("z-jafari-intent", "Intention to profit continued throughout the year")
+            + check("z-jafari-access", "Owner retained the right to dispose of the goods throughout the year")
+            + check("z-jafari-market", "Market value did not fall below the purchase cost during the year")
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">This path excludes cash, banknotes, ordinary savings, personal jewellery, crops and livestock. It is not a complete Zakat or Khums assessment.</p>'
+            + '</div>'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal prices for Nisab</h2>'
+            + '<div><label class="@L@" for="z-metal-price-unit">Metal price unit</label>'
+            + '<select id="z-metal-price-unit" name="z-metal-price-unit" class="@I@">'
+            + '<option value="gram" selected>Price per gram</option>'
+            + '<option value="tola">Price per Pakistani tola (11.6638 g)</option>'
+            + '</select></div>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">Enter the current local price in the selected currency and unit. If you choose tola, the calculator converts using 1 Pakistani tola = 11.6638 g.</p>'
+            + '<div class="grid sm:grid-cols-2 gap-4">'
+            + field("z-silverprice", "Silver price per gram")
+            + field("z-goldprice", "24-karat gold price per gram")
+            + '</div>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">This is an estimate, not a fatwa. Debt, jewellery, investments, business goods and retirement rules can differ. Review the source-based guidance below and ask a qualified scholar about your circumstances.</p>'
             + '</form>'
             + result("zakat-result")
         ),
