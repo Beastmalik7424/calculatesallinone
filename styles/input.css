@@ -583,7 +583,7 @@
   }
   .ca-home-calculator #calc-history {
     margin-top: 0 !important;
-    font-size: .7rem !important;
+    font-size: .67rem !important;
     line-height: 1.1 !important;
   }
 }
@@ -1017,7 +1017,7 @@
 #main .ca-tool-bmi-calculator #bmi-form button[type=submit] { min-height: 44px; padding: .45rem; }
 #main .ca-tasbih-shell { gap: .3rem !important; }
 #main .ca-tasbih-shell label { font-size: .85rem !important; line-height: 1.15 !important; }
-#main .ca-tasbih-shell select, #main .ca-tasbih-shell input { min-height: 40px !important; padding-top: .25rem; padding-bottom: .25rem; }
+#main .ca-tasbih-shell select, #main .ca-tasbih-shell input { min-height: 34px !important; padding-top: .25rem; padding-bottom: .25rem; }
 #main .ca-tasbih-shell #t-count { padding: .2rem !important; font-size: clamp(2.8rem, 9vw, 4.1rem) !important; line-height: 1.05 !important; }
 #main .ca-tasbih-shell #t-progress { margin: 0; font-size: .82rem !important; }
 #main .ca-tasbih-shell #t-tap { min-height: 48px !important; padding: .35rem !important; }
@@ -1398,7 +1398,7 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
     padding: 0 !important;
   }
   #main .ca-tool-standard-calculator #calc-pad {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     grid-auto-rows: 44px !important;
     align-content: start !important;
     row-gap: 4px !important;
@@ -2382,7 +2382,7 @@ body:not(:has(.ca-home-wrap)) .ca-calculator-track {
 body:not(:has(.ca-home-wrap)) .ca-calculator-group[data-tool-set="duplicate"] { display: none !important; }
 body:not(:has(.ca-home-wrap)) .ca-calculator-group[data-tool-set="primary"] {
   display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   width: 100% !important;
   min-width: 0 !important;
   gap: .3rem !important;
