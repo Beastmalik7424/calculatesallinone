@@ -1,6 +1,8 @@
 name: First-screen calculator browser audit
 on:
-  pull_request:
+  push:
+    branches:
+      - 'fix/zakat-urdu-copy-qa-2026-11-16'
     paths:
       - 'build.py'
       - 'content_v5.py'
@@ -24,6 +26,17 @@ on:
       - 'static/extra-calculators-ui.js'
       - 'tests/extra-calculators-browser.cjs'
       - 'tests/extra-calculators-smoke.cjs'
+      - '.github/workflows/first-screen-audit.yml'
+  pull_request:
+    paths:
+      - 'build.py'
+      - 'content_v5.py'
+      - 'styles/input.css'
+      - 'static/app.js'
+      - 'static/zakat-calculator.js'
+      - 'tests/viewport-audit.cjs'
+      - 'tests/zakat-calculator-browser.cjs'
+      - 'tests/extra-calculators-browser.cjs'
       - '.github/workflows/first-screen-audit.yml'
   workflow_dispatch:
 permissions:
