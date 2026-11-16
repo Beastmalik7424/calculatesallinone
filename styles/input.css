@@ -2455,3 +2455,11 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
   background: #134e4a !important;
   color: #f0fdfa !important;
 }
+
+
+/* On small screens, prioritize the Zakat calculator over the global shortcut grid. */
+@media (max-width: 600px) {
+  body:has(#zakat-form) .ca-calculator-carousel {
+    display: none !important;
+  }
+}
