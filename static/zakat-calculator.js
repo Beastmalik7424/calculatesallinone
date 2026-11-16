@@ -5,7 +5,7 @@
   if (root) root.ZakatCalculator = api;
 })(typeof window !== "undefined" ? window : globalThis, function () {
   "use strict";
-  const PAKISTANI_TOLA_GRAMS = 11.6638;
+  const SINDH_STANDARD_TOLA_GRAMS = 11.6638;
   const NISAB = Object.freeze({
     silver: Object.freeze({ grams: 612.36, priceKey: "silverPricePerGram", label: "Silver 612.36 g" }),
     "gold-87": Object.freeze({ grams: 87.48, priceKey: "goldPricePerGram", label: "Gold 87.48 g" })
@@ -44,7 +44,7 @@
   function pricePerGram(input, priceKey, unit) {
     const raw = amount(input[priceKey], priceKey);
     if (raw <= 0) throw new RangeError("Enter a current metal price in the selected currency and unit");
-    return raw / (unit === "tola" ? PAKISTANI_TOLA_GRAMS : 1);
+    return raw / (unit === "tola" ? SINDH_STANDARD_TOLA_GRAMS : 1);
   }
   function finishResult(values) {
     const zakatBeforePaid = values.status === "payable" ? values.netAssets * 0.025 : 0;
@@ -159,6 +159,6 @@
     nisabMethods: NISAB,
     jafariNisabMethods: JAFARI_NISAB,
     sunniSchools: SUNNI_SCHOOLS,
-    pakistaniTolaGrams: PAKISTANI_TOLA_GRAMS
+    pakistaniTolaGrams: SINDH_STANDARD_TOLA_GRAMS
   });
 });
