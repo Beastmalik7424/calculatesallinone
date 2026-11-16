@@ -41,11 +41,12 @@ let browser;
      const r=e.getBoundingClientRect(),s=getComputedStyle(e);
      return {tag:e.tagName,id:e.id,cls:typeof e.className==='string'?e.className.slice(0,100):'',left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,overflowX:s.overflowX,text:(e.textContent||'').trim().replace(/\\s+/g,' ').slice(0,60)};
     }).filter(x=>x.right>innerWidth+2||x.left< -2).sort((a,b)=>Math.max(b.right-innerWidth,-b.left)-Math.max(a.right-innerWidth,-a.left)).slice(0,18));
-    console.log('OVERFLOW DIAGNOSTIC '+key,JSON.stringify({docWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,scrollX,offenders}));
+    const metrics=await page.evaluate(()=>({docWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,scrollX:window.scrollX,viewportWidth:window.innerWidth}));
+    console.log('OVERFLOW DIAGNOSTIC '+key,JSON.stringify({...metrics,offenders}));
     failures.push(key+' horizontal overflow');
    }
    const urduPage=slug.startsWith('ur/');
-   const expectedColumns=size.width<600?3:size.width<900?4:6;
+   const expectedColumns=size.width<600?4:size.width<900?5:6;
    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible)failures.push(key+' all 17 calculator links must be visible together');
    if(data.gridColumns!==expectedColumns)failures.push(key+' expected '+expectedColumns+' navigation columns, got '+data.gridColumns);
    if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
