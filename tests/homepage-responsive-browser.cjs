@@ -46,6 +46,7 @@ const axe = require("axe-core");
     assert.equal(initial.unnamedButtons, 0, "every calculator key must have an accessible name");
     // The home page should follow the same focused, calculator-first hierarchy at every viewport.
     const firstFoldScenarios = [
+      { width: 320, height: 568, label: "small mobile portrait" },
       { width: 390, height: 844, label: "mobile portrait" },
       { width: 360, height: 740, label: "compact mobile portrait" },
       { width: 1366, height: 768, label: "laptop" },
