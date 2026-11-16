@@ -119,9 +119,7 @@ assert.equal(result.overpayment, 252.5);
 result = calculate({ ...base, nisabMethod: "gold-87", assets: { cash: 900000 }, goldPricePerGram: 10000 });
 assert.equal(result.nisabThreshold, 874800);
 assert.equal(result.nisabGrams, 87.48);
-result = calculate({ ...base, nisabMethod: "gold-85", assets: { cash: 900000 }, goldPricePerGram: 10000 });
-assert.equal(result.nisabThreshold, 850000);
-assert.equal(result.nisabGrams, 85);
+assert.throws(() => calculate({ ...base, nisabMethod: "gold-85", assets: { cash: 900000 }, goldPricePerGram: 10000 }), /Nisab method/);
 
 for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
   assert.throws(() => calculate({ ...base, assets: { cash: bad } }));
@@ -145,7 +143,7 @@ for (let i = 0; i < 2000; i++) {
   const price = 10 + random() * 500;
   const paid = Math.floor(random() * 500000) / 100;
   const r = calculate({
-    currency: "PKR", nisabMethod: i % 3 === 0 ? "gold-87" : (i % 3 === 1 ? "gold-85" : "silver"),
+    currency: "PKR", nisabMethod: i % 2 === 0 ? "gold-87" : "silver",
     silverPricePerGram: price, goldPricePerGram: price * 100,
     assets, liabilities, zakatPaid: paid, hawlComplete: i % 2 === 0
   });
