@@ -305,16 +305,16 @@ TOOLS = [
         ),
         "guide": [
             ("Formulas", [
-                "Business P&L formulas: gross profit equals total revenue minus cost of goods sold (COGS). Net operating profit equals gross profit minus other business expenses. Net operating margin equals net operating profit divided by total revenue, multiplied by 100. When revenue is zero, margin is not available.",
-                                "This simplified operating P&L excludes separate interest and income tax calculations. Enter those amounts in other expenses only when appropriate."
+                "Gross profit = revenue − COGS. Gross margin % = gross profit ÷ revenue × 100. If revenue is zero, gross margin is not available. Business mode also subtracts the other operating expenses you enter to show an operating result; it does not infer costs you leave out.",
+                "This simplified operating P&L excludes separate interest and income tax calculations. Use the limitations below before treating the estimate as a formal statement."
             ]),
             ("Product profit formulas", [
                 "Product profit or loss equals selling price minus cost price. A negative result is a loss.",
                 "Markup on cost is profit divided by cost price, multiplied by 100. Gross margin on selling price is profit divided by selling price, multiplied by 100. Either percentage is unavailable when its denominator is zero."
             ]),
             ("How to calculate cost of goods sold", [
-                "For a trading business, COGS is generally opening inventory plus net purchases and direct inward costs, minus closing inventory. The worked example below uses opening inventory of 20,000, purchases of 50,000 and closing inventory of 25,000, giving COGS of 45,000.",
-                "This calculator asks you to enter the resulting COGS total. It does not collect opening inventory, purchases or closing inventory separately, and it does not derive COGS from them. Prepare the total first and avoid counting freight or other direct costs twice."
+                "COGS = opening inventory + purchases − closing inventory. Use figures from the same accounting period and the same inventory valuation basis. In the worked example, 20,000 + 50,000 − 25,000 = 45,000.",
+                "This calculator asks you to enter the resulting COGS total. It does not collect opening inventory, purchases or closing inventory separately, and it does not derive COGS from them. Prepare the total from your stock records before using Business mode."
             ]),
             ("Markup versus margin at a glance", [
                 "Markup uses cost as its base; gross margin uses selling price as its base. If an item costs 800 and sells for 1,000, profit is 200, markup is 25 percent of cost, and gross margin is 20 percent of selling price. These percentages describe the same 200 profit with different denominators.",
@@ -358,7 +358,7 @@ TOOLS = [
             ("How do shipping and platform fees affect product profit?", "Include direct costs that belong in the product's cost base, such as freight, packaging and platform fees. Keep general overheads separate when preparing a business P&L."),
             ("Does the business result include tax and interest?", "No. This is a simplified operating estimate. Enter appropriate expenses in the other-expenses field, and use a qualified accountant for tax and formal reporting."),
             ("What is the difference between gross profit and net operating profit?", "Gross profit is revenue minus COGS. Net operating profit also subtracts the other business expenses entered in the calculator."),
-            ("How do I calculate COGS from inventory?", "For a trading business, start with opening inventory, add net purchases and direct inward costs, then subtract closing inventory. Enter that resulting COGS total in business mode.")
+            ("How do I calculate COGS from inventory?", "Record the opening inventory, purchases and closing inventory for the same period, calculate the COGS total from your stock records, then enter that total in business mode. The calculator does not calculate it from separate inventory fields.")
         ],
         "sources": 'Formula references: <a class="' + LINK + '" href="https://openstax.org/books/introduction-business/pages/14-5-the-income-statement" target="_blank" rel="noopener noreferrer">OpenStax: The Income Statement</a> explains inventory, cost of goods sold, gross profit, operating expenses and why profit is not cash. <a class="' + LINK + '" href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html" target="_blank" rel="noopener noreferrer">ACCA Ratio Analysis</a> explains gross and operating profit margin ratios. This calculator is a simplified estimate, not a formal financial statement.',
     },
@@ -1793,13 +1793,12 @@ BMI_GUIDE = [
         "These categories are population-level screening ranges. They do not determine whether an individual is healthy, and they should not be used as a personal diagnosis or treatment plan.",
     ]),
     ("WHO Expert Consultation and Asian population action points", ["The WHO Expert Consultation published in The Lancet in 2004 retained the standard WHO BMI cutoffs. It identified 23.0, 27.5, 32.5 and 37.5 kg/m² as additional public-health action points for Asian populations. These points sit alongside the standard categories. They are not replacement categories and this calculator does not relabel them as categories."]),
-    ("Worked example", ["For an adult weighing 70 kg at a height of 1.70 m: 70 ÷ (1.70 × 1.70) = 24.2 kg/m² when rounded to one decimal place."]),
-    ("Worked examples", [
-        "If an adult weighs 70 kg and is 170 cm tall, the calculation is 70 ÷ (1.70 × 1.70), giving a BMI of 24.2 after rounding. The displayed adult category is normal weight.",
-        "For someone who is 5 ft 7 in tall, total height is 67 inches. Converting that to centimetres gives 170.18 cm. With a weight of 70 kg, BMI is also about 24.2. Enter feet and inches separately rather than entering a decimal number such as 5.7 feet.",
+    ("Worked example", [
+        "For an adult weighing 70 kg at a height of 1.70 m: 70 ÷ (1.70 × 1.70) = 24.2 kg/m² when rounded to one decimal place. The displayed adult category is normal weight.",
+        "For someone using imperial height input, 5 ft 7 in is 67 inches. At 70 kg, the BMI is also about 24.2. Enter feet and inches separately rather than entering a decimal number such as 5.7 feet.",
     ]),
     ("What BMI cannot tell you", [
-        "BMI does not measure body fat directly or show where fat is stored. A person with substantial muscle mass may have a higher BMI without having the same body-fat level as another person with the same BMI. Body frame, fat distribution, health history and other measurements can change how the result should be interpreted.",
+        "BMI does not measure body fat directly or show where fat is stored. A person with substantial muscle mass may have a higher BMI without having the same body-fat level as another person with the same BMI. Body frame, fat distribution, health history and other measurements can change how the result should be interpreted. Waist circumference adds a separate measure of abdominal fat distribution. WHO notes that it can help identify overweight or obesity alongside BMI, but it does not change the BMI number or the standard WHO category.",
         "BMI categories for adults are not suitable for children and teenagers, who need age- and sex-specific growth charts. BMI also needs special interpretation during pregnancy and may be less informative for some older adults or people with fluid retention, recent illness or changes in muscle mass.",
     ]),
     ("Limitations and professional opinion", [
