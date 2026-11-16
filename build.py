@@ -162,6 +162,7 @@ TOOLS = [
             '<option value="gold-87">Gold Nisab (87.48 g)</option>'
 
             '</select></div></div>'
+            '<div id="z-sunni-asset-fields" class="space-y-5">'
             '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
             '<p class="text-sm text-stone-700 dark:text-stone-300">Enter market values in the selected currency. Leave categories you do not own at zero.</p>'
             '<div class="grid sm:grid-cols-2 gap-4">'
