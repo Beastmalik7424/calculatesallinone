@@ -137,7 +137,7 @@ TOOLS = [
         "app": "FinanceApplication",
         "description": "Calculate Hanafi or Sayyid Sistani Ja'fari Zakat estimates with gold or silver Nisab and gram, Sindh-standard tola or troy-ounce metal price inputs.",
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
-        "lead": "Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
+        "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             + '<div class="sticky top-20 z-20 shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
@@ -758,7 +758,7 @@ URDU = {
         "title": "حنفی اور جعفری زکوٰۃ کیلکولیٹر | گرام اور تولہ | CalculatesAll",
         "description": "حنفی یا سید سیستانی کے جعفری طریقے سے زکوٰۃ کا تخمینہ لگائیں۔ سونے اور چاندی کی قیمت گرام یا معیاری تولہ میں درج کریں۔",
         "h1": "حنفی اور جعفری زکوٰۃ کیلکولیٹر",
-        "lead": "دو الگ حسابی طریقوں میں سے انتخاب کریں: سنی حنفی، یا آیت اللہ سید سیستانی کا مخصوص جعفری تجارتی مال کا حکم۔ سونے اور چاندی کی قیمت فی گرام یا واضح طور پر متعین سندھ کے معیاری تولہ کے مطابق درج کریں۔ حساب کے مفروضے، ماخذ اور حدود ضرور پڑھیں۔",
+        "lead": "یہ کیلکولیٹر مفت ہے اور اکاؤنٹ بنانے کی ضرورت نہیں۔ حساب آپ کے براؤزر میں ہوتا ہے۔ دھاتوں کی قیمت خود درج کریں کیونکہ یہاں لائیو مارکیٹ ریٹس حاصل نہیں کیے جاتے۔ دو الگ حسابی طریقوں میں سے انتخاب کریں: سنی حنفی، یا آیت اللہ سید سیستانی کا مخصوص جعفری تجارتی مال کا حکم۔ سونے اور چاندی کی قیمت فی گرام یا واضح طور پر متعین سندھ کے معیاری تولہ کے مطابق درج کریں۔ حساب کے مفروضے، ماخذ اور حدود ضرور پڑھیں۔",
         "labels": [
             ("Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.", "چاندی یا سونے کا نصاب منتخب کریں۔ 2.5٪ کا تخمینہ صرف منتخب نصاب اور حول کی شرائط پوری ہونے پر لاگو ہوتا ہے۔"),
             ("Currency code (ISO 4217)", "کرنسی کوڈ (ISO 4217)"),
@@ -799,6 +799,7 @@ URDU = {
             ("Owner retained the right to dispose of the goods throughout the year", "مالک کو پورے سال مال میں تصرف کا حق حاصل رہا ہو"),
             ("Market value did not fall below the purchase cost during the year", "سال کے دوران مال کی بازاری قیمت خریداری کی لاگت سے کم نہ ہوئی ہو"),
             ("This path excludes cash, banknotes, ordinary savings, personal jewellery, crops and livestock. It is not a complete Zakat or Khums assessment.", "اس طریقے میں نقد رقم، بینک نوٹ، عام بچت، ذاتی زیورات، زرعی پیداوار اور مویشی شامل نہیں۔ یہ زکوٰۃ یا خمس کا مکمل حساب نہیں ہے۔"),
+            ("Metal prices for Nisab", "نصاب کے لیے دھاتوں کی قیمت"),
             ("Metal price unit", "دھات کی قیمت کی اکائی"),
             ("Price per gram", "فی گرام قیمت"),
             ("Price per Sindh Government standard tola (11.6638 g)", "حکومتِ سندھ کے سرکاری تولہ کے حساب سے قیمت (11.6638 گرام)"),
