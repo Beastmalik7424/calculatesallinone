@@ -60,6 +60,7 @@ for phrase in (
     "87.48 grams",
     "85 grams of gold",
     "595 grams of silver",
+    "96 grams of gold",
     "ISO currency",
     "PKR 503,529",
     "not personal Nisab",
@@ -74,7 +75,7 @@ for phrase in (
 ):
     assert phrase.lower() in method.lower(), f"Methodology missing useful detail: {phrase}"
 
-assert "85 grams of gold" in method.lower() and "595 grams of silver" in method.lower(), "Methodology must disclose the sourced modern Nisab references"
+assert "85 grams of gold" in method.lower() and "595 grams of silver" in method.lower() and "96 grams of gold" in method.lower(), "Methodology must disclose the sourced modern and Shafi'i Nisab references"
 
 editorial = visible("editorial-policy")
 for phrase in (

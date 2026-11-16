@@ -36,7 +36,7 @@ for (const id of [
   assert.match(ur, new RegExp('id="' + id + '"'), "Urdu calculator missing " + id);
 }
 for (const term of [
-  "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48", "595 g", "85 g",
+  "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48", "595 g", "85 g", "96 g",
   "503,529", "1446–1447 AH", "1447 AH (2026)", "State Bank of Pakistan", "first day of Ramazan",
   "saving, profit and loss sharing", "2.5%", "personal Zakat Nisab",
   "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000",
@@ -101,11 +101,15 @@ assert.match(en, /sindhlaws\.gov\.pk/, "English content must cite the Sindh Gove
 assert.match(ur, /sindhlaws\.gov\.pk/, "Urdu content must cite the Sindh Government conversion table");
 assert.match(en, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "English content must cite scholarly debt-rule guidance");
 assert.match(ur, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "Urdu content must cite scholarly debt-rule guidance");
+assert.match(ur, /zatca\\.gov\\.sa/, "Urdu content must cite Saudi ZATCA's official modern Nisab guidance");
+assert.match(ur, /aliftaa\\.jo/, "Urdu content must cite Jordan General Iftaa's 85 g and 96 g gold reference");
 
 assert.match(enNisab[1], /value="gold-85"/, "85 g gold reference must be selectable in English");
 assert.match(enNisab[1], /value="silver-595"/, "595 g silver reference must be selectable in English");
 assert.match(urNisab[1], /value="gold-85"/, "85 g gold reference must be selectable in Urdu");
 assert.match(urNisab[1], /value="silver-595"/, "595 g silver reference must be selectable in Urdu");
+assert.match(enNisab[1], /value="gold-96"/, "96 g Shafi'i text reference must be selectable in English");
+assert.match(urNisab[1], /value="gold-96"/, "96 g Shafi'i text reference must be selectable in Urdu");
 for (const term of [
   "503,529", "612.36", "87.48", "595", "85", "زکوٰۃ سال", "پاکستان", "نصاب",
   "اثاثے", "واجبات", "2.5"
@@ -124,8 +128,8 @@ assert.match(en, /application\/ld\+json/, "English page must retain structured d
 assert.match(ur, /application\/ld\+json/, "Urdu page must retain structured data");
 assert.match(en, /canonical/i, "English page must retain canonical metadata");
 assert.match(ur, /canonical/i, "Urdu page must retain canonical metadata");
-assert.ok(!en.includes("islamweb.net/en/fatwa/81355"), "English page must not introduce the unapproved 85 g gold reference");
-assert.ok(!ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must not introduce the unapproved 85 g gold reference");
+assert.ok(!en.includes("islamweb.net/en/fatwa/81355"), "English page must not cite the unsupported Islamweb reference for Nisab");
+assert.ok(!ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must not cite the unsupported Islamweb reference for Nisab");
 console.log("Zakat global calculator content and localization gates: PASS");
 
 // Pure calculation-engine tests. These are independent of page rendering.
@@ -167,7 +171,7 @@ assert.equal(result.overpayment, 252.5);
 result = calculate({ ...base, nisabMethod: "gold-87", assets: { cash: 900000 }, goldPricePerGram: 10000 });
 assert.equal(result.nisabThreshold, 874800);
 assert.equal(result.nisabGrams, 87.48);
-for (const [nisabMethod, grams, priceKey] of [["gold-85", 85, "goldPricePerGram"], ["silver-595", 595, "silverPricePerGram"]]) {
+for (const [nisabMethod, grams, priceKey] of [["gold-85", 85, "goldPricePerGram"], ["silver-595", 595, "silverPricePerGram"], ["gold-96", 96, "goldPricePerGram"]]) {
   const result = calculate({ ...base, nisabMethod, [priceKey]: 100, assets: { cash: grams * 100 }, hawlComplete: true });
   assert.equal(result.nisabGrams, grams, nisabMethod + " must remain a supported Nisab choice");
 }

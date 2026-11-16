@@ -116,20 +116,21 @@ urdu_zakat_html = (ROOT / "ur" / "zakat-calculator" / "index.html").read_text(en
 zakat_text = visible(zakat_html)
 urdu_zakat_text = visible(urdu_zakat_html)
 for phrase in [
-    "This calculator offers four selectable reference weights",
+    "This calculator offers five selectable reference weights",
     "612.36 g of silver",
     "87.48 g of gold",
     "595 g of silver",
     "85 g of gold",
+    "96 g of gold",
     "does not fetch a live metal price",
     "qualified scholar",
     "Last reviewed: 2026-11-16",
 ]:
     assert phrase.lower() in zakat_text.lower(), f"English Zakat page missing useful, sourced guidance: {phrase}"
-for phrase in ["612.36", "87.48", "595", "85", "مستند عالم"]:
+for phrase in ["612.36", "87.48", "595", "85", "96", "مستند عالم"]:
     assert phrase.lower() in urdu_zakat_text.lower(), f"Urdu Zakat page missing Nisab or scholarly limitation detail: {phrase}"
 
-assert all(f'value="{method}"' in zakat_html for method in ["silver", "gold-87", "silver-595", "gold-85"]), "All four sourced Nisab weight conventions must remain selectable"
+assert all(f'value="{method}"' in zakat_html for method in ["silver", "gold-87", "silver-595", "gold-85", "gold-96"]), "All five sourced Nisab weight conventions must remain selectable"
 assert re.search(r'"dateModified"\s*:\s*"2026-11-16"', zakat_html), "Zakat WebPage dateModified must match the visible review date"
 
 money_source = read("money")

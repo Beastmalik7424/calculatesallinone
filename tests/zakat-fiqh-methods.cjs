@@ -23,7 +23,8 @@ assert.equal(r.zakatBeforePaid, 2500);
 
 for (const [method, grams, priceKey] of [
   ["gold-85", 85, "goldPricePerGram"],
-  ["silver-595", 595, "silverPricePerGram"]
+  ["silver-595", 595, "silverPricePerGram"],
+  ["gold-96", 96, "goldPricePerGram"]
 ]) {
   const result = calculate({
     ...base,
@@ -183,7 +184,7 @@ function random() {
 }
 for (let i = 0; i < 2000; i++) {
   const school = ["sunni-hanafi", "sunni-shafii", "sunni-maliki", "sunni-hanbali"][i % 4];
-  const nisabMethod = ["silver", "gold-87", "silver-595", "gold-85"][i % 4];
+  const nisabMethod = ["silver", "gold-87", "silver-595", "gold-85", "gold-96"][i % 5];
   const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
   const silverPerGram = 50 + random() * 300;
   const goldPerGram = 5000 + random() * 15000;
