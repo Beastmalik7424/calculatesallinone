@@ -38,7 +38,7 @@ CASES = {
         "form": 'id="years-days-form"',
         "category": "/time/",
         "related": ["/date-calculator/", "/age-calculator/", "/query-calculator/", "/unit-converter/"],
-        "faq_min": 4,
+        "faq_min": 5,
         "h1": "Years to Days Calculator",
     },
     "unit-converter": {
@@ -147,6 +147,8 @@ def check_targeted_content():
             "Quick answers to common years-to-days questions",
             "5 years = 1,826.2125 days using the Gregorian average",
             "30 years = 10,957.275 days using the Gregorian average",
+            "How many days are in 13 years?",
+            "4,748.1525 days",
             "70,000 days ÷ 365.2425 = 191.6535 years",
             "Exact calendar days depend on the start date",
             "U.S. Naval Observatory leap-year explanation",
