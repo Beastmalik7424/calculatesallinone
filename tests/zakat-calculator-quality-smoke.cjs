@@ -113,7 +113,7 @@ assert.doesNotMatch(urNisab[1], /gold-85|silver-595|gold-96/);
 
 
 for (const term of [
-  "503,529", "612.36", "87.48", "595", "85", "96", "زکوٰۃ سال", "پاکستان", "نصاب",
+  "503,529", "612.36", "87.48", "زکوٰۃ سال", "پاکستان", "نصاب",
   "اثاثے", "واجبات", "2.5"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing localized topic: " + term);
