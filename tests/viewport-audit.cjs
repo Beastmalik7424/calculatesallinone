@@ -44,7 +44,7 @@ const { chromium } = require('playwright');
     failures.push(key+' horizontal overflow');
    }
    const urduPage=slug.startsWith('ur/');
-   const expectedColumns=size.width<600?3:size.width<900?4:6;
+   const expectedColumns=size.width<600?4:size.width<900?5:6;
    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible)failures.push(key+' all 17 calculator links must be visible together');
    if(data.gridColumns!==expectedColumns)failures.push(key+' expected '+expectedColumns+' navigation columns, got '+data.gridColumns);
    if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
