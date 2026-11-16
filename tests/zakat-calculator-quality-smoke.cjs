@@ -49,8 +49,8 @@ for (const term of [
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
 }
-assert.equal((en.match(/<summary\b/gi) || []).length, 3, "English Zakat page must have three page-specific FAQs");
-assert.equal((ur.match(/<summary\b/gi) || []).length, 3, "Urdu Zakat page must have three page-specific FAQs");
+assert.equal((en.match(/<summary\b/gi) || []).length, 8, "English Zakat page must retain eight useful page-specific FAQs");
+assert.equal((ur.match(/<summary\b/gi) || []).length, 8, "Urdu Zakat page must retain eight useful page-specific FAQs");
 assert.match(en, /value="gold-85"/, "English UI must retain the clearly labelled 85 g gold reference");
 assert.match(ur, /value="gold-85"/, "Urdu UI must retain the clearly labelled 85 g gold reference");
 for (const term of [
