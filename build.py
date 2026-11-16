@@ -1691,8 +1691,8 @@ def shell(main_html, lang="en", current_path=None):
         + lang_links(lang, s, current_path) +
         '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
         '</div></footer>\n'
-        '<script src="/assets/zakat-calculator.js?v=20261115-global-1" defer></script>\n'
-        '<script src="/assets/app.js?v=20261115-zakat-global-1" defer></script>\n'
+        '<script src="/assets/zakat-calculator.js?v=20261116-hanafi-jafari-1" defer></script>\n'
+        '<script src="/assets/app.js?v=20261116-hanafi-jafari-1" defer></script>\n'
         '</body>\n</html>\n'
     )
 
