@@ -2,8 +2,9 @@
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 
+let browser;
 (async () => {
-  const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
+  browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
@@ -128,7 +129,8 @@ const { chromium } = require("playwright");
   assert.deepEqual(pageErrors, [], "Zakat pages must have no browser console or page errors");
   await browser.close();
   console.log("Zakat browser regression: English and Urdu flows, ISO currency, Nisab methods, Hawl, labels and 375px layout passed");
-})().catch(error => {
+})().catch(async error => {
   console.error(error);
+  if (browser) await browser.close().catch(() => {});
   process.exitCode = 1;
 });
