@@ -101,6 +101,7 @@ assert "grid-template-columns:repeat(4,minmax(0,1fr))" in css.replace(" ", ""), 
 assert "grid-template-columns:repeat(5,minmax(0,1fr))" in css.replace(" ", ""), "Tablet navigation must preserve five columns"
 assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Desktop navigation must use six columns"
 assert "white-space:normal!important" in css.replace(" ", ""), "Calculator shortcut labels must wrap instead of clipping or ellipsizing"
+assert "overflow-wrap:anywhere!important" in css.replace(" ", ""), "Long calculator names must wrap safely within narrow shortcut cards"
 assert "text-overflow:clip!important" in css.replace(" ", ""), "Calculator shortcut labels must not be truncated"
 assert "min-height:44px" in css.replace(" ", ""), "Calculator shortcut links must retain a comfortable mobile tap target"
 assert "@keyframes ca-calculator-marquee" in css, "Homepage must retain its existing carousel animation"
