@@ -29,10 +29,15 @@ let browser;
     const active=primary?.querySelector('a[aria-current="page"]');
     const carouselRect=carousel?.getBoundingClientRect();
     const headerRect=document.querySelector('header')?.getBoundingClientRect();
+    const calculatorRect=document.querySelector('#tool-calculator')?.getBoundingClientRect();
+    const formRect=document.querySelector('#zakat-form')?.getBoundingClientRect();
     const gridStyle=primary?getComputedStyle(primary):null;
     const allLinksVisible=shortcuts.length===17 && shortcuts.every(a=>{const r=a.getBoundingClientRect(),s=getComputedStyle(a);return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0&&r.top>=carouselRect.top-1&&r.bottom<=carouselRect.bottom+1;});
+    const allLabelsFit=shortcuts.length===17 && shortcuts.every(a=>a.scrollWidth<=a.clientWidth+1 && a.scrollHeight<=a.clientHeight+1 && getComputedStyle(a).whiteSpace!=='nowrap');
+    const zakatSubmit=document.querySelector('#zakat-form button[type="submit"]');
+    const submitPosition=zakatSubmit?getComputedStyle(zakatSubmit.parentElement).position:null;
     const gridColumns=gridStyle?gridStyle.gridTemplateColumns.split(' ').length:0;
-    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselCount:shortcuts.length,allLinksVisible,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height};
+    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselBottom:carouselRect?.bottom,calculatorTop:calculatorRect?.top,formTop:formRect?.top,carouselCount:shortcuts.length,allLinksVisible,allLabelsFit,submitPosition,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height};
    });
    const key=slug+' '+size.width+'x'+size.height;
    console.log(key,JSON.stringify(data));
@@ -46,12 +51,23 @@ let browser;
     failures.push(key+' horizontal overflow');
    }
    const urduPage=slug.startsWith('ur/');
-   const expectedColumns=size.width<600?4:size.width<900?5:6;
-   if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible)failures.push(key+' all 17 calculator links must be visible together');
-   if(data.gridColumns!==expectedColumns)failures.push(key+' expected '+expectedColumns+' navigation columns, got '+data.gridColumns);
-   if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
-   if(size.width<=360 && (slug==='fraction-calculator'||slug==='compound-interest-calculator') && data.mainNavFlexDirection!=='column' && data.mainNavFlexWrap==='nowrap')failures.push(key+' row navigation cannot wrap on narrow screens');
-   if(!data.lastButton||data.bottom>size.height)failures.push(key+' primary button below fold');
+   const expectedColumns=size.width<600?5:size.width<900?5:6;
+   const isZakat=slug.endsWith('zakat-calculator');
+   if(isZakat&&size.width<=600){
+    if(data.carouselVisible)failures.push(key+' calculator shortcuts must not push the Zakat calculator below the first screen on mobile');
+    if(data.calculatorTop>=size.height||data.formTop>=size.height)failures.push(key+' Zakat calculator form must begin on the first screen');
+    if(!data.lastButton||data.bottom>size.height-8)failures.push(key+' Calculate Zakat action must be visible on the first screen');
+   } else {
+    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible)failures.push(key+' all 17 calculator links must be visible together');
+    if(!data.allLabelsFit)failures.push(key+' calculator shortcut labels are clipped or truncated');
+    if(data.gridColumns!==expectedColumns)failures.push(key+' expected '+expectedColumns+' navigation columns, got '+data.gridColumns);
+    if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
+    if(size.width<=360 && (slug==='fraction-calculator'||slug==='compound-interest-calculator') && data.mainNavFlexDirection!=='column' && data.mainNavFlexWrap==='nowrap')failures.push(key+' row navigation cannot wrap on narrow screens');
+    if(!data.lastButton)failures.push(key+' primary calculator button is missing');
+    if(data.bottom>size.height-8)failures.push(key+' primary calculator action is below the first screen');
+    if(data.carouselBottom>size.height)failures.push(key+' all-calculator navigation extends below the first screen');
+   }
+   if(data.submitPosition==='sticky'||data.submitPosition==='fixed')failures.push(key+' Zakat submit button must not overlap the header navigation');
    const screenshotSlug=slug.replaceAll('/','-');
    await page.screenshot({path:'/tmp/'+screenshotSlug+'-'+size.width+'.png',fullPage:false});
   }

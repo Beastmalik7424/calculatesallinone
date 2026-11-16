@@ -140,7 +140,7 @@ TOOLS = [
         "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
-            + '<div class="sticky top-20 z-20 shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
+            + '<div class="shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
             '<p class="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
             '<div class="grid sm:grid-cols-2 gap-4">'
             '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
@@ -1608,7 +1608,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261026-standard-mobile-v6">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261116-zakat-first-screen-v1">\n'
         + ld + ads + "</head>\n"
     )
 
