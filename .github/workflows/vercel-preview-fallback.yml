@@ -116,3 +116,17 @@ jobs:
               test "$code" = 200 || { echo "Production alias verification failed: $path"; exit 1; }
             done
           fi
+      - name: Verify published Zakat selector and source content
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment_url }}
+        run: |
+          curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/zakat-calculator/" | grep -Fq "Sayyid Sistani"
+          curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/zakat-calculator/" | grep -Fq "Hanafi"
+          curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/zakat-calculator/" | grep -Fq "11.6638"
+          curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/ur/zakat-calculator/" | grep -Fq "شیعہ جعفری"
+      - name: Install Playwright Chromium for live deployment check
+        run: npx playwright install --with-deps chromium
+      - name: Verify live Zakat browser flow
+        env:
+          BASE_URL: ${{ env.DEPLOY_ENV == 'production' && 'https://calculateallinone.vercel.app' || steps.deploy.outputs.deployment_url }}
+        run: node tests/zakat-calculator-browser.cjs
