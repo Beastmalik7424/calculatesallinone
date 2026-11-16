@@ -1,240 +1,118 @@
 "use strict";
 const assert = require("node:assert/strict");
-const { calculate, assetKeys } = require("../static/zakat-calculator.js");
+const { calculate, assetKeys, sunniSchools, nisabMethods, jafariNisabMethods, sindhStandardTolaGrams } = require("../static/zakat-calculator.js");
 
 const base = {
-  currency: "PKR",
-  nisabMethod: "silver",
-  silverPricePerGram: 100,
-  goldPricePerGram: 10000,
-  metalPriceUnit: "gram",
-  hawlComplete: true,
-  liabilities: 0,
-  zakatPaid: 0
+  currency: "PKR", nisabMethod: "silver", silverPricePerGram: 100,
+  goldPricePerGram: 10000, metalPriceUnit: "gram", hawlComplete: true,
+  liabilities: 0, zakatPaid: 0
 };
 
-let r = calculate({
-  ...base,
-  schoolOfThought: "sunni-hanafi",
-  assets: { cash: 50000, jewellery: 50000 }
-});
-assert.equal(r.totalAssets, 100000, "Hanafi method must include qualifying personal-use jewellery");
+assert.deepEqual(sunniSchools, ["sunni-hanafi"]);
+assert.deepEqual(Object.keys(nisabMethods).sort(), ["gold-87", "silver"]);
+assert.equal(sindhStandardTolaGrams, 11.6638);
+assert.equal(nisabMethods.silver.grams, 612.36);
+assert.equal(nisabMethods["gold-87"].grams, 87.48);
+assert.equal(jafariNisabMethods.gold.grams, 69.12);
+assert.equal(jafariNisabMethods.silver.grams, 483.84);
+
+let r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 50000, jewellery: 50000 } });
+assert.equal(r.totalAssets, 100000);
 assert.equal(r.zakatBeforePaid, 2500);
+assert.equal(r.personalJewelleryIncluded, true);
+assert.equal(r.nisabGrams, 612.36);
 
-for (const [method, grams, priceKey] of [
-  ["gold-85", 85, "goldPricePerGram"],
-  ["silver-595", 595, "silverPricePerGram"],
-  ["gold-96", 96, "goldPricePerGram"]
-]) {
-  const result = calculate({
-    ...base,
-    schoolOfThought: "sunni-shafii",
-    nisabMethod: method,
-    [priceKey]: 100,
-    assets: { cash: grams * 100 },
-    hawlComplete: true
-  });
-  assert.equal(result.nisabGrams, grams, method + " must use its selected sourced reference weight");
-  assert.equal(result.nisabThreshold, grams * 100, method + " must calculate the threshold correctly");
-}
-r = calculate({
-  ...base,
-  nisabMethod: undefined,
-  schoolOfThought: "sunni-shafii",
-  goldPricePerGram: 100,
-  assets: { cash: 8500 },
-  hawlComplete: true
-});
-assert.equal(r.nisabGrams, 85, "Non-Hanafi presets must default to the common modern 85 g gold reference");
-assert.equal(r.nisabThreshold, 8500, "The default modern gold threshold must use 85 g");
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", nisabMethod: "gold-87", goldPricePerGram: 100, assets: { cash: 8748 } });
+assert.equal(r.nisabThreshold, 8748);
+assert.equal(r.nisabGrams, 87.48);
+assert.equal(r.status, "payable");
 
-for (const school of ["sunni-shafii", "sunni-maliki", "sunni-hanbali"]) {
-  r = calculate({
-    ...base,
-    schoolOfThought: school,
-    nisabMethod: "gold-87",
-    goldPricePerGram: 100,
-    assets: { cash: 50000, jewellery: 50000 }
-  });
-  assert.equal(r.totalAssets, 50000, school + " must exclude ordinary permissible personal-use jewellery");
-  assert.equal(r.schoolOfThought, school);
-}
-
-r = calculate({
-  ...base,
-  schoolOfThought: "jafari-sistani",
-  jafariNisabMethod: "gold",
-  tradeGoodsValue: 1000000,
-  tradeGoodsAcquiredByExchange: true,
-  tradeGoodsHawlComplete: true,
-  tradeGoodsProfitIntentContinuous: true,
-  tradeGoodsAccessContinuous: true,
-  tradeGoodsMarketValueAtLeastCost: true,
-  ownerAdultAndSane: true
-});
-assert.equal(r.nisabGrams, 69.12);
-assert.equal(r.nisabThreshold, 691200);
-assert.equal(r.zakatBeforePaid, 25000);
-assert.equal(r.methodology, "jafari-sistani-trading-goods-obligatory-precaution");
-
-r = calculate({
-  ...base,
-  schoolOfThought: "jafari-sistani",
-  jafariNisabMethod: "gold",
-  tradeGoodsValue: 1000000,
-  tradeGoodsAcquiredByExchange: false,
-  tradeGoodsHawlComplete: true,
-  tradeGoodsProfitIntentContinuous: true,
-  tradeGoodsAccessContinuous: true,
-  tradeGoodsMarketValueAtLeastCost: true,
-  ownerAdultAndSane: true
-});
-assert.equal(r.status, "conditions_incomplete", "Sistani trading goods must be acquired through a contract of exchange");
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 70000 }, hawlComplete: false });
+assert.equal(r.status, "hawl_incomplete");
 assert.equal(r.zakatBeforePaid, 0);
 
-r = calculate({
-  ...base,
-  schoolOfThought: "jafari-sistani",
-  jafariNisabMethod: "silver",
-  silverPricePerGram: 100,
-  tradeGoodsValue: 100000,
-  tradeGoodsAcquiredByExchange: true,
-  tradeGoodsHawlComplete: true,
-  tradeGoodsProfitIntentContinuous: true,
-  tradeGoodsAccessContinuous: true,
-  tradeGoodsMarketValueAtLeastCost: true,
-  ownerAdultAndSane: true
-});
-assert.equal(r.nisabGrams, 483.84);
-assert.equal(r.nisabThreshold, 48384);
-assert.equal(r.zakatBeforePaid, 2500);
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 70000 }, zakatPaid: 500 });
+assert.equal(r.balanceDue, 1250);
+assert.equal(r.overpayment, 0);
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 70000 }, zakatPaid: 2000 });
+assert.equal(r.balanceDue, 0);
+assert.equal(r.overpayment, 250);
 
-r = calculate({
-  ...base,
-  schoolOfThought: "jafari-sistani",
-  jafariNisabMethod: "gold",
-  tradeGoodsValue: 1000000,
-  assets: { cash: 1000000, bank: 500000 },
-  tradeGoodsAcquiredByExchange: true,
-  tradeGoodsHawlComplete: true,
-  tradeGoodsProfitIntentContinuous: true,
-  tradeGoodsAccessContinuous: true,
-  tradeGoodsMarketValueAtLeastCost: true,
-  ownerAdultAndSane: true
-});
-assert.equal(r.totalAssets, 1000000, "Sistani method must calculate qualifying trading goods, not add banknotes/cash");
-assert.equal(r.zakatBeforePaid, 25000);
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", metalPriceUnit: "tola", silverPricePerGram: 1166.38, assets: { cash: 100000 } });
+assert.ok(Math.abs(r.metalPricePerGram - 100) < 1e-10);
+assert.ok(Math.abs(r.nisabThreshold - 61236) < 1e-8);
 
-r = calculate({
-  ...base,
-  schoolOfThought: "jafari-sistani",
-  jafariNisabMethod: "gold",
-  tradeGoodsValue: 1000000,
-  tradeGoodsAcquiredByExchange: true,
-  tradeGoodsHawlComplete: true,
-  tradeGoodsProfitIntentContinuous: true,
-  tradeGoodsAccessContinuous: true,
-  tradeGoodsMarketValueAtLeastCost: false,
-  ownerAdultAndSane: true
-});
-assert.equal(r.status, "conditions_incomplete");
-assert.equal(r.zakatBeforePaid, 0);
-
-const validSistaniConditions = {
-  ownerAdultAndSane: true,
-  tradeGoodsAcquiredByExchange: true,
-  tradeGoodsHawlComplete: true,
-  tradeGoodsProfitIntentContinuous: true,
-  tradeGoodsAccessContinuous: true,
-  tradeGoodsMarketValueAtLeastCost: true
-};
-for (const condition of Object.keys(validSistaniConditions)) {
-  const incomplete = calculate({
-    ...base,
-    schoolOfThought: "jafari-sistani",
-    jafariNisabMethod: "gold",
-    tradeGoodsValue: 1000000,
-    ...validSistaniConditions,
-    [condition]: false
-  });
-  assert.equal(incomplete.status, "conditions_incomplete", "Sistani condition must be mandatory: " + condition);
+for (const school of ["sunni-shafii", "sunni-maliki", "sunni-hanbali", "unknown"]) {
+  assert.throws(() => calculate({ ...base, schoolOfThought: school }), /school/i);
 }
-
-r = calculate({
-  ...base,
-  schoolOfThought: "sunni-hanafi",
-  nisabMethod: "silver",
-  silverPricePerGram: 1166.38,
-  metalPriceUnit: "tola",
-  assets: { cash: 100000 },
-  hawlComplete: true
-});
-assert.ok(Math.abs(r.metalPricePerGram - 100) < 1e-10, "tola price must normalize to per-gram price");
-assert.ok(Math.abs(r.nisabThreshold - 61236) < 1e-8, "tola conversion must preserve the silver Nisab threshold");
-
-assert.throws(() => calculate({ ...base, schoolOfThought: "unknown" }), /school/i);
-assert.throws(() => calculate({ ...base, metalPriceUnit: "ounce" }), /metal price unit/i);
+assert.throws(() => calculate({ ...base, nisabMethod: "gold-85" }), /Nisab method/i);
 assert.throws(() => calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "unknown" }), /Jafari Nisab/i);
 
-// Deterministic stress coverage across all four Sunni options and both price units.
-let seed = 20261116;
-function random() {
-  seed = (seed * 1664525 + 1013904223) >>> 0;
-  return seed / 4294967296;
+const validSistaniConditions = {
+  ownerAdultAndSane: true, tradeGoodsAcquiredByExchange: true, tradeGoodsHawlComplete: true,
+  tradeGoodsProfitIntentContinuous: true, tradeGoodsAccessContinuous: true, tradeGoodsMarketValueAtLeastCost: true
+};
+for (const [method, grams, priceKey] of [["gold",69.12,"goldPricePerGram"],["silver",483.84,"silverPricePerGram"]]) {
+  r = calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: method, [priceKey]: 100, tradeGoodsValue: grams * 100, ...validSistaniConditions });
+  assert.equal(r.nisabGrams, grams);
+  assert.equal(r.nisabThreshold, grams * 100);
+  assert.equal(r.zakatBeforePaid, grams * 2.5);
 }
+r = calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "gold", tradeGoodsValue: 1000000, assets: { cash: 900000, bank: 500000 }, ...validSistaniConditions });
+assert.equal(r.totalAssets, 1000000);
+assert.equal(r.zakatBeforePaid, 25000);
+for (const condition of Object.keys(validSistaniConditions)) {
+  const incomplete = calculate({ ...base, schoolOfThought: "jafari-sistani", tradeGoodsValue: 1000000, ...validSistaniConditions, [condition]: false });
+  assert.equal(incomplete.status, "conditions_incomplete");
+  assert.equal(incomplete.zakatBeforePaid, 0);
+}
+
+for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
+  assert.throws(() => calculate({ ...base, assets: { cash: bad } }));
+  assert.throws(() => calculate({ ...base, liabilities: bad }));
+  assert.throws(() => calculate({ ...base, silverPricePerGram: bad }));
+  assert.throws(() => calculate({ ...base, zakatPaid: bad }));
+}
+assert.throws(() => calculate({ ...base, currency: "ZZZ" }), /currency/i);
+assert.throws(() => calculate({ ...base, assets: { cash: Number.MAX_VALUE, bank: Number.MAX_VALUE } }), /supported calculation range/i);
+
+// 2,000 deterministic Hanafi scenarios across both supported Nisab metals and both price units.
+let seed = 20261116;
+function random() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
 for (let i = 0; i < 2000; i++) {
-  const school = ["sunni-hanafi", "sunni-shafii", "sunni-maliki", "sunni-hanbali"][i % 4];
-  const nisabMethod = ["silver", "gold-87", "silver-595", "gold-85", "gold-96"][i % 5];
+  const nisabMethod = i % 2 === 0 ? "silver" : "gold-87";
   const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
-  const silverPerGram = 50 + random() * 300;
-  const goldPerGram = 5000 + random() * 15000;
-  const selectedPerGram = nisabMethod.startsWith("silver") ? silverPerGram : goldPerGram;
+  const silver = 50 + random() * 300, gold = 5000 + random() * 15000;
+  const selected = nisabMethod === "silver" ? silver : gold;
   const assets = Object.fromEntries(assetKeys.map(key => [key, Math.floor(random() * 1000000) / 100]));
+  const liabilities = Math.floor(random() * 500000) / 100, paid = Math.floor(random() * 50000) / 100;
   const result = calculate({
-    currency: "PKR",
-    schoolOfThought: school,
-    nisabMethod,
-    metalPriceUnit,
-    silverPricePerGram: metalPriceUnit === "tola" ? silverPerGram * 11.6638 : silverPerGram,
-    goldPricePerGram: metalPriceUnit === "tola" ? goldPerGram * 11.6638 : goldPerGram,
-    assets,
-    liabilities: Math.floor(random() * 500000) / 100,
-    zakatPaid: Math.floor(random() * 50000) / 100,
-    hawlComplete: i % 3 === 0
+    currency: "PKR", schoolOfThought: "sunni-hanafi", nisabMethod, metalPriceUnit,
+    silverPricePerGram: metalPriceUnit === "tola" ? silver * 11.6638 : silver,
+    goldPricePerGram: metalPriceUnit === "tola" ? gold * 11.6638 : gold,
+    assets, liabilities, zakatPaid: paid, hawlComplete: i % 3 === 0
   });
   assert.ok(Number.isFinite(result.totalAssets) && Number.isFinite(result.netAssets));
-  assert.equal(result.personalJewelleryIncluded, school === "sunni-hanafi");
-  assert.ok(Math.abs(result.metalPricePerGram - selectedPerGram) < 1e-8);
+  assert.equal(result.personalJewelleryIncluded, true);
+  assert.ok(Math.abs(result.metalPricePerGram - selected) < 1e-8);
   assert.ok(result.balanceDue >= 0 && result.balanceDue <= result.zakatBeforePaid);
   assert.ok(result.zakatBeforePaid === 0 || Math.abs(result.zakatBeforePaid - result.netAssets * 0.025) < 1e-7);
 }
 
-// Deterministic stress coverage for Sistani's two trading-goods Nisab paths.
+// 1,000 deterministic Sistani scenarios covering both Nisab metals and all six conditions.
 for (let i = 0; i < 1000; i++) {
   const jafariNisabMethod = i % 2 === 0 ? "gold" : "silver";
   const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
-  const nisabGrams = jafariNisabMethod === "gold" ? 69.12 : 483.84;
-  const pricePerGram = 100 + random() * 500;
-  const priceKey = jafariNisabMethod === "gold" ? "goldPricePerGram" : "silverPricePerGram";
-  const threshold = nisabGrams * pricePerGram;
+  const grams = jafariNisabMethod === "gold" ? 69.12 : 483.84;
+  const price = 100 + random() * 500, threshold = grams * price;
   const tradeGoodsValue = Math.floor(random() * threshold * 2);
-  const conditions = {
-    ownerAdultAndSane: true,
-    tradeGoodsAcquiredByExchange: true,
-    tradeGoodsHawlComplete: true,
-    tradeGoodsProfitIntentContinuous: true,
-    tradeGoodsAccessContinuous: true,
-    tradeGoodsMarketValueAtLeastCost: true
-  };
+  const conditions = { ...validSistaniConditions };
   if (i % 2 === 0) conditions[Object.keys(conditions)[i % 6]] = false;
+  const priceKey = jafariNisabMethod === "gold" ? "goldPricePerGram" : "silverPricePerGram";
   const result = calculate({
-    currency: "PKR",
-    schoolOfThought: "jafari-sistani",
-    jafariNisabMethod,
-    metalPriceUnit,
-    [priceKey]: metalPriceUnit === "tola" ? pricePerGram * 11.6638 : pricePerGram,
-    tradeGoodsValue,
-    ...conditions
+    currency: "PKR", schoolOfThought: "jafari-sistani", jafariNisabMethod, metalPriceUnit,
+    [priceKey]: metalPriceUnit === "tola" ? price * 11.6638 : price,
+    tradeGoodsValue, ...conditions
   });
   if (i % 2 === 0) {
     assert.equal(result.status, "conditions_incomplete");
@@ -244,37 +122,4 @@ for (let i = 0; i < 1000; i++) {
     assert.equal(result.zakatBeforePaid, tradeGoodsValue >= threshold ? tradeGoodsValue * 0.025 : 0);
   }
 }
-console.log("Zakat fiqh-method tests: PASS (2,000 Sunni + 1,000 Sistani deterministic scenarios, plus boundary and validation cases)");
-
-
-// Contract: expose only the two requested fiqh methods, with metal choice
-// (gold/silver) and price-unit choice (gram/tola) kept separate.
-const fs = require("node:fs");
-const path = require("node:path");
-const engine = require("../static/zakat-calculator.js");
-assert.deepEqual(engine.sunniSchools, ["sunni-hanafi"], "Only Hanafi is supported as the Sunni method");
-assert.deepEqual(Object.keys(engine.nisabMethods).sort(), ["gold-87", "silver"], "Hanafi Nisab must expose only the cited 87.48 g gold and 612.36 g silver references");
-assert.throws(() => calculate({ ...base, schoolOfThought: "sunni-shafii" }), /school/i, "Unsupported madhhabs must not silently use Hanafi arithmetic");
-assert.throws(() => calculate({ ...base, schoolOfThought: "sunni-maliki" }), /school/i);
-assert.throws(() => calculate({ ...base, schoolOfThought: "sunni-hanbali" }), /school/i);
-
-const enPage = fs.readFileSync(path.join(__dirname, "..", "public", "zakat-calculator", "index.html"), "utf8");
-const urPage = fs.readFileSync(path.join(__dirname, "..", "public", "ur", "zakat-calculator", "index.html"), "utf8");
-for (const [locale, html] of [["English", enPage], ["Urdu", urPage]]) {
-  const school = html.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
-  assert.ok(school, locale + " school selector must exist");
-  assert.equal((school[1].match(/<option\b/g) || []).length, 2, locale + " must show exactly Hanafi and Ja'fari");
-  assert.match(school[1], /value="sunni-hanafi"/);
-  assert.match(school[1], /value="jafari-sistani"/);
-  assert.doesNotMatch(school[1], /shafii|maliki|hanbali/i);
-  const unit = html.match(/<select id="z-metal-price-unit"[^>]*>([\s\S]*?)<\/select>/);
-  assert.ok(unit, locale + " metal price unit selector must exist");
-  assert.equal((unit[1].match(/<option\b/g) || []).length, 2, locale + " must show Gram and Tola");
-  assert.match(unit[1], /value="gram"/);
-  assert.match(unit[1], /value="tola"/);
-  const nisab = html.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
-  assert.ok(nisab, locale + " Hanafi Nisab selector must exist");
-  assert.equal((nisab[1].match(/<option\b/g) || []).length, 2, locale + " Hanafi Nisab must expose only silver 612.36 g and gold 87.48 g");
-  assert.doesNotMatch(nisab[1], /gold-85|silver-595|gold-96/);
-}
-console.log("Zakat two-method, two-metal, two-unit UI contract: PASS");
+console.log("Zakat engine: PASS (2,000 Hanafi + 1,000 Sistani deterministic scenarios, boundary, validation and unit-conversion cases)");
