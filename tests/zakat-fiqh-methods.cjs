@@ -38,6 +38,7 @@ for (const [method, grams, priceKey] of [
 }
 r = calculate({
   ...base,
+  nisabMethod: undefined,
   schoolOfThought: "sunni-shafii",
   goldPricePerGram: 100,
   assets: { cash: 8500 },
