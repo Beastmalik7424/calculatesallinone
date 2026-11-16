@@ -38,6 +38,7 @@ r = calculate({
   schoolOfThought: "jafari-sistani",
   jafariNisabMethod: "gold",
   tradeGoodsValue: 1000000,
+  tradeGoodsAcquiredByExchange: true,
   tradeGoodsHawlComplete: true,
   tradeGoodsProfitIntentContinuous: true,
   tradeGoodsAccessContinuous: true,
@@ -48,6 +49,21 @@ assert.equal(r.nisabGrams, 69.12);
 assert.equal(r.nisabThreshold, 691200);
 assert.equal(r.zakatBeforePaid, 25000);
 assert.equal(r.methodology, "jafari-sistani-trading-goods-obligatory-precaution");
+
+r = calculate({
+  ...base,
+  schoolOfThought: "jafari-sistani",
+  jafariNisabMethod: "gold",
+  tradeGoodsValue: 1000000,
+  tradeGoodsAcquiredByExchange: false,
+  tradeGoodsHawlComplete: true,
+  tradeGoodsProfitIntentContinuous: true,
+  tradeGoodsAccessContinuous: true,
+  tradeGoodsMarketValueAtLeastCost: true,
+  ownerAdultAndSane: true
+});
+assert.equal(r.status, "conditions_incomplete", "Sistani trading goods must be acquired through a contract of exchange");
+assert.equal(r.zakatBeforePaid, 0);
 
 r = calculate({
   ...base,
