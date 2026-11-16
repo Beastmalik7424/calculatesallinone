@@ -245,3 +245,36 @@ for (let i = 0; i < 1000; i++) {
   }
 }
 console.log("Zakat fiqh-method tests: PASS (2,000 Sunni + 1,000 Sistani deterministic scenarios, plus boundary and validation cases)");
+
+
+// Contract: expose only the two requested fiqh methods, with metal choice
+// (gold/silver) and price-unit choice (gram/tola) kept separate.
+const fs = require("node:fs");
+const path = require("node:path");
+const engine = require("../static/zakat-calculator.js");
+assert.deepEqual(engine.sunniSchools, ["sunni-hanafi"], "Only Hanafi is supported as the Sunni method");
+assert.deepEqual(Object.keys(engine.nisabMethods).sort(), ["gold-87", "silver"], "Hanafi Nisab must expose only the cited 87.48 g gold and 612.36 g silver references");
+assert.throws(() => calculate({ ...base, schoolOfThought: "sunni-shafii" }), /school/i, "Unsupported madhhabs must not silently use Hanafi arithmetic");
+assert.throws(() => calculate({ ...base, schoolOfThought: "sunni-maliki" }), /school/i);
+assert.throws(() => calculate({ ...base, schoolOfThought: "sunni-hanbali" }), /school/i);
+
+const enPage = fs.readFileSync(path.join(__dirname, "..", "public", "zakat-calculator", "index.html"), "utf8");
+const urPage = fs.readFileSync(path.join(__dirname, "..", "public", "ur", "zakat-calculator", "index.html"), "utf8");
+for (const [locale, html] of [["English", enPage], ["Urdu", urPage]]) {
+  const school = html.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
+  assert.ok(school, locale + " school selector must exist");
+  assert.equal((school[1].match(/<option\b/g) || []).length, 2, locale + " must show exactly Hanafi and Ja'fari");
+  assert.match(school[1], /value="sunni-hanafi"/);
+  assert.match(school[1], /value="jafari-sistani"/);
+  assert.doesNotMatch(school[1], /shafii|maliki|hanbali/i);
+  const unit = html.match(/<select id="z-metal-price-unit"[^>]*>([\s\S]*?)<\/select>/);
+  assert.ok(unit, locale + " metal price unit selector must exist");
+  assert.equal((unit[1].match(/<option\b/g) || []).length, 2, locale + " must show Gram and Tola");
+  assert.match(unit[1], /value="gram"/);
+  assert.match(unit[1], /value="tola"/);
+  const nisab = html.match(/<select id="z-nisab-method"[^>]*>([\s\S]*?)<\/select>/);
+  assert.ok(nisab, locale + " Hanafi Nisab selector must exist");
+  assert.equal((nisab[1].match(/<option\b/g) || []).length, 2, locale + " Hanafi Nisab must expose only silver 612.36 g and gold 87.48 g");
+  assert.doesNotMatch(nisab[1], /gold-85|silver-595|gold-96/);
+}
+console.log("Zakat two-method, two-metal, two-unit UI contract: PASS");
