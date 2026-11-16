@@ -75,6 +75,9 @@ assert.match(en, /value="tola"/, "Sindh Government standard tola unit must be se
 assert.match(en, /11\.6638 g/, "Sindh Government standard tola conversion must be visible");
 assert.match(en, /Sindh Government standard tola/, "The 11.6638 g unit must be named as the Sindh Government standard, not a universal Pakistani market tola");
 assert.match(en, /12\.5 g/, "The 12.5 g competing convention must be disclosed");
+assert.match(ur, /12\.5 گرام/, "Urdu content must disclose the 12.5 g competing convention");
+assert.match(en, /zakat-on-jewellery/, "English content must cite the scholar-reviewed jewellery and tola guidance");
+assert.match(ur, /zakat-on-jewellery/, "Urdu content must cite the scholar-reviewed jewellery and tola guidance");
 assert.match(en, /id="z-sunni-fields"/, "Sunni fields must have a separate visibility container");
 assert.match(en, /id="z-jafari-fields"[^>]*hidden/, "Sistani fields must be separately hidden by default");
 assert.match(en, /sistani\.org\/english\/book\/48\/2323/, "English content must cite Sistani's official trading-goods ruling");
