@@ -100,6 +100,7 @@ assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcu
 assert "grid-template-columns:repeat(4,minmax(0,1fr))" in css.replace(" ", ""), "Phone navigation must use a compact four-column grid"
 assert "grid-template-columns:repeat(5,minmax(0,1fr))" in css.replace(" ", ""), "Tablet navigation must use five columns"
 assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Desktop navigation must use six columns"
+assert "min-height:38px" in css.replace(" ", ""), "Calculator shortcut links must retain a comfortable mobile tap target"
 assert "@keyframes ca-calculator-marquee" in css, "Homepage must retain its existing carousel animation"
 assert ".ca-calculator-track" in css and "animation:none" in css.replace(" ", ""), "Inner-page calculator navigation must be static, not a moving marquee"
 assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
