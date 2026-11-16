@@ -2358,6 +2358,12 @@ header nav:has(.ca-site-nav-topline) .ca-calculator-carousel {
 }
 
 
+/* Decorative fixed background glows must not expand the Zakat page's horizontal scroll area. */
+html:has(body #zakat-form),
+body:has(#zakat-form) {
+  overflow-x: clip;
+}
+
 /* Static all-calculators navigation on inner pages only. Keep the homepage carousel unchanged. */
 body:has(#zakat-form) header nav:has(.ca-site-nav-topline) .ca-calculator-carousel,
 body:has(#zakat-form) header nav .ca-calculator-carousel {
