@@ -56,7 +56,7 @@ for (const [method, grams, priceKey] of [["gold",69.12,"goldPricePerGram"],["sil
   r = calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: method, [priceKey]: 100, tradeGoodsValue: grams * 100, ...validSistaniConditions });
   assert.equal(r.nisabGrams, grams);
   assert.equal(r.nisabThreshold, grams * 100);
-  assert.equal(r.zakatBeforePaid, grams * 2.5);
+  assert.ok(Math.abs(r.zakatBeforePaid - grams * 2.5) < 1e-9, "Floating-point result must match the exact rational amount within precision tolerance");
 }
 r = calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "gold", tradeGoodsValue: 1000000, assets: { cash: 900000, bank: 500000 }, ...validSistaniConditions });
 assert.equal(r.totalAssets, 1000000);
