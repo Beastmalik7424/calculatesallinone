@@ -332,7 +332,7 @@ for url in urls:
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
 # Keep titles specific to each calculator's actual job, without promising unsupported features.
 EXPECTED_INTENT_TITLES = {
-    "/zakat-calculator/": "Global Zakat Calculator | Nisab & Currency | CalculatesAll",
+    "/zakat-calculator/": "Zakat Calculator | Hanafi & Ja'fari | Gram and Tola",
     "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
     "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
     "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
@@ -722,8 +722,8 @@ for url in urls:
                     "Tasbih Counter dateModified must match the verified target-persistence and content update."
                 )
             elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
-                assert item.get("dateModified") == "2026-11-15", (
-                    "Zakat dateModified must match the verified global Nisab, currency, asset and bilingual content update."
+                assert item.get("dateModified") == "2026-11-16", (
+                    "Zakat dateModified must match the verified Hanafi/Sistani, gram/tola, source and bilingual content update."
                 )
             else:
                 assert "dateModified" not in item, (

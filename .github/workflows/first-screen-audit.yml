@@ -13,6 +13,10 @@ on:
       - 'tests/emi-viewport-audit.cjs'
       - 'styles/input.css'
       - 'static/app.js'
+      - 'static/zakat-calculator.js'
+      - 'tests/zakat-calculator-browser.cjs'
+      - 'tests/zakat-fiqh-methods.cjs'
+      - 'tests/zakat-calculator-quality-smoke.cjs'
       - 'tests/viewport-audit.cjs'
       - 'tests/query-calculator-browser.cjs'
       - 'extra_calculator_pages.py'
@@ -63,6 +67,7 @@ jobs:
             sleep 1
           done
           curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null
+          node tests/zakat-calculator-browser.cjs
           node tests/calorie-calculator-browser.cjs
           node tests/query-calculator-browser.cjs
           node tests/extra-calculators-browser.cjs
