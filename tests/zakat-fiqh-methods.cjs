@@ -108,7 +108,7 @@ for (let i = 0; i < 1500; i++) {
   const price = 100 + random() * 500, threshold = grams * price;
   const tradeGoodsValue = Math.floor(random() * threshold * 2);
   const conditions = { ...validSistaniConditions };
-  if (i % 2 === 0) conditions[Object.keys(conditions)[i % 6]] = false;
+  if (i % 2 === 0) conditions[Object.keys(conditions)[Math.floor(i / 2) % 6]] = false;
   const priceKey = jafariNisabMethod === "gold" ? "goldPricePerGram" : "silverPricePerGram";
   const result = calculate({
     currency: "PKR", schoolOfThought: "jafari-sistani", jafariNisabMethod, metalPriceUnit,
