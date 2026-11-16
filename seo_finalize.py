@@ -41,8 +41,8 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/ur/zakat-calculator/": "2026-11-16",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
-    # This date records the verified Years-to-Days answer examples, calendar distinction and source review.
-    "/years-to-days-calculator/": "2026-11-14",
+    # This date records the verified 13-year answer, calendar distinction and source review.
+    "/years-to-days-calculator/": "2026-11-17",
     # This date records the verified unit definitions, conversion formulas, rounding and input-limit review.
     "/unit-converter/": "2026-11-14",
     # This date records the verified Tasbih target-persistence, storage-disclosure and content-restructure update.
