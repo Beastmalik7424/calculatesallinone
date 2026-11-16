@@ -61,6 +61,7 @@ for phrase in (
     "85 grams of gold",
     "595 grams of silver",
     "96 grams of gold",
+    "96 grams of gold",
     "ISO currency",
     "PKR 503,529",
     "not personal Nisab",
@@ -71,6 +72,7 @@ for phrase in (
     "Hanafi scholar answer",
     "Saudi ZATCA guide",
     "Jordan General Iftaa explanation",
+    "96 g gold conversions",
     "Report a suspected error",
 ):
     assert phrase.lower() in method.lower(), f"Methodology missing useful detail: {phrase}"
