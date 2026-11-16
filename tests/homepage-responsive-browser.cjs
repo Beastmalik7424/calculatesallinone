@@ -84,7 +84,7 @@ const axe = require("axe-core");
       assert.ok(layout.calculator.bottom <= layout.viewportHeight + 1, scenario.label + ": complete calculator must fit above the first fold; " + JSON.stringify(layout));
       assert.ok(layout.documentWidth <= layout.viewportWidth + 1, scenario.label + ": no horizontal scrolling is allowed");
       if (scenario.width <= 600) {
-        for (const key of ["7", "+", "3", "="]) {
+        for (const key of ["C", "7", "+", "3", "="]) {
           await page.locator('.ca-home-calculator #calc-pad button[data-key="' + key + '"]').click();
         }
         const afterCalculation = await page.evaluate(() => ({
