@@ -111,4 +111,4 @@ assert "ca-site-nav-topline" in markup, "Header must keep its separate top contr
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
 print("Calculator grid, all 17 unique tools, responsive columns, header layout and Tasbih action smoke tests PASS")
 
-assert '<link rel="stylesheet" href="/assets/site.css?v=20261116-zakat-first-screen-v1">' in zakat_markup, "Zakat pages must use a fresh stylesheet URL so browsers do not reuse cached pre-fix CSS"
+assert '<link rel="stylesheet" href="/assets/site.css?v=20261116-homepage-calculator-layout-v1">' in zakat_markup, "Zakat pages must use a fresh stylesheet URL so browsers do not reuse cached pre-fix CSS"
