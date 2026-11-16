@@ -1996,6 +1996,13 @@ def tool_page(t):
             "breadcrumb": {"@id": url + "#breadcrumb"},
             "dateModified": "2026-11-16",
             "citation": [
+                "https://www.sistani.org/english/book/48/2317/",
+                "https://www.sistani.org/english/book/48/2318/",
+                "https://www.sistani.org/english/book/48/2323/",
+                "https://www.sistani.org/english/qa/14884/",
+                "https://zatca.gov.sa/en/HelpCenter/guidelines/Documents/ZakatyManual.pdf",
+                "https://www.aliftaa.jo/research-fatwa-english/854/School-books-state-that-the-Nisaab-for-gold-is-85-grams-of-pure-gold-so",
+                "https://sindhlaws.gov.pk/Setup/Publications_SindhCode/PUB-16-000006.pdf",
                 "https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-calculator/",
                 "https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf",
                 "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026",
