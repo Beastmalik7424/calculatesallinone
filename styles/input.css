@@ -469,7 +469,7 @@
   .ca-home-header h1 {
     margin: 0 !important;
     font-size: clamp(1.4rem, 2vw, 2rem) !important;
-    line-height: 1.2 !important;
+    line-height: 1.15 !important;
   }
   .ca-home-layout {
     width: 100% !important;
@@ -1099,7 +1099,7 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
  #main .ca-tool-tasbih-counter .ca-tasbih-shell { gap: .12rem !important; margin-block: 0 !important; }
  #main .ca-tool-tasbih-counter .ca-tasbih-settings { gap: .2rem !important; }
  #main .ca-tool-tasbih-counter .ca-tasbih-settings label { font-size: .72rem !important; margin: 0 !important; }
- #main .ca-tool-tasbih-counter .ca-tasbih-settings select { min-height: 44px !important; height: 38px !important; padding-block: .15rem !important; }
+ #main .ca-tool-tasbih-counter .ca-tasbih-settings select { min-height: 38px !important; height: 38px !important; padding-block: .15rem !important; }
  #main .ca-tool-tasbih-counter #t-count { font-size: 2.4rem !important; padding: .1rem !important; line-height: 1 !important; min-height: 48px !important; }
  #main .ca-tool-tasbih-counter #t-progress { font-size: .72rem !important; margin: 0 !important; }
  #main .ca-tool-tasbih-counter #t-tap { min-height: 48px !important; height: 48px !important; padding: .25rem !important; font-size: 1.05rem !important; }
@@ -1398,7 +1398,7 @@ body:has(.ca-tool-bmi-calculator) header nav, body:has(.ca-tool-tasbih-counter) 
     padding: 0 !important;
   }
   #main .ca-tool-standard-calculator #calc-pad {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     grid-auto-rows: 44px !important;
     align-content: start !important;
     row-gap: 4px !important;
@@ -1784,7 +1784,7 @@ header nav #theme-toggle, header nav .ca-calculator-carousel { white-space: nowr
   }
   #main:has(#extra-calculator-form.ca-compact-calculator-form) > nav[aria-label="Breadcrumb"] {
     margin-bottom: .1rem !important;
-    font-size: .76rem !important;
+    font-size: .68rem !important;
     line-height: 1.05 !important;
   }
   #main:has(#extra-calculator-form.ca-compact-calculator-form) > section:first-of-type {
