@@ -21,6 +21,30 @@ let r = calculate({
 assert.equal(r.totalAssets, 100000, "Hanafi method must include qualifying personal-use jewellery");
 assert.equal(r.zakatBeforePaid, 2500);
 
+for (const [method, grams, priceKey] of [
+  ["gold-85", 85, "goldPricePerGram"],
+  ["silver-595", 595, "silverPricePerGram"]
+]) {
+  const result = calculate({
+    ...base,
+    schoolOfThought: "sunni-shafii",
+    nisabMethod: method,
+    [priceKey]: 100,
+    assets: { cash: grams * 100 },
+    hawlComplete: true
+  });
+  assert.equal(result.nisabGrams, grams, method + " must use its selected sourced reference weight");
+  assert.equal(result.nisabThreshold, grams * 100, method + " must calculate the threshold correctly");
+}
+r = calculate({
+  ...base,
+  schoolOfThought: "sunni-shafii",
+  goldPricePerGram: 100,
+  assets: { cash: 8500 },
+  hawlComplete: true
+});
+assert.equal(r.nisabMethod, "gold-85", "Non-Hanafi presets must default to the common modern 85 g gold reference");
+
 for (const school of ["sunni-shafii", "sunni-maliki", "sunni-hanbali"]) {
   r = calculate({
     ...base,
@@ -157,7 +181,7 @@ function random() {
 }
 for (let i = 0; i < 2000; i++) {
   const school = ["sunni-hanafi", "sunni-shafii", "sunni-maliki", "sunni-hanbali"][i % 4];
-  const nisabMethod = i % 2 === 0 ? "silver" : "gold-87";
+  const nisabMethod = ["silver", "gold-87", "silver-595", "gold-85"][i % 4];
   const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
   const silverPerGram = 50 + random() * 300;
   const goldPerGram = 5000 + random() * 15000;
