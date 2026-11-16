@@ -807,7 +807,7 @@ URDU = {
             ("Metal price unit", "دھات کی قیمت کی اکائی"),
             ("Price per gram", "فی گرام قیمت"),
             ("Price per Sindh Government standard tola (11.6638 g)", "حکومتِ سندھ کے سرکاری تولہ کے حساب سے قیمت (11.6638 گرام)"),
-            ("Enter the current local price in the selected currency and unit. If you choose tola, the calculator converts using 1 Pakistani tola = 11.6638 g.", "منتخب کرنسی اور اکائی میں موجودہ مقامی قیمت درج کریں۔ سرکاری تولہ منتخب کرنے پر کیلکولیٹر 1 تولہ = 11.6638 گرام کے مطابق تبدیلی کرتا ہے۔"),
+            ("Enter the current local price in the selected currency and unit. If you choose tola, the calculator converts using 1 Sindh Government standard tola = 11.6638 g.", "منتخب کرنسی اور اکائی میں موجودہ مقامی قیمت درج کریں۔ سرکاری تولہ منتخب کرنے پر کیلکولیٹر 1 تولہ = 11.6638 گرام کے مطابق تبدیلی کرتا ہے۔"),
             ("Silver price in selected unit", "منتخب اکائی میں چاندی کی قیمت"),
             ("24-karat gold price in selected unit", "منتخب اکائی میں 24 قیراط سونے کی قیمت"),
             ("Eligible liabilities and payments", "قابلِ کٹوتی واجبات اور ادائیگیاں"),
