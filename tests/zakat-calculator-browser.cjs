@@ -123,6 +123,13 @@ let browser;
   await page.locator("#z-hawl").check();
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /واجب الادا/);
+  await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
+  assert.equal(await page.locator("#z-sunni-fields").isVisible(), false, "Urdu Sunni Nisab selector must be hidden in the Sistani method");
+  assert.equal(await page.locator("#z-sunni-asset-fields").isVisible(), false, "Urdu Sunni assets, liabilities and Hawl must be hidden in the Sistani method");
+  for (const id of ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-hawl"]) {
+    assert.equal(await page.locator("#" + id).isVisible(), false, "Urdu Sunni-only field must be hidden in the Sistani method: " + id);
+  }
+  assert.equal(await page.locator("#z-jafari-fields").isVisible(), true, "Urdu Sistani fields must be visible");
   const urOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   assert.equal(urOverflow, false, "Urdu page must not overflow a 375px viewport");
 
