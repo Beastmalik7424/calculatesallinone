@@ -1,6 +1,6 @@
 "use strict";
 const assert = require("node:assert/strict");
-const { calculate } = require("../static/zakat-calculator.js");
+const { calculate, assetKeys } = require("../static/zakat-calculator.js");
 
 const base = {
   currency: "PKR",
@@ -149,4 +149,72 @@ assert.throws(() => calculate({ ...base, schoolOfThought: "unknown" }), /school/
 assert.throws(() => calculate({ ...base, metalPriceUnit: "ounce" }), /metal price unit/i);
 assert.throws(() => calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "unknown" }), /Jafari Nisab/i);
 
-console.log("Zakat fiqh-method engine tests: PASS (11 method, condition, threshold and unit assertions)");
+// Deterministic stress coverage across all four Sunni options and both price units.
+let seed = 20261116;
+function random() {
+  seed = (seed * 1664525 + 1013904223) >>> 0;
+  return seed / 4294967296;
+}
+for (let i = 0; i < 2000; i++) {
+  const school = ["sunni-hanafi", "sunni-shafii", "sunni-maliki", "sunni-hanbali"][i % 4];
+  const nisabMethod = i % 2 === 0 ? "silver" : "gold-87";
+  const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
+  const silverPerGram = 50 + random() * 300;
+  const goldPerGram = 5000 + random() * 15000;
+  const selectedPerGram = nisabMethod === "silver" ? silverPerGram : goldPerGram;
+  const assets = Object.fromEntries(assetKeys.map(key => [key, Math.floor(random() * 1000000) / 100]));
+  const result = calculate({
+    currency: "PKR",
+    schoolOfThought: school,
+    nisabMethod,
+    metalPriceUnit,
+    silverPricePerGram: metalPriceUnit === "tola" ? silverPerGram * 11.6638 : silverPerGram,
+    goldPricePerGram: metalPriceUnit === "tola" ? goldPerGram * 11.6638 : goldPerGram,
+    assets,
+    liabilities: Math.floor(random() * 500000) / 100,
+    zakatPaid: Math.floor(random() * 50000) / 100,
+    hawlComplete: i % 3 === 0
+  });
+  assert.ok(Number.isFinite(result.totalAssets) && Number.isFinite(result.netAssets));
+  assert.equal(result.personalJewelleryIncluded, school === "sunni-hanafi");
+  assert.ok(Math.abs(result.metalPricePerGram - selectedPerGram) < 1e-8);
+  assert.ok(result.balanceDue >= 0 && result.balanceDue <= result.zakatBeforePaid);
+  assert.ok(result.zakatBeforePaid === 0 || Math.abs(result.zakatBeforePaid - result.netAssets * 0.025) < 1e-7);
+}
+
+// Deterministic stress coverage for Sistani's two trading-goods Nisab paths.
+for (let i = 0; i < 1000; i++) {
+  const jafariNisabMethod = i % 2 === 0 ? "gold" : "silver";
+  const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
+  const nisabGrams = jafariNisabMethod === "gold" ? 69.12 : 483.84;
+  const pricePerGram = 100 + random() * 500;
+  const priceKey = jafariNisabMethod === "gold" ? "goldPricePerGram" : "silverPricePerGram";
+  const threshold = nisabGrams * pricePerGram;
+  const tradeGoodsValue = Math.floor(random() * threshold * 2);
+  const conditions = {
+    ownerAdultAndSane: true,
+    tradeGoodsAcquiredByExchange: true,
+    tradeGoodsHawlComplete: true,
+    tradeGoodsProfitIntentContinuous: true,
+    tradeGoodsAccessContinuous: true,
+    tradeGoodsMarketValueAtLeastCost: true
+  };
+  if (i % 2 === 0) conditions[Object.keys(conditions)[i % 6]] = false;
+  const result = calculate({
+    currency: "PKR",
+    schoolOfThought: "jafari-sistani",
+    jafariNisabMethod,
+    metalPriceUnit,
+    [priceKey]: metalPriceUnit === "tola" ? pricePerGram * 11.6638 : pricePerGram,
+    tradeGoodsValue,
+    ...conditions
+  });
+  if (i % 2 === 0) {
+    assert.equal(result.status, "conditions_incomplete");
+    assert.equal(result.zakatBeforePaid, 0);
+  } else {
+    assert.equal(result.status, tradeGoodsValue >= threshold ? "payable" : "below_nisab");
+    assert.equal(result.zakatBeforePaid, tradeGoodsValue >= threshold ? tradeGoodsValue * 0.025 : 0);
+  }
+}
+console.log("Zakat fiqh-method tests: PASS (2,000 Sunni + 1,000 Sistani deterministic scenarios, plus boundary and validation cases)");
