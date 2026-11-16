@@ -79,10 +79,12 @@ assert.equal((urSchool[1].match(/<option\b/g) || []).length, 2, "Urdu UI must ex
 assert.match(en, /value="jafari-sistani"/, "Sistani calculation path must be explicitly named");
 assert.match(en, /value="tola"/, "Sindh Government standard tola unit must be selectable");
 assert.match(en, /value="ounce"/, "Troy ounce unit must be selectable");
-assert.match(en, /31\\.1034768 g/, "Troy ounce conversion must be visible");
-assert.match(ur, /31\\.1034768 گرام/, "Urdu page must explain the troy ounce conversion");
+assert.match(en, /31\.1034768 g/, "Troy ounce conversion must be visible");
+assert.match(ur, /31\.1034768 گرام/, "Urdu page must explain the troy ounce conversion");
 assert.match(en, /11\.6638 g/, "Sindh Government standard tola conversion must be visible");
 assert.match(en, /Sindh Government standard tola/, "The 11.6638 g unit must be named as the Sindh Government standard, not a universal Pakistani market tola");
+assert.equal((en.match(/<select id="z-metal-price-unit"[^>]*>[\\s\\S]*?<option\\b/g) || []).length, 3, "English UI must expose exactly gram, standard tola and troy ounce");
+assert.equal((ur.match(/<select id="z-metal-price-unit"[^>]*>[\\s\\S]*?<option\\b/g) || []).length, 3, "Urdu UI must expose exactly the same three price units");
 assert.match(en, /12\.5 g/, "The 12.5 g competing convention must be disclosed");
 assert.match(ur, /12\.5 گرام/, "Urdu content must disclose the 12.5 g competing convention");
 assert.match(en, /zakat-on-jewellery/, "English content must cite the scholar-reviewed jewellery and tola guidance");
