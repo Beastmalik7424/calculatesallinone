@@ -2501,3 +2501,33 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
   #main .ca-home-calculator #calc-pad { gap: .2rem !important; margin-top: .2rem !important; }
   #main .ca-home-calculator #calc-history { display: none !important; }
 }
+
+/* Homepage standard calculator: match the focused, centered calculator-page hierarchy. */
+#main .ca-home-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 44rem) !important;
+  justify-content: center !important;
+  align-items: start !important;
+  width: 100% !important;
+  max-width: 60rem !important;
+  margin-inline: auto !important;
+}
+#main .ca-home-calculator {
+  order: 0 !important;
+  width: 100% !important;
+  max-width: 44rem !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+#main .ca-home-calculator .ca-calculator-engine {
+  width: 100% !important;
+  max-width: 36rem !important;
+  margin-inline: auto !important;
+}
+#main .ca-home-tools {
+  order: 1 !important;
+  width: 100% !important;
+  max-width: 44rem !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
