@@ -135,9 +135,9 @@ TOOLS = [
         "category": "money",
         "name": "Zakat Calculator",
         "app": "FinanceApplication",
-        "description": "Calculate Zakat with Sunni madhhab options, Sayyid Sistani's Ja'fari trading-goods method, gold/silver Nisab, and gram or Sindh Government standard tola prices.",
-        "h1": "Global Zakat Calculator: Sunni and Ja'fari Methods",
-        "lead": "Choose a Sunni madhhab or the specific Sistani Ja'fari trading-goods method. Enter gold and silver prices per gram or the Sindh Government standard tola, and review the calculation assumptions and limits before using the result.",
+        "description": "Calculate Hanafi or Sayyid Sistani Ja'fari Zakat estimates with gold or silver Nisab and gram or Sindh-standard tola price inputs.",
+        "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
+        "lead": "Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             + '<div class="sticky top-20 z-20 shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
@@ -149,9 +149,6 @@ TOOLS = [
             '<div><label class="@L@" for="z-school-of-thought">School of thought / calculation method</label>'
             '<select id="z-school-of-thought" name="z-school-of-thought" class="@I@">'
             '<option value="sunni-hanafi" selected>Sunni — Hanafi</option>'
-            '<option value="sunni-shafii">Sunni — Shafi\'i</option>'
-            '<option value="sunni-maliki">Sunni — Maliki</option>'
-            '<option value="sunni-hanbali">Sunni — Hanbali</option>'
             '<option value="jafari-sistani">Shia Ja\'fari — Sayyid Sistani</option>'
             '</select>'
             '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p></div>'
@@ -160,9 +157,6 @@ TOOLS = [
             '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
             '<option value="silver" selected>Silver Nisab (612.36 g, South Asian classical conversion)</option>'
             '<option value="gold-87">Gold Nisab (87.48 g, South Asian classical conversion)</option>'
-            '<option value="gold-96">Gold Nisab (96 g, Al-Fiqh al-Manhaji Shafi\'i conversion)</option>'
-            '<option value="silver-595">Silver Nisab (595 g, common modern conversion)</option>'
-            '<option value="gold-85">Gold Nisab (85 g, common modern conversion)</option>'
 
             '</select></div></div>'
             '<div id="z-sunni-asset-fields" class="space-y-5">'
@@ -189,7 +183,7 @@ TOOLS = [
             + field("z-paid", "Zakat already paid for this Zakat year")
             + "</div>"
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
-            + '<p class="text-sm text-stone-700 dark:text-stone-300">For the Sunni methods, the Hanafi option includes qualifying personal-use gold/silver jewellery. The Shafi\'i, Maliki and Hanbali options exclude ordinary permissible personal-use jewellery; investment, trade or excessive jewellery may be treated differently. Confirm edge cases with your scholar.</p>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">The Hanafi method includes qualifying gold and silver jewellery when the entered amount is eligible under Hanafi guidance. Enter the metal value only, avoid counting the same jewellery twice, and ask a qualified Hanafi scholar about mixed purity, stones, unusual jewellery, investment or trade holdings.</p>'
             + '</div>'
             + '<div id="z-jafari-fields" class="space-y-4" hidden>'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Shia Ja\'fari method — Sayyid Sistani</h2>'
@@ -229,12 +223,12 @@ TOOLS = [
                 "Use the figures that apply on your own Zakat due date, usually the Hijri date on which your Zakat year completes. The date is personal to you. It is not automatically 1 January, the tax year, Ramadan, or the date you open this page. Keep a record of the date and the price sources you used so you can review the calculation next year."
             ]),
             ("Choose a Nisab method carefully", [
-                "Nisab is the minimum qualifying level of wealth. This calculator offers five selectable reference weights: 612.36 g of silver and 87.48 g of gold, which are South Asian classical conversions often cited in Hanafi references, plus 595 g of silver and 85 g of gold, which are common modern conversions used by some national authorities, and 96 g of gold as the conversion cited in Al-Fiqh al-Manhaji and explained by Jordan's General Iftaa Department. These are alternative weight conventions, not a claim that every school or scholar uses the same conversion. The Hanafi preset starts with 612.36 g silver; the other Sunni presets start with 85 g gold. You can change the reference to match guidance from your own qualified scholar. Enter the current local price per gram for the selected metal in the same currency as your assets. The monetary threshold changes with the market price and currency you use.",
+                "Nisab is the minimum qualifying threshold. This Hanafi calculator provides two reference choices commonly cited in South Asian Hanafi guidance: 612.36 g of silver or 87.48 g of gold. The initial selection is silver. The monetary threshold is the selected metal weight multiplied by the current price per gram you enter. These weights are fixed references; their cash value changes with the local market price. Select the basis advised by your qualified Hanafi scholar for your circumstances. Do not choose a method merely because it produces a lower or higher result.",
                 "Enter the current local price per gram for the selected metal in the same currency as your assets. For silver Nisab, enter the silver price. For either gold Nisab option, enter a 24-karat gold price. This calculator does not fetch a live metal price or other live commodity prices, convert currencies, or claim that an old sample rate is today's rate. Confirm the metal price with a reliable local bullion or jewellers' source on your calculation date. Ask a qualified scholar which Nisab basis applies to your circumstances."
             ]),
-            ("How the Sunni school selector works", [
-                "Select the Sunni madhhab you follow. In this calculator, Hanafi defaults to the 612.36 g silver reference and includes qualifying personal-use gold and silver jewellery entered in the separate jewellery field. Shafi'i, Maliki and Hanbali default to the 85 g gold reference and exclude ordinary lawful personal-use jewellery. You can also select the 96 g gold conversion cited in Al-Fiqh al-Manhaji, or the South Asian classical conversions (87.48 g gold or 612.36 g silver) and common modern conversions (85 g gold or 595 g silver) when your qualified scholar advises a different basis. Jordan's General Iftaa Department explains the distinction between 85 g and 96 g. These are limited presets, not complete fiqh engines. The liabilities field subtracts exactly the amount you enter in every Sunni preset. The relied-upon Shafi'i view does not allow debts to prevent Zakat, so leave this field at zero unless your scholar directs otherwise. Debt rules in other schools also have conditions. The Hawl checkbox is self-reported and does not track balances throughout the lunar year. Hanafi and Maliki methods generally require Nisab at the beginning and end of the year, while Shafi'i and Hanbali methods require it throughout. This calculator applies one selected monetary Nisab reference to total net wealth and does not model every school-specific gold/silver aggregation rule. Follow your own qualified scholar where the ruling differs.",
-                "Use the personal-use jewellery field only for ordinary, permissible jewellery kept for use. Do not enter the same jewellery value in both this field and the eligible gold or silver fields. In the Shafi'i, Maliki and Hanbali presets, leave ordinary permissible personal-use jewellery out of the eligible gold/silver values as well. Investment, trade, excessive, impermissible or non-personal jewellery may need to be counted differently. The Hanafi calculation includes the separate jewellery field. The Shafi'i, Maliki and Hanbali calculations exclude it only as ordinary permissible personal-use jewellery. The jewellery ruling is not a universal Sunni consensus."
+            ("Hanafi method and calculation limits", [
+                "Choose Sunni — Hanafi only if you follow the Hanafi school. The calculator defaults to the 612.36 g silver Nisab and also provides the 87.48 g gold reference. The silver and gold prices are entered separately, and the calculator converts a selected Sindh-standard tola quote to a per-gram price before valuing Nisab. The asset fields are a structured estimate, not an automatic religious classification of every holding. The liabilities field subtracts the amount you enter, but the tool cannot decide whether a specific loan, instalment or business liability is deductible under your circumstances. The Hawl checkbox is self-reported and does not track balances during the lunar year. This is not a complete Hanafi fiqh engine. Follow a qualified Hanafi scholar for personal rulings and exceptional cases.",
+                "For jewellery, enter only the eligible metal value and avoid duplicate entry between the jewellery, gold and silver fields. Purity, stones, workmanship, trade use and personal use can affect valuation or classification. The calculator cannot inspect jewellery or determine its eligible weight. Obtain a reliable valuation and ask a qualified Hanafi scholar about uncertain cases."
             ]),
             ("Shia Ja'fari method: Sayyid Sistani", [
                 "Choose Shia Ja'fari — Sayyid Sistani only if you follow this authority. His official rulings distinguish obligatory Zakat from Khums. The official Q&A says ordinary money saved in bank accounts and monetary bills do not carry obligatory Zakat under this method, while Khums may apply after annual expenses. Do not use the Sunni cash-and-bank calculation for this path.",
@@ -258,7 +252,7 @@ TOOLS = [
                 "A pension or retirement account is included here only as the amount you can access or withdraw under the method you follow. Tax, penalties, vesting restrictions and access conditions can materially change that amount. Cryptocurrency is an optional field for holdings treated as zakatable wealth by the scholar or authority you follow. Property is included in this tool only when it is held for resale or trade. Property held for personal use or rental income needs a different analysis."
             ]),
             ("Which liabilities may be deducted", [
-                "The liabilities field subtracts exactly the amount you enter in every Sunni preset. The calculator does not independently decide whether a particular debt is deductible under your madhhab. Enter only the amount that your own qualified scholar says is eligible. In the relied-upon Shafi'i view, debt does not prevent Zakat; Hanafi, Maliki and Hanbali debt rules have their own conditions and differences.",
+                "The liabilities field subtracts exactly the amount you enter. It does not decide whether a particular debt is deductible under Hanafi rulings. Enter only the amount your qualified Hanafi scholar says is eligible. Debt type, due date and repayment structure can change the ruling. Do not automatically subtract the full outstanding balance of a long-term loan.",
                 "Enter only liabilities that your chosen scholarly approach permits you to deduct. Many contemporary calculation guides focus on debts and instalments due immediately or within the next twelve lunar months, including overdue bills, supplier invoices, rent, taxes and near-term instalments. The treatment of longer-term debts differs. Do not subtract the full outstanding balance of a long mortgage or student loan automatically when only near-term instalments may be deductible under the guidance you follow.",
                 "Do not subtract future household spending that is not yet due, an estimate of ordinary living costs, or interest as though it were an eligible Zakat liability. If you have several debts, list only the amount due within the permitted period and avoid counting the same instalment twice. If you are unsure whether a debt is deductible, calculate both ways for discussion with a qualified scholar rather than presenting one disputed answer as universal."
             ]),
@@ -287,7 +281,7 @@ TOOLS = [
             ])
         ],
         "faq": [
-            ("Which Sunni madhhab option should I select?", "Choose the madhhab you follow. Hanafi includes qualifying personal-use gold and silver jewellery in this calculator and defaults to the 612.36 g silver reference. Shafi'i, Maliki and Hanbali exclude ordinary permissible personal-use jewellery and default to the 85 g gold reference. The page also offers 87.48 g gold, 595 g silver and the 96 g gold conversion cited in Al-Fiqh al-Manhaji as alternative weight conversions. Other asset, debt and exceptional-case rulings still need qualified guidance."),
+            ("Which calculation method should I choose?", "Choose Sunni — Hanafi if you follow the Hanafi school. Choose Shia Ja'fari — Sayyid Sistani only if you follow his published rulings. These are separate calculation paths, not interchangeable versions of one formula. Other Ja'fari authorities and other Sunni schools may have different rulings and are not implemented by this calculator."),
             ("What does the Shia Ja'fari Sistani option calculate?", "It estimates only qualifying trading goods under Sayyid Sistani's published obligatory-precaution ruling. It checks the owner, Nisab, one-year, continuous profit intention, disposal rights and market-value conditions. It does not calculate ordinary cash, banknotes, Khums, crops, livestock or every Zakat category."),
             ("Does Sistani's method apply obligatory Zakat to ordinary bank savings?", "His official Q&A says Zakat is not obligatory on ordinary bank deposits and monetary bills; Khums is a separate obligation and may apply to savings after annual expenses. Other Ja'fari authorities may differ."),
             ("How do I enter a tola price?", "Select the Sindh Government standard tola only when the quoted price is based on 11.6638 g. Some published Zakat guidance uses 12.5 g for a Pakistani tola. If your jeweller uses that or another convention, convert the quote to a per-gram price and select gram. The calculator does not guess which market convention your jeweller uses.")
@@ -1911,8 +1905,8 @@ def tool_page(t):
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     if t["slug"] == "zakat-calculator":
-        title = "Global Zakat Calculator | Gold, Silver Nisab & Currency"
-        desc = "Estimate Zakat worldwide with silver or gold Nisab, an ISO currency code, eligible assets, short-term liabilities and lunar-year confirmation. Pakistan bank deductions explained separately."
+        title = "Zakat Calculator | Hanafi and Ja'fari (Sayyid Sistani) | Gold, Silver, Gram and Tola"
+        desc = "Calculate a source-based Hanafi Zakat estimate or Sayyid Sistani's limited Ja'fari trading-goods estimate. Compare gold and silver Nisab, enter prices per gram or Sindh-standard tola, and review worked examples, assumptions and exclusions."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
