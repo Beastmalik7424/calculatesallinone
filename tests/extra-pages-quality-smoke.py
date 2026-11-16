@@ -96,10 +96,10 @@ for slug, spec in CASES.items():
     description = re.search(r'<meta name="description" content="([^"]*)"', source)
     canonical = f'<link rel="canonical" href="https://calculateallinone.vercel.app/{slug}/">'
     title_text = unescape(title.group(1)) if title else ""
-    title_limit = 63 if slug == "date-calculator" else 60
+    title_limit = 60
     assert title and 25 <= len(title_text) <= title_limit, f"Invalid title: {slug}"
     if slug == "date-calculator":
-        assert title_text == "Date Difference Calculator | Days Between Dates | CalculatesAll", "Date calculator title must preserve the exact requested search-intent wording"
+        assert title_text == "Date Difference Calculator | Days Between Dates", "Date calculator title must preserve the exact requested search-intent wording"
         headings = [unescape(value) for value in re.findall(r"<h2[^>]*>(.*?)</h2>", source)]
         assert "Gregorian leap-year rule" in headings, "Date calculator must label its Gregorian leap-year explanation accurately"
         assert "Calendar-day counting limitations" in headings, "Date calculator limitations need a heading that matches the content"
