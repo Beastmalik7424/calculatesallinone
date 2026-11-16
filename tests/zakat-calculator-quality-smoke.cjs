@@ -232,6 +232,7 @@ assert.ok(urText.includes("اکاؤنٹ بنانے کی ضرورت نہیں"), "
 const enTitle = en.match(/<title>(.*?)<\/title>/i);
 const urTitle = ur.match(/<title>(.*?)<\/title>/i);
 const enDescription = en.match(/<meta name="description" content="([^"]*)"/i);
-assert.ok(enTitle && enTitle[1] === "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab", "English title must target the calculator's actual supported methods");
-assert.ok(urTitle && urTitle[1].includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
-assert.ok(enDescription && enDescription[1].includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
+const decodeMeta = (value) => value.replace(/&#x27;|&#39;/gi, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+assert.ok(enTitle && decodeMeta(enTitle[1]) === "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab", "English title must target the calculator's actual supported methods");
+assert.ok(urTitle && decodeMeta(urTitle[1]).includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
+assert.ok(enDescription && decodeMeta(enDescription[1]).includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
