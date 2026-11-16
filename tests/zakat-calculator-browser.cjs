@@ -76,7 +76,8 @@ const { chromium } = require("playwright");
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
 
-  // Pakistani tola price must normalize to the same gram-based Nisab result.
+  // Sindh Government standard tola price must normalize to the same gram-based Nisab result.
+  assert.match(await page.locator('#z-metal-price-unit option[value="tola"]').innerText(), /Sindh Government standard tola/);
   await page.locator("#z-metal-price-unit").selectOption("tola");
   await page.locator("#z-goldprice").fill("11663.8");
   await page.locator('#zakat-form button[type="submit"]').click();
