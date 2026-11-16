@@ -45,7 +45,12 @@ for (const term of [
   "Sunni", "Hanafi", "Shafi'i", "Maliki", "Hanbali", "Sayyid Sistani",
   "obligatory precaution", "Khums", "69.12 g", "483.84 g",
   "11.6638", "trading goods", "personal-use gold/silver jewellery",
-  "ordinary banknotes", "right of disposal", "capital cost", "contract of exchange"
+  "ordinary banknotes", "right of disposal", "capital cost", "contract of exchange",
+  "liabilities field subtracts exactly the amount you enter in every Sunni preset",
+  "relied-upon Shafi'i view does not allow debts to prevent Zakat",
+  "Hawl checkbox is self-reported", "does not track balances throughout the lunar year",
+  "Hanafi and Maliki", "Shafi'i and Hanbali", "does not model every school-specific gold/silver aggregation rule",
+  "Do not enter the same jewellery value in both", "Muhammad Fayyaz Adeel"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
@@ -53,7 +58,8 @@ for (const term of [
   "503,529", "612.36", "87.48", "1446–1447", "رمضان کے پہلے دن", "پاکستان", "نصاب",
   "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتی ہے",
   "سیستانی", "جعفری", "احتیاطِ واجب", "خمس", "69.12", "483.84",
-  "11.6638", "حنفی", "شافعی", "مالکی", "حنبلی", "تجارتی مال"
+  "11.6638", "حنفی", "شافعی", "مالکی", "حنبلی", "تجارتی مال",
+  "محمد فیاض عدیل", "خود تصدیق", "پورے قمری سال", "ایک ہی زیور کی قیمت", "مکمل فقہی انجن"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
 }
@@ -93,6 +99,8 @@ assert.match(en, /sistani\.org\/english\/book\/48\/2323/, "English content must 
 assert.match(ur, /sistani\.org\/english\/book\/48\/2323/, "Urdu content must cite Sistani's official trading-goods ruling");
 assert.match(en, /sindhlaws\.gov\.pk/, "English content must cite the Sindh Government conversion table");
 assert.match(ur, /sindhlaws\.gov\.pk/, "Urdu content must cite the Sindh Government conversion table");
+assert.match(en, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "English content must cite scholarly debt-rule guidance");
+assert.match(ur, /which-debts-affect-zakat-for-both-debtor-and-creditor/, "Urdu content must cite scholarly debt-rule guidance");
 
 assert.doesNotMatch(enNisab[1], /gold-85/, "Unapproved 85 g gold option must not be exposed in English");
 assert.doesNotMatch(urNisab[1], /gold-85/, "Unapproved 85 g gold option must not be exposed in Urdu");
