@@ -9,15 +9,12 @@
   const NISAB = Object.freeze({
     silver: Object.freeze({ grams: 612.36, priceKey: "silverPricePerGram", label: "Silver 612.36 g (classical South Asian conversion)" }),
     "gold-87": Object.freeze({ grams: 87.48, priceKey: "goldPricePerGram", label: "Gold 87.48 g (classical South Asian conversion)" }),
-    "gold-96": Object.freeze({ grams: 96, priceKey: "goldPricePerGram", label: "Gold 96 g (Al-Fiqh al-Manhaji Shafi'i conversion)" }),
-    "silver-595": Object.freeze({ grams: 595, priceKey: "silverPricePerGram", label: "Silver 595 g (common modern conversion)" }),
-    "gold-85": Object.freeze({ grams: 85, priceKey: "goldPricePerGram", label: "Gold 85 g (common modern conversion)" })
   });
   const JAFARI_NISAB = Object.freeze({
     gold: Object.freeze({ grams: 69.12, priceKey: "goldPricePerGram", label: "Sistani coined gold 69.12 g" }),
     silver: Object.freeze({ grams: 483.84, priceKey: "silverPricePerGram", label: "Sistani coined silver 483.84 g" })
   });
-  const SUNNI_SCHOOLS = Object.freeze(["sunni-hanafi", "sunni-shafii", "sunni-maliki", "sunni-hanbali"]);
+  const SUNNI_SCHOOLS = Object.freeze(["sunni-hanafi"]);
   const ASSET_KEYS = Object.freeze([
     "cash", "bank", "savings", "gold", "silver", "jewellery", "investments",
     "businessCash", "stock", "receivables", "pension", "crypto", "property"
@@ -113,9 +110,8 @@
     const metalPriceUnit = input.metalPriceUnit || "gram";
     if (!["gram", "tola"].includes(metalPriceUnit)) throw new RangeError("Choose a supported metal price unit");
     if (schoolOfThought === "jafari-sistani") return calculateJafari(input, currency, metalPriceUnit);
-    if (!SUNNI_SCHOOLS.includes(schoolOfThought)) throw new RangeError("Choose a supported Sunni or Ja'fari school of thought");
-    const defaultNisabMethod = schoolOfThought === "sunni-hanafi" ? "silver" : "gold-85";
-    const nisabMethod = input.nisabMethod || defaultNisabMethod;
+    if (!SUNNI_SCHOOLS.includes(schoolOfThought)) throw new RangeError("Choose Hanafi or the supported Ja'fari method");
+    const nisabMethod = input.nisabMethod || "silver";
     const method = NISAB[nisabMethod];
     if (!method) throw new RangeError("Choose a supported Nisab method");
     const metalPrice = pricePerGram(input, method.priceKey, metalPriceUnit);
