@@ -35,24 +35,24 @@ for (const id of [
 }
 for (const term of [
   "ISO 4217", "silver Nisab", "gold Nisab", "612.36", "87.48",
-  "503,529", "State Bank of Pakistan", "first day of Ramazan",
+  "503,529", "1446–1447 AH", "85 g", "State Bank of Pakistan", "first day of Ramazan",
   "saving, profit and loss sharing", "2.5%", "personal Zakat Nisab",
   "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000",
-  "bank deduction threshold changes yearly", "Worked example",
+  "bank deduction threshold changes yearly", "Which assets to include", "Which liabilities may be deducted", "How the calculation works", "Worked example with checkable arithmetic", "Personal-use property and other exclusions", "Pakistan bank deduction threshold is separate", "Worldwide currency support, privacy and limitations", "Worked example",
   "does not fetch a live metal price", "qualified scholar", "Sources"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
 for (const term of [
-  "503,529", "612.36", "87.48", "رمضان کے پہلے دن", "پاکستان", "نصاب",
+  "503,529", "612.36", "87.48", "85 گرام", "1446–1447", "رمضان کے پہلے دن", "پاکستان", "نصاب",
   "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتا ہے"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
 }
 assert.equal((en.match(/<summary\b/gi) || []).length, 3, "English Zakat page must have three page-specific FAQs");
 assert.equal((ur.match(/<summary\b/gi) || []).length, 3, "Urdu Zakat page must have three page-specific FAQs");
-assert.doesNotMatch(en, /value="gold-85"/, "English UI must not offer the unapproved 85 g threshold");
-assert.doesNotMatch(ur, /value="gold-85"/, "Urdu UI must not offer the unapproved 85 g threshold");
+assert.match(en, /value="gold-85"/, "English UI must retain the clearly labelled 85 g gold reference");
+assert.match(ur, /value="gold-85"/, "Urdu UI must retain the clearly labelled 85 g gold reference");
 for (const term of [
   "503,529", "612.36", "87.48", "زکوٰۃ سال", "پاکستان", "نصاب",
   "اثاثے", "واجبات", "2.5"
@@ -71,6 +71,8 @@ assert.match(en, /application\/ld\+json/, "English page must retain structured d
 assert.match(ur, /application\/ld\+json/, "Urdu page must retain structured data");
 assert.match(en, /canonical/i, "English page must retain canonical metadata");
 assert.match(ur, /canonical/i, "Urdu page must retain canonical metadata");
+assert.ok(en.includes("islamweb.net/en/fatwa/81355"), "English page must cite the 85 g gold reference");
+assert.ok(ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must cite the 85 g gold reference");
 console.log("Zakat global calculator content and localization gates: PASS");
 
 // Pure calculation-engine tests. These are independent of page rendering.
