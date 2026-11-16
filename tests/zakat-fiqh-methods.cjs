@@ -1,6 +1,6 @@
 "use strict";
 const assert = require("node:assert/strict");
-const { calculate, assetKeys, sunniSchools, nisabMethods, jafariNisabMethods, sindhStandardTolaGrams } = require("../static/zakat-calculator.js");
+const { calculate, assetKeys, sunniSchools, nisabMethods, jafariNisabMethods, sindhStandardTolaGrams, troyOunceGrams } = require("../static/zakat-calculator.js");
 
 const base = {
   currency: "PKR", nisabMethod: "silver", silverPricePerGram: 100,
@@ -11,6 +11,7 @@ const base = {
 assert.deepEqual(sunniSchools, ["sunni-hanafi"]);
 assert.deepEqual(Object.keys(nisabMethods).sort(), ["gold-87", "silver"]);
 assert.equal(sindhStandardTolaGrams, 11.6638);
+assert.equal(troyOunceGrams, 31.1034768);
 assert.equal(nisabMethods.silver.grams, 612.36);
 assert.equal(nisabMethods["gold-87"].grams, 87.48);
 assert.equal(jafariNisabMethods.gold.grams, 69.12);
@@ -47,6 +48,7 @@ for (const school of ["sunni-shafii", "sunni-maliki", "sunni-hanbali", "unknown"
 }
 assert.throws(() => calculate({ ...base, nisabMethod: "gold-85" }), /Nisab method/i);
 assert.throws(() => calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "unknown" }), /Jafari Nisab/i);
+assert.throws(() => calculate({ ...base, metalPriceUnit: "ounce" }), /unit/i);
 
 const validSistaniConditions = {
   ownerAdultAndSane: true, tradeGoodsAcquiredByExchange: true, tradeGoodsHawlComplete: true,
@@ -76,20 +78,20 @@ for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
 assert.throws(() => calculate({ ...base, currency: "ZZZ" }), /currency/i);
 assert.throws(() => calculate({ ...base, assets: { cash: Number.MAX_VALUE, bank: Number.MAX_VALUE } }), /supported calculation range/i);
 
-// 2,000 deterministic Hanafi scenarios across both supported Nisab metals and both price units.
+// 3,000 deterministic Hanafi scenarios across both Nisab metals and all three price units.
 let seed = 20261116;
 function random() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
-for (let i = 0; i < 2000; i++) {
+for (let i = 0; i < 3000; i++) {
   const nisabMethod = i % 2 === 0 ? "silver" : "gold-87";
-  const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
+  const metalPriceUnit = ["gram", "tola", "ounce"][i % 3];
   const silver = 50 + random() * 300, gold = 5000 + random() * 15000;
   const selected = nisabMethod === "silver" ? silver : gold;
   const assets = Object.fromEntries(assetKeys.map(key => [key, Math.floor(random() * 1000000) / 100]));
   const liabilities = Math.floor(random() * 500000) / 100, paid = Math.floor(random() * 50000) / 100;
   const result = calculate({
     currency: "PKR", schoolOfThought: "sunni-hanafi", nisabMethod, metalPriceUnit,
-    silverPricePerGram: metalPriceUnit === "tola" ? silver * 11.6638 : silver,
-    goldPricePerGram: metalPriceUnit === "tola" ? gold * 11.6638 : gold,
+    silverPricePerGram: silver * (metalPriceUnit === "tola" ? 11.6638 : metalPriceUnit === "ounce" ? 31.1034768 : 1),
+    goldPricePerGram: gold * (metalPriceUnit === "tola" ? 11.6638 : metalPriceUnit === "ounce" ? 31.1034768 : 1),
     assets, liabilities, zakatPaid: paid, hawlComplete: i % 3 === 0
   });
   assert.ok(Number.isFinite(result.totalAssets) && Number.isFinite(result.netAssets));
@@ -99,10 +101,10 @@ for (let i = 0; i < 2000; i++) {
   assert.ok(result.zakatBeforePaid === 0 || Math.abs(result.zakatBeforePaid - result.netAssets * 0.025) < 1e-7);
 }
 
-// 1,000 deterministic Sistani scenarios covering both Nisab metals and all six conditions.
-for (let i = 0; i < 1000; i++) {
+// 1,500 deterministic Sistani scenarios covering both Nisab metals, all three units and all six conditions.
+for (let i = 0; i < 1500; i++) {
   const jafariNisabMethod = i % 2 === 0 ? "gold" : "silver";
-  const metalPriceUnit = i % 3 === 0 ? "tola" : "gram";
+  const metalPriceUnit = ["gram", "tola", "ounce"][i % 3];
   const grams = jafariNisabMethod === "gold" ? 69.12 : 483.84;
   const price = 100 + random() * 500, threshold = grams * price;
   const tradeGoodsValue = Math.floor(random() * threshold * 2);
@@ -111,7 +113,7 @@ for (let i = 0; i < 1000; i++) {
   const priceKey = jafariNisabMethod === "gold" ? "goldPricePerGram" : "silverPricePerGram";
   const result = calculate({
     currency: "PKR", schoolOfThought: "jafari-sistani", jafariNisabMethod, metalPriceUnit,
-    [priceKey]: metalPriceUnit === "tola" ? price * 11.6638 : price,
+    [priceKey]: price * (metalPriceUnit === "tola" ? 11.6638 : metalPriceUnit === "ounce" ? 31.1034768 : 1),
     tradeGoodsValue, ...conditions
   });
   if (i % 2 === 0) {
@@ -122,4 +124,25 @@ for (let i = 0; i < 1000; i++) {
     assert.equal(result.zakatBeforePaid, tradeGoodsValue >= threshold ? tradeGoodsValue * 0.025 : 0);
   }
 }
-console.log("Zakat engine: PASS (2,000 Hanafi + 1,000 Sistani deterministic scenarios, boundary, validation and unit-conversion cases)");
+// Cross-unit economic equivalence: identical per-gram market prices must produce identical
+// normalized metal prices, Nisab thresholds, statuses and Zakat for gram, tola and troy ounce.
+for (const schoolOfThought of ["sunni-hanafi", "jafari-sistani"]) {
+  for (const nisabMethod of schoolOfThought === "sunni-hanafi" ? ["silver", "gold-87"] : ["gold", "silver"]) {
+    const priceKey = nisabMethod === "silver" ? "silverPricePerGram" : "goldPricePerGram";
+    const perGram = 1234.567;
+    const gramsPerUnit = { gram: 1, tola: 11.6638, ounce: 31.1034768 };
+    const results = Object.entries(gramsPerUnit).map(([metalPriceUnit, factor]) => calculate({
+      ...base, schoolOfThought,
+      ...(schoolOfThought === "sunni-hanafi" ? { nisabMethod, assets: { cash: 900000 }, hawlComplete: true } :
+        { jafariNisabMethod: nisabMethod, tradeGoodsValue: 900000, ...validSistaniConditions }),
+      metalPriceUnit, [priceKey]: perGram * factor
+    }));
+    for (const result of results.slice(1)) {
+      assert.ok(Math.abs(result.metalPricePerGram - results[0].metalPricePerGram) < 1e-9);
+      assert.ok(Math.abs(result.nisabThreshold - results[0].nisabThreshold) < 1e-7);
+      assert.equal(result.status, results[0].status);
+      assert.ok(Math.abs(result.zakatBeforePaid - results[0].zakatBeforePaid) < 1e-7);
+    }
+  }
+}
+console.log("Zakat engine: PASS (3,000 Hanafi + 1,500 Sistani deterministic scenarios, all three units and cross-unit equivalence)");
