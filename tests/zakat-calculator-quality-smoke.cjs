@@ -49,7 +49,7 @@ for (const term of [
   
   
   "Hawl checkbox is self-reported", "does not track balances throughout the lunar year",
-   "does not model every Hanafi gold/silver aggregation detail",
+   "not a complete Hanafi fiqh engine",
   "Do not enter the same jewellery value in both", "Muhammad Fayyaz Adeel"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
