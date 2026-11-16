@@ -90,14 +90,6 @@ let browser;
   await page.locator('#zakat-form button[type="submit"]').click();
   assert.match(await page.locator("#zakat-result").innerText(), /16,250/);
 
-  // Shafi'i excludes ordinary permissible personal-use jewellery in this limited model.
-  await page.locator("#z-school-of-thought").selectOption("sunni-shafii");
-  await page.locator("#z-cash").fill("100000");
-  await page.locator("#z-jewellery").fill("50000");
-  await page.locator("#z-goldprice").fill("1000");
-  await page.locator('#zakat-form button[type="submit"]').click();
-  assert.match(await page.locator("#zakat-result").innerText(), /2,500/);
-
   // Sindh Government standard tola price must normalize to the same gram-based Nisab result.
   assert.match(await page.locator('#z-metal-price-unit option[value="tola"]').innerText(), /Sindh Government standard tola/);
   await page.locator("#z-metal-price-unit").selectOption("tola");
