@@ -66,6 +66,7 @@ LANGUAGE_LABELS = {
 }
 for lang, required_labels in LANGUAGE_LABELS.items():
     markup = output_for("/" + lang + "/")
+    assert 'data-tool-set="duplicate"' in markup, f"{lang} homepage must retain the moving carousel duplicate"
     group = primary_group(markup, "/" + lang + "/")
     found = set(re.findall(r'data-tool-shortcut="([^"]+)"', group))
     assert found == ENGLISH_TOOLS, f"{lang} carousel must include all 17 calculators"
