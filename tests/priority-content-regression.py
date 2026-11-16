@@ -144,6 +144,9 @@ for phrase in [
     "monthly close",
 ]:
     assert phrase.casefold() in money.casefold(), f"/money/ missing useful guidance: {phrase}"
+assert "COGS = opening inventory + purchases − closing inventory" in money, "Money hub must use the approved COGS formula"
+assert money.count("COGS = opening inventory + purchases − closing inventory") == 1, "Money hub must state the COGS formula once"
+assert "gross profit as revenue minus COGS" in money, "Money hub must use the approved gross-profit basis"
 assert "Sources" in money and "Last reviewed: 2026-11-16" in money, "Money hub needs sources and review date"
 assert re.search(r"<a\b[^>]*href=[\"']https?://[^\"']+[\"']", money_source, re.I), "Money hub needs a working source link"
 money_faqs = [visible(q) for q in re.findall(r"<summary\b[^>]*>(.*?)</summary>", money_source, re.S | re.I)]
