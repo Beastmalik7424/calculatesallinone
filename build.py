@@ -321,7 +321,7 @@ TOOLS = [
                 "Do not label a markup percentage as a margin. A 25 percent markup does not mean a 25 percent gross margin."
             ]),
             ("Worked example", [
-                "Assume revenue is 100,000, opening inventory is 20,000, purchases are 50,000 and closing inventory is 25,000. COGS is 20,000 + 50,000 − 25,000 = 45,000. Gross profit is 100,000 − 45,000 = 55,000, and gross margin is 55,000 ÷ 100,000 × 100 = 55 percent.",
+                "Assume revenue is 100,000, opening inventory is 20,000, purchases are 50,000 and closing inventory is 25,000. COGS is 20,000 + 50,000 − 25,000 = 45,000. Gross profit is 100,000 − 45,000 = 55,000, and gross margin is 55,000 ÷ 100,000 × 100 = 55%.",
                 "If other operating expenses are 15,000, net operating profit is 40,000. The calculator's business mode takes revenue, COGS and other expenses as separate inputs. It does not ask for inventory components."
             ]),
             ("Worked example, profit", [
