@@ -3,7 +3,10 @@
 
   var MSG = {
     en: {
-      zakatNoPrice: "Enter a positive silver or gold price per gram in the selected currency to calculate the chosen Nisab.",
+      zakatNoPrice: "Enter a positive silver or gold price in the selected currency and selected unit (gram or Sindh Government standard tola).",
+      zakatSistaniConditions: "No Zakat amount has been calculated. Confirm all six Sayyid Sistani trading-goods conditions. If any condition is uncertain, ask his office or your qualified scholar.",
+      zakatSistaniBelow: "Qualifying trading goods: {net}. Selected Sistani Nisab: {nisab}. The trading-goods value is below this threshold, so this estimate does not show Zakat as payable.",
+      zakatSistaniDue: "Under Sayyid Sistani's published trading-goods ruling (obligatory precaution), the estimated amount at 2.5% is {amount}. Eligible trading goods: {net}. Nisab: {nisab}. This is not a calculation of ordinary cash, banknotes, Khums, crops, livestock or every Zakat category.",
       zakatInput: "Enter a valid three-letter ISO currency code supported by your browser. Check every amount. Values must be finite and zero or greater.",
       zakatBelow: "Assets: {assets}. Eligible liabilities: {liabilities}. Net wealth: {net}. Selected Nisab: {nisab}. Net wealth is below the threshold, so this estimate does not show Zakat as payable.",
       zakatHawl: "Assets: {assets}. Eligible liabilities: {liabilities}. Net wealth: {net}. Selected Nisab: {nisab}. The threshold is met, but the lunar Zakat year (hawl) is not confirmed as complete.",
@@ -67,7 +70,10 @@
       cats: { weight: "weight", length: "length", temp: "temperature" }
     },
     ur: {
-      zakatNoPrice: "منتخب نصاب کا حساب کرنے کے لیے منتخب کرنسی میں سونے یا چاندی کی فی گرام موجودہ قیمت درج کریں۔",
+      zakatNoPrice: "منتخب نصاب کے لیے منتخب کرنسی اور اکائی (گرام یا حکومتِ سندھ کا سرکاری تولہ) میں سونے یا چاندی کی مثبت قیمت درج کریں۔",
+      zakatSistaniConditions: "زکوٰۃ کی رقم نہیں نکالی گئی۔ آیت اللہ سیستانی کے تجارتی مال کی چھوں شرائط کی تصدیق کریں۔ اگر کسی شرط میں شک ہو تو ان کے دفتر یا اپنے مستند عالم سے پوچھیں۔",
+      zakatSistaniBelow: "اہل تجارتی مال: {net}۔ سیستانی کے منتخب نصاب کی مالیت: {nisab}۔ تجارتی مال کی قیمت اس حد سے کم ہے، اس لیے اس حساب میں زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
+      zakatSistaniDue: "آیت اللہ سیستانی کے شائع شدہ تجارتی مال کے حکم (احتیاطِ واجب) کے مطابق 2.5 فیصد کا تخمینی حساب {amount} ہے۔ اہل تجارتی مال: {net}۔ نصاب: {nisab}۔ یہ عام نقد رقم، بینک نوٹ، خمس، فصل، مویشی یا زکوٰۃ کی تمام اقسام کا حساب نہیں ہے۔",
       zakatInput: "اپنے براؤزر میں معاون تین حروف والا درست ISO کرنسی کوڈ درج کریں۔ تمام رقوم چیک کریں۔ ہر رقم صفر یا اس سے زیادہ اور محدود ہونی چاہیے۔",
       zakatBelow: "اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص مال: {net}۔ منتخب نصاب: {nisab}۔ خالص مال نصاب سے کم ہے، اس لیے زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
       zakatHawl: "اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص مال: {net}۔ منتخب نصاب: {nisab}۔ نصاب پورا ہے، لیکن قمری زکوٰۃ سال (حول) مکمل ہونے کی تصدیق نہیں ہوئی۔",
@@ -455,45 +461,75 @@
   }
 
 
-  /* Zakat: Nisab is 612.36 g of silver. The amount is shown only after the Nisab and hawl checks. */
+  /* Zakat: each school uses its own supported calculation path. */
   function initZakat () {
     var form = $("zakat-form")
     if (!form) return
     var assetFields = [
       ["cash", "z-cash"], ["bank", "z-bank"], ["savings", "z-savings"],
-      ["gold", "z-gold"], ["silver", "z-silver"], ["investments", "z-investments"],
-      ["businessCash", "z-businesscash"], ["stock", "z-stock"],
-      ["receivables", "z-recv"], ["pension", "z-pension"],
+      ["gold", "z-gold"], ["silver", "z-silver"], ["jewellery", "z-jewellery"],
+      ["investments", "z-investments"], ["businessCash", "z-businesscash"],
+      ["stock", "z-stock"], ["receivables", "z-recv"], ["pension", "z-pension"],
       ["crypto", "z-crypto"], ["property", "z-property"]
     ]
+    var schoolField = $("z-school-of-thought")
+    var nisabField = $("z-nisab-method")
+    var unitField = $("z-metal-price-unit")
+    var sunniFields = $("z-sunni-fields")
+    var sunniAssetFields = $("z-sunni-asset-fields")
+    var jafariFields = $("z-jafari-fields")
     function money(value, currency) {
       return new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", {
         style: "currency", currency: currency, maximumFractionDigits: 2
       }).format(value)
     }
+    function updateMethodUI(resetNisab) {
+      var school = schoolField ? schoolField.value : "sunni-hanafi"
+      var isJafari = school === "jafari-sistani"
+      if (sunniFields) sunniFields.hidden = isJafari
+      if (sunniAssetFields) sunniAssetFields.hidden = isJafari
+      if (jafariFields) jafariFields.hidden = !isJafari
+      if (resetNisab && nisabField && !isJafari) {
+        nisabField.value = school === "sunni-hanafi" ? "silver" : "gold-85"
+      }
+    }
+    if (schoolField) schoolField.addEventListener("change", function () { updateMethodUI(true) })
+    updateMethodUI(false)
     form.addEventListener("submit", function (e) {
       e.preventDefault()
       if (!window.ZakatCalculator || typeof window.ZakatCalculator.calculate !== "function") {
         say("zakat-result", t("zakatEngineError"))
         return
       }
-      var assets = {}
-      assetFields.forEach(function (entry) {
-        assets[entry[0]] = num(entry[1])
-      })
+      var school = schoolField ? schoolField.value : "sunni-hanafi"
       var currency = ($("z-currency") && $("z-currency").value || "PKR").trim().toUpperCase()
-      var method = $("z-nisab-method") ? $("z-nisab-method").value : "silver"
+      var input = {
+        currency: currency,
+        schoolOfThought: school,
+        metalPriceUnit: unitField ? unitField.value : "gram",
+        silverPricePerGram: num("z-silverprice"),
+        goldPricePerGram: num("z-goldprice")
+      }
+      if (school === "jafari-sistani") {
+        input.jafariNisabMethod = $("z-jafari-nisab-method") ? $("z-jafari-nisab-method").value : "gold"
+        input.tradeGoodsValue = num("z-jafari-trade-value")
+        input.ownerAdultAndSane = !!($("z-jafari-owner") && $("z-jafari-owner").checked)
+        input.tradeGoodsAcquiredByExchange = !!($("z-jafari-acquired") && $("z-jafari-acquired").checked)
+        input.tradeGoodsHawlComplete = !!($("z-jafari-hawl") && $("z-jafari-hawl").checked)
+        input.tradeGoodsProfitIntentContinuous = !!($("z-jafari-intent") && $("z-jafari-intent").checked)
+        input.tradeGoodsAccessContinuous = !!($("z-jafari-access") && $("z-jafari-access").checked)
+        input.tradeGoodsMarketValueAtLeastCost = !!($("z-jafari-market") && $("z-jafari-market").checked)
+      } else {
+        var assets = {}
+        assetFields.forEach(function (entry) { assets[entry[0]] = num(entry[1]) })
+        input.nisabMethod = nisabField ? nisabField.value : (school === "sunni-hanafi" ? "silver" : "gold-85")
+        input.assets = assets
+        input.liabilities = num("z-debts")
+        input.zakatPaid = num("z-paid")
+        input.hawlComplete = !!($("z-hawl") && $("z-hawl").checked)
+      }
       try {
-        var result = window.ZakatCalculator.calculate({
-          currency: currency,
-          nisabMethod: method,
-          silverPricePerGram: num("z-silverprice"),
-          goldPricePerGram: num("z-goldprice"),
-          assets: assets,
-          liabilities: num("z-debts"),
-          zakatPaid: num("z-paid"),
-          hawlComplete: !!($("z-hawl") && $("z-hawl").checked)
-        })
+        var result = window.ZakatCalculator.calculate(input)
         var formatted = {
           assets: money(result.totalAssets, result.currency),
           liabilities: money(result.totalLiabilities, result.currency),
@@ -502,6 +538,18 @@
           gross: money(result.zakatBeforePaid, result.currency),
           paid: money(result.zakatPaid, result.currency),
           amount: money(result.balanceDue, result.currency)
+        }
+        if (school === "jafari-sistani") {
+          if (result.status === "conditions_incomplete") {
+            say("zakat-result", t("zakatSistaniConditions"))
+            return
+          }
+          if (result.status === "below_nisab") {
+            say("zakat-result", t("zakatSistaniBelow", formatted))
+            return
+          }
+          say("zakat-result", t("zakatSistaniDue", formatted))
+          return
         }
         if (result.status === "below_nisab") {
           say("zakat-result", t("zakatBelow", formatted))
@@ -517,13 +565,12 @@
       } catch (error) {
         var reason = String(error && error.message || "")
         if (/metal price/i.test(reason)) say("zakat-result", t("zakatNoPrice"))
-        else if (/currency|finite|amount|Nisab method|supported range/i.test(reason)) say("zakat-result", t("zakatInput"))
+        else if (/currency|finite|amount|Nisab method|Jafari Nisab|metal price unit|school of thought|supported range/i.test(reason)) say("zakat-result", t("zakatInput"))
         else say("zakat-result", t("zakatEngineError"))
       }
     })
   }
 
-  /* BMI: WHO adult ranges. Imperial inches must be 0 to 11.9. */
   function initBMI () {
     var form = $("bmi-form")
     if (!form) return

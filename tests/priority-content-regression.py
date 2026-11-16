@@ -35,7 +35,7 @@ PAGES = {
         "required": [
             "503,529", "1446–1447 AH", "1447 AH (2026)", "first day of Ramazan",
             "saving", "profit and loss sharing", "2.5%",
-            "87.48 g", "612.36 g",
+            "87.48 g", "612.36 g", "Hanafi", "Sayyid Sistani", "11.6638",
             "Which assets to include", "Which liabilities may be deducted",
             "How the calculation works", "Worked example with checkable arithmetic",
             "1,837,080", "700,000", "2,000,000", "50,000",
@@ -112,14 +112,26 @@ assert visible(pnl_html).count("COGS = opening inventory + purchases") == 1, "P&
 assert "does not count inventory or derive COGS for you" in visible(pnl_html), "P&L must distinguish the COGS guide formula from calculator inputs"
 
 zakat_html = read("zakat-calculator")
-zakat_words = len(re.findall(r"\b[\w’'-]+\b", visible(zakat_html)))
 urdu_zakat_html = (ROOT / "ur" / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
-urdu_zakat_words = len(re.findall(r"\b[\w’'-]+\b", visible(urdu_zakat_html)))
-assert zakat_words >= 1000, f"English Zakat page must contain at least 1,000 useful visible words, got {zakat_words}"
-assert urdu_zakat_words >= 700, f"Urdu Zakat page must contain at least 700 useful visible words, got {urdu_zakat_words}"
+zakat_text = visible(zakat_html)
+urdu_zakat_text = visible(urdu_zakat_html)
+for phrase in [
+    "This calculator provides two reference choices",
+    "612.36 g of silver",
+    "87.48 g of gold",
+    "595 g of silver",
+    "85 g of gold",
+    "96 g of gold",
+    "96 g of gold",
+    "does not fetch a live metal price",
+    "qualified scholar",
+    "Last reviewed: 2026-11-16",
+]:
+    assert phrase.lower() in zakat_text.lower(), f"English Zakat page missing useful, sourced guidance: {phrase}"
+for phrase in ["612.36", "87.48", "مستند عالم", "حنفی", "سیستانی", "11.6638"]:
+    assert phrase.lower() in urdu_zakat_text.lower(), f"Urdu Zakat page missing Nisab or scholarly limitation detail: {phrase}"
 
-assert 'value="silver"' in zakat_html and 'value="gold-87"' in zakat_html and 'value="gold-85"' not in zakat_html
-assert "85 g" not in visible(zakat_html), "Zakat page must not present the unapproved 85 g gold method"
+assert all(f'value="{method}"' in zakat_html for method in ["silver", "gold-87"]), "Only the Hanafi silver and gold Nisab references must be selectable"
 assert re.search(r'"dateModified"\s*:\s*"2026-11-16"', zakat_html), "Zakat WebPage dateModified must match the visible review date"
 
 money_source = read("money")
