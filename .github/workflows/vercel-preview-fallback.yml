@@ -10,6 +10,7 @@ on:
     branches:
       - main
       - deploy/zakat-hanafi-jafari-2026-11-16
+      - feature/zakat-hanafi-jafari-tola-clean-2026-11-16
     paths:
       - '.github/workflows/vercel-preview-fallback.yml'
       - 'build.py'
@@ -123,6 +124,9 @@ jobs:
           curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/zakat-calculator/" | grep -Fq "Sayyid Sistani"
           curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/zakat-calculator/" | grep -Fq "Hanafi"
           curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/zakat-calculator/" | grep -Fq "11.6638"
+          curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/zakat-calculator/" | grep -Fq 'value="ounce"'
+          curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/zakat-calculator/" | grep -Fq "31.1034768"
+          curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/ur/zakat-calculator/" | grep -Fq "31.1034768"
           curl --retry 3 --retry-delay 2 --fail --location --silent "$DEPLOYMENT_URL/ur/zakat-calculator/" | grep -Fq "شیعہ جعفری"
       - name: Install Playwright Chromium for live deployment check
         run: npx playwright install --with-deps chromium
