@@ -178,7 +178,7 @@ def normalize_meta(raw, path, lang):
         "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
         "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
         "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
-        "/date-calculator/": "Date Difference Calculator | Days Between Dates | CalculatesAll",
+        "/date-calculator/": "Date Difference Calculator | Days Between Dates",
         "/years-to-days-calculator/": "Years to Days Calculator | How Many Days in X Years?",
         "/money/": "Money Calculators: EMI, Zakat, Profit | CalculatesAll",
         "/math/": "Math Calculators and Unit Converters | CalculatesAll",
