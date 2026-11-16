@@ -49,7 +49,7 @@ let browser;
     failures.push(key+' horizontal overflow');
    }
    const urduPage=slug.startsWith('ur/');
-   const expectedColumns=size.width<600?4:size.width<900?5:6;
+   const expectedColumns=size.width<600?5:size.width<900?5:6;
    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible)failures.push(key+' all 17 calculator links must be visible together');
    if(!data.allLabelsFit)failures.push(key+' calculator shortcut labels are clipped or truncated');
    if(data.submitPosition==='sticky'||data.submitPosition==='fixed')failures.push(key+' Zakat submit button must not overlap the header navigation');
@@ -57,7 +57,8 @@ let browser;
    if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
    if(size.width<=360 && (slug==='fraction-calculator'||slug==='compound-interest-calculator') && data.mainNavFlexDirection!=='column' && data.mainNavFlexWrap==='nowrap')failures.push(key+' row navigation cannot wrap on narrow screens');
    if(!data.lastButton)failures.push(key+' primary calculator button is missing');
-    if(data.carouselBottom>size.height)failures.push(key+' all-calculator navigation extends below the first screen');
+   if(data.bottom>size.height-8)failures.push(key+' primary calculator action is below the first screen');
+   if(data.carouselBottom>size.height)failures.push(key+' all-calculator navigation extends below the first screen');
    const screenshotSlug=slug.replaceAll('/','-');
    await page.screenshot({path:'/tmp/'+screenshotSlug+'-'+size.width+'.png',fullPage:false});
   }
