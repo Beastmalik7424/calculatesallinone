@@ -426,7 +426,7 @@ def main():
     ET.indent(urlset, space="  ")
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(urlset, encoding="unicode") + "\n", encoding="utf-8")
     (ROOT / "robots.txt").write_text(
-        "User-agent: OAI-SearchBot\nAllow: /\nDisallow: /404\n\n"
+        "User-agent: OAI-SearchBot\nAllow: /\n\n"
         "User-agent: *\nAllow: /\nDisallow: /404\n\n"
         "Sitemap: " + SITE + "/sitemap.xml\n",
         encoding="utf-8",
