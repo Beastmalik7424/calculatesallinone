@@ -40,7 +40,8 @@ const { chromium } = require('playwright');
      const r=e.getBoundingClientRect(),s=getComputedStyle(e);
      return {tag:e.tagName,id:e.id,cls:typeof e.className==='string'?e.className.slice(0,100):'',left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),scrollWidth:e.scrollWidth,clientWidth:e.clientWidth,overflowX:s.overflowX,text:(e.textContent||'').trim().replace(/\\s+/g,' ').slice(0,60)};
     }).filter(x=>x.right>innerWidth+2||x.left< -2).sort((a,b)=>Math.max(b.right-innerWidth,-b.left)-Math.max(a.right-innerWidth,-a.left)).slice(0,18));
-    console.log('OVERFLOW DIAGNOSTIC '+key,JSON.stringify({docWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,scrollX,offenders}));
+    const dimensions=await page.evaluate(()=>({docWidth:document.documentElement.scrollWidth,bodyWidth:document.body.scrollWidth,scrollX:window.scrollX}));
+    console.log('OVERFLOW DIAGNOSTIC '+key,JSON.stringify({...dimensions,offenders}));
     failures.push(key+' horizontal overflow');
    }
    const urduPage=slug.startsWith('ur/');
