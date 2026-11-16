@@ -159,6 +159,6 @@
     nisabMethods: NISAB,
     jafariNisabMethods: JAFARI_NISAB,
     sunniSchools: SUNNI_SCHOOLS,
-    pakistaniTolaGrams: SINDH_STANDARD_TOLA_GRAMS
+    sindhStandardTolaGrams: SINDH_STANDARD_TOLA_GRAMS
   });
 });
