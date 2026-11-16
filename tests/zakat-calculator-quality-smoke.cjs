@@ -79,6 +79,15 @@ assert.match(ur, /12\.5 گرام/, "Urdu content must disclose the 12.5 g compet
 assert.match(en, /zakat-on-jewellery/, "English content must cite the scholar-reviewed jewellery and tola guidance");
 assert.match(ur, /zakat-on-jewellery/, "Urdu content must cite the scholar-reviewed jewellery and tola guidance");
 assert.match(en, /id="z-sunni-fields"/, "Sunni fields must have a separate visibility container");
+for (const [name, html] of [["English", en], ["Urdu", ur]]) {
+  const wrapperAt = html.indexOf('id="z-sunni-asset-fields"');
+  const jafariAt = html.indexOf('id="z-jafari-fields"');
+  assert.ok(wrapperAt >= 0 && jafariAt > wrapperAt, name + " Sunni assets/liabilities wrapper must precede the Ja'fari section");
+  for (const id of ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-hawl"]) {
+    const fieldAt = html.indexOf('id="' + id + '"');
+    assert.ok(fieldAt > wrapperAt && fieldAt < jafariAt, name + " Sunni-only field must be inside its visibility wrapper: " + id);
+  }
+}
 assert.match(en, /id="z-jafari-fields"[^>]*hidden/, "Sistani fields must be separately hidden by default");
 assert.match(en, /sistani\.org\/english\/book\/48\/2323/, "English content must cite Sistani's official trading-goods ruling");
 assert.match(ur, /sistani\.org\/english\/book\/48\/2323/, "Urdu content must cite Sistani's official trading-goods ruling");
