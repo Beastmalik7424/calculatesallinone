@@ -89,7 +89,7 @@ for route in indexable:
         title = html.unescape(title_matches[0]).strip()
         titles[route] = title
         check(bool(title), route + ": title is empty")
-        check(len(title) <= 63, route + ": title exceeds 63 characters (" + str(len(title)) + ")")
+        check(len(title) <= 60, route + ": title exceeds 60 characters (" + str(len(title)) + ")")
 
     if description_matches:
         description = html.unescape(description_matches[0]).strip()
@@ -146,10 +146,9 @@ for route in noindex:
           route + ": noindex route must not appear in sitemap")
 
 robots_txt = read_text(ROOT / "robots.txt")
-check(bool(re.search(
-    r"(?ms)^User-agent: OAI-SearchBot\s*\nAllow: /\s*\nDisallow: /404(?:\s|$)",
-    robots_txt
-)), "robots.txt must allow OAI-SearchBot and keep /404 blocked")
+oai_group = re.search(r"(?ms)^User-agent: OAI-SearchBot\s*\n(.*?)(?=^User-agent:|\Z)", robots_txt)
+check(bool(oai_group and re.search(r"(?m)^Allow: /\s*$", oai_group.group(1)) and not re.search(r"(?m)^Disallow:", oai_group.group(1))),
+      "robots.txt must allow OAI-SearchBot without path restrictions")
 check(not re.search(r"(?m)^Disallow:\s*/\s*$", robots_txt),
       "robots.txt must not block the whole site")
 sitemap_lines = [
