@@ -710,8 +710,8 @@ for url in urls:
                     "Urdu BMI dateModified must match the verified substantive content and source update."
                 )
             elif url == SITE + "/years-to-days-calculator/":
-                assert item.get("dateModified") == "2026-11-14", (
-                    "Years-to-Days dateModified must match the latest verified content and source update."
+                assert item.get("dateModified") == "2026-11-17", (
+                    "Years-to-Days dateModified must match the latest verified 13-year answer and source update."
                 )
             elif url == SITE + "/unit-converter/":
                 assert item.get("dateModified") == "2026-11-14", (
