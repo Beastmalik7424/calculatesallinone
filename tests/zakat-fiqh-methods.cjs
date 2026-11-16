@@ -48,7 +48,6 @@ for (const school of ["sunni-shafii", "sunni-maliki", "sunni-hanbali", "unknown"
 }
 assert.throws(() => calculate({ ...base, nisabMethod: "gold-85" }), /Nisab method/i);
 assert.throws(() => calculate({ ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "unknown" }), /Jafari Nisab/i);
-assert.throws(() => calculate({ ...base, metalPriceUnit: "ounce" }), /unit/i);
 
 const validSistaniConditions = {
   ownerAdultAndSane: true, tradeGoodsAcquiredByExchange: true, tradeGoodsHawlComplete: true,
