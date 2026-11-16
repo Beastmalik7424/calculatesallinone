@@ -135,7 +135,7 @@ TOOLS = [
         "category": "money",
         "name": "Zakat Calculator",
         "app": "FinanceApplication",
-        "description": "Calculate Hanafi or Sayyid Sistani Ja'fari Zakat estimates with gold or silver Nisab and gram or Sindh-standard tola price inputs.",
+        "description": "Calculate Hanafi or Sayyid Sistani Ja'fari Zakat estimates with gold or silver Nisab and gram, Sindh-standard tola or troy-ounce metal price inputs.",
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
         "lead": "Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
@@ -206,7 +206,8 @@ TOOLS = [
             + '<div><label class="@L@" for="z-metal-price-unit">Metal price unit</label>'
             + '<select id="z-metal-price-unit" name="z-metal-price-unit" class="@I@">'
             + '<option value="gram" selected>Price per gram</option>'
-            + '<option value="tola">Price per Sindh Government standard tola (11.6638 g)</option>'\n            + '<option value="ounce">Price per troy ounce (31.1034768 g)</option>'
+            + '<option value="tola">Price per Sindh Government standard tola (11.6638 g)</option>'
+            + '<option value="ounce">Price per troy ounce (31.1034768 g)</option>'
             + '</select></div>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Enter the current local price in the selected currency and unit. Gram = 1 g, Sindh Government standard tola = 11.6638 g, and troy ounce = 31.1034768 g. The calculator converts both metal prices to a per-gram rate before calculating Nisab.</p>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
@@ -802,7 +803,7 @@ URDU = {
             ("Price per gram", "فی گرام قیمت"),
             ("Price per Sindh Government standard tola (11.6638 g)", "حکومتِ سندھ کے سرکاری تولہ کے حساب سے قیمت (11.6638 گرام)"),
             ("Price per troy ounce (31.1034768 g)", "فی ٹرائے اونس قیمت (31.1034768 گرام)"),
-            ("Enter the current local price in the selected currency and unit. Gram = 1 g, Sindh Government standard tola = 11.6638 g, and troy ounce = 31.1034768 g. The calculator converts both metal prices to a per-gram rate before calculating Nisab.", "منتخب کرنسی اور اکائی میں موجودہ مقامی قیمت درج کریں۔ سرکاری تولہ منتخب کرنے پر کیلکولیٹر 1 تولہ = 11.6638 گرام کے مطابق تبدیلی کرتا ہے۔"),
+            ("Enter the current local price in the selected currency and unit. Gram = 1 g, Sindh Government standard tola = 11.6638 g, and troy ounce = 31.1034768 g. The calculator converts both metal prices to a per-gram rate before calculating Nisab.", "منتخب کرنسی اور اکائی میں موجودہ مقامی قیمت درج کریں۔ گرام = 1 گرام، سرکاری تولہ = 11.6638 گرام، اور ٹرائے اونس = 31.1034768 گرام ہے۔ کیلکولیٹر دونوں قیمتوں کو نصاب سے پہلے فی گرام میں تبدیل کرتا ہے۔"),
             ("Silver price in selected unit", "منتخب اکائی میں چاندی کی قیمت"),
             ("24-karat gold price in selected unit", "منتخب اکائی میں 24 قیراط سونے کی قیمت"),
             ("Eligible liabilities and payments", "قابلِ کٹوتی واجبات اور ادائیگیاں"),
