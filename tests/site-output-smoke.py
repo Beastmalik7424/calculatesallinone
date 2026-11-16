@@ -1263,7 +1263,7 @@ for _phrase in ("COGS = opening inventory + purchases", "closing inventory",
                 "openstax.org/books/introduction-business/pages/14-5-the-income-statement"):
     assert _phrase.lower() in _profit_2026.lower(), "Profit and Loss page is missing approved content: " + _phrase
 assert "PKR 150,000" not in _profit_2026, "Old, unrequested Profit and Loss example must be removed"
-assert "Markup versus margin at a glance" not in _profit_2026, "Duplicate formula table must be removed"
+assert 'id="markup-margin-comparison"' not in _profit_2026, "Duplicate markup/margin comparison table must be removed"
 
 _money_2026 = output_for_url(SITE + "/money/").read_text(encoding="utf-8")
 for _phrase in ("Recommended monthly close process", "recommended working process",
