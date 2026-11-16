@@ -759,7 +759,7 @@ assert "background-color:#0f172a!important" in site_css, "Equals button backgrou
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
 assert "/assets/site.css?v=20261116-homepage-calculator-layout-v1" in homepage_html, "Homepage must load the current calculator layout stylesheet"
 assert ".ca-home-layout{display:grid" in site_css, "Homepage calculator layout must use the responsive single-column grid"
-homepage_layout_rule_start = site_css.find("#main .ca-home-layout{")
+homepage_layout_rule_start = site_css.rfind("#main .ca-home-layout{")
 homepage_layout_rule_end = site_css.find("}", homepage_layout_rule_start)
 homepage_layout_rule = site_css[homepage_layout_rule_start:homepage_layout_rule_end] if homepage_layout_rule_start >= 0 and homepage_layout_rule_end >= 0 else ""
 assert "display:grid!important" in homepage_layout_rule and "grid-template-columns:minmax(0,1fr)!important" in homepage_layout_rule, "Desktop homepage must force tools below the calculator with a high-specificity one-column rule"
