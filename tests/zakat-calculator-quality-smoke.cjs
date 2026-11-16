@@ -42,14 +42,14 @@ for (const term of [
   "PKR 1,837,080", "PKR 700,000", "PKR 2,000,000", "PKR 50,000",
   "bank deduction threshold changes yearly", "Which assets to include", "Which liabilities may be deducted", "How the calculation works", "Worked example with checkable arithmetic", "Personal-use property and other exclusions", "Pakistan bank deduction threshold is separate", "Worldwide currency support, privacy and limitations", "Worked example",
   "does not fetch a live metal price", "qualified scholar", "Sources",
-  "Sunni", "Hanafi", "Shafi'i", "Maliki", "Hanbali", "Sayyid Sistani",
+  "Sunni", "Hanafi", "Sayyid Sistani",
   "obligatory precaution", "Khums", "69.12 g", "483.84 g",
   "11.6638", "trading goods", "personal-use gold/silver jewellery",
   "ordinary banknotes", "right of disposal", "capital cost", "contract of exchange",
   "liabilities field subtracts exactly the amount you enter in every Sunni preset",
   "relied-upon Shafi'i view does not allow debts to prevent Zakat",
   "Hawl checkbox is self-reported", "does not track balances throughout the lunar year",
-  "Hanafi and Maliki", "Shafi'i and Hanbali", "does not model every school-specific gold/silver aggregation rule",
+  "does not model every Hanafi gold/silver aggregation rule",
   "Do not enter the same jewellery value in both", "Muhammad Fayyaz Adeel"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
@@ -74,8 +74,8 @@ assert.equal((urNisab[1].match(/<option\b/g) || []).length, 5, "Urdu UI must exp
 const enSchool = en.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
 const urSchool = ur.match(/<select id="z-school-of-thought"[^>]*>([\s\S]*?)<\/select>/);
 assert.ok(enSchool && urSchool, "Both locales must expose the school-of-thought selector");
-assert.equal((enSchool[1].match(/<option\b/g) || []).length, 5, "English UI must expose four Sunni madhhabs and one named Ja'fari authority");
-assert.equal((urSchool[1].match(/<option\b/g) || []).length, 5, "Urdu UI must expose the same five methods");
+assert.equal((enSchool[1].match(/<option\b/g) || []).length, 2, "English UI must expose only Hanafi and the named Ja'fari authority");
+assert.equal((urSchool[1].match(/<option\b/g) || []).length, 2, "Urdu UI must expose only the same two requested methods");
 assert.match(en, /value="jafari-sistani"/, "Sistani calculation path must be explicitly named");
 assert.match(en, /value="tola"/, "Sindh Government standard tola unit must be selectable");
 assert.match(en, /11\.6638 g/, "Sindh Government standard tola conversion must be visible");
