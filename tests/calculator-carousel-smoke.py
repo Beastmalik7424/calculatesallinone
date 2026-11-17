@@ -95,25 +95,31 @@ css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
-assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat calculator navigation must not duplicate links"
+assert 'data-tool-set="duplicate"' in zakat_markup, "Zakat navigation must keep a duplicate track for continuous marquee movement"
 assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
-assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Zakat phone and tablet navigation must use a compact six-column grid"
-assert "grid-template-columns:repeat(9,minmax(0,1fr))" in css.replace(" ", ""), "Zakat desktop navigation must use a nine-column grid"
+assert "animation:ca-calculator-marquee 48s linear infinite!important" in css.replace(" ", ""), "Zakat navigation must use the shared moving marquee"
+assert "overflow-x:auto!important" in css.replace(" ", ""), "Zakat ticker must remain horizontally scrollable"
+assert "height:44px!important" in css.replace(" ", ""), "Zakat ticker must preserve its compact header height"
 assert "white-space:nowrap!important" in css.replace(" ", ""), "Short shortcut labels must remain on one line"
 assert "data-short-label" in zakat_markup and "aria-label=" in zakat_markup and "title=" in zakat_markup, "Every compact visual label must retain its full accessible name and title"
 assert "text-overflow:clip!important" in css.replace(" ", ""), "Calculator shortcut labels must not be truncated"
 assert "min-height:44px" in css.replace(" ", ""), "Calculator shortcut links must retain a comfortable mobile tap target"
 assert "@keyframes ca-calculator-marquee" in css, "Homepage must retain its existing carousel animation"
-assert ".ca-calculator-track" in css and "animation:none" in css.replace(" ", ""), "Inner-page calculator navigation must be static, not a moving marquee"
+assert "@media(prefers-reduced-motion:reduce)" in css.replace(" ", "") and "animation:none!important" in css.replace(" ", ""), "Reduced-motion users must get a static calculator shortcut track"
 assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
 assert "ca-site-nav-topline" in markup, "Header must keep its separate top controls row"
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
-print("Calculator grid, all 17 unique tools, responsive columns, header layout and Tasbih action smoke tests PASS")
+print("Calculator ticker, all 17 unique tools, touch targets, header layout and Tasbih action smoke tests PASS")
 
-assert '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">' in zakat_markup, "Zakat pages must use a new stylesheet URL so browsers cannot reuse the prior cached layout"
+assert '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-ticker-v1">' in zakat_markup, "Zakat pages must use a new stylesheet URL so browsers cannot reuse the prior cached layout"
 carousel_rules = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-carousel\{([^}]*)\}', css)
 track_rules = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-track\{([^}]*)\}', css)
 assert len(carousel_rules) == 1, f"Zakat navigation must have one authoritative carousel rule, found {len(carousel_rules)}"
 assert len(track_rules) == 1, f"Zakat navigation must have one authoritative track rule, found {len(track_rules)}"
 assert all("display:none" not in rule for rule in carousel_rules), "Zakat navigation must never be hidden at mobile breakpoints"
-assert all("ca-calculator-marquee" not in rule for rule in track_rules), "Zakat navigation must be a static grid, not a moving marquee"
+assert all("ca-calculator-marquee" in rule and "display:flex" in rule and "max-content" in rule for rule in track_rules), "Zakat track must use the shared moving flex marquee"
+primary_rules = re.findall(r'body:has\\(#zakat-form\\) header nav \\.ca-calculator-group\\[data-tool-set="primary"\\]\\{([^}]*)\\}', css)
+duplicate_rules = re.findall(r'body:has\\(#zakat-form\\) header nav \\.ca-calculator-group\\[data-tool-set="duplicate"\\]\\{([^}]*)\\}', css)
+assert len(primary_rules) == 1 and "display:flex" in primary_rules[0] and "max-content" in primary_rules[0], "Zakat primary shortcuts must stay in the horizontal track"
+assert len(duplicate_rules) == 1 and "display:flex" in duplicate_rules[0], "Zakat duplicate track must remain visible for seamless movement"
+assert "overflow-x:auto" in carousel_rules[0] and "height:44px" in carousel_rules[0], "Zakat carousel must keep its horizontal viewport and 44px height"
