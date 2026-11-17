@@ -130,6 +130,11 @@ function rect(element) {
               const r = link.getBoundingClientRect();
               return { label: link.textContent.trim(), left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top), bottom: Math.round(r.bottom) };
             });
+            const tickerLinksNotReachable = primaryTickerLinks.filter(link => {
+              const r = link.getBoundingClientRect();
+              const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+              return !hit || !(link === hit || link.contains(hit));
+            }).map(link => link.textContent.trim());
             const actionInViewport = actionVisible && actionRect.top >= -1 && actionRect.bottom <= innerHeight - 2;
             const firstControlInViewport = visible(firstControl) && firstRect.top >= -1 && firstRect.bottom <= innerHeight - 1;
             const hitTarget = actionVisible
@@ -145,7 +150,9 @@ function rect(element) {
               tickerInViewport,
               tickerLinkCount,
               tickerLinksOutsideViewport,
-              allTickerLinksInViewport: tickerLinkCount > 0 && tickerLinksOutsideViewport.length === 0,
+              allTickerLinksInViewport: tickerLinkCount === 17 && tickerLinksOutsideViewport.length === 0,
+              tickerLinksNotReachable,
+              allTickerLinksReachable: tickerLinkCount === 17 && tickerLinksNotReachable.length === 0,
               tickerRect: box(ticker),
               title: document.title,
               heading: heading ? heading.textContent.trim() : null,
@@ -177,6 +184,7 @@ function rect(element) {
           if (metrics.tickerFound && !metrics.tickerInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker is outside the initial viewport", metrics });
           if (metrics.tickerFound && metrics.tickerLinkCount < 15) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker does not expose the full calculator shortcut set", metrics });
           if (route.name.startsWith("zakat-") && !metrics.allTickerLinksInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Not every calculator shortcut box is fully visible on the first screen", offscreen: metrics.tickerLinksOutsideViewport, metrics });
+          if (route.name.startsWith("zakat-") && !metrics.allTickerLinksReachable) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more first-screen calculator shortcut boxes are not clickable", blocked: metrics.tickerLinksNotReachable, metrics });
           if (!metrics.rootFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing calculator container " + route.root });
           if (!metrics.actionFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing primary calculator action " + route.action });
           if (metrics.rootFound && !metrics.rootTopInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator container starts below the initial viewport", metrics });
