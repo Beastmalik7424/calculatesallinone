@@ -54,6 +54,10 @@ let browser;
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
   for (const slug of slugs) {
    await page.goto('http://127.0.0.1:8123/'+slug+'/',{waitUntil:'load'});
+   await page.waitForFunction(() => {
+    const form=document.querySelector('#zakat-form');
+    return !!form && form.getAttribute('data-current-step')==='setup' && !!form.getAttribute('data-step-order');
+   }, null, {timeout:10000});
    const data=await page.evaluate(()=>{
     const section=document.querySelector('#tool-calculator')
       || document.querySelector('#main .ca-home-calculator')
@@ -82,7 +86,8 @@ let browser;
      const tickerScrollable=!!carousel && carousel.scrollWidth>carousel.clientWidth+1;
     const zakatSubmit=document.querySelector('#zakat-next');
     const submitPosition=zakatSubmit?getComputedStyle(zakatSubmit.parentElement).position:null;
-    const firstField=document.querySelector('#zakat-form input:not([type="hidden"]), #zakat-form select, #zakat-form textarea');
+    const activeZakatPanels=[...document.querySelectorAll('#zakat-form .zakat-step-panel:not([hidden])')];
+     const firstField=activeZakatPanels.flatMap(panel=>[...panel.querySelectorAll('input:not([type="hidden"]),select,textarea')]).find(visible);
     const firstFieldRect=firstField?.getBoundingClientRect();
     const firstFieldVisible=!!firstFieldRect && firstFieldRect.top>=-1 && firstFieldRect.bottom<=innerHeight-1 && visible(firstField);
     const firstFieldReachable=!!firstFieldRect && (()=>{const hit=document.elementFromPoint(firstFieldRect.left+firstFieldRect.width/2,firstFieldRect.top+firstFieldRect.height/2);return !!hit&&(hit===firstField||firstField.contains(hit));})();
