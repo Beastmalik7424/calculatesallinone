@@ -2935,6 +2935,7 @@ def main():
                 "Do not email passwords, payment card numbers, bank details, medical records or other sensitive personal information. Calculator entries remain in your browser. We only receive details you choose to include in your message.",
                 'For formula methods, read the <a class="' + LINK + '" href="/methodology/">calculation methodology</a>. For the correction process, read the <a class="' + LINK + '" href="/editorial-policy/">editorial policy</a>. For data handling, read the <a class="' + LINK + '" href="/privacy/">privacy policy</a>.',
             ]
+            paras = paras + CONTACT_EXTRA
         elif path == "/editorial-policy/":
             paras = [
                 "Calculator guides describe the inputs, method, worked examples where helpful, common mistakes and limitations. Each worked example states its calculation so readers can repeat it. Guides are designed around the visitor task, not around a target word count.",

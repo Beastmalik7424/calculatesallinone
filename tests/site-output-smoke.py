@@ -165,8 +165,14 @@ assert 'href="https://openstax.org/books/introduction-business/pages/14-5-the-in
 assert 'href="https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f2/technical-articles/ratio-analysis.html"' in profit_html, "Profit and Loss page should cite ACCA ratio-analysis guidance"
 assert "Markup versus margin at a glance" in profit_html and "<table" in profit_html, "Profit and Loss page should include a useful comparison table"
 contact_html = output_for_url(SITE + "/contact/").read_text(encoding="utf-8").lower()
-for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy"):
+for phrase in ("page url", "input values", "expected result", "sensitive personal information", "privacy policy", "editorial policy",
+               "single public contact point", "independently maintained by muhammad fayyaz adeel",
+               "six concrete items", "browser name and device type", "no guaranteed reply time",
+               "passwords", "one-time codes", "medical records", "keyboard, screen reader or mobile browser",
+               "commercial and advertising enquiries", "clear, reproducible reports"):
     assert phrase in contact_html, f"Contact page should explain safe, reproducible issue reporting: {phrase}"
+assert contact_html.count("how to report a calculation issue") == 1, "Contact page should have one clear issue-reporting section"
+assert 'href="mailto:' in contact_html, "Contact page must retain its direct email link"
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 assert "Maintained by <a" in profit_html and "Muhammad Fayyaz Adeel" in profit_html and 'href="/about/"' in profit_html, "Calculator guide should have an honest maintainer byline"
 assert any(node.get("@type") == "WebPage" and node.get("author", {}).get("@id") == SITE + "/#maintainer" for node in profit_nodes), "Calculator WebPage schema should reference the named maintainer"
