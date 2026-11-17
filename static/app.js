@@ -501,8 +501,8 @@
     var currentStepIndex = 0
     function activeStepKeys() {
       return schoolField && schoolField.value === "jafari-sistani"
-        ? ["setup", "prices", "jafari-trade", "jafari-conditions"]
-        : ["setup", "prices", "sunni-assets-a", "sunni-assets-b", "sunni-assets-c", "sunni-liabilities"]
+        ? ["setup", "price-unit", "metal-prices", "jafari-trade", "jafari-hawl-intent", "jafari-conditions"]
+        : ["setup", "price-unit", "metal-prices", "sunni-assets-a", "sunni-assets-b", "sunni-assets-c", "sunni-assets-d", "sunni-assets-e", "sunni-liabilities"]
     }
     function renderStep() {
       if (!form || typeof form.querySelectorAll !== "function") return
@@ -522,21 +522,29 @@
       var urdu = lang() === "ur"
       var titles = urdu ? {
         setup: "طریقہ اور کرنسی",
-        prices: "دھات کی قیمتیں",
+        "price-unit": "دھات کی قیمت کا یونٹ",
+        "metal-prices": "دھاتوں کی موجودہ قیمتیں",
         "sunni-assets-a": "نقد رقم اور بنیادی اثاثے",
-        "sunni-assets-b": "دیگر قابلِ زکوٰۃ اثاثے",
-        "sunni-assets-c": "کاروباری اور دیگر اثاثے",
-        "sunni-liabilities": "جائیداد، واجبات اور ادا شدہ زکوٰۃ",
+        "sunni-assets-b": "سونا، چاندی اور زیورات",
+        "sunni-assets-c": "سرمایہ کاری اور کاروباری اثاثے",
+        "sunni-assets-d": "قابلِ وصول رقم اور ریٹائرمنٹ فنڈ",
+        "sunni-assets-e": "ڈیجیٹل اثاثے اور جائیداد",
+        "sunni-liabilities": "واجبات اور ادا شدہ زکوٰۃ",
         "jafari-trade": "تجارتی مال اور ملکیت",
+        "jafari-hawl-intent": "حول اور نفع کی نیت",
         "jafari-conditions": "تجارتی مال کی شرائط"
       } : {
         setup: "Method and currency",
-        prices: "Metal prices",
+        "price-unit": "Metal price unit",
+        "metal-prices": "Current metal prices",
         "sunni-assets-a": "Cash and core assets",
-        "sunni-assets-b": "Other eligible assets",
-        "sunni-assets-c": "Business and other assets",
-        "sunni-liabilities": "Property, liabilities and payments",
+        "sunni-assets-b": "Gold, silver and jewellery",
+        "sunni-assets-c": "Investments and business assets",
+        "sunni-assets-d": "Receivables and retirement funds",
+        "sunni-assets-e": "Digital assets and property",
+        "sunni-liabilities": "Liabilities and payments",
         "jafari-trade": "Trading goods and ownership",
+        "jafari-hawl-intent": "Hawl and profit intention",
         "jafari-conditions": "Trading-goods conditions"
       }
       if (stepProgress) stepProgress.textContent = urdu
