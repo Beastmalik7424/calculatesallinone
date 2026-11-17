@@ -2788,3 +2788,48 @@ body:has(#zakat-form) #zakat-form .zakat-step-panel label:not(.flex) {
 body:has(#zakat-form) #zakat-form :is(input:not([type="checkbox"]), select, textarea) {
   min-height: 44px !important;
 }
+
+
+/* Smallest supported phone: keep the full shortcut grid and every active Zakat step in view. */
+@media (max-width: 360px) {
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step^="sunni-assets"] .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: .25rem !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step^="sunni-assets"] .grid > * {
+    min-width: 0 !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step^="sunni-assets"] label.block {
+    font-size: .62rem !important;
+    line-height: 1.05 !important;
+    overflow-wrap: anywhere !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step^="sunni-assets"] input[type="number"] {
+    padding-inline: .2rem !important;
+    font-size: 16px !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: .25rem !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] > h2,
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] > div {
+    grid-column: 1 / -1 !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0 !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] label.flex {
+    min-width: 0 !important;
+    gap: .25rem !important;
+    font-size: .62rem !important;
+    line-height: 1.05 !important;
+    overflow-wrap: anywhere !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] label.flex input {
+    flex: 0 0 16px !important;
+    width: 16px !important;
+    height: 16px !important;
+  }
+}
