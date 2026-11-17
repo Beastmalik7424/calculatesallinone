@@ -246,7 +246,7 @@ TOOLS = [
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Choose one unit and use it for both metal prices.</p>'
             + '</div>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="metal-prices">'
-            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Current metal prices</h2>'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal prices for Nisab</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-silverprice", "Silver price in selected unit")
             + field("z-goldprice", "24-karat gold price in selected unit")
