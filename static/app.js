@@ -476,6 +476,7 @@
     var nisabField = $("z-nisab-method")
     var unitField = $("z-metal-price-unit")
     var sunniFields = $("z-sunni-fields")
+    var hanafiSetupNote = $("zakat-hanafi-setup-note")
     var sunniAssetFields = $("z-sunni-asset-fields")
     var jafariFields = $("z-jafari-fields")
     function money(value, currency) {
@@ -510,6 +511,7 @@
       var steps = activeStepKeys()
       currentStepIndex = Math.max(0, Math.min(currentStepIndex, steps.length - 1))
       var key = steps[currentStepIndex]
+      if (hanafiSetupNote) hanafiSetupNote.hidden = isJafari
       if (sunniFields) sunniFields.hidden = isJafari || key !== "setup"
       if (sunniAssetFields) sunniAssetFields.hidden = isJafari || key.indexOf("sunni-") !== 0
       if (jafariFields) jafariFields.hidden = !isJafari || (key !== "setup" && key.indexOf("jafari-") !== 0)
