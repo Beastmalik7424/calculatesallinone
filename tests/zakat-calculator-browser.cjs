@@ -4,7 +4,7 @@ const { chromium } = require("playwright");
 const BASE_URL = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/+$/, "");
 
 const FIELD_STEP = {
-  "z-currency":"setup","z-school-of-thought":"setup","z-nisab-method":"setup","z-jafari-nisab-method":"setup",
+  "z-currency":"setup","z-school-of-thought":"setup","z-nisab-method":"nisab","z-jafari-nisab-method":"nisab",
   "z-metal-price-unit":"price-unit","z-silverprice":"metal-prices","z-goldprice":"metal-prices",
   "z-cash":"sunni-assets-a","z-bank":"sunni-assets-a","z-savings":"sunni-assets-a",
   "z-gold":"sunni-assets-b","z-silver":"sunni-assets-b","z-jewellery":"sunni-assets-b",
