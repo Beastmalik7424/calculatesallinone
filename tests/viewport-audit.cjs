@@ -37,7 +37,7 @@ let browser;
     const zakatSubmit=document.querySelector('#zakat-form button[type="submit"]');
     const submitPosition=zakatSubmit?getComputedStyle(zakatSubmit.parentElement).position:null;
     const gridColumns=gridStyle?gridStyle.gridTemplateColumns.split(' ').length:0;
-    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselBottom:carouselRect?.bottom,calculatorTop:calculatorRect?.top,formTop:formRect?.top,carouselCount:shortcuts.length,allLinksVisible,allLabelsFit,submitPosition,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height};
+    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselBottom:carouselRect?.bottom,calculatorTop:calculatorRect?.top,formTop:formRect?.top,carouselCount:shortcuts.length,allLinksVisible,allLabelsFit,tickerScrollable,submitPosition,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height};
    });
    const key=slug+' '+size.width+'x'+size.height;
    console.log(key,JSON.stringify(data));
