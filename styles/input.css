@@ -2543,3 +2543,98 @@ body:has(#zakat-form) header nav .ca-calculator-link[aria-current="page"] {
   border-color: var(--accent) !important;
   color: var(--accentText) !important;
 }
+
+
+/* Zakat page: render every calculator shortcut as a compact, simultaneous grid.
+   Do not replace this with the horizontal marquee/scroll strip on small screens. */
+body:has(#zakat-form) header nav .ca-calculator-carousel {
+  display: block !important;
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  scrollbar-width: auto !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-track {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  animation: none !important;
+  transform: none !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  gap: 4px !important;
+  padding: 0 !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="duplicate"] {
+  display: none !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-link {
+  display: flex !important;
+  min-width: 0 !important;
+  min-height: 32px !important;
+  height: auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 4px 3px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 6px !important;
+  background: var(--panel) !important;
+  color: var(--accent) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1.05 !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-link[aria-current="page"] {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--accentText) !important;
+  font-weight: 850 !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-link:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 1px !important;
+}
+@media (min-width: 601px) {
+  body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+  body:has(#zakat-form) header nav .ca-calculator-link {
+    min-height: 34px !important;
+    font-size: 11px !important;
+  }
+}
+@media (min-width: 900px) {
+  body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
+    grid-template-columns: repeat(9, minmax(0, 1fr)) !important;
+  }
+}
+html.dark body:has(#zakat-form) header nav .ca-calculator-link {
+  border-color: #475569 !important;
+  background: #17243a !important;
+  color: #e2e8f0 !important;
+}
+html.dark body:has(#zakat-form) header nav .ca-calculator-link[aria-current="page"] {
+  border-color: #5eead4 !important;
+  background: #134e4a !important;
+  color: #f0fdfa !important;
+}
