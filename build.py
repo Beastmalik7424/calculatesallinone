@@ -1433,22 +1433,22 @@ def nav_items(lang="en"):
 
 
 CAROUSEL_TOOLS = (
-    ("calorie-calculator", "Adult Calorie Calculator", "Calories"),
+    ("calorie-calculator", "Adult Calorie Calculator", "Cal"),
     ("zakat-calculator", "Zakat Calculator", "Zakat"),
     ("bmi-calculator", "BMI Calculator", "BMI"),
-    ("profit-loss-calculator", "Profit and Loss Calculator", "Profit/Loss"),
-    ("discount-calculator", "Discount Calculator", "Discount"),
+    ("profit-loss-calculator", "Profit and Loss Calculator", "P/L"),
+    ("discount-calculator", "Discount Calculator", "Disc"),
     ("age-calculator", "Age Calculator", "Age"),
     ("unit-converter", "Unit Converter", "Units"),
-    ("standard-calculator", "Standard and Scientific Calculator", "Standard"),
+    ("standard-calculator", "Standard and Scientific Calculator", "Std"),
     ("tasbih-counter", "Tasbih Counter", "Tasbih"),
-    ("stopwatch", "Online Stopwatch", "Stopwatch"),
-    ("years-to-days-calculator", "Years to Days Calculator", "Years→Days"),
+    ("stopwatch", "Online Stopwatch", "Timer"),
+    ("years-to-days-calculator", "Years to Days Calculator", "Y→D"),
     ("query-calculator", "Query Calculator", "Query"),
     ("emi-calculator", "EMI Calculator", "EMI"),
-    ("percentage-calculator", "Percentage Calculator", "Percent"),
-    ("fraction-calculator", "Fraction Calculator", "Fraction"),
-    ("compound-interest-calculator", "Compound Interest Calculator", "Compound"),
+    ("percentage-calculator", "Percentage Calculator", "%"),
+    ("fraction-calculator", "Fraction Calculator", "Frac"),
+    ("compound-interest-calculator", "Compound Interest Calculator", "CI"),
     ("date-calculator", "Date Difference Calculator", "Date"),
 )
 
@@ -1495,12 +1495,14 @@ CAROUSEL_TRANSLATIONS = {
 }
 
 CAROUSEL_SHORT_UR = {
-    "zakat-calculator": "زکوٰۃ", "bmi-calculator": "BMI",
-    "profit-loss-calculator": "منافع", "discount-calculator": "ڈسکاؤنٹ",
-    "age-calculator": "عمر", "unit-converter": "اکائیاں",
-    "standard-calculator": "معیاری", "tasbih-counter": "تسبیح",
-    "stopwatch": "اسٹاپ واچ", "years-to-days-calculator": "سال→دن",
+    "calorie-calculator": "کیلوری", "zakat-calculator": "زکوٰۃ", "bmi-calculator": "BMI",
+    "profit-loss-calculator": "نفع", "discount-calculator": "ڈسک",
+    "age-calculator": "عمر", "unit-converter": "اکائی",
+    "standard-calculator": "حساب", "tasbih-counter": "تسبیح",
+    "stopwatch": "وقت", "years-to-days-calculator": "سال",
     "query-calculator": "سوال", "emi-calculator": "EMI",
+    "percentage-calculator": "%", "fraction-calculator": "کسر",
+    "compound-interest-calculator": "سود", "date-calculator": "تاریخ",
 }
 
 
@@ -1522,8 +1524,10 @@ def calculator_carousel(lang="en", current_path=None):
                 href = "/" + slug + "/"
             active = ' aria-current="page"' if not duplicate and current_path == href else ""
             tabindex = ' tabindex="-1"' if duplicate else ""
+            short_label = CAROUSEL_SHORT_UR.get(slug, short_name) if lang == "ur" else short_name
             links.append(
                 '<a class="ca-calculator-link" data-tool-shortcut="' + slug
+                + '" data-short-label="' + html.escape(short_label, quote=True)
                 + '" href="' + href + '" aria-label="' + html.escape(name, quote=True)
                 + '" title="' + html.escape(name, quote=True) + '"' + active + tabindex + '>'
                 + html.escape(name) + '</a>'

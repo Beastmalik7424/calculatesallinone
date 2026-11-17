@@ -646,9 +646,9 @@ english_tool_labels = (
 for locale, labels in localized_tool_labels.items():
     localized_html = output_for_url(SITE + "/" + locale + "/").read_text(encoding="utf-8")
     for label in labels:
-        assert ">" + label + "</a>" in localized_html, f"Missing localized tool label on /{locale}/: {label}"
+        assert re.search(r"<a\b[^>]*class=\"ca-calculator-link\"[^>]*>.*?" + re.escape(label) + r".*?</a>", localized_html, re.S), f"Missing localized tool label on /{locale}/: {label}"
     for label in english_tool_labels:
-        assert ">" + label + "</a>" not in localized_html, f"English tool label remains in /{locale}/ menu: {label}"
+        assert not re.search(r"<a\b[^>]*class=\"ca-calculator-link\"[^>]*>.*?" + re.escape(label) + r".*?</a>", localized_html, re.S), f"English tool label remains in /{locale}/ menu: {label}"
 # The Zakat page must not show an unfinished expert-review note when no reviewer is listed.
 zakat_html = (ROOT / "zakat-calculator" / "index.html").read_text(encoding="utf-8")
 assert "Subject expert review by a qualified scholar is pending." not in zakat_html, (
