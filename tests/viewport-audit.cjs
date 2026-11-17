@@ -82,7 +82,7 @@ let browser;
     const formRect=document.querySelector('#zakat-form')?.getBoundingClientRect();
     const gridStyle=primary?getComputedStyle(primary):null;
      const allLinksVisible=shortcuts.length===17 && shortcuts.every(a=>{const r=a.getBoundingClientRect(),s=getComputedStyle(a);return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>=44&&r.left>=-1&&r.right<=innerWidth+1&&r.top>=-1&&r.bottom<=innerHeight+1;});
-     const allLabelsFit=shortcuts.length===17 && shortcuts.every(a=>{const label=a.querySelector('.ca-calculator-short');return !!label&&label.scrollWidth<=label.clientWidth+1&&getComputedStyle(label).whiteSpace==='nowrap';});
+     const allLabelsFit=shortcuts.length===17 && shortcuts.every(a=>{const label=getComputedStyle(a,'::after');return !!a.dataset.shortLabel&&label.content!=='none'&&label.whiteSpace==='nowrap';});
      const tickerScrollable=!!carousel && carousel.scrollWidth>carousel.clientWidth+1;
     const zakatSubmit=document.querySelector('#zakat-next');
     const submitPosition=zakatSubmit?getComputedStyle(zakatSubmit.parentElement).position:null;
