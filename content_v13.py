@@ -119,8 +119,23 @@ TERMS_PARAS = [
 ]
 
 CONTACT_EXTRA = [
-    "When you write, please include the tool name, the numbers you entered, the result you saw and the result you expected. This helps us find and fix problems quickly.",
-    "We do not sell your personal information. The address is used only to answer your message and to correct confirmed errors.",
+    "This page is the single public contact point for CalculatesAll. Use it to report a calculation issue, request a correction, flag an accessibility or translation problem, or ask a clear question about methods, privacy practices or terms. The project is independently maintained by Muhammad Fayyaz Adeel. Messages are read by the maintainer and are not routed through third-party ticket systems.",
+
+    "How to report a calculation issue so it can be investigated. A useful report contains six concrete items: (1) the exact calculator name and full page URL, (2) every input value you entered including units and currency where relevant, (3) the result the page displayed, (4) the result you expected and a short reason why, (5) the browser name and device type, and (6) the approximate date and time of the test. For date or time tools also state the date format and any time-zone assumption that matters. Incomplete reports take longer to diagnose and may not be reproducible.",
+
+    "What happens after you write. Confirmed arithmetic or display errors are corrected on the affected page. The correction process is described on the Editorial Policy page. Method and formula questions are answered by pointing to the relevant calculator page or the Methodology page rather than by issuing private rulings. Feature requests are recorded and considered against the project's scope of free browser-based tools. Messages that demand medical, tax, legal or religious rulings are declined; those decisions require a qualified professional or scholar, not a calculator site.",
+
+    "Response expectations. There is no guaranteed reply time because this is a single-maintainer project. Actionable complete reports are prioritised over vague statements such as \"the calculator is wrong.\" Messages that omit the six items listed above, or that contain only screenshots without typed values, usually cannot be verified. Do not expect an immediate reply on weekends or public holidays. If you do not receive an acknowledgement within a reasonable period you may send one polite follow-up that restates the original details.",
+
+    "What not to send. Never include passwords, one-time codes, payment-card numbers, bank account details, medical records, tax identification numbers or any other sensitive personal information. Calculator inputs stay in your browser and are not transmitted to the server. The only information received is the content of the email you choose to send. Requests that ask for personal financial, medical or religious advice will be declined.",
+
+    "Related pages that answer many common questions without email. For formulas, conversion factors and worked examples read the Calculation Methodology page. For how content is researched, checked and corrected read the Editorial Policy. For data handling, browser storage and advertising disclosures read the Privacy Policy. For the scope and limits of the tools read the Terms of Use. Linking these pages here reduces repetitive private replies and keeps the public record consistent.",
+
+    "Accessibility and translation reports. If a control is difficult to use with a keyboard, screen reader or mobile browser, describe the page, the action you attempted and the result. For translation issues in Urdu or other language versions, quote the exact phrase that looks incorrect and, if possible, suggest a clearer alternative. These reports help improve the tools for every visitor.",
+
+    "Commercial and advertising enquiries. CalculatesAll is a free tool site. Advertising, if enabled, is governed by the Privacy Policy and any advertising disclosure page. Partnership or sponsorship proposals should be sent only if they do not conflict with the site's independence and the requirement that calculator results remain free of commercial bias. Unsolicited bulk marketing messages are ignored.",
+
+    "This contact page exists so that users can help keep the calculators accurate and the site transparent. Clear, reproducible reports are the most effective contribution. Vague claims, incomplete data and requests for professional advice outside the project's scope cannot be actioned. Use the email address shown on this page and include the details listed above.",
 ]
 
 ABOUT_EXTRA = [
