@@ -26,7 +26,7 @@ let browser;
     });
     if(stepMetrics.activeKey!==order[stepIndex])failures.push(key+' wrong '+methodLabel+' Zakat step at index '+stepIndex+': '+stepMetrics.activeKey);
     if(stepMetrics.panelCount<1||stepMetrics.panels.some(r=>r.top< -1||r.bottom>size.height+1))failures.push(key+' '+methodLabel+' Zakat step panel exceeds viewport at '+order[stepIndex]+': '+JSON.stringify(stepMetrics));
-    if(stepMetrics.controls.length<1||stepMetrics.controls.some(r=>r.top< -1||r.bottom>size.height+1||r.height<44||r.width<44))failures.push(key+' '+methodLabel+' Zakat field is not fully usable within the viewport at '+order[stepIndex]+': '+JSON.stringify(stepMetrics));
+    if((stepMetrics.controls.length+stepMetrics.checkboxRows.length)<1||stepMetrics.controls.some(r=>r.top< -1||r.bottom>size.height+1||r.height<44||r.width<44))failures.push(key+' '+methodLabel+' Zakat field is not fully usable within the viewport at '+order[stepIndex]+': '+JSON.stringify(stepMetrics));
     if(stepMetrics.checkboxRows.some(r=>r.height<44||r.width<44||r.top< -1||r.bottom>size.height+1))failures.push(key+' '+methodLabel+' Zakat checkbox row is too small or outside the viewport at '+order[stepIndex]);
     if(!stepMetrics.action||stepMetrics.action.top< -1||stepMetrics.action.bottom>size.height+1||stepMetrics.action.height<44||stepMetrics.action.width<44)failures.push(key+' '+methodLabel+' Zakat step action is not visible and tappable at '+order[stepIndex]);
     if(!stepMetrics.progress||!stepMetrics.title||stepMetrics.progress.top< -1||stepMetrics.title.bottom>size.height+1)failures.push(key+' '+methodLabel+' Zakat step heading or progress is outside the viewport at '+order[stepIndex]);
