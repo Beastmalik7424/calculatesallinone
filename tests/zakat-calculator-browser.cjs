@@ -15,6 +15,22 @@ let browser;
 
   await page.goto(BASE_URL + "/zakat-calculator/", { waitUntil: "networkidle" });
   assert.equal(await page.locator("html").getAttribute("lang"), "en");
+  assert.equal(await page.locator("#zakat-next").count(), 1, "Mobile Zakat flow must provide an in-place Next control");
+  assert.equal(await page.locator("#zakat-back").count(), 1, "Mobile Zakat flow must provide an in-place Back control");
+  assert.equal(await page.locator("#zakat-step-progress").count(), 1, "Zakat flow must expose accessible step progress");
+  assert.equal(await page.locator("#zakat-submit").count(), 1, "Zakat calculation submit must remain available in the final step");
+  assert.equal(await page.locator("#zakat-form .zakat-step-panel:not([hidden])").count(), 1, "Exactly one Zakat step panel must be active initially");
+  const initialWizard = await page.evaluate(() => {
+    const panel = document.querySelector("#zakat-form .zakat-step-panel:not([hidden])");
+    const next = document.querySelector("#zakat-next");
+    const rect = e => { const r=e.getBoundingClientRect(); return {top:r.top,bottom:r.bottom,height:r.height}; };
+    const controls = panel ? [...panel.querySelectorAll("input,select,textarea")].filter(e=>getComputedStyle(e).display!=="none"&&getComputedStyle(e).visibility!=="hidden") : [];
+    return {scrollY, panel:panel?rect(panel):null, next:next?rect(next):null, controls:controls.map(rect), viewport:innerHeight};
+  });
+  assert.equal(initialWizard.scrollY, 0, "Zakat wizard must start without page scrolling");
+  assert.ok(initialWizard.panel && initialWizard.panel.top>=0 && initialWizard.panel.bottom<=initialWizard.viewport, "Initial Zakat step must fit the viewport: "+JSON.stringify(initialWizard));
+  assert.ok(initialWizard.next && initialWizard.next.top>=0 && initialWizard.next.bottom<=initialWizard.viewport, "Next control must be reachable without scrolling");
+  assert.ok(initialWizard.controls.length>0 && initialWizard.controls.every(r=>r.top>=0&&r.bottom<=initialWizard.viewport), "All initial-step fields must fit without scrolling");
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-jafari-nisab-method","z-jafari-trade-value","z-jafari-owner","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jewellery","z-bank","z-savings","z-investments","z-businesscash","z-pension","z-crypto","z-property","z-goldprice","z-silverprice","z-paid"]) {
     assert.equal(await page.locator("#" + id).count(), 1, "Missing English field " + id);
   }
