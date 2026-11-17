@@ -207,7 +207,8 @@ let browser;
   for (const id of ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-hawl"]) {
     assert.equal(await page.locator("#" + id).isVisible(), false, "Urdu Sunni-only field must be hidden in the Sistani method: " + id);
   }
-  assert.equal(await page.locator("#z-jafari-fields").isVisible(), true, "Urdu Sistani fields must be visible");
+  await goToStep(page, "nisab");
+  assert.equal(await page.locator("#z-jafari-fields").isVisible(), true, "Urdu Sistani fields must be visible on the Nisab step");
   const urOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   assert.equal(urOverflow, false, "Urdu page must not overflow a 375px viewport");
 
