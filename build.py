@@ -183,7 +183,7 @@ TOOLS = [
             + field("z-jewellery", "Permissible personal-use gold/silver jewellery")
             + '</div></div>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-c">'
-            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Investments and business assets</h2>'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Business assets</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-investments", "Zakatable shares and investments")
             + field("z-businesscash", "Business cash and bank balance")
@@ -813,6 +813,7 @@ URDU = {
             ("Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.", "چاندی یا سونے کا نصاب منتخب کریں۔ 2.5 فیصد کا اندازہ صرف اسی وقت لاگو ہوتا ہے جب منتخب حد اور حول کی شرائط پوری ہوں۔"),
             ("Gold, silver and jewellery", "سونا، چاندی اور زیورات"),
             ("Investments and business assets", "سرمایہ کاری اور کاروباری اثاثے"),
+            ("Business assets", "کاروباری اثاثے"),
             ("Receivables and retirement funds", "قابلِ وصول رقوم اور ریٹائرمنٹ فنڈز"),
             ("Digital assets and property", "ڈیجیٹل اثاثے اور جائیداد"),
             ("Liabilities and payments", "واجبات اور ادائیگیاں"),
