@@ -140,68 +140,92 @@ TOOLS = [
         "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
-            + '<div class="shadow-lg"><button type="submit" class="@B@">Calculate Zakat</button></div>'
-            '<p class="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
-            '<div class="grid sm:grid-cols-2 gap-4">'
-            '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
-            '<input id="z-currency" name="z-currency" class="@I@" type="text" value="PKR" maxlength="3" minlength="3" pattern="[A-Za-z]{3}" autocapitalize="characters" autocomplete="off" spellcheck="false">'
-            '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.</p></div>'
-            '<div><label class="@L@" for="z-school-of-thought">School of thought / calculation method</label>'
-            '<select id="z-school-of-thought" name="z-school-of-thought" class="@I@">'
-            '<option value="sunni-hanafi" selected>Sunni — Hanafi</option>'
-            '<option value="jafari-sistani">Shia Ja\'fari — Sayyid Sistani</option>'
-            '</select>'
-            '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p></div>'
-            '<div id="z-sunni-fields" class="space-y-5">'
-            '<div><label class="@L@" for="z-nisab-method">Nisab method</label>'
-            '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
-            '<option value="silver" selected>Silver Nisab (612.36 g, South Asian classical conversion)</option>'
-            '<option value="gold-87">Gold Nisab (87.48 g, South Asian classical conversion)</option>'
-
-            '</select></div></div>'
-            '<div id="z-sunni-asset-fields" class="space-y-5">'
-            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
-            '<p class="text-sm text-stone-700 dark:text-stone-300">Enter market values in the selected currency. Leave categories you do not own at zero.</p>'
-            '<div class="grid sm:grid-cols-2 gap-4">'
+            + '<div id="zakat-step-controls" class="flex flex-wrap items-center justify-between gap-2">'
+            + '<div class="min-w-0"><p id="zakat-step-progress" class="text-xs text-stone-600 dark:text-stone-300" aria-live="polite">Step 1 of 6</p><h2 id="zakat-step-title" class="text-base font-semibold text-stone-900 dark:text-stone-100">Method and currency</h2></div>'
+            + '<div class="flex gap-2">'
+            + '<button id="zakat-back" type="button" class="@B@" hidden>Back</button>'
+            + '<button id="zakat-next" type="button" class="@B@">Next</button>'
+            + '<button id="zakat-submit" type="submit" class="@B@" hidden>Calculate Zakat</button>'
+            + '</div></div>'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="setup">'
+            + '<p class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
+            + '<div class="grid sm:grid-cols-2 gap-4">'
+            + '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
+            + '<input id="z-currency" name="z-currency" class="@I@" type="text" value="PKR" maxlength="3" minlength="3" pattern="[A-Za-z]{3}" autocapitalize="characters" autocomplete="off" spellcheck="false">'
+            + '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.</p></div>'
+            + '<div><label class="@L@" for="z-school-of-thought">School of thought / calculation method</label>'
+            + '<select id="z-school-of-thought" name="z-school-of-thought" class="@I@">'
+            + '<option value="sunni-hanafi" selected>Sunni — Hanafi</option>'
+            + '<option value="jafari-sistani">Shia Ja\'fari — Sayyid Sistani</option>'
+            + '</select>'
+            + '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p></div>'
+            + '</div></div>'
+            + '<div id="z-sunni-fields" class="zakat-step-panel space-y-3" data-zakat-step="setup">'
+            + '<div><label class="@L@" for="z-nisab-method">Nisab method</label>'
+            + '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
+            + '<option value="silver" selected>Silver Nisab (612.36 g, South Asian classical conversion)</option>'
+            + '<option value="gold-87">Gold Nisab (87.48 g, South Asian classical conversion)</option>'
+            + '</select></div></div>'
+            + '<div id="z-sunni-asset-fields" class="space-y-3">'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-a">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">Enter market values in the selected currency. Leave categories you do not own at zero.</p>'
+            + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-cash", "Cash held at home")
             + field("z-bank", "Bank and current account balances")
             + field("z-savings", "Savings, deposits and cash equivalents")
             + field("z-gold", "Eligible gold value")
+            + '</div></div>'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-b">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Other eligible assets</h2>'
+            + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-silver", "Eligible silver value")
             + field("z-jewellery", "Permissible personal-use gold/silver jewellery")
             + field("z-investments", "Zakatable shares and investments")
             + field("z-businesscash", "Business cash and bank balance")
+            + '</div></div>'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-c">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Business and other assets</h2>'
+            + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-stock", "Trade inventory at current sale value")
             + field("z-recv", "Recoverable loans and receivables")
             + field("z-pension", "Accessible pension or retirement amount")
             + field("z-crypto", "Eligible cryptocurrency holdings")
+            + '</div></div>'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-liabilities">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Property, liabilities and payments</h2>'
+            + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-property", "Property held for resale")
-            + "</div>"
-            '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible liabilities and payments</h2>'
-            '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-debts", "Eligible short-term debts and dues")
             + field("z-paid", "Zakat already paid for this Zakat year")
-            + "</div>"
+            + '</div>'
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
             + '<p class="text-sm text-stone-700 dark:text-stone-300">The Hanafi method includes qualifying gold and silver jewellery when the entered amount is eligible under Hanafi guidance. Enter the metal value only, avoid counting the same jewellery twice, and ask a qualified Hanafi scholar about mixed purity, stones, unusual jewellery, investment or trade holdings.</p>'
-            + '</div>'
-            + '<div id="z-jafari-fields" class="space-y-4" hidden>'
+            + '</div></div>'
+            + '<div id="z-jafari-fields" class="space-y-3" hidden>'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="setup">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Shia Ja\'fari method — Sayyid Sistani</h2>'
-            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">This is not the Sunni cash-and-bank calculation. Under Sayyid Sistani\'s published rulings, ordinary banknotes and bank deposits do not carry obligatory Zakat. This limited calculator estimates only qualifying trading goods under obligatory precaution. Other Ja\'fari authorities may have different rulings. Khums is separate and is not calculated here.</p>'
+            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">This is not the Sunni cash-and-bank calculation. Under Sayyid Sistani\'s published rulings, ordinary banknotes and bank deposits do not carry obligatory Zakat. This limited calculator estimates only qualifying trading goods under obligatory precaution. Other Ja\'fari authorities may have different rulings. Khums is separate and is not calculated here.</p>'
             + '<div><label class="@L@" for="z-jafari-nisab-method">Trading-goods Nisab reference</label>'
             + '<select id="z-jafari-nisab-method" name="z-jafari-nisab-method" class="@I@">'
             + '<option value="gold" selected>Gold: 69.12 g (15 common mithqals)</option>'
             + '<option value="silver">Silver: 483.84 g (105 common mithqals)</option>'
-            + '</select></div>'
+            + '</select></div></div>'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="jafari-trade">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Trading goods and ownership</h2>'
             + field("z-jafari-trade-value", "Current market value of qualifying trading goods")
             + check("z-jafari-owner", "Owner is adult and sane")
             + check("z-jafari-acquired", "Trading goods were acquired through a contract of exchange, such as a purchase")
             + check("z-jafari-hawl", "One full lunar year has passed since the intention to profit")
+            + '</div>'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="jafari-conditions">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Trading-goods conditions</h2>'
             + check("z-jafari-intent", "Intention to profit continued throughout the year")
             + check("z-jafari-access", "Owner retained the right to dispose of the goods throughout the year")
             + check("z-jafari-market", "Market value did not fall below the purchase cost during the year")
             + '<p class="text-sm text-stone-700 dark:text-stone-300">This path excludes cash, banknotes, ordinary savings, personal jewellery, crops and livestock. It is not a complete Zakat or Khums assessment.</p>'
-            + '</div>'
+            + '</div></div>'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="prices">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal prices for Nisab</h2>'
             + '<div><label class="@L@" for="z-metal-price-unit">Metal price unit</label>'
             + '<select id="z-metal-price-unit" name="z-metal-price-unit" class="@I@">'
@@ -215,6 +239,7 @@ TOOLS = [
             + field("z-goldprice", "24-karat gold price in selected unit")
             + '</div>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">This is an estimate, not a fatwa. Debt, jewellery, investments, business goods and retirement rules can differ. Review the source-based guidance below and ask a qualified scholar about your circumstances.</p>'
+            + '</div>'
             + '</form>'
             + result("zakat-result")
         ),
