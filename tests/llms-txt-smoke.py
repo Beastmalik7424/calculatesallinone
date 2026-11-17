@@ -12,7 +12,9 @@ assert robots_path.is_file(), "public/robots.txt is missing"
 llms = llms_path.read_text(encoding="utf-8")
 sitemap = sitemap_path.read_text(encoding="utf-8")
 robots = robots_path.read_text(encoding="utf-8")
-assert "User-agent: OAI-SearchBot\nAllow: /\nDisallow: /404" in robots, "robots.txt must explicitly allow OAI-SearchBot while keeping /404 blocked"
+oai_group = re.search(r"(?ms)^User-agent: OAI-SearchBot\s*\n(.*?)(?=^User-agent:|\Z)", robots)
+assert oai_group and re.search(r"(?m)^Allow: /\s*$", oai_group.group(1)), "robots.txt must allow OAI-SearchBot"
+assert not re.search(r"(?m)^Disallow:", oai_group.group(1)), "OAI-SearchBot must not be partially blocked by path rules"
 listed = set(re.findall(r"https://calculateallinone\.vercel\.app/[^\s)]*", llms))
 sitemap_urls = set(re.findall(r"<loc>(.*?)</loc>", sitemap))
 missing = sorted(sitemap_urls - listed)
