@@ -86,7 +86,7 @@ let browser;
        const form=document.querySelector('#zakat-form');
        const panels=[...form.querySelectorAll('.zakat-step-panel:not([hidden])')];
        const visibleElement=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0;};
-       const controls=panels.flatMap(p=>[...p.querySelectorAll('input:not([type="hidden"]),select,textarea')]).filter(visibleElement);
+       const controls=panels.flatMap(p=>[...p.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]),select,textarea')]).filter(visibleElement);
        const rect=e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
        const action=document.querySelector('#zakat-next:not([hidden])')||document.querySelector('#zakat-submit:not([hidden])');
        const checkboxRows=panels.flatMap(p=>[...p.querySelectorAll('label.flex')]).filter(visibleElement);
