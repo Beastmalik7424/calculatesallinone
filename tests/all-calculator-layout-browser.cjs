@@ -81,9 +81,23 @@ function rect(element) {
             const action = document.querySelector(actionSelector);
             const heading = document.querySelector("h1");
             const firstControl = root && root.querySelector("input:not([type='hidden']), select, textarea, button");
+            const box = element => {
+              if (!element) return null;
+              const r = element.getBoundingClientRect();
+              const style = getComputedStyle(element);
+              return {
+                x: Math.round(r.x * 10) / 10,
+                y: Math.round(r.y * 10) / 10,
+                right: Math.round(r.right * 10) / 10,
+                bottom: Math.round(r.bottom * 10) / 10,
+                width: Math.round(r.width * 10) / 10,
+                height: Math.round(r.height * 10) / 10,
+                display: style.display,
+                visibility: style.visibility
+              };
+            };
             const rootRect = root && root.getBoundingClientRect();
             const actionRect = action && action.getBoundingClientRect();
-            const headingRect = heading && heading.getBoundingClientRect();
             const firstRect = firstControl && firstControl.getBoundingClientRect();
             const visible = element => {
               if (!element) return false;
@@ -104,17 +118,17 @@ function rect(element) {
               horizontalOverflow: document.documentElement.scrollWidth > innerWidth + 1,
               title: document.title,
               heading: heading ? heading.textContent.trim() : null,
-              headingRect: rect(heading),
+              headingRect: box(heading),
               rootFound: !!root,
-              rootRect: rect(root),
+              rootRect: box(root),
               rootTopInViewport: !!rootRect && rootRect.top >= -1 && rootRect.top < innerHeight,
               rootFitsWidth: !!rootRect && rootRect.left >= -1 && rootRect.right <= innerWidth + 1,
               firstControlFound: !!firstControl,
-              firstControlRect: rect(firstControl),
+              firstControlRect: box(firstControl),
               firstControlInViewport,
               actionFound: !!action,
               actionText: action ? action.textContent.trim() : null,
-              actionRect: rect(action),
+              actionRect: box(action),
               actionInViewport,
               actionReachable
             };
