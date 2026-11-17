@@ -74,8 +74,9 @@
  header p{font-size:12px;line-height:1.2;margin:2px 0}
  .breadcrumb{display:none}
  .panel{margin:4px 0;padding:8px}
+ #calculator.panel{margin-top:2px}
  #calc-heading{font-size:1.1rem;margin:0 0 4px}
- .presets{gap:3px;margin:3px 0 5px}
+ .presets{gap:3px;margin:3px 0 3px}
  .presets .btn{min-height:30px;padding:3px 5px;font-size:11px}
  #loan-form>.grid{gap:5px}
  #loan-form .field label{font-size:11px;line-height:1.1}
@@ -116,6 +117,13 @@
 @keyframes ca-calculator-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(max-width:700px){.site-nav{flex-wrap:wrap;gap:5px;margin-bottom:6px}.site-nav>a{flex:0 0 auto}.site-nav>.ca-calculator-carousel{min-width:88px;max-width:none}.site-nav .ca-calculator-link{min-height:32px;padding:4px 7px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){.ca-calculator-track{animation:none!important;transform:none!important}.ca-calculator-group[data-tool-set=duplicate]{display:none!important}.site-nav>.ca-calculator-carousel{scrollbar-width:thin}}
+
+/* At the smallest supported phone viewport, keep the primary EMI action fully visible on load. */
+@media(max-width:340px) and (max-height:640px){
+ .site-nav{margin-bottom:0}
+ header{padding-top:0}
+ #calculator.panel{margin-top:0;padding:6px}
+}
 </style>
 </head>
 <body>

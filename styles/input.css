@@ -2463,3 +2463,76 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
     display: none !important;
   }
 }
+
+
+/* Match the Standard Calculator's moving all-calculator ticker on every page.
+   Restore it on the small-screen Zakat and calorie layouts without changing calculator order. */
+@media (max-width: 600px) {
+  body:has(#main.ca-tool-calorie-calculator) header nav .ca-calculator-carousel {
+    display: block !important;
+  }
+}
+body:has(#zakat-form) header nav .ca-calculator-carousel {
+  display: block !important;
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 9px !important;
+  background: var(--panel) !important;
+  scrollbar-width: none !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-track {
+  display: flex !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  animation: ca-calculator-marquee 48s linear infinite !important;
+  transform: none !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  grid-template-columns: none !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 0 5px !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="duplicate"] {
+  display: flex !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-link {
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px 9px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  background: var(--panel) !important;
+  color: var(--accent) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+body:has(#zakat-form) header nav .ca-calculator-link[aria-current="page"] {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--accentText) !important;
+}
