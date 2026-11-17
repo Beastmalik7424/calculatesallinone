@@ -210,7 +210,7 @@ TOOLS = [
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
             + '</div></div>'
             + '<div id="z-jafari-fields" class="space-y-3" hidden>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="setup">'
+            + '<div class="zakat-step-panel space-y-3" data-zakat-step="nisab">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Shia Ja\'fari method — Sayyid Sistani</h2>'
             + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. Ordinary banknotes and deposits are excluded. Khums is separate. Other Ja\'fari authorities may differ. Khums is separate.</p>'
             + '<div><label class="@L@" for="z-jafari-nisab-method">Trading-goods Nisab reference</label>'
