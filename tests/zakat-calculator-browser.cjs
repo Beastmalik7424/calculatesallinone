@@ -91,6 +91,19 @@ let browser;
   assert.equal(tickerState.animationName, "ca-calculator-marquee", "Zakat page must use the shared moving calculator ticker");
   assert.ok(tickerState.carouselScrollWidth > tickerState.carouselClientWidth, "Zakat calculator shortcuts must overflow horizontally as a ticker: " + JSON.stringify(tickerState));
   assert.equal(tickerState.primaryDisplay, "flex", "Zakat shortcut links must remain in the shared horizontal track");
+  const tickerOffset = async () => page.evaluate(() => {
+    const track = document.querySelector("header nav .ca-calculator-track");
+    if (!track) return null;
+    const transform = getComputedStyle(track).transform;
+    return transform === "none" ? null : new DOMMatrixReadOnly(transform).m41;
+  });
+  const offsetBefore = await tickerOffset();
+  await page.waitForTimeout(500);
+  const offsetAfter = await tickerOffset();
+  assert.ok(
+    offsetBefore !== null && offsetAfter !== null && offsetAfter < offsetBefore - 1,
+    "Zakat ticker must visibly move; an animation name alone is not sufficient: " + JSON.stringify({offsetBefore, offsetAfter})
+  );
   assert.equal(await page.locator("#zakat-result").isVisible(), false, "Empty Zakat result placeholder must not look like an inactive input");
   const zakatShareButton = page.locator('button[data-share-result-for="zakat-result"]');
   assert.equal(await zakatShareButton.count(), 1, "Zakat share action must be available after the result is populated");
