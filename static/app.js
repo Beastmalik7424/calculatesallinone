@@ -505,6 +505,7 @@
         : ["setup", "prices", "sunni-assets-a", "sunni-assets-b", "sunni-assets-c", "sunni-liabilities"]
     }
     function renderStep() {
+      if (!form || typeof form.querySelectorAll !== "function") return
       var isJafari = schoolField && schoolField.value === "jafari-sistani"
       var steps = activeStepKeys()
       currentStepIndex = Math.max(0, Math.min(currentStepIndex, steps.length - 1))
