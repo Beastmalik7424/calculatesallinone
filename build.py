@@ -838,6 +838,7 @@ URDU = {
             ("Eligible cryptocurrency holdings", "قابلِ زکوٰۃ کرپٹو کرنسی کی مالیت"),
             ("Property held for resale", "دوبارہ فروخت کے لیے رکھی گئی جائیداد"),
             ("Shia Ja'fari method — Sayyid Sistani", "شیعہ جعفری طریقہ — آیت اللہ سید سیستانی"),
+            ("This is not the Sunni cash-and-bank calculation. Under Sayyid Sistani's published rulings, ordinary banknotes and bank deposits do not carry obligatory Zakat. This limited calculator estimates only qualifying trading goods under obligatory precaution. Other Ja'fari authorities may have different rulings. Khums is separate and is not calculated here.", "یہ سنی نقد رقم اور بینک بیلنس والا حساب نہیں ہے۔ آیت اللہ سید سیستانی کے شائع شدہ احکام کے مطابق عام بینک نوٹ اور بینک ڈپازٹس پر واجب زکوٰۃ نہیں۔ یہ محدود کیلکولیٹر صرف احتیاطِ واجب کے تحت اہل تجارتی مال کا تخمینہ لگاتا ہے۔ دوسرے جعفری مراجع کے احکام مختلف ہو سکتے ہیں۔ خمس الگ ہے اور یہاں اس کا حساب نہیں ہوتا۔"),
             ("Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. Ordinary banknotes and deposits are excluded. Khums is separate.", "صرف آیت اللہ سید سیستانی کا طریقہ۔ یہ حساب احتیاطِ واجب کے مطابق اہل تجارتی مال کا تخمینہ لگاتا ہے۔ عام بینک نوٹ اور بینک ڈپازٹس شامل نہیں۔ خمس الگ ہے۔"),
             ("Trading-goods Nisab reference", "تجارتی مال کا نصاب"),
             ("Gold: 69.12 g (15 common mithqals)", "سونا: 69.12 گرام (15 مثقالِ صیرفی)"),
