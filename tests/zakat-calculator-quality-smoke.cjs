@@ -140,6 +140,13 @@ assert.match(en, /canonical/i, "English page must retain canonical metadata");
 assert.match(ur, /canonical/i, "Urdu page must retain canonical metadata");
 assert.ok(!en.includes("islamweb.net/en/fatwa/81355"), "English page must not cite the unsupported Islamweb reference for Nisab");
 assert.ok(!ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must not cite the unsupported Islamweb reference for Nisab");
+// Responsive layout regression: the Zakat form's primary mobile grid must be one column. 
+const zakatCss = fs.readFileSync(path.join(__dirname, "..", "styles", "input.css"), "utf8");
+assert.match(zakatCss, /#main \.ca-tool-zakat-calculator #zakat-form > \.grid\s*\{\s*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*!important;/,
+  "Zakat form must use a single full-width column on mobile");
+assert.doesNotMatch(zakatCss, /#main \.ca-tool-zakat-calculator #zakat-form > \.grid\s*\{\s*grid-template-columns:\s*repeat\(2,/,
+  "Zakat form must not force two columns on mobile");
+
 console.log("Zakat global calculator content and localization gates: PASS");
 
 // Pure calculation-engine tests. These are independent of page rendering.
