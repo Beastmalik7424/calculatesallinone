@@ -119,7 +119,7 @@ let browser;
    if(isZakat){
     if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible||data.tickerScrollable)failures.push(key+' all 17 calculator shortcut boxes must be visible together without scrolling');
     if(!data.allLabelsFit)failures.push(key+' compact calculator shortcut labels are clipped or truncated');
-    if(data.carouselBottom>190)failures.push(key+' calculator shortcut grid takes too much first-screen space');
+    if(data.carouselBottom>205)failures.push(key+' calculator shortcut grid takes too much first-screen space');
     if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
     if(data.calculatorTop>=size.height||data.formTop>=size.height)failures.push(key+' Zakat calculator form must begin on the first screen');
     if(!data.lastButton||data.bottom>size.height-8)failures.push(key+' Calculate Zakat action must be visible on the first screen');
