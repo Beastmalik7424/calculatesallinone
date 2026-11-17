@@ -118,7 +118,18 @@ function rect(element) {
             const actionVisible = visible(action);
             const tickerVisible = visible(ticker);
             const tickerInViewport = tickerVisible && tickerRect.top >= -1 && tickerRect.bottom <= innerHeight - 1;
-            const tickerLinkCount = ticker ? ticker.querySelectorAll("a.ca-calculator-link").length : 0;
+            const primaryTicker = ticker && ticker.querySelector('.ca-calculator-group[data-tool-set="primary"]');
+            const primaryTickerLinks = primaryTicker ? Array.from(primaryTicker.querySelectorAll("a.ca-calculator-link")) : [];
+            const tickerLinkCount = primaryTickerLinks.length;
+            const tickerLinksOutsideViewport = primaryTickerLinks.filter(link => {
+              const r = link.getBoundingClientRect();
+              const s = getComputedStyle(link);
+              return r.width <= 0 || r.height <= 0 || s.display === "none" || s.visibility === "hidden" ||
+                r.left < -1 || r.right > innerWidth + 1 || r.top < -1 || r.bottom > innerHeight + 1;
+            }).map(link => {
+              const r = link.getBoundingClientRect();
+              return { label: link.textContent.trim(), left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top), bottom: Math.round(r.bottom) };
+            });
             const actionInViewport = actionVisible && actionRect.top >= -1 && actionRect.bottom <= innerHeight - 2;
             const firstControlInViewport = visible(firstControl) && firstRect.top >= -1 && firstRect.bottom <= innerHeight - 1;
             const hitTarget = actionVisible
@@ -133,6 +144,8 @@ function rect(element) {
               tickerVisible,
               tickerInViewport,
               tickerLinkCount,
+              tickerLinksOutsideViewport,
+              allTickerLinksInViewport: tickerLinkCount > 0 && tickerLinksOutsideViewport.length === 0,
               tickerRect: box(ticker),
               title: document.title,
               heading: heading ? heading.textContent.trim() : null,
@@ -163,6 +176,7 @@ function rect(element) {
           if (!metrics.tickerFound || !metrics.tickerVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker is missing or hidden" });
           if (metrics.tickerFound && !metrics.tickerInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker is outside the initial viewport", metrics });
           if (metrics.tickerFound && metrics.tickerLinkCount < 15) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker does not expose the full calculator shortcut set", metrics });
+          if (route.name.startsWith("zakat-") && !metrics.allTickerLinksInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Not every calculator shortcut box is fully visible on the first screen", offscreen: metrics.tickerLinksOutsideViewport, metrics });
           if (!metrics.rootFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing calculator container " + route.root });
           if (!metrics.actionFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing primary calculator action " + route.action });
           if (metrics.rootFound && !metrics.rootTopInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator container starts below the initial viewport", metrics });
