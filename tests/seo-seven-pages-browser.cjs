@@ -92,7 +92,7 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
     const homeResponse = await desktop.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
     assert.equal(homeResponse && homeResponse.status(), 200, "homepage should return HTTP 200 on desktop");
     const stylesheetHref = await desktop.locator('link[rel="stylesheet"][href*="site.css"]').first().getAttribute("href");
-    assert.ok(stylesheetHref && stylesheetHref.includes("20261116-zakat-first-screen-v1"), "homepage must request the cache-busted candidate stylesheet");
+    assert.ok(stylesheetHref && stylesheetHref.includes("20261116-homepage-calculator-layout-v1"), "homepage must request the cache-busted candidate stylesheet");
     // The root-relative stylesheet URL above loads this build's generated CSS in the local test server.
     const homeCalculator = await desktop.locator(".ca-home-calculator .ca-calculator-engine").boundingBox();
     const homeTitle = await desktop.locator(".ca-home-header h1").boundingBox();
@@ -101,9 +101,13 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
     assert.ok(homeCalculator && homeTitle && allToolsBox, "homepage heading, calculator and All Tools section must exist");
     assert.ok(homeCalculator.y >= homeTitle.y + homeTitle.height, "homepage calculator must follow the main heading");
     assert.ok(homeCalculator.width >= 500, "homepage calculator should be wide on a 1440px desktop");
-    const desktopGridColumns = await desktop.locator(".ca-home-layout").evaluate(el => getComputedStyle(el).gridTemplateColumns);
-    console.log("homepage desktop geometry: calculator=" + JSON.stringify(homeCalculator) + " allTools=" + JSON.stringify(allToolsBox) + " gridColumns=" + desktopGridColumns);
-    assert.equal(desktopGridColumns.trim().split(/\s+/).length, 1, "homepage must use a single desktop column so All Tools cannot sit beside the calculator");
+    const desktopLayoutStyle = await desktop.locator(".ca-home-layout").evaluate(el => {
+      const style = getComputedStyle(el);
+      return { display: style.display, flexDirection: style.flexDirection };
+    });
+    console.log("homepage desktop geometry: calculator=" + JSON.stringify(homeCalculator) + " allTools=" + JSON.stringify(allToolsBox) + " layout=" + JSON.stringify(desktopLayoutStyle));
+    assert.equal(desktopLayoutStyle.display, "flex", "homepage must use a flex layout for a single desktop column");
+    assert.equal(desktopLayoutStyle.flexDirection, "column", "homepage must stack All Tools below the main calculator");
     assert.ok(homeCalculator.y + homeCalculator.height <= allToolsBox.y, "All Tools section must follow the main calculator, not overlap it");
     assert.equal(await allTools.isVisible(), true, "All Tools section must remain visible on desktop");
     assert.ok(homeCalculator.x >= 0 && homeCalculator.x + homeCalculator.width <= 1442, "homepage calculator must fit desktop viewport");

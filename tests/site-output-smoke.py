@@ -757,12 +757,12 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261116-zakat-first-screen-v1" in homepage_html, "Homepage must load the current calculator layout stylesheet"
+assert "/assets/site.css?v=20261116-homepage-calculator-layout-v1" in homepage_html, "Homepage must load the current calculator layout stylesheet"
 assert ".ca-home-layout{display:grid" in site_css, "Homepage calculator layout must use the responsive single-column grid"
-homepage_layout_rule_start = site_css.find("#main .ca-home-layout{")
+homepage_layout_rule_start = site_css.rfind("#main .ca-home-layout{")
 homepage_layout_rule_end = site_css.find("}", homepage_layout_rule_start)
 homepage_layout_rule = site_css[homepage_layout_rule_start:homepage_layout_rule_end] if homepage_layout_rule_start >= 0 and homepage_layout_rule_end >= 0 else ""
-assert "display:grid!important" in homepage_layout_rule and "grid-template-columns:minmax(0,1fr)!important" in homepage_layout_rule, "Desktop homepage must force tools below the calculator with a high-specificity one-column rule"
+assert "display:flex!important" in homepage_layout_rule and "flex-direction:column!important" in homepage_layout_rule, "Desktop homepage must force tools below the calculator with a high-specificity one-column flex rule"
 assert ".ca-home-side-left{display:none!important}" in site_css, "Homepage promotional sidebar must not push the calculator below the fold"
 assert ".ca-home-calculator .ca-calculator-engine{width:100%;max-width:100%" in site_css, "Homepage calculator must use the available width"
 # Every dynamic calculator message, unit label, category label, and theme label
@@ -994,7 +994,7 @@ assert ".ca-home-side-left{display:none!important}" in site_css_compact and ".ca
 assert ".ca-home-calculator" in site_css, "Homepage calculator styles must survive the CSS build"
 input_css = (ROOT.parent / "styles" / "input.css").read_text(encoding="utf-8")
 assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?\.ca-home-calculator\s+#calc-pad\s+button\s*\{\s*min-height:\s*2\.8rem", input_css), "Homepage mobile calculator sizing must be explicitly defined in source CSS"
-assert "20261116-zakat-first-screen-v1" in home_html, "Homepage must load the restored calculator-first stylesheet"
+assert "20261116-homepage-calculator-layout-v1" in home_html, "Homepage must load the restored calculator-first stylesheet"
 layout_marker = "/* Persistent homepage calculator-first layout override. Keep this in source CSS because build:css regenerates static/site.css. */"
 assert layout_marker in input_css, "Calculator-first desktop layout must live in source CSS, not only the generated stylesheet"
 layout_override = input_css.split(layout_marker, 1)[1]

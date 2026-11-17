@@ -1609,7 +1609,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261116-zakat-first-screen-v1">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261116-homepage-calculator-layout-v1">\n'
         + ld + ads + "</head>\n"
     )
 

@@ -44,6 +44,60 @@ const axe = require("axe-core");
     assert.equal(initial.rejectsUserScalableNo, true, "zoom guard must detect user-scalable=no");
     assert.equal(initial.rejectsMaximumScaleOne, true, "zoom guard must detect maximum-scale=1");
     assert.equal(initial.unnamedButtons, 0, "every calculator key must have an accessible name");
+    // The home page should follow the same focused, calculator-first hierarchy at every viewport.
+    const firstFoldScenarios = [
+      { width: 320, height: 568, label: "small mobile portrait" },
+      { width: 390, height: 844, label: "mobile portrait" },
+      { width: 360, height: 740, label: "compact mobile portrait" },
+      { width: 1366, height: 768, label: "laptop" },
+    ];
+    for (const scenario of firstFoldScenarios) {
+      await page.setViewportSize({ width: scenario.width, height: scenario.height });
+      const layout = await page.evaluate(() => {
+        const header = document.querySelector("header");
+        const ticker = header?.querySelector(".ca-calculator-carousel");
+        const calculator = document.querySelector(".ca-home-calculator");
+        const tools = document.querySelector(".ca-home-tools");
+        const side = document.querySelector(".ca-home-side-left");
+        const keypad = document.querySelector(".ca-home-calculator #calc-pad");
+        const box = element => {
+          const r = element.getBoundingClientRect();
+          const style = getComputedStyle(element);
+          return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, width: r.width, display: style.display };
+        };
+        return {
+          ticker: ticker ? box(ticker) : null, calculator: calculator ? box(calculator) : null,
+          tools: tools ? box(tools) : null, sideDisplay: side ? getComputedStyle(side).display : "missing",
+          keypadButtons: [...(keypad?.querySelectorAll("button") || [])].map(box),
+          documentWidth: document.documentElement.scrollWidth, viewportWidth: window.innerWidth,
+          viewportHeight: window.innerHeight,
+        };
+      });
+      assert.ok(layout.ticker, scenario.label + ": shared calculator ticker must remain in the header");
+      assert.equal(layout.sideDisplay, "none", scenario.label + ": decorative side panel must not compete with calculator");
+      assert.ok(layout.calculator, scenario.label + ": homepage calculator must exist");
+      assert.ok(layout.tools.top >= layout.calculator.bottom - 1, scenario.label + ": supporting tools must follow the calculator");
+      assert.ok(Math.abs((layout.calculator.left + layout.calculator.right) / 2 - scenario.width / 2) <= 2, scenario.label + ": calculator must be centered");
+      assert.ok(layout.calculator.width <= 760, scenario.label + ": calculator must use a focused readable width");
+      assert.equal(layout.keypadButtons.length, 23, scenario.label + ": all 23 standard keys must remain");
+      assert.ok(layout.keypadButtons.every(button => button.width >= 44 && button.height >= 44), scenario.label + ": keys must remain touch-accessible");
+      assert.ok(layout.calculator.bottom <= layout.viewportHeight + 1, scenario.label + ": complete calculator must fit above the first fold; " + JSON.stringify(layout));
+      assert.ok(layout.documentWidth <= layout.viewportWidth + 1, scenario.label + ": no horizontal scrolling is allowed");
+      if (scenario.width <= 600) {
+        for (const key of ["C", "7", "+", "3", "="]) {
+          await page.locator('.ca-home-calculator #calc-pad button[data-key="' + key + '"]').click();
+        }
+        const afterCalculation = await page.evaluate(() => ({
+          calculatorBottom: document.querySelector(".ca-home-calculator").getBoundingClientRect().bottom,
+          historyDisplay: getComputedStyle(document.querySelector(".ca-home-calculator #calc-history")).display,
+          viewportHeight: window.innerHeight,
+        }));
+        assert.equal(afterCalculation.historyDisplay, "none", scenario.label + ": history line must not push the mobile keypad below the fold");
+        assert.ok(afterCalculation.calculatorBottom <= afterCalculation.viewportHeight + 1, scenario.label + ": full calculator must remain visible after a calculation");
+      }
+    }
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.setViewportSize({ width: 1280, height: 800 });
 
     let scenarios = 0;
     const failures = [];
