@@ -1495,12 +1495,14 @@ CAROUSEL_TRANSLATIONS = {
 }
 
 CAROUSEL_SHORT_UR = {
-    "zakat-calculator": "زکوٰۃ", "bmi-calculator": "BMI",
-    "profit-loss-calculator": "منافع", "discount-calculator": "ڈسکاؤنٹ",
-    "age-calculator": "عمر", "unit-converter": "اکائیاں",
-    "standard-calculator": "معیاری", "tasbih-counter": "تسبیح",
-    "stopwatch": "اسٹاپ واچ", "years-to-days-calculator": "سال→دن",
+    "calorie-calculator": "کیلوری", "zakat-calculator": "زکوٰۃ", "bmi-calculator": "BMI",
+    "profit-loss-calculator": "نفع", "discount-calculator": "ڈسک",
+    "age-calculator": "عمر", "unit-converter": "اکائی",
+    "standard-calculator": "حساب", "tasbih-counter": "تسبیح",
+    "stopwatch": "وقت", "years-to-days-calculator": "سال",
     "query-calculator": "سوال", "emi-calculator": "EMI",
+    "percentage-calculator": "%", "fraction-calculator": "کسر",
+    "compound-interest-calculator": "سود", "date-calculator": "تاریخ",
 }
 
 
@@ -1522,11 +1524,13 @@ def calculator_carousel(lang="en", current_path=None):
                 href = "/" + slug + "/"
             active = ' aria-current="page"' if not duplicate and current_path == href else ""
             tabindex = ' tabindex="-1"' if duplicate else ""
+            short_label = CAROUSEL_SHORT_UR.get(slug, short_name) if lang == "ur" else short_name
             links.append(
                 '<a class="ca-calculator-link" data-tool-shortcut="' + slug
                 + '" href="' + href + '" aria-label="' + html.escape(name, quote=True)
                 + '" title="' + html.escape(name, quote=True) + '"' + active + tabindex + '>'
-                + html.escape(name) + '</a>'
+                + '<span class="ca-calculator-full">' + html.escape(name) + '</span>'
+                + '<span class="ca-calculator-short" aria-hidden="true">' + html.escape(short_label) + '</span></a>'
             )
         hidden = ' aria-hidden="true"' if duplicate else ""
         groups.append(
