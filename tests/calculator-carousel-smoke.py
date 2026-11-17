@@ -120,6 +120,7 @@ assert len(carousel_rules) == 1, f"Zakat navigation must have one authoritative 
 assert len(track_rules) == 1, f"Zakat navigation must have one authoritative track rule, found {len(track_rules)}"
 assert all("display:none" not in rule for rule in carousel_rules), "Zakat navigation must never be hidden at mobile breakpoints"
 assert all("ca-calculator-marquee" in rule and "display:flex" in rule and "max-content" in rule for rule in track_rules), "Zakat track must use the shared moving flex marquee"
+assert all("transform:none" not in rule for rule in track_rules), "No important static transform may override the ticker keyframes"
 primary_rules = re.findall(r"body:has\(#zakat-form\) header nav \.ca-calculator-group\[data-tool-set=\"?primary\"?\]\{([^}]*)\}", css)
 duplicate_rules = re.findall(r"body:has\(#zakat-form\) header nav \.ca-calculator-group\[data-tool-set=\"?duplicate\"?\]\{([^}]*)\}", css)
 assert len(primary_rules) == 1 and "display:flex" in primary_rules[0] and "max-content" in primary_rules[0], "Zakat primary shortcuts must stay in the horizontal track"
