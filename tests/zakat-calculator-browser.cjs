@@ -176,7 +176,7 @@ let browser;
   await setField(page, "z-goldprice", "fill", "1000");
   await setField(page, "z-jafari-trade-value", "fill", "1000000");
   for (const id of ["z-jafari-owner","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market"]) {
-    await page.locator("#" + id).check();
+    await setField(page, id, "check");
   }
   await submitZakat(page);
   assert.match(await page.locator("#zakat-result").innerText(), /25,000/);
