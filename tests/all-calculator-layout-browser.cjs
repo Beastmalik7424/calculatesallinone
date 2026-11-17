@@ -7,7 +7,8 @@ const { chromium } = require("playwright");
 const BASE_URL = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/+$/, "");
 const VIEWPORTS = [
   { name: "phone-320x568", width: 320, height: 568 },
-  { name: "android-360x800", width: 360, height: 800 },
+  { name: "android-360x740", width: 360, height: 740 },
+  { name: "android-390x844", width: 390, height: 844 },
   { name: "desktop-1366x768", width: 1366, height: 768 }
 ];
 
@@ -153,6 +154,11 @@ function rect(element) {
               allTickerLinksInViewport: tickerLinkCount === 17 && tickerLinksOutsideViewport.length === 0,
               tickerLinksNotReachable,
               allTickerLinksReachable: tickerLinkCount === 17 && tickerLinksNotReachable.length === 0,
+              shortLabelFailures: primaryTickerLinks.filter(link => {
+                const label = (link.getAttribute("data-short-label") || "").trim();
+                const pseudo = getComputedStyle(link, "::after");
+                return !label || pseudo.content === "none" || pseudo.content === "normal" || parseFloat(pseudo.fontSize) < 9;
+              }).map(link => link.getAttribute("data-tool-shortcut")),
               tickerRect: box(ticker),
               title: document.title,
               heading: heading ? heading.textContent.trim() : null,
@@ -185,6 +191,7 @@ function rect(element) {
           if (metrics.tickerFound && metrics.tickerLinkCount < 15) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker does not expose the full calculator shortcut set", metrics });
           if (route.name.startsWith("zakat-") && !metrics.allTickerLinksInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Not every calculator shortcut box is fully visible on the first screen", offscreen: metrics.tickerLinksOutsideViewport, metrics });
           if (route.name.startsWith("zakat-") && !metrics.allTickerLinksReachable) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more first-screen calculator shortcut boxes are not clickable", blocked: metrics.tickerLinksNotReachable, metrics });
+          if (route.name.startsWith("zakat-") && metrics.shortLabelFailures.length) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more shortcut labels are not visibly rendered", labels: metrics.shortLabelFailures, metrics });
           if (!metrics.rootFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing calculator container " + route.root });
           if (!metrics.actionFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing primary calculator action " + route.action });
           if (metrics.rootFound && !metrics.rootTopInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator container starts below the initial viewport", metrics });
