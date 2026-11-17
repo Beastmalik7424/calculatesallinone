@@ -164,6 +164,7 @@ let browser;
   assert.equal(await page.locator("#z-school-of-thought option").count(), 2, "Only Hanafi and Ja'fari Sistani methods must be selectable");
   await setField(page, "z-school-of-thought", "select", "jafari-sistani");
   assert.equal(await page.locator("#z-sunni-fields").isVisible(), false);
+  await goToStep(page, "nisab");
   assert.equal(await page.locator("#z-jafari-fields").isVisible(), true);
   assert.equal(await page.locator("#z-sunni-asset-fields").count(), 1, "Sunni-only asset and liability section must have a dedicated wrapper");
   assert.equal(await page.locator("#z-sunni-asset-fields").isVisible(), false, "Sunni assets, liabilities and Hawl must be hidden in the Sistani method");
