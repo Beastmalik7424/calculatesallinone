@@ -2697,13 +2697,9 @@ body:has(#zakat-form) header nav .ca-calculator-link {
   overflow: hidden !important;
   text-overflow: clip !important;
 }
-body:has(#zakat-form) header nav .ca-calculator-full {
-  display: none !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-short {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+body:has(#zakat-form) header nav .ca-calculator-link::after {
+  content: attr(data-short-label) !important;
+  display: inline-block !important;
   max-width: 100% !important;
   overflow: hidden !important;
   color: inherit !important;
