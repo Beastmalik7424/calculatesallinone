@@ -493,8 +493,86 @@
         nisabField.value = "silver"
       }
     }
-    if (schoolField) schoolField.addEventListener("change", function () { updateMethodUI(true) })
+    var backButton = $("zakat-back")
+    var nextButton = $("zakat-next")
+    var submitButton = $("zakat-submit")
+    var stepProgress = $("zakat-step-progress")
+    var stepTitle = $("zakat-step-title")
+    var currentStepIndex = 0
+    function activeStepKeys() {
+      return schoolField && schoolField.value === "jafari-sistani"
+        ? ["setup", "prices", "jafari-trade", "jafari-conditions"]
+        : ["setup", "prices", "sunni-assets-a", "sunni-assets-b", "sunni-assets-c", "sunni-liabilities"]
+    }
+    function renderStep() {
+      var isJafari = schoolField && schoolField.value === "jafari-sistani"
+      var steps = activeStepKeys()
+      currentStepIndex = Math.max(0, Math.min(currentStepIndex, steps.length - 1))
+      var key = steps[currentStepIndex]
+      if (sunniFields) sunniFields.hidden = isJafari || key !== "setup"
+      if (sunniAssetFields) sunniAssetFields.hidden = isJafari
+      if (jafariFields) jafariFields.hidden = !isJafari
+      form.querySelectorAll(".zakat-step-panel").forEach(function (panel) {
+        var inSunni = !!panel.closest("#z-sunni-fields, #z-sunni-asset-fields")
+        var inJafari = !!panel.closest("#z-jafari-fields")
+        var methodAllowed = isJafari ? !inSunni : !inJafari
+        panel.hidden = panel.getAttribute("data-zakat-step") !== key || !methodAllowed
+      })
+      var urdu = lang() === "ur"
+      var titles = urdu ? {
+        setup: "طریقہ اور کرنسی",
+        prices: "دھات کی قیمتیں",
+        "sunni-assets-a": "نقد رقم اور بنیادی اثاثے",
+        "sunni-assets-b": "دیگر قابلِ زکوٰۃ اثاثے",
+        "sunni-assets-c": "کاروباری اور دیگر اثاثے",
+        "sunni-liabilities": "جائیداد، واجبات اور ادا شدہ زکوٰۃ",
+        "jafari-trade": "تجارتی مال اور ملکیت",
+        "jafari-conditions": "تجارتی مال کی شرائط"
+      } : {
+        setup: "Method and currency",
+        prices: "Metal prices",
+        "sunni-assets-a": "Cash and core assets",
+        "sunni-assets-b": "Other eligible assets",
+        "sunni-assets-c": "Business and other assets",
+        "sunni-liabilities": "Property, liabilities and payments",
+        "jafari-trade": "Trading goods and ownership",
+        "jafari-conditions": "Trading-goods conditions"
+      }
+      if (stepProgress) stepProgress.textContent = urdu
+        ? "مرحلہ " + (currentStepIndex + 1) + " از " + steps.length
+        : "Step " + (currentStepIndex + 1) + " of " + steps.length
+      if (stepTitle) stepTitle.textContent = titles[key] || ""
+      if (backButton) {
+        backButton.hidden = currentStepIndex === 0
+        backButton.textContent = urdu ? "واپس" : "Back"
+      }
+      if (nextButton) {
+        nextButton.hidden = currentStepIndex === steps.length - 1
+        nextButton.textContent = urdu ? "اگلا" : "Next"
+      }
+      if (submitButton) submitButton.hidden = currentStepIndex !== steps.length - 1
+      form.setAttribute("data-current-step", key)
+      form.setAttribute("data-step-order", steps.join(","))
+    }
+    if (schoolField) schoolField.addEventListener("change", function () {
+      updateMethodUI(true)
+      currentStepIndex = 0
+      renderStep()
+    })
+    if (nextButton) nextButton.addEventListener("click", function () {
+      if (currentStepIndex < activeStepKeys().length - 1) {
+        currentStepIndex += 1
+        renderStep()
+      }
+    })
+    if (backButton) backButton.addEventListener("click", function () {
+      if (currentStepIndex > 0) {
+        currentStepIndex -= 1
+        renderStep()
+      }
+    })
     updateMethodUI(false)
+    renderStep()
     form.addEventListener("submit", function (e) {
       e.preventDefault()
       if (!window.ZakatCalculator || typeof window.ZakatCalculator.calculate !== "function") {
