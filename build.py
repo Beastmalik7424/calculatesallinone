@@ -25,7 +25,7 @@ SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools fo
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
     "/zakat-calculator/": "2026-11-15",
-    "/years-to-days-calculator/": "2026-11-14",
+    "/years-to-days-calculator/": "2026-11-17",
     "/unit-converter/": "2026-11-14",
     "/tasbih-counter/": "2026-11-15",
 }
@@ -1165,6 +1165,7 @@ TOOLS.extend([
             ("Does exact calendar mode include leap days?", "Yes. It counts actual Gregorian calendar days up to, but not including, the ending anniversary. A 29 February start uses 1 March when the ending year is not a leap year."),
             ("Can I convert days to years?", "Yes. Select Days to years and choose one of the three fixed year lengths. The result is a decimal-year estimate with an approximate years, months and days breakdown."),
             ("Can exact calendar mode use decimal years?", "No. Exact calendar mode accepts whole years and a valid Gregorian start date. The fixed 365, 365.25 and 365.2425 methods accept decimal values."),
+            ("How many days are in 13 years?", "Using the 365.2425-day Gregorian average, 13 years is 4,748.1525 days (about 4,748.15 days). The exact count in a calendar interval can differ because leap days depend on the start date. Use Exact calendar years to count an actual 13-year anniversary interval."),
         ],
         "sources": 'Julian year: exactly 365.25 days (<a class="' + LINK + '" href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noopener noreferrer">NASA/JPL astrodynamic parameters</a>). Gregorian mean year: 365.2425 days over the 400-year cycle (<a class="' + LINK + '" href="https://aa.usno.navy.mil/faq/leap_years" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory leap-year guidance</a>).'
     },
