@@ -1665,7 +1665,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-ticker-v1">\n'
         + ld + ads + "</head>\n"
     )
 
