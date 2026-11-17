@@ -5,6 +5,51 @@ let browser;
 // This task changes the shared navigation on the English and Urdu Zakat pages. Other routes retain their existing build and dedicated browser regression suites.
  const slugs=['zakat-calculator','ur/zakat-calculator'];
  let failures=[];
+ async function auditZakatSteps(page,size,key,failures) {
+  async function runSequence(methodLabel) {
+   const raw=await page.locator('#zakat-form').getAttribute('data-step-order');
+   if(!raw){failures.push(key+' '+methodLabel+' Zakat no-scroll step sequence is missing');return;}
+   const order=raw.split(',').filter(Boolean);
+   for(let stepIndex=0;stepIndex<order.length;stepIndex++){
+    const stepMetrics=await page.evaluate(()=>{
+     const form=document.querySelector('#zakat-form');
+     const panels=[...form.querySelectorAll('.zakat-step-panel:not([hidden])')];
+     const visibleElement=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0;};
+     const controls=panels.flatMap(p=>[...p.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]),select,textarea')]).filter(visibleElement);
+     const rect=e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
+     const action=document.querySelector('#zakat-next:not([hidden])')||document.querySelector('#zakat-submit:not([hidden])');
+     const checkboxRows=panels.flatMap(p=>[...p.querySelectorAll('label.flex')]).filter(visibleElement);
+     const activeKey=form.getAttribute('data-current-step');
+     const progress=document.querySelector('#zakat-step-progress');
+     const title=document.querySelector('#zakat-step-title');
+     return {activeKey,scrollY,viewport:innerHeight,panelCount:panels.length,panels:panels.map(rect),controls:controls.map(e=>({type:e.type||e.tagName.toLowerCase(),...rect(e)})),checkboxRows:checkboxRows.map(rect),action:action?rect(action):null,progress:progress?rect(progress):null,title:title?rect(title):null};
+    });
+    if(stepMetrics.activeKey!==order[stepIndex])failures.push(key+' wrong '+methodLabel+' Zakat step at index '+stepIndex+': '+stepMetrics.activeKey);
+    if(stepMetrics.panelCount<1||stepMetrics.panels.some(r=>r.top< -1||r.bottom>size.height+1))failures.push(key+' '+methodLabel+' Zakat step panel exceeds viewport at '+order[stepIndex]+': '+JSON.stringify(stepMetrics));
+    if(stepMetrics.controls.length<1||stepMetrics.controls.some(r=>r.top< -1||r.bottom>size.height+1||r.height<44||r.width<44))failures.push(key+' '+methodLabel+' Zakat field is not fully usable within the viewport at '+order[stepIndex]+': '+JSON.stringify(stepMetrics));
+    if(stepMetrics.checkboxRows.some(r=>r.height<44||r.width<44||r.top< -1||r.bottom>size.height+1))failures.push(key+' '+methodLabel+' Zakat checkbox row is too small or outside the viewport at '+order[stepIndex]);
+    if(!stepMetrics.action||stepMetrics.action.top< -1||stepMetrics.action.bottom>size.height+1||stepMetrics.action.height<44||stepMetrics.action.width<44)failures.push(key+' '+methodLabel+' Zakat step action is not visible and tappable at '+order[stepIndex]);
+    if(!stepMetrics.progress||!stepMetrics.title||stepMetrics.progress.top< -1||stepMetrics.title.bottom>size.height+1)failures.push(key+' '+methodLabel+' Zakat step heading or progress is outside the viewport at '+order[stepIndex]);
+    if(stepMetrics.scrollY!==0)failures.push(key+' page scrolled before '+methodLabel+' Zakat step '+order[stepIndex]);
+    if(stepIndex<order.length-1)await page.locator('#zakat-next').click({scroll:'none'});
+    else await page.locator('#zakat-submit').click({scroll:'none'});
+    const afterScroll=await page.evaluate(()=>window.scrollY);
+    if(afterScroll!==0)failures.push(key+' page scrolled while navigating '+methodLabel+' Zakat step '+order[stepIndex]);
+   }
+  }
+  await runSequence("Hanafi");
+  let current=await page.locator('#zakat-form').getAttribute('data-current-step');
+  let backCount=0;
+  while(current!=="setup"&&backCount<20){
+   await page.locator('#zakat-back').click({scroll:'none'});
+   current=await page.locator('#zakat-form').getAttribute('data-current-step');
+   backCount++;
+  }
+  if(current!=="setup")failures.push(key+' could not return to Zakat method selection without scrolling');
+  await page.locator('#z-school-of-thought').selectOption('jafari-sistani');
+  if(await page.evaluate(()=>window.scrollY)!==0)failures.push(key+' page scrolled while switching Zakat method');
+  await runSequence("Sistani Ja'fari");
+ }
  for (const size of [{width:320,height:568},{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
   for (const slug of slugs) {
@@ -76,37 +121,8 @@ let browser;
     if(!data.firstFieldVisible||!data.firstFieldReachable)failures.push(key+' first Zakat input must be visible and reachable without scrolling');
     if(!data.submitVisible||!data.submitReachable)failures.push(key+' Calculate Zakat button must be visible and reachable without scrolling');
     if(data.scrollY!==0)failures.push(key+' page must remain at the initial scroll position');
-    const stepOrderRaw=await page.locator('#zakat-form').getAttribute('data-step-order');
-    if(!stepOrderRaw) {
-     failures.push(key+' Zakat no-scroll step sequence is missing');
-    } else {
-     const stepOrder=stepOrderRaw.split(',').filter(Boolean);
-     for(let stepIndex=0;stepIndex<stepOrder.length;stepIndex++){
-      const stepMetrics=await page.evaluate(()=>{
-       const form=document.querySelector('#zakat-form');
-       const panels=[...form.querySelectorAll('.zakat-step-panel:not([hidden])')];
-       const visibleElement=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0;};
-       const controls=panels.flatMap(p=>[...p.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]),select,textarea')]).filter(visibleElement);
-       const rect=e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
-       const action=document.querySelector('#zakat-next:not([hidden])')||document.querySelector('#zakat-submit:not([hidden])');
-       const checkboxRows=panels.flatMap(p=>[...p.querySelectorAll('label.flex')]).filter(visibleElement);
-       const activeKey=form.getAttribute('data-current-step');
-       return {activeKey,scrollY,viewport:innerHeight,panelCount:panels.length,panels:panels.map(rect),controls:controls.map(e=>({type:e.type||e.tagName.toLowerCase(),...rect(e)})),checkboxRows:checkboxRows.map(rect),action:action?rect(action):null};
-      });
-      if(stepMetrics.activeKey!==stepOrder[stepIndex])failures.push(key+' wrong active Zakat step at index '+stepIndex+': '+stepMetrics.activeKey);
-      if(stepMetrics.panelCount<1||stepMetrics.panels.some(r=>r.top< -1||r.bottom>size.height+1))failures.push(key+' Zakat step panel exceeds viewport at '+stepOrder[stepIndex]+': '+JSON.stringify(stepMetrics));
-      if(stepMetrics.controls.length<1||stepMetrics.controls.some(r=>r.top< -1||r.bottom>size.height+1||r.height<44||r.width<44))failures.push(key+' Zakat field is not fully usable within the viewport at '+stepOrder[stepIndex]+': '+JSON.stringify(stepMetrics));
-      if(stepMetrics.checkboxRows.some(r=>r.height<44||r.width<44||r.top< -1||r.bottom>size.height+1))failures.push(key+' Zakat checkbox row is too small or outside the viewport at '+stepOrder[stepIndex]);
-      if(!stepMetrics.action||stepMetrics.action.top< -1||stepMetrics.action.bottom>size.height+1||stepMetrics.action.height<44)failures.push(key+' Zakat step action is not visible and tappable at '+stepOrder[stepIndex]);
-      if(stepMetrics.scrollY!==0)failures.push(key+' page scrolled before Zakat step '+stepOrder[stepIndex]);
-      if(stepIndex<stepOrder.length-1)await page.locator('#zakat-next').click({scroll:'none'});
-      else await page.locator('#zakat-submit').click({scroll:'none'});
-      const afterScroll=await page.evaluate(()=>window.scrollY);
-      if(afterScroll!==0)failures.push(key+' page scrolled while navigating Zakat step '+stepOrder[stepIndex]);
-     }
-    }
+     await auditZakatSteps(page,size,key,failures);
     if(size.width<=600&&data.minShortcutHeight<44)failures.push(key+' calculator shortcut touch targets must be at least 44px high: '+data.minShortcutHeight);
-    if(size.width<=600&&data.minNumberInputHeight<44)failures.push(key+' Zakat numeric inputs must be at least 44px high: '+data.minNumberInputHeight);
     if(size.width<=600&&data.minCheckboxLabelHeight<44)failures.push(key+' Zakat checkbox rows must be at least 44px high: '+data.minCheckboxLabelHeight);
    }
    if(data.submitPosition==='sticky'||data.submitPosition==='fixed')failures.push(key+' Zakat submit button must not overlap the header navigation');
