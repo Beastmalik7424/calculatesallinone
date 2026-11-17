@@ -1527,10 +1527,10 @@ def calculator_carousel(lang="en", current_path=None):
             short_label = CAROUSEL_SHORT_UR.get(slug, short_name) if lang == "ur" else short_name
             links.append(
                 '<a class="ca-calculator-link" data-tool-shortcut="' + slug
+                + '" data-short-label="' + html.escape(short_label, quote=True)
                 + '" href="' + href + '" aria-label="' + html.escape(name, quote=True)
                 + '" title="' + html.escape(name, quote=True) + '"' + active + tabindex + '>'
-                + '<span class="ca-calculator-full">' + html.escape(name) + '</span>'
-                + '<span class="ca-calculator-short" aria-hidden="true">' + html.escape(short_label) + '</span></a>'
+                + html.escape(name) + '</a>'
             )
         hidden = ' aria-hidden="true"' if duplicate else ""
         groups.append(
