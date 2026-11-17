@@ -2529,89 +2529,70 @@ body:has(#zakat-form) #zakat-step-title {
   }
 }
 
-/* Zakat first-screen navigation: one static, accessible grid. All 17 destinations stay visible and tappable. */
+/* Match the shared horizontal calculator ticker on the Zakat pages.
+   Keep the duplicate track for continuous movement and preserve 44px touch targets. */
 body:has(#zakat-form) header nav .ca-calculator-carousel {
   display: block !important;
   flex: 1 1 100% !important;
   width: 100% !important;
   min-width: 0 !important;
-  max-width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: visible !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
+  max-width: none !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 9px !important;
+  background: var(--panel) !important;
   scrollbar-width: none !important;
 }
 body:has(#zakat-form) header nav .ca-calculator-track {
-  display: block !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  height: auto !important;
-  min-height: 0 !important;
-  animation: none !important;
-  transform: none !important;
+  display: flex !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  animation: ca-calculator-marquee 48s linear infinite !important;
 }
 body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
-  display: grid !important;
-  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  gap: 4px !important;
-  padding: 0 !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  grid-template-columns: none !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 0 5px !important;
 }
 body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="duplicate"] {
-  display: none !important;
+  display: flex !important;
 }
 body:has(#zakat-form) header nav .ca-calculator-link {
-  display: flex !important;
-  flex: initial !important;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
   min-width: 0 !important;
   min-height: 44px !important;
   height: 44px !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 2px !important;
+  padding: 5px 9px !important;
   border: 1px solid var(--line) !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   background: var(--panel) !important;
   color: var(--accent) !important;
-  font-size: 0 !important;
-  line-height: 1 !important;
-  text-align: center !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
   text-decoration: none !important;
   white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: clip !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-link::after {
-  content: attr(data-short-label) !important;
-  display: inline-block !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-  color: inherit !important;
-  font-size: 10px !important;
-  font-weight: 750 !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
+  overflow: visible !important;
   text-overflow: clip !important;
 }
 body:has(#zakat-form) header nav .ca-calculator-link[aria-current="page"] {
   background: var(--accent) !important;
   border-color: var(--accent) !important;
   color: var(--accentText) !important;
-  font-weight: 850 !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-link:focus-visible {
-  outline: 2px solid var(--accent) !important;
-  outline-offset: 1px !important;
-}
-@media (min-width: 900px) {
-  body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
-    grid-template-columns: repeat(9, minmax(0, 1fr)) !important;
-  }
 }
 html.dark body:has(#zakat-form) header nav .ca-calculator-link {
   border-color: #475569 !important;
@@ -2623,36 +2604,14 @@ html.dark body:has(#zakat-form) header nav .ca-calculator-link[aria-current="pag
   background: #134e4a !important;
   color: #f0fdfa !important;
 }
-@media (max-width: 600px) {
-  body:has(#zakat-form) header nav:has(.ca-site-nav-topline) {
-    gap: .15rem !important;
-    padding-block: .15rem !important;
-    padding-inline: .45rem !important;
-  }
-  body:has(#zakat-form) header nav:has(.ca-site-nav-topline) .ca-site-nav-topline {
-    min-height: 44px !important;
-    height: 44px !important;
-    gap: .35rem !important;
-  }
-  body:has(#zakat-form) header nav:has(.ca-site-nav-topline) .ca-site-nav-topline > a,
-  body:has(#zakat-form) header nav:has(.ca-site-nav-topline) #theme-toggle {
-    min-height: 44px !important;
-    height: 44px !important;
-  }
-  body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
-    gap: 2px !important;
-  }
-  body:has(#zakat-form) header nav .ca-calculator-link {
-    min-height: 44px !important;
-    height: 44px !important;
-    padding: 2px 1px !important;
-  }
-  body:has(#zakat-form) header nav .ca-calculator-link::after {
-    font-size: 10px !important;
-    line-height: 1 !important;
-  }
-}
 
+/* Empty result cards and hidden share actions must not look like disabled inputs. */
+body:has(#zakat-form) #zakat-result:empty {
+  display: none !important;
+}
+button[data-share-result-for][hidden] {
+  display: none !important;
+}
 /* Preserve the existing compact-phone calorie header carousel. */
 @media (max-width: 600px) {
   body:has(#main.ca-tool-calorie-calculator) header nav .ca-calculator-carousel {

@@ -1509,7 +1509,9 @@ CAROUSEL_SHORT_UR = {
 def calculator_carousel(lang="en", current_path=None):
     s = shell_strings(lang)
     groups = []
-    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else (("primary", False),)
+    is_home = current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/")
+    is_zakat = current_path in ("/zakat-calculator/", "/ur/zakat-calculator/")
+    groups_to_render = (("primary", False), ("duplicate", True)) if is_home or is_zakat else (("primary", False),)
     for group_name, duplicate in groups_to_render:
         links = []
         for slug, english_name, short_name in CAROUSEL_TOOLS:
@@ -1665,7 +1667,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-ticker-v1">\n'
         + ld + ads + "</head>\n"
     )
 

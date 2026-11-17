@@ -146,6 +146,12 @@ assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \.zakat-step-panel \
   "Zakat asset steps must use a compact two-column field grid on mobile");
 assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form :is\(input:not\(\[type="checkbox"\]\), select, textarea\)\s*\{\s*min-height:\s*44px\s*!important;/,
   "Zakat form controls must retain accessible 44px minimum height");
+assert.match(zakatCss, /button\[data-share-result-for\]\[hidden\]\s*\{\s*display:\s*none\s*!important;/,
+  "Share-result controls must respect their hidden state before a calculation");
+assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-result:empty\s*\{[^}]*display:\s*none\s*!important;/s,
+  "An empty Zakat result container must not appear as a blank input");
+assert.doesNotMatch(zakatCss, /body:has\(#zakat-form\) header nav \.ca-calculator-track\s*\{[^}]*animation:\s*none\s*!important;/s,
+  "Zakat page must preserve the shared moving calculator ticker");
 
 console.log("Zakat global calculator content and localization gates: PASS");
 

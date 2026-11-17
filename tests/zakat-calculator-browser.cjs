@@ -45,6 +45,17 @@ async function setField(page, id, action, value) {
   else if (action === "uncheck") await control.uncheck();
   else throw new Error("Unknown field action " + action);
 }
+async function assertFocusableEnabled(page, id) {
+  const control = page.locator("#" + id);
+  assert.equal(await control.isVisible(), true, "Expected visible control " + id);
+  assert.equal(await control.isEnabled(), true, "Expected enabled control " + id);
+  await control.evaluate(el => el.focus({ preventScroll: true }));
+  assert.equal(
+    await control.evaluate(el => document.activeElement === el),
+    true,
+    "Expected keyboard focus on " + id
+  );
+}
 async function submitZakat(page) {
   const form = page.locator("#zakat-form");
   const order = (await form.getAttribute("data-step-order")).split(",");
@@ -65,6 +76,38 @@ let browser;
   });
 
   await page.goto(BASE_URL + "/zakat-calculator/", { waitUntil: "networkidle" });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  const tickerState = await page.evaluate(() => {
+    const carousel = document.querySelector("header nav .ca-calculator-carousel");
+    const track = carousel && carousel.querySelector(".ca-calculator-track");
+    const primary = track && track.querySelector('[data-tool-set="primary"]');
+    return {
+      animationName: track ? getComputedStyle(track).animationName : null,
+      carouselClientWidth: carousel ? carousel.clientWidth : 0,
+      carouselScrollWidth: carousel ? carousel.scrollWidth : 0,
+      primaryDisplay: primary ? getComputedStyle(primary).display : null
+    };
+  });
+  assert.equal(tickerState.animationName, "ca-calculator-marquee", "Zakat page must use the shared moving calculator ticker");
+  assert.ok(tickerState.carouselScrollWidth > tickerState.carouselClientWidth, "Zakat calculator shortcuts must overflow horizontally as a ticker: " + JSON.stringify(tickerState));
+  assert.equal(tickerState.primaryDisplay, "flex", "Zakat shortcut links must remain in the shared horizontal track");
+  const tickerOffset = async () => page.evaluate(() => {
+    const track = document.querySelector("header nav .ca-calculator-track");
+    if (!track) return null;
+    const transform = getComputedStyle(track).transform;
+    return transform === "none" ? null : new DOMMatrixReadOnly(transform).m41;
+  });
+  const offsetBefore = await tickerOffset();
+  await page.waitForTimeout(500);
+  const offsetAfter = await tickerOffset();
+  assert.ok(
+    offsetBefore !== null && offsetAfter !== null && offsetAfter < offsetBefore - 1,
+    "Zakat ticker must visibly move; an animation name alone is not sufficient: " + JSON.stringify({offsetBefore, offsetAfter})
+  );
+  assert.equal(await page.locator("#zakat-result").isVisible(), false, "Empty Zakat result placeholder must not look like an inactive input");
+  const zakatShareButton = page.locator('button[data-share-result-for="zakat-result"]');
+  assert.equal(await zakatShareButton.count(), 1, "Zakat share action must be available after the result is populated");
+  assert.equal(await zakatShareButton.isVisible(), false, "Zakat share action must stay hidden before a calculation");
   assert.equal(await page.locator("html").getAttribute("lang"), "en");
   assert.equal(await page.locator("#zakat-next").count(), 1, "Mobile Zakat flow must provide an in-place Next control");
   assert.equal(await page.locator("#zakat-back").count(), 1, "Mobile Zakat flow must provide an in-place Back control");
@@ -89,6 +132,18 @@ let browser;
     assert.ok(await page.locator('label[for="' + id + '"]').count() === 1, "Missing accessible label for " + id);
   }
 
+  await assertFocusableEnabled(page, "z-currency");
+  await assertFocusableEnabled(page, "z-school-of-thought");
+  await goToStep(page, "nisab");
+  await assertFocusableEnabled(page, "z-nisab-method");
+  await goToStep(page, "price-unit");
+  await assertFocusableEnabled(page, "z-metal-price-unit");
+  await goToStep(page, "metal-prices");
+  await assertFocusableEnabled(page, "z-silverprice");
+  await assertFocusableEnabled(page, "z-goldprice");
+  await goToStep(page, "sunni-assets-a");
+  await assertFocusableEnabled(page, "z-cash");
+  await goToStep(page, "setup");
   await setField(page, "z-currency", "fill", "USD");
   await setField(page, "z-nisab-method", "select", "gold-87");
   await setField(page, "z-cash", "fill", "100000");
@@ -98,6 +153,8 @@ let browser;
   await setField(page, "z-paid", "fill", "1000");
   await setField(page, "z-hawl", "check");
   await submitZakat(page);
+  assert.equal(await page.locator("#zakat-result").isVisible(), true, "Zakat result must become visible after calculation");
+  assert.equal(await page.locator('button[data-share-result-for="zakat-result"]').isVisible(), true, "Share action must appear after a result exists");
   const globalResult = await page.locator("#zakat-result").innerText();
   assert.match(globalResult, /2\.5 percent/i);
   assert.match(globalResult, /Assets:/i);

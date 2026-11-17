@@ -122,6 +122,21 @@ function rect(element) {
             const primaryTicker = ticker && ticker.querySelector('.ca-calculator-group[data-tool-set="primary"]');
             const primaryTickerLinks = primaryTicker ? Array.from(primaryTicker.querySelectorAll("a.ca-calculator-link")) : [];
             const tickerLinkCount = primaryTickerLinks.length;
+            const track = ticker && ticker.querySelector(".ca-calculator-track");
+            const tickerScrollable = !!ticker && ticker.scrollWidth > ticker.clientWidth + 1;
+            const tickerAnimationName = track ? getComputedStyle(track).animationName : null;
+            const duplicate = ticker && ticker.querySelector('[data-tool-set="duplicate"]');
+            const duplicateLinks = duplicate ? Array.from(duplicate.querySelectorAll("a.ca-calculator-link")) : [];
+            const duplicateTrackAccessible = !!duplicate && duplicate.getAttribute("aria-hidden") === "true" && duplicateLinks.length === 17 && duplicateLinks.every(link => link.getAttribute("tabindex") === "-1");
+            const tickerLinkFailures = primaryTickerLinks.filter(link => {
+              const r = link.getBoundingClientRect();
+              const s = getComputedStyle(link);
+              return !link.getAttribute("href") || r.width <= 0 || r.height < 44 || s.display === "none" || s.visibility === "hidden";
+            }).map(link => link.getAttribute("data-tool-shortcut"));
+            const labelDisplayFailures = primaryTickerLinks.filter(link => {
+              const s = getComputedStyle(link);
+              return !(link.textContent || "").trim() || s.whiteSpace !== "nowrap" || s.textOverflow === "ellipsis" || link.scrollWidth > link.clientWidth + 1;
+            }).map(link => link.getAttribute("data-tool-shortcut"));
             const tickerLinksOutsideViewport = primaryTickerLinks.filter(link => {
               const r = link.getBoundingClientRect();
               const s = getComputedStyle(link);
@@ -153,12 +168,7 @@ function rect(element) {
               tickerLinksOutsideViewport,
               allTickerLinksInViewport: tickerLinkCount === 17 && tickerLinksOutsideViewport.length === 0,
               tickerLinksNotReachable,
-              allTickerLinksReachable: tickerLinkCount === 17 && tickerLinksNotReachable.length === 0,
-              shortLabelFailures: primaryTickerLinks.filter(link => {
-                const label = (link.getAttribute("data-short-label") || "").trim();
-                const pseudo = getComputedStyle(link, "::after");
-                return !label || pseudo.content === "none" || pseudo.content === "normal" || parseFloat(pseudo.fontSize) < 9;
-              }).map(link => link.getAttribute("data-tool-shortcut")),
+              allTickerLinksReachable: tickerLinkCount === 17 && tickerLinksNotReachable.length === 0, tickerScrollable, tickerAnimationName, duplicateTrackAccessible, tickerLinkFailures, labelDisplayFailures,
               tickerRect: box(ticker),
               title: document.title,
               heading: heading ? heading.textContent.trim() : null,
@@ -189,9 +199,9 @@ function rect(element) {
           if (!metrics.tickerFound || !metrics.tickerVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker is missing or hidden" });
           if (metrics.tickerFound && !metrics.tickerInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker is outside the initial viewport", metrics });
           if (metrics.tickerFound && metrics.tickerLinkCount < 15) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker does not expose the full calculator shortcut set", metrics });
-          if (route.name.startsWith("zakat-") && !metrics.allTickerLinksInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Not every calculator shortcut box is fully visible on the first screen", offscreen: metrics.tickerLinksOutsideViewport, metrics });
-          if (route.name.startsWith("zakat-") && !metrics.allTickerLinksReachable) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more first-screen calculator shortcut boxes are not clickable", blocked: metrics.tickerLinksNotReachable, metrics });
-          if (route.name.startsWith("zakat-") && metrics.shortLabelFailures.length) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more shortcut labels are not visibly rendered", labels: metrics.shortLabelFailures, metrics });
+          if (route.name.startsWith("zakat-") && (metrics.tickerLinkCount !== 17 || !metrics.tickerScrollable || metrics.tickerAnimationName !== "ca-calculator-marquee" || !metrics.duplicateTrackAccessible)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat ticker must contain 17 shortcuts, animate horizontally, and keep its duplicate group inaccessible to keyboard/screen-reader navigation", metrics });
+          if (route.name.startsWith("zakat-") && metrics.tickerLinkFailures.length) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more Zakat ticker links are missing, hidden, or below the 44px tap target", links: metrics.tickerLinkFailures, metrics });
+          if (route.name.startsWith("zakat-") && metrics.labelDisplayFailures.length) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more Zakat ticker labels are clipped or missing", labels: metrics.labelDisplayFailures, metrics });
           if (!metrics.rootFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing calculator container " + route.root });
           if (!metrics.actionFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing primary calculator action " + route.action });
           if (metrics.rootFound && !metrics.rootTopInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator container starts below the initial viewport", metrics });
