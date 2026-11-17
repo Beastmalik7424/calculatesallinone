@@ -140,12 +140,12 @@ assert.match(en, /canonical/i, "English page must retain canonical metadata");
 assert.match(ur, /canonical/i, "Urdu page must retain canonical metadata");
 assert.ok(!en.includes("islamweb.net/en/fatwa/81355"), "English page must not cite the unsupported Islamweb reference for Nisab");
 assert.ok(!ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must not cite the unsupported Islamweb reference for Nisab");
-// Responsive layout regression: the Zakat form's primary mobile grid must be one column. 
+// Responsive layout regression: use compact two-column asset fields while preserving 44px controls.
 const zakatCss = fs.readFileSync(path.join(__dirname, "..", "styles", "input.css"), "utf8");
-assert.match(zakatCss, /#main \.ca-tool-zakat-calculator #zakat-form > \.grid\s*\{\s*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*!important;/,
-  "Zakat form must use a single full-width column on mobile");
-assert.doesNotMatch(zakatCss, /#main \.ca-tool-zakat-calculator #zakat-form > \.grid\s*\{\s*grid-template-columns:\s*repeat\(2,/,
-  "Zakat form must not force two columns on mobile");
+assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \.zakat-step-panel \.grid\s*\{\s*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)\s*!important;/,
+  "Zakat asset steps must use a compact two-column field grid on mobile");
+assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form :is\(input:not\(\[type="checkbox"\]\), select, textarea\)\s*\{\s*min-height:\s*44px\s*!important;/,
+  "Zakat form controls must retain accessible 44px minimum height");
 
 console.log("Zakat global calculator content and localization gates: PASS");
 
