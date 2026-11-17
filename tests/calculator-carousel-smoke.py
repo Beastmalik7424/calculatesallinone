@@ -97,11 +97,10 @@ zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
 assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat calculator navigation must not duplicate links"
 assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
-assert "grid-template-columns:repeat(5,minmax(0,1fr))" in css.replace(" ", ""), "Phone navigation must fit all calculator shortcuts in a compact five-column layout"
-assert "grid-template-columns:repeat(5,minmax(0,1fr))" in css.replace(" ", ""), "Tablet navigation must preserve five columns"
-assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Desktop navigation must use six columns"
-assert "white-space:normal!important" in css.replace(" ", ""), "Calculator shortcut labels must wrap instead of clipping or ellipsizing"
-assert "overflow-wrap:anywhere!important" in css.replace(" ", ""), "Long calculator names must wrap safely within narrow shortcut cards"
+assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Zakat phone and tablet navigation must use a compact six-column grid"
+assert "grid-template-columns:repeat(9,minmax(0,1fr))" in css.replace(" ", ""), "Zakat desktop navigation must use a nine-column grid"
+assert "white-space:nowrap!important" in css.replace(" ", ""), "Short shortcut labels must remain on one line"
+assert "data-short-label" in zakat_markup and "aria-label=" in zakat_markup and "title=" in zakat_markup, "Every compact visual label must retain its full accessible name and title"
 assert "text-overflow:clip!important" in css.replace(" ", ""), "Calculator shortcut labels must not be truncated"
 assert "min-height:44px" in css.replace(" ", ""), "Calculator shortcut links must retain a comfortable mobile tap target"
 assert "@keyframes ca-calculator-marquee" in css, "Homepage must retain its existing carousel animation"
@@ -111,4 +110,10 @@ assert "ca-site-nav-topline" in markup, "Header must keep its separate top contr
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
 print("Calculator grid, all 17 unique tools, responsive columns, header layout and Tasbih action smoke tests PASS")
 
-assert '<link rel="stylesheet" href="/assets/site.css?v=20261116-zakat-first-screen-v1">' in zakat_markup, "Zakat pages must use a fresh stylesheet URL so browsers do not reuse cached pre-fix CSS"
+assert '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">' in zakat_markup, "Zakat pages must use a new stylesheet URL so browsers cannot reuse the prior cached layout"
+carousel_rules = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-carousel\{([^}]*)\}', css)
+track_rules = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-track\{([^}]*)\}', css)
+assert len(carousel_rules) == 1, f"Zakat navigation must have one authoritative carousel rule, found {len(carousel_rules)}"
+assert len(track_rules) == 1, f"Zakat navigation must have one authoritative track rule, found {len(track_rules)}"
+assert all("display:none" not in rule for rule in carousel_rules), "Zakat navigation must never be hidden at mobile breakpoints"
+assert all("ca-calculator-marquee" not in rule for rule in track_rules), "Zakat navigation must be a static grid, not a moving marquee"
