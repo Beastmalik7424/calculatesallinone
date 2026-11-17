@@ -2534,6 +2534,10 @@ body:has(#zakat-form) header nav .ca-calculator-link {
   overflow: visible !important;
   text-overflow: clip !important;
 }
+#main .ca-tool-zakat-calculator #zakat-step-controls button {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
 body:has(#zakat-form) header nav .ca-calculator-link[aria-current="page"] {
   background: var(--accent) !important;
   border-color: var(--accent) !important;
