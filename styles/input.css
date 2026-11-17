@@ -2808,28 +2808,27 @@ body:has(#zakat-form) #zakat-form :is(input:not([type="checkbox"]), select, text
     padding-inline: .2rem !important;
     font-size: 16px !important;
   }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: .25rem !important;
-  }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] > h2,
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] > div {
-    grid-column: 1 / -1 !important;
-  }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] > :not([hidden]) ~ :not([hidden]) {
-    margin-top: 0 !important;
-  }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] label.flex {
+  body:has(#zakat-form) #zakat-form .zakat-step-panel:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > label.flex {
+    display: inline-flex !important;
+    vertical-align: top !important;
+    box-sizing: border-box !important;
+    width: calc(50% - .15rem) !important;
     min-width: 0 !important;
+    min-height: 44px !important;
+    margin: 0 .15rem .25rem 0 !important;
+    padding: .2rem !important;
     gap: .25rem !important;
+    align-items: flex-start !important;
     font-size: .62rem !important;
     line-height: 1.05 !important;
     overflow-wrap: anywhere !important;
   }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step="jafari-trade"] label.flex input {
+  body:has(#zakat-form) #zakat-form .zakat-step-panel:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > label.flex input {
     flex: 0 0 16px !important;
     width: 16px !important;
     height: 16px !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-step-panel:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0 !important;
   }
 }
