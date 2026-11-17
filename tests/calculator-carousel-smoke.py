@@ -99,7 +99,7 @@ assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its
 assert 'data-tool-set="duplicate"' in zakat_markup, "English Zakat navigation must keep a duplicate track for continuous marquee movement"
 assert 'data-tool-set="duplicate"' in urdu_zakat_markup, "Urdu Zakat navigation must keep a duplicate track for continuous marquee movement"
 assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
-assert "animation:ca-calculator-marquee 48s linear infinite!important" in css.replace(" ", ""), "Zakat navigation must use the shared moving marquee"
+assert "animation:ca-calculator-marquee48slinearinfinite!important" in css.replace(" ", ""), "Zakat navigation must use the shared moving marquee"
 assert "overflow-x:auto!important" in css.replace(" ", ""), "Zakat ticker must remain horizontally scrollable"
 assert "height:44px!important" in css.replace(" ", ""), "Zakat ticker must preserve its compact header height"
 assert "white-space:nowrap!important" in css.replace(" ", ""), "Short shortcut labels must remain on one line"
