@@ -2504,10 +2504,11 @@ html.dark body:has(#zakat-form) .ca-calculator-link[aria-current="page"] {
 
 /* Homepage standard calculator: match the focused, centered calculator-page hierarchy. */
 #main .ca-home-layout {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) !important;
-  justify-content: center !important;
-  align-items: start !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: .75rem !important;
   width: 100% !important;
   max-width: 60rem !important;
   margin-inline: auto !important;
