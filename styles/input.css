@@ -2554,7 +2554,6 @@ body:has(#zakat-form) header nav .ca-calculator-track {
   height: 100% !important;
   min-height: 100% !important;
   animation: ca-calculator-marquee 48s linear infinite !important;
-  transform: none !important;
 }
 body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
   display: flex !important;
