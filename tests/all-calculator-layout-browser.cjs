@@ -79,6 +79,7 @@ function rect(element) {
           const metrics = await page.evaluate(({ rootSelector, actionSelector }) => {
             const root = document.querySelector(rootSelector);
             const action = document.querySelector(actionSelector);
+            const ticker = document.querySelector(".ca-calculator-carousel");
             const heading = document.querySelector("h1");
             const firstControl = root && root.querySelector("input:not([type='hidden']), select, textarea, button");
             const box = element => {
@@ -98,6 +99,7 @@ function rect(element) {
             };
             const rootRect = root && root.getBoundingClientRect();
             const actionRect = action && action.getBoundingClientRect();
+            const tickerRect = ticker && ticker.getBoundingClientRect();
             const firstRect = firstControl && firstControl.getBoundingClientRect();
             const visible = element => {
               if (!element) return false;
@@ -106,6 +108,9 @@ function rect(element) {
               return r.width > 0 && r.height > 0 && s.display !== "none" && s.visibility !== "hidden" && Number(s.opacity) > 0;
             };
             const actionVisible = visible(action);
+            const tickerVisible = visible(ticker);
+            const tickerInViewport = tickerVisible && tickerRect.top >= -1 && tickerRect.bottom <= innerHeight - 1;
+            const tickerLinkCount = ticker ? ticker.querySelectorAll("a.ca-calculator-link").length : 0;
             const actionInViewport = actionVisible && actionRect.top >= -1 && actionRect.bottom <= innerHeight - 2;
             const firstControlInViewport = visible(firstControl) && firstRect.top >= -1 && firstRect.bottom <= innerHeight - 1;
             const hitTarget = actionVisible
@@ -116,6 +121,11 @@ function rect(element) {
               viewport: { width: innerWidth, height: innerHeight },
               documentWidth: document.documentElement.scrollWidth,
               horizontalOverflow: document.documentElement.scrollWidth > innerWidth + 1,
+              tickerFound: !!ticker,
+              tickerVisible,
+              tickerInViewport,
+              tickerLinkCount,
+              tickerRect: box(ticker),
               title: document.title,
               heading: heading ? heading.textContent.trim() : null,
               headingRect: box(heading),
@@ -142,6 +152,9 @@ function rect(element) {
 
           if (status !== 200) failures.push({ route: route.path, viewport: viewport.name, issue: "HTTP status " + status });
           if (!metrics.heading) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing H1" });
+          if (!metrics.tickerFound || !metrics.tickerVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker is missing or hidden" });
+          if (metrics.tickerFound && !metrics.tickerInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker is outside the initial viewport", metrics });
+          if (metrics.tickerFound && metrics.tickerLinkCount < 15) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker does not expose the full calculator shortcut set", metrics });
           if (!metrics.rootFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing calculator container " + route.root });
           if (!metrics.actionFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing primary calculator action " + route.action });
           if (metrics.rootFound && !metrics.rootTopInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator container starts below the initial viewport", metrics });
