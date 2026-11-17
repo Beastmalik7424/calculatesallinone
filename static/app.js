@@ -476,7 +476,6 @@
     var nisabField = $("z-nisab-method")
     var unitField = $("z-metal-price-unit")
     var sunniFields = $("z-sunni-fields")
-    var hanafiSetupNote = $("zakat-hanafi-setup-note")
     var sunniAssetFields = $("z-sunni-asset-fields")
     var jafariFields = $("z-jafari-fields")
     function money(value, currency) {
@@ -502,8 +501,8 @@
     var currentStepIndex = 0
     function activeStepKeys() {
       return schoolField && schoolField.value === "jafari-sistani"
-        ? ["setup", "price-unit", "metal-prices", "jafari-trade", "jafari-hawl-intent", "jafari-conditions"]
-        : ["setup", "price-unit", "metal-prices", "sunni-assets-a", "sunni-assets-b", "sunni-assets-c", "sunni-assets-d", "sunni-assets-e", "sunni-liabilities"]
+        ? ["setup", "nisab", "price-unit", "metal-prices", "jafari-trade", "jafari-hawl-intent", "jafari-conditions"]
+        : ["setup", "nisab", "price-unit", "metal-prices", "sunni-assets-a", "sunni-assets-b", "sunni-assets-c", "sunni-assets-d", "sunni-assets-e", "sunni-liabilities"]
     }
     function renderStep() {
       if (!form || typeof form.querySelectorAll !== "function") return
@@ -511,10 +510,9 @@
       var steps = activeStepKeys()
       currentStepIndex = Math.max(0, Math.min(currentStepIndex, steps.length - 1))
       var key = steps[currentStepIndex]
-      if (hanafiSetupNote) hanafiSetupNote.hidden = isJafari
-      if (sunniFields) sunniFields.hidden = isJafari || key !== "setup"
+      if (sunniFields) sunniFields.hidden = isJafari || key !== "nisab"
       if (sunniAssetFields) sunniAssetFields.hidden = isJafari || key.indexOf("sunni-") !== 0
-      if (jafariFields) jafariFields.hidden = !isJafari || (key !== "setup" && key.indexOf("jafari-") !== 0)
+      if (jafariFields) jafariFields.hidden = !isJafari || (key !== "nisab" && key.indexOf("jafari-") !== 0)
       form.querySelectorAll(".zakat-step-panel").forEach(function (panel) {
         var inSunni = !!panel.closest("#z-sunni-fields, #z-sunni-asset-fields")
         var inJafari = !!panel.closest("#z-jafari-fields")
@@ -524,6 +522,7 @@
       var urdu = lang() === "ur"
       var titles = urdu ? {
         setup: "طریقہ اور کرنسی",
+        nisab: "نصاب کا طریقہ",
         "price-unit": "دھات کی قیمت کا یونٹ",
         "metal-prices": "دھاتوں کی موجودہ قیمتیں",
         "sunni-assets-a": "نقد رقم اور بنیادی اثاثے",
@@ -537,6 +536,7 @@
         "jafari-conditions": "تجارتی مال کی شرائط"
       } : {
         setup: "Method and currency",
+        nisab: "Nisab method",
         "price-unit": "Metal price unit",
         "metal-prices": "Current metal prices",
         "sunni-assets-a": "Cash and core assets",
