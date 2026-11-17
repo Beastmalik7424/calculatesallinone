@@ -510,8 +510,8 @@
       currentStepIndex = Math.max(0, Math.min(currentStepIndex, steps.length - 1))
       var key = steps[currentStepIndex]
       if (sunniFields) sunniFields.hidden = isJafari || key !== "setup"
-      if (sunniAssetFields) sunniAssetFields.hidden = isJafari
-      if (jafariFields) jafariFields.hidden = !isJafari
+      if (sunniAssetFields) sunniAssetFields.hidden = isJafari || key.indexOf("sunni-") !== 0
+      if (jafariFields) jafariFields.hidden = !isJafari || (key !== "setup" && key.indexOf("jafari-") !== 0)
       form.querySelectorAll(".zakat-step-panel").forEach(function (panel) {
         var inSunni = !!panel.closest("#z-sunni-fields, #z-sunni-asset-fields")
         var inJafari = !!panel.closest("#z-jafari-fields")
