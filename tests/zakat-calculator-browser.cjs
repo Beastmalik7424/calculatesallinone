@@ -5,13 +5,16 @@ const BASE_URL = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/+$
 
 const FIELD_STEP = {
   "z-currency":"setup","z-school-of-thought":"setup","z-nisab-method":"setup","z-jafari-nisab-method":"setup",
-  "z-metal-price-unit":"prices","z-silverprice":"prices","z-goldprice":"prices",
-  "z-cash":"sunni-assets-a","z-bank":"sunni-assets-a","z-savings":"sunni-assets-a","z-gold":"sunni-assets-a",
-  "z-silver":"sunni-assets-b","z-jewellery":"sunni-assets-b","z-investments":"sunni-assets-b","z-businesscash":"sunni-assets-b",
-  "z-stock":"sunni-assets-c","z-recv":"sunni-assets-c","z-pension":"sunni-assets-c","z-crypto":"sunni-assets-c",
-  "z-property":"sunni-liabilities","z-debts":"sunni-liabilities","z-paid":"sunni-liabilities","z-hawl":"sunni-liabilities",
-  "z-jafari-trade-value":"jafari-trade","z-jafari-owner":"jafari-trade","z-jafari-acquired":"jafari-trade","z-jafari-hawl":"jafari-trade",
-  "z-jafari-intent":"jafari-conditions","z-jafari-access":"jafari-conditions","z-jafari-market":"jafari-conditions"
+  "z-metal-price-unit":"price-unit","z-silverprice":"metal-prices","z-goldprice":"metal-prices",
+  "z-cash":"sunni-assets-a","z-bank":"sunni-assets-a","z-savings":"sunni-assets-a",
+  "z-gold":"sunni-assets-b","z-silver":"sunni-assets-b","z-jewellery":"sunni-assets-b",
+  "z-investments":"sunni-assets-c","z-businesscash":"sunni-assets-c","z-stock":"sunni-assets-c",
+  "z-recv":"sunni-assets-d","z-pension":"sunni-assets-d",
+  "z-crypto":"sunni-assets-e","z-property":"sunni-assets-e",
+  "z-debts":"sunni-liabilities","z-paid":"sunni-liabilities","z-hawl":"sunni-liabilities",
+  "z-jafari-trade-value":"jafari-trade","z-jafari-owner":"jafari-trade","z-jafari-acquired":"jafari-trade",
+  "z-jafari-hawl":"jafari-hawl-intent","z-jafari-intent":"jafari-hawl-intent",
+  "z-jafari-access":"jafari-conditions","z-jafari-market":"jafari-conditions"
 };
 async function goToStep(page, key) {
   const form = page.locator("#zakat-form");
