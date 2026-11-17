@@ -94,8 +94,10 @@ assert 'id="t-tap"' in tasbih, "Tasbih Count one action must remain in generated
 css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
+urdu_zakat_markup = output_for("/ur/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
-assert 'data-tool-set="duplicate"' in zakat_markup, "Zakat navigation must keep a duplicate track for continuous marquee movement"
+assert 'data-tool-set="duplicate"' in zakat_markup, "English Zakat navigation must keep a duplicate track for continuous marquee movement"
+assert 'data-tool-set="duplicate"' in urdu_zakat_markup, "Urdu Zakat navigation must keep a duplicate track for continuous marquee movement"
 assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
 assert "animation:ca-calculator-marquee 48s linear infinite!important" in css.replace(" ", ""), "Zakat navigation must use the shared moving marquee"
 assert "overflow-x:auto!important" in css.replace(" ", ""), "Zakat ticker must remain horizontally scrollable"
