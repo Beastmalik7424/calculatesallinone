@@ -75,13 +75,21 @@ function rect(element) {
         let response;
         try {
           response = await page.goto(targetUrl, { waitUntil: "networkidle", timeout: 30000 });
+          await page.waitForFunction(() => {
+            const form = document.querySelector("#zakat-form");
+            return !form || (form.getAttribute("data-current-step") === "setup" && !!form.getAttribute("data-step-order"));
+          }, null, { timeout: 10000 });
           await page.evaluate(() => document.fonts && document.fonts.ready);
           const metrics = await page.evaluate(({ rootSelector, actionSelector }) => {
             const root = document.querySelector(rootSelector);
             const action = document.querySelector(actionSelector);
             const ticker = document.querySelector(".ca-calculator-carousel");
             const heading = document.querySelector("h1");
-            const firstControl = root && root.querySelector("input:not([type='hidden']), select, textarea, button");
+            const zakatForm = root && root.querySelector("#zakat-form");
+            const activeZakatPanel = zakatForm && zakatForm.querySelector(".zakat-step-panel:not([hidden])");
+            const firstControl = zakatForm
+              ? activeZakatPanel && activeZakatPanel.querySelector("input:not([type='hidden']), select, textarea, button")
+              : root && root.querySelector("input:not([type='hidden']), select, textarea, button");
             const box = element => {
               if (!element) return null;
               const r = element.getBoundingClientRect();
