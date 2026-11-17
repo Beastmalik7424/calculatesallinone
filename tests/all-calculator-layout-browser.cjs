@@ -26,7 +26,7 @@ const ROUTES = [
   { name: "stopwatch-en", path: "/stopwatch/", root: "#tool-calculator", action: "#sw-start" },
   { name: "years-to-days-en", path: "/years-to-days-calculator/", root: "#tool-calculator", action: "#yd-submit" },
   { name: "query-en", path: "/query-calculator/", root: "#tool-calculator", action: "#query-time-form button[type='submit']" },
-  { name: "calorie-en", path: "/calorie-calculator/", root: "#tool-calculator", action: "#calorie-form button[type='submit']" },
+  { name: "calorie-en", path: "/calorie-calculator/", root: "#calorie-form", action: "#cal-calculate" },
   { name: "emi-en", path: "/emi-calculator/", root: "#calculator", action: "#loan-form button[type='submit']" },
   { name: "percentage-en", path: "/percentage-calculator/", root: "#extra-calculator-form", action: "#extra-calculator-form button[type='submit']" },
   { name: "percentage-difference-en", path: "/percentage-difference-calculator/", root: "#extra-calculator-form", action: "#extra-calculator-form button[type='submit']" },
