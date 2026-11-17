@@ -1433,22 +1433,22 @@ def nav_items(lang="en"):
 
 
 CAROUSEL_TOOLS = (
-    ("calorie-calculator", "Adult Calorie Calculator", "Calories"),
+    ("calorie-calculator", "Adult Calorie Calculator", "Cal"),
     ("zakat-calculator", "Zakat Calculator", "Zakat"),
     ("bmi-calculator", "BMI Calculator", "BMI"),
-    ("profit-loss-calculator", "Profit and Loss Calculator", "Profit/Loss"),
-    ("discount-calculator", "Discount Calculator", "Discount"),
+    ("profit-loss-calculator", "Profit and Loss Calculator", "P/L"),
+    ("discount-calculator", "Discount Calculator", "Disc"),
     ("age-calculator", "Age Calculator", "Age"),
     ("unit-converter", "Unit Converter", "Units"),
-    ("standard-calculator", "Standard and Scientific Calculator", "Standard"),
+    ("standard-calculator", "Standard and Scientific Calculator", "Std"),
     ("tasbih-counter", "Tasbih Counter", "Tasbih"),
-    ("stopwatch", "Online Stopwatch", "Stopwatch"),
-    ("years-to-days-calculator", "Years to Days Calculator", "Years→Days"),
+    ("stopwatch", "Online Stopwatch", "Timer"),
+    ("years-to-days-calculator", "Years to Days Calculator", "Y→D"),
     ("query-calculator", "Query Calculator", "Query"),
     ("emi-calculator", "EMI Calculator", "EMI"),
-    ("percentage-calculator", "Percentage Calculator", "Percent"),
-    ("fraction-calculator", "Fraction Calculator", "Fraction"),
-    ("compound-interest-calculator", "Compound Interest Calculator", "Compound"),
+    ("percentage-calculator", "Percentage Calculator", "%"),
+    ("fraction-calculator", "Fraction Calculator", "Frac"),
+    ("compound-interest-calculator", "Compound Interest Calculator", "CI"),
     ("date-calculator", "Date Difference Calculator", "Date"),
 )
 
