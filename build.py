@@ -141,14 +141,14 @@ TOOLS = [
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
             + '<div id="zakat-step-controls" class="flex flex-wrap items-center justify-between gap-2">'
-            + '<div class="min-w-0"><p id="zakat-step-progress" class="text-xs text-stone-600 dark:text-stone-300" aria-live="polite">Step 1 of 6</p><h2 id="zakat-step-title" class="text-base font-semibold text-stone-900 dark:text-stone-100">Method and currency</h2></div>'
+            + '<div class="min-w-0"><p id="zakat-step-progress" class="text-xs text-stone-600 dark:text-stone-300" aria-live="polite">Step 1 of 9</p><h2 id="zakat-step-title" class="text-base font-semibold text-stone-900 dark:text-stone-100">Method and currency</h2></div>'
             + '<div class="flex gap-2">'
             + '<button id="zakat-back" type="button" class="@B@" hidden>Back</button>'
             + '<button id="zakat-next" type="button" class="@B@">Next</button>'
             + '<button id="zakat-submit" type="submit" class="@B@" hidden>Calculate Zakat</button>'
             + '</div></div>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="setup">'
-            + '<p class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
+            + '<p id="zakat-hanafi-setup-note" class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
             + '<input id="z-currency" name="z-currency" class="@I@" type="text" value="PKR" maxlength="3" minlength="3" pattern="[A-Za-z]{3}" autocapitalize="characters" autocomplete="off" spellcheck="false">'
@@ -208,7 +208,6 @@ TOOLS = [
             + field("z-paid", "Zakat already paid for this Zakat year")
             + '</div>'
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
-            + '<p class="text-sm text-stone-700 dark:text-stone-300">Subtract only eligible debts due within this Zakat year. Do not count the same asset or payment twice.</p>'
             + '</div></div>'
             + '<div id="z-jafari-fields" class="space-y-3" hidden>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="setup">'
