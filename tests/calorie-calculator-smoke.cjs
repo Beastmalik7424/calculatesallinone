@@ -28,7 +28,8 @@ assert.equal(katch.restingKcalPerDay, 1579.6);
 assert.equal(katch.maintenanceKcalPerDay, 1895.52);
 assert.equal(katch.formulaLabel, "Katch–McArdle");
 assert.throws(() => calculateCalorieTargets({ ...common, formula: "katch-mcardle" }), /body fat/i);
-assert.throws(() => calculateCalorieTargets({ ...common, formula: "mifflin", bodyFatPercent: 20 }), /only.*Katch|Katch.*only/i);
+assert.equal(calculateCalorieTargets({ ...common, formula: "mifflin", bodyFatPercent: 20 }).restingKcalPerDay, mifflin.restingKcalPerDay, "Body-fat input must not affect formulas that do not use it");
+assert.equal(calculateCalorieTargets({ ...common, formula: "katch-mcardle", coefficient: "", bodyFatPercent: 20 }).restingKcalPerDay, 1579.6, "Katch–McArdle must not require a male/female coefficient");
 
 for (const activity of ACTIVITY_PRESETS) {
   const result = calculateCalorieTargets({ ...common, formula: "mifflin", activityId: activity.id });
@@ -53,6 +54,41 @@ const imperial = calculateCalorieTargets({
   coefficient: "male", formula: "mifflin", activityId: "sedentary"
 });
 assert.ok(Math.abs(imperial.restingKcalPerDay - mifflin.restingKcalPerDay) < 1e-6);
+
+
+const femaleMifflin = calculateCalorieTargets({ ...common, formula: "mifflin", coefficient: "female" });
+assert.equal(femaleMifflin.restingKcalPerDay, 1482.75);
+const femaleHarris = calculateCalorieTargets({ ...common, formula: "harris-benedict", coefficient: "female" });
+assert.ok(Math.abs(femaleHarris.restingKcalPerDay - 1507.133) < 1e-9);
+
+let simulatedCases = 0;
+for (let i = 0; i < 5000; i += 1) {
+  const formula = ["mifflin", "harris-benedict", "katch-mcardle"][i % 3];
+  const activityId = ACTIVITY_PRESETS[i % ACTIVITY_PRESETS.length].id;
+  const scenario = {
+    age: 18 + (i % 83),
+    weight: 45 + (i % 156) * 0.7,
+    weightUnit: "kg",
+    height: 140 + (i % 81) * 0.8,
+    heightUnit: "cm",
+    coefficient: i % 2 ? "male" : "female",
+    activityId,
+    formula,
+    bodyFatPercent: 8 + (i % 50) * 0.7
+  };
+  const value = calculateCalorieTargets(scenario);
+  assert.ok(Number.isFinite(value.restingKcalPerDay) && value.restingKcalPerDay > 0);
+  assert.ok(Number.isFinite(value.maintenanceKcalPerDay) && value.maintenanceKcalPerDay > 0);
+  assert.equal(value.maintenanceKcalPerDay, value.restingKcalPerDay * value.activity.multiplier);
+  assert.equal(value.mildDeficitKcalPerDay, value.maintenanceKcalPerDay - 300);
+  assert.equal(value.moderateDeficitKcalPerDay, value.maintenanceKcalPerDay - 500);
+  assert.equal(value.leanSurplusKcalPerDay, value.maintenanceKcalPerDay + 250);
+  assert.ok(Number.isFinite(value.macros.proteinGrams));
+  assert.ok(Number.isFinite(value.macros.carbohydrateGrams));
+  assert.ok(Number.isFinite(value.macros.fatGrams));
+  simulatedCases += 1;
+}
+assert.equal(simulatedCases, 5000);
 
 const pagePath = path.join(__dirname, "..", "public", "calorie-calculator", "index.html");
 assert.ok(fs.existsSync(pagePath), "Calorie Calculator page must be generated");
