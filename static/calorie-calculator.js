@@ -185,7 +185,12 @@
       var card = doc.createElement("div");
       card.className = "min-w-0 rounded-lg border border-stone-200 bg-white p-3 dark:border-stone-700 dark:bg-stone-900";
       appendText(card, "p", "text-xs font-medium text-stone-600 dark:text-stone-300", label);
-      appendText(card, "p", "mt-1 text-xl font-bold tabular-nums text-stone-950 dark:text-white", formatKcal(value) + " kcal/day");
+      if (value > 0) {
+        appendText(card, "p", "mt-1 text-xl font-bold tabular-nums text-stone-950 dark:text-white", formatKcal(value) + " kcal/day");
+      } else {
+        appendText(card, "p", "mt-1 text-lg font-semibold text-stone-700 dark:text-stone-200", "Not shown");
+        detail = "This fixed comparison is at or below zero, so it is not a usable intake target.";
+      }
       if (detail) appendText(card, "p", "mt-1 text-xs text-stone-600 dark:text-stone-300", detail);
       parent.appendChild(card);
     }
