@@ -471,9 +471,8 @@
     var assetFields = [
       ["cash", "z-cash"], ["bank", "z-bank"], ["savings", "z-savings"],
       ["gold", "z-gold"], ["silver", "z-silver"], ["jewellery", "z-jewellery"],
-      ["investments", "z-investments"], ["businessCash", "z-businesscash"],
-      ["stock", "z-stock"], ["receivables", "z-recv"], ["pension", "z-pension"],
-      ["crypto", "z-crypto"], ["property", "z-property"]
+      ["businessCash", "z-businesscash"], ["stock", "z-stock"],
+      ["receivables", "z-recv"], ["property", "z-property"]
     ]
     var schoolField = $("z-school-of-thought")
     var nisabField = $("z-nisab-method")
@@ -497,95 +496,28 @@
         nisabField.value = "silver"
       }
     }
-    var backButton = $("zakat-back")
-    var nextButton = $("zakat-next")
     var submitButton = $("zakat-submit")
-    var stepProgress = $("zakat-step-progress")
-    var stepTitle = $("zakat-step-title")
-    var currentStepIndex = 0
-    function activeStepKeys() {
-      return schoolField && schoolField.value === "jafari-sistani"
-        ? ["setup", "nisab", "price-unit", "metal-prices", "jafari-trade", "jafari-hawl-intent", "jafari-conditions"]
-        : ["setup", "nisab", "price-unit", "metal-prices", "sunni-assets-a", "sunni-assets-b", "sunni-assets-c", "sunni-assets-d", "sunni-assets-e", "sunni-liabilities"]
-    }
     function renderStep() {
-      if (!form || typeof form.querySelectorAll !== "function") return
       var isJafari = schoolField && schoolField.value === "jafari-sistani"
-      var steps = activeStepKeys()
-      currentStepIndex = Math.max(0, Math.min(currentStepIndex, steps.length - 1))
-      var key = steps[currentStepIndex]
       if (hanafiSetupNote) hanafiSetupNote.hidden = isJafari
-      if (sunniFields) sunniFields.hidden = isJafari || key !== "nisab"
-      if (sunniAssetFields) sunniAssetFields.hidden = isJafari || key.indexOf("sunni-") !== 0
-      if (jafariFields) jafariFields.hidden = !isJafari || (key !== "nisab" && key.indexOf("jafari-") !== 0)
+      if (sunniFields) sunniFields.hidden = isJafari
+      if (sunniAssetFields) sunniAssetFields.hidden = isJafari
+      if (jafariFields) jafariFields.hidden = !isJafari
       form.querySelectorAll(".zakat-step-panel").forEach(function (panel) {
         var inSunni = !!panel.closest("#z-sunni-fields, #z-sunni-asset-fields")
         var inJafari = !!panel.closest("#z-jafari-fields")
-        var methodAllowed = isJafari ? !inSunni : !inJafari
-        panel.hidden = panel.getAttribute("data-zakat-step") !== key || !methodAllowed
+        panel.hidden = isJafari ? inSunni : inJafari
       })
-      var urdu = lang() === "ur"
-      var titles = urdu ? {
-        setup: "طریقہ اور کرنسی",
-        nisab: "نصاب کا طریقہ",
-        "price-unit": "دھات کی قیمت کا یونٹ",
-        "metal-prices": "دھاتوں کی موجودہ قیمتیں",
-        "sunni-assets-a": "نقد رقم اور بنیادی اثاثے",
-        "sunni-assets-b": "سونا، چاندی اور زیورات",
-        "sunni-assets-c": "کاروباری اثاثے",
-        "sunni-assets-d": "قابلِ وصول رقم اور ریٹائرمنٹ فنڈ",
-        "sunni-assets-e": "ڈیجیٹل اثاثے اور جائیداد",
-        "sunni-liabilities": "واجبات اور ادا شدہ زکوٰۃ",
-        "jafari-trade": "تجارتی مال اور ملکیت",
-        "jafari-hawl-intent": "حول اور نفع کی نیت",
-        "jafari-conditions": "تجارتی مال کی شرائط"
-      } : {
-        setup: "Method and currency",
-        nisab: "Nisab method",
-        "price-unit": "Metal price unit",
-        "metal-prices": "Current metal prices",
-        "sunni-assets-a": "Cash and core assets",
-        "sunni-assets-b": "Gold, silver and jewellery",
-        "sunni-assets-c": "Business assets",
-        "sunni-assets-d": "Receivables and retirement funds",
-        "sunni-assets-e": "Digital assets and property",
-        "sunni-liabilities": "Liabilities and payments",
-        "jafari-trade": "Trading goods and ownership",
-        "jafari-hawl-intent": "Hawl and profit intention",
-        "jafari-conditions": "Trading-goods conditions"
+      if (submitButton) {
+        submitButton.hidden = false
+        submitButton.textContent = lang() === "ur" ? "زکوٰۃ کا حساب کریں" : "Calculate Zakat"
       }
-      if (stepProgress) stepProgress.textContent = urdu
-        ? "مرحلہ " + (currentStepIndex + 1) + " از " + steps.length
-        : "Step " + (currentStepIndex + 1) + " of " + steps.length
-      if (stepTitle) stepTitle.textContent = titles[key] || ""
-      if (backButton) {
-        backButton.hidden = currentStepIndex === 0
-        backButton.textContent = urdu ? "واپس" : "Back"
-      }
-      if (nextButton) {
-        nextButton.hidden = currentStepIndex === steps.length - 1
-        nextButton.textContent = urdu ? "اگلا" : "Next"
-      }
-      if (submitButton) submitButton.hidden = currentStepIndex !== steps.length - 1
-      form.setAttribute("data-current-step", key)
-      form.setAttribute("data-step-order", steps.join(","))
+      form.removeAttribute("data-current-step")
+      form.removeAttribute("data-step-order")
     }
     if (schoolField) schoolField.addEventListener("change", function () {
       updateMethodUI(true)
-      currentStepIndex = 0
       renderStep()
-    })
-    if (nextButton) nextButton.addEventListener("click", function () {
-      if (currentStepIndex < activeStepKeys().length - 1) {
-        currentStepIndex += 1
-        renderStep()
-      }
-    })
-    if (backButton) backButton.addEventListener("click", function () {
-      if (currentStepIndex > 0) {
-        currentStepIndex -= 1
-        renderStep()
-      }
     })
     updateMethodUI(false)
     renderStep()
