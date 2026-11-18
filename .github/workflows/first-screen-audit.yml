@@ -32,9 +32,6 @@ permissions:
 jobs:
   viewport:
     runs-on: ubuntu-24.04
-    container:
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
-      options: --user 1001
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -51,10 +48,10 @@ jobs:
         run: python3 tests/workflow-security-contract.py
       - name: Test Playwright lockfile contract
         run: python3 tests/playwright-lock-contract-smoke.py
-      - name: Test version-matched prebuilt browser image contract
-        run: python3 tests/first-screen-container-contract.py
       - name: Install locked dependencies
         run: npm ci
+      - name: Install Chromium for locked Playwright
+        run: npx playwright install --with-deps chromium
       - name: Build site and run smoke tests
         run: npm run build
       - name: Verify locked Playwright version
