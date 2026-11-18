@@ -1291,5 +1291,5 @@ for _phrase in ("Illustrative small-shop Nisab comparison", "PKR 650,000",
 
 # Query Calculator must not contradict its mean Gregorian year conversion method.
 _query_calculator_html = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
-assert "Questions about years use the mean Gregorian year of 365.2425 days per year in this calculator." in _query_calculator_html, "Query Calculator must disclose the mean Gregorian year used by its year conversions"
+assert "mean Gregorian year of 365.2425 days per year for fixed-unit conversions" in _query_calculator_html, "Query Calculator must disclose the mean Gregorian year used by its year conversions"
 assert "Questions about years use 365 days per year in this calculator." not in _query_calculator_html, "Outdated 365-day claim conflicts with the Query Calculator's mean Gregorian year method"
