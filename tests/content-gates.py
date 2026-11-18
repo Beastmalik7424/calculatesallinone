@@ -19,7 +19,7 @@ CASES = {
         "115 months = 9 years and 7 months",
         "80 years ≈ 29,219.4 days",
         "1 year = 8,765.82 hours",
-        "Gregorian mean year of 365.2425 days",
+        "mean Gregorian year of 365.2425 days",
         "Pakistan independence date",
         "14 August 1947",
         "Exact calendar days require the actual start and end dates",
