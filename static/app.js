@@ -345,7 +345,10 @@
 
   function say (id, text) {
     var el = $(id)
-    if (el) el.textContent = text
+    if (el) {
+      el.textContent = text
+      if (String(text || "").trim()) el.hidden = false
+    }
   }
 
   function fmt (n) {
