@@ -98,10 +98,10 @@ assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its
 assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat pages must use one stable shortcut row without duplicate marquee links"
 assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pages must retain their existing single shortcut group"
 assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available on unaffected pages"
-assert re.search(r"\\.ca-calculator-track\\s*\\{[^}]*animation:\\s*ca-calculator-marquee\\s+48s\\s+linear\\s+infinite", css), "Unaffected calculator pages must retain the shared continuous ticker animation"
-zakat_track_overrides = re.findall(r"body:has\\(#main \\.ca-tool-zakat-calculator\\) \\.ca-calculator-track\\{([^}]*)\\}", css)
+assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Unaffected calculator pages must retain the shared continuous ticker animation"
+zakat_track_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-track\{([^}]*)\}", css)
 assert zakat_track_overrides and all("animation:none" in rule and "transform:none" in rule for rule in zakat_track_overrides), "Zakat pages must use a stable, non-moving shortcut track"
-zakat_link_overrides = re.findall(r"body:has\\(#main \\.ca-tool-zakat-calculator\\) \\.ca-calculator-link\\{([^}]*)\\}", css)
+zakat_link_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-link\{([^}]*)\}", css)
 assert zakat_link_overrides and all("min-height:44px" in rule and "height:44px" in rule for rule in zakat_link_overrides), "Zakat shortcut links must meet the 44px touch-target design target"
 assert "theme-toggle" in zakat_markup and zakat_markup.index('id="theme-toggle"') < zakat_markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
 assert "ca-site-nav-topline" in zakat_markup, "Header must keep its separate top controls row"
