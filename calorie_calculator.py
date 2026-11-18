@@ -24,9 +24,9 @@ def build_calorie_page(head, shell, write):
             "The 1984 paper reevaluated the Harris–Benedict equations using indirect calorimetry data. This page uses the revised male and female equations reported by Roza and Shizgal.",
         ),
         (
-            "Katch–McArdle resting metabolic rate equation",
-            "https://pmc.ncbi.nlm.nih.gov/articles/PMC12425712/",
-            "This peer-reviewed study describes the commonly used Katch–McArdle equation: 370 + 21.6 × lean body mass in kilograms. The result depends on the accuracy of the body-fat estimate.",
+            "Cunningham: Body composition as a determinant of energy expenditure (1991)",
+            "https://pubmed.ncbi.nlm.nih.gov/1957828/",
+            "This peer-reviewed paper proposes the generalized resting-energy equation 370 + 21.6 × fat-free mass in kilograms, the equation commonly used as Katch–McArdle. The result depends on the accuracy of the body-fat estimate used to derive fat-free mass.",
         ),
         (
             "National Academies: Dietary Reference Intakes for Energy (2023)",
