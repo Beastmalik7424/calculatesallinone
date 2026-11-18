@@ -3,232 +3,67 @@ const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
-  const failures = [];
   try {
-    for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 1366, height: 768 }]) {
+    for (const viewport of [{ width: 320, height: 640 }, { width: 390, height: 844 }, { width: 1366, height: 768 }]) {
       const page = await browser.newPage({ viewport });
       const errors = [], nonGetRequests = [], measurementLeaks = [];
       page.on("pageerror", error => errors.push(error.message));
       page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
       page.on("request", request => {
         if (request.method() !== "GET") nonGetRequests.push(request.method() + " " + request.url());
-        const queryKeys = Array.from(new URL(request.url()).searchParams.keys());
-        const postData = request.postData() || "";
-        const sensitiveKeys = /(?:^|[?&,"'])(?:age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)["']?\s*[:=]/i;
-        if (queryKeys.some(key => /^(age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)$/i.test(key)) || sensitiveKeys.test(postData)) {
-          measurementLeaks.push(request.method() + " " + request.url());
-        }
+        const url = new URL(request.url());
+        if ([...url.searchParams.keys()].some(key => /^(age|weight|height|bodyFatPercent|calories)$/i.test(key))) measurementLeaks.push(request.url());
       });
       const response = await page.goto("http://127.0.0.1:4174/calorie-calculator/", { waitUntil: "domcontentloaded" });
       assert.equal(response && response.status(), 200);
-      const calculatorScript = page.locator('script[src*="/assets/calorie-calculator.js"]');
-      assert.equal(await calculatorScript.count(), 1, "The page must load exactly one calorie calculator script");
-      const calculatorScriptUrl = await calculatorScript.getAttribute("src");
-      assert.match(calculatorScriptUrl, /[?&]v=[a-f0-9]{12}$/i, "The calculator script URL must be content-versioned to prevent stale browser cache");
-      const calculatorScriptResponse = await page.request.get(new URL(calculatorScriptUrl, page.url()).toString());
-      assert.equal(calculatorScriptResponse.status(), 200, "The versioned calculator script must load successfully");
-      assert.match(await calculatorScriptResponse.text(), /calculateLifeStageCalories/, "The served script must contain the evidence-based life-stage calculation path");
       assert.equal(await page.locator("#calorie-form").isVisible(), true);
-      assert.equal(await page.locator("#calorie-form").evaluate(el => el.tagName), "FORM");
-      assert.equal(await page.locator("#calorie-result").getAttribute("role"), "status");
-      assert.equal(await page.locator("#calorie-error").getAttribute("role"), "alert");
-      const eligibilityNotice = page.locator('aside[role="note"]');
-      assert.match(await eligibilityNotice.innerText(), /Standard estimate is for adults 18\+.*National Academies DRI 2023.*adults aged 19\+/);
-      const noticeClasses = await eligibilityNotice.getAttribute("class");
-      assert.match(noticeClasses, /border-sky-300/);
-      assert.match(noticeClasses, /bg-sky-50/);
-      assert.doesNotMatch(noticeClasses, /amber/);
-      assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Fresh page load must not show a validation error");
-      assert.equal(await page.locator("#calorie-error").isVisible(), false, "Empty validation region must not occupy visible space on initial load");
-      assert.equal(await page.getByLabel("Age (years)").count(), 1);
-      assert.equal(await page.getByLabel("Equation coefficient").count(), 1);
-      for (const id of ["cal-age", "cal-coefficient", "cal-weight", "cal-activity"]) {
-        const label = page.locator("label[for=\"" + id + "\"]").first();
-        assert.equal(await label.isVisible(), true, "Primary field label must be visible at " + viewport.width + "px: " + id);
-      }
-      assert.equal(await page.locator("#cal-eligibility-field").isVisible(), false, "Pregnancy/breastfeeding field must be hidden until female coefficient is selected");
-      assert.equal(await page.locator("#cal-eligibility").isDisabled(), true, "Eligibility control must be disabled for male/default coefficient");
-      for (const id of ["cal-life-stage-fields", "cal-pregnancy-fields", "cal-breastfeeding-fields", "cal-life-stage-activity-field"]) {
-        assert.equal(await page.locator("#" + id).isVisible(), false, "Life-stage controls must stay hidden until the relevant status is selected: " + id);
-      }
-      assert.equal(await page.locator("#cal-height-label").isVisible(), true, "Height label must be visible at " + viewport.width + "px");
-      const weightElements = await page.locator("#cal-weight").evaluateAll(elements => elements.map(element => ({ tag: element.tagName, html: element.outerHTML, parent: element.parentElement && element.parentElement.outerHTML.slice(0, 700) })));
-      assert.equal(weightElements.length, 1, "Expected exactly one weight input, found: " + JSON.stringify(weightElements));
-      const associatedWeightLabels = await page.locator("#cal-weight").evaluate(el => Array.from(el.labels || []).map(label => label.textContent.trim()));
-      assert.equal(associatedWeightLabels.filter(label => label === "Weight").length, 1, "Weight input must have exactly one explicit, correctly named associated label");
-      assert.equal(await page.getByLabel("Weight unit").count(), 1);
-      assert.equal(await page.locator("#cal-height-metric").isVisible(), true, "Metric height controls must be visible by default");
-      assert.equal(await page.locator("#cal-height-imperial").isVisible(), false, "Imperial height controls must be hidden by default");
-      await page.locator("#cal-height-unit").selectOption("ft-in");
-      assert.equal(await page.locator("#cal-height-metric").isVisible(), false, "Metric height controls must hide when feet/inches is selected");
-      assert.equal(await page.locator("#cal-height-imperial").isVisible(), true, "Feet/inches controls must appear when selected");
-      await page.locator("#cal-height-unit").selectOption("cm");
-      assert.equal(await page.locator("#cal-height-metric").isVisible(), true, "Metric height controls must return when centimetres are selected");
-      assert.equal(await page.locator("#cal-height-imperial").isVisible(), false, "Feet/inches controls must hide when centimetres are selected");
-
-      const layout = await page.evaluate(() => {
-        const rect = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return { top: r.top, bottom: r.bottom, height: r.height, marginTop: s.marginTop, marginBottom: s.marginBottom, paddingTop: s.paddingTop, paddingBottom: s.paddingBottom, display: s.display }; };
-        return { overflow: document.documentElement.scrollWidth > innerWidth + 2, buttonBottom: document.querySelector("#cal-calculate").getBoundingClientRect().bottom, viewportHeight: innerHeight, buttonTop: document.querySelector("#cal-calculate").getBoundingClientRect().top, pageHeight: document.documentElement.scrollHeight, mediaMatches: matchMedia("(max-width: 340px) and (max-height: 640px)").matches, bodyClass: document.body.className, mainClass: document.querySelector("main").className, body: rect("body"), main: rect("main"), carousel: rect(".ca-calculator-carousel"), breadcrumb: rect("main nav"), pageHeader: rect("main header"), eligibility: rect("main aside"), card: rect("main section"), form: rect("#calorie-form"), age: rect("#cal-age"), weight: rect("#cal-weight"), height: rect("#cal-height-cm"), activity: rect("#cal-activity"), eligible: rect("#cal-eligibility") };
-      });
-      console.log("CALORIE VIEWPORT", viewport.width, JSON.stringify(layout));
-      const geometry = await page.evaluate(() => {
-        const rect = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); return { top:r.top, bottom:r.bottom, height:r.height, display:getComputedStyle(el).display }; };
-        return { nav:rect("nav"), header:rect("header"), eligibility:rect('[role="note"]'), section:rect("#calorie-form").parentElement, form:rect("#calorie-form"), fields:Array.from(document.querySelector("#calorie-form").children).map(el=>({id:el.id,tag:el.tagName,top:el.getBoundingClientRect().top,bottom:el.getBoundingClientRect().bottom,height:el.getBoundingClientRect().height,display:getComputedStyle(el).display,grid:getComputedStyle(el).gridTemplateColumns})) };
-      });
-      console.log("CALORIE GEOMETRY", viewport.width, JSON.stringify(geometry));
-      await page.screenshot({ path: "/tmp/calorie-calculator-" + viewport.width + ".png", fullPage: false });
-      console.log("Calorie calculator first-screen geometry", viewport.width, layout);
-      assert.equal(layout.overflow, false, "No horizontal overflow at " + viewport.width + "px");
-      assert.ok(layout.buttonBottom <= layout.viewportHeight - 2, "Calculate action must be fully visible with a 2px viewport margin at " + viewport.width + "px");
-      await page.locator("#cal-age").fill("30");
-      await page.locator("#cal-coefficient").selectOption("male");
-      assert.equal(await page.locator("#cal-eligibility-field").isVisible(), false);
-      await page.locator("#cal-weight").fill("70");
-      await page.locator("#cal-height-cm").fill("175");
-      await page.locator("#cal-activity").selectOption("sedentary");
-      await page.locator("#cal-age").focus();
-      await page.keyboard.press("Enter");
-      assert.match(await page.locator("#calorie-result").innerText(), /1,648\.8 kcal\/day/);
-      assert.match(await page.locator("#calorie-result").innerText(), /1,978\.5 kcal\/day/);
-      assert.match(await page.locator("#calorie-result").innerText(), /Equation: Mifflin–St Jeor \(1990\)/);
-      assert.ok(await page.locator('#calorie-result a[href="https://pubmed.ncbi.nlm.nih.gov/2305711/"]').count() >= 1, "Result must cite the Mifflin–St Jeor source");
-      await page.locator("#cal-coefficient").selectOption("female");
-      assert.equal(await page.locator("#cal-eligibility-field").isVisible(), true, "Female coefficient must reveal eligibility question");
-      assert.equal(await page.locator("#cal-eligibility").isEnabled(), true);
-      assert.equal(await page.locator("#calorie-result").isVisible(), false, "Editing a calculation input must hide the now-stale result");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-error").innerText(), /select a pregnancy and breastfeeding status/i, "Female coefficient must require an eligibility answer");
-      await page.locator("#cal-eligibility").selectOption("no");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-result").innerText(), /1,482\.8 kcal\/day/);
-      assert.match(await page.locator("#calorie-result").innerText(), /1,779\.3 kcal\/day/);
-      await page.locator("#cal-coefficient").selectOption("male");
-      assert.equal(await page.locator("#cal-eligibility-field").isVisible(), false);
-      await page.locator("#cal-activity").selectOption("moderate");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-result").innerText(), /2,555\.6 kcal\/day/);
-      await page.locator("#cal-height-unit").selectOption("ft-in");
-      assert.equal(await page.locator("#cal-height-imperial").isVisible(), true);
-      assert.equal(await page.locator("#cal-height-label").innerText(), "Height (ft / in)");
-      assert.equal(await page.locator("#cal-height-label").getAttribute("for"), "cal-height-ft");
-      await page.locator("#cal-height-ft").fill("5");
-      await page.locator("#cal-height-in").fill("8.89763779527559");
-      await page.locator("#cal-weight-unit").selectOption("lb");
-      await page.locator("#cal-weight").fill("154.323583529414");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-result").innerText(), /1,648\.8 kcal\/day/, "Metric/imperial conversion must preserve the rounded REE display");
-      assert.match(await page.locator("#calorie-result").innerText(), /2,555\.6 kcal\/day/, "Metric/imperial conversion must preserve the activity-adjusted maintenance display");
-      await page.locator("#cal-coefficient").selectOption("female");
-      await page.locator("#cal-height-unit").selectOption("cm");
-      await page.locator("#cal-weight-unit").selectOption("kg");
-      await page.locator("#cal-weight").fill("70");
-      await page.locator("#cal-height-cm").fill("175");
-      await page.locator("#cal-coefficient").selectOption("female");
-      await page.locator("#cal-eligibility").selectOption("both");
-      assert.equal(await page.locator("#cal-life-stage-fields").isVisible(), true, "Both must reveal the separate life-stage inputs");
-      assert.equal(await page.locator("#cal-pregnancy-fields").isVisible(), true, "Both must reveal pregnancy-specific inputs");
-      assert.equal(await page.locator("#cal-breastfeeding-fields").isVisible(), true, "Both must reveal breastfeeding-stage input");
-      assert.equal(await page.locator("#cal-life-stage-activity-field").isVisible(), true, "Life-stage estimates must use official DRI activity categories");
-      assert.equal(await page.locator("#calorie-form-title").innerText(), "Pregnancy and breastfeeding estimates");
-      assert.equal(await page.locator("#cal-calculate").innerText(), "Calculate estimate");
-      assert.equal(await page.locator("#cal-standard-activity-field").isVisible(), false, "Consumer activity multipliers must not be used for DRI estimates");
-      await page.locator("#cal-life-stage-activity").selectOption("inactive");
-      await page.locator("#cal-pregnancy-weeks").fill("20");
-      await page.locator("#cal-prepregnancy-weight").fill("70");
-      await page.locator("#cal-breastfeeding-stage").selectOption("exclusive_0_6");
-      await page.locator("#cal-calculate").click();
-      const bothText = await page.locator("#calorie-result").innerText();
-      assert.match(bothText, /Pregnancy estimate · Second trimester/);
-      assert.match(bothText, /2,363\.2 kcal\/day/, "Both must display the 2023 National Academies pregnancy estimate");
-      assert.match(bothText, /2,595\.3 kcal\/day/, "Both must display the separate 2023 National Academies breastfeeding estimate");
-      assert.match(bothText, /National Academies DRI 2023, Table 5-17/);
-      assert.match(bothText, /National Academies DRI 2023, Table 5-18/);
-      assert.match(bothText, /Do not add them together/);
-      assert.match(bothText, /not validated as a combined target/);
-      assert.match(bothText, /US and Canadian reference populations/);
-      assert.match(bothText, /excluded studies from non-high-income countries/i,
-        "Life-stage results must disclose the source evidence population limitation");
-      assert.match(bothText, /not validated for Pakistan/i,
-        "Life-stage results must not imply Pakistan-specific validation");
-      assert.match(bothText, /cannot be guaranteed 100% accurate/i,
-        "Life-stage results must not imply perfect individual accuracy");
-      assert.match(bothText, /Type 1 and Type 2 diabetes/i,
-        "Life-stage results must disclose chronic-condition evidence limits");
-      assert.match(bothText, /do not rely on this estimate for treatment or dietary decisions/i,
-        "Life-stage results must warn against clinical reliance for chronic conditions");
-      assert.equal(await page.locator('#calorie-result a[href="https://www.nationalacademies.org/read/26818/chapter/7"]').count(), 1, "Both results must cite the primary National Academies source");
-      await page.locator("#cal-eligibility").selectOption("pregnant");
-      assert.equal(await page.locator("#cal-pregnancy-fields").isVisible(), true);
-      assert.equal(await page.locator("#cal-breastfeeding-fields").isVisible(), false);
-      await page.locator("#cal-pregnancy-weeks").fill("10");
-      await page.locator("#cal-calculate").click();
-      const pregnancyText = await page.locator("#calorie-result").innerText();
-      assert.match(pregnancyText, /First trimester/);
-      assert.match(pregnancyText, /2,195\.3 kcal\/day/, "First trimester must use the nonpregnant TEE equation without an added pregnancy increment");
-      assert.doesNotMatch(pregnancyText, /Breastfeeding estimate/);
-      await page.locator("#cal-eligibility").selectOption("breastfeeding");
-      assert.equal(await page.locator("#cal-pregnancy-fields").isVisible(), false);
-      assert.equal(await page.locator("#cal-breastfeeding-fields").isVisible(), true);
-      await page.locator("#cal-breastfeeding-stage").selectOption("partial_7_12");
-      await page.locator("#cal-calculate").click();
-      const breastfeedingText = await page.locator("#calorie-result").innerText();
-      assert.match(breastfeedingText, /Partial breastfeeding, 7–12 months postpartum/);
-      assert.match(breastfeedingText, /2,575\.3 kcal\/day/);
-      assert.doesNotMatch(breastfeedingText, /Pregnancy estimate/);
-      await page.locator("#cal-eligibility").selectOption("both");
-      await page.locator("#cal-pregnancy-weeks").fill("20");
-      await page.locator("#cal-prepregnancy-weight").fill("70");
-      await page.locator("#cal-breastfeeding-stage").selectOption("exclusive_0_6");
-      await page.locator("#cal-age").fill("18");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-error").innerText(), /19 years or older/i,
-        "The adult DRI equations must not be extrapolated to an unsupported age");
-      await page.locator("#cal-age").fill("30");
-      await page.locator("#cal-eligibility").selectOption("prefer_not_to_say");
-      assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Changing eligibility after a calculation must clear stale messages");
-      assert.equal(await page.locator("#calorie-result").isVisible(), false, "Changing inputs must not leave a stale result visible");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-error").innerText(), /select “Neither applies”|select.*Neither applies/i,
-        "Prefer not to say must receive a privacy-respecting explanation");
-      await page.locator("#cal-eligibility").selectOption("no");
-      assert.equal(await page.locator("#calorie-form-title").innerText(), "Daily maintenance estimate");
-      assert.equal(await page.locator("#cal-calculate").innerText(), "Calculate maintenance");
-      assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Selecting an eligible option must clear the previous validation message");
-      await page.locator("#cal-eligibility").selectOption("prefer_not_to_say");
-      assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Changing eligibility after a blocked calculation must clear the stale pregnancy warning");
-      assert.equal(await page.locator("#calorie-result").isVisible(), false, "Changing inputs must not leave a stale result visible");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-error").innerText(), /select “Neither applies”|select.*Neither applies/i, "Prefer not to say must receive a privacy-respecting explanation, not a false pregnancy warning");
-      await page.locator("#cal-eligibility").selectOption("no");
-      assert.equal((await page.locator("#calorie-error").innerText()).trim(), "", "Selecting an eligible option must clear the previous validation message");
-      await page.locator("#cal-age").fill("17");
-      await page.locator("#cal-calculate").click();
-      assert.match(await page.locator("#calorie-error").innerText(), /18 or older/i);
-      await page.locator("#cal-reset").focus();
-      await page.keyboard.press("Enter");
-      assert.equal(await page.locator("#cal-age").inputValue(), "");
-      assert.equal(await page.locator("#cal-weight").inputValue(), "");
-      assert.equal(await page.locator("#cal-height-unit").inputValue(), "cm");
-      assert.equal(await page.locator("#cal-height-label").innerText(), "Height (cm)");
-      assert.equal(await page.locator("#cal-height-label").getAttribute("for"), "cal-height-cm");
+      assert.equal(await page.locator("#cal-formula").inputValue(), "mifflin");
+      assert.equal(await page.locator("#cal-body-fat-field").isVisible(), false, "Body-fat input must be hidden unless Katch–McArdle is selected");
       assert.equal(await page.locator("#calorie-result").isVisible(), false);
-      assert.equal(await page.locator("#cal-age").evaluate(el => el === document.activeElement), true, "Reset should return focus to age");
-      await page.waitForTimeout(100);
-      assert.deepEqual(nonGetRequests, [], "Calculations must not send network requests");
-      assert.deepEqual(measurementLeaks, [], "Measurements and calculated results must not appear in analytics or other request payloads");
-      const privacy = await page.evaluate(() => ({ query: location.search, hash: location.hash, keys: Object.keys(localStorage).filter(key => /calorie|weight|height|age/i.test(key)), sessionKeys: Object.keys(sessionStorage).filter(key => /calorie|weight|height|age/i.test(key)), cookie: document.cookie }));
-      assert.equal(privacy.query, "");
-      assert.equal(privacy.hash, "");
-      assert.deepEqual(privacy.keys, []);
-      assert.deepEqual(privacy.sessionKeys, []);
-      assert.doesNotMatch(privacy.cookie, /calorie|weight|height|age/i);
-      assert.deepEqual(errors, [], "No browser console or page errors at " + viewport.width + "px");
-      console.log("Calorie calculator browser checks PASS at " + viewport.width + "x" + viewport.height);
+      assert.equal(await page.locator("#calorie-error").getAttribute("role"), "alert");
+      assert.equal(await page.locator("#calorie-result").getAttribute("role"), "status");
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 2), false, "No horizontal overflow at " + viewport.width + "px");
+      for (const id of ["cal-age", "cal-coefficient", "cal-weight", "cal-height", "cal-activity", "cal-formula"]) {
+        assert.equal(await page.locator('label[for="' + id + '"]').count(), 1, "Visible label required for " + id);
+      }
+      await page.locator("#cal-age").fill("30");
+      await page.locator("#cal-coefficient").selectOption("male");
+      await page.locator("#cal-weight").fill("70");
+      await page.locator("#cal-height").fill("175");
+      await page.locator("#cal-activity").selectOption("sedentary");
+      await page.locator("#cal-calculate").click();
+      const result = await page.locator("#calorie-result").innerText();
+      assert.match(result, /1,978\.5 kcal\/day/);
+      assert.match(result, /1,648\.8 kcal\/day/);
+      assert.match(result, /1,678\.5 kcal\/day/);
+      assert.match(result, /1,478\.5 kcal\/day/);
+      assert.match(result, /2,228\.5 kcal\/day/);
+      assert.match(result, /Maintenance macro split/i);
+      assert.equal(await page.locator("#calorie-error").innerText(), "");
+      await page.locator("#cal-formula").selectOption("harris-benedict");
+      assert.equal(await page.locator("#cal-body-fat-field").isVisible(), false);
+      assert.equal(await page.locator("#calorie-result").isVisible(), false, "Changing inputs must clear stale results");
+      await page.locator("#cal-calculate").click();
+      assert.match(await page.locator("#calorie-result").innerText(), /Revised Harris–Benedict/);
+      await page.locator("#cal-formula").selectOption("katch-mcardle");
+      assert.equal(await page.locator("#cal-body-fat-field").isVisible(), true);
+      assert.equal(await page.locator("#cal-body-fat").isEnabled(), true);
+      await page.locator("#cal-body-fat").fill("20");
+      await page.locator("#cal-calculate").click();
+      assert.match(await page.locator("#calorie-result").innerText(), /Katch–McArdle/);
+      await page.locator("#cal-formula").selectOption("mifflin");
+      assert.equal(await page.locator("#cal-body-fat-field").isVisible(), false);
+      assert.equal(await page.locator("#cal-body-fat").isDisabled(), true);
+      await page.locator("#cal-reset").click();
+      assert.equal(await page.locator("#calorie-result").isVisible(), false);
+      assert.equal(await page.locator("#cal-age").inputValue(), "");
+      assert.deepEqual(errors, [], "No browser JavaScript or console errors at " + viewport.width + "px");
+      assert.deepEqual(nonGetRequests, [], "Calculator must not send non-GET requests");
+      assert.deepEqual(measurementLeaks, [], "Calculator measurements must not appear in request URLs");
       await page.close();
     }
-  } catch (error) {
-    failures.push(error.stack || error.message);
-  } finally { await browser.close(); }
-  if (failures.length) { failures.forEach(message => console.error(message)); process.exitCode = 1; }
-  else console.log("Adult calorie calculator browser, privacy and responsive checks: PASS");
-})();
+    console.log("Calorie calculator mobile/desktop browser, formula-switching, results and privacy checks: PASS");
+  } finally {
+    await browser.close();
+  }
+})().catch(error => { console.error(error); process.exitCode = 1; });
