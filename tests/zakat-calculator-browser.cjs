@@ -87,6 +87,14 @@ let browser;
   await page.locator("#z-jafari-coins-used-as-money").check();
   assert.equal(await page.locator("#z-jafari-coin-inputs").isVisible(), true,
     "Qualifying personal-coin inputs must appear after explicit confirmation");
+  await page.locator("#z-jafari-coins-access").check();
+  await page.locator("#z-jafari-gold-coins-hawl").check();
+  await page.locator("#z-jafari-gold-coins-weight").fill("69.11");
+  await page.locator("#zakat-submit").click();
+  const belowNisabCoinResult = await page.locator("#zakat-result").innerText();
+  assert.match(belowNisabCoinResult, /Business-goods Nisab reference: Not applicable/i,
+    "Coin-only below-Nisab result must not display a zero business-goods threshold");
+
   await page.locator("#z-jafari-gold-coins-weight").fill("69.12");
   await page.locator("#z-jafari-coins-access").check();
   await page.locator("#z-jafari-gold-coins-hawl").check();
