@@ -27,7 +27,7 @@ const katch = calculateCalorieTargets({ ...common, formula: "katch-mcardle", bod
 assert.ok(Math.abs(katch.restingKcalPerDay - 1579.6) < 1e-9);
 assert.equal(katch.maintenanceKcalPerDay, 1895.52);
 assert.equal(katch.formulaLabel, "Katch–McArdle");
-assert.throws(() => calculateCalorieTargets({ ...common, formula: "katch-mcardle" }), /body fat/i);
+assert.throws(() => calculateCalorieTargets({ ...common, formula: "katch-mcardle" }), /body-fat/i);
 assert.equal(calculateCalorieTargets({ ...common, formula: "mifflin", bodyFatPercent: 20 }).restingKcalPerDay, mifflin.restingKcalPerDay, "Body-fat input must not affect formulas that do not use it");
 assert.ok(Math.abs(calculateCalorieTargets({ ...common, formula: "katch-mcardle", coefficient: "", bodyFatPercent: 20 }).restingKcalPerDay - 1579.6) < 1e-9, "Katch–McArdle must not require a male/female coefficient");
 
@@ -43,8 +43,8 @@ assert.throws(() => calculateCalorieTargets({ ...common, height: 0, formula: "mi
 assert.throws(() => calculateCalorieTargets({ ...common, coefficient: "other", formula: "mifflin" }), /coefficient/i);
 assert.throws(() => calculateCalorieTargets({ ...common, formula: "unknown" }), /formula/i);
 assert.throws(() => calculateCalorieTargets({ ...common, activityId: "unknown", formula: "mifflin" }), /activity/i);
-assert.throws(() => calculateCalorieTargets({ ...common, formula: "katch-mcardle", bodyFatPercent: 0 }), /body fat/i);
-assert.throws(() => calculateCalorieTargets({ ...common, formula: "katch-mcardle", bodyFatPercent: 71 }), /body fat/i);
+assert.throws(() => calculateCalorieTargets({ ...common, formula: "katch-mcardle", bodyFatPercent: 0 }), /body-fat/i);
+assert.throws(() => calculateCalorieTargets({ ...common, formula: "katch-mcardle", bodyFatPercent: 71 }), /body-fat/i);
 assert.throws(() => calculateCalorieTargets({ ...common, weightUnit: "stone", formula: "mifflin" }), /weight unit/i);
 assert.throws(() => calculateCalorieTargets({ ...common, heightUnit: "inches", formula: "mifflin" }), /height unit/i);
 
