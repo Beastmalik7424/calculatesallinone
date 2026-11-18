@@ -1,96 +1,298 @@
 import hashlib
 import html
 
+
 def build_calorie_page(head, shell, write):
+    """Generate the adult calorie calculator and its supporting SEO content."""
     path = "/calorie-calculator/"
     site = "https://calculateallinone.vercel.app"
-    title = "Calorie Calculator | Maintenance & TDEE | CalculatesAll"
-    description = "Estimate adult daily calorie needs and maintenance calories (TDEE) from age, weight, height and activity using Mifflin–St Jeor. Review assumptions."
+    title = "Calorie Calculator: TDEE, BMR & Macros | CalculatesAll"
+    description = (
+        "Estimate adult maintenance calories, TDEE, resting energy and macros with "
+        "Mifflin–St Jeor, Revised Harris–Benedict or Katch–McArdle."
+    )
+
     sources = [
-        ("Mifflin–St Jeor original paper (1990)", "https://pubmed.ncbi.nlm.nih.gov/2305711/", "Original equation study. It included 498 healthy adults aged 19–78; the equation predicts resting energy expenditure and does not guarantee an individual's measured value."),
-        ("National Academies: Dietary Reference Intakes for Energy (2023)", "https://www.ncbi.nlm.nih.gov/books/NBK591031/", "Explains total energy expenditure as including resting energy expenditure, the thermic effect of food and physical activity, and discusses individual variability in energy-expenditure estimates."),
-        ("FAO/WHO/UNU: Human Energy Requirements", "https://www.fao.org/4/y5686e/y5686e00.htm", "Reference framework for human energy requirements, basal metabolic rate and physical activity level. Its PAL framework is distinct from this page's consumer activity multipliers."),
-        ("FAO/WHO/UNU: Adult energy requirements", "https://www.fao.org/4/y5686e/y5686e07.htm", "Adult energy-requirement chapter. It is cited for context, not as the source of the Mifflin equation or the consumer multipliers below."),
-        ("NIDDK: About the Body Weight Planner", "https://www.niddk.nih.gov/health-information/weight-management/body-weight-planner", "States that its adult planner is not intended for people under 18 or for pregnant or breastfeeding women. This calculator does not implement the NIDDK dynamic weight-change model."),
-        ("Mayo Clinic: Calorie Calculator", "https://www.mayoclinic.org/healthy-lifestyle/weight-loss/in-depth/calorie-calculator/itt-20402304", "Mayo Clinic cautions that calorie estimates may be inaccurate for pregnancy or breastfeeding, competitive athletes and people with metabolic diseases such as diabetes. This page uses separate National Academies DRI 2023 equations for pregnancy and breastfeeding, not the Mayo calculator, and still advises individual professional guidance."),
-        ("National Academies: Dietary Reference Intakes for Energy (2023), Chapter 5", "https://www.nationalacademies.org/read/26818/chapter/7", "Primary source for the adult female Estimated Energy Requirement equations for pregnancy and lactation, including trimester, gestational week, pre-pregnancy BMI energy deposition, and breastfeeding-stage increments. These are population estimates, not individual prescriptions or certification of this website."),
-        ("Health Canada: Dietary Reference Intakes equations for energy", "https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/dietary-reference-intakes/tables/equations-estimate-energy-requirement.html", "Government reference reproducing the DRI equations, physical-activity categories, and pregnancy and breastfeeding energy estimates."),
-        ("CDC: Weight Gain During Pregnancy", "https://www.cdc.gov/maternal-infant-health/pregnancy-weight/", "Independent public-health context: CDC describes typical additional energy guidance of about 340 kcal/day in the second trimester and 450 kcal/day in the third. This is not the coefficient or formula used by the National Academies DRI calculation."),
-        ("CDC: Maternal Diet and Breastfeeding", "https://www.cdc.gov/breastfeeding-special-circumstances/hcp/diet-micronutrients/maternal-diet.html", "Independent public-health context: CDC describes 330–400 kcal/day above pre-pregnancy intake for well-nourished breastfeeding mothers and notes that needs vary with age, BMI, activity and feeding pattern. Its baseline and guidance purpose differ from the DRI equation."),
-        ("World Bank: Country and Lending Groups", "https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups", "The World Bank classifies Pakistan as a lower-middle-income economy. This provides country-classification context for the National Academies report's exclusion of studies from non-high-income countries from its IAEA analysis dataset."),
-        ("USDA National Agricultural Library: DRI Calculator", "https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator", "An official Dietary Reference Intakes calculator for healthcare professionals that reports estimated energy needs and nutrient recommendations; individual requirements may be higher or lower than DRI values."),
+        (
+            "Mifflin–St Jeor original research (1990)",
+            "https://pubmed.ncbi.nlm.nih.gov/2305711/",
+            "The original study developed a resting energy expenditure prediction equation from measurements in 498 healthy adults aged 19–78. It supports the Mifflin–St Jeor equation, not an individual measurement or guarantee.",
+        ),
+        (
+            "Roza and Shizgal: Revised Harris–Benedict equation (1984)",
+            "https://pubmed.ncbi.nlm.nih.gov/6741850/",
+            "The 1984 paper reevaluated the Harris–Benedict equations using indirect calorimetry data. This page uses the revised male and female equations reported by Roza and Shizgal.",
+        ),
+        (
+            "Katch–McArdle resting metabolic rate equation",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC12425712/",
+            "This peer-reviewed study describes the commonly used Katch–McArdle equation: 370 + 21.6 × lean body mass in kilograms. The result depends on the accuracy of the body-fat estimate.",
+        ),
+        (
+            "National Academies: Dietary Reference Intakes for Energy (2023)",
+            "https://www.ncbi.nlm.nih.gov/books/NBK591031/",
+            "Provides reference context for total energy expenditure, resting energy expenditure, physical activity and variation between individuals. The consumer activity factors on this page are not National Academies equations.",
+        ),
+        (
+            "FAO/WHO/UNU: Human Energy Requirements",
+            "https://www.fao.org/4/y5686e/y5686e00.htm",
+            "Explains human energy requirements and physical activity level. Its formal PAL framework is different from the simplified activity multipliers used by this calculator.",
+        ),
+        (
+            "NIDDK: About the Body Weight Planner",
+            "https://www.niddk.nih.gov/health-information/weight-management/body-weight-planner",
+            "NIDDK states that its adult Body Weight Planner is not intended for people under 18 or for people who are pregnant or breastfeeding. This calculator is also not intended for pregnancy or breastfeeding.",
+        ),
+        (
+            "Mayo Clinic: Calorie Calculator",
+            "https://www.mayoclinic.org/healthy-lifestyle/weight-loss/in-depth/calorie-calculator/itt-20402304",
+            "Provides consumer guidance about estimating calorie needs. Prediction equations can differ from an individual's actual energy requirements, particularly where health or activity circumstances are not represented by the inputs.",
+        ),
     ]
+
     faq = [
-        ("What does this calorie calculator estimate?", "It estimates resting energy expenditure with the Mifflin–St Jeor equation, then multiplies that estimate by a selected activity assumption to approximate total daily energy expenditure (TDEE) and maintenance calories. It does not measure metabolism."),
-        ("How many calories do I need to maintain my weight?", "There is no single daily calorie number that applies to every adult. This calculator estimates your maintenance calories from the age, weight, height, equation coefficient and activity assumption you enter. The result is a starting estimate, not a measured requirement or personal dietary instruction."),
-        ("Are maintenance calories the same as TDEE?", "Maintenance calories are commonly used to describe the daily energy level associated with maintaining body weight. TDEE means total daily energy expenditure. This calculator approximates TDEE by multiplying estimated resting energy expenditure by a selected activity factor. The result is not a direct measurement, and individual needs vary."),
-        ("Is resting energy expenditure the same as BMR or RMR?", "No. Resting energy expenditure (REE), basal metabolic rate (BMR) and resting metabolic rate (RMR) are related but distinct terms with different measurement conditions. This page labels the equation output as REE and does not claim that the terms are interchangeable."),
-        ("Where do the activity multipliers come from?", "The five multipliers are consumer-calculator assumptions stored by this site. They are not coefficients from the original Mifflin–St Jeor paper and are not FAO/WHO/UNU PAL categories. Real activity varies, so the selected factor can overestimate or underestimate an individual's needs."),
-        ("Should I add exercise calories separately?", "Do not add exercise calories again when your selected activity assumption already represents that movement. Consider your full day, including work, walking and routine movement, rather than gym sessions alone."),
-        ("Why can two calorie calculators give different results?", "They may use different resting-energy equations, activity assumptions, population groups, rounding rules or data inputs. Compare the method and assumptions, not only the final number."),
-        ("Can teenagers use this calculator?", "No. This page is for adults aged 18 or older. It does not estimate calorie needs for children or teenagers."),
-        ("Can I use this during pregnancy or breastfeeding?", "Yes. For adults aged 19 or older, the calculator can show separate National Academies DRI 2023 pregnancy and breastfeeding reference estimates. Pregnancy uses gestational week and pre-pregnancy BMI. Breastfeeding uses the supported postpartum and feeding stage. These are population estimates, not medical advice or a certified clinical assessment."),
-        ("What if I have diabetes, a metabolic condition or compete in sports?", "A simple prediction equation may overestimate or underestimate energy needs in people with metabolic conditions such as diabetes and in competitive athletes. Discuss an appropriate assessment with a qualified healthcare professional. This calculator does not adjust for a diagnosis, medication, treatment or training programme."),
-        ("Is this calculator medically reviewed?", "No. This calculator has not been reviewed by a qualified medical professional. Its source links support the stated method and limitations; they do not certify this website or its implementation."),
-        ("Does this calculator give a weight-loss or weight-gain target?", "No. It estimates maintenance calories only. It does not prescribe a calorie deficit, surplus, food plan, weight-change rate or deadline."),
-        ("Are my measurements stored or sent to an API?", "The calculation runs in your browser. This feature does not add measurements to the URL, local storage or a calculation API request. The website host and any existing third-party resources may still process ordinary technical request data."),
-        ("Is BMR a minimum safe calorie intake?", "No. A calculated resting-energy estimate is not a universal minimum safe intake. Do not use it as a personal dietary limit or medical instruction."),
-        ("Is this calculator free, and do I need an account?", "The calculator is free to use and does not require an account or sign-up."),
-        ("How are pounds and feet/inches converted?", "Weight is converted using 1 lb = 0.45359237 kg. Height is converted using 1 inch = 2.54 cm. The calculation normalizes each entered value once and keeps full precision until display formatting."),
-        ("What if I am unsure which activity level to choose?", "Choose the closest description for your whole day, including work, walking and routine movement. The factor is a rough assumption, not a precise measurement. Do not add exercise calories again when the activity choice already includes that movement."),
-        ("Why might the displayed result differ by a fraction?", "The calculation keeps full precision internally and rounds only the displayed result to one decimal place. Other calculators may use different equations, assumptions or rounding rules."),
-        ("Can I use a keyboard or report an error?", "The inputs have visible labels, the calculate and reset controls are keyboard-operable, and errors and results use live announcement regions. You can report an issue through the Contact page. Screen-reader behavior should still be checked with the assistive technology you use."),
+        (
+            "How many calories do I need each day?",
+            "There is no single calorie number that fits every adult. Your estimated daily energy needs depend on age, body size, the equation used and your usual activity. Enter your own measurements to see an estimate, then treat it as a starting point rather than a measured requirement or personal diet instruction.",
+        ),
+        (
+            "What are maintenance calories?",
+            "Maintenance calories are an estimate of the daily energy intake associated with keeping body weight broadly stable over time. This calculator estimates maintenance by multiplying a resting-energy estimate by an activity factor. Real weight trends are affected by water, digestion, illness, medication and other factors, so a calculated number is not a guarantee.",
+        ),
+        (
+            "What does TDEE mean?",
+            "TDEE means total daily energy expenditure: the energy your body uses across a full day. It includes resting energy expenditure, the thermic effect of food and physical activity. This calculator approximates TDEE by multiplying a resting estimate by a selected activity factor. It does not measure every part of daily energy expenditure.",
+        ),
+        (
+            "What is BMR, and is it the same as RMR or REE?",
+            "BMR means basal metabolic rate. RMR means resting metabolic rate, and REE means resting energy expenditure. They describe related resting-energy concepts but are measured under different conditions and are not always interchangeable. The selected prediction equation estimates resting energy. It is not a laboratory measurement of your BMR.",
+        ),
+        (
+            "Which calorie formula should I choose?",
+            "Mifflin–St Jeor is the default and recommended starting option for this general adult calculator. Revised Harris–Benedict is another established prediction equation. Katch–McArdle uses estimated lean body mass and therefore requires a body-fat percentage. Katch–McArdle can be especially sensitive to an inaccurate body-fat estimate. Different equations can give different results for the same person.",
+        ),
+        (
+            "What is the Mifflin–St Jeor equation?",
+            "For the male coefficient, the equation is 10 × weight in kg + 6.25 × height in cm − 5 × age + 5. For the female coefficient, use the same weight, height and age terms, then subtract 161 instead of adding 5. The original study measured resting energy expenditure in healthy adults aged 19–78. This is a prediction equation, not a measurement.",
+        ),
+        (
+            "What is the Revised Harris–Benedict equation?",
+            "The revised male equation is 88.362 + 13.397 × weight in kg + 4.799 × height in cm − 5.677 × age. The revised female equation is 447.593 + 9.247 × weight in kg + 3.098 × height in cm − 4.330 × age. These are the Roza and Shizgal revisions published in 1984, not the original 1919 coefficients.",
+        ),
+        (
+            "How does the Katch–McArdle formula work?",
+            "Katch–McArdle estimates resting metabolic rate as 370 + 21.6 × lean body mass in kilograms. Lean body mass is estimated as body weight × (1 − body-fat percentage ÷ 100). Because the calculation depends on body-fat percentage, an inaccurate body-fat reading can materially change the result. The formula does not independently verify body composition.",
+        ),
+        (
+            "What activity level should I select?",
+            "Choose the description that best represents your usual full-day movement, including work, walking, household activity and planned exercise. Sedentary means mostly seated with little planned movement. Light means some walking or light exercise. Moderate means regular moderate exercise. Very active means frequent hard exercise or a physically demanding job. Extra active means very demanding daily work or training. These multipliers are simplified assumptions, not measured physical activity levels.",
+        ),
+        (
+            "Should I add exercise calories separately?",
+            "Usually not when your selected activity factor already represents your exercise and daily movement. Adding exercise calories a second time can count the same activity twice. The activity factor is an estimate, so it may still differ from your actual routine.",
+        ),
+        (
+            "What is a calorie deficit?",
+            "A calorie deficit means energy intake is below energy expenditure over a period of time. The −300 and −500 kcal figures shown after calculation are simple arithmetic comparisons with estimated maintenance. They are not individualized prescriptions, a recommendation that every adult should lose weight, or a promise of a particular rate of change.",
+        ),
+        (
+            "What is a calorie surplus?",
+            "A calorie surplus means energy intake is above energy expenditure over a period of time. The +250 kcal figure is an arithmetic comparison with estimated maintenance, not a personalized muscle-gain or weight-gain prescription. Results vary and no outcome is guaranteed.",
+        ),
+        (
+            "Why can two calorie calculators give different results?",
+            "Calculators may use different equations, body-composition inputs, activity factors, unit conversions, rounding rules and reference populations. Some estimate resting energy while others use different methods to estimate total daily energy expenditure. Compare the formula and assumptions as well as the final number.",
+        ),
+        (
+            "Can I use this calculator during pregnancy or breastfeeding?",
+            "No. This calculator is for adults aged 18 or older who are not pregnant or breastfeeding. Pregnancy and lactation change energy needs and require context that this general calculator does not collect. Speak with a qualified healthcare professional for individualized guidance. Do not use the deficit, surplus or macro examples on this page as pregnancy or breastfeeding advice.",
+        ),
+        (
+            "Can teenagers use this calculator?",
+            "No. This calculator is intended for adults aged 18 or older only. Children and teenagers have different growth-related energy needs and should not use these adult equations for dietary decisions.",
+        ),
+        (
+            "Can I use the results if I have diabetes or another medical condition?",
+            "This is not a clinical calculator and it does not account for diagnoses, medicines, treatment, recovery, eating-disorder history or other individual health factors. If you have diabetes or another medical condition, discuss energy and nutrition decisions with your healthcare professional or registered dietitian.",
+        ),
+        (
+            "Does a lower calorie number guarantee weight loss?",
+            "No. The figures are estimates and do not guarantee weight loss, weight gain, muscle gain or a particular timeline. Body-weight changes are influenced by many factors, and the calculation is not a dynamic body-weight model.",
+        ),
+        (
+            "What does the macro split mean?",
+            "The example maintenance split allocates 30% of estimated maintenance calories to protein, 40% to carbohydrates and 30% to fat. Grams are calculated using 4 kcal per gram for protein and carbohydrates and 9 kcal per gram for fat. This is a simple illustrative split, not a universally optimal or medically tailored nutrition plan.",
+        ),
+        (
+            "Are my measurements sent to a server?",
+            "The calculator performs its arithmetic in your browser. Its calculation code does not send the entered age, weight, height, body-fat percentage or result to a calculation API, add them to the page URL or save them in browser storage. The website host and third-party resources may still process ordinary technical request data as described in the Privacy Policy.",
+        ),
+        (
+            "Is the resting estimate a minimum safe calorie intake?",
+            "No. A resting-energy estimate is not a minimum safe intake, a nutritional requirement or a personal calorie limit. Do not use it to set a restrictive diet or make medical decisions.",
+        ),
+        (
+            "Is this calculator medical advice or medically reviewed?",
+            "No. It is an educational estimation tool, not medical advice, diagnosis or treatment. This calculator has not been medically reviewed. The linked sources support the named equations and general context; they do not approve, certify or endorse this website.",
+        ),
+        (
+            "Why are results shown to one decimal place?",
+            "The formulas calculate using the entered values and keep full precision during the calculation. Results are rounded to one decimal place for display. Other calculators may round at a different stage, which can create small differences.",
+        ),
     ]
+
+    input_class = "w-full min-w-0 rounded-lg border border-stone-400 bg-white px-3 py-2 text-base text-stone-900 min-h-[44px] dark:bg-stone-950 dark:text-white"
+    label_class = "mb-1 block text-sm font-medium text-stone-800 dark:text-stone-200"
     body = (
-        '<nav aria-label="Breadcrumb" class="sr-only sm:not-sr-only sm:mb-4 sm:text-sm text-stone-700 dark:text-stone-300"><ol class="flex flex-wrap items-center gap-2"><li><a class="underline text-sky-800 dark:text-sky-300" href="/">Home</a></li><li aria-hidden="true">/</li><li><a class="underline text-sky-800 dark:text-sky-300" href="/health/">Health</a></li><li aria-hidden="true">/</li><li aria-current="page">Adult Calorie Calculator</li></ol></nav>'
-        '<header class="mb-2"><p class="hidden text-xs font-bold uppercase tracking-wide text-rose-800 dark:text-rose-200 sm:block">Adult maintenance estimate</p><h1 class="mt-1 text-xl font-bold text-stone-900 dark:text-stone-100">Adult Calorie Calculator</h1><p class="mt-1 text-xs leading-5 text-stone-800 dark:text-stone-200">Estimate adult maintenance calories. Results are estimates, not measurements or prescriptions.</p></header>'
-        '<aside role="note" class="mb-2 rounded-lg border border-sky-300 bg-sky-50 p-2 text-xs leading-4 text-sky-950 dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-100"><strong>Eligibility:</strong> Standard estimate is for adults 18+. Pregnancy and breastfeeding estimates use National Academies DRI 2023 equations for adults aged 19+ and require additional stage-specific inputs.</aside>'
-        '<section class="rounded-xl border border-stone-300 bg-white p-2 sm:p-3 shadow-sm dark:border-stone-700 dark:bg-stone-900"><h2 id="calorie-form-title" class="text-base font-semibold text-stone-900 dark:text-stone-100">Daily maintenance estimate</h2><p class="mt-1 hidden text-sm text-stone-700 dark:text-stone-300 sm:block">Enter your measurements. Weight and height units can be selected independently.</p>'
-        '<form id="calorie-form" aria-labelledby="calorie-form-title" novalidate class="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 sm:gap-y-2">'
-        '<div class="min-w-0"><label for="cal-age" class="text-[11px] leading-tight font-medium">Age (years)</label><input id="cal-age" type="number" placeholder="Age" min="18" max="120" step="1" inputmode="numeric" autocomplete="off" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"></div>'
-        '<div class="min-w-0"><label for="cal-coefficient" class="text-[11px] leading-tight font-medium">Equation coefficient</label><select id="cal-coefficient" aria-label="Equation coefficient" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"><option value="">Coefficient</option><option value="male">Male coefficient</option><option value="female">Female coefficient</option></select></div>'
-        '<div class="min-w-0"><label for="cal-weight" class="text-[11px] leading-tight font-medium">Weight</label><div class="grid grid-cols-[minmax(0,1fr)_5rem] gap-1"><input id="cal-weight" type="number" placeholder="Weight" min="0" step="any" inputmode="decimal" autocomplete="off" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"><select id="cal-weight-unit" aria-label="Weight unit" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-1 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"><option value="kg">kg</option><option value="lb">lb</option></select></div></div>'
-        '<div class="min-w-0"><label id="cal-height-label" for="cal-height-cm" class="text-[11px] leading-tight font-medium">Height (cm)</label><div class="grid grid-cols-[minmax(0,1fr)_5rem] gap-1">'
-        '<div id="cal-height-metric" class="min-w-0"><input id="cal-height-cm" type="number" min="0" step="any" inputmode="decimal" autocomplete="off" placeholder="cm" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"></div>'
-        '<div id="cal-height-imperial" class="grid grid-cols-2 gap-1" hidden><div class="min-w-0"><label for="cal-height-ft" class="text-[11px] leading-tight font-medium">Feet</label><input id="cal-height-ft" type="number" min="3" max="8" step="1" inputmode="numeric" placeholder="ft" disabled class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-1 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"></div><div class="min-w-0"><label for="cal-height-in" class="text-[11px] leading-tight font-medium">Inches</label><input id="cal-height-in" type="number" min="0" max="11.99" step="any" inputmode="decimal" placeholder="in" disabled class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-1 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"></div></div>'
-        '<select id="cal-height-unit" aria-label="Height unit" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-1 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"><option value="cm">cm</option><option value="ft-in">ft/in</option></select></div></div>'
-        '<div id="cal-standard-activity-field" class="min-w-0"><label for="cal-activity" class="text-[11px] leading-tight font-medium">Activity level</label><select id="cal-activity" aria-label="Activity level" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"><option value="">Activity</option><option value="sedentary">Sedentary</option><option value="light">Light activity</option><option value="moderate">Moderate activity</option><option value="very_active">Very active</option><option value="extra_active">Extra active</option></select></div>'
-        '<div id="cal-eligibility-field" class="min-w-0" hidden><label for="cal-eligibility" class="text-[11px] leading-tight font-medium">Pregnancy / breastfeeding</label><select id="cal-eligibility" aria-label="Pregnancy and breastfeeding eligibility" disabled class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"><option value="">Eligibility</option><option value="no">Neither applies</option><option value="pregnant">Pregnant</option><option value="breastfeeding">Breastfeeding</option><option value="both">Both</option><option value="prefer_not_to_say">Prefer not to say</option></select></div>'
-        '<div id="cal-life-stage-fields" class="col-span-2 grid grid-cols-2 gap-2" hidden>'
-        '<div id="cal-pregnancy-fields" class="col-span-2 grid grid-cols-2 gap-2" hidden><div class="min-w-0"><label for="cal-pregnancy-weeks" class="text-[11px] leading-tight font-medium">Pregnancy weeks</label><input id="cal-pregnancy-weeks" type="number" min="1" max="42" step="1" inputmode="numeric" placeholder="Weeks" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"></div><div class="min-w-0"><label for="cal-prepregnancy-weight" class="text-[11px] leading-tight font-medium">Pre-pregnancy weight (same unit)</label><input id="cal-prepregnancy-weight" type="number" min="0" step="any" inputmode="decimal" placeholder="Before pregnancy" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"></div></div>'
-        '<div id="cal-breastfeeding-fields" class="col-span-2 min-w-0" hidden><label for="cal-breastfeeding-stage" class="text-[11px] leading-tight font-medium">Breastfeeding stage</label><select id="cal-breastfeeding-stage" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"><option value="">Choose supported stage</option><option value="exclusive_0_6">Exclusive breastfeeding, 0–6 months postpartum</option><option value="partial_7_12">Partial breastfeeding, 7–12 months postpartum</option></select></div>'
-        '<div id="cal-life-stage-activity-field" class="col-span-2 min-w-0" hidden><label for="cal-life-stage-activity" class="text-[11px] leading-tight font-medium">DRI activity category</label><select id="cal-life-stage-activity" class="w-full min-w-0 rounded-lg border border-stone-400 bg-white px-2 py-2 text-base text-stone-900 min-h-[40px] dark:bg-stone-950 dark:text-white"><option value="inactive">Inactive (PAL 1.00–&lt;1.53)</option><option value="low_active">Low active (PAL 1.53–&lt;1.68)</option><option value="active">Active (PAL 1.68–&lt;1.85)</option><option value="very_active">Very active (PAL 1.85–2.50)</option></select><p class="mt-1 col-span-2 text-xs leading-4">PAL means physical activity level. Select the category that best matches your full-day activity. These are the National Academies adult PAL ranges, not the standard calculator multipliers.</p></div></div>'
-        '<div class="col-span-2 flex flex-wrap gap-2 pt-0.5"><button id="cal-calculate" type="button" class="flex-1 rounded-lg bg-sky-800 px-3 py-1.5 text-sm font-semibold text-white min-h-[36px]">Calculate maintenance</button><button id="cal-reset" type="button" class="rounded-lg border border-stone-500 px-3 py-1.5 text-sm font-semibold min-h-[36px]">Reset</button></div>'
-        '<p id="calorie-error" class="col-span-2 empty:hidden text-sm font-medium text-red-700 dark:text-red-300" role="alert" aria-live="assertive"></p>'
-        '<div id="calorie-result" class="col-span-2 mt-2 rounded-lg border border-sky-300 bg-sky-50 p-3 text-stone-900 dark:border-sky-800 dark:bg-sky-950/40 dark:text-white" role="status" aria-live="polite" hidden></div></form></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">How the estimate is calculated</h2><p class="mt-2 leading-7">The Mifflin–St Jeor equation estimates resting energy expenditure (REE). It does not directly measure your metabolism. The published male-coefficient equation is REE = 10 × weight in kg + 6.25 × height in cm − 5 × age in years + 5. The published female-coefficient equation uses the same terms and subtracts 161 instead of adding 5.</p><p class="mt-2 leading-7">The maintenance estimate is calculated as estimated REE multiplied by the selected activity factor. It approximates total daily energy expenditure (TDEE) for a consumer estimate. It is not a measured TDEE and is not the FAO/WHO/UNU basal metabolic rate and physical activity level calculation framework.</p><p class="mt-2 leading-7">The original study included 498 healthy adults aged 19–78. This calculator accepts adults aged 18 or older, but an entered age of 18 or over 78 is outside that original study sample range and is flagged in the result.</p></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Pregnancy and breastfeeding estimates</h2><p class="mt-2 leading-7">The standard Mifflin–St Jeor maintenance path remains not intended for pregnancy or breastfeeding. When either applies, this calculator uses a separate National Academies 2023 Dietary Reference Intakes for Energy method, not the Mifflin–St Jeor equation or the standard consumer activity multipliers. Pregnancy and breastfeeding estimates use separate life-stage equations. The pregnancy estimate uses gestational weeks, current weight and pre-pregnancy BMI (for the second and third trimesters). The first trimester uses the nonpregnant adult female TEE equation without an added pregnancy increment. The second and third trimester equations include gestational weeks and an energy-deposition adjustment based on pre-pregnancy BMI.</p><p class="mt-2 leading-7">The breastfeeding estimate supports the two published categories: exclusive breastfeeding at 0–6 months postpartum, and partial breastfeeding at 7–12 months postpartum. The corresponding National Academies equations add the published milk-production and energy-mobilization increments. Other feeding patterns or postpartum periods are not extrapolated.</p><p class="mt-2 leading-7"><strong>Worked example:</strong> For age 30, height 175 cm, current weight 70 kg, inactive PAL, pregnancy at 20 weeks and pre-pregnancy weight 70 kg (BMI 22.9), the pregnancy equation gives 2,363.2 kcal/day. The exclusive breastfeeding 0–6 month equation using the same adult measurements gives 2,595.3 kcal/day. These are separate examples of the two equations, not a combined calorie target.</p><p class="mt-2 leading-7"><strong>Important:</strong> If both are selected, the calculator displays two separate reference estimates. They must not be added together or treated as a validated combined target. This is not a combined calorie target. The National Academies equations were developed for US and Canadian reference populations and have not been validated for every country or individual, including Pakistan. The National Academies report excluded studies from non-high-income countries because living, healthcare, physical-activity and food-availability environments may differ. The World Bank classifies Pakistan as a lower-middle-income economy, which falls within the non-high-income category described in that exclusion. It also excluded participants with chronic conditions, including Type 1 and Type 2 diabetes, from its IAEA analysis dataset. These equations are not a disease-specific clinical estimate and have not been validated for Pakistan or every individual. Individual energy requirements vary, so no result can be guaranteed 100% accurate for a particular person. If you have diabetes or another chronic medical condition, do not rely on this estimate for treatment or dietary decisions. Seek individualized guidance from your healthcare professional. These sources do not certify this website and the estimate does not replace an individual assessment by a qualified healthcare professional. See the <a class="underline text-sky-800 dark:text-sky-300" href="https://www.nationalacademies.org/read/26818/chapter/7" target="_blank" rel="noopener noreferrer">2023 National Academies method and equations</a>.</p><p class="mt-2 leading-7"><strong>Independent CDC context:</strong> CDC pregnancy guidance describes about 340 additional kcal/day in the second trimester and 450 additional kcal/day in the third trimester. CDC breastfeeding guidance describes 330–400 additional kcal/day compared with pre-pregnancy intake for well-nourished mothers, with needs affected by age, BMI, activity and feeding pattern. These are broad public-health guidance figures with a different baseline and assumptions. They are not substituted into the DRI equations and are not interchangeable with the equations or this calculator’s outputs. They provide context, not a validation of this website.</p></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Activity assumptions</h2><p class="mt-2 leading-7">The activity multipliers are consumer estimates stored by this calculator, not values from the original Mifflin–St Jeor equation or FAO/WHO/UNU PAL categories. They are approximate presets, not a validated measure of an individual’s daily energy expenditure.</p><ul class="mt-2 list-disc space-y-1 pl-6"><li>Sedentary (1.2): mostly seated work and little planned movement.</li><li>Light activity (1.375): some walking or light exercise, with mostly light daily movement.</li><li>Moderate activity (1.55): regular moderate exercise and a generally active daily routine.</li><li>Very active (1.725): frequent hard exercise or a physically demanding job.</li><li>Extra active (1.9): very demanding daily physical work or training.</li></ul><p class="mt-2 leading-7">Choose based on your full daily routine, including walking, work and other movement, not only gym sessions. Do not add exercise calories again when the selected activity assumption already represents that activity.</p></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Worked example</h2><p class="mt-2 leading-7">For age 30, weight 70 kg and height 175 cm, the male-coefficient equation gives 10 × 70 + 6.25 × 175 − 5 × 30 + 5 = 1,648.75 kcal/day REE. With the sedentary factor of 1.2, the maintenance estimate is 1,648.75 × 1.2 = 1,978.5 kcal/day.</p><p class="mt-2 leading-7">With the female coefficient and the same measurements, estimated REE is 1,482.75 kcal/day and the same sedentary factor gives 1,779.3 kcal/day. These examples are arithmetic checks, not predictions for every individual.</p></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Equation coefficient and individual differences</h2><p class="mt-2 leading-7">The original equation provides male and female coefficients. This selector is a coefficient choice for that published equation. It is not a complete model of gender identity, hormone treatment, sex traits or every clinical circumstance. If the coefficient does not represent your circumstances, this equation may not be suitable for you.</p><p class="mt-2 leading-7">Results can differ from another calculator or wearable because equations, activity assumptions, measurement conditions, input rounding and individual physiology differ. A calculated REE is not the same as a measured metabolic rate.</p></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Limitations and safety</h2><ul class="mt-2 list-disc space-y-2 pl-6"><li>For adults aged 18 or older only. It does not estimate needs for children or teenagers.</li><li>Pregnancy and breastfeeding estimates are available only for ages 19+ using the supported 2023 National Academies DRI categories. They are population estimates, not medical prescriptions or a certification of this website.</li><li>For simultaneous pregnancy and breastfeeding, the calculator shows two separate reference estimates only. The equations do not validate a combined calorie target, so do not add the values together.</li><li>People with diabetes or other metabolic conditions, and competitive athletes, may receive inaccurate estimates. Mayo Clinic advises that calorie estimates can overestimate or underestimate needs in these circumstances. Seek individual guidance from a qualified healthcare professional.</li><li>The original study sample was 19–78 years old. The calculator accepts age 18+ but flags ages outside the original sample.</li><li>Input guardrails of 20–500 kg and 100–250 cm are broad checks for likely entry errors, not medical reference ranges.</li><li>No individual confidence interval is calculated or implied.</li><li>This tool estimates maintenance only. It does not create weight-loss, weight-gain, deficit or surplus prescriptions.</li><li>REE is not a universal minimum safe calorie intake. Do not use it as a personal dietary limit.</li><li>This calculator has not been medically reviewed. The source references support the method context, not certification or approval of this website.</li></ul></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Privacy and data handling</h2><p class="mt-2 leading-7">The calculation runs in your browser. This feature does not write measurements to local storage, add them to the URL, or send them to a calculation API. Reset clears the entered values and displayed result. The website host and any existing third-party resources may still process ordinary technical request data, as described in the <a class="underline text-sky-800 dark:text-sky-300" href="/privacy/">Privacy Policy</a>.</p></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Frequently asked questions</h2><div class="mt-2">'
-        + "".join('<details class="border-b border-stone-300 py-3 dark:border-stone-700"><summary class="min-h-[40px] cursor-pointer font-medium">' + html.escape(question) + '</summary><p class="mt-2 leading-7">' + html.escape(answer) + '</p></details>' for question, answer in faq)
+        '<nav aria-label="Breadcrumb" class="mb-3 text-sm text-stone-700 dark:text-stone-300">'
+        '<ol class="flex flex-wrap items-center gap-2"><li><a class="underline text-sky-800 dark:text-sky-300" href="/">Home</a></li>'
+        '<li aria-hidden="true">/</li><li><a class="underline text-sky-800 dark:text-sky-300" href="/health/">Health</a></li>'
+        '<li aria-hidden="true">/</li><li aria-current="page">Calorie Calculator</li></ol></nav>'
+        '<header class="mb-4"><p class="text-xs font-bold uppercase tracking-wide text-sky-800 dark:text-sky-300">Adult calorie estimate</p>'
+        '<h1 class="mt-1 text-2xl font-bold text-stone-950 dark:text-white">Calorie Calculator</h1>'
+        '<p class="mt-2 leading-6 text-stone-700 dark:text-stone-300">Estimate maintenance calories, total daily energy expenditure (TDEE), resting energy (BMR / REE) and a simple maintenance macro split with three established prediction formulas.</p></header>'
+        '<aside role="note" class="mb-4 rounded-lg border border-amber-400 bg-amber-50 p-3 text-sm leading-6 text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100">'
+        '<strong>Important health notice:</strong> Estimate only – not medical advice. For adults aged 18 or older only. Do not use this calculator during pregnancy or breastfeeding, for children or teenagers, or as a substitute for advice from a qualified healthcare professional. No weight-loss or weight-gain outcome is guaranteed.</aside>'
+        '<section class="rounded-xl border border-stone-300 bg-white p-3 shadow-sm dark:border-stone-700 dark:bg-stone-900 sm:p-5">'
+        '<h2 id="calorie-form-title" class="text-lg font-semibold text-stone-950 dark:text-white">Calculate your daily calorie estimate</h2>'
+        '<p class="mt-1 text-sm leading-5 text-stone-700 dark:text-stone-300">Mifflin–St Jeor is selected by default. Use metric or imperial units and choose the activity level that best matches your usual day.</p>'
+        '<form id="calorie-form" aria-labelledby="calorie-form-title" novalidate class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">'
+        '<div class="min-w-0"><label for="cal-age" class="' + label_class + '">Age (years)</label>'
+        '<input id="cal-age" type="number" min="18" max="120" step="1" inputmode="numeric" autocomplete="off" placeholder="e.g. 30" class="' + input_class + '"></div>'
+        '<div class="min-w-0"><label for="cal-formula" class="' + label_class + '">Calculation formula</label>'
+        '<select id="cal-formula" class="' + input_class + '"><option value="mifflin" selected>Mifflin–St Jeor (recommended)</option><option value="harris-benedict">Revised Harris–Benedict</option><option value="katch-mcardle">Katch–McArdle (requires body fat %)</option></select></div>'
+        '<div class="min-w-0"><label for="cal-coefficient" class="' + label_class + '">Equation coefficient</label>'
+        '<select id="cal-coefficient" class="' + input_class + '"><option value="">Choose coefficient</option><option value="male">Male coefficient</option><option value="female">Female coefficient</option></select>'
+        '<p class="mt-1 text-xs leading-5 text-stone-600 dark:text-stone-400">Required for Mifflin–St Jeor and Revised Harris–Benedict. Katch–McArdle does not use this input.</p></div>'
+        '<div class="min-w-0"><label for="cal-activity" class="' + label_class + '">Activity level</label>'
+        '<select id="cal-activity" class="' + input_class + '"><option value="">Choose activity</option><option value="sedentary">Sedentary</option><option value="light">Light activity</option><option value="moderate">Moderate activity</option><option value="very_active">Very active</option><option value="extra_active">Extra active</option></select></div>'
+        '<div class="min-w-0"><label for="cal-weight" class="' + label_class + '">Weight</label>'
+        '<div class="grid grid-cols-[minmax(0,1fr)_5rem] gap-2"><input id="cal-weight" type="number" min="0" step="any" inputmode="decimal" placeholder="Your weight" class="' + input_class + '">'
+        '<select id="cal-weight-unit" aria-label="Weight unit" class="' + input_class + '"><option value="kg">kg</option><option value="lb">lb</option></select></div></div>'
+        '<div class="min-w-0"><label id="cal-height-label" for="cal-height" class="' + label_class + '">Height</label>'
+        '<div class="grid grid-cols-[minmax(0,1fr)_5rem] gap-2"><div id="cal-height-metric"><input id="cal-height" type="number" min="0" step="any" inputmode="decimal" placeholder="Centimetres" class="' + input_class + '"></div>'
+        '<div id="cal-height-imperial" class="grid grid-cols-2 gap-1" hidden><input id="cal-height-ft" type="number" min="3" max="8" step="1" inputmode="numeric" aria-label="Height in feet" placeholder="ft" disabled class="' + input_class + '">'
+        '<input id="cal-height-in" type="number" min="0" max="11.99" step="any" inputmode="decimal" aria-label="Remaining height in inches" placeholder="in" disabled class="' + input_class + '"></div>'
+        '<select id="cal-height-unit" aria-label="Height unit" class="' + input_class + '"><option value="cm">cm</option><option value="ft-in">ft/in</option></select></div></div>'
+        '<div id="cal-body-fat-field" class="min-w-0" hidden><label for="cal-body-fat" class="' + label_class + '">Body-fat percentage (%)</label>'
+        '<input id="cal-body-fat" type="number" min="3" max="70" step="any" inputmode="decimal" placeholder="e.g. 20" disabled class="' + input_class + '">'
+        '<p class="mt-1 text-xs leading-5 text-stone-600 dark:text-stone-400">Used only by Katch–McArdle. Enter a reasonably measured estimate, not a guess.</p></div>'
+        '<div class="col-span-1 flex flex-wrap gap-2 pt-1 sm:col-span-2"><button id="cal-calculate" type="button" class="min-h-[44px] flex-1 rounded-lg bg-sky-800 px-4 py-2 font-semibold text-white hover:bg-sky-900 focus:outline-none focus:ring-2 focus:ring-sky-500">Calculate calories</button>'
+        '<button id="cal-reset" type="button" class="min-h-[44px] rounded-lg border border-stone-400 px-4 py-2 font-semibold text-stone-800 hover:bg-stone-100 dark:border-stone-600 dark:text-stone-100 dark:hover:bg-stone-800">Reset</button></div>'
+        '<p id="calorie-error" class="col-span-1 empty:hidden text-sm font-medium text-red-700 dark:text-red-300 sm:col-span-2" role="alert" aria-live="assertive"></p>'
+        '<div id="calorie-result" class="col-span-1 mt-1 rounded-lg border border-sky-300 bg-sky-50 p-3 text-stone-950 dark:border-sky-800 dark:bg-sky-950/40 dark:text-white sm:col-span-2 sm:p-4" role="status" aria-live="polite" hidden></div>'
+        '</form></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">How many calories do I need?</h2>'
+        '<p class="mt-2 leading-7">Your daily calorie needs are influenced by your age, body size, body composition, activity, health and other individual factors. A calorie calculator estimates energy needs from a mathematical model. It cannot measure your metabolism or account for every personal circumstance. Use the result as an educational reference, not as an exact daily requirement.</p>'
+        '<p class="mt-2 leading-7">The maintenance estimate is intended to approximate the calories associated with maintaining body weight over time. Day-to-day scale readings can move for reasons unrelated to body fat, including fluid balance, food in the digestive system and normal biological variation.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">TDEE, maintenance calories and BMR explained</h2>'
+        '<p class="mt-2 leading-7"><strong>Total daily energy expenditure (TDEE)</strong> is the energy used across a full day. It includes resting energy, the thermic effect of food and physical activity. This calculator estimates TDEE by multiplying a predicted resting-energy value by one of five activity factors.</p>'
+        '<p class="mt-2 leading-7"><strong>Maintenance calories</strong> are a practical term for an estimated daily intake associated with stable body weight over time. In this tool, maintenance calories and estimated TDEE use the same calculated value.</p>'
+        '<p class="mt-2 leading-7"><strong>Basal metabolic rate (BMR)</strong>, <strong>resting metabolic rate (RMR)</strong> and <strong>resting energy expenditure (REE)</strong> refer to related but not identical concepts. The formulas estimate resting energy under their published assumptions. They do not replace indirect calorimetry or a clinical assessment.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">The three calorie formulas</h2>'
+        '<h3 class="mt-4 text-lg font-semibold">1. Mifflin–St Jeor (default and recommended)</h3>'
+        '<p class="mt-2 leading-7">Male coefficient: REE = 10 × weight (kg) + 6.25 × height (cm) − 5 × age + 5. Female coefficient: REE = 10 × weight (kg) + 6.25 × height (cm) − 5 × age − 161. The original 1990 study developed the equation from resting-energy measurements in 498 healthy adults aged 19–78. The equation is a population prediction, not a personal measurement.</p>'
+        '<h3 class="mt-4 text-lg font-semibold">2. Revised Harris–Benedict (Roza and Shizgal, 1984)</h3>'
+        '<p class="mt-2 leading-7">Male coefficient: REE = 88.362 + 13.397 × weight (kg) + 4.799 × height (cm) − 5.677 × age. Female coefficient: REE = 447.593 + 9.247 × weight (kg) + 3.098 × height (cm) − 4.330 × age. These revised equations are distinct from the original Harris–Benedict equations published in 1919.</p>'
+        '<h3 class="mt-4 text-lg font-semibold">3. Katch–McArdle (body-composition based)</h3>'
+        '<p class="mt-2 leading-7">Estimated resting metabolic rate = 370 + 21.6 × lean body mass (kg). Lean body mass = body weight (kg) × (1 − body-fat percentage ÷ 100). This option requires body-fat percentage and does not use the male or female coefficient input. Its output is only as useful as the body-fat estimate entered. Consumer body-composition devices and visual estimates can be inaccurate.</p>'
+        '<p class="mt-2 leading-7">The three equations estimate related resting-energy outcomes using different inputs and study assumptions. They should not be expected to produce identical numbers. Mifflin–St Jeor is selected by default as a practical general-adult starting point, not because it is guaranteed to be the most accurate formula for every person.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Activity levels and TDEE multipliers</h2>'
+        '<p class="mt-2 leading-7">After estimating resting energy, the calculator multiplies it by the selected activity factor. These five factors are simplified consumer-calculator assumptions. They are not coefficients from the original Mifflin–St Jeor or Revised Harris–Benedict papers, and they are not the formal FAO/WHO/UNU physical activity level categories.</p>'
+        '<ul class="mt-2 list-disc space-y-2 pl-6"><li><strong>Sedentary (1.2):</strong> mostly seated work and little planned movement.</li><li><strong>Light activity (1.375):</strong> some walking or light exercise, with mostly light daily movement.</li><li><strong>Moderate activity (1.55):</strong> regular moderate exercise and a generally active daily routine.</li><li><strong>Very active (1.725):</strong> frequent hard exercise or a physically demanding job.</li><li><strong>Extra active (1.9):</strong> very demanding daily physical work or training.</li></ul>'
+        '<p class="mt-2 leading-7">Choose the closest description for your whole day, including work, walking, household tasks and planned exercise. Do not add exercise calories a second time if the activity factor already represents that movement. The factor is approximate and can overestimate or underestimate an individual’s TDEE.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Calorie deficit, surplus and maintenance targets</h2>'
+        '<p class="mt-2 leading-7">A calorie deficit means estimated intake is below estimated energy expenditure. A calorie surplus means estimated intake is above estimated energy expenditure. The results panel shows maintenance, maintenance minus 300 kcal, maintenance minus 500 kcal and maintenance plus 250 kcal so the arithmetic can be compared clearly.</p>'
+        '<p class="mt-2 leading-7">These deficit and surplus figures are illustrative calculations, not personalized recommendations. A fixed reduction or increase is not appropriate for every adult. The calculator does not screen for low energy availability, nutritional adequacy, medical conditions, medication, eating-disorder risk or other reasons a target may be unsuitable. It does not predict a rate of weight change and makes no weight-loss or weight-gain guarantee.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Simple maintenance macro split</h2>'
+        '<p class="mt-2 leading-7">The results panel includes an illustrative split of 30% of maintenance calories from protein, 40% from carbohydrates and 30% from fat. Gram estimates use 4 kcal per gram for protein and carbohydrates and 9 kcal per gram for fat. This is a simple arithmetic example, not a universally optimal ratio, a clinical nutrition plan or an assessment of your individual needs. Food quality, preferences, health and total nutritional adequacy also matter.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Why calorie calculators give different results</h2>'
+        '<p class="mt-2 leading-7">Two calculators can return different values for the same person because they may use different resting-energy formulas, sex coefficients, activity multipliers, body-fat inputs, population samples, unit conversions or rounding methods. Some tools estimate resting energy, while others estimate total daily energy expenditure directly. Wearables and exercise machines use their own models and can also differ.</p>'
+        '<p class="mt-2 leading-7">Compare the formula, inputs and assumptions before comparing the final number. A difference between two estimates does not automatically mean one calculator is broken. Neither output should be treated as a measured metabolic rate.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Pregnancy, breastfeeding and medical conditions</h2>'
+        '<p class="mt-2 leading-7"><strong>This calculator is not intended for pregnancy or breastfeeding.</strong> Pregnancy and lactation change nutritional and energy requirements, and an ordinary adult prediction equation or fixed deficit/surplus example is not an appropriate substitute for individualized care. Speak with a qualified healthcare professional or registered dietitian for guidance during pregnancy or breastfeeding.</p>'
+        '<p class="mt-2 leading-7">This tool is also not designed to adjust for diabetes, thyroid conditions, other metabolic or chronic diseases, medication, recovery from illness, competitive sport, eating-disorder history or clinical nutrition needs. If any of these circumstances apply, do not use the displayed values to set a diet or treatment target. Seek advice from a professional who knows your health history.</p>'
+        '<p class="mt-2 leading-7">The equations are population-level estimates. Their original study groups and assumptions do not represent every country, body type, age or health circumstance. In particular, the original Mifflin–St Jeor sample was adults aged 19–78, while this page accepts adults from age 18 as a broad consumer input range. The age input range does not mean that every age has equal validation evidence.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Worked example</h2>'
+        '<p class="mt-2 leading-7">For an adult aged 30 with a weight of 70 kg, a height of 175 cm and the male coefficient, Mifflin–St Jeor gives: 10 × 70 + 6.25 × 175 − 5 × 30 + 5 = 1,648.75 kcal/day resting energy. With the sedentary factor of 1.2, the estimated maintenance value is 1,648.75 × 1.2 = 1,978.5 kcal/day. The displayed result is rounded to one decimal place.</p>'
+        '<p class="mt-2 leading-7">The arithmetic example demonstrates the formula only. It is not a prediction for every adult with these measurements and is not a diet recommendation.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Limitations and safety</h2>'
+        '<ul class="mt-2 list-disc space-y-2 pl-6"><li>Estimate only – not medical advice, diagnosis or treatment.</li><li>Adults aged 18 or older only. Not for children or teenagers.</li><li>Not intended for pregnancy or breastfeeding.</li><li>No weight-loss, weight-gain, muscle-gain or timeline guarantee.</li><li>Deficit, surplus and macro figures are illustrative arithmetic, not personalized prescriptions.</li><li>Prediction equations can overestimate or underestimate actual energy needs.</li><li>Katch–McArdle depends on the accuracy of the entered body-fat percentage.</li><li>Activity multipliers are simplified assumptions, not measured activity or validated individual TDEE.</li><li>A resting-energy estimate is not a minimum safe calorie intake.</li><li>This calculator has not been medically reviewed.</li></ul></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Privacy: calculations stay in your browser</h2>'
+        '<p class="mt-2 leading-7">The calculator performs the formula calculations in your browser using JavaScript. The calculator code does not send the age, weight, height, body-fat percentage or calculated result to a calculation server or API, place those values in the page URL, or save them in browser storage. Reset clears the entered values and displayed result. The website host and third-party resources may still process ordinary technical request data, as explained in the <a class="underline text-sky-800 dark:text-sky-300" href="/privacy/">Privacy Policy</a>.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Frequently asked questions</h2><div class="mt-2">'
+        + "".join(
+            '<details class="border-b border-stone-300 py-3 dark:border-stone-700"><summary class="min-h-[44px] cursor-pointer font-medium">'
+            + html.escape(question)
+            + '</summary><p class="mt-2 leading-7">'
+            + html.escape(answer)
+            + '</p></details>'
+            for question, answer in faq
+        )
         + '</div></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Page ownership and review</h2><p class="mt-2 leading-7">Site maintainer: Muhammad Fayyaz Adeel. No qualified medical professional has reviewed this calculator or its implementation. The cited research supports the described equation and context, not medical certification or endorsement of this website.</p></section>'
-        '<section class="mt-6"><h2 class="text-xl font-semibold">Sources and references</h2><ul class="mt-2 list-disc space-y-3 pl-6">'
-        + "".join('<li><a class="underline text-sky-800 dark:text-sky-300" href="' + html.escape(url, quote=True) + '" target="_blank" rel="noopener noreferrer">' + html.escape(source_title) + '</a><p class="text-sm leading-6">' + html.escape(note) + '</p></li>' for source_title, url, note in sources)
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Page ownership and medical review</h2>'
+        '<p class="mt-2 leading-7">Site maintainer: Muhammad Fayyaz Adeel. No qualified medical professional has reviewed this calculator or its implementation. The cited research supports the named formulas and general context, not medical certification or endorsement of this website.</p></section>'
+        '<section class="mt-8"><h2 class="text-xl font-semibold">Sources and references</h2><ul class="mt-2 list-disc space-y-3 pl-6">'
+        + "".join(
+            '<li><a class="underline text-sky-800 dark:text-sky-300" href="'
+            + html.escape(url, quote=True)
+            + '" target="_blank" rel="noopener noreferrer">'
+            + html.escape(source_title)
+            + '</a><p class="text-sm leading-6">'
+            + html.escape(note)
+            + '</p></li>'
+            for source_title, url, note in sources
+        )
         + '</ul></section>'
-        '<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">Related tools</h2><ul class="mt-2 list-disc space-y-1 pl-6"><li><a class="underline text-sky-800 dark:text-sky-300" href="/bmi-calculator/">Adult BMI Calculator</a></li><li><a class="underline text-sky-800 dark:text-sky-300" href="/health/">Health calculators and guidance</a></li><li><a class="underline text-sky-800 dark:text-sky-300" href="/methodology/">Calculation methodology</a></li><li><a class="underline text-sky-800 dark:text-sky-300" href="/about/">About CalculatesAll</a></li></ul></nav>'
+        '<nav aria-label="Related calculators" class="mt-8"><h2 class="text-xl font-semibold">Related tools</h2><ul class="mt-2 list-disc space-y-1 pl-6">'
+        '<li><a class="underline text-sky-800 dark:text-sky-300" href="/bmi-calculator/">Adult BMI Calculator</a></li>'
+        '<li><a class="underline text-sky-800 dark:text-sky-300" href="/health/">Health calculators and guidance</a></li>'
+        '<li><a class="underline text-sky-800 dark:text-sky-300" href="/methodology/">Calculation methodology</a></li>'
+        '<li><a class="underline text-sky-800 dark:text-sky-300" href="/about/">About CalculatesAll</a></li></ul></nav>'
         '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">For a correction, use the <a class="underline text-sky-800 dark:text-sky-300" href="/contact/">Contact page</a>. Do not send medical records or other sensitive personal information.</p>'
     )
+
     schema = [
-        {"@context": "https://schema.org", "@type": "WebPage", "name": title, "url": site + path, "description": description, "publisher": {"@id": site + "/#organization"}, "citation": [url for _, url, _ in sources], "inLanguage": "en"},
-        {"@context": "https://schema.org", "@type": "WebApplication", "name": "Adult Calorie Calculator", "url": site + path, "description": description, "applicationCategory": "HealthApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "publisher": {"@id": site + "/#organization"}, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "inLanguage": "en"},
-        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": site + "/"},
-            {"@type": "ListItem", "position": 2, "name": "Health", "item": site + "/health/"},
-            {"@type": "ListItem", "position": 3, "name": "Adult Calorie Calculator", "item": site + path},
-        ]},
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": title,
+            "url": site + path,
+            "description": description,
+            "publisher": {"@id": site + "/#organization"},
+            "citation": [url for _, url, _ in sources],
+            "inLanguage": "en",
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Calorie Calculator",
+            "url": site + path,
+            "description": description,
+            "applicationCategory": "HealthApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "publisher": {"@id": site + "/#organization"},
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+            "inLanguage": "en",
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": site + "/"},
+                {"@type": "ListItem", "position": 2, "name": "Health", "item": site + "/health/"},
+                {"@type": "ListItem", "position": 3, "name": "Calorie Calculator", "item": site + path},
+            ],
+        },
     ]
+
     document = head(title, description, path, schema) + shell(body, current_path=path)
-    script_version = hashlib.sha256(open("static/calorie-calculator.js", "rb").read()).hexdigest()[:12]
-    document = document.replace("</body>", f'<script defer src="/assets/calorie-calculator.js?v={script_version}"></script></body>')
+    with open("static/calorie-calculator.js", "rb") as script_file:
+        script_version = hashlib.sha256(script_file.read()).hexdigest()[:12]
+    document = document.replace(
+        "</body>",
+        f'<script defer src="/assets/calorie-calculator.js?v={script_version}"></script></body>',
+    )
     write(path, document)
     return path
