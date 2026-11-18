@@ -112,6 +112,44 @@ let browser;
       "Every Urdu Zakat amount input must disable browser autofill: " + await input.getAttribute("id"));
   }
 
+  // Urdu must be a complete localized experience, not an English form inside an RTL page.
+  const urduFormText = await page.locator("#zakat-form").innerText();
+  for (const untranslated of [
+    "One-page Zakat calculator",
+    "Choose your method, enter only applicable amounts, then calculate.",
+    "Recoverable receivables",
+    "Property held for resale (only if bought for resale)",
+    "Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution.",
+    "Owner remained adult and sane throughout the year",
+    "One full year has passed since the intention to profit began"
+  ]) {
+    assert.equal(urduFormText.includes(untranslated), false,
+      "Urdu Zakat form must not show untranslated English text: " + untranslated);
+  }
+  assert.match(urduFormText, /ایک صفحے کا زکوٰۃ کیلکولیٹر/,
+    "Urdu form heading must be translated");
+  assert.match(urduFormText, /قابلِ وصول رقوم/,
+    "Urdu receivables heading must be translated");
+  assert.match(urduFormText, /دوبارہ فروخت کے لیے رکھی گئی جائیداد/,
+    "Urdu resale-property field must be translated");
+  assert.equal(await page.locator("#zakat-form").evaluate(el => getComputedStyle(el).direction), "rtl",
+    "Urdu form controls and grids must inherit right-to-left direction");
+
+  for (const viewport of [{ width: 320, height: 740 }, { width: 360, height: 800 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1366, height: 900 }]) {
+    await page.setViewportSize(viewport);
+    const metrics = await page.evaluate(() => ({
+      width: innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      mainWidth: document.querySelector("#main").getBoundingClientRect().width,
+      formWidth: document.querySelector("#zakat-form").getBoundingClientRect().width,
+      formDirection: getComputedStyle(document.querySelector("#zakat-form")).direction
+    }));
+    assert.equal(metrics.documentWidth, metrics.width, "Urdu RTL page must not overflow horizontally at " + viewport.width + "px");
+    assert.ok(metrics.mainWidth > 0 && metrics.mainWidth <= metrics.width, "Urdu page container must fit viewport at " + viewport.width + "px");
+    assert.ok(metrics.formWidth > 0 && metrics.formWidth <= metrics.mainWidth, "Urdu calculator must fit its page container at " + viewport.width + "px");
+    assert.equal(metrics.formDirection, "rtl", "Urdu form must remain RTL at " + viewport.width + "px");
+  }
+
   assert.deepEqual(pageErrors, [], "Zakat browser page must not produce uncaught JavaScript errors");
   assert.deepEqual(consoleErrors, [], "Zakat browser page must not produce console errors");
   console.log("Zakat browser: PASS (single-page Hanafi and Sistani flows, both locales, 4 responsive widths, no console errors)");
