@@ -23,6 +23,12 @@ let browser;
   assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Calculate action must be visible at the top of the form");
   assert.equal(await page.locator("#z-stock").getAttribute("autocomplete"), "off",
     "Financial trade-stock values must not be browser-autofilled");
+  const englishAmountInputs = page.locator("#zakat-form input[type=number]");
+  assert.ok(await englishAmountInputs.count() >= 10, "Expected all English Zakat amount inputs");
+  for (const input of await englishAmountInputs.all()) {
+    assert.equal(await input.getAttribute("autocomplete"), "off",
+      "Every English Zakat amount input must disable browser autofill: " + await input.getAttribute("id"));
+  }
   const shortcutNav = page.locator("header .ca-calculator-carousel");
   assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 0,
     "Zakat pages must not duplicate moving calculator shortcuts");
@@ -98,6 +104,13 @@ let browser;
   assert.equal(await page.locator("#zakat-next, #zakat-back, #zakat-step-progress").count(), 0,
     "Urdu calculator must not expose wizard navigation");
   assert.equal(await page.locator("#zakat-submit").isVisible(), true);
+
+  const urAmountInputs = page.locator("#zakat-form input[type=number]");
+  assert.ok(await urAmountInputs.count() >= 10, "Expected all Urdu Zakat amount inputs");
+  for (const input of await urAmountInputs.all()) {
+    assert.equal(await input.getAttribute("autocomplete"), "off",
+      "Every Urdu Zakat amount input must disable browser autofill: " + await input.getAttribute("id"));
+  }
 
   assert.deepEqual(pageErrors, [], "Zakat browser page must not produce uncaught JavaScript errors");
   assert.deepEqual(consoleErrors, [], "Zakat browser page must not produce console errors");
