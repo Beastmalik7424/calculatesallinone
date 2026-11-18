@@ -181,6 +181,18 @@ let browser;
     assert.equal(metrics.formDirection, "rtl", "Urdu form must remain RTL at " + viewport.width + "px");
   }
 
+  // Urdu Sistani coin-only below-Nisab result must not display a zero business-goods threshold.
+  await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
+  await page.locator("#z-jafari-coins-used-as-money").check();
+  await page.locator("#z-jafari-silver-coins-weight").fill("483.83");
+  await page.locator("#z-jafari-coins-access").check();
+  await page.locator("#z-jafari-silver-coins-hawl").check();
+  await page.locator("#z-silverprice").fill("100");
+  await page.locator("#zakat-submit").click();
+  const urduBelowCoinResult = await page.locator("#zakat-result").innerText();
+  assert.match(urduBelowCoinResult, /لاگو نہیں/,
+    "Urdu coin-only below-Nisab result must not display a zero business-goods threshold");
+
   assert.deepEqual(pageErrors, [], "Zakat browser page must not produce uncaught JavaScript errors");
   assert.deepEqual(consoleErrors, [], "Zakat browser page must not produce console errors");
   console.log("Zakat browser: PASS (single-page Hanafi and Sistani flows, both locales, 4 responsive widths, no console errors)");

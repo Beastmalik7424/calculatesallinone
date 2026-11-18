@@ -572,7 +572,9 @@
           assets: money(result.totalAssets, result.currency),
           liabilities: money(result.totalLiabilities, result.currency),
           net: money(result.netAssets, result.currency),
-          nisab: money(result.nisabThreshold, result.currency),
+          nisab: school === "jafari-sistani" && result.tradeGoodsStatus === "not_applicable"
+            ? (lang() === "ur" ? "لاگو نہیں" : "Not applicable")
+            : money(result.nisabThreshold, result.currency),
           gross: money(result.zakatBeforePaid, result.currency),
           paid: money(result.zakatPaid, result.currency),
           amount: money(result.balanceDue, result.currency),
