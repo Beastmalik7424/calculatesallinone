@@ -96,7 +96,7 @@ homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
 assert 'data-tool-set="duplicate"' in zakat_markup, "Zakat calculator navigation must include the second accessible marquee group"
-assert 'data-tool-set="duplicate"' in tasbih, "Inner calculator pages must retain the duplicate group required for a seamless ticker"
+assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pages must retain their existing single shortcut group"
 assert "body:has(#zakat-form) header nav .ca-calculator-group" not in css, "Zakat navigation must not replace the shared ticker with a static grid"
 assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available"
 assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "All calculator pages must use the shared continuous ticker animation"
