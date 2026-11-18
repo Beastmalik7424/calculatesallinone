@@ -76,7 +76,9 @@ let browser;
   const ticker = page.locator("header .ca-calculator-carousel");
   assert.equal(await ticker.count(), 1, "Zakat page must retain the shared calculator ticker");
   assert.equal(await ticker.locator('[data-tool-set="primary"] a').count(), 17, "Primary ticker must expose all 17 calculator destinations");
-  assert.equal(await ticker.locator('[data-tool-set="duplicate"]').count(), 0, "Zakat must retain the same single-group structure as other inner calculator pages");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"] a').count(), 17, "Continuous ticker must have a matching duplicate group");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"]').getAttribute("aria-hidden"), "true", "Duplicate ticker group must be hidden from assistive technology");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"] a[tabindex="-1"]').count(), 17, "Duplicate ticker links must not enter keyboard navigation");
   const tickerMotion = await ticker.locator(".ca-calculator-track").evaluate(el => {
     const style = getComputedStyle(el);
     return { name: style.animationName, duration: style.animationDuration, iteration: style.animationIterationCount };
