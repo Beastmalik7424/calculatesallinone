@@ -1,0 +1,29 @@
+name: Zakat focused verification
+
+on:
+  push:
+    branches: ["fix/zakat-sistani-coins-single-page"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  zakat-focused:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install locked dependencies without repeating the separate audit gate
+        run: npm ci --no-audit --ignore-scripts
+      - name: Check Zakat JavaScript syntax
+        run: node --check static/zakat-calculator.js && node --check static/app.js
+      - name: Run Zakat fiqh and deterministic calculation tests
+        run: node tests/zakat-fiqh-methods.cjs
+      - name: Run Zakat generated-page quality smoke test
+        run: node tests/zakat-calculator-quality-smoke.cjs
