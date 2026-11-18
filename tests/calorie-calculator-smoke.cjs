@@ -49,7 +49,7 @@ assert.throws(() => calculateCalorieTargets({ ...common, heightUnit: "inches", f
 
 const imperial = calculateCalorieTargets({
   age: 30, weight: 154.323583529414, weightUnit: "lb",
-  height: 5 * 12 + 8.89763779527559, heightUnit: "in",
+  heightUnit: "ft-in", heightFeet: 5, heightInches: 8.89763779527559,
   coefficient: "male", formula: "mifflin", activityId: "sedentary"
 });
 assert.ok(Math.abs(imperial.restingKcalPerDay - mifflin.restingKcalPerDay) < 1e-6);
