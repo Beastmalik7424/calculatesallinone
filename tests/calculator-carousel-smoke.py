@@ -95,25 +95,18 @@ css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
-assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat calculator navigation must not duplicate links"
-assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
-assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Zakat phone and tablet navigation must use a compact six-column grid"
-assert "grid-template-columns:repeat(9,minmax(0,1fr))" in css.replace(" ", ""), "Zakat desktop navigation must use a nine-column grid"
-assert "white-space:nowrap!important" in css.replace(" ", ""), "Short shortcut labels must remain on one line"
-assert "data-short-label" in zakat_markup and "aria-label=" in zakat_markup and "title=" in zakat_markup, "Every compact visual label must retain its full accessible name and title"
-assert "text-overflow:clip!important" in css.replace(" ", ""), "Calculator shortcut labels must not be truncated"
-assert "min-height:44px" in css.replace(" ", ""), "Calculator shortcut links must retain a comfortable mobile tap target"
-assert "@keyframes ca-calculator-marquee" in css, "Homepage must retain its existing carousel animation"
-assert ".ca-calculator-track" in css and "animation:none" in css.replace(" ", ""), "Inner-page calculator navigation must be static, not a moving marquee"
-assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
-assert "ca-site-nav-topline" in markup, "Header must keep its separate top controls row"
+assert 'data-tool-set="duplicate"' in zakat_markup, "Zakat calculator navigation must include the second accessible marquee group"
+assert 'data-tool-set="duplicate"' in tasbih, "Inner calculator pages must retain the duplicate group required for a seamless ticker"
+assert "grid-template-columns:repeat(6,minmax(0,1fr))" not in css.replace(" ", ""), "Zakat navigation must not be converted into a static six-column grid"
+assert "grid-template-columns:repeat(9,minmax(0,1fr))" not in css.replace(" ", ""), "Zakat navigation must not be converted into a static nine-column grid"
+assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available"
+assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "All calculator pages must use the shared continuous ticker animation"
+assert "animation:none!important" not in css.replace(" ", ""), "Zakat-specific CSS must not disable the shared ticker"
+assert "theme-toggle" in zakat_markup and zakat_markup.index('id="theme-toggle"') < zakat_markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
+assert "ca-site-nav-topline" in zakat_markup, "Header must keep its separate top controls row"
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
-print("Calculator grid, all 17 unique tools, responsive columns, header layout and Tasbih action smoke tests PASS")
+print("Calculator ticker, all 17 destinations, accessible duplicate group, header layout and Tasbih action smoke tests PASS")
 
-assert '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">' in zakat_markup, "Zakat pages must use a new stylesheet URL so browsers cannot reuse the prior cached layout"
-carousel_rules = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-carousel\{([^}]*)\}', css)
-track_rules = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-track\{([^}]*)\}', css)
-assert len(carousel_rules) == 1, f"Zakat navigation must have one authoritative carousel rule, found {len(carousel_rules)}"
-assert len(track_rules) == 1, f"Zakat navigation must have one authoritative track rule, found {len(track_rules)}"
-assert all("display:none" not in rule for rule in carousel_rules), "Zakat navigation must never be hidden at mobile breakpoints"
-assert all("ca-calculator-marquee" not in rule for rule in track_rules), "Zakat navigation must be a static grid, not a moving marquee"
+assert '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">' in zakat_markup, "Zakat pages must retain the cache-busted stylesheet URL"
+assert zakat_markup.count('data-tool-set="primary"') == 1 and zakat_markup.count('data-tool-set="duplicate"') == 1, "Zakat pages must render exactly one primary and one duplicate ticker group"
+assert 'aria-hidden="true"' in zakat_markup and 'tabindex="-1"' in zakat_markup, "Duplicate ticker links must be hidden from assistive technology and keyboard navigation"
