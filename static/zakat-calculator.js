@@ -96,13 +96,14 @@
       marketValueAtLeastCost: input.tradeGoodsMarketValueAtLeastCost === true
     };
     const conditionsMet = Object.values(conditions).every(Boolean);
+    const coinAccessContinuous = input.jafariCoinsAccessContinuous === true;
     const tradeGoodsMeetsNisab = tradeGoodsValue > 0 && tradeGoodsValue >= nisabThreshold;
     const tradeGoodsStatus = tradeGoodsValue <= 0 ? "not_applicable" :
       (!tradeGoodsMeetsNisab ? "below_nisab" : (!conditionsMet ? "conditions_incomplete" : "payable"));
     const tradeGoodsZakatBase = tradeGoodsStatus === "payable" ? tradeGoodsValue : 0;
 
     const coinsUsedAsMoney = input.jafariCoinsUsedAsMoney === true;
-    const coinOwnerAndAccess = conditions.adultAndSane && conditions.accessContinuous;
+    const coinOwnerAndAccess = conditions.adultAndSane && coinAccessContinuous;
     const goldCoinsWeightGrams = weightInGrams(input.jafariGoldCoinsWeight, metalPriceUnit, "jafariGoldCoinsWeight");
     const silverCoinsWeightGrams = weightInGrams(input.jafariSilverCoinsWeight, metalPriceUnit, "jafariSilverCoinsWeight");
 
@@ -149,7 +150,7 @@
     const coinConditions = {
       mintedAndCommonlyUsedAsMoney: coinsUsedAsMoney,
       adultAndSane: conditions.adultAndSane,
-      accessContinuous: conditions.accessContinuous,
+      accessContinuous: coinAccessContinuous,
       goldHawlComplete: input.jafariGoldCoinsHawlComplete === true,
       silverHawlComplete: input.jafariSilverCoinsHawlComplete === true
     };
