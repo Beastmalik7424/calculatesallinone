@@ -31,7 +31,7 @@ CASES = {
     ],
     "calorie-calculator": [
         "resting energy expenditure (REE)",
-        "1,648.75 kcal/day REE",
+        "1,648.75 kcal/day resting energy",
         "1,978.5 kcal/day",
         "498 healthy adults aged 19–78",
         "Mifflin–St Jeor is the default and recommended starting option",
