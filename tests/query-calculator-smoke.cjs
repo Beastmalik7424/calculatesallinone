@@ -105,6 +105,15 @@ for (const [q, expected] of yearDayQueries) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+const meanYearCases = [
+ ["80 years to days", /80 years ≈ 29,219\.4 days/],
+ ["1 year in hours", /1 year = 8,765\.82 hours/]
+];
+for (const [q, expected] of meanYearCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
 
 const multiUnitCases = [
  ["34 years in days months and weeks", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
