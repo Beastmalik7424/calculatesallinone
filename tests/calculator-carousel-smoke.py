@@ -100,7 +100,7 @@ assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pa
 assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available on unaffected pages"
 assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Unaffected calculator pages must retain the shared continuous ticker animation"
 zakat_track_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-track\{([^}]*)\}", css)
-assert not zakat_track_overrides or all("animation:none" not in rule and "transform:none" not in rule for rule in zakat_track_overrides), "Zakat pages must not disable the shared moving ticker"
+assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in zakat_track_overrides), "Zakat pages must enable the shared continuous ticker animation"
 assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Zakat pages must use the continuous shared ticker animation"
 zakat_link_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-link\{([^}]*)\}", css)
 assert zakat_link_overrides and all("min-height:44px" in rule and "height:44px" in rule for rule in zakat_link_overrides), "Zakat shortcut links must meet the 44px touch-target design target"
