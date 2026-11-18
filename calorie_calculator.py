@@ -155,7 +155,7 @@ def build_calorie_page(head, shell, write):
         '<section class="rounded-xl border border-stone-300 bg-white p-2 shadow-sm dark:border-stone-700 dark:bg-stone-900 sm:p-5">'
         '<h2 id="calorie-form-title" class="sr-only">Calculate your daily calorie estimate</h2>'
         ''
-        '<form id="calorie-form" aria-labelledby="calorie-form-title" novalidate class="mt-2 grid grid-cols-2 gap-2 sm:gap-3">'
+        '<form id="calorie-form" aria-labelledby="calorie-form-title" novalidate class="mt-2 grid grid-cols-2 gap-1.5 sm:gap-3">'
         '<div class="min-w-0"><label for="cal-age" class="' + label_class + '">Age (years)</label>'
         '<input id="cal-age" type="number" min="18" max="120" step="1" inputmode="numeric" autocomplete="off" placeholder="e.g. 30" class="' + input_class + '"></div>'
         '<div class="min-w-0"><label for="cal-formula" class="' + label_class + '">Calculation formula</label>'
