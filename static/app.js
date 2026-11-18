@@ -503,7 +503,7 @@
       if (sunniFields) sunniFields.hidden = isJafari
       if (sunniAssetFields) sunniAssetFields.hidden = isJafari
       if (jafariFields) jafariFields.hidden = !isJafari
-      form.querySelectorAll(".zakat-step-panel").forEach(function (panel) {
+      form.querySelectorAll(".zakat-section").forEach(function (panel) {
         var inSunni = !!panel.closest("#z-sunni-fields, #z-sunni-asset-fields")
         var inJafari = !!panel.closest("#z-jafari-fields")
         panel.hidden = isJafari ? inSunni : inJafari
