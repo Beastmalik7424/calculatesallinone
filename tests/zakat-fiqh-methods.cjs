@@ -133,9 +133,13 @@ assert.equal(r.goldCoinsStatus, "conditions_incomplete");
 assert.equal(r.zakatBeforePaid, 0);
 r = calculate({ ...coinBase, jafariCoinsAccessContinuous: false, tradeGoodsAccessContinuous: true, jafariSilverCoinsWeight: 483.84 });
 assert.equal(r.silverCoinsStatus, "conditions_incomplete");
+assert.equal(r.conditions.coins.accessContinuous, false);
+assert.equal(r.coinConditionsMet, false);
 assert.equal(r.zakatBeforePaid, 0);
 r = calculate({ ...coinBase, jafariCoinsAccessContinuous: true, tradeGoodsAccessContinuous: false, jafariGoldCoinsWeight: 69.12 });
 assert.equal(r.goldCoinsStatus, "payable", "Personal coin disposal must be independent of business-goods disposal");
+assert.equal(r.conditions.coins.accessContinuous, true);
+assert.equal(r.coinConditionsMet, true);
 
 // Coin weights and metal prices use the same selected unit and must remain
 // economically equivalent for grams, the 11.6638 g standard tola and troy ounces.
