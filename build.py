@@ -209,7 +209,7 @@ TOOLS = [
             + '<div id="z-jafari-fields" class="space-y-3" hidden>'
             + '<div class="zakat-section space-y-3" data-zakat-step="nisab">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Shia Ja\'fari method — Sayyid Sistani</h2>'
-            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. Gold and silver Zakat applies only to minted coins commonly used as money. Sistani states that gold and silver are not currently used as money in transactions, so ordinary banknotes, bank deposits, bullion bars and jewellery are not included in this Zakat calculation. Khums is separate. Other Ja\'fari authorities may differ. Khums is separate.</p>'
+            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. Gold and silver Zakat applies only to minted coins commonly used as money. Sistani states that gold and silver are not currently used as money in transactions, so ordinary banknotes, bank deposits, bullion bars and jewellery are not included in this Zakat calculation. Khums is separate. Other Ja\'fari authorities may differ.</p>'
             + '<div><label class="@L@" for="z-jafari-nisab-method">Trading-goods Nisab reference</label>'
             + '<select id="z-jafari-nisab-method" name="z-jafari-nisab-method" class="@I@">'
             + '<option value="gold" selected>Gold: 69.12 g (15 common mithqals)</option>'
@@ -862,6 +862,13 @@ URDU = {
             ("One full lunar Zakat year (hawl) is complete", "ایک مکمل قمری زکوٰۃ سال (حول) پورا ہو چکا ہے"),
             ("The Hanafi method includes qualifying gold and silver jewellery when eligible under Hanafi guidance. Enter metal value only, avoid duplicate entry, and ask a qualified scholar about unusual jewellery or trade holdings.", "حنفی طریقہ اہل سونے اور چاندی کے زیورات کو حنفی رہنمائی کے مطابق شامل کرتا ہے۔ صرف دھات کی مالیت درج کریں، ایک ہی زیور دوبارہ شمار نہ کریں، اور غیر معمولی زیورات یا تجارتی مال کے بارے میں مستند عالم سے پوچھیں۔"),
             ("This is an estimate, not a fatwa. Debt, jewellery, investments, business goods and retirement rules can differ. Review the source-based guidance below and ask a qualified scholar about your circumstances.", "یہ صرف تخمینہ ہے، فتویٰ نہیں۔ قرض، زیورات، سرمایہ کاری، کاروباری مال اور پنشن کے احکام مختلف ہو سکتے ہیں۔ نیچے مستند ماخذ پر مبنی وضاحت پڑھیں اور اپنے حالات کے مطابق اہل عالم سے رجوع کریں۔"),
+            ("One-page Zakat calculator", "ایک صفحے کا زکوٰۃ کیلکولیٹر"),
+            ("Choose your method, enter only applicable amounts, then calculate.", "اپنا طریقہ منتخب کریں، صرف متعلقہ رقوم درج کریں، پھر حساب کریں۔"),
+            ("Recoverable receivables", "قابلِ وصول رقوم"),
+            ("Property held for resale (only if bought for resale)", "دوبارہ فروخت کے لیے خریدی گئی جائیداد کی مالیت"),
+            ("Owner remained adult and sane throughout the year", "مالک پورے سال بالغ اور عاقل رہا ہو"),
+            ("One full year has passed since the intention to profit began", "نفع کی نیت کرنے کے بعد ایک مکمل سال گزر چکا ہو"),
+            ("Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. Gold and silver Zakat applies only to minted coins commonly used as money. Sistani states that gold and silver are not currently used as money in transactions, so ordinary banknotes, bank deposits, bullion bars and jewellery are not included in this Zakat calculation. Khums is separate. Other Ja'fari authorities may differ.", "صرف آیت اللہ سید سیستانی کا طریقہ۔ یہ کیلکولیٹر احتیاطِ واجب کے تحت اہل تجارتی مال کا تخمینہ لگاتا ہے۔ سونے اور چاندی کی زکوٰۃ صرف ان ڈھلے ہوئے سکوں پر ہوتی ہے جو عام لین دین میں بطور رقم استعمال ہوں۔ سیستانی کے مطابق اس وقت سونے اور چاندی کے سکے لین دین میں رائج نہیں، اس لیے عام بینک نوٹ، بینک ڈپازٹس، سونے کی اینٹیں اور زیورات اس حساب میں شامل نہیں۔ خمس الگ ہے۔ دوسرے جعفری مراجع کے احکام مختلف ہو سکتے ہیں۔"),
             ("Calculate Zakat", "زکوٰۃ کا حساب کریں")
         ],
         "how_heading": "زکوٰۃ کا حساب، نصاب اور ضروری وضاحت",
