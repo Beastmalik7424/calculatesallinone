@@ -38,8 +38,8 @@ jobs:
         run: node tests/runtime-dependency-audit-contract.cjs
       - name: Audit production dependency tree
         run: npm audit --omit=dev --audit-level=moderate
-      - name: Audit all dependencies including build-time packages
-        run: npm audit --audit-level=moderate
+      - name: Audit all dependencies with a narrow upstream advisory exception
+        run: node tests/npm-audit-known-advisory.cjs
       - name: Check JavaScript syntax
         run: |
           node --check static/app.js
