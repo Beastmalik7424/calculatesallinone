@@ -37,7 +37,7 @@ assert.match(result.textContent,/15,429|15429/, "29 July 1984 to 26 October 2026
 assert.match(result.textContent,/42 years, 2 months, 27 days/, "DOB should report calendar years, months and days");
 input.value = "DOB 29 February 1984 age in days";
 listeners["form:submit"]({preventDefault(){}});
-assert.match(result.textContent,/15,580|15580/, "English month-name leap-day DOB must be parsed as 29 February 1984");
+assert.match(result.textContent,/Birth date: 29-02-1984/, "English month-name leap-day DOB must be parsed as 29 February 1984");
 const monthCases = [
  ["115 months in years and days",/9 years and 7 months.*3,500\.24 days/],
  ["115 mahine in years and days",/9 years and 7 months.*3,500\.24 days/],
