@@ -142,6 +142,7 @@ def build_calorie_page(head, shell, write):
     ]
 
     input_class = "w-full min-w-0 rounded-lg border border-stone-400 bg-white px-3 py-2 text-base text-stone-900 min-h-[44px] dark:bg-stone-950 dark:text-white"
+    compact_input_class = input_class.replace("px-3", "px-1").replace("text-base", "text-sm")
     label_class = "mb-1 block text-sm font-medium text-stone-800 dark:text-stone-200"
     body = (
         '<nav aria-label="Breadcrumb" class="mb-3 text-sm text-stone-700 dark:text-stone-300">'
@@ -164,14 +165,14 @@ def build_calorie_page(head, shell, write):
         '<p class="mt-1 text-xs leading-5 text-stone-600 dark:text-stone-400">Required for Mifflin–St Jeor and Revised Harris–Benedict. Katch–McArdle does not use this input.</p></div>'
         '<div class="min-w-0"><label for="cal-activity" class="' + label_class + '">Activity level</label>'
         '<select id="cal-activity" class="' + input_class + '"><option value="">Choose activity</option><option value="sedentary">Sedentary</option><option value="light">Light activity</option><option value="moderate">Moderate activity</option><option value="very_active">Very active</option><option value="extra_active">Extra active</option></select></div>'
-        '<div class="col-span-2 min-w-0"><label for="cal-weight" class="' + label_class + '">Weight</label>'
-        '<div class="grid grid-cols-[minmax(0,1fr)_5rem] gap-2"><input id="cal-weight" type="number" min="0" step="any" inputmode="decimal" placeholder="Your weight" class="' + input_class + '">'
-        '<select id="cal-weight-unit" aria-label="Weight unit" class="' + input_class + '"><option value="kg">kg</option><option value="lb">lb</option></select></div></div>'
-        '<div class="col-span-2 min-w-0"><label id="cal-height-label" for="cal-height" class="' + label_class + '">Height</label>'
-        '<div class="grid grid-cols-[minmax(0,1fr)_5rem] gap-2"><div id="cal-height-metric"><input id="cal-height" type="number" min="0" step="any" inputmode="decimal" placeholder="Centimetres" class="' + input_class + '"></div>'
-        '<div id="cal-height-imperial" class="grid grid-cols-2 gap-1" hidden><input id="cal-height-ft" type="number" min="3" max="8" step="1" inputmode="numeric" aria-label="Height in feet" placeholder="ft" disabled class="' + input_class + '">'
-        '<input id="cal-height-in" type="number" min="0" max="11.99" step="any" inputmode="decimal" aria-label="Remaining height in inches" placeholder="in" disabled class="' + input_class + '"></div>'
-        '<select id="cal-height-unit" aria-label="Height unit" class="' + input_class + '"><option value="cm">cm</option><option value="ft-in">ft/in</option></select></div></div>'
+        '<div class="min-w-0"><label for="cal-weight" class="' + label_class + '">Weight</label>'
+        '<div class="grid grid-cols-[minmax(0,1fr)_3.5rem] gap-1"><input id="cal-weight" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 70" class="' + compact_input_class + '">'
+        '<select id="cal-weight-unit" aria-label="Weight unit" class="' + compact_input_class + '"><option value="kg">kg</option><option value="lb">lb</option></select></div></div>'
+        '<div class="min-w-0"><label id="cal-height-label" for="cal-height" class="' + label_class + '">Height</label>'
+        '<div class="grid grid-cols-[minmax(0,1fr)_3.5rem] gap-1"><div id="cal-height-metric"><input id="cal-height" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 175" class="' + compact_input_class + '"></div>'
+        '<div id="cal-height-imperial" class="grid grid-cols-2 gap-1" hidden><input id="cal-height-ft" type="number" min="3" max="8" step="1" inputmode="numeric" aria-label="Height in feet" placeholder="ft" disabled class="' + compact_input_class + '">'
+        '<input id="cal-height-in" type="number" min="0" max="11.99" step="any" inputmode="decimal" aria-label="Remaining height in inches" placeholder="in" disabled class="' + compact_input_class + '"></div>'
+        '<select id="cal-height-unit" aria-label="Height unit" class="' + compact_input_class + '"><option value="cm">cm</option><option value="ft-in">ft/in</option></select></div></div>'
         '<div id="cal-body-fat-field" class="col-span-2 min-w-0" hidden><label for="cal-body-fat" class="' + label_class + '">Body-fat percentage (%)</label>'
         '<input id="cal-body-fat" type="number" min="3" max="70" step="any" inputmode="decimal" placeholder="e.g. 20" disabled class="' + input_class + '">'
         '<p class="mt-1 text-xs leading-5 text-stone-600 dark:text-stone-400">Used only by Katch–McArdle. Enter a reasonably measured estimate, not a guess.</p></div>'
