@@ -34,6 +34,10 @@ jobs:
         run: npm ci
       - name: Test hardened braces dependency
         run: node tests/braces-hardening-smoke.cjs
+      - name: Verify production dependency isolation
+        run: node tests/runtime-dependency-audit-contract.cjs
+      - name: Audit production dependency tree
+        run: npm audit --omit=dev --audit-level=moderate
       - name: Audit all dependencies including build-time packages
         run: npm audit --audit-level=moderate
       - name: Check JavaScript syntax
