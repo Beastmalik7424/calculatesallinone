@@ -115,6 +115,9 @@ function rect(element) {
             const rootRect = root && root.getBoundingClientRect();
             const actionRect = action && action.getBoundingClientRect();
             const tickerRect = ticker && ticker.getBoundingClientRect();
+            const primaryTicker = ticker && ticker.querySelector('.ca-calculator-group[data-tool-set="primary"]');
+            const primaryTickerLinks = primaryTicker ? Array.from(primaryTicker.querySelectorAll("a.ca-calculator-link")) : [];
+            const tickerLinkCount = primaryTickerLinks.length;
             const activeShortcut = primaryTicker && primaryTicker.querySelector('a[aria-current="page"]');
             const activeShortcutIndex = primaryTickerLinks.indexOf(activeShortcut);
             const activeRect = activeShortcut && activeShortcut.getBoundingClientRect();
@@ -135,9 +138,6 @@ function rect(element) {
             const actionVisible = visible(action);
             const tickerVisible = visible(ticker);
             const tickerInViewport = tickerVisible && tickerRect.top >= -1 && tickerRect.bottom <= innerHeight - 1;
-            const primaryTicker = ticker && ticker.querySelector('.ca-calculator-group[data-tool-set="primary"]');
-            const primaryTickerLinks = primaryTicker ? Array.from(primaryTicker.querySelectorAll("a.ca-calculator-link")) : [];
-            const tickerLinkCount = primaryTickerLinks.length;
             const tickerLinksOutsideViewport = primaryTickerLinks.filter(link => {
               const r = link.getBoundingClientRect();
               const s = getComputedStyle(link);
