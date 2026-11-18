@@ -152,7 +152,7 @@ def build_calorie_page(head, shell, write):
         '<header class="mb-4"><p class="text-xs font-bold uppercase tracking-wide text-sky-800 dark:text-sky-300">Adult calorie estimate</p>'
         '<h1 class="mt-1 text-2xl font-bold text-stone-950 dark:text-white">Calorie Calculator</h1>'
         '<p class="mt-2 text-sm leading-5 text-stone-700 dark:text-stone-300">Estimate adult maintenance calories (TDEE), resting energy and a simple macro split with three established formulas.</p></header>'
-        '<section class="rounded-xl border border-stone-300 bg-white p-3 shadow-sm dark:border-stone-700 dark:bg-stone-900 sm:p-5">'
+        '<section class="rounded-xl border border-stone-300 bg-white p-2 shadow-sm dark:border-stone-700 dark:bg-stone-900 sm:p-5">'
         '<h2 id="calorie-form-title" class="sr-only">Calculate your daily calorie estimate</h2>'
         ''
         '<form id="calorie-form" aria-labelledby="calorie-form-title" novalidate class="mt-2 grid grid-cols-2 gap-2 sm:gap-3">'
