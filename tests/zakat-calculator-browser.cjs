@@ -134,6 +134,14 @@ let browser;
     "Urdu resale-property field must be translated");
   assert.equal(await page.locator("#zakat-form").evaluate(el => getComputedStyle(el).direction), "rtl",
     "Urdu form controls and grids must inherit right-to-left direction");
+  assert.equal(await page.locator("#z-currency").evaluate(el => getComputedStyle(el).direction), "ltr",
+    "Currency code must remain left-to-right inside the Urdu form");
+  for (const input of await urAmountInputs.all()) {
+    assert.equal(await input.evaluate(el => getComputedStyle(el).direction), "ltr",
+      "Numeric financial values must remain left-to-right inside the Urdu form: " + await input.getAttribute("id"));
+  }
+  assert.equal(await page.locator("#z-school-of-thought").evaluate(el => getComputedStyle(el).direction), "rtl",
+    "Method selector must retain RTL direction");
 
   for (const viewport of [{ width: 320, height: 740 }, { width: 360, height: 800 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1366, height: 900 }]) {
     await page.setViewportSize(viewport);
