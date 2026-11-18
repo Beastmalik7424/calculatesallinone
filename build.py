@@ -28,6 +28,7 @@ LASTMOD = {
     "/years-to-days-calculator/": "2026-11-17",
     "/unit-converter/": "2026-11-14",
     "/tasbih-counter/": "2026-11-15",
+    "/query-calculator/": "2026-11-19",
 }
 OUT = "public"
 STATIC = "static"
