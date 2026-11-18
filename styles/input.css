@@ -2527,3 +2527,38 @@ body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link:focus-visible {
     scroll-behavior: auto;
   }
 }
+
+
+/* Zakat accessibility: solid content surfaces let assistive audits verify contrast
+   while the surrounding page keeps its existing soft gradient treatment. */
+body:has(#main .ca-tool-zakat-calculator) #main {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e7e5e4;
+  border-radius: 1.5rem;
+  box-shadow: 0 16px 44px rgba(15, 23, 42, .08);
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) #main {
+  background-color: #1c1917 !important;
+  border-color: #44403c;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, .24);
+}
+body:has(#main .ca-tool-zakat-calculator) header.sticky,
+body:has(#main .ca-tool-zakat-calculator) footer {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) header.sticky,
+html.dark body:has(#main .ca-tool-zakat-calculator) footer {
+  background-color: #1c1917 !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #main > h1 {
+  background: none !important;
+  color: #3730a3 !important;
+  -webkit-text-fill-color: #3730a3 !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) #main > h1 {
+  color: #c7d2fe !important;
+  -webkit-text-fill-color: #c7d2fe !important;
+}
