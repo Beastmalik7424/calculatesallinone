@@ -57,7 +57,11 @@ async function submitZakat(page) {
 let browser;
 (async () => {
   browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
-  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.addInitScript(() => {
+    window.__zakatShareCalls = [];
+    Object.defineProperty(navigator, "share", { configurable: true, value: async payload => { window.__zakatShareCalls.push(payload); } });
+  });
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
   page.on("console", message => {
@@ -70,6 +74,42 @@ let browser;
   assert.equal(await page.locator("#zakat-back").count(), 1, "Mobile Zakat flow must provide an in-place Back control");
   assert.equal(await page.locator("#zakat-step-progress").count(), 1, "Zakat flow must expose accessible step progress");
   assert.equal(await page.locator("#zakat-submit").count(), 1, "Zakat calculation submit must remain available in the final step");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const desktopFirstScreen = await page.evaluate(() => {
+    const panel = document.querySelector("#zakat-form .zakat-step-panel:not([hidden])");
+    const controls = [...panel.querySelectorAll("input:not([type=hidden]), select, textarea, button")].filter(el => getComputedStyle(el).display !== "none" && getComputedStyle(el).visibility !== "hidden");
+    return { panel: panel.getBoundingClientRect().toJSON(), controls: controls.map(el => el.getBoundingClientRect().toJSON()), viewport: innerHeight, width: innerWidth, documentWidth: document.documentElement.scrollWidth };
+  });
+  assert.equal(desktopFirstScreen.documentWidth, desktopFirstScreen.width, "Desktop Zakat first screen must not overflow");
+  assert.ok(desktopFirstScreen.panel.top >= 0 && desktopFirstScreen.panel.bottom <= desktopFirstScreen.viewport, "Desktop first wizard step must fit in the first screen: " + JSON.stringify(desktopFirstScreen));
+  assert.ok(desktopFirstScreen.controls.every(rect => rect.top >= 0 && rect.bottom <= desktopFirstScreen.viewport), "Desktop first-step controls must be visible without scrolling");
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  const ticker = page.locator("header .ca-calculator-carousel");
+  assert.equal(await ticker.count(), 1, "Zakat page must retain the shared calculator ticker");
+  assert.equal(await ticker.locator('[data-tool-set="primary"] a').count(), 17, "Primary ticker must expose all 17 calculator destinations");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"] a').count(), 17, "Continuous ticker must have a matching duplicate group");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"]').getAttribute("aria-hidden"), "true", "Duplicate ticker group must be hidden from assistive technology");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"] a[tabindex="-1"]').count(), 17, "Duplicate ticker links must not enter keyboard navigation");
+  const tickerMotion = await ticker.locator(".ca-calculator-track").evaluate(el => {
+    const style = getComputedStyle(el);
+    return { name: style.animationName, duration: style.animationDuration, iteration: style.animationIterationCount };
+  });
+  assert.deepEqual(tickerMotion, { name: "ca-calculator-marquee", duration: "48s", iteration: "infinite" }, "Zakat must use the same ticker motion as other calculator pages");
+  assert.equal(await page.locator("#zakat-result").isVisible(), false, "An empty result panel must not occupy space before the first calculation");
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
+    await page.setViewportSize(viewport);
+    const layout = await page.evaluate(() => ({
+      width: innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      navVisible: (() => { const r=document.querySelector("header .ca-calculator-carousel").getBoundingClientRect(); return r.width>0 && r.height>=40; })(),
+      mainVisible: (() => { const r=document.querySelector("#main").getBoundingClientRect(); return r.width>0 && r.right<=innerWidth+1; })()
+    }));
+    assert.equal(layout.documentWidth, layout.width, "Zakat page must not horizontally overflow at " + viewport.width + "px: " + JSON.stringify(layout));
+    assert.equal(layout.navVisible, true, "Ticker must remain visible at " + viewport.width + "px");
+    assert.equal(layout.mainVisible, true, "Calculator content must fit the viewport width at " + viewport.width + "px");
+  }
+  await page.setViewportSize({ width: 375, height: 812 });
   assert.ok(await page.locator("#zakat-form .zakat-step-panel:not([hidden])").count() >= 1, "Initial Zakat step panels must be active");
   const initialWizard = await page.evaluate(() => {
     const panels = [...document.querySelectorAll("#zakat-form .zakat-step-panel:not([hidden])")];
@@ -82,6 +122,14 @@ let browser;
   assert.ok(initialWizard.panels.length>=1 && initialWizard.panels.every(r=>r.top>=0&&r.bottom<=initialWizard.viewport), "Initial Zakat step must fit the viewport: "+JSON.stringify(initialWizard));
   assert.ok(initialWizard.next && initialWizard.next.top>=0 && initialWizard.next.bottom<=initialWizard.viewport, "Next control must be reachable without scrolling");
   assert.ok(initialWizard.controls.length>0 && initialWizard.controls.every(r=>r.top>=0&&r.bottom<=initialWizard.viewport), "All initial-step fields must fit without scrolling");
+  // Every Sunni/Hanafi input must be visible and enabled when its wizard step is active.
+  for (const [id, step] of Object.entries(FIELD_STEP).filter(([id]) => !id.startsWith("z-jafari"))) {
+    await goToStep(page, step);
+    const control = page.locator("#" + id);
+    assert.equal(await control.isVisible(), true, "Active Hanafi input must be visible: " + id);
+    assert.equal(await control.isEnabled(), true, "Active Hanafi input must be enabled: " + id);
+  }
+  await goToStep(page, "setup");
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-jafari-nisab-method","z-jafari-trade-value","z-jafari-owner","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jewellery","z-bank","z-savings","z-investments","z-businesscash","z-pension","z-crypto","z-property","z-goldprice","z-silverprice","z-paid"]) {
     assert.equal(await page.locator("#" + id).count(), 1, "Missing English field " + id);
   }
@@ -104,6 +152,18 @@ let browser;
   assert.match(globalResult, /Eligible liabilities:/i);
   assert.match(globalResult, /Remaining balance:/i);
   assert.match(globalResult, /2,500/);
+  const shareButton = page.locator('[data-share-result-for="zakat-result"]');
+  assert.equal(await shareButton.isVisible(), true, "Share result action must appear only after a result exists");
+  await shareButton.click();
+  assert.equal(await page.evaluate(() => window.__zakatShareCalls.length), 1, "Share result button must invoke the native share action");
+  assert.match((await page.evaluate(() => window.__zakatShareCalls[0].text)), /2,500/);
+
+  const shareButton = page.locator('[data-share-result-for="zakat-result"]');
+  assert.equal(await shareButton.isVisible(), true, "Share result action must appear after a successful calculation");
+  assert.equal(await shareButton.isEnabled(), true, "Share result action must be enabled after a successful calculation");
+  await shareButton.click();
+  const shareStatus = page.locator('[data-share-result-for="zakat-result"] + span[role="status"]');
+  assert.ok((await shareStatus.innerText()).trim().length > 0, "Share result button must complete its browser share action");
 
   await setField(page, "z-currency", "fill", "ZZZ");
   await submitZakat(page);
@@ -189,6 +249,23 @@ let browser;
   assert.equal(await page.locator("#zakat-submit").isVisible(), true);
   assert.equal(await page.evaluate(() => window.scrollY), 0);
 
+  // Repeat the core wizard and result path at a laptop viewport.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE_URL + "/zakat-calculator/", { waitUntil: "networkidle" });
+  assert.equal(await page.locator("#z-currency").isVisible(), true, "Laptop first screen must expose the currency input");
+  await page.locator("#zakat-next").click({ scroll: "none" });
+  assert.equal(await page.locator("#zakat-form").getAttribute("data-current-step"), "nisab", "Laptop Next button must advance the wizard");
+  assert.equal(await page.locator("#z-nisab-method").isVisible(), true, "Laptop Nisab selector must be visible and active");
+  await page.locator("#zakat-back").click({ scroll: "none" });
+  assert.equal(await page.locator("#zakat-form").getAttribute("data-current-step"), "setup", "Laptop Back button must return to the first step");
+  await setField(page, "z-cash", "fill", "100000");
+  await setField(page, "z-silverprice", "fill", "100");
+  await setField(page, "z-hawl", "check");
+  await submitZakat(page);
+  assert.match(await page.locator("#zakat-result").innerText(), /2,500/, "Laptop calculation must return the independently expected PKR amount");
+  assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Laptop Calculate button must remain visible on the final step");
+
+  await page.setViewportSize({ width: 375, height: 812 });
   await page.goto(BASE_URL + "/ur/zakat-calculator/", { waitUntil: "networkidle" });
   assert.equal(await page.locator("html").getAttribute("lang"), "ur");
   assert.equal(await page.locator("html").getAttribute("dir"), "rtl");

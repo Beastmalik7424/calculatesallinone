@@ -88,8 +88,9 @@ def check(fid, label):
             '<input id="' + fid + '" type="checkbox" class="mt-1 h-5 w-5"> <span>' + label + "</span></label>")
 
 
-def result(rid):
-    return '<div id="' + rid + '" class="@R@" aria-live="polite"></div>'
+def result(rid, initially_hidden=False):
+    hidden = " hidden" if initially_hidden else ""
+    return '<div id="' + rid + '" class="@R@" aria-live="polite"' + hidden + '></div>'
 
 
 BMI_UI = (
@@ -254,7 +255,7 @@ TOOLS = [
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Prices are converted to per-gram rates before Nisab is calculated. This is an estimate, not a fatwa.</p>'
             + '</div>'
             + '</form>'
-            + result("zakat-result")
+            + result("zakat-result", True)
         ),
         "guide": [
             ("What this calculator does", [
@@ -1509,7 +1510,7 @@ CAROUSEL_SHORT_UR = {
 def calculator_carousel(lang="en", current_path=None):
     s = shell_strings(lang)
     groups = []
-    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else (("primary", False),)
+    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/", "/zakat-calculator/", "/ur/zakat-calculator/") else (("primary", False),)
     for group_name, duplicate in groups_to_render:
         links = []
         for slug, english_name, short_name in CAROUSEL_TOOLS:
@@ -1665,7 +1666,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v3">\n'
         + ld + ads + "</head>\n"
     )
 
