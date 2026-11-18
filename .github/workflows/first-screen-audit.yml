@@ -51,7 +51,7 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
       - name: Install Chromium for locked Playwright
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: Build site and run smoke tests
         run: npm run build
       - name: Verify locked Playwright version
