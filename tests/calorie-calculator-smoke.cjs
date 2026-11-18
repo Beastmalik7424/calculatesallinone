@@ -24,12 +24,12 @@ assert.ok(Math.abs(harris.restingKcalPerDay - 1695.667) < 1e-9);
 assert.equal(harris.maintenanceKcalPerDay, harris.restingKcalPerDay * 1.2);
 
 const katch = calculateCalorieTargets({ ...common, formula: "katch-mcardle", bodyFatPercent: 20 });
-assert.equal(katch.restingKcalPerDay, 1579.6);
+assert.ok(Math.abs(katch.restingKcalPerDay - 1579.6) < 1e-9);
 assert.equal(katch.maintenanceKcalPerDay, 1895.52);
 assert.equal(katch.formulaLabel, "Katch–McArdle");
 assert.throws(() => calculateCalorieTargets({ ...common, formula: "katch-mcardle" }), /body fat/i);
 assert.equal(calculateCalorieTargets({ ...common, formula: "mifflin", bodyFatPercent: 20 }).restingKcalPerDay, mifflin.restingKcalPerDay, "Body-fat input must not affect formulas that do not use it");
-assert.equal(calculateCalorieTargets({ ...common, formula: "katch-mcardle", coefficient: "", bodyFatPercent: 20 }).restingKcalPerDay, 1579.6, "Katch–McArdle must not require a male/female coefficient");
+assert.ok(Math.abs(calculateCalorieTargets({ ...common, formula: "katch-mcardle", coefficient: "", bodyFatPercent: 20 }).restingKcalPerDay - 1579.6) < 1e-9, "Katch–McArdle must not require a male/female coefficient");
 
 for (const activity of ACTIVITY_PRESETS) {
   const result = calculateCalorieTargets({ ...common, formula: "mifflin", activityId: activity.id });
