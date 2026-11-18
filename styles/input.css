@@ -2484,3 +2484,46 @@ body:has(#zakat-form) #zakat-form :is(input:not([type="checkbox"]), select, text
     display: block !important;
   }
 }
+
+
+/* Zakat pages: keep calculator navigation stable, touch-friendly and manually scrollable.
+   A single row avoids the moving duplicate marquee and preserves all destinations on phones. */
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-carousel {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scroll-padding-inline: .5rem;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-track {
+  width: max-content;
+  min-width: max-content;
+  animation: none !important;
+  transform: none !important;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group[data-tool-set="duplicate"] {
+  display: none !important;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group {
+  min-height: 44px;
+  align-items: center;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link {
+  min-height: 44px;
+  height: 44px;
+  padding: .5rem .7rem;
+  line-height: 1.2;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link:focus-visible {
+  outline: 3px solid #0369a1;
+  outline-offset: -3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(#main .ca-tool-zakat-calculator) .ca-calculator-carousel {
+    scroll-behavior: auto;
+  }
+}
