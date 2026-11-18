@@ -237,7 +237,7 @@
         [
           ["Mifflin–St Jeor", "https://pubmed.ncbi.nlm.nih.gov/2305711/"],
           ["Revised Harris–Benedict", "https://pubmed.ncbi.nlm.nih.gov/6741850/"],
-          ["Katch–McArdle", "https://pmc.ncbi.nlm.nih.gov/articles/PMC12425712/"]
+          ["Katch–McArdle", "https://pubmed.ncbi.nlm.nih.gov/1957828/"]
         ].forEach(function (item, index) {
           if (index) source.appendChild(doc.createTextNode(" · "));
           var link = doc.createElement("a");
