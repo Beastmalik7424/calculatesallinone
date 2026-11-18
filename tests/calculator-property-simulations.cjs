@@ -261,7 +261,7 @@ match(percentagePage, /id="extra-calculator-form"/, "generated percentage page m
 match(fractionPage, /\/assets\/extra-calculators\.js/, "generated fraction page must load the tested extra-calculator engine");
 match(fractionPage, /id="extra-calculator-form"/, "generated fraction page must expose its form contract");
 
-equal(simulations, 14000, "all planned deterministic simulation cases must execute");
+equal(simulations, 15000, "all planned deterministic simulation cases must execute");
 console.log("PASS: " + simulations + " deterministic calculator simulations (seed 20261114)");
 console.log("PASS: " + assertionCount + " independently counted unit/property assertions");
 console.log("PASS: 3 generated-page integration contracts");
