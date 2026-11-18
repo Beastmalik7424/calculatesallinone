@@ -107,7 +107,7 @@ for (const [q, expected] of yearDayQueries) {
 
 const meanYearCases = [
  ["80 years to days", /80 years ≈ 29,219\.4 days/],
- ["1 year in hours", /1 year = 8,765\.82 hours/]
+ ["1 year in hours", /1 year = 8,765\.82 hours.*mean Gregorian year of 365\.2425 days/]
 ];
 for (const [q, expected] of meanYearCases) {
  input.value = q;
