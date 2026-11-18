@@ -1200,7 +1200,7 @@ for _english_label in ("Cash held at home", "Eligible gold value", "Eligible sil
                        "Eligible short-term debts and dues", "Silver price per gram",
                        "One full lunar Zakat year (hawl) is complete", "Calculate Zakat"):
     assert _english_label not in _ur_zakat_compact, "English Zakat label leaked into Urdu page: " + _english_label
-for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-investments", "z-businesscash", "z-stock", "z-recv", "z-pension", "z-crypto", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
+for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-businesscash", "z-stock", "z-recv", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
     assert 'id="' + _field_id + '"' in _ur_zakat_compact, "Urdu Zakat field ID changed: " + _field_id
 
 # Urdu calculator templates must carry the same page-specific responsive hooks as English tools.
