@@ -339,7 +339,7 @@ for url in urls:
 # Keep titles specific to each calculator's actual job, without promising unsupported features.
 EXPECTED_INTENT_TITLES = {
     "/zakat-calculator/": "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab",
-    "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
+    "/query-calculator/": "Time & Date Query Calculator | CalculatesAll",
     "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
     "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
     "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
