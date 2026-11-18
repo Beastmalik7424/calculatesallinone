@@ -1922,7 +1922,11 @@
       var leapBirthday = /(?:29[ -]?(?:feb|february)|(?:feb|february)[ -]?29|29[ -]?(?:farwari|februari))/.test(question)
       var birthdayCountQuestion = /(?:birthday|birthdays|saalgirah|salgirah|bar|baar|times|kitni dafa)/.test(question)
       if (leapBirthday && dateMatch) {
-        var febDate = /(?:29[-/]0?2[-/]|[-/]0?2[-/]29)/.test(dateMatch[0])
+        // dateMatch is normalized to [full match, first, second, third].
+        // Named dates are normalized to DD-MM-YYYY, while ISO dates remain YYYY-MM-DD.
+        var febDate = dateMatch[1].length === 4
+          ? Number(dateMatch[2]) === 2 && Number(dateMatch[3]) === 29
+          : Number(dateMatch[1]) === 29 && Number(dateMatch[2]) === 2
         if (!febDate) {
           say("qt-result", "Your question mentions 29 February but the supplied date is different. Please confirm the correct date of birth, for example 29-02-1984 or 29-07-1984.")
           return
