@@ -121,3 +121,5 @@ assert "body:has(#main .ca-tool-zakat-calculator) #main" in css, "Zakat content 
 assert "html.dark body:has(#main .ca-tool-zakat-calculator) #main" in css, "Dark-mode Zakat content must retain a solid contrast-checkable surface"
 assert "body:has(#main .ca-tool-zakat-calculator) header" in css and "body:has(#main .ca-tool-zakat-calculator) footer" in css, "Zakat header and footer must use opaque surfaces for reliable contrast"
 assert "body:has(#main .ca-tool-zakat-calculator) #main>h1" in css, "Zakat page title must use a solid text color instead of gradient-clipped text"
+assert "bg-sky-700 hover:bg-sky-800 dark:bg-indigo-700" in zakat_markup, "Zakat calculate action must use a solid, high-contrast button surface"
+assert "bg-gradient-to-r from-sky-700 to-indigo-700" not in zakat_markup, "Zakat calculate action must not rely on an unmeasured gradient contrast"
