@@ -57,7 +57,11 @@ async function submitZakat(page) {
 let browser;
 (async () => {
   browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
-  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.addInitScript(() => {
+    window.__zakatShareCalls = [];
+    Object.defineProperty(navigator, "share", { configurable: true, value: async payload => { window.__zakatShareCalls.push(payload); } });
+  });
   const pageErrors = [];
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "share", { value: async () => {}, configurable: true });
@@ -73,6 +77,23 @@ let browser;
   assert.equal(await page.locator("#zakat-back").count(), 1, "Mobile Zakat flow must provide an in-place Back control");
   assert.equal(await page.locator("#zakat-step-progress").count(), 1, "Zakat flow must expose accessible step progress");
   assert.equal(await page.locator("#zakat-submit").count(), 1, "Zakat calculation submit must remain available in the final step");
+  assert.equal(await page.locator("#zakat-form input:not([type=hidden]), #zakat-form select, #zakat-form textarea").filter({ visible: true }).count(), await page.locator("#zakat-form input:not([type=hidden]), #zakat-form select, #zakat-form textarea").filter({ visible: true }).count(), "Visible Zakat form controls must be queryable");
+  const desktopLayout = await page.evaluate(() => {
+    const main = document.querySelector("#main").getBoundingClientRect();
+    const wizard = document.querySelector("#zakat-form").getBoundingClientRect();
+    return { width: innerWidth, documentWidth: document.documentElement.scrollWidth, mainWidth: main.width, wizardWidth: wizard.width, wizardTop: wizard.top, viewportHeight: innerHeight };
+  });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const desktopFirstScreen = await page.evaluate(() => {
+    const panel = document.querySelector("#zakat-form .zakat-step-panel:not([hidden])");
+    const controls = [...panel.querySelectorAll("input:not([type=hidden]), select, textarea, button")].filter(el => getComputedStyle(el).display !== "none" && getComputedStyle(el).visibility !== "hidden");
+    return { panel: panel.getBoundingClientRect().toJSON(), controls: controls.map(el => el.getBoundingClientRect().toJSON()), viewport: innerHeight, width: innerWidth, documentWidth: document.documentElement.scrollWidth };
+  });
+  assert.equal(desktopFirstScreen.documentWidth, desktopFirstScreen.width, "Desktop Zakat first screen must not overflow");
+  assert.ok(desktopFirstScreen.panel.top >= 0 && desktopFirstScreen.panel.bottom <= desktopFirstScreen.viewport, "Desktop first wizard step must fit in the first screen: " + JSON.stringify(desktopFirstScreen));
+  assert.ok(desktopFirstScreen.controls.every(rect => rect.top >= 0 && rect.bottom <= desktopFirstScreen.viewport), "Desktop first-step controls must be visible without scrolling");
+  await page.setViewportSize({ width: 390, height: 844 });
+
   const ticker = page.locator("header .ca-calculator-carousel");
   assert.equal(await ticker.count(), 1, "Zakat page must retain the shared calculator ticker");
   assert.equal(await ticker.locator('[data-tool-set="primary"] a').count(), 17, "Primary ticker must expose all 17 calculator destinations");
@@ -140,6 +161,12 @@ let browser;
   assert.match(globalResult, /Eligible liabilities:/i);
   assert.match(globalResult, /Remaining balance:/i);
   assert.match(globalResult, /2,500/);
+  const shareButton = page.locator('[data-share-result-for="zakat-result"]');
+  assert.equal(await shareButton.isVisible(), true, "Share result action must appear only after a result exists");
+  await shareButton.click();
+  assert.equal(await page.evaluate(() => window.__zakatShareCalls.length), 1, "Share result button must invoke the native share action");
+  assert.match((await page.evaluate(() => window.__zakatShareCalls[0].text)), /2,500/);
+
   const shareButton = page.locator('[data-share-result-for="zakat-result"]');
   assert.equal(await shareButton.isVisible(), true, "Share result action must appear after a successful calculation");
   assert.equal(await shareButton.isEnabled(), true, "Share result action must be enabled after a successful calculation");
