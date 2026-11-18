@@ -35,6 +35,7 @@ STATIC = "static"
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
 I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 B = "bg-gradient-to-r from-sky-700 to-indigo-700 hover:from-sky-800 hover:to-indigo-800 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
+B_ZAKAT = "bg-sky-700 hover:bg-sky-800 dark:bg-indigo-700 dark:hover:bg-indigo-800 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 S = "border border-stone-500 dark:border-stone-400 text-stone-900 dark:text-stone-100 text-base font-medium px-5 py-3 rounded-lg min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 R = "mt-6 rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5 text-base leading-relaxed min-h-[3rem]"
 H2 = "text-2xl font-bold text-indigo-800 dark:text-indigo-200 mt-12"
@@ -75,7 +76,7 @@ def attach_notice_badge(ui, slug, language):
 
 
 
-def field(fid, label, step="0.01", hint="", autocomplete=None):
+def field(fid, label, step="0.01", hint="", autocomplete="off"):
     h = ""
     if hint:
         h = '<p class="text-sm text-stone-700 dark:text-stone-300 mt-1">' + hint + "</p>"
@@ -1789,7 +1790,8 @@ def home_lang_page(code):
 
 
 def fill(s):
-    return s.replace("@L@", L).replace("@I@", I).replace("@B@", B).replace("@S@", S).replace("@R@", R)
+    button_class = B_ZAKAT if 'id="zakat-form"' in s else B
+    return s.replace("@L@", L).replace("@I@", I).replace("@B@", button_class).replace("@S@", S).replace("@R@", R)
 
 
 def write(path, content):
