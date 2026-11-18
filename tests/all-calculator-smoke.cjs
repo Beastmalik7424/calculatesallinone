@@ -24,7 +24,7 @@ function element(id, value = "") {
   };
 }
 [
-  "zakat-form","z-currency","z-nisab-method","z-cash","z-bank","z-savings","z-gold","z-silver","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-silverprice","z-goldprice","z-hawl","zakat-result",
+  "zakat-form","z-currency","z-nisab-method","z-cash","z-bank","z-savings","z-gold","z-silver","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-silverprice","z-goldprice","z-hawl","zakat-result",
   "bmi-form","bmi-unit","bmi-height-cm","bmi-height-ftin","bmi-metric","bmi-imperial",
   "b-kg","b-kg-error","b-lb","b-lb-error","bmi-weight-kg","bmi-weight-lb","bmi-weight-kg-group","bmi-weight-lb-group","b-cm","b-cm-error","b-ft","b-ft-error","b-in","b-in-error","bmi-result",
   "pl-form","p-cost","p-sell","pl-result","age-form","a-dob","age-result","disc-form","d-price","d-pct","disc-result",
