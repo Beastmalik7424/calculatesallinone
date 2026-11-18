@@ -129,7 +129,7 @@ def build_calorie_page(head, shell, write):
         ),
         (
             "Is the resting estimate a minimum safe calorie intake?",
-            "No. A resting-energy estimate is not a minimum safe intake, a nutritional requirement or a personal calorie limit. Do not use it to set a restrictive diet or make medical decisions.",
+            "No. REE is not a universal minimum safe calorie intake. A resting-energy estimate is not a nutritional requirement or a personal calorie limit. Do not use it to set a restrictive diet or make medical decisions.",
         ),
         (
             "Is this calculator medical advice or medically reviewed?",
