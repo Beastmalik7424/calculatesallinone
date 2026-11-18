@@ -32,6 +32,9 @@ permissions:
 jobs:
   viewport:
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -57,8 +60,6 @@ jobs:
       - name: Verify locked Playwright version
         run: |
           node -e 'const v=require("playwright/package.json").version; if(v!=="1.64.1") throw new Error("Expected locked Playwright 1.64.1, got "+v); console.log("Locked Playwright version:",v);'
-      - name: Install Chromium for locked Playwright
-        run: npx playwright install --with-deps chromium
       - name: Start local browser-test servers
         run: |
           python3 -m http.server 8123 --directory public >/tmp/site-server.log 2>&1 &
