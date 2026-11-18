@@ -79,6 +79,7 @@ for (const condition of Object.keys(validSistaniConditions)) {
 const validCoinConditions = {
   jafariCoinsUsedAsMoney: true,
   ownerAdultAndSane: true,
+  jafariCoinsAccessContinuous: true,
   tradeGoodsAccessContinuous: true,
   jafariGoldCoinsHawlComplete: true,
   jafariSilverCoinsHawlComplete: true
@@ -130,9 +131,11 @@ assert.equal(r.zakatBeforePaid, 0);
 r = calculate({ ...coinBase, ownerAdultAndSane: false, jafariGoldCoinsWeight: 69.12 });
 assert.equal(r.goldCoinsStatus, "conditions_incomplete");
 assert.equal(r.zakatBeforePaid, 0);
-r = calculate({ ...coinBase, tradeGoodsAccessContinuous: false, jafariSilverCoinsWeight: 483.84 });
+r = calculate({ ...coinBase, jafariCoinsAccessContinuous: false, tradeGoodsAccessContinuous: true, jafariSilverCoinsWeight: 483.84 });
 assert.equal(r.silverCoinsStatus, "conditions_incomplete");
 assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...coinBase, jafariCoinsAccessContinuous: true, tradeGoodsAccessContinuous: false, jafariGoldCoinsWeight: 69.12 });
+assert.equal(r.goldCoinsStatus, "payable", "Personal coin disposal must be independent of business-goods disposal");
 
 // Coin weights and metal prices use the same selected unit and must remain
 // economically equivalent for grams, the 11.6638 g standard tola and troy ounces.
