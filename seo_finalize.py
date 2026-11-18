@@ -216,7 +216,7 @@ def normalize_meta(raw, path, lang):
     "/years-to-days-calculator/": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",
     "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
-    "/zakat-calculator/": "Estimate Hanafi Zakat on cash, gold, savings and investments, plus Sayyid Sistani's limited Ja'fari trading-goods method. Enter metal prices."
+    "/zakat-calculator/": "Estimate Hanafi Zakat on eligible cash, gold, silver, business stock and recoverable receivables, or Sayyid Sistani's limited Ja'fari business-goods method."
 }
     urdu_description_overrides = {
     "/ur/age-calculator/": "تاریخ پیدائش اور مطلوبہ تاریخ درج کرکے عمر سال، مہینوں اور دنوں میں معلوم کریں۔ کل گزرے دن بھی دیکھیں اور کیلکولیٹر کے تاریخوں کے حساب کا طریقہ سمجھیں۔",
