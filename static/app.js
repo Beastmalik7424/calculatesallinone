@@ -2292,9 +2292,11 @@
       }
       var sourceLabel = source + (value === 1 ? "" : "s")
       var targetLabel = target + (result === 1 ? "" : "s")
+      var methodNote = source === "year" || target === "year"
+        ? ". Uses the mean Gregorian year of 365.2425 days."
+        : ". Uses fixed unit conversion factors."
       say("qt-result", timeConversionFormat(value) + " " + sourceLabel +
-        " = " + timeConversionFormat(result) + " " + targetLabel +
-        ". Uses 365 days per year.")
+        " = " + timeConversionFormat(result) + " " + targetLabel + methodNote)
     }
     form.addEventListener("submit", calculateQuery)
     $("qt-question").addEventListener("change", calculateQuery)
