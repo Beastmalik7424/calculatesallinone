@@ -29,7 +29,7 @@
     if (age > 120) throw new Error("Enter an age from 18 to 120 years.");
 
     if (input.weightUnit !== "kg" && input.weightUnit !== "lb") {
-      throw new Error("Choose kg or lb for weight.");
+      throw new Error("Choose a supported weight unit (kg or lb).");
     }
     var enteredWeight = finiteNumber(input.weight, "your weight");
     var weightKg = input.weightUnit === "lb" ? enteredWeight * LB_TO_KG : enteredWeight;
@@ -47,7 +47,7 @@
       if (inches < 0 || inches >= 12) throw new Error("Remaining inches must be at least 0 and less than 12.");
       heightCm = (feet * 12 + inches) * IN_TO_CM;
     } else {
-      throw new Error("Choose cm or feet and inches for height.");
+      throw new Error("Choose a supported height unit (cm or feet and inches).");
     }
     if (!Number.isFinite(heightCm) || heightCm < 100 || heightCm > 250) {
       throw new Error("Enter a height that converts to 100–250 cm. This is an input check, not a medical range.");
