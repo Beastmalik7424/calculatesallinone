@@ -30,15 +30,23 @@ let browser;
       "Every English Zakat amount input must disable browser autofill: " + await input.getAttribute("id"));
   }
   const shortcutNav = page.locator("header .ca-calculator-carousel");
-  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 0,
-    "Zakat pages must not duplicate moving calculator shortcuts");
-  assert.equal(await shortcutNav.locator('[data-tool-shortcut]').count(), 17,
-    "All calculator destinations must remain available in the shortcut navigation");
-  assert.ok(await shortcutNav.locator('[data-tool-shortcut][aria-current="page"]').evaluate(el => {
+  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 1,
+    "Zakat pages must render one aria-hidden duplicate for the continuous ticker");
+  assert.match(await shortcutNav.locator(".ca-calculator-track").evaluate(el => getComputedStyle(el).animationName), /ca-calculator-marquee/,
+    "Zakat calculator shortcuts must move continuously like the shared ticker");
+  assert.equal(await shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut]').count(), 17,
+    "All 17 calculator destinations must remain available in the primary shortcut group");
+  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"] [data-tool-shortcut]').count(), 17,
+    "The visual ticker duplicate must contain all 17 destinations");
+  // Freeze the marquee at its initial frame so this visibility assertion is deterministic.
+  await shortcutNav.locator(".ca-calculator-track").evaluate(el => {
+    for (const animation of el.getAnimations()) { animation.pause(); animation.currentTime = 0; }
+  });
+  assert.ok(await shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut][aria-current="page"]').evaluate(el => {
     const item = el.getBoundingClientRect();
     const nav = el.closest(".ca-calculator-carousel").getBoundingClientRect();
     return item.height >= 44 && item.left >= nav.left && item.right <= nav.right;
-  }), "Active calculator shortcut must be visible and have a 44px touch target");
+  }), "Active calculator shortcut must be visible in the ticker's initial frame and have a 44px touch target");
   assert.equal(await shortcutNav.locator('[data-tool-shortcut]').first().getAttribute("aria-current"), "page",
     "Current calculator shortcut must be first for immediate discoverability");
 

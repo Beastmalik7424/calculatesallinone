@@ -95,12 +95,13 @@ css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
-assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat pages must use one stable shortcut row without duplicate marquee links"
+assert 'data-tool-set="duplicate"' in zakat_markup, "Zakat pages must retain the continuously moving calculator ticker"
 assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pages must retain their existing single shortcut group"
 assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available on unaffected pages"
 assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Unaffected calculator pages must retain the shared continuous ticker animation"
 zakat_track_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-track\{([^}]*)\}", css)
-assert zakat_track_overrides and all("animation:none" in rule and "transform:none" in rule for rule in zakat_track_overrides), "Zakat pages must use a stable, non-moving shortcut track"
+assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in zakat_track_overrides), "Zakat pages must enable the shared continuous ticker animation"
+assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Zakat pages must use the continuous shared ticker animation"
 zakat_link_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-link\{([^}]*)\}", css)
 assert zakat_link_overrides and all("min-height:44px" in rule and "height:44px" in rule for rule in zakat_link_overrides), "Zakat shortcut links must meet the 44px touch-target design target"
 assert "theme-toggle" in zakat_markup and zakat_markup.index('id="theme-toggle"') < zakat_markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
@@ -108,8 +109,8 @@ assert "ca-site-nav-topline" in zakat_markup, "Header must keep its separate top
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
 print("Calculator ticker, all 17 destinations, inner-page header layout and Tasbih action smoke tests PASS")
 
-assert '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v5">' in zakat_markup, "Zakat pages must use the current cache-busted stylesheet URL"
-assert zakat_markup.count('data-tool-set="primary"') == 1 and 'data-tool-set="duplicate"' not in zakat_markup, "Zakat pages must render one non-duplicated shortcut group"
+assert '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v6">' in zakat_markup, "Zakat pages must use the current cache-busted stylesheet URL"
+assert zakat_markup.count('data-tool-set="primary"') == 1 and zakat_markup.count('data-tool-set="duplicate"') == 1, "Zakat pages must render one accessible primary group and one aria-hidden marquee duplicate"
 zakat_group = primary_group(zakat_markup, "/zakat-calculator/")
 current_zakat = re.search(r'data-tool-shortcut="zakat-calculator"[^>]*aria-current="page"', zakat_group)
 first_calorie = re.search(r'data-tool-shortcut="calorie-calculator"', zakat_group)
