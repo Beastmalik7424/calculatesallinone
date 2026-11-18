@@ -83,7 +83,7 @@ let browser;
    const urduPage=slug.startsWith('ur/');
    const isZakat=slug.endsWith('zakat-calculator');
    if(isZakat){
-    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible||!data.tickerScrollable||data.duplicateGroups!==0)failures.push(key+' calculator shortcuts must use one accessible, horizontally scrollable row with all 17 links');
+    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible||(size.width<=1024&&!data.tickerScrollable)||data.duplicateGroups!==0)failures.push(key+' calculator shortcuts must expose all 17 links in one accessible row and allow horizontal scrolling on narrow viewports');
     if(!data.allLabelsFit)failures.push(key+' calculator shortcut labels are clipped or missing accessible names');
     if(!data.activeShortcutVisible||data.activeShortcutIndex!==0)failures.push(key+' current calculator shortcut must be first and visible in the navigation viewport');
     if(data.carouselBottom>205)failures.push(key+' calculator shortcut grid takes too much first-screen space');
