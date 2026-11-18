@@ -1,0 +1,87 @@
+name: Query Calculator independent verification
+
+on:
+  push:
+    branches:
+      - seo/query-calculator-intent-and-method-fix-20261119
+    paths:
+      - 'build.py'
+      - 'seo_finalize.py'
+      - 'static/app.js'
+      - 'tests/query-calculator-*'
+      - 'tests/content-gates.py'
+      - 'tests/site-output-smoke.py'
+      - '.github/workflows/query-calculator-independent.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'build.py'
+      - 'seo_finalize.py'
+      - 'static/app.js'
+      - 'tests/query-calculator-*'
+      - 'tests/content-gates.py'
+      - 'tests/site-output-smoke.py'
+      - '.github/workflows/query-calculator-independent.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  clean-build-and-regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Check out exact PR commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.12'
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Validate runtime and workflow security contracts
+        run: |
+          python3 tests/runtime-contract-smoke.py
+          python3 tests/workflow-security-contract.py
+          python3 tests/playwright-lock-contract-smoke.py
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run complete repository build and regression suite
+        run: npm run build
+      - name: Start static production-output server
+        run: |
+          python3 -m http.server 8123 --directory public >/tmp/query-calculator-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8123/query-calculator/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/query-calculator-http.log
+          exit 1
+      - name: Run real Chromium mobile query calculator tests
+        run: timeout 240s node tests/query-calculator-browser.cjs
+      - name: Confirm generated SEO output
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('public/query-calculator/index.html')
+          assert p.exists(), 'generated Query Calculator page missing'
+          h = p.read_text(encoding='utf-8')
+          for phrase in [
+              'Time &amp; Date Query Calculator',
+              '80 years ≈ 29,219.4 days',
+              '1 year = 8,765.82 hours',
+              '365.2425 days',
+              '30.436875 days',
+              'rejects unsupported questions',
+          ]:
+              assert phrase in h, f'missing generated page evidence: {phrase}'
+          print('Generated Query Calculator SEO/content assertions: PASS')
+          PY
