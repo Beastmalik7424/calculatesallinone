@@ -248,6 +248,7 @@ TOOLS = [
             + check("z-jafari-coins-access", "Owner retained legal and actual right of disposal over these coins")
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Only use this if the coins are minted and are actually used prevalently as money in transactions. Sistani states that gold and silver are not currently used as money. Ordinary banknotes, bank deposits, bullion bars and jewellery do not qualify. If unsure, leave this option off and consult Sistani&#39;s office.</p>'
             + '</div></div>'
+            + '</div>'
             + '<div class="zakat-section space-y-3" data-zakat-step="price-unit">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal price unit</h2>'
             + '<div><label class="@L@" for="z-metal-price-unit">Metal price unit</label>'
