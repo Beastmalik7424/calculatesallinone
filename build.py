@@ -1268,7 +1268,7 @@ TOOLS.extend([
         "guide": [
             ("What this calculator can answer", [
                 "This is a deterministic, browser-based parser for a defined set of everyday time, date and arithmetic questions. It can convert common time units, convert months and years, estimate months as an average number of days, calculate Gregorian age from a birth date through today's local date, and solve clearly worded addition or subtraction questions.",
-                "It is not a general search engine or an AI chatbot. It does not look up arbitrary facts, fetch live information, solve complex equations, or fill in missing dates by guesswork. If a question does not match a supported pattern, simplify the wording or use the dedicated calculator for that task."
+                "It also recognizes the fixed Pakistan independence date query and returns 14 August 1947 from the National Assembly of Pakistan historical reference. It is not a general search engine or an AI chatbot: it does not look up arbitrary facts, fetch live information, solve complex equations, or fill in missing dates by guesswork. If a question does not match a supported pattern, simplify the wording or use the dedicated calculator for that task."
             ]),
             ("Conversion rules and assumptions", [
                 "A year contains 12 calendar months. For conversions between years and fixed time units, this calculator uses the mean Gregorian year of 365.2425 days. Therefore 80 years ≈ 29,219.4 days, and 1 year = 8,765.82 hours. These are average-unit conversions, not counts for a particular start and end date.",
@@ -1300,7 +1300,7 @@ TOOLS.extend([
 ])
 EXTRA.update({
     "years-to-days-calculator": {"faq": [], "quick": ""},
-    "query-calculator": {"faq": [], "quick": "Month conversions use 12 months per year and an average Gregorian month of 30.436875 days. Example: 115 months = 9 years and 7 months, about 3,500.24 average days; exact calendar days need a start date."},
+    "query-calculator": {"faq": [], "quick": "Year conversions use the 365.2425-day mean Gregorian year. Month-to-day conversions use 30.436875 average days per month; exact calendar totals need actual dates."},
 })
 
 TOOLS.append({
