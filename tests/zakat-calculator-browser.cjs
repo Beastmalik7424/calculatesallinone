@@ -79,6 +79,21 @@ let browser;
   assert.match(await page.locator("#zakat-result").innerText(), /condition|شرائط/i,
     "Sistani result must not be payable when a required condition is false");
 
+  // Personal coin path: only reveal optional coin fields after the user confirms
+  // minted gold/silver coins are prevalently used as money in transactions.
+  assert.equal(await page.locator("#z-jafari-coin-inputs").isVisible(), false,
+    "Sistani personal-coin inputs must remain hidden until the currency-use condition is selected");
+  await page.locator("#z-jafari-trade-value").fill("0");
+  await page.locator("#z-jafari-coins-used-as-money").check();
+  assert.equal(await page.locator("#z-jafari-coin-inputs").isVisible(), true,
+    "Qualifying personal-coin inputs must appear after explicit confirmation");
+  await page.locator("#z-jafari-gold-coins-weight").fill("69.12");
+  await page.locator("#z-jafari-coins-access").check();
+  await page.locator("#z-jafari-gold-coins-hawl").check();
+  await page.locator("#zakat-submit").click();
+  assert.match(await page.locator("#zakat-result").innerText(), /172\.8/,
+    "Sistani personal gold coins must calculate 2.5% of the first gold Nisab when all separate conditions are met");
+
   // Responsive geometry: no horizontal overflow and accessible control heights.
   for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }]) {
     await page.setViewportSize(viewport);

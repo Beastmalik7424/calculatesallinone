@@ -3,7 +3,7 @@
 
   var MSG = {
     en: {
-      zakatNoPrice: "Enter a positive silver or gold price in the selected currency and selected unit (gram or Sindh Government standard tola).",
+      zakatNoPrice: "Enter a positive silver or gold price in the selected currency and selected unit (gram, Sindh Government standard tola or troy ounce).",
       zakatSistaniConditions: "No Zakat amount has been calculated. Confirm the applicable conditions for each category: qualifying coins must be minted and commonly used as money, and business goods must meet all obligatory-precaution conditions. If uncertain, ask Sistani's office or your qualified scholar.",
       zakatSistaniBelow: "No eligible category meets its separate Sistani Nisab. Business-goods Nisab reference: {nisab}. Gold and silver coin Nisabs are checked separately only for minted coins commonly used as money. Do not combine gold and silver to reach a coin Nisab.",
       zakatSistaniDue: "Under Sayyid Sistani's published rulings, estimated Zakat at 2.5% is {amount}. Eligible business-goods base: {tradeGoodsBase}. Qualifying gold-coin base: {goldCoinsBase}. Qualifying silver-coin base: {silverCoinsBase}. Business goods are assessed under obligatory precaution. Gold and silver coins are separate categories and are not combined to reach Nisab. Ordinary banknotes, bank deposits, bullion bars, ordinary jewellery, Khums, crops and livestock are not included.",
@@ -552,6 +552,7 @@
         input.tradeGoodsAccessContinuous = !!($("z-jafari-access") && $("z-jafari-access").checked)
         input.tradeGoodsMarketValueAtLeastCost = !!($("z-jafari-market") && $("z-jafari-market").checked)
         input.jafariCoinsUsedAsMoney = !!(coinMoneyField && coinMoneyField.checked)
+        input.jafariCoinsAccessContinuous = !!($("z-jafari-coins-access") && $("z-jafari-coins-access").checked)
         input.jafariGoldCoinsWeight = num("z-jafari-gold-coins-weight")
         input.jafariSilverCoinsWeight = num("z-jafari-silver-coins-weight")
         input.jafariGoldCoinsHawlComplete = !!($("z-jafari-gold-coins-hawl") && $("z-jafari-gold-coins-hawl").checked)

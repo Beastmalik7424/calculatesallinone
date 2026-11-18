@@ -121,6 +121,8 @@ assert.match(en, /sistani\.org\/english\/book\/48\/8243/, "English content must 
 assert.match(ur, /sistani\.org\/english\/book\/48\/8243/, "Urdu content must cite Sistani's official mithqal conversion table");
 const appJs = fs.readFileSync(path.join(__dirname, "..", "static", "app.js"), "utf8");
 assert.match(appJs, /troy ounce/i, "Metal-price validation guidance must include the supported troy-ounce unit");
+assert.match(appJs, /jafariCoinsAccessContinuous/, "Sistani personal-coin disposal condition must reach the calculation engine");
+assert.match(appJs, /z-jafari-coins-access/, "Sistani personal-coin disposal must have a dedicated UI control");
 assert.match(en, /sistani\.org\/english\/book\/48\/2323/, "English content must cite Sistani's official trading-goods ruling");
 assert.match(ur, /sistani\.org\/english\/book\/48\/2323/, "Urdu content must cite Sistani's official trading-goods ruling");
 assert.match(en, /sindhlaws\.gov\.pk/, "English content must cite the Sindh Government conversion table");

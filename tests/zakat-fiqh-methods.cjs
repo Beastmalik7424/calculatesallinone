@@ -105,7 +105,7 @@ assert.equal(r.goldCoinsTaxableGrams, 82.944);
 assert.equal(r.zakatBeforePaid, 207.36);
 
 // Silver's second Nisab increment is 21 common mithqals (96.768 g).
-r = calculate({ ...coinBase, jafariGoldCoinsWeight: 488.448, jafariGoldCoinsWeight: 0, jafariSilverCoinsWeight: 488.448 });
+r = calculate({ ...coinBase, jafariSilverCoinsWeight: 488.448 });
 assert.equal(r.silverCoinsStatus, "payable");
 assert.equal(r.silverCoinsTaxableGrams, 483.84);
 assert.equal(r.silverCoinsZakatBase, 4838.4);
