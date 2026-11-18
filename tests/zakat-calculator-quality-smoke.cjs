@@ -27,6 +27,9 @@ for (const id of [
   "z-currency", "z-school-of-thought", "z-nisab-method", "z-metal-price-unit",
   "z-jafari-nisab-method", "z-jafari-trade-value", "z-jafari-owner", "z-jafari-acquired",
   "z-jafari-hawl", "z-jafari-intent", "z-jafari-access", "z-jafari-market",
+  "z-jafari-coins-used-as-money", "z-jafari-coin-inputs", "z-jafari-gold-coins-weight",
+  "z-jafari-silver-coins-weight", "z-jafari-gold-coins-hawl", "z-jafari-silver-coins-hawl",
+  "z-jafari-coins-access",
   "z-silverprice", "z-goldprice", "z-cash", "z-bank", "z-savings",
   "z-gold", "z-silver", "z-jewellery", "z-businesscash", "z-stock", "z-recv",
   "z-property", "z-debts", "z-paid",
@@ -109,6 +112,15 @@ for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   }
 }
 assert.match(en, /id="z-jafari-fields"[^>]*hidden/, "Sistani fields must be separately hidden by default");
+assert.match(en, /id="z-jafari-coin-inputs"[^>]*hidden/, "Sistani coin weights must remain hidden until the user confirms qualifying currency coins");
+assert.match(ur, /id="z-jafari-coin-inputs"[^>]*hidden/, "Urdu Sistani coin weights must remain hidden until the user confirms qualifying currency coins");
+assert.match(en, /id="z-jafari-coins-used-as-money"/, "Sistani coin currency-use eligibility must be explicit");
+assert.match(en, /11 lunar months/, "Sistani coin ownership must disclose the 11-month condition");
+assert.match(urText, /11 قمری مہینے/, "Urdu Sistani coin ownership must disclose the 11-month condition");
+assert.match(en, /sistani\.org\/english\/book\/48\/8243/, "English content must cite Sistani's official mithqal conversion table");
+assert.match(ur, /sistani\.org\/english\/book\/48\/8243/, "Urdu content must cite Sistani's official mithqal conversion table");
+const appJs = fs.readFileSync(path.join(__dirname, "..", "static", "app.js"), "utf8");
+assert.match(appJs, /troy ounce/i, "Metal-price validation guidance must include the supported troy-ounce unit");
 assert.match(en, /sistani\.org\/english\/book\/48\/2323/, "English content must cite Sistani's official trading-goods ruling");
 assert.match(ur, /sistani\.org\/english\/book\/48\/2323/, "Urdu content must cite Sistani's official trading-goods ruling");
 assert.match(en, /sindhlaws\.gov\.pk/, "English content must cite the Sindh Government conversion table");
