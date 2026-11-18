@@ -29,7 +29,7 @@ def validate_playwright_config(config):
         and config.get("ci_uses_npm_ci") is True
         and config.get("ci_has_no_ad_hoc_install") is True
         and config.get("ci_installs_chromium") is True
-        and config.get("first_screen_uses_prebuilt_image") is True
+        and config.get("first_screen_installs_locked_chromium") is True
     )
 
 
@@ -58,10 +58,7 @@ def repository_playwright_config(root=ROOT):
         "ci_uses_npm_ci": all("run: npm ci" in workflow for workflow in (ci, site_build, first_screen)),
         "ci_has_no_ad_hoc_install": "npm install --no-save" not in workflows,
         "ci_installs_chromium": "npx playwright install --with-deps chromium" in ci,
-        "first_screen_uses_prebuilt_image": (
-            f"image: mcr.microsoft.com/playwright:v{PLAYWRIGHT_VERSION}-noble" in first_screen
-            and "npx playwright install" not in first_screen
-        ),
+        "first_screen_installs_locked_chromium": "npx playwright install --with-deps chromium" in first_screen,
     }
 
 
@@ -82,7 +79,7 @@ class PlaywrightLockUnitTests(unittest.TestCase):
             "ci_uses_npm_ci": True,
             "ci_has_no_ad_hoc_install": True,
             "ci_installs_chromium": True,
-            "first_screen_uses_prebuilt_image": True,
+            "first_screen_installs_locked_chromium": True,
         }
 
     def test_accepts_exact_locked_playwright_version(self):
@@ -118,9 +115,9 @@ class PlaywrightLockUnitTests(unittest.TestCase):
         config["ci_installs_chromium"] = False
         self.assertFalse(validate_playwright_config(config))
 
-    def test_rejects_unmatched_prebuilt_browser_image(self):
+    def test_rejects_missing_locked_chromium_install(self):
         config = self.valid_config()
-        config["first_screen_uses_prebuilt_image"] = False
+        config["first_screen_installs_locked_chromium"] = False
         self.assertFalse(validate_playwright_config(config))
 
     def test_two_thousand_deterministic_lockfile_mutations(self):
