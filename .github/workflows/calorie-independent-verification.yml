@@ -1,0 +1,59 @@
+name: Independent calorie release verification
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-verification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Check out exact PR commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: "3.12"
+      - name: Verify runtime and workflow contracts
+        run: |
+          python3 tests/runtime-contract-smoke.py
+          python3 tests/workflow-security-contract.py
+          python3 tests/playwright-lock-contract-smoke.py
+      - name: Install exact lockfile dependencies without implicit audit gate
+        run: npm ci --no-audit
+      - name: Audit production dependency graph separately
+        run: npm audit --omit=dev --audit-level=moderate
+      - name: Verify hardened braces dependency
+        run: node tests/braces-hardening-smoke.cjs
+      - name: Check JavaScript and Python syntax
+        run: |
+          node --check static/app.js
+          node --check static/calorie-calculator.js
+          python -m py_compile build.py calorie_calculator.py content_v5.py content_v13.py lang_v6.py urdu_v5.py
+      - name: Build site and run complete repository smoke and simulation suite
+        run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Start local test server
+        run: |
+          python3 -m http.server 4174 --directory public >/tmp/calorie-independent-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4174/calorie-calculator/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/calorie-independent-server.log
+          exit 1
+      - name: Verify calorie calculator browser behavior
+        run: timeout 180s node tests/calorie-calculator-browser.cjs
+      - name: Verify all calculator browser layout regressions
+        run: timeout 420s node tests/all-calculator-layout-browser.cjs
