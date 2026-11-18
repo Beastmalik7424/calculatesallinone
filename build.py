@@ -1663,7 +1663,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v3">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v4">\n'
         + ld + ads + "</head>\n"
     )
 
