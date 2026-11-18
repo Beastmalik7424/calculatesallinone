@@ -2576,3 +2576,16 @@ html.dark body:has(#main .ca-tool-zakat-calculator) #main > h1 {
   color: #c7d2fe !important;
   -webkit-text-fill-color: #c7d2fe !important;
 }
+
+
+/* Urdu Zakat: keep the RTL page layout while rendering numeric financial inputs LTR. */
+html[dir="rtl"] body:has(#zakat-form) #zakat-form input[type="number"],
+html[dir="rtl"] body:has(#zakat-form) #z-currency {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: plaintext;
+}
+html[dir="rtl"] body:has(#zakat-form) #zakat-form select {
+  direction: rtl;
+  text-align: right;
+}
