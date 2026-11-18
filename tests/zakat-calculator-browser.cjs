@@ -59,6 +59,9 @@ let browser;
   browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   const pageErrors = [];
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "share", { value: async () => {}, configurable: true });
+  });
   page.on("pageerror", error => pageErrors.push(error.message));
   page.on("console", message => {
     if (message.type() === "error") pageErrors.push(message.text());
@@ -127,6 +130,12 @@ let browser;
   assert.match(globalResult, /Eligible liabilities:/i);
   assert.match(globalResult, /Remaining balance:/i);
   assert.match(globalResult, /2,500/);
+  const shareButton = page.locator('[data-share-result-for="zakat-result"]');
+  assert.equal(await shareButton.isVisible(), true, "Share result action must appear after a successful calculation");
+  assert.equal(await shareButton.isEnabled(), true, "Share result action must be enabled after a successful calculation");
+  await shareButton.click();
+  const shareStatus = page.locator('[data-share-result-for="zakat-result"] + span[role="status"]');
+  assert.ok((await shareStatus.innerText()).trim().length > 0, "Share result button must complete its browser share action");
 
   await setField(page, "z-currency", "fill", "ZZZ");
   await submitZakat(page);
@@ -212,6 +221,23 @@ let browser;
   assert.equal(await page.locator("#zakat-submit").isVisible(), true);
   assert.equal(await page.evaluate(() => window.scrollY), 0);
 
+  // Repeat the core wizard and result path at a laptop viewport.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(BASE_URL + "/zakat-calculator/", { waitUntil: "networkidle" });
+  assert.equal(await page.locator("#z-currency").isVisible(), true, "Laptop first screen must expose the currency input");
+  await page.locator("#zakat-next").click({ scroll: "none" });
+  assert.equal(await page.locator("#zakat-form").getAttribute("data-current-step"), "nisab", "Laptop Next button must advance the wizard");
+  assert.equal(await page.locator("#z-nisab-method").isVisible(), true, "Laptop Nisab selector must be visible and active");
+  await page.locator("#zakat-back").click({ scroll: "none" });
+  assert.equal(await page.locator("#zakat-form").getAttribute("data-current-step"), "setup", "Laptop Back button must return to the first step");
+  await setField(page, "z-cash", "fill", "100000");
+  await setField(page, "z-silverprice", "fill", "100");
+  await setField(page, "z-hawl", "check");
+  await submitZakat(page);
+  assert.match(await page.locator("#zakat-result").innerText(), /2,500/, "Laptop calculation must return the independently expected PKR amount");
+  assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Laptop Calculate button must remain visible on the final step");
+
+  await page.setViewportSize({ width: 375, height: 812 });
   await page.goto(BASE_URL + "/ur/zakat-calculator/", { waitUntil: "networkidle" });
   assert.equal(await page.locator("html").getAttribute("lang"), "ur");
   assert.equal(await page.locator("html").getAttribute("dir"), "rtl");
