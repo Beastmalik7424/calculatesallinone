@@ -30,8 +30,10 @@ let browser;
       "Every English Zakat amount input must disable browser autofill: " + await input.getAttribute("id"));
   }
   const shortcutNav = page.locator("header .ca-calculator-carousel");
-  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 0,
-    "Zakat pages must not duplicate moving calculator shortcuts");
+  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 1,
+    "Zakat pages must render one aria-hidden duplicate for the continuous ticker");
+  assert.match(await shortcutNav.locator(".ca-calculator-track").evaluate(el => getComputedStyle(el).animationName), /ca-calculator-marquee/,
+    "Zakat calculator shortcuts must move continuously like the shared ticker");
   assert.equal(await shortcutNav.locator('[data-tool-shortcut]').count(), 17,
     "All calculator destinations must remain available in the shortcut navigation");
   assert.ok(await shortcutNav.locator('[data-tool-shortcut][aria-current="page"]').evaluate(el => {
