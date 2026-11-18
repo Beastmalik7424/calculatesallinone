@@ -21,6 +21,15 @@ let browser;
   assert.equal(await page.locator("#zakat-next, #zakat-back, #zakat-step-progress").count(), 0,
     "Single-page calculator must not expose Next/Back wizard controls or step progress");
   assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Calculate action must be visible at the top of the form");
+  assert.equal(await page.locator("#z-stock").getAttribute("autocomplete"), "off",
+    "Financial trade-stock values must not be browser-autofilled");
+  const shortcutNav = page.locator("header .ca-calculator-carousel");
+  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 0,
+    "Zakat pages must not duplicate moving calculator shortcuts");
+  assert.equal(await shortcutNav.locator('[data-tool-shortcut]').count(), 17,
+    "All calculator destinations must remain available in the shortcut navigation");
+  assert.ok(await shortcutNav.locator('[data-tool-shortcut][aria-current="page"]').evaluate(el => el.getBoundingClientRect().height >= 44),
+    "Active calculator shortcut must have a 44px touch target");
 
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
     "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
