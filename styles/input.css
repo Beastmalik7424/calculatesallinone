@@ -2654,6 +2654,13 @@ html.dark body:has(#zakat-form) header nav .ca-calculator-link[aria-current="pag
 }
 
 /* Preserve the existing compact-phone calorie header carousel. */
+@media (max-width: 639px) {
+  body:has(#main.ca-tool-calorie-calculator) #calorie-form {
+    row-gap: 4px !important;
+    column-gap: 4px !important;
+  }
+}
+
 @media (max-width: 600px) {
   body:has(#main.ca-tool-calorie-calculator) header nav .ca-calculator-carousel {
     display: block !important;
