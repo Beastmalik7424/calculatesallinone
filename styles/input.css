@@ -2486,27 +2486,24 @@ body:has(#zakat-form) #zakat-form :is(input:not([type="checkbox"]), select, text
 }
 
 
-/* Zakat pages: keep calculator navigation stable, touch-friendly and manually scrollable.
-   A single row avoids the moving duplicate marquee and preserves all destinations on phones. */
+/* Zakat pages: reuse the shared continuous ticker after the calculator list.
+   Keep one semantic link set and one aria-hidden visual duplicate for seamless motion. */
 body:has(#main .ca-tool-zakat-calculator) .ca-calculator-carousel {
-  max-width: 100%;
+  display: block;
+  width: 100%;
+  max-width: none;
   min-width: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
-  scroll-behavior: smooth;
-  scroll-padding-inline: .5rem;
+  height: 44px;
+  overflow: hidden;
+  scrollbar-width: none;
   overscroll-behavior-x: contain;
-  touch-action: pan-x;
 }
 body:has(#main .ca-tool-zakat-calculator) .ca-calculator-track {
+  display: flex;
   width: max-content;
   min-width: max-content;
-  animation: none !important;
-  transform: none !important;
-}
-body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group[data-tool-set="duplicate"] {
-  display: none !important;
+  height: 100%;
+  animation: ca-calculator-marquee 48s linear infinite;
 }
 body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group {
   min-height: 44px;
@@ -2517,8 +2514,6 @@ body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link {
   height: 44px;
   padding: .5rem .7rem;
   line-height: 1.2;
-}
-body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link {
   font-size: 0;
 }
 body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link::after {
@@ -2536,9 +2531,47 @@ body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link:focus-visible {
   outline: 3px solid #0369a1;
   outline-offset: -3px;
 }
+/* Slightly tighten the Zakat page so the working calculator and first action
+   appear immediately below the header without sacrificing readable controls. */
+body:has(#main .ca-tool-zakat-calculator) #main {
+  padding-top: .9rem !important;
+  padding-bottom: 1.25rem !important;
+  padding-left: clamp(.75rem, 2vw, 1.25rem) !important;
+  padding-right: clamp(.75rem, 2vw, 1.25rem) !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #main > h1 {
+  margin-top: .15rem !important;
+  margin-bottom: .45rem !important;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem) !important;
+  line-height: 1.2 !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #tool-calculator {
+  margin-top: .4rem !important;
+  padding: clamp(.7rem, 1.5vw, 1rem) !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #zakat-form.space-y-5 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: .55rem !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
+body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty + button[data-share-result-for],
+body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty + button[data-share-result-for] + span[role="status"] {
+  display: none !important;
+}
+@media (max-width: 600px) {
+  body:has(#main .ca-tool-zakat-calculator) #main > h1 {
+    font-size: 1.15rem !important;
+  }
+  body:has(#main .ca-tool-zakat-calculator) #tool-calculator {
+    border-radius: .8rem !important;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  body:has(#main .ca-tool-zakat-calculator) .ca-calculator-carousel {
-    scroll-behavior: auto;
+  body:has(#main .ca-tool-zakat-calculator) .ca-calculator-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group[data-tool-set="duplicate"] {
+    display: none !important;
   }
 }
 
