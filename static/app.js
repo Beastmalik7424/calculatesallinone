@@ -503,17 +503,16 @@
       if (sunniFields) sunniFields.hidden = isJafari
       if (sunniAssetFields) sunniAssetFields.hidden = isJafari
       if (jafariFields) jafariFields.hidden = !isJafari
+      if (submitButton) {
+        submitButton.hidden = false
+        submitButton.textContent = lang() === "ur" ? "زکوٰۃ کا حساب کریں" : "Calculate Zakat"
+      }
+      if (typeof form.querySelectorAll !== "function") return
       form.querySelectorAll(".zakat-section").forEach(function (panel) {
         var inSunni = !!panel.closest("#z-sunni-fields, #z-sunni-asset-fields")
         var inJafari = !!panel.closest("#z-jafari-fields")
         panel.hidden = isJafari ? inSunni : inJafari
       })
-      if (submitButton) {
-        submitButton.hidden = false
-        submitButton.textContent = lang() === "ur" ? "زکوٰۃ کا حساب کریں" : "Calculate Zakat"
-      }
-      form.removeAttribute("data-current-step")
-      form.removeAttribute("data-step-order")
     }
     if (schoolField) schoolField.addEventListener("change", function () {
       updateMethodUI(true)
