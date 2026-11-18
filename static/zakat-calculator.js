@@ -17,8 +17,8 @@
   });
   const SUNNI_SCHOOLS = Object.freeze(["sunni-hanafi"]);
   const ASSET_KEYS = Object.freeze([
-    "cash", "bank", "savings", "gold", "silver", "jewellery", "investments",
-    "businessCash", "stock", "receivables", "pension", "crypto", "property"
+    "cash", "bank", "savings", "gold", "silver", "jewellery",
+    "businessCash", "stock", "receivables", "property"
   ]);
   function amount(value, name) {
     const n = value === undefined || value === null || value === "" ? 0 : Number(value);
