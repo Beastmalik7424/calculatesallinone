@@ -70,6 +70,31 @@ let browser;
   assert.equal(await page.locator("#zakat-back").count(), 1, "Mobile Zakat flow must provide an in-place Back control");
   assert.equal(await page.locator("#zakat-step-progress").count(), 1, "Zakat flow must expose accessible step progress");
   assert.equal(await page.locator("#zakat-submit").count(), 1, "Zakat calculation submit must remain available in the final step");
+  const ticker = page.locator("header .ca-calculator-carousel");
+  assert.equal(await ticker.count(), 1, "Zakat page must retain the shared calculator ticker");
+  assert.equal(await ticker.locator('[data-tool-set="primary"] a').count(), 17, "Primary ticker must expose all 17 calculator destinations");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"] a').count(), 17, "Continuous ticker must have a matching duplicate group");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"]').getAttribute("aria-hidden"), "true", "Duplicate ticker group must be hidden from assistive technology");
+  assert.equal(await ticker.locator('[data-tool-set="duplicate"] a[tabindex="-1"]').count(), 17, "Duplicate ticker links must not enter keyboard navigation");
+  const tickerMotion = await ticker.locator(".ca-calculator-track").evaluate(el => {
+    const style = getComputedStyle(el);
+    return { name: style.animationName, duration: style.animationDuration, iteration: style.animationIterationCount };
+  });
+  assert.deepEqual(tickerMotion, { name: "ca-calculator-marquee", duration: "48s", iteration: "infinite" }, "Zakat must use the same continuous ticker motion as other calculator pages");
+  assert.equal(await page.locator("#zakat-result").isVisible(), false, "An empty result panel must not occupy space before the first calculation");
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
+    await page.setViewportSize(viewport);
+    const layout = await page.evaluate(() => ({
+      width: innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      navVisible: (() => { const r=document.querySelector("header .ca-calculator-carousel").getBoundingClientRect(); return r.width>0 && r.height>=40; })(),
+      mainVisible: (() => { const r=document.querySelector("#main").getBoundingClientRect(); return r.width>0 && r.right<=innerWidth+1; })()
+    }));
+    assert.equal(layout.documentWidth, layout.width, "Zakat page must not horizontally overflow at " + viewport.width + "px: " + JSON.stringify(layout));
+    assert.equal(layout.navVisible, true, "Ticker must remain visible at " + viewport.width + "px");
+    assert.equal(layout.mainVisible, true, "Calculator content must fit the viewport width at " + viewport.width + "px");
+  }
+  await page.setViewportSize({ width: 375, height: 812 });
   assert.ok(await page.locator("#zakat-form .zakat-step-panel:not([hidden])").count() >= 1, "Initial Zakat step panels must be active");
   const initialWizard = await page.evaluate(() => {
     const panels = [...document.querySelectorAll("#zakat-form .zakat-step-panel:not([hidden])")];
