@@ -14,9 +14,9 @@ assert.equal(mifflin.maintenanceKcalPerDay, 1978.5);
 assert.equal(mifflin.mildDeficitKcalPerDay, 1678.5);
 assert.equal(mifflin.moderateDeficitKcalPerDay, 1478.5);
 assert.equal(mifflin.leanSurplusKcalPerDay, 2228.5);
-assert.equal(mifflin.macros.proteinGrams, 148.3875);
-assert.equal(mifflin.macros.carbohydrateGrams, 197.85);
-assert.equal(mifflin.macros.fatGrams, 65.95);
+assert.ok(Math.abs(mifflin.macros.proteinGrams - 148.3875) < 1e-9);
+assert.ok(Math.abs(mifflin.macros.carbohydrateGrams - 197.85) < 1e-9);
+assert.ok(Math.abs(mifflin.macros.fatGrams - 65.95) < 1e-9);
 assert.equal(mifflin.formulaLabel, "Mifflin–St Jeor");
 
 const harris = calculateCalorieTargets({ ...common, formula: "harris-benedict" });
