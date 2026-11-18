@@ -19,6 +19,13 @@ const { chromium } = require("playwright");
       assert.equal(await page.locator("#calorie-form").isVisible(), true);
       assert.equal(await page.locator("#cal-formula").inputValue(), "mifflin");
       assert.equal(await page.locator("#cal-body-fat-field").isVisible(), false, "Body-fat input must be hidden unless Katch–McArdle is selected");
+      assert.equal(await page.locator("#cal-height-imperial").isVisible(), false, "Imperial height controls must stay hidden while metric units are selected");
+      const helperWidthRatio = await page.evaluate(() => {
+        const form = document.querySelector("#calorie-form");
+        const help = document.querySelector("#cal-coefficient-help");
+        return help.getBoundingClientRect().width / form.getBoundingClientRect().width;
+      });
+      assert.ok(helperWidthRatio >= 0.9, "Coefficient guidance must span the full form width on narrow screens");
       assert.equal(await page.locator("#calorie-result").isVisible(), false);
       assert.equal(await page.locator("#calorie-error").getAttribute("role"), "alert");
       assert.equal(await page.locator("#calorie-result").getAttribute("role"), "status");
