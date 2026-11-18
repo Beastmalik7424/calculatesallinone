@@ -213,7 +213,7 @@
         var grid = doc.createElement("div");
         grid.className = "mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2";
         appendMetric(grid, "Maintenance calories (TDEE)", data.maintenanceKcalPerDay, "Estimated daily energy expenditure");
-        appendMetric(grid, "Resting estimate (BMR / REE)", data.restingKcalPerDay, "The selected equation's resting-energy estimate");
+        appendMetric(grid, "Resting estimate (REE)", data.restingKcalPerDay, "A predicted resting-energy value, not a measured BMR or RMR");
         appendMetric(grid, "Mild deficit (−300 kcal)", data.mildDeficitKcalPerDay, "Arithmetic comparison with maintenance");
         appendMetric(grid, "Moderate deficit (−500 kcal)", data.moderateDeficitKcalPerDay, "Arithmetic comparison with maintenance");
         appendMetric(grid, "Lean surplus (+250 kcal)", data.leanSurplusKcalPerDay, "Arithmetic comparison with maintenance");
@@ -236,7 +236,8 @@
         source.appendChild(doc.createTextNode("Formula references: "));
         [
           ["Mifflin–St Jeor", "https://pubmed.ncbi.nlm.nih.gov/2305711/"],
-          ["Revised Harris–Benedict", "https://pubmed.ncbi.nlm.nih.gov/6741850/"]
+          ["Revised Harris–Benedict", "https://pubmed.ncbi.nlm.nih.gov/6741850/"],
+          ["Katch–McArdle", "https://pmc.ncbi.nlm.nih.gov/articles/PMC12425712/"]
         ].forEach(function (item, index) {
           if (index) source.appendChild(doc.createTextNode(" · "));
           var link = doc.createElement("a");
