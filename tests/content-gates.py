@@ -22,7 +22,7 @@ CASES = {
         "mean Gregorian year of 365.2425 days",
         "Pakistan independence date",
         "14 August 1947",
-        "Exact calendar days require the actual start and end dates",
+        "For a date-specific result, exact calendar days require a start date and end date",
     ],
     "stopwatch": [
         "A lap time of 83 seconds equals 1 minute and 23 seconds.",
