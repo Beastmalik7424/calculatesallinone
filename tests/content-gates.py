@@ -12,13 +12,9 @@ from pathlib import Path
 ROOT = Path("public")
 CASES = {
     "query-calculator": [
-        "Question: 2 weeks in hours.",
-        "2 x 7 = 14 days.",
-        "14 x 24 = 336 hours.",
-        "Question: 3 days to minutes.",
-        "3 x 24 = 72 hours.",
-        "72 x 60 = 4,320 minutes.",
-        "Divide the answer by each factor used in the question, in reverse order.",
+        "2 weeks = 336 hours",
+        "3 days = 4,320 minutes",
+        "To check a fixed-unit result, reverse the conversion.",
         "115 months in years and days",
         "115 months = 9 years and 7 months",
         "80 years ≈ 29,219.4 days",
@@ -26,7 +22,7 @@ CASES = {
         "Gregorian mean year of 365.2425 days",
         "Pakistan independence date",
         "14 August 1947",
-        "exact calendar days require a start date",
+        "Exact calendar days require the actual start and end dates",
     ],
     "stopwatch": [
         "A lap time of 83 seconds equals 1 minute and 23 seconds.",
