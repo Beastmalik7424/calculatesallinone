@@ -35,6 +35,7 @@ STATIC = "static"
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
 I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 B = "bg-gradient-to-r from-sky-700 to-indigo-700 hover:from-sky-800 hover:to-indigo-800 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
+B_ZAKAT = "bg-sky-700 hover:bg-sky-800 dark:bg-indigo-700 dark:hover:bg-indigo-800 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 S = "border border-stone-500 dark:border-stone-400 text-stone-900 dark:text-stone-100 text-base font-medium px-5 py-3 rounded-lg min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 R = "mt-6 rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5 text-base leading-relaxed min-h-[3rem]"
 H2 = "text-2xl font-bold text-indigo-800 dark:text-indigo-200 mt-12"
@@ -75,12 +76,13 @@ def attach_notice_badge(ui, slug, language):
 
 
 
-def field(fid, label, step="0.01", hint=""):
+def field(fid, label, step="0.01", hint="", autocomplete="off"):
     h = ""
     if hint:
         h = '<p class="text-sm text-stone-700 dark:text-stone-300 mt-1">' + hint + "</p>"
+    autocomplete_attr = (' autocomplete="' + html.escape(autocomplete, quote=True) + '"') if autocomplete else ""
     return ('<div><label class="@L@" for="' + fid + '">' + label + '</label>'
-            '<input id="' + fid + '" name="' + fid + '" class="@I@" type="number" min="0" step="' + step + '" inputmode="decimal">' + h + "</div>")
+            '<input id="' + fid + '" name="' + fid + '" class="@I@" type="number" min="0" step="' + step + '" inputmode="decimal"' + autocomplete_attr + '>' + h + "</div>")
 
 
 def check(fid, label):
@@ -88,8 +90,9 @@ def check(fid, label):
             '<input id="' + fid + '" type="checkbox" class="mt-1 h-5 w-5"> <span>' + label + "</span></label>")
 
 
-def result(rid):
-    return '<div id="' + rid + '" class="@R@" aria-live="polite"></div>'
+def result(rid, initially_hidden=False):
+    hidden = " hidden" if initially_hidden else ""
+    return '<div id="' + rid + '" class="@R@" aria-live="polite"' + hidden + '></div>'
 
 
 BMI_UI = (
@@ -135,19 +138,16 @@ TOOLS = [
         "category": "money",
         "name": "Zakat Calculator",
         "app": "FinanceApplication",
-        "description": "Calculate Hanafi or Sayyid Sistani Ja'fari Zakat estimates with gold or silver Nisab and gram, Sindh-standard tola or troy-ounce metal price inputs.",
+        "description": "Estimate Hanafi Zakat on eligible cash, gold, silver, trade stock and recoverable receivables, or Sayyid Sistani's limited Ja'fari business-goods method. Enter metal prices.",
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
         "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
-            + '<div id="zakat-step-controls" class="flex flex-wrap items-center justify-between gap-2">'
-            + '<div class="min-w-0"><p id="zakat-step-progress" class="text-xs text-stone-600 dark:text-stone-300" aria-live="polite">Step 1 of 10</p><h2 id="zakat-step-title" class="text-base font-semibold text-stone-900 dark:text-stone-100">Method and currency</h2></div>'
-            + '<div class="flex gap-2">'
-            + '<button id="zakat-back" type="button" class="@B@" hidden>Back</button>'
-            + '<button id="zakat-next" type="button" class="@B@">Next</button>'
-            + '<button id="zakat-submit" type="submit" class="@B@" hidden>Calculate Zakat</button>'
-            + '</div></div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="setup">'
+            + '<div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-stone-200 bg-stone-50 p-3 dark:border-stone-700 dark:bg-stone-900">'
+            + '<div class="min-w-0"><h2 class="text-base font-semibold text-stone-900 dark:text-stone-100">One-page Zakat calculator</h2><p class="text-xs text-stone-600 dark:text-stone-300">Choose your method, enter only applicable amounts, then calculate.</p></div>'
+            + '<button id="zakat-submit" type="submit" class="@B@">Calculate Zakat</button></div>'
+            + result("zakat-result", True)
+            + '<div class="zakat-section space-y-3" data-zakat-step="setup">'
             + '<p id="zakat-hanafi-setup-note" class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
@@ -160,14 +160,14 @@ TOOLS = [
             + '</select>'
             + '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p></div>'
             + '</div></div>'
-            + '<div id="z-sunni-fields" class="zakat-step-panel space-y-3" data-zakat-step="nisab">'
+            + '<div id="z-sunni-fields" class="zakat-section space-y-3" data-zakat-step="nisab">'
             + '<div><label class="@L@" for="z-nisab-method">Nisab method</label>'
             + '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
             + '<option value="silver" selected>Silver Nisab (612.36 g, South Asian classical conversion)</option>'
             + '<option value="gold-87">Gold Nisab (87.48 g, South Asian classical conversion)</option>'
             + '</select></div></div>'
             + '<div id="z-sunni-asset-fields" class="space-y-3">'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-a">'
+            + '<div class="zakat-section space-y-3" data-zakat-step="sunni-assets-a">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Enter market values in the selected currency. Leave categories you do not own at zero.</p>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
@@ -175,33 +175,30 @@ TOOLS = [
             + field("z-bank", "Bank and current account balances")
             + field("z-savings", "Savings, deposits and cash equivalents")
             + '</div></div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-b">'
+            + '<div class="zakat-section space-y-3" data-zakat-step="sunni-assets-b">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Gold, silver and jewellery</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-gold", "Eligible gold value")
             + field("z-silver", "Eligible silver value")
             + field("z-jewellery", "Permissible personal-use gold/silver jewellery")
             + '</div></div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-c">'
+            + '<div class="zakat-section space-y-3" data-zakat-step="sunni-assets-c">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Business assets</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-investments", "Zakatable shares and investments")
             + field("z-businesscash", "Business cash and bank balance")
-            + field("z-stock", "Trade inventory at current sale value")
+            + field("z-stock", "Trade inventory at current sale value", autocomplete="off")
             + '</div></div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-d">'
-            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Receivables and retirement funds</h2>'
+            + '<div class="zakat-section space-y-3" data-zakat-step="sunni-assets-d">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Recoverable receivables</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-recv", "Recoverable loans and receivables")
-            + field("z-pension", "Accessible pension or retirement amount")
             + '</div></div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-e">'
-            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Digital assets and property</h2>'
+            + '<div class="zakat-section space-y-3" data-zakat-step="sunni-assets-e">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Property held for resale</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-crypto", "Eligible cryptocurrency holdings")
-            + field("z-property", "Property held for resale")
+            + field("z-property", "Property held for resale (only if bought for resale)")
             + '</div></div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-liabilities">'
+            + '<div class="zakat-section space-y-3" data-zakat-step="sunni-liabilities">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Liabilities and payments</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-debts", "Eligible short-term debts and dues")
@@ -210,32 +207,49 @@ TOOLS = [
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
             + '</div></div>'
             + '<div id="z-jafari-fields" class="space-y-3" hidden>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="nisab">'
+            + '<div class="zakat-section space-y-3" data-zakat-step="nisab">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Shia Ja\'fari method — Sayyid Sistani</h2>'
-            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. Ordinary banknotes and deposits are excluded. Khums is separate. Other Ja\'fari authorities may differ. Khums is separate.</p>'
+            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. The personal-coin option applies only to minted gold/silver coins that are prevalently used as money in transactions. For qualifying coins, the first Nisab must remain present for 11 lunar months. Sistani states that gold and silver are not currently used as money in transactions, so ordinary banknotes, bank deposits, bullion bars and jewellery are not included. Khums is separate. Other Ja\'fari authorities may differ.</p>'
             + '<div><label class="@L@" for="z-jafari-nisab-method">Trading-goods Nisab reference</label>'
             + '<select id="z-jafari-nisab-method" name="z-jafari-nisab-method" class="@I@">'
             + '<option value="gold" selected>Gold: 69.12 g (15 common mithqals)</option>'
             + '<option value="silver">Silver: 483.84 g (105 common mithqals)</option>'
             + '</select></div></div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="jafari-trade">'
-            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Trading goods and ownership</h2>'
+            + '<div class="zakat-section space-y-3" data-zakat-step="jafari-ownership">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Ownership conditions</h2>'
+            + check("z-jafari-owner", "Owner remained adult and sane throughout the year")
+            + '</div>'
+            + '<div class="zakat-section space-y-3" data-zakat-step="jafari-trade">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Trading goods</h2>'
             + field("z-jafari-trade-value", "Current market value of qualifying trading goods")
-            + check("z-jafari-owner", "Owner is adult and sane")
             + check("z-jafari-acquired", "Trading goods were acquired through a contract of exchange, such as a purchase")
             + '</div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="jafari-hawl-intent">'
+            + '<div class="zakat-section space-y-3" data-zakat-step="jafari-hawl-intent">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Hawl and profit intention</h2>'
-            + check("z-jafari-hawl", "One full lunar year has passed since the intention to profit")
+            + check("z-jafari-hawl", "One full year has passed since the intention to profit began")
             + check("z-jafari-intent", "Intention to profit continued throughout the year")
             + '</div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="jafari-conditions">'
+            + '<div class="zakat-section space-y-3" data-zakat-step="jafari-conditions">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Trading-goods conditions</h2>'
             + check("z-jafari-access", "Owner retained the right to dispose of the goods throughout the year")
             + check("z-jafari-market", "Market value did not fall below the purchase cost during the year")
             + '<p class="text-sm text-stone-700 dark:text-stone-300">This path excludes cash, banknotes, ordinary savings, personal jewellery, crops and livestock. It is not a complete Zakat or Khums assessment.</p>'
+            + '</div>'
+            + '<div class="zakat-section space-y-3" data-zakat-step="jafari-coins">'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Personal gold/silver coins</h2>'
+            + check("z-jafari-coins-used-as-money", "These are minted gold/silver coins that are prevalently used as money in transactions")
+            + '<div id="z-jafari-coin-inputs" class="space-y-3" hidden>'
+            + '<div class="grid sm:grid-cols-2 gap-4">'
+            + field("z-jafari-gold-coins-weight", "Total minted gold-coin weight (selected unit)")
+            + field("z-jafari-silver-coins-weight", "Total minted silver-coin weight (selected unit)")
+            + '</div>'
+            + check("z-jafari-gold-coins-hawl", "Gold coins remained at or above the first Nisab for 11 lunar months")
+            + check("z-jafari-silver-coins-hawl", "Silver coins remained at or above the first Nisab for 11 lunar months")
+            + check("z-jafari-coins-access", "Owner retained legal and actual right of disposal over these coins")
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">Only use this if the coins are minted and are actually used prevalently as money in transactions. Sistani states that gold and silver are not currently used as money. Ordinary banknotes, bank deposits, bullion bars and jewellery do not qualify. If unsure, leave this option off and consult Sistani&#39;s office.</p>'
             + '</div></div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="price-unit">'
+            + '</div>'
+            + '<div class="zakat-section space-y-3" data-zakat-step="price-unit">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal price unit</h2>'
             + '<div><label class="@L@" for="z-metal-price-unit">Metal price unit</label>'
             + '<select id="z-metal-price-unit" name="z-metal-price-unit" class="@I@">'
@@ -245,7 +259,7 @@ TOOLS = [
             + '</select></div>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Choose one unit and use it for both metal prices.</p>'
             + '</div>'
-            + '<div class="zakat-step-panel space-y-3" data-zakat-step="metal-prices">'
+            + '<div class="zakat-section space-y-3" data-zakat-step="metal-prices">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Metal prices for Nisab</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-silverprice", "Silver price in selected unit")
@@ -254,7 +268,6 @@ TOOLS = [
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Prices are converted to per-gram rates before Nisab is calculated. This is an estimate, not a fatwa.</p>'
             + '</div>'
             + '</form>'
-            + result("zakat-result")
         ),
         "guide": [
             ("What this calculator does", [
@@ -273,7 +286,7 @@ TOOLS = [
             ("Shia Ja'fari method: Sayyid Sistani", [
                 "Choose Shia Ja'fari — Sayyid Sistani only if you follow this authority. His official rulings distinguish obligatory Zakat from Khums. The official Q&A says ordinary money saved in bank accounts and monetary bills do not carry obligatory Zakat under this method, while Khums may apply after annual expenses. Do not use the Sunni cash-and-bank calculation for this path.",
                 "This calculator implements one limited Sistani path: trading goods acquired through a contract of exchange and held for profit, based on obligatory precaution. The official ruling requires the owner to be adult and sane; the goods to reach at least 15 common mithqals of coined gold or 105 common mithqals of coined silver; one year to pass from the intention to profit; the profit intention to continue throughout the year; the owner to retain the right of disposal; and the goods to remain saleable at or above their capital cost throughout the year. The official rate is one-fortieth, or 2.5 percent. The form checks these conditions and does not calculate an amount if any condition is unconfirmed.",
-                "The Sistani trading-goods Nisab references used here are 69.12 g of gold and 483.84 g of silver. His official gold and silver rulings also distinguish coins minted and prevalently used as money from bullion or ordinary jewellery. This calculator does not cover every Sistani Zakat category, including agricultural produce, livestock or the separate coined-money conditions, and it does not calculate Khums. Other Ja'fari maraji may have different rulings. Confirm your own marja's guidance before relying on an estimate."
+                "The Sistani trading-goods Nisab references used here are 69.12 g of gold and 483.84 g of silver. The calculator also has a separate optional input for minted gold/silver coins, but only when they are prevalently used as money in transactions and the owner meets the separate 11-lunar-month, adult/sane and disposal conditions. Ruling 1915 states that gold and silver are not currently used as money in transactions, so ordinary banknotes, bank deposits, bullion bars and jewellery are not included. This calculator does not cover every Sistani Zakat category, including agricultural produce and livestock, and it does not calculate Khums. Other Ja'fari maraji may have different rulings. Confirm your own marja's guidance before relying on an estimate."
             ]),
             ("Gram, Sindh Government standard tola and troy ounce price input", [
                 "Choose the unit used by your jeweller: gram, Sindh Government standard tola (11.6638 g), or troy ounce (31.1034768 g). The calculator converts both entered metal prices to a per-gram rate before calculating Nisab. Some published Zakat guidance describes a 12.5 g Pakistani tola, so the 11.6638 g government standard is not a universal market convention. Confirm the actual gram basis with your jeweller.",
@@ -322,11 +335,11 @@ TOOLS = [
         ],
         "faq": [
             ("Which calculation method should I choose?", "Choose Sunni — Hanafi if you follow the Hanafi school. Choose Shia Ja'fari — Sayyid Sistani only if you follow his published rulings. These are separate calculation paths, not interchangeable versions of one formula. Other Ja'fari authorities and other Sunni schools may have different rulings and are not implemented by this calculator."),
-            ("What does the Shia Ja'fari Sistani option calculate?", "It estimates only qualifying trading goods under Sayyid Sistani's published obligatory-precaution ruling. It checks the owner, Nisab, one-year, continuous profit intention, disposal rights and market-value conditions. It does not calculate ordinary cash, banknotes, Khums, crops, livestock or every Zakat category."),
+            ("What does the Shia Ja'fari Sistani option calculate?", "It estimates qualifying trading goods under Sayyid Sistani's published obligatory-precaution ruling and, only if the strict conditions are met, minted gold/silver coins prevalently used as money in transactions. It checks the owner, Nisab, the applicable 11-month or one-year holding condition, disposal rights and business-goods market-value conditions. It does not calculate ordinary cash, banknotes, bank deposits, bullion, ordinary jewellery, Khums, crops or livestock."),
             ("Does Sistani's method apply obligatory Zakat to ordinary bank savings?", "His official Q&A says Zakat is not obligatory on ordinary bank deposits and monetary bills; Khums is a separate obligation and may apply to savings after annual expenses. Other Ja'fari authorities may differ."),
             ("Which metal price units can I use?", "Choose gram (1 g), Sindh Government standard tola (11.6638 g), or troy ounce (31.1034768 g). Select the unit that matches the jeweller’s quote. Some Pakistani quotes use 12.5 g per tola, which differs from the Sindh Government standard. For that quote, convert to a per-gram price and choose gram.")
         ],
-        "sources": 'Primary and supporting references: <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2317/" rel="noopener noreferrer">Sayyid Sistani official gold Nisab ruling</a>; <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2318/" rel="noopener noreferrer">Sayyid Sistani official silver Nisab and coined-money rulings</a>; <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2323/" rel="noopener noreferrer">Sayyid Sistani official trading-goods conditions</a>; <a class="' + LINK + '" href="https://www.sistani.org/english/qa/14884/" rel="noopener noreferrer">Sayyid Sistani official bank-deposit and monetary-bill Q&amp;A</a>; <a class="' + LINK + '" href="https://islamqa.org/hanafi/answerstofatawa/118729/who-is-liable-to-pay-zakat/" rel="noopener noreferrer">Hanafi scholar reference for 87.48 g gold and 612.36 g silver Nisab</a>; <a class="' + LINK + '" href="https://islamqa.org/hanafi/darulfiqh/156652/" rel="noopener noreferrer">Hanafi jewellery guidance by Darulfiqh</a>; <a class="' + LINK + '" href="https://seekersguidance.org/answers/hanafi-fiqh/which-debts-affect-zakat-for-both-debtor-and-creditor/" rel="noopener noreferrer">Hanafi debt guidance and scholarly comparison</a>; <a class="' + LINK + '" href="https://sindhlaws.gov.pk/Setup/Publications_SindhCode/PUB-16-000006.pdf" rel="noopener noreferrer">Sindh Government official tola conversion table</a>; <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-on-jewellery/" rel="noopener noreferrer">Islamic Relief jewellery and tola guidance</a>; <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide Zakat calculation principles</a>; <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan 2026 circular</a>. These sources describe named authorities and methods; they do not establish one ruling for every Muslim.'
+        "sources": 'Primary and supporting references: <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2317/" rel="noopener noreferrer">Sayyid Sistani official gold Nisab ruling</a>; <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2318/" rel="noopener noreferrer">Sayyid Sistani official silver Nisab and coined-money rulings</a>; <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/8243/" rel="noopener noreferrer">Sayyid Sistani official mithqal weight conversion table</a>; <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2323/" rel="noopener noreferrer">Sayyid Sistani official trading-goods conditions</a>; <a class="' + LINK + '" href="https://www.sistani.org/english/qa/14884/" rel="noopener noreferrer">Sayyid Sistani official bank-deposit and monetary-bill Q&amp;A</a>; <a class="' + LINK + '" href="https://islamqa.org/hanafi/answerstofatawa/118729/who-is-liable-to-pay-zakat/" rel="noopener noreferrer">Hanafi scholar reference for 87.48 g gold and 612.36 g silver Nisab</a>; <a class="' + LINK + '" href="https://islamqa.org/hanafi/darulfiqh/156652/" rel="noopener noreferrer">Hanafi jewellery guidance by Darulfiqh</a>; <a class="' + LINK + '" href="https://seekersguidance.org/answers/hanafi-fiqh/which-debts-affect-zakat-for-both-debtor-and-creditor/" rel="noopener noreferrer">Hanafi debt guidance and scholarly comparison</a>; <a class="' + LINK + '" href="https://sindhlaws.gov.pk/Setup/Publications_SindhCode/PUB-16-000006.pdf" rel="noopener noreferrer">Sindh Government official tola conversion table</a>; <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-on-jewellery/" rel="noopener noreferrer">Islamic Relief jewellery and tola guidance</a>; <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide Zakat calculation principles</a>; <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">State Bank of Pakistan 2026 circular</a>. These sources describe named authorities and methods; they do not establish one ruling for every Muslim.'
     },
     {
         "slug": "bmi-calculator",
@@ -797,7 +810,7 @@ URDU = {
         "title": "حنفی اور جعفری زکوٰۃ کیلکولیٹر | گرام اور تولہ | CalculatesAll",
         "description": "حنفی یا سید سیستانی کے جعفری طریقے سے زکوٰۃ کا تخمینہ لگائیں۔ سونے اور چاندی کی قیمت گرام یا معیاری تولہ میں درج کریں۔",
         "h1": "حنفی اور جعفری زکوٰۃ کیلکولیٹر",
-        "lead": "یہ کیلکولیٹر مفت ہے اور اکاؤنٹ بنانے کی ضرورت نہیں۔ حساب آپ کے براؤزر میں ہوتا ہے۔ دھاتوں کی قیمت خود درج کریں کیونکہ یہاں لائیو مارکیٹ ریٹس حاصل نہیں کیے جاتے۔ دو الگ حسابی طریقوں میں سے انتخاب کریں: سنی حنفی، یا آیت اللہ سید سیستانی کا مخصوص جعفری تجارتی مال کا حکم۔ سونے اور چاندی کی قیمت فی گرام یا واضح طور پر متعین سندھ کے معیاری تولہ کے مطابق درج کریں۔ حساب کے مفروضے، ماخذ اور حدود ضرور پڑھیں۔",
+        "lead": "یہ کیلکولیٹر مفت ہے اور اکاؤنٹ بنانے کی ضرورت نہیں۔ حساب آپ کے براؤزر میں ہوتا ہے۔ دھاتوں کی قیمت خود درج کریں کیونکہ یہاں لائیو مارکیٹ ریٹس حاصل نہیں کیے جاتے۔ دو الگ حسابی طریقوں میں سے انتخاب کریں: سنی حنفی، یا آیت اللہ سید سیستانی کے مخصوص جعفری تجارتی مال اور اہل ڈھلے ہوئے سکوں کے محدود احکام۔ سونے اور چاندی کی قیمت فی گرام یا واضح طور پر متعین سندھ کے معیاری تولہ کے مطابق درج کریں۔ حساب کے مفروضے، ماخذ اور حدود ضرور پڑھیں۔",
         "labels": [
             ("Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.", "چاندی یا سونے کا نصاب منتخب کریں۔ 2.5٪ کا تخمینہ صرف منتخب نصاب اور حول کی شرائط پوری ہونے پر لاگو ہوتا ہے۔"),
             ("Currency code (ISO 4217)", "کرنسی کوڈ (ISO 4217)"),
@@ -818,6 +831,16 @@ URDU = {
             ("Digital assets and property", "ڈیجیٹل اثاثے اور جائیداد"),
             ("Liabilities and payments", "واجبات اور ادائیگیاں"),
             ("Trading goods and ownership", "تجارتی مال اور ملکیت"),
+            ("Ownership conditions", "ملکیت کی شرائط"),
+            ("Trading goods", "تجارتی مال"),
+            ("Personal gold/silver coins", "ذاتی سونے اور چاندی کے سکے"),
+            ("These are minted gold/silver coins that are prevalently used as money in transactions", "یہ ڈھلے ہوئے سونے یا چاندی کے سکے ہیں جو عام لین دین میں بطور رقم رائج ہیں"),
+            ("Total minted gold-coin weight (selected unit)", "ڈھلے ہوئے سونے کے سکوں کا کل وزن (منتخب اکائی)"),
+            ("Total minted silver-coin weight (selected unit)", "ڈھلے ہوئے چاندی کے سکوں کا کل وزن (منتخب اکائی)"),
+            ("Gold coins remained at or above the first Nisab for 11 lunar months", "سونے کے سکے 11 قمری مہینے تک پہلے نصاب کے برابر یا اس سے زیادہ رہے"),
+            ("Silver coins remained at or above the first Nisab for 11 lunar months", "چاندی کے سکے 11 قمری مہینے تک پہلے نصاب کے برابر یا اس سے زیادہ رہے"),
+            ("Owner retained legal and actual right of disposal over these coins", "مالک کو پورے عرصے میں ان سکوں پر قانونی اور عملی تصرف کا اختیار حاصل رہا"),
+            ("Only use this if the coins are minted and are actually used prevalently as money in transactions. Sistani states that gold and silver are not currently used as money. Ordinary banknotes, bank deposits, bullion bars and jewellery do not qualify. If unsure, leave this option off and consult Sistani&#39;s office.", "یہ اختیار صرف اسی صورت میں استعمال کریں جب سکے ڈھلے ہوئے ہوں اور عام لین دین میں بطور رقم رائج ہوں۔ سیستانی کے مطابق اس وقت سونا اور چاندی لین دین میں بطور رقم استعمال نہیں ہوتے۔ عام بینک نوٹ، بینک ڈپازٹس، بلین کی سلاخیں اور زیورات اس میں شامل نہیں۔ شک ہو تو یہ اختیار بند رکھیں اور دفترِ سیستانی سے رجوع کریں."),
             ("Hawl and profit intention", "حول اور نفع کی نیت"),
             ("Trading-goods conditions", "تجارتی مال کی شرائط"),
             ("Current metal prices", "دھاتوں کی موجودہ قیمتیں"),
@@ -866,6 +889,13 @@ URDU = {
             ("One full lunar Zakat year (hawl) is complete", "ایک مکمل قمری زکوٰۃ سال (حول) پورا ہو چکا ہے"),
             ("The Hanafi method includes qualifying gold and silver jewellery when eligible under Hanafi guidance. Enter metal value only, avoid duplicate entry, and ask a qualified scholar about unusual jewellery or trade holdings.", "حنفی طریقہ اہل سونے اور چاندی کے زیورات کو حنفی رہنمائی کے مطابق شامل کرتا ہے۔ صرف دھات کی مالیت درج کریں، ایک ہی زیور دوبارہ شمار نہ کریں، اور غیر معمولی زیورات یا تجارتی مال کے بارے میں مستند عالم سے پوچھیں۔"),
             ("This is an estimate, not a fatwa. Debt, jewellery, investments, business goods and retirement rules can differ. Review the source-based guidance below and ask a qualified scholar about your circumstances.", "یہ صرف تخمینہ ہے، فتویٰ نہیں۔ قرض، زیورات، سرمایہ کاری، کاروباری مال اور پنشن کے احکام مختلف ہو سکتے ہیں۔ نیچے مستند ماخذ پر مبنی وضاحت پڑھیں اور اپنے حالات کے مطابق اہل عالم سے رجوع کریں۔"),
+            ("One-page Zakat calculator", "ایک صفحے کا زکوٰۃ کیلکولیٹر"),
+            ("Choose your method, enter only applicable amounts, then calculate.", "اپنا طریقہ منتخب کریں، صرف متعلقہ رقوم درج کریں، پھر حساب کریں۔"),
+            ("Recoverable receivables", "قابلِ وصول رقوم"),
+            ("Property held for resale (only if bought for resale)", "دوبارہ فروخت کے لیے خریدی گئی جائیداد کی مالیت"),
+            ("Owner remained adult and sane throughout the year", "مالک پورے سال بالغ اور عاقل رہا ہو"),
+            ("One full year has passed since the intention to profit began", "نفع کی نیت کرنے کے بعد ایک مکمل سال گزر چکا ہو"),
+            ("Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. The personal-coin option applies only to minted gold/silver coins that are prevalently used as money in transactions. For qualifying coins, the first Nisab must remain present for 11 lunar months. Sistani states that gold and silver are not currently used as money in transactions, so ordinary banknotes, bank deposits, bullion bars and jewellery are not included. Khums is separate. Other Ja'fari authorities may differ.", "صرف آیت اللہ سید سیستانی کا طریقہ۔ یہ کیلکولیٹر احتیاطِ واجب کے تحت اہل تجارتی مال کا تخمینہ لگاتا ہے۔ ذاتی سکوں کا اختیار صرف ان ڈھلے ہوئے سونے یا چاندی کے سکوں کے لیے ہے جو عام لین دین میں بطور رقم رائج ہوں۔ اہل سکوں کے لیے پہلا نصاب 11 قمری مہینے برقرار رہنا ضروری ہے۔ سیستانی کے مطابق اس وقت سونا اور چاندی لین دین میں بطور رقم استعمال نہیں ہوتے، اس لیے عام بینک نوٹ، بینک ڈپازٹس، بلین کی سلاخیں اور زیورات شامل نہیں۔ خمس الگ ہے۔ دوسرے جعفری مراجع کے احکام مختلف ہو سکتے ہیں۔"),
             ("Calculate Zakat", "زکوٰۃ کا حساب کریں")
         ],
         "how_heading": "زکوٰۃ کا حساب، نصاب اور ضروری وضاحت",
@@ -879,7 +909,7 @@ URDU = {
             "ایک ہی زیور کی قیمت کو زیورات، سونے اور چاندی کے خانوں میں دوبارہ درج نہ کریں۔ خالص پن، نگینے، کاریگری، ذاتی استعمال اور تجارت کا مقصد مالیت یا شرعی درجہ بندی بدل سکتے ہیں۔ کیلکولیٹر زیور کا وزن یا خالص پن خود نہیں جانچتا۔ غیر یقینی صورت میں مستند حنفی عالم اور قابلِ اعتماد جیولر سے رجوع کریں.",
             "شیعہ جعفری اختیار صرف آیت اللہ سید سیستانی کی پیروی کرنے والوں کے لیے ہے۔ ان کے سرکاری سوال و جواب کے مطابق عام بینک ڈپازٹس اور بینک نوٹوں پر واجب زکوٰۃ نہیں، جبکہ سالانہ اخراجات کے بعد بچت پر خمس کا الگ حکم ہو سکتا ہے۔ اس لیے اس اختیار میں سنی نقد اور بینک بیلنس والا فارمولا استعمال نہیں ہوتا۔",
             "یہ کیلکولیٹر سیستانی کے ایک محدود حکم کا حساب کرتا ہے: ایسا تجارتی مال جو تبادلے کے معاہدے سے حاصل کیا گیا ہو اور نفع کے لیے رکھا گیا ہو۔ یہ حکم احتیاطِ واجب کی بنا پر لاگو ہوتا ہے۔ سرکاری حکم کے مطابق مالک بالغ اور عاقل ہو، مال کا نصاب کم از کم 15 مثقالِ صیرفی سونا یا 105 مثقالِ صیرفی چاندی ہو، نفع کی نیت سے ایک سال گزرے، نفع کی نیت پورے سال برقرار رہے، مالک کو پورے سال مال میں تصرف کا حق حاصل ہو، اور مال پورے سال کم از کم اپنی لاگت کے برابر فروخت ہونے کے قابل ہو۔ اس مال پر شرح 2.5 فیصد ہے۔ اگر ان شرائط میں سے کسی کی تصدیق نہ ہو تو کیلکولیٹر رقم نہیں دکھاتا۔",
-            "سیستانی کے تجارتی مال کے لیے استعمال شدہ نصاب سونے کے 69.12 گرام اور چاندی کے 483.84 گرام ہیں۔ ان کے سرکاری احکام میں سونے اور چاندی کے ایسے سکوں کا الگ ذکر ہے جو عام لین دین میں بطور کرنسی استعمال ہوتے ہوں۔ یہ کیلکولیٹر زرعی پیداوار، مویشی، سکے بطور کرنسی یا خمس کا حساب نہیں کرتا۔ دوسرے جعفری مراجع کے احکام مختلف ہو سکتے ہیں، اس لیے اپنے مرجع کے دفتر سے تصدیق کریں۔",
+            "سیستانی کے تجارتی مال کے لیے استعمال شدہ نصاب سونے کے 69.12 گرام اور چاندی کے 483.84 گرام ہیں۔ کیلکولیٹر میں ذاتی سکوں کے لیے الگ اختیاری خانہ بھی ہے، مگر صرف ان ڈھلے ہوئے سونے یا چاندی کے سکوں کے لیے جو عام لین دین میں بطور رقم رائج ہوں اور جن پر 11 قمری مہینے، بالغ و عاقل مالک اور حقِ تصرف کی الگ شرائط پوری ہوں۔ حکم 1915 کے مطابق اس وقت سونا اور چاندی لین دین میں بطور رقم استعمال نہیں ہوتے، اس لیے عام بینک نوٹ، بینک ڈپازٹس، بلین اور زیورات شامل نہیں۔ یہ کیلکولیٹر زرعی پیداوار، مویشی یا خمس کا حساب نہیں کرتا۔ دوسرے جعفری مراجع کے احکام مختلف ہو سکتے ہیں، اس لیے اپنے مرجع کے دفتر سے تصدیق کریں۔",
             "سونے اور چاندی کی قیمت تین اکائیوں میں درج کریں: گرام (1 گرام)، حکومتِ سندھ کا سرکاری تولہ (11.6638 گرام)، یا ٹرائے اونس (31.1034768 گرام)۔ کیلکولیٹر قیمت کو فی گرام میں تبدیل کر کے نصاب نکالتا ہے۔ بعض پاکستانی بازاروں میں تولہ 12.5 گرام بھی استعمال ہوتا ہے، اس لیے صراف سے اصل وزن کی تصدیق کریں۔",
             "تمام اثاثوں اور دھات کی قیمت ایک ہی کرنسی میں درج کریں۔ یہ کیلکولیٹر لائیو قیمت حاصل نہیں کرتا۔ سرکاری تولہ صرف 11.6638 گرام کے نرخ پر اور ٹرائے اونس صرف 31.1034768 گرام کے نرخ پر منتخب کریں۔ اگر بازار کا تولہ 12.5 گرام ہو تو قیمت فی گرام میں تبدیل کر کے گرام منتخب کریں۔",
             "چاندی کا نصاب منتخب ہو تو چاندی کی فی گرام موجودہ قیمت درج کریں۔ سونے کے دونوں طریقوں کے لیے 24 قیراط سونے کی فی گرام قیمت درکار ہے۔ قیمت اسی کرنسی میں ہونی چاہیے جس میں آپ نے اپنے اثاثے اور قرض درج کیے ہیں۔ یہ صفحہ لائیو مارکیٹ قیمت حاصل کرنے کا دعویٰ نہیں کرتا۔ اپنی زکوٰۃ کی تاریخ پر مقامی معتبر صرافہ، بلین یا جیولرز کے ذریعے قیمت کی تصدیق کریں۔ پرانی مثال کی قیمت کو آج کی قیمت نہ سمجھیں۔",
@@ -905,11 +935,11 @@ URDU = {
         ],
         "faq": [
             ("کون سا حسابی طریقہ منتخب کروں؟", "اگر آپ حنفی فقہ کی پیروی کرتے ہیں تو سنی — حنفی منتخب کریں۔ شیعہ جعفری — سید سیستانی صرف اسی وقت منتخب کریں جب آپ ان کے شائع شدہ احکام کی پیروی کرتے ہیں۔ دونوں الگ حسابی راستے ہیں۔ دوسرے جعفری مراجع یا دیگر سنی فقہی مکاتب کے احکام مختلف ہو سکتے ہیں اور یہاں نافذ نہیں کیے گئے۔"),
-            ("شیعہ جعفری سیستانی اختیار کیا حساب کرتا ہے؟", "یہ صرف آیت اللہ سید سیستانی کے شائع شدہ احتیاطِ واجب کے حکم کے تحت اہل تجارتی مال کا تخمینہ لگاتا ہے۔ اس میں مالک، نصاب، ایک سال، مسلسل نفع کی نیت، تصرف کا حق اور مال کی قیمت سے متعلق شرائط چیک ہوتی ہیں۔ یہ عام نقد رقم، بینک نوٹ، خمس، زرعی پیداوار، مویشی یا زکوٰۃ کی تمام اقسام کا حساب نہیں کرتا۔"),
+            ("شیعہ جعفری سیستانی اختیار کیا حساب کرتا ہے؟", "یہ آیت اللہ سید سیستانی کے شائع شدہ احتیاطِ واجب کے حکم کے تحت اہل تجارتی مال اور صرف سخت شرائط پوری ہونے پر عام لین دین میں بطور رقم رائج ڈھلے ہوئے سونے یا چاندی کے سکوں کا تخمینہ لگاتا ہے۔ اس میں مالک، نصاب، متعلقہ 11 قمری مہینے یا ایک سال کی مدت، حقِ تصرف اور تجارتی مال کی فروختی قیمت کی شرائط چیک ہوتی ہیں۔ یہ عام نقد رقم، بینک نوٹ، بینک ڈپازٹس، بلین، عام زیورات، خمس، زرعی پیداوار یا مویشی کا حساب نہیں کرتا۔"),
             ("کیا سیستانی کے طریقے میں بینک کی بچت پر واجب زکوٰۃ ہے؟", "ان کے سرکاری سوال و جواب کے مطابق عام بینک ڈپازٹس اور بینک نوٹوں پر واجب زکوٰۃ نہیں۔ سالانہ اخراجات کے بعد بچت پر خمس کا الگ حکم ہو سکتا ہے۔ دوسرے جعفری مراجع کے احکام مختلف ہو سکتے ہیں۔"),
             ("دھات کی قیمت کی کون سی اکائیاں دستیاب ہیں؟", "گرام (1 گرام)، حکومتِ سندھ کا سرکاری تولہ (11.6638 گرام)، یا ٹرائے اونس (31.1034768 گرام) منتخب کریں۔ بازار کا تولہ 12.5 گرام بھی ہو سکتا ہے، اس لیے صراف سے وزن کی تصدیق کریں۔ اگر وزن مختلف ہو تو قیمت فی گرام میں تبدیل کر کے گرام منتخب کریں۔")
         ],
-        "sources": 'اہم اور معاون ماخذ: <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2317/" rel="noopener noreferrer">آیت اللہ سیستانی کے سونے کے نصاب کے سرکاری احکام</a>؛ <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2318/" rel="noopener noreferrer">چاندی اور سکوں کے سرکاری احکام</a>؛ <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2323/" rel="noopener noreferrer">تجارتی مال کی شرائط</a>؛ <a class="' + LINK + '" href="https://www.sistani.org/english/qa/14884/" rel="noopener noreferrer">بینک ڈپازٹس اور بینک نوٹوں کے بارے میں سرکاری جواب</a>؛ <a class="' + LINK + '" href="https://islamqa.org/hanafi/answerstofatawa/118729/who-is-liable-to-pay-zakat/" rel="noopener noreferrer">حنفی نصاب: 87.48 گرام سونا اور 612.36 گرام چاندی</a>؛ <a class="' + LINK + '" href="https://islamqa.org/hanafi/darulfiqh/156652/" rel="noopener noreferrer">حنفی زیورات کے بارے میں دارالفقہ کی رہنمائی</a>؛ <a class="' + LINK + '" href="https://seekersguidance.org/answers/hanafi-fiqh/which-debts-affect-zakat-for-both-debtor-and-creditor/" rel="noopener noreferrer">حنفی قرض کی کٹوتی کے بارے میں علمی رہنمائی</a>؛ <a class="' + LINK + '" href="https://sindhlaws.gov.pk/Setup/Publications_SindhCode/PUB-16-000006.pdf" rel="noopener noreferrer">حکومتِ سندھ کا سرکاری تولہ تبدیلی جدول</a>؛ <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-on-jewellery/" rel="noopener noreferrer">اسلامک ریلیف کی زیورات اور تولہ رہنمائی</a>؛ <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide کے زکوٰۃ اصول</a>؛ <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">اسٹیٹ بینک کا 2026 سرکلر</a>۔ یہ ماخذ مخصوص مراجع اور طریقوں کی وضاحت کرتے ہیں، ہر شخص کے لیے ایک ہی شرعی حکم نہیں بناتے۔'
+        "sources": 'اہم اور معاون ماخذ: <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2317/" rel="noopener noreferrer">آیت اللہ سیستانی کے سونے کے نصاب کے سرکاری احکام</a>؛ <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2318/" rel="noopener noreferrer">چاندی اور سکوں کے سرکاری احکام</a>؛ <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/8243/" rel="noopener noreferrer">مثقال کے وزن کا سرکاری جدول</a>؛ <a class="' + LINK + '" href="https://www.sistani.org/english/book/48/2323/" rel="noopener noreferrer">تجارتی مال کی شرائط</a>؛ <a class="' + LINK + '" href="https://www.sistani.org/english/qa/14884/" rel="noopener noreferrer">بینک ڈپازٹس اور بینک نوٹوں کے بارے میں سرکاری جواب</a>؛ <a class="' + LINK + '" href="https://islamqa.org/hanafi/answerstofatawa/118729/who-is-liable-to-pay-zakat/" rel="noopener noreferrer">حنفی نصاب: 87.48 گرام سونا اور 612.36 گرام چاندی</a>؛ <a class="' + LINK + '" href="https://islamqa.org/hanafi/darulfiqh/156652/" rel="noopener noreferrer">حنفی زیورات کے بارے میں دارالفقہ کی رہنمائی</a>؛ <a class="' + LINK + '" href="https://seekersguidance.org/answers/hanafi-fiqh/which-debts-affect-zakat-for-both-debtor-and-creditor/" rel="noopener noreferrer">حنفی قرض کی کٹوتی کے بارے میں علمی رہنمائی</a>؛ <a class="' + LINK + '" href="https://sindhlaws.gov.pk/Setup/Publications_SindhCode/PUB-16-000006.pdf" rel="noopener noreferrer">حکومتِ سندھ کا سرکاری تولہ تبدیلی جدول</a>؛ <a class="' + LINK + '" href="https://www.islamic-relief.org.uk/giving/islamic-giving/zakat/zakat-on-jewellery/" rel="noopener noreferrer">اسلامک ریلیف کی زیورات اور تولہ رہنمائی</a>؛ <a class="' + LINK + '" href="https://nzfworldwide.com/wp-content/uploads/2022/03/NZF_Zakat-Calculation-Principle-No.1.pdf" rel="noopener noreferrer">NZF Worldwide کے زکوٰۃ اصول</a>؛ <a class="' + LINK + '" href="https://www.sbp.org.pk/circulars/bprd-circular-letter-no-03-of-2026" rel="noopener noreferrer">اسٹیٹ بینک کا 2026 سرکلر</a>۔ یہ ماخذ مخصوص مراجع اور طریقوں کی وضاحت کرتے ہیں، ہر شخص کے لیے ایک ہی شرعی حکم نہیں بناتے۔'
     },
     "bmi-calculator": {
         "name": "BMI کیلکولیٹر",
@@ -1512,7 +1542,10 @@ def calculator_carousel(lang="en", current_path=None):
     groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else (("primary", False),)
     for group_name, duplicate in groups_to_render:
         links = []
-        for slug, english_name, short_name in CAROUSEL_TOOLS:
+        tools_to_render = CAROUSEL_TOOLS
+        if current_path in ("/zakat-calculator/", "/ur/zakat-calculator/"):
+            tools_to_render = sorted(CAROUSEL_TOOLS, key=lambda item: item[0] != "zakat-calculator")
+        for slug, english_name, short_name in tools_to_render:
             if lang == "ur":
                 name = CAROUSEL_TRANSLATIONS["ur"][slug]
                 href = ("/ur/" if slug in URDU else "/") + slug + "/"
@@ -1665,7 +1698,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v5">\n'
         + ld + ads + "</head>\n"
     )
 
@@ -1791,7 +1824,8 @@ def home_lang_page(code):
 
 
 def fill(s):
-    return s.replace("@L@", L).replace("@I@", I).replace("@B@", B).replace("@S@", S).replace("@R@", R)
+    button_class = B_ZAKAT if 'id="zakat-form"' in s else B
+    return s.replace("@L@", L).replace("@I@", I).replace("@B@", button_class).replace("@S@", S).replace("@R@", R)
 
 
 def write(path, content):
@@ -1958,7 +1992,7 @@ def tool_page(t):
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     if t["slug"] == "zakat-calculator":
         title = "Zakat Calculator | Hanafi & Ja'fari | Gram and Tola"
-        desc = "Estimate Hanafi or Sayyid Sistani Ja'fari Zakat with gold or silver Nisab. Enter metal prices per gram or Sindh-standard tola."
+        desc = "Hanafi Zakat on cash, gold, silver, stock and receivables, or Sayyid Sistani's limited Ja'fari trading-goods method, with clear assumptions."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]

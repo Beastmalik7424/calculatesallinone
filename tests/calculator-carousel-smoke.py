@@ -95,25 +95,31 @@ css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
-assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat calculator navigation must not duplicate links"
-assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must not duplicate links"
-assert "grid-template-columns:repeat(6,minmax(0,1fr))" in css.replace(" ", ""), "Zakat phone and tablet navigation must use a compact six-column grid"
-assert "grid-template-columns:repeat(9,minmax(0,1fr))" in css.replace(" ", ""), "Zakat desktop navigation must use a nine-column grid"
-assert "white-space:nowrap!important" in css.replace(" ", ""), "Short shortcut labels must remain on one line"
-assert "data-short-label" in zakat_markup and "aria-label=" in zakat_markup and "title=" in zakat_markup, "Every compact visual label must retain its full accessible name and title"
-assert "text-overflow:clip!important" in css.replace(" ", ""), "Calculator shortcut labels must not be truncated"
-assert "min-height:44px" in css.replace(" ", ""), "Calculator shortcut links must retain a comfortable mobile tap target"
-assert "@keyframes ca-calculator-marquee" in css, "Homepage must retain its existing carousel animation"
-assert ".ca-calculator-track" in css and "animation:none" in css.replace(" ", ""), "Inner-page calculator navigation must be static, not a moving marquee"
-assert "theme-toggle" in markup and markup.index('id="theme-toggle"') < markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
-assert "ca-site-nav-topline" in markup, "Header must keep its separate top controls row"
+assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat pages must use one stable shortcut row without duplicate marquee links"
+assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pages must retain their existing single shortcut group"
+assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available on unaffected pages"
+assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Unaffected calculator pages must retain the shared continuous ticker animation"
+zakat_track_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-track\{([^}]*)\}", css)
+assert zakat_track_overrides and all("animation:none" in rule and "transform:none" in rule for rule in zakat_track_overrides), "Zakat pages must use a stable, non-moving shortcut track"
+zakat_link_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-link\{([^}]*)\}", css)
+assert zakat_link_overrides and all("min-height:44px" in rule and "height:44px" in rule for rule in zakat_link_overrides), "Zakat shortcut links must meet the 44px touch-target design target"
+assert "theme-toggle" in zakat_markup and zakat_markup.index('id="theme-toggle"') < zakat_markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
+assert "ca-site-nav-topline" in zakat_markup, "Header must keep its separate top controls row"
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
-print("Calculator grid, all 17 unique tools, responsive columns, header layout and Tasbih action smoke tests PASS")
+print("Calculator ticker, all 17 destinations, inner-page header layout and Tasbih action smoke tests PASS")
 
-assert '<link rel="stylesheet" href="/assets/site.css?v=20261117-zakat-positioning-v2">' in zakat_markup, "Zakat pages must use a new stylesheet URL so browsers cannot reuse the prior cached layout"
-carousel_rules = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-carousel\{([^}]*)\}', css)
-track_rules = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-track\{([^}]*)\}', css)
-assert len(carousel_rules) == 1, f"Zakat navigation must have one authoritative carousel rule, found {len(carousel_rules)}"
-assert len(track_rules) == 1, f"Zakat navigation must have one authoritative track rule, found {len(track_rules)}"
-assert all("display:none" not in rule for rule in carousel_rules), "Zakat navigation must never be hidden at mobile breakpoints"
-assert all("ca-calculator-marquee" not in rule for rule in track_rules), "Zakat navigation must be a static grid, not a moving marquee"
+assert '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v5">' in zakat_markup, "Zakat pages must use the current cache-busted stylesheet URL"
+assert zakat_markup.count('data-tool-set="primary"') == 1 and 'data-tool-set="duplicate"' not in zakat_markup, "Zakat pages must render one non-duplicated shortcut group"
+zakat_group = primary_group(zakat_markup, "/zakat-calculator/")
+current_zakat = re.search(r'data-tool-shortcut="zakat-calculator"[^>]*aria-current="page"', zakat_group)
+first_calorie = re.search(r'data-tool-shortcut="calorie-calculator"', zakat_group)
+assert current_zakat and first_calorie and current_zakat.start() < first_calorie.start(), "Current Zakat shortcut must appear first"
+assert re.search(r'<input id="z-stock"[^>]*autocomplete="off"', zakat_markup), "Financial trade-stock input must disable browser autofill"
+zakat_amount_inputs = re.findall(r'<input id="z-[^"]+"[^>]*type="number"[^>]*>', zakat_markup)
+assert zakat_amount_inputs and all('autocomplete="off"' in item for item in zakat_amount_inputs), "Every financial amount input must explicitly disable inappropriate browser autofill"
+assert "body:has(#main .ca-tool-zakat-calculator) #main" in css, "Zakat content must sit on a solid contrast-checkable surface"
+assert "html.dark body:has(#main .ca-tool-zakat-calculator) #main" in css, "Dark-mode Zakat content must retain a solid contrast-checkable surface"
+assert "body:has(#main .ca-tool-zakat-calculator) header" in css and "body:has(#main .ca-tool-zakat-calculator) footer" in css, "Zakat header and footer must use opaque surfaces for reliable contrast"
+assert "body:has(#main .ca-tool-zakat-calculator) #main>h1" in css, "Zakat page title must use a solid text color instead of gradient-clipped text"
+assert "bg-sky-700 hover:bg-sky-800 dark:bg-indigo-700" in zakat_markup, "Zakat calculate action must use a solid, high-contrast button surface"
+assert "bg-gradient-to-r from-sky-700 to-indigo-700" not in zakat_markup, "Zakat calculate action must not rely on an unmeasured gradient contrast"

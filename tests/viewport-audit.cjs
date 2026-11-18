@@ -5,61 +5,20 @@ let browser;
 // This task changes the shared navigation on the English and Urdu Zakat pages. Other routes retain their existing build and dedicated browser regression suites.
  const slugs=['zakat-calculator','ur/zakat-calculator'];
  let failures=[];
- async function auditZakatSteps(page,size,key,failures) {
-  async function runSequence(methodLabel) {
-   const raw=await page.locator('#zakat-form').getAttribute('data-step-order');
-   if(!raw){failures.push(key+' '+methodLabel+' Zakat no-scroll step sequence is missing');return;}
-   const order=raw.split(',').filter(Boolean);
-   for(let stepIndex=0;stepIndex<order.length;stepIndex++){
-    const stepMetrics=await page.evaluate(()=>{
-     const form=document.querySelector('#zakat-form');
-     const panels=[...form.querySelectorAll('.zakat-step-panel:not([hidden])')];
-     const visibleElement=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0;};
-     const controls=panels.flatMap(p=>[...p.querySelectorAll('input:not([type="hidden"]):not([type="checkbox"]),select,textarea')]).filter(visibleElement);
-     const rect=e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,width:r.width,height:r.height};};
-     const action=document.querySelector('#zakat-next:not([hidden])')||document.querySelector('#zakat-submit:not([hidden])');
-     const checkboxRows=panels.flatMap(p=>[...p.querySelectorAll('label.flex')]).filter(visibleElement);
-     const activeKey=form.getAttribute('data-current-step');
-     const progress=document.querySelector('#zakat-step-progress');
-     const title=document.querySelector('#zakat-step-title');
-     const controlsBar=document.querySelector('#zakat-step-controls');
-     return {activeKey,scrollY,viewport:innerHeight,panelCount:panels.length,panels:panels.map(rect),controls:controls.map(e=>({type:e.type||e.tagName.toLowerCase(),...rect(e)})),checkboxRows:checkboxRows.map(rect),action:action?rect(action):null,progress:progress?rect(progress):null,title:title?rect(title):null,controlBar:controlsBar?rect(controlsBar):null};
-    });
-    if(stepMetrics.activeKey!==order[stepIndex])failures.push(key+' wrong '+methodLabel+' Zakat step at index '+stepIndex+': '+stepMetrics.activeKey);
-    if(stepMetrics.panelCount<1||stepMetrics.panels.some(r=>r.top< -1||r.bottom>size.height+1))failures.push(key+' '+methodLabel+' Zakat step panel exceeds viewport at '+order[stepIndex]+': '+JSON.stringify(stepMetrics));
-    if(size.width<=600&&(!stepMetrics.controlBar||stepMetrics.controlBar.height>56))failures.push(key+' '+methodLabel+' Zakat step controls must remain a compact single-row action bar at '+order[stepIndex]+': '+JSON.stringify(stepMetrics.controlBar));
-    if((stepMetrics.controls.length+stepMetrics.checkboxRows.length)<1||stepMetrics.controls.some(r=>r.top< -1||r.bottom>size.height+1||r.height<44||r.width<44))failures.push(key+' '+methodLabel+' Zakat field is not fully usable within the viewport at '+order[stepIndex]+': '+JSON.stringify(stepMetrics));
-    if(stepMetrics.checkboxRows.some(r=>r.height<44||r.width<44||r.top< -1||r.bottom>size.height+1))failures.push(key+' '+methodLabel+' Zakat checkbox row is too small or outside the viewport at '+order[stepIndex]);
-    if(!stepMetrics.action||stepMetrics.action.top< -1||stepMetrics.action.bottom>size.height+1||stepMetrics.action.height<44||stepMetrics.action.width<44)failures.push(key+' '+methodLabel+' Zakat step action is not visible and tappable at '+order[stepIndex]);
-    if(!stepMetrics.progress||!stepMetrics.title||stepMetrics.progress.top< -1||stepMetrics.title.bottom>size.height+1)failures.push(key+' '+methodLabel+' Zakat step heading or progress is outside the viewport at '+order[stepIndex]);
-    if(stepMetrics.scrollY!==0)failures.push(key+' page scrolled before '+methodLabel+' Zakat step '+order[stepIndex]);
-    if(stepIndex<order.length-1)await page.locator('#zakat-next').click({scroll:'none'});
-    else await page.locator('#zakat-submit').click({scroll:'none'});
-    const afterScroll=await page.evaluate(()=>window.scrollY);
-    if(afterScroll!==0)failures.push(key+' page scrolled while navigating '+methodLabel+' Zakat step '+order[stepIndex]);
-   }
-  }
-  await runSequence("Hanafi");
-  let current=await page.locator('#zakat-form').getAttribute('data-current-step');
-  let backCount=0;
-  while(current!=="setup"&&backCount<20){
-   await page.locator('#zakat-back').click({scroll:'none'});
-   current=await page.locator('#zakat-form').getAttribute('data-current-step');
-   backCount++;
-  }
-  if(current!=="setup")failures.push(key+' could not return to Zakat method selection without scrolling');
-  await page.locator('#z-school-of-thought').selectOption('jafari-sistani');
-  if(await page.evaluate(()=>window.scrollY)!==0)failures.push(key+' page scrolled while switching Zakat method');
-  await runSequence("Sistani Ja'fari");
- }
  for (const size of [{width:320,height:568},{width:390,height:844},{width:360,height:740},{width:1366,height:768}]) {
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
   for (const slug of slugs) {
    await page.goto('http://127.0.0.1:8123/'+slug+'/',{waitUntil:'load'});
-   await page.waitForFunction(() => {
-    const form=document.querySelector('#zakat-form');
-    return !!form && form.getAttribute('data-current-step')==='setup' && !!form.getAttribute('data-step-order');
-   }, null, {timeout:10000});
+   await page.waitForFunction(() => !!document.querySelector('#zakat-form'), null, {timeout:10000});
+   const zakatFormContract = await page.evaluate(() => ({
+    next: !!document.querySelector('#zakat-next'),
+    back: !!document.querySelector('#zakat-back'),
+    progress: !!document.querySelector('#zakat-step-progress'),
+    submit: !!document.querySelector('#zakat-submit'),
+    fields: [...document.querySelectorAll('#zakat-form input, #zakat-form select, #zakat-form textarea')].filter(e => !e.closest('[hidden]')).length
+   }));
+   if(zakatFormContract.next || zakatFormContract.back || zakatFormContract.progress) failures.push(slug+' still exposes obsolete wizard navigation');
+   if(!zakatFormContract.submit || zakatFormContract.fields < 5) failures.push(slug+' single-page calculator is missing its submit action or input fields');
    const data=await page.evaluate(()=>{
     const section=document.querySelector('#tool-calculator')
       || document.querySelector('#main .ca-home-calculator')
@@ -83,12 +42,17 @@ let browser;
     const calculatorRect=document.querySelector('#tool-calculator')?.getBoundingClientRect();
     const formRect=document.querySelector('#zakat-form')?.getBoundingClientRect();
     const gridStyle=primary?getComputedStyle(primary):null;
-     const allLinksVisible=shortcuts.length===17 && shortcuts.every(a=>{const r=a.getBoundingClientRect(),s=getComputedStyle(a);return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>=44&&r.left>=-1&&r.right<=innerWidth+1&&r.top>=-1&&r.bottom<=innerHeight+1;});
-     const allLabelsFit=shortcuts.length===17 && shortcuts.every(a=>{const label=getComputedStyle(a,'::after');return !!a.dataset.shortLabel&&label.content!=='none'&&label.whiteSpace==='nowrap';});
+     const activeShortcutIndex=shortcuts.indexOf(active);
+     const activeRect=active?.getBoundingClientRect();
+     const carouselBounds=carousel?.getBoundingClientRect();
+     const activeShortcutVisible=!!activeRect&&!!carouselBounds&&activeRect.left>=carouselBounds.left-1&&activeRect.right<=carouselBounds.right+1&&activeRect.top>=carouselBounds.top-1&&activeRect.bottom<=carouselBounds.bottom+1;
+     const allLinksVisible=shortcuts.length===17 && shortcuts.every(a=>{const s=getComputedStyle(a);return s.display!=='none'&&s.visibility!=='hidden'&&a.getBoundingClientRect().width>0&&a.getBoundingClientRect().height>=44;});
+     const allLabelsFit=shortcuts.length===17 && shortcuts.every(a=>{const r=a.getBoundingClientRect();return !!a.dataset.shortLabel&&!!a.getAttribute('aria-label')&&!!a.title&&a.scrollWidth<=a.clientWidth+1&&r.height>=44;});
      const tickerScrollable=!!carousel && carousel.scrollWidth>carousel.clientWidth+1;
-    const zakatSubmit=document.querySelector('#zakat-next');
+     const duplicateGroups=carousel?.querySelectorAll('[data-tool-set="duplicate"]').length||0;
+    const zakatSubmit=document.querySelector('#zakat-submit');
     const submitPosition=zakatSubmit?getComputedStyle(zakatSubmit.parentElement).position:null;
-    const activeZakatPanels=[...document.querySelectorAll('#zakat-form .zakat-step-panel:not([hidden])')];
+    const activeZakatPanels=[...document.querySelectorAll('#zakat-form .zakat-section')].filter(visible);
      const firstField=activeZakatPanels.flatMap(panel=>[...panel.querySelectorAll('input:not([type="hidden"]),select,textarea')]).find(visible);
     const firstFieldRect=firstField?.getBoundingClientRect();
     const firstFieldVisible=!!firstFieldRect && firstFieldRect.top>=-1 && firstFieldRect.bottom<=innerHeight-1 && visible(firstField);
@@ -100,10 +64,10 @@ let browser;
     const minShortcutHeight=shortcutHeights.length?Math.min(...shortcutHeights):0;
     const numberInputHeights=[...document.querySelectorAll('#zakat-form input[type="number"]')].map(e=>parseFloat(getComputedStyle(e).height)||0);
     const minNumberInputHeight=numberInputHeights.length?Math.min(...numberInputHeights):0;
-    const checkboxLabelHeights=[...document.querySelectorAll('#zakat-form label.flex')].map(e=>Math.max(e.getBoundingClientRect().height,parseFloat(getComputedStyle(e).minHeight)||0));
+    const checkboxLabelHeights=[...document.querySelectorAll('#zakat-form label.flex')].filter(visible).map(e=>Math.max(e.getBoundingClientRect().height,parseFloat(getComputedStyle(e).minHeight)||0));
     const minCheckboxLabelHeight=checkboxLabelHeights.length?Math.min(...checkboxLabelHeights):0;
     const gridColumns=gridStyle?gridStyle.gridTemplateColumns.split(' ').length:0;
-    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,scrollY,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselBottom:carouselRect?.bottom,calculatorTop:calculatorRect?.top,formTop:formRect?.top,carouselCount:shortcuts.length,allLinksVisible,allLabelsFit,tickerScrollable,submitPosition,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height,firstFieldVisible,firstFieldReachable,firstFieldRect:firstFieldRect?{top:firstFieldRect.top,bottom:firstFieldRect.bottom,height:firstFieldRect.height}:null,submitVisible,submitReachable,submitRect:submitRect?{top:submitRect.top,bottom:submitRect.bottom,height:submitRect.height}:null,minShortcutHeight,minNumberInputHeight,minCheckboxLabelHeight};
+    return {lastButton:last?.textContent.trim()||last?.value,top:r?.top,bottom:r?.bottom,viewport:innerHeight,scrollY,overflow:document.documentElement.scrollWidth>innerWidth+2,mainNavFlexWrap:mainNav?getComputedStyle(mainNav).flexWrap:null,mainNavFlexDirection:mainNav?getComputedStyle(mainNav).flexDirection:null,carouselVisible:visible(carousel)&&carouselRect.width>0,carouselBottom:carouselRect?.bottom,calculatorTop:calculatorRect?.top,formTop:formRect?.top,carouselCount:shortcuts.length,allLinksVisible,allLabelsFit,tickerScrollable,duplicateGroups,activeShortcutVisible,activeShortcutIndex,submitPosition,gridColumns,activeHref:active?.getAttribute('href'),headerHeight:headerRect?.height,firstFieldVisible,firstFieldReachable,firstFieldRect:firstFieldRect?{top:firstFieldRect.top,bottom:firstFieldRect.bottom,height:firstFieldRect.height}:null,submitVisible,submitReachable,submitRect:submitRect?{top:submitRect.top,bottom:submitRect.bottom,height:submitRect.height}:null,minShortcutHeight,minNumberInputHeight,minCheckboxLabelHeight};
    });
    const key=slug+' '+size.width+'x'+size.height;
    console.log(key,JSON.stringify(data));
@@ -119,8 +83,9 @@ let browser;
    const urduPage=slug.startsWith('ur/');
    const isZakat=slug.endsWith('zakat-calculator');
    if(isZakat){
-    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible||data.tickerScrollable)failures.push(key+' all 17 calculator shortcut boxes must be visible together without scrolling');
-    if(!data.allLabelsFit)failures.push(key+' compact calculator shortcut labels are clipped or truncated');
+    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible||(size.width<=1024&&!data.tickerScrollable)||data.duplicateGroups!==0)failures.push(key+' calculator shortcuts must expose all 17 links in one accessible row and allow horizontal scrolling on narrow viewports');
+    if(!data.allLabelsFit)failures.push(key+' calculator shortcut labels are clipped or missing accessible names');
+    if(!data.activeShortcutVisible||data.activeShortcutIndex!==0)failures.push(key+' current calculator shortcut must be first and visible in the navigation viewport');
     if(data.carouselBottom>205)failures.push(key+' calculator shortcut grid takes too much first-screen space');
     if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
     if(data.calculatorTop>=size.height||data.formTop>=size.height)failures.push(key+' Zakat calculator form must begin on the first screen');
@@ -128,7 +93,7 @@ let browser;
     if(!data.firstFieldVisible||!data.firstFieldReachable)failures.push(key+' first Zakat input must be visible and reachable without scrolling');
     if(!data.submitVisible||!data.submitReachable)failures.push(key+' Calculate Zakat button must be visible and reachable without scrolling');
     if(data.scrollY!==0)failures.push(key+' page must remain at the initial scroll position');
-     await auditZakatSteps(page,size,key,failures);
+     // One-page form: all applicable fields remain on one page; vertical scrolling is permitted on short screens.
     if(size.width<=600&&data.minShortcutHeight<44)failures.push(key+' calculator shortcut touch targets must be at least 44px high: '+data.minShortcutHeight);
     if(size.width<=600&&data.minCheckboxLabelHeight<44)failures.push(key+' Zakat checkbox rows must be at least 44px high: '+data.minCheckboxLabelHeight);
    }

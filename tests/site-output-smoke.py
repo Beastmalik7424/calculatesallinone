@@ -763,7 +763,7 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261117-zakat-positioning-v2" in homepage_html, "Homepage must load the current calculator layout stylesheet"
+assert "/assets/site.css?v=20261118-zakat-mobile-ticker-v5" in homepage_html, "Homepage must load the current calculator layout stylesheet"
 assert ".ca-home-layout{display:grid" in site_css, "Homepage calculator layout must use the responsive single-column grid"
 homepage_layout_rule_start = site_css.find("#main .ca-home-layout{")
 homepage_layout_rule_end = site_css.find("}", homepage_layout_rule_start)
@@ -1000,7 +1000,7 @@ assert ".ca-home-side-left{display:none!important}" in site_css_compact and ".ca
 assert ".ca-home-calculator" in site_css, "Homepage calculator styles must survive the CSS build"
 input_css = (ROOT.parent / "styles" / "input.css").read_text(encoding="utf-8")
 assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?\.ca-home-calculator\s+#calc-pad\s+button\s*\{\s*min-height:\s*2\.8rem", input_css), "Homepage mobile calculator sizing must be explicitly defined in source CSS"
-assert "20261117-zakat-positioning-v2" in home_html, "Homepage must load the restored calculator-first stylesheet"
+assert "20261118-zakat-mobile-ticker-v5" in home_html, "Homepage must load the restored calculator-first stylesheet"
 layout_marker = "/* Persistent homepage calculator-first layout override. Keep this in source CSS because build:css regenerates static/site.css. */"
 assert layout_marker in input_css, "Calculator-first desktop layout must live in source CSS, not only the generated stylesheet"
 layout_override = input_css.split(layout_marker, 1)[1]
@@ -1200,7 +1200,7 @@ for _english_label in ("Cash held at home", "Eligible gold value", "Eligible sil
                        "Eligible short-term debts and dues", "Silver price per gram",
                        "One full lunar Zakat year (hawl) is complete", "Calculate Zakat"):
     assert _english_label not in _ur_zakat_compact, "English Zakat label leaked into Urdu page: " + _english_label
-for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-investments", "z-businesscash", "z-stock", "z-recv", "z-pension", "z-crypto", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
+for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-businesscash", "z-stock", "z-recv", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
     assert 'id="' + _field_id + '"' in _ur_zakat_compact, "Urdu Zakat field ID changed: " + _field_id
 
 # Urdu calculator templates must carry the same page-specific responsive hooks as English tools.

@@ -2381,49 +2381,51 @@ body:has(#zakat-form) #main p a {
 }
 
 /* Reclaim vertical space without shrinking 44px form controls or checkbox targets. */
-body:has(#zakat-form) #main.ca-tool-main {
-  padding-top: .5rem !important;
-  padding-bottom: 1rem !important;
-}
-body:has(#zakat-form) #main > nav[aria-label="Breadcrumb"] {
-  margin-bottom: .2rem !important;
-  font-size: .72rem !important;
-  line-height: 1.1 !important;
-}
-body:has(#zakat-form) #main > h1 {
-  margin-top: .25rem !important;
-  margin-bottom: .35rem !important;
-  font-size: 1.45rem !important;
-  line-height: 1.15 !important;
-}
-body:has(#zakat-form) #main #tool-calculator {
-  margin-top: .4rem !important;
-  padding: .5rem !important;
-}
-body:has(#zakat-form) #zakat-form {
-  gap: .4rem !important;
-}
-body:has(#zakat-form) #zakat-form > :not([hidden]) ~ :not([hidden]) {
-  margin-top: .4rem !important;
-}
-body:has(#zakat-form) #zakat-form .zakat-step-panel > :not([hidden]) ~ :not([hidden]) {
-  margin-top: .35rem !important;
-}
-body:has(#zakat-form) #zakat-form .zakat-step-panel .grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: .4rem !important;
-}
-body:has(#zakat-form) #zakat-form .zakat-step-panel h2 {
-  font-size: .86rem !important;
-  line-height: 1.2 !important;
-}
-body:has(#zakat-form) #zakat-form .zakat-step-panel p {
-  font-size: .72rem !important;
-  line-height: 1.2 !important;
-}
-body:has(#zakat-form) #zakat-form .zakat-step-panel label:not(.flex) {
-  font-size: .72rem !important;
-  line-height: 1.15 !important;
+@media (max-width: 600px) {
+  body:has(#zakat-form) #main.ca-tool-main {
+    padding-top: .5rem !important;
+    padding-bottom: 1rem !important;
+  }
+  body:has(#zakat-form) #main > nav[aria-label="Breadcrumb"] {
+    margin-bottom: .2rem !important;
+    font-size: .72rem !important;
+    line-height: 1.1 !important;
+  }
+  body:has(#zakat-form) #main > h1 {
+    margin-top: .25rem !important;
+    margin-bottom: .35rem !important;
+    font-size: 1.45rem !important;
+    line-height: 1.15 !important;
+  }
+  body:has(#zakat-form) #main #tool-calculator {
+    margin-top: .4rem !important;
+    padding: .65rem !important;
+  }
+  body:has(#zakat-form) #zakat-form {
+    gap: .5rem !important;
+  }
+  body:has(#zakat-form) #zakat-form > :not([hidden]) ~ :not([hidden]) {
+    margin-top: .4rem !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-section > :not([hidden]) ~ :not([hidden]) {
+    margin-top: .35rem !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-section .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: .5rem !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-section h2 {
+    font-size: .95rem !important;
+    line-height: 1.25 !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-section p {
+    font-size: .82rem !important;
+    line-height: 1.3 !important;
+  }
+  body:has(#zakat-form) #zakat-form .zakat-section label:not(.flex) {
+    font-size: .82rem !important;
+    line-height: 1.2 !important;
+  }
 }
 body:has(#zakat-form) #zakat-form :is(input:not([type="checkbox"]), select, textarea) {
   min-height: 44px !important;
@@ -2432,23 +2434,23 @@ body:has(#zakat-form) #zakat-form :is(input:not([type="checkbox"]), select, text
 
 /* Smallest supported phone: keep the full shortcut grid and every active Zakat step in view. */
 @media (max-width: 360px) {
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step^="sunni-assets"] .grid {
+  body:has(#zakat-form) #zakat-form .zakat-section[data-zakat-step^="sunni-assets"] .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: .25rem !important;
   }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step^="sunni-assets"] .grid > * {
+  body:has(#zakat-form) #zakat-form .zakat-section[data-zakat-step^="sunni-assets"] .grid > * {
     min-width: 0 !important;
   }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step^="sunni-assets"] label.block {
+  body:has(#zakat-form) #zakat-form .zakat-section[data-zakat-step^="sunni-assets"] label.block {
     font-size: .62rem !important;
     line-height: 1.05 !important;
     overflow-wrap: anywhere !important;
   }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel[data-zakat-step^="sunni-assets"] input[type="number"] {
+  body:has(#zakat-form) #zakat-form .zakat-section[data-zakat-step^="sunni-assets"] input[type="number"] {
     padding-inline: .2rem !important;
     font-size: 16px !important;
   }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > label.flex {
+  body:has(#zakat-form) #zakat-form .zakat-section:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > label.flex {
     display: inline-flex !important;
     vertical-align: top !important;
     box-sizing: border-box !important;
@@ -2463,199 +2465,127 @@ body:has(#zakat-form) #zakat-form :is(input:not([type="checkbox"]), select, text
     line-height: 1.05 !important;
     overflow-wrap: anywhere !important;
   }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > label.flex input {
+  body:has(#zakat-form) #zakat-form .zakat-section:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > label.flex input {
     flex: 0 0 16px !important;
     width: 16px !important;
     height: 16px !important;
   }
-  body:has(#zakat-form) #zakat-form .zakat-step-panel:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > :not([hidden]) ~ :not([hidden]) {
+  body:has(#zakat-form) #zakat-form .zakat-section:is([data-zakat-step="jafari-trade"], [data-zakat-step="jafari-hawl-intent"], [data-zakat-step="jafari-conditions"]) > :not([hidden]) ~ :not([hidden]) {
     margin-top: 0 !important;
   }
 }
 
 
-/* The action bar is a two-column row, not a flex-wrap stack. This recovers
-   the vertical space lost when the title and Next/Back buttons wrapped. */
-body:has(#zakat-form) #zakat-step-controls {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) auto !important;
-  align-items: center !important;
-  gap: .35rem !important;
-  min-width: 0 !important;
-}
-body:has(#zakat-form) #zakat-step-controls > :first-child {
-  min-width: 0 !important;
-  width: auto !important;
-}
-body:has(#zakat-form) #zakat-step-controls > :last-child {
-  display: flex !important;
-  flex-wrap: nowrap !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: .2rem !important;
-  min-width: 0 !important;
-}
-body:has(#zakat-form) #zakat-step-controls button {
-  min-width: 44px !important;
-  min-height: 44px !important;
-  height: 44px !important;
-  padding: .2rem .3rem !important;
-  font-size: .75rem !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
-}
-body:has(#zakat-form) #zakat-step-progress {
-  font-size: .68rem !important;
-  line-height: 1.1 !important;
-  margin: 0 !important;
-}
-body:has(#zakat-form) #zakat-step-title {
-  min-width: 0 !important;
-  font-size: .82rem !important;
-  line-height: 1.12 !important;
-  overflow-wrap: anywhere !important;
-}
-@media (max-width: 360px) {
-  body:has(#zakat-form) #zakat-step-controls {
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    gap: .2rem !important;
-  }
-  body:has(#zakat-form) #zakat-step-controls > :last-child {
-    gap: .12rem !important;
-  }
-  body:has(#zakat-form) #zakat-step-controls button {
-    padding-inline: .22rem !important;
-    font-size: .7rem !important;
-  }
-}
-
-/* Zakat first-screen navigation: one static, accessible grid. All 17 destinations stay visible and tappable. */
-body:has(#zakat-form) header nav .ca-calculator-carousel {
-  display: block !important;
-  flex: 1 1 100% !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: visible !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  scrollbar-width: none !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-track {
-  display: block !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  height: auto !important;
-  min-height: 0 !important;
-  animation: none !important;
-  transform: none !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
-  display: grid !important;
-  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  gap: 4px !important;
-  padding: 0 !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="duplicate"] {
-  display: none !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-link {
-  display: flex !important;
-  flex: initial !important;
-  min-width: 0 !important;
-  min-height: 44px !important;
-  height: 44px !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 2px !important;
-  border: 1px solid var(--line) !important;
-  border-radius: 6px !important;
-  background: var(--panel) !important;
-  color: var(--accent) !important;
-  font-size: 0 !important;
-  line-height: 1 !important;
-  text-align: center !important;
-  text-decoration: none !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: clip !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-link::after {
-  content: attr(data-short-label) !important;
-  display: inline-block !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-  color: inherit !important;
-  font-size: 10px !important;
-  font-weight: 750 !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
-  text-overflow: clip !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-link[aria-current="page"] {
-  background: var(--accent) !important;
-  border-color: var(--accent) !important;
-  color: var(--accentText) !important;
-  font-weight: 850 !important;
-}
-body:has(#zakat-form) header nav .ca-calculator-link:focus-visible {
-  outline: 2px solid var(--accent) !important;
-  outline-offset: 1px !important;
-}
-@media (min-width: 900px) {
-  body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
-    grid-template-columns: repeat(9, minmax(0, 1fr)) !important;
-  }
-}
-html.dark body:has(#zakat-form) header nav .ca-calculator-link {
-  border-color: #475569 !important;
-  background: #17243a !important;
-  color: #e2e8f0 !important;
-}
-html.dark body:has(#zakat-form) header nav .ca-calculator-link[aria-current="page"] {
-  border-color: #5eead4 !important;
-  background: #134e4a !important;
-  color: #f0fdfa !important;
-}
-@media (max-width: 600px) {
-  body:has(#zakat-form) header nav:has(.ca-site-nav-topline) {
-    gap: .15rem !important;
-    padding-block: .15rem !important;
-    padding-inline: .45rem !important;
-  }
-  body:has(#zakat-form) header nav:has(.ca-site-nav-topline) .ca-site-nav-topline {
-    min-height: 44px !important;
-    height: 44px !important;
-    gap: .35rem !important;
-  }
-  body:has(#zakat-form) header nav:has(.ca-site-nav-topline) .ca-site-nav-topline > a,
-  body:has(#zakat-form) header nav:has(.ca-site-nav-topline) #theme-toggle {
-    min-height: 44px !important;
-    height: 44px !important;
-  }
-  body:has(#zakat-form) header nav .ca-calculator-group[data-tool-set="primary"] {
-    gap: 2px !important;
-  }
-  body:has(#zakat-form) header nav .ca-calculator-link {
-    min-height: 44px !important;
-    height: 44px !important;
-    padding: 2px 1px !important;
-  }
-  body:has(#zakat-form) header nav .ca-calculator-link::after {
-    font-size: 10px !important;
-    line-height: 1 !important;
-  }
-}
+/* Zakat uses the same shared calculator ticker as every other calculator page. */
 
 /* Preserve the existing compact-phone calorie header carousel. */
 @media (max-width: 600px) {
   body:has(#main.ca-tool-calorie-calculator) header nav .ca-calculator-carousel {
     display: block !important;
   }
+}
+
+
+/* Zakat pages: keep calculator navigation stable, touch-friendly and manually scrollable.
+   A single row avoids the moving duplicate marquee and preserves all destinations on phones. */
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-carousel {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scroll-padding-inline: .5rem;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-track {
+  width: max-content;
+  min-width: max-content;
+  animation: none !important;
+  transform: none !important;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group[data-tool-set="duplicate"] {
+  display: none !important;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group {
+  min-height: 44px;
+  align-items: center;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link {
+  min-height: 44px;
+  height: 44px;
+  padding: .5rem .7rem;
+  line-height: 1.2;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link {
+  font-size: 0;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link::after {
+  content: attr(data-short-label);
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: .78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link:focus-visible {
+  outline: 3px solid #0369a1;
+  outline-offset: -3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  body:has(#main .ca-tool-zakat-calculator) .ca-calculator-carousel {
+    scroll-behavior: auto;
+  }
+}
+
+
+/* Zakat accessibility: solid content surfaces let assistive audits verify contrast
+   while the surrounding page keeps its existing soft gradient treatment. */
+body:has(#main .ca-tool-zakat-calculator) #main {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e7e5e4;
+  border-radius: 1.5rem;
+  box-shadow: 0 16px 44px rgba(15, 23, 42, .08);
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) #main {
+  background-color: #1c1917 !important;
+  border-color: #44403c;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, .24);
+}
+body:has(#main .ca-tool-zakat-calculator) header.sticky,
+body:has(#main .ca-tool-zakat-calculator) footer {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) header.sticky,
+html.dark body:has(#main .ca-tool-zakat-calculator) footer {
+  background-color: #1c1917 !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #main > h1 {
+  background: none !important;
+  color: #3730a3 !important;
+  -webkit-text-fill-color: #3730a3 !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) #main > h1 {
+  color: #c7d2fe !important;
+  -webkit-text-fill-color: #c7d2fe !important;
+}
+
+
+/* Urdu Zakat: keep the RTL page layout while rendering numeric financial inputs LTR. */
+html[dir="rtl"] body:has(#zakat-form) #zakat-form input[type="number"],
+html[dir="rtl"] body:has(#zakat-form) #z-currency {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: plaintext;
+}
+html[dir="rtl"] body:has(#zakat-form) #zakat-form select {
+  direction: rtl;
+  text-align: right;
 }

@@ -27,9 +27,12 @@ for (const id of [
   "z-currency", "z-school-of-thought", "z-nisab-method", "z-metal-price-unit",
   "z-jafari-nisab-method", "z-jafari-trade-value", "z-jafari-owner", "z-jafari-acquired",
   "z-jafari-hawl", "z-jafari-intent", "z-jafari-access", "z-jafari-market",
+  "z-jafari-coins-used-as-money", "z-jafari-coin-inputs", "z-jafari-gold-coins-weight",
+  "z-jafari-silver-coins-weight", "z-jafari-gold-coins-hawl", "z-jafari-silver-coins-hawl",
+  "z-jafari-coins-access",
   "z-silverprice", "z-goldprice", "z-cash", "z-bank", "z-savings",
-  "z-gold", "z-silver", "z-jewellery", "z-investments", "z-businesscash", "z-stock", "z-recv",
-  "z-pension", "z-crypto", "z-property", "z-debts", "z-paid",
+  "z-gold", "z-silver", "z-jewellery", "z-businesscash", "z-stock", "z-recv",
+  "z-property", "z-debts", "z-paid",
   "z-hawl", "zakat-result"
 ]) {
   assert.match(en, new RegExp('id="' + id + '"'), "English calculator missing " + id);
@@ -92,17 +95,34 @@ assert.match(en, /12\.5 g/, "The 12.5 g competing convention must be disclosed")
 assert.match(ur, /12\.5 گرام/, "Urdu content must disclose the 12.5 g competing convention");
 assert.match(en, /zakat-on-jewellery/, "English content must cite the scholar-reviewed jewellery and tola guidance");
 assert.match(ur, /zakat-on-jewellery/, "Urdu content must cite the scholar-reviewed jewellery and tola guidance");
+assert.doesNotMatch(en, /id="zakat-next"|id="zakat-back"|zakat-step-progress/, "English calculator must not expose wizard navigation");
+assert.doesNotMatch(ur, /id="zakat-next"|id="zakat-back"|zakat-step-progress/, "Urdu calculator must not expose wizard navigation");
+for (const id of ["z-investments","z-pension","z-crypto"]) {
+  assert.doesNotMatch(en, new RegExp('id="' + id + '"'), "Unverified asset field must not be offered: " + id);
+  assert.doesNotMatch(ur, new RegExp('id="' + id + '"'), "Unverified asset field must not be offered in Urdu: " + id);
+}
 assert.match(en, /id="z-sunni-fields"/, "Sunni fields must have a separate visibility container");
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const wrapperAt = html.indexOf('id="z-sunni-asset-fields"');
   const jafariAt = html.indexOf('id="z-jafari-fields"');
   assert.ok(wrapperAt >= 0 && jafariAt > wrapperAt, name + " Sunni assets/liabilities wrapper must precede the Ja'fari section");
-  for (const id of ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-investments","z-businesscash","z-stock","z-recv","z-pension","z-crypto","z-property","z-debts","z-paid","z-hawl"]) {
+  for (const id of ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
     const fieldAt = html.indexOf('id="' + id + '"');
     assert.ok(fieldAt > wrapperAt && fieldAt < jafariAt, name + " Sunni-only field must be inside its visibility wrapper: " + id);
   }
 }
 assert.match(en, /id="z-jafari-fields"[^>]*hidden/, "Sistani fields must be separately hidden by default");
+assert.match(en, /id="z-jafari-coin-inputs"[^>]*hidden/, "Sistani coin weights must remain hidden until the user confirms qualifying currency coins");
+assert.match(ur, /id="z-jafari-coin-inputs"[^>]*hidden/, "Urdu Sistani coin weights must remain hidden until the user confirms qualifying currency coins");
+assert.match(en, /id="z-jafari-coins-used-as-money"/, "Sistani coin currency-use eligibility must be explicit");
+assert.match(en, /11 lunar months/, "Sistani coin ownership must disclose the 11-month condition");
+assert.match(urText, /11 قمری مہینے/, "Urdu Sistani coin ownership must disclose the 11-month condition");
+assert.match(en, /sistani\.org\/english\/book\/48\/8243/, "English content must cite Sistani's official mithqal conversion table");
+assert.match(ur, /sistani\.org\/english\/book\/48\/8243/, "Urdu content must cite Sistani's official mithqal conversion table");
+const appJs = fs.readFileSync(path.join(__dirname, "..", "static", "app.js"), "utf8");
+assert.match(appJs, /troy ounce/i, "Metal-price validation guidance must include the supported troy-ounce unit");
+assert.match(appJs, /jafariCoinsAccessContinuous/, "Sistani personal-coin disposal condition must reach the calculation engine");
+assert.match(appJs, /z-jafari-coins-access/, "Sistani personal-coin disposal must have a dedicated UI control");
 assert.match(en, /sistani\.org\/english\/book\/48\/2323/, "English content must cite Sistani's official trading-goods ruling");
 assert.match(ur, /sistani\.org\/english\/book\/48\/2323/, "Urdu content must cite Sistani's official trading-goods ruling");
 assert.match(en, /sindhlaws\.gov\.pk/, "English content must cite the Sindh Government conversion table");
@@ -142,7 +162,7 @@ assert.ok(!en.includes("islamweb.net/en/fatwa/81355"), "English page must not ci
 assert.ok(!ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must not cite the unsupported Islamweb reference for Nisab");
 // Responsive layout regression: use compact two-column asset fields while preserving 44px controls.
 const zakatCss = fs.readFileSync(path.join(__dirname, "..", "styles", "input.css"), "utf8");
-assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \.zakat-step-panel \.grid\s*\{\s*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)\s*!important;/,
+assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \.zakat-section \.grid\s*\{\s*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)\s*!important;/,
   "Zakat asset steps must use a compact two-column field grid on mobile");
 assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form :is\(input:not\(\[type="checkbox"\]\), select, textarea\)\s*\{\s*min-height:\s*44px\s*!important;/,
   "Zakat form controls must retain accessible 44px minimum height");
@@ -212,7 +232,7 @@ let seed = 20261115;
 function random() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
 for (let i = 0; i < 2000; i++) {
   const assets = {};
-  for (const key of ["cash","bank","savings","gold","silver","jewellery","investments","businessCash","stock","receivables","pension","crypto","property"]) {
+  for (const key of ["cash","bank","savings","gold","silver","jewellery","businessCash","stock","receivables","property"]) {
     assets[key] = Math.floor(random() * 25000000) / 100;
   }
   const liabilities = Math.floor(random() * 10000000) / 100;

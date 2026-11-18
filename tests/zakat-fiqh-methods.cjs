@@ -28,6 +28,11 @@ assert.equal(r.nisabThreshold, 8748);
 assert.equal(r.nisabGrams, 87.48);
 assert.equal(r.status, "payable");
 
+// RED regression: unclassified pension and cryptocurrency balances must not be silently
+// treated as eligible Hanafi wealth until their school-specific treatment is verified.
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 70000, pension: 900000, crypto: 800000, investments: 500000 } });
+assert.equal(r.totalAssets, 70000);
+
 r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 70000 }, hawlComplete: false });
 assert.equal(r.status, "hawl_incomplete");
 assert.equal(r.zakatBeforePaid, 0);
@@ -67,6 +72,101 @@ for (const condition of Object.keys(validSistaniConditions)) {
   assert.equal(incomplete.status, "conditions_incomplete");
   assert.equal(incomplete.zakatBeforePaid, 0);
 }
+
+// Sistani personal gold/silver coin Zakat is separate from ordinary cash and from business goods.
+// Rulings 1912-1918 require minted coins used prevalently as money, separate metal Nisabs,
+// the 11-month holding condition, adult/sane ownership, and legal/actual disposal rights.
+const validCoinConditions = {
+  jafariCoinsUsedAsMoney: true,
+  ownerAdultAndSane: true,
+  jafariCoinsAccessContinuous: true,
+  tradeGoodsAccessContinuous: true,
+  jafariGoldCoinsHawlComplete: true,
+  jafariSilverCoinsHawlComplete: true
+};
+const coinBase = {
+  ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "gold",
+  tradeGoodsValue: 0, goldPricePerGram: 100, silverPricePerGram: 10,
+  ...validCoinConditions
+};
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 69.12 });
+assert.equal(r.goldCoinsStatus, "payable");
+assert.equal(r.goldCoinsTaxableGrams, 69.12);
+assert.equal(r.goldCoinsZakatBase, 6912);
+assert.equal(r.zakatBase, 6912);
+assert.equal(r.zakatBeforePaid, 172.8);
+
+// Gold's second Nisab increment is 3 common mithqals (13.824 g): a smaller
+// increase remains assessed on the first Nisab; a full increment is assessed in full.
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 73.728 });
+assert.equal(r.goldCoinsTaxableGrams, 69.12);
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 82.944 });
+assert.equal(r.goldCoinsTaxableGrams, 82.944);
+assert.equal(r.zakatBeforePaid, 207.36);
+
+// Silver's second Nisab increment is 21 common mithqals (96.768 g).
+r = calculate({ ...coinBase, jafariSilverCoinsWeight: 488.448 });
+assert.equal(r.silverCoinsStatus, "payable");
+assert.equal(r.silverCoinsTaxableGrams, 483.84);
+assert.equal(r.silverCoinsZakatBase, 4838.4);
+r = calculate({ ...coinBase, jafariSilverCoinsWeight: 580.608 });
+assert.equal(r.silverCoinsTaxableGrams, 580.608);
+
+// Gold and silver do not combine to meet either personal-coin Nisab.
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 69.11, jafariSilverCoinsWeight: 483.83 });
+assert.equal(r.goldCoinsStatus, "below_nisab");
+assert.equal(r.silverCoinsStatus, "below_nisab");
+assert.equal(r.zakatBeforePaid, 0);
+assert.equal(r.status, "below_nisab");
+
+// Coins not minted/common as money, or missing the owner/disposal/11-month conditions,
+// must not be charged merely because their weight reaches the threshold.
+r = calculate({ ...coinBase, jafariCoinsUsedAsMoney: false, jafariGoldCoinsWeight: 100 });
+assert.equal(r.goldCoinsStatus, "not_applicable");
+assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...coinBase, jafariGoldCoinsHawlComplete: false, jafariGoldCoinsWeight: 69.12 });
+assert.equal(r.goldCoinsStatus, "conditions_incomplete");
+assert.equal(r.status, "conditions_incomplete");
+assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...coinBase, ownerAdultAndSane: false, jafariGoldCoinsWeight: 69.12 });
+assert.equal(r.goldCoinsStatus, "conditions_incomplete");
+assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...coinBase, jafariCoinsAccessContinuous: false, tradeGoodsAccessContinuous: true, jafariSilverCoinsWeight: 483.84 });
+assert.equal(r.silverCoinsStatus, "conditions_incomplete");
+assert.equal(r.conditions.coins.accessContinuous, false);
+assert.equal(r.coinConditionsMet, false);
+assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...coinBase, jafariCoinsAccessContinuous: true, tradeGoodsAccessContinuous: false, jafariGoldCoinsWeight: 69.12 });
+assert.equal(r.goldCoinsStatus, "payable", "Personal coin disposal must be independent of business-goods disposal");
+assert.equal(r.conditions.coins.accessContinuous, true);
+assert.equal(r.coinConditionsMet, true);
+
+// Coin weights and metal prices use the same selected unit and must remain
+// economically equivalent for grams, the 11.6638 g standard tola and troy ounces.
+for (const [metalPriceUnit, factor] of [["gram", 1], ["tola", 11.6638], ["ounce", 31.1034768]]) {
+  const converted = calculate({
+    ...coinBase, metalPriceUnit,
+    goldPricePerGram: 100 * factor,
+    silverPricePerGram: 10 * factor,
+    jafariGoldCoinsWeight: 69.12 / factor
+  });
+  assert.ok(Math.abs(converted.goldCoinsTaxableGrams - 69.12) < 1e-8);
+  assert.ok(Math.abs(converted.zakatBeforePaid - 172.8) < 1e-7);
+}
+assert.throws(() => calculate({ ...coinBase, jafariGoldCoinsWeight: -1 }), /jafariGoldCoinsWeight/);
+
+// Qualifying business goods and qualifying coins are separate bases; their
+// eligible amounts are summed only after each category independently passes its rules.
+r = calculate({
+  ...coinBase, tradeGoodsValue: 100000, jafariNisabMethod: "gold",
+  tradeGoodsAcquiredByExchange: true, tradeGoodsHawlComplete: true,
+  tradeGoodsProfitIntentContinuous: true, tradeGoodsMarketValueAtLeastCost: true,
+  jafariGoldCoinsWeight: 69.12
+});
+assert.equal(r.tradeGoodsZakatBase, 100000);
+assert.equal(r.goldCoinsZakatBase, 6912);
+assert.equal(r.zakatBase, 106912);
+assert.equal(r.zakatBeforePaid, 2672.8);
 
 for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
   assert.throws(() => calculate({ ...base, assets: { cash: bad } }));
@@ -116,7 +216,7 @@ for (let i = 0; i < 1500; i++) {
     tradeGoodsValue, ...conditions
   });
   if (i % 2 === 0) {
-    assert.equal(result.status, "conditions_incomplete");
+    assert.equal(result.status, tradeGoodsValue >= threshold ? "conditions_incomplete" : "below_nisab");
     assert.equal(result.zakatBeforePaid, 0);
   } else {
     assert.equal(result.status, tradeGoodsValue >= threshold ? "payable" : "below_nisab");

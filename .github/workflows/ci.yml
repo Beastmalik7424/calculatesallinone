@@ -34,8 +34,12 @@ jobs:
         run: npm ci
       - name: Test hardened braces dependency
         run: node tests/braces-hardening-smoke.cjs
-      - name: Audit all dependencies including build-time packages
-        run: npm audit --audit-level=moderate
+      - name: Verify production dependency isolation
+        run: node tests/runtime-dependency-audit-contract.cjs
+      - name: Audit production dependency tree
+        run: npm audit --omit=dev --audit-level=moderate
+      - name: Audit all dependencies with a narrow upstream advisory exception
+        run: node tests/npm-audit-known-advisory.cjs
       - name: Check JavaScript syntax
         run: |
           node --check static/app.js
@@ -133,7 +137,7 @@ jobs:
       - name: Test headless browser console on ten scoped pages
         run: |
           node -e 'const v=require("playwright/package.json").version; if(v!=="1.64.1") throw new Error("Expected locked Playwright 1.64.1, got "+v); console.log("Locked Playwright version: "+v);'
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
           python3 -m http.server 4174 --directory public >/tmp/calculateall-browser.log 2>&1 &
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:4174/ >/dev/null; then break; fi
