@@ -115,3 +115,9 @@ current_zakat = re.search(r'data-tool-shortcut="zakat-calculator"[^>]*aria-curre
 first_calorie = re.search(r'data-tool-shortcut="calorie-calculator"', zakat_group)
 assert current_zakat and first_calorie and current_zakat.start() < first_calorie.start(), "Current Zakat shortcut must appear first"
 assert re.search(r'<input id="z-stock"[^>]*autocomplete="off"', zakat_markup), "Financial trade-stock input must disable browser autofill"
+zakat_amount_inputs = re.findall(r'<input id="z-[^"]+"[^>]*type="number"[^>]*>', zakat_markup)
+assert zakat_amount_inputs and all('autocomplete="off"' in item for item in zakat_amount_inputs), "Every financial amount input must explicitly disable inappropriate browser autofill"
+assert "body:has(#main .ca-tool-zakat-calculator) #main" in css, "Zakat content must sit on a solid contrast-checkable surface"
+assert "html.dark body:has(#main .ca-tool-zakat-calculator) #main" in css, "Dark-mode Zakat content must retain a solid contrast-checkable surface"
+assert "body:has(#main .ca-tool-zakat-calculator) header" in css and "body:has(#main .ca-tool-zakat-calculator) footer" in css, "Zakat header and footer must use opaque surfaces for reliable contrast"
+assert "body:has(#main .ca-tool-zakat-calculator) #main>h1" in css, "Zakat page title must use a solid text color instead of gradient-clipped text"
