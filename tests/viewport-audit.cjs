@@ -9,10 +9,16 @@ let browser;
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
   for (const slug of slugs) {
    await page.goto('http://127.0.0.1:8123/'+slug+'/',{waitUntil:'load'});
-   await page.waitForFunction(() => {
-    const form=document.querySelector('#zakat-form');
-    return !!form && form.getAttribute('data-current-step')==='setup' && !!form.getAttribute('data-step-order');
-   }, null, {timeout:10000});
+   await page.waitForFunction(() => !!document.querySelector('#zakat-form'), null, {timeout:10000});
+   const zakatFormContract = await page.evaluate(() => ({
+    next: !!document.querySelector('#zakat-next'),
+    back: !!document.querySelector('#zakat-back'),
+    progress: !!document.querySelector('#zakat-step-progress'),
+    submit: !!document.querySelector('#zakat-submit'),
+    fields: [...document.querySelectorAll('#zakat-form input, #zakat-form select, #zakat-form textarea')].filter(e => !e.closest('[hidden]')).length
+   }));
+   if(zakatFormContract.next || zakatFormContract.back || zakatFormContract.progress) failures.push(slug+' still exposes obsolete wizard navigation');
+   if(!zakatFormContract.submit || zakatFormContract.fields < 5) failures.push(slug+' single-page calculator is missing its submit action or input fields');
    const data=await page.evaluate(()=>{
     const section=document.querySelector('#tool-calculator')
       || document.querySelector('#main .ca-home-calculator')
@@ -81,7 +87,7 @@ let browser;
     if(!data.firstFieldVisible||!data.firstFieldReachable)failures.push(key+' first Zakat input must be visible and reachable without scrolling');
     if(!data.submitVisible||!data.submitReachable)failures.push(key+' Calculate Zakat button must be visible and reachable without scrolling');
     if(data.scrollY!==0)failures.push(key+' page must remain at the initial scroll position');
-     await auditZakatSteps(page,size,key,failures);
+     // One-page form: all applicable fields remain on one page; vertical scrolling is permitted on short screens.
     if(size.width<=600&&data.minShortcutHeight<44)failures.push(key+' calculator shortcut touch targets must be at least 44px high: '+data.minShortcutHeight);
     if(size.width<=600&&data.minCheckboxLabelHeight<44)failures.push(key+' Zakat checkbox rows must be at least 44px high: '+data.minCheckboxLabelHeight);
    }
