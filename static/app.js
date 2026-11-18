@@ -4,9 +4,9 @@
   var MSG = {
     en: {
       zakatNoPrice: "Enter a positive silver or gold price in the selected currency and selected unit (gram or Sindh Government standard tola).",
-      zakatSistaniConditions: "No Zakat amount has been calculated. Confirm all six Sayyid Sistani trading-goods conditions. If any condition is uncertain, ask his office or your qualified scholar.",
-      zakatSistaniBelow: "Qualifying trading goods: {net}. Selected Sistani Nisab: {nisab}. The trading-goods value is below this threshold, so this estimate does not show Zakat as payable.",
-      zakatSistaniDue: "Under Sayyid Sistani's published trading-goods ruling (obligatory precaution), the estimated amount at 2.5% is {amount}. Eligible trading goods: {net}. Nisab: {nisab}. This is not a calculation of ordinary cash, banknotes, Khums, crops, livestock or every Zakat category.",
+      zakatSistaniConditions: "No Zakat amount has been calculated. Confirm the applicable conditions for each category: qualifying coins must be minted and commonly used as money, and business goods must meet all obligatory-precaution conditions. If uncertain, ask Sistani's office or your qualified scholar.",
+      zakatSistaniBelow: "No eligible category meets its separate Sistani Nisab. Business-goods Nisab reference: {nisab}. Gold and silver coin Nisabs are checked separately only for minted coins commonly used as money. Do not combine gold and silver to reach a coin Nisab.",
+      zakatSistaniDue: "Under Sayyid Sistani's published rulings, estimated Zakat at 2.5% is {amount}. Eligible business-goods base: {tradeGoodsBase}. Qualifying gold-coin base: {goldCoinsBase}. Qualifying silver-coin base: {silverCoinsBase}. Business goods are assessed under obligatory precaution. Gold and silver coins are separate categories and are not combined to reach Nisab. Ordinary banknotes, bank deposits, bullion bars, ordinary jewellery, Khums, crops and livestock are not included.",
       zakatInput: "Enter a valid three-letter ISO currency code supported by your browser. Check every amount. Values must be finite and zero or greater.",
       zakatBelow: "Assets: {assets}. Eligible liabilities: {liabilities}. Net wealth: {net}. Selected Nisab: {nisab}. Net wealth is below the threshold, so this estimate does not show Zakat as payable.",
       zakatHawl: "Assets: {assets}. Eligible liabilities: {liabilities}. Net wealth: {net}. Selected Nisab: {nisab}. The threshold is met, but the lunar Zakat year (hawl) is not confirmed as complete.",
@@ -71,9 +71,9 @@
     },
     ur: {
       zakatNoPrice: "منتخب نصاب کے لیے منتخب کرنسی اور اکائی (گرام یا حکومتِ سندھ کا سرکاری تولہ) میں سونے یا چاندی کی مثبت قیمت درج کریں۔",
-      zakatSistaniConditions: "زکوٰۃ کی رقم نہیں نکالی گئی۔ آیت اللہ سیستانی کے تجارتی مال کی چھوں شرائط کی تصدیق کریں۔ اگر کسی شرط میں شک ہو تو ان کے دفتر یا اپنے مستند عالم سے پوچھیں۔",
-      zakatSistaniBelow: "اہل تجارتی مال: {net}۔ سیستانی کے منتخب نصاب کی مالیت: {nisab}۔ تجارتی مال کی قیمت اس حد سے کم ہے، اس لیے اس حساب میں زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
-      zakatSistaniDue: "آیت اللہ سیستانی کے شائع شدہ تجارتی مال کے حکم (احتیاطِ واجب) کے مطابق 2.5 فیصد کا تخمینی حساب {amount} ہے۔ اہل تجارتی مال: {net}۔ نصاب: {nisab}۔ یہ عام نقد رقم، بینک نوٹ، خمس، فصل، مویشی یا زکوٰۃ کی تمام اقسام کا حساب نہیں ہے۔",
+      zakatSistaniConditions: "زکوٰۃ کی رقم نہیں نکالی گئی۔ ہر قسم کی متعلقہ شرائط کی تصدیق کریں۔ سکے ڈھلے ہوئے اور عام لین دین میں بطور رقم استعمال ہونے چاہئیں، جبکہ تجارتی مال کے لیے احتیاطِ واجب کی تمام شرائط پوری ہونا ضروری ہیں۔ شک کی صورت میں سیستانی کے دفتر یا اپنے مستند عالم سے رجوع کریں۔",
+      zakatSistaniBelow: "سیستانی کے الگ الگ نصاب میں سے کوئی اہل قسم پوری نہیں ہوئی۔ تجارتی مال کے نصاب کی مالیت: {nisab}۔ سونے اور چاندی کے سکوں کا نصاب الگ الگ دیکھا جاتا ہے، اور صرف وہ ڈھلے سکے شامل ہیں جو عام لین دین میں بطور رقم استعمال ہوں۔ سونے اور چاندی کو ملا کر نصاب پورا نہیں کیا جاتا۔",
+      zakatSistaniDue: "آیت اللہ سیستانی کے شائع شدہ احکام کے مطابق 2.5 فیصد سے زکوٰۃ کا تخمینی حساب {amount} ہے۔ اہل تجارتی مال کی بنیاد: {tradeGoodsBase}۔ اہل سونے کے سکوں کی بنیاد: {goldCoinsBase}۔ اہل چاندی کے سکوں کی بنیاد: {silverCoinsBase}۔ تجارتی مال احتیاطِ واجب کے تحت ہے۔ سونے اور چاندی کے سکے الگ الگ شمار ہوتے ہیں اور نصاب کے لیے آپس میں نہیں ملائے جاتے۔ عام بینک نوٹ، بینک ڈپازٹس، سونے کی اینٹیں، عام زیورات، خمس، فصل اور مویشی شامل نہیں۔",
       zakatInput: "اپنے براؤزر میں معاون تین حروف والا درست ISO کرنسی کوڈ درج کریں۔ تمام رقوم چیک کریں۔ ہر رقم صفر یا اس سے زیادہ اور محدود ہونی چاہیے۔",
       zakatBelow: "اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص مال: {net}۔ منتخب نصاب: {nisab}۔ خالص مال نصاب سے کم ہے، اس لیے زکوٰۃ واجب الادا نہیں دکھائی گئی۔",
       zakatHawl: "اثاثے: {assets}۔ قابلِ کٹوتی واجبات: {liabilities}۔ خالص مال: {net}۔ منتخب نصاب: {nisab}۔ نصاب پورا ہے، لیکن قمری زکوٰۃ سال (حول) مکمل ہونے کی تصدیق نہیں ہوئی۔",
@@ -481,11 +481,18 @@
     var hanafiSetupNote = $("zakat-hanafi-setup-note")
     var sunniAssetFields = $("z-sunni-asset-fields")
     var jafariFields = $("z-jafari-fields")
+    var coinMoneyField = $("z-jafari-coins-used-as-money")
+    var coinInputs = $("z-jafari-coin-inputs")
     function money(value, currency) {
       return new Intl.NumberFormat(lang() === "ur" ? "ur-PK" : "en-US", {
         style: "currency", currency: currency, maximumFractionDigits: 2
       }).format(value)
     }
+    function updateCoinUI() {
+      if (coinInputs) coinInputs.hidden = !(coinMoneyField && coinMoneyField.checked)
+    }
+    if (coinMoneyField) coinMoneyField.addEventListener("change", updateCoinUI)
+    updateCoinUI()
     function updateMethodUI(resetNisab) {
       var school = schoolField ? schoolField.value : "sunni-hanafi"
       var isJafari = school === "jafari-sistani"
@@ -544,6 +551,11 @@
         input.tradeGoodsProfitIntentContinuous = !!($("z-jafari-intent") && $("z-jafari-intent").checked)
         input.tradeGoodsAccessContinuous = !!($("z-jafari-access") && $("z-jafari-access").checked)
         input.tradeGoodsMarketValueAtLeastCost = !!($("z-jafari-market") && $("z-jafari-market").checked)
+        input.jafariCoinsUsedAsMoney = !!(coinMoneyField && coinMoneyField.checked)
+        input.jafariGoldCoinsWeight = num("z-jafari-gold-coins-weight")
+        input.jafariSilverCoinsWeight = num("z-jafari-silver-coins-weight")
+        input.jafariGoldCoinsHawlComplete = !!($("z-jafari-gold-coins-hawl") && $("z-jafari-gold-coins-hawl").checked)
+        input.jafariSilverCoinsHawlComplete = !!($("z-jafari-silver-coins-hawl") && $("z-jafari-silver-coins-hawl").checked)
       } else {
         var assets = {}
         assetFields.forEach(function (entry) { assets[entry[0]] = num(entry[1]) })
@@ -562,7 +574,10 @@
           nisab: money(result.nisabThreshold, result.currency),
           gross: money(result.zakatBeforePaid, result.currency),
           paid: money(result.zakatPaid, result.currency),
-          amount: money(result.balanceDue, result.currency)
+          amount: money(result.balanceDue, result.currency),
+          tradeGoodsBase: money(result.tradeGoodsZakatBase || 0, result.currency),
+          goldCoinsBase: money(result.goldCoinsZakatBase || 0, result.currency),
+          silverCoinsBase: money(result.silverCoinsZakatBase || 0, result.currency)
         }
         if (school === "jafari-sistani") {
           if (result.status === "conditions_incomplete") {
