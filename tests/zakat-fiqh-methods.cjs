@@ -73,6 +73,94 @@ for (const condition of Object.keys(validSistaniConditions)) {
   assert.equal(incomplete.zakatBeforePaid, 0);
 }
 
+// Sistani personal gold/silver coin Zakat is separate from ordinary cash and from business goods.
+// Rulings 1912-1918 require minted coins used prevalently as money, separate metal Nisabs,
+// the 11-month holding condition, adult/sane ownership, and legal/actual disposal rights.
+const validCoinConditions = {
+  jafariCoinsUsedAsMoney: true,
+  ownerAdultAndSane: true,
+  tradeGoodsAccessContinuous: true,
+  jafariGoldCoinsHawlComplete: true,
+  jafariSilverCoinsHawlComplete: true
+};
+const coinBase = {
+  ...base, schoolOfThought: "jafari-sistani", jafariNisabMethod: "gold",
+  tradeGoodsValue: 0, goldPricePerGram: 100, silverPricePerGram: 10,
+  ...validCoinConditions
+};
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 69.12 });
+assert.equal(r.goldCoinsStatus, "payable");
+assert.equal(r.goldCoinsTaxableGrams, 69.12);
+assert.equal(r.goldCoinsZakatBase, 6912);
+assert.equal(r.zakatBase, 6912);
+assert.equal(r.zakatBeforePaid, 172.8);
+
+// Gold's second Nisab increment is 3 common mithqals (13.824 g): a smaller
+// increase remains assessed on the first Nisab; a full increment is assessed in full.
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 73.728 });
+assert.equal(r.goldCoinsTaxableGrams, 69.12);
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 82.944 });
+assert.equal(r.goldCoinsTaxableGrams, 82.944);
+assert.equal(r.zakatBeforePaid, 207.36);
+
+// Silver's second Nisab increment is 21 common mithqals (96.768 g).
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 488.448, jafariGoldCoinsWeight: 0, jafariSilverCoinsWeight: 488.448 });
+assert.equal(r.silverCoinsStatus, "payable");
+assert.equal(r.silverCoinsTaxableGrams, 483.84);
+assert.equal(r.silverCoinsZakatBase, 4838.4);
+r = calculate({ ...coinBase, jafariSilverCoinsWeight: 580.608 });
+assert.equal(r.silverCoinsTaxableGrams, 580.608);
+
+// Gold and silver do not combine to meet either personal-coin Nisab.
+r = calculate({ ...coinBase, jafariGoldCoinsWeight: 69.11, jafariSilverCoinsWeight: 483.83 });
+assert.equal(r.goldCoinsStatus, "below_nisab");
+assert.equal(r.silverCoinsStatus, "below_nisab");
+assert.equal(r.zakatBeforePaid, 0);
+assert.equal(r.status, "below_nisab");
+
+// Coins not minted/common as money, or missing the owner/disposal/11-month conditions,
+// must not be charged merely because their weight reaches the threshold.
+r = calculate({ ...coinBase, jafariCoinsUsedAsMoney: false, jafariGoldCoinsWeight: 100 });
+assert.equal(r.goldCoinsStatus, "not_applicable");
+assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...coinBase, jafariGoldCoinsHawlComplete: false, jafariGoldCoinsWeight: 69.12 });
+assert.equal(r.goldCoinsStatus, "conditions_incomplete");
+assert.equal(r.status, "conditions_incomplete");
+assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...coinBase, ownerAdultAndSane: false, jafariGoldCoinsWeight: 69.12 });
+assert.equal(r.goldCoinsStatus, "conditions_incomplete");
+assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...coinBase, tradeGoodsAccessContinuous: false, jafariSilverCoinsWeight: 483.84 });
+assert.equal(r.silverCoinsStatus, "conditions_incomplete");
+assert.equal(r.zakatBeforePaid, 0);
+
+// Coin weights and metal prices use the same selected unit and must remain
+// economically equivalent for grams, the 11.6638 g standard tola and troy ounces.
+for (const [metalPriceUnit, factor] of [["gram", 1], ["tola", 11.6638], ["ounce", 31.1034768]]) {
+  const converted = calculate({
+    ...coinBase, metalPriceUnit,
+    goldPricePerGram: 100 * factor,
+    silverPricePerGram: 10 * factor,
+    jafariGoldCoinsWeight: 69.12 / factor
+  });
+  assert.ok(Math.abs(converted.goldCoinsTaxableGrams - 69.12) < 1e-8);
+  assert.ok(Math.abs(converted.zakatBeforePaid - 172.8) < 1e-7);
+}
+assert.throws(() => calculate({ ...coinBase, jafariGoldCoinsWeight: -1 }), /jafariGoldCoinsWeight/);
+
+// Qualifying business goods and qualifying coins are separate bases; their
+// eligible amounts are summed only after each category independently passes its rules.
+r = calculate({
+  ...coinBase, tradeGoodsValue: 100000, jafariNisabMethod: "gold",
+  tradeGoodsAcquiredByExchange: true, tradeGoodsHawlComplete: true,
+  tradeGoodsProfitIntentContinuous: true, tradeGoodsMarketValueAtLeastCost: true,
+  jafariGoldCoinsWeight: 69.12
+});
+assert.equal(r.tradeGoodsZakatBase, 100000);
+assert.equal(r.goldCoinsZakatBase, 6912);
+assert.equal(r.zakatBase, 106912);
+assert.equal(r.zakatBeforePaid, 2672.8);
+
 for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
   assert.throws(() => calculate({ ...base, assets: { cash: bad } }));
   assert.throws(() => calculate({ ...base, liabilities: bad }));
