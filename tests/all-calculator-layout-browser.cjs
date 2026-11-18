@@ -177,8 +177,11 @@ function rect(element) {
               zakatWizardControls,
               shortLabelFailures: primaryTickerLinks.filter(link => {
                 const label = (link.getAttribute("data-short-label") || "").trim();
-                const pseudo = getComputedStyle(link, "::after");
-                return !label || pseudo.content === "none" || pseudo.content === "normal" || parseFloat(pseudo.fontSize) < 9;
+                const accessibleName = (link.getAttribute("aria-label") || "").trim();
+                const title = (link.getAttribute("title") || "").trim();
+                const linkRect = link.getBoundingClientRect();
+                return !label || !accessibleName || !title ||
+                  link.scrollWidth > link.clientWidth + 1 || linkRect.height < 44;
               }).map(link => link.getAttribute("data-tool-shortcut")),
               tickerRect: box(ticker),
               title: document.title,
