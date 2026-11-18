@@ -1254,30 +1254,48 @@ TOOLS.extend([
     {
         "slug": "query-calculator", "category": "time",
         "name": "Query Calculator", "app": "UtilitiesApplication",
-        "description": "Ask supported questions in English, Roman Urdu, Urdu, Hindi, Arabic, Spanish or French about time conversions, months, birth dates and simple arithmetic.",
-        "h1": "Query Calculator for Time, Dates and Math",
-        "lead": "Ask a supported question such as 115 months in years and days, a DOB like 29-07-1984, Pakistan independence date, or 80 years mein kitne din. The calculator explains assumptions and refuses unsupported questions.",
+        "description": "Ask supported time, date and simple arithmetic questions in plain language. Convert years, months, weeks and hours, calculate Gregorian age from a birth date, and see the method.",
+        "h1": "Time & Date Query Calculator",
+        "lead": "Type a supported question in plain language, such as 115 months in years and days, 80 years to days, a date of birth, or 2 weeks to hours. Results use stated conversion rules, and unsupported questions are not guessed.",
         "ui": (
             '<form id="query-time-form" class="space-y-4" novalidate>'
             '<label class="@L@" for="qt-question">Your question</label>'
-            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="Ager birth date 29-07-1984 ho to age kitne days hogi?" required>'
-            '<p class="text-sm">Try: 115 months in years and days, DOB 29-07-1984 months and days, Pakistan independence date, or 2 weeks in hours. Exact month-to-day totals need a start date.</p>'
+            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="Ager birth date 29-02-1984 ho to age kitne days hogi?" required>'
+            '<p class="text-sm">Try: 115 months in years and days, 80 years to days, DOB 29-07-1984 age in days, or 2 weeks in hours. Exact calendar totals need a start date.</p>'
             '<button class="@B@" type="submit">Calculate Answer</button></form>'
-            '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a question and tap Calculate Answer. If no result appears, refresh this page.</div>'
+            '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a supported question and tap Calculate Answer.</div>'
         ),
         "guide": [
-            ("How it works", ["The parser runs locally in your browser. It recognizes supported time-unit conversions, month-to-year and average month-to-day conversions, exact Gregorian birth-date ages, simple everyday arithmetic, and one verified Pakistan Independence Day date lookup. It does not send your question to a server or guess at unsupported questions."]),
-            ("Examples", ["80 years to days = 29,200 days using the 365-day method. 2 weeks to hours = 336 hours. 115 months = 9 years and 7 months, or about 3,500.24 average days. A DOB such as 29-07-1984 returns elapsed Gregorian age as of today. Pakistan independence date returns 14 August 1947."]),
-            ("Limits", ["Month-to-year conversion uses 12 months per year. Month-to-day results use the Gregorian average of 365.2425 days per year, or 30.436875 days per month; exact calendar days require a start date. Birth-date ages use exact Gregorian calendar dates. Everyday arithmetic is limited to clearly worded addition and subtraction, not full expression parsing."]),
-            ("Supported question patterns", ["Ask one number with two time units, a month amount with years and days, a date of birth in DD-MM-YYYY format, or a simple everyday addition/subtraction question. Examples include 115 months in years and days, 29-07-1984 DOB age in days, Pakistan independence date, 2 weeks in hours, and Roman Urdu questions. Defined unit and arithmetic terms are supported in English, Roman Urdu, Urdu, Hindi, Arabic, Spanish and French. Unrecognized or ambiguous wording is not guessed."]),
-            ("Understanding answers", ["Year-to-day questions use a 365-day year for a simple repeatable estimate. Month-to-year questions use 12 months per year. Month-to-day questions use an average Gregorian month and are labelled approximate because calendar months have different lengths. Birth-date questions calculate exact elapsed days and completed calendar years, months and days through today. The everyday arithmetic parser follows clear addition and subtraction wording and is not a substitute for the Standard Calculator for complex expressions."])
+            ("What this calculator can answer", [
+                "This is a deterministic, browser-based parser for a defined set of everyday time, date and arithmetic questions. It can convert common time units, convert months and years, estimate months as an average number of days, calculate Gregorian age from a birth date through today's local date, and solve clearly worded addition or subtraction questions.",
+                "It is not a general search engine or an AI chatbot. It does not look up arbitrary facts, fetch live information, solve complex equations, or fill in missing dates by guesswork. If a question does not match a supported pattern, simplify the wording or use the dedicated calculator for that task."
+            ]),
+            ("Conversion rules and assumptions", [
+                "A year contains 12 calendar months. For conversions between years and fixed time units, this calculator uses the mean Gregorian year of 365.2425 days. Therefore 80 years ≈ 29,219.4 days, and 1 year = 8,765.82 hours. These are average-unit conversions, not counts for a particular start and end date.",
+                "A month does not have one fixed number of calendar days. When a question asks for months in days, the calculator uses the Gregorian average of 30.436875 days per month. For example, 115 months = 9 years and 7 months, or about 3,500.24 average days. Exact calendar days require the actual start and end dates.",
+                "Smaller fixed units use 1 week = 7 days, 1 day = 24 hours, 1 hour = 60 minutes and 1 minute = 60 seconds. For example, 2 weeks = 336 hours and 3 days = 4,320 minutes. The same factors are used in reverse conversions."
+            ]),
+            ("Date of birth and Gregorian age", [
+                "Enter a valid date of birth in DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD format. Some English month-name formats are also recognized. The calculator counts actual Gregorian days from the birth date through the current local date on your device, then reports completed calendar years, months and remaining days.",
+                "Invalid dates and birth dates in the future are rejected. The tool uses today's date from your device and does not provide a separate field for choosing a historical or future reference date. It calculates Gregorian age, not Hijri age or a legal age ruling for a particular jurisdiction."
+            ]),
+            ("Simple arithmetic and language input", [
+                "The parser supports clearly expressed addition and subtraction, including common wording such as amounts added, distributed, stolen or remaining. For example, 99 − 29 − 19 = 51. It does not parse arbitrary algebra, nested expressions or every possible sentence.",
+                "Defined number words, units and arithmetic terms are recognized in English, Roman Urdu, Urdu, Hindi, Arabic, Spanish and French. This is limited vocabulary and pattern recognition, not full translation or unrestricted speech understanding. Different spellings and dialects may not be recognized."
+            ]),
+            ("Limits and checking an answer", [
+                "Use a date-based calculator when you need the exact number of calendar days between two dates, because month lengths and leap days vary. The average month and mean-year conversions on this page are estimates for unit conversion, not substitutes for a specific calendar interval.",
+                "To check a fixed-unit result, reverse the conversion. For 4,320 minutes, divide by 60 to get 72 hours, then divide by 24 to get 3 days. A correct reverse calculation should return the starting quantity, subject to the displayed rounding."
+            ])
         ],
-        "faq": [("Can I convert months to years and days?", "Yes. 12 months make one year, so 115 months is 9 years and 7 months. The day total is about 3,500.24 using the Gregorian average of 30.436875 days per month; exact calendar days require a start date."),
-                ("What is Pakistan's Independence Day?", "14 August 1947. The National Assembly of Pakistan records the transfer of power on 14 August 1947."),
-                ("Can I calculate age from a birth date?", "Yes. Enter a date such as 29-07-1984. The result shows elapsed Gregorian days and calendar years, months and days as of today."),
-                ("Can I ask in Roman Urdu or other languages?", "Yes. Defined question patterns are supported in English, Roman Urdu, Urdu, Hindi, Arabic, Spanish and French. The parser asks for simpler wording if a pattern is not recognized."),
-                ("Does it answer any question?", "No. It supports time conversions, month conversions, birth-date calculations, simple everyday arithmetic and the Pakistan Independence Day date lookup. It is not a general search engine or an AI assistant.")],
-        "sources": "Fixed conversions: 1 day = 24 hours, 1 hour = 60 minutes, 1 minute = 60 seconds; 12 months per year; Gregorian mean year = 365.2425 days. Pakistan date: National Assembly of Pakistan, Parliamentary History, https://na.gov.pk/en/content.php?id=75."
+        "faq": [
+            ("How many days are in 80 years?", "This calculator uses the mean Gregorian year of 365.2425 days. Therefore 80 years ≈ 29,219.4 days. A simple 365-day multiplication gives 29,200, but that is not the method used for this calculator's year-to-day conversion."),
+            ("Can I convert months to years and days?", "Yes. 115 months is 9 years and 7 months because 12 months make one year. Its average day equivalent is about 3,500.24 days using 30.436875 days per month. Exact calendar days need the actual dates."),
+            ("Can I calculate age from a birth date?", "Yes. Enter a valid Gregorian date of birth. The calculator reports elapsed days and completed years, months and days through today's local date on your device. You cannot select a separate reference date on this page."),
+            ("Which languages can I use?", "The parser recognizes defined terms and number forms in English, Roman Urdu, Urdu, Hindi, Arabic, Spanish and French. It does not understand every sentence, spelling or dialect."),
+            ("Does this calculator answer any question?", "No. It supports specified time-unit conversions, month and year conversions, Gregorian birth-date age, simple addition and subtraction, and a fixed Pakistan Independence Day date lookup. It is not a general-purpose search engine or AI question-answering service.")
+        ],
+        "sources": "Fixed units: 1 week = 7 days, 1 day = 24 hours, 1 hour = 60 minutes and 1 minute = 60 seconds. Mean Gregorian year: 365.2425 days over the 400-year calendar cycle; see the <a class=\"" + LINK + "\" href=\"https://aa.usno.navy.mil/faq/leap_years\" target=\"_blank\" rel=\"noopener noreferrer\">U.S. Naval Observatory leap-year guidance</a>. Pakistan date: National Assembly of Pakistan, Parliamentary History, https://na.gov.pk/en/content.php?id=75."
     }
 ])
 EXTRA.update({
