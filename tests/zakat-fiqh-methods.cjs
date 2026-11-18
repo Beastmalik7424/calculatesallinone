@@ -28,6 +28,11 @@ assert.equal(r.nisabThreshold, 8748);
 assert.equal(r.nisabGrams, 87.48);
 assert.equal(r.status, "payable");
 
+// RED regression: unclassified pension and cryptocurrency balances must not be silently
+// treated as eligible Hanafi wealth until their school-specific treatment is verified.
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 70000, pension: 900000, crypto: 800000 } });
+assert.equal(r.totalAssets, 70000);
+
 r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 70000 }, hawlComplete: false });
 assert.equal(r.status, "hawl_incomplete");
 assert.equal(r.zakatBeforePaid, 0);
