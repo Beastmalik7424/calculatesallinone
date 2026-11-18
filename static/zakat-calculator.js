@@ -15,6 +15,10 @@
     gold: Object.freeze({ grams: 69.12, priceKey: "goldPricePerGram", label: "Sistani coined gold 69.12 g" }),
     silver: Object.freeze({ grams: 483.84, priceKey: "silverPricePerGram", label: "Sistani coined silver 483.84 g" })
   });
+  const JAFARI_COIN_NISAB = Object.freeze({
+    gold: Object.freeze({ grams: 69.12, incrementGrams: 13.824, priceKey: "goldPricePerGram", label: "Sistani minted gold coins 69.12 g; next increment 13.824 g" }),
+    silver: Object.freeze({ grams: 483.84, incrementGrams: 96.768, priceKey: "silverPricePerGram", label: "Sistani minted silver coins 483.84 g; next increment 96.768 g" })
+  });
   const SUNNI_SCHOOLS = Object.freeze(["sunni-hanafi"]);
   const ASSET_KEYS = Object.freeze([
     "cash", "bank", "savings", "gold", "silver", "jewellery",
