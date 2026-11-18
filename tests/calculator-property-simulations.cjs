@@ -59,10 +59,18 @@ deepEqual(extra.percentageDifference(...refs.referenceCases.percentageDifference
 deepEqual(extra.fraction(...refs.referenceCases.fractionAdd.input), refs.referenceCases.fractionAdd.expected);
 close(extra.compound(...refs.referenceCases.compound.input), refs.referenceCases.compound.expected);
 equal(extra.dateDifference(...refs.referenceCases.dateDifference.input), refs.referenceCases.dateDifference.expected);
-const maleRef = calorie.calculateMaintenanceCalories(refs.referenceCases.calorieMale.input);
+function fromMifflinReference(reference) {
+  const input = reference.input;
+  return calorie.calculateCalorieTargets({
+    age: input.age, weight: input.weight, weightUnit: input.weightUnit,
+    height: input.heightCm, heightUnit: input.heightUnit,
+    coefficient: input.coefficient, activityId: input.activityId, formula: "mifflin"
+  });
+}
+const maleRef = fromMifflinReference(refs.referenceCases.calorieMale);
 close(maleRef.restingKcalPerDay, refs.referenceCases.calorieMale.expected.resting);
 close(maleRef.maintenanceKcalPerDay, refs.referenceCases.calorieMale.expected.maintenance);
-const femaleRef = calorie.calculateMaintenanceCalories(refs.referenceCases.calorieFemale.input);
+const femaleRef = fromMifflinReference(refs.referenceCases.calorieFemale);
 close(femaleRef.restingKcalPerDay, refs.referenceCases.calorieFemale.expected.resting);
 close(femaleRef.maintenanceKcalPerDay, refs.referenceCases.calorieFemale.expected.maintenance);
 
@@ -197,52 +205,45 @@ simulate(() => {
   const coefficient = random() < 0.5 ? "male" : "female";
   const activity = calorie.ACTIVITY_PRESETS[integer(0, calorie.ACTIVITY_PRESETS.length - 1)];
   const resting = 10 * weightKg + 6.25 * heightCm - 5 * age + (coefficient === "male" ? 5 : -161);
-  const result = calorie.calculateMaintenanceCalories({
-    age, weight: weightKg, weightUnit: "kg", heightUnit: "cm", heightCm,
-    coefficient, activityId: activity.id, pregnancyStatus: coefficient === "female" ? "no" : undefined
+  const result = calorie.calculateCalorieTargets({
+    age, weight: weightKg, weightUnit: "kg", height: heightCm, heightUnit: "cm",
+    coefficient, formula: "mifflin", activityId: activity.id
   });
   close(result.restingKcalPerDay, resting);
   close(result.maintenanceKcalPerDay, resting * activity.multiplier);
 }, 1000);
 
-// 1,000 DRI 2023 adult life-stage cases, checked against independently transcribed equation coefficients.
+// 1,000 Revised Harris–Benedict estimates checked against the published 1984 coefficients.
 simulate(() => {
-  const age = integer(19, 80), heightCm = integer(15000, 20000) / 100, weightKg = integer(4500, 12000) / 100;
-  const pal = calorie.DRI_ACTIVITY_CATEGORIES[integer(0, 3)];
-  const status = ["pregnant", "breastfeeding", "both"][integer(0, 2)];
-  const weeks = integer(1, 42), preWeight = integer(4500, 12000) / 100;
-  const base = {
-    inactive: 584.90 - 7.01 * age + 5.72 * heightCm + 11.71 * weightKg,
-    low_active: 575.77 - 7.01 * age + 6.60 * heightCm + 12.14 * weightKg,
-    active: 710.25 - 7.01 * age + 6.54 * heightCm + 12.34 * weightKg,
-    very_active: 511.83 - 7.01 * age + 9.07 * heightCm + 12.56 * weightKg
-  }[pal];
-  const input = {
-    age, coefficient: "female", pregnancyStatus: status, lifeStageActivityId: pal,
-    weight: weightKg, weightUnit: "kg", heightUnit: "cm", heightCm,
-    pregnancyWeeks: weeks, prePregnancyWeight: preWeight,
-    breastfeedingStage: random() < 0.5 ? "exclusive_0_6" : "partial_7_12"
-  };
-  const result = calorie.calculateLifeStageCalories(input);
-  if (status === "pregnant" || status === "both") {
-    let expected = base;
-    if (weeks > 13) {
-      const bmi = preWeight / Math.pow(heightCm / 100, 2);
-      const deposition = bmi < 18.5 ? 300 : bmi < 25 ? 200 : bmi < 30 ? 150 : -50;
-      const pregnancyBase = {
-        inactive: 1131.20 - 2.04 * age + 0.34 * heightCm + 12.15 * weightKg + 9.16 * weeks,
-        low_active: 693.35 - 2.04 * age + 5.73 * heightCm + 10.20 * weightKg + 9.16 * weeks,
-        active: -223.84 - 2.04 * age + 13.23 * heightCm + 8.15 * weightKg + 9.16 * weeks,
-        very_active: -779.72 - 2.04 * age + 18.45 * heightCm + 8.73 * weightKg + 9.16 * weeks
-      }[pal];
-      expected = pregnancyBase + deposition;
-    }
-    close(result.pregnancy.eerKcalPerDay, expected);
-  }
-  if (status === "breastfeeding" || status === "both") {
-    const increment = input.breastfeedingStage === "exclusive_0_6" ? 400 : 380;
-    close(result.breastfeeding.eerKcalPerDay, base + increment);
-  }
+  const age = integer(18, 100), weightKg = integer(3000, 20000) / 100;
+  const heightCm = integer(13000, 22000) / 100;
+  const coefficient = random() < 0.5 ? "male" : "female";
+  const activity = calorie.ACTIVITY_PRESETS[integer(0, calorie.ACTIVITY_PRESETS.length - 1)];
+  const resting = coefficient === "male"
+    ? 88.362 + 13.397 * weightKg + 4.799 * heightCm - 5.677 * age
+    : 447.593 + 9.247 * weightKg + 3.098 * heightCm - 4.330 * age;
+  const result = calorie.calculateCalorieTargets({
+    age, weight: weightKg, weightUnit: "kg", height: heightCm, heightUnit: "cm",
+    coefficient, formula: "harris-benedict", activityId: activity.id
+  });
+  close(result.restingKcalPerDay, resting);
+  close(result.maintenanceKcalPerDay, resting * activity.multiplier);
+}, 1000);
+
+// 1,000 Katch–McArdle estimates checked against independently calculated lean mass.
+simulate(() => {
+  const age = integer(18, 100), weightKg = integer(3000, 20000) / 100;
+  const heightCm = integer(13000, 22000) / 100;
+  const bodyFatPercent = integer(500, 5500) / 100;
+  const activity = calorie.ACTIVITY_PRESETS[integer(0, calorie.ACTIVITY_PRESETS.length - 1)];
+  const leanMassKg = weightKg * (1 - bodyFatPercent / 100);
+  const resting = 370 + 21.6 * leanMassKg;
+  const result = calorie.calculateCalorieTargets({
+    age, weight: weightKg, weightUnit: "kg", height: heightCm, heightUnit: "cm",
+    formula: "katch-mcardle", bodyFatPercent, activityId: activity.id
+  });
+  close(result.restingKcalPerDay, resting);
+  close(result.maintenanceKcalPerDay, resting * activity.multiplier);
 }, 1000);
 
 // Integration checks: generated pages must load the same tested engines and expose their calculator controls.
@@ -252,6 +253,8 @@ const percentagePage = fs.readFileSync(path.join(root, "public", "percentage-cal
 const fractionPage = fs.readFileSync(path.join(root, "public", "fraction-calculator", "index.html"), "utf8");
 match(caloriePage, /\/assets\/calorie-calculator\.js\?v=/, "generated calorie page must load the tested calorie engine");
 match(caloriePage, /id="calorie-form"/, "generated calorie page must expose the expected form contract");
+match(caloriePage, /id="cal-formula"/, "generated calorie page must expose the three-formula selector");
+match(caloriePage, /id="cal-body-fat-field"/, "generated calorie page must expose the conditional Katch–McArdle body-fat field");
 match(percentagePage, /\/assets\/extra-calculators\.js/, "generated percentage page must load the tested extra-calculator engine");
 match(percentagePage, /\/assets\/extra-calculators-ui\.js/, "generated percentage page must load the calculator UI adapter");
 match(percentagePage, /id="extra-calculator-form"/, "generated percentage page must expose its form contract");
