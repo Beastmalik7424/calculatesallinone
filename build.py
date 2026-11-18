@@ -206,7 +206,7 @@ TOOLS = [
             + '<div id="z-jafari-fields" class="space-y-3" hidden>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="nisab">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Shia Ja\'fari method — Sayyid Sistani</h2>'
-            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. Ordinary banknotes and deposits are excluded. Khums is separate. Other Ja\'fari authorities may differ. Khums is separate.</p>'
+            + '<p class="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-stone-900 dark:border-amber-700 dark:bg-amber-950 dark:text-stone-100">Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. Gold and silver Zakat applies only to minted coins commonly used as money. Ordinary banknotes, bank deposits, bullion bars and jewellery are not included in this Zakat calculation. Khums is separate. Other Ja\'fari authorities may differ. Khums is separate.</p>'
             + '<div><label class="@L@" for="z-jafari-nisab-method">Trading-goods Nisab reference</label>'
             + '<select id="z-jafari-nisab-method" name="z-jafari-nisab-method" class="@I@">'
             + '<option value="gold" selected>Gold: 69.12 g (15 common mithqals)</option>'
