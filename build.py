@@ -1261,7 +1261,7 @@ TOOLS.extend([
         "ui": (
             '<form id="query-time-form" class="space-y-4" novalidate>'
             '<label class="@L@" for="qt-question">Your question</label>'
-            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="Ager birth date 29-02-1984 ho to age kitne days hogi?" required>'
+            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="DOB 29-02-1984 age in days" required>'
             '<p class="text-sm">Try: 115 months in years and days, 80 years to days, DOB 29-07-1984 age in days, or 2 weeks in hours. Exact calendar totals need a start date.</p>'
             '<button class="@B@" type="submit">Calculate Answer</button></form>'
             '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a supported question and tap Calculate Answer.</div>'
