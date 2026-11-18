@@ -29,7 +29,7 @@ TOOLS = [
     ("Age Calculator", "/age-calculator/", "Date and Time", "Calculates exact age in years, months and days.", "Confirm the date of birth and the reference date."),
     ("Date Difference Calculator", "/date-calculator/", "Date and Time", "Counts the days or time between two dates.", "Check whether the start and end dates are counted."),
     ("Years to Days Calculator", "/years-to-days-calculator/", "Date and Time", "Converts years into days, hours, minutes and seconds.", "Leap years change the total slightly."),
-    ("Query Calculator", "/query-calculator/", "Date and Time", "Answers supported plain-language time conversion questions.", "It answers only the question types it supports."),
+    ("Query Calculator", "/query-calculator/", "Date and Time", "Answers supported plain-language time/date conversions, Gregorian birth-date age and simple arithmetic.", "It rejects unsupported questions instead of guessing."),
     ("Stopwatch", "/stopwatch/", "Date and Time", "Measures elapsed time and laps in your browser.", "It is for everyday timing, not certified measurement."),
     ("Tasbih Counter", "/tasbih-counter/", "Worship and Daily Use", "Counts dhikr with an optional target.", "The count is stored on the current device."),
 ]
