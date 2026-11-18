@@ -141,13 +141,9 @@ TOOLS = [
         "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="space-y-5" novalidate>'
-            + '<div id="zakat-step-controls" class="flex flex-wrap items-center justify-between gap-2">'
-            + '<div class="min-w-0"><p id="zakat-step-progress" class="text-xs text-stone-600 dark:text-stone-300" aria-live="polite">Step 1 of 10</p><h2 id="zakat-step-title" class="text-base font-semibold text-stone-900 dark:text-stone-100">Method and currency</h2></div>'
-            + '<div class="flex gap-2">'
-            + '<button id="zakat-back" type="button" class="@B@" hidden>Back</button>'
-            + '<button id="zakat-next" type="button" class="@B@">Next</button>'
-            + '<button id="zakat-submit" type="submit" class="@B@" hidden>Calculate Zakat</button>'
-            + '</div></div>'
+            + '<div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-stone-200 bg-stone-50 p-3 dark:border-stone-700 dark:bg-stone-900">'
+            + '<div class="min-w-0"><h2 class="text-base font-semibold text-stone-900 dark:text-stone-100">One-page Zakat calculator</h2><p class="text-xs text-stone-600 dark:text-stone-300">Choose your method, enter only applicable amounts, then calculate.</p></div>'
+            + '<button id="zakat-submit" type="submit" class="@B@">Calculate Zakat</button></div>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="setup">'
             + '<p id="zakat-hanafi-setup-note" class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
@@ -186,21 +182,18 @@ TOOLS = [
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-c">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Business assets</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-investments", "Zakatable shares and investments")
             + field("z-businesscash", "Business cash and bank balance")
             + field("z-stock", "Trade inventory at current sale value")
             + '</div></div>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-d">'
-            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Receivables and retirement funds</h2>'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Recoverable receivables</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-recv", "Recoverable loans and receivables")
-            + field("z-pension", "Accessible pension or retirement amount")
             + '</div></div>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-assets-e">'
-            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Digital assets and property</h2>'
+            + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Property held for resale</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
-            + field("z-crypto", "Eligible cryptocurrency holdings")
-            + field("z-property", "Property held for resale")
+            + field("z-property", "Property held for resale (only if bought for resale)")
             + '</div></div>'
             + '<div class="zakat-step-panel space-y-3" data-zakat-step="sunni-liabilities">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Liabilities and payments</h2>'
