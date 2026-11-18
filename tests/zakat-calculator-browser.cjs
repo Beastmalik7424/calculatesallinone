@@ -108,6 +108,14 @@ let browser;
   assert.ok(initialWizard.panels.length>=1 && initialWizard.panels.every(r=>r.top>=0&&r.bottom<=initialWizard.viewport), "Initial Zakat step must fit the viewport: "+JSON.stringify(initialWizard));
   assert.ok(initialWizard.next && initialWizard.next.top>=0 && initialWizard.next.bottom<=initialWizard.viewport, "Next control must be reachable without scrolling");
   assert.ok(initialWizard.controls.length>0 && initialWizard.controls.every(r=>r.top>=0&&r.bottom<=initialWizard.viewport), "All initial-step fields must fit without scrolling");
+  // Every Sunni/Hanafi input must be visible and enabled when its wizard step is active.
+  for (const [id, step] of Object.entries(FIELD_STEP).filter(([id]) => !id.startsWith("z-jafari"))) {
+    await goToStep(page, step);
+    const control = page.locator("#" + id);
+    assert.equal(await control.isVisible(), true, "Active Hanafi input must be visible: " + id);
+    assert.equal(await control.isEnabled(), true, "Active Hanafi input must be enabled: " + id);
+  }
+  await goToStep(page, "setup");
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-jafari-nisab-method","z-jafari-trade-value","z-jafari-owner","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jewellery","z-bank","z-savings","z-investments","z-businesscash","z-pension","z-crypto","z-property","z-goldprice","z-silverprice","z-paid"]) {
     assert.equal(await page.locator("#" + id).count(), 1, "Missing English field " + id);
   }
