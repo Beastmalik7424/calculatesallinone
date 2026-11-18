@@ -48,6 +48,8 @@ jobs:
         run: python3 tests/workflow-security-contract.py
       - name: Test Playwright lockfile contract
         run: python3 tests/playwright-lock-contract-smoke.py
+      - name: Test version-matched prebuilt browser image contract
+        run: python3 tests/first-screen-container-contract.py
       - name: Install locked dependencies
         run: npm ci
       - name: Build site and run smoke tests
