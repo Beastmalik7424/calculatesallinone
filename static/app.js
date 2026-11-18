@@ -1801,7 +1801,7 @@
   function initQueryTime () {
     var form = $("query-time-form")
     if (!form) return
-    var factors = { year: 365 * 86400, month: (365.2425 / 12) * 86400, day: 86400, week: 604800,
+    var factors = { year: 365.2425 * 86400, month: (365.2425 / 12) * 86400, day: 86400, week: 604800,
       hour: 3600, minute: 60, second: 1 }
     var aliases = { years: "year", year: "year", saal: "year", sal: "year",
       months: "month", month: "month", mahine: "month", mahinay: "month", mahina: "month", maheene: "month",
