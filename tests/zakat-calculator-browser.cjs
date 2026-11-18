@@ -63,9 +63,6 @@ let browser;
     Object.defineProperty(navigator, "share", { configurable: true, value: async payload => { window.__zakatShareCalls.push(payload); } });
   });
   const pageErrors = [];
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, "share", { value: async () => {}, configurable: true });
-  });
   page.on("pageerror", error => pageErrors.push(error.message));
   page.on("console", message => {
     if (message.type() === "error") pageErrors.push(message.text());
@@ -77,12 +74,6 @@ let browser;
   assert.equal(await page.locator("#zakat-back").count(), 1, "Mobile Zakat flow must provide an in-place Back control");
   assert.equal(await page.locator("#zakat-step-progress").count(), 1, "Zakat flow must expose accessible step progress");
   assert.equal(await page.locator("#zakat-submit").count(), 1, "Zakat calculation submit must remain available in the final step");
-  assert.equal(await page.locator("#zakat-form input:not([type=hidden]), #zakat-form select, #zakat-form textarea").filter({ visible: true }).count(), await page.locator("#zakat-form input:not([type=hidden]), #zakat-form select, #zakat-form textarea").filter({ visible: true }).count(), "Visible Zakat form controls must be queryable");
-  const desktopLayout = await page.evaluate(() => {
-    const main = document.querySelector("#main").getBoundingClientRect();
-    const wizard = document.querySelector("#zakat-form").getBoundingClientRect();
-    return { width: innerWidth, documentWidth: document.documentElement.scrollWidth, mainWidth: main.width, wizardWidth: wizard.width, wizardTop: wizard.top, viewportHeight: innerHeight };
-  });
   await page.setViewportSize({ width: 1440, height: 900 });
   const desktopFirstScreen = await page.evaluate(() => {
     const panel = document.querySelector("#zakat-form .zakat-step-panel:not([hidden])");
