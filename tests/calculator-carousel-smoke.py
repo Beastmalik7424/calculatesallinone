@@ -101,7 +101,7 @@ assert "grid-template-columns:repeat(6,minmax(0,1fr))" not in css.replace(" ", "
 assert "grid-template-columns:repeat(9,minmax(0,1fr))" not in css.replace(" ", ""), "Zakat navigation must not be converted into a static nine-column grid"
 assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available"
 assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "All calculator pages must use the shared continuous ticker animation"
-zakat_track_overrides = re.findall(r'body:has\\(#zakat-form\\) header nav \\.ca-calculator-track\\{([^}]*)\\}', css)
+zakat_track_overrides = re.findall(r'body:has\(#zakat-form\) header nav \.ca-calculator-track\{([^}]*)\}', css)
 assert not zakat_track_overrides, "Zakat-specific CSS must not override the shared ticker track animation"
 assert "theme-toggle" in zakat_markup and zakat_markup.index('id="theme-toggle"') < zakat_markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
 assert "ca-site-nav-topline" in zakat_markup, "Header must keep its separate top controls row"
