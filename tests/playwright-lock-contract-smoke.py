@@ -57,7 +57,7 @@ def repository_playwright_config(root=ROOT):
         "axe_integrity": axe_lock.get("integrity"),
         "ci_uses_npm_ci": all("run: npm ci" in workflow for workflow in (ci, site_build, first_screen)),
         "ci_has_no_ad_hoc_install": "npm install --no-save" not in workflows,
-        "ci_installs_chromium": "npx playwright install --with-deps chromium" in ci,
+        "ci_installs_chromium": "npx playwright install chromium" in ci and "npx playwright install --with-deps chromium" not in ci,
         "first_screen_installs_locked_chromium": "npx playwright install chromium" in first_screen and "npx playwright install --with-deps chromium" not in first_screen,
     }
 
