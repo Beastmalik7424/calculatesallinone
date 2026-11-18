@@ -95,8 +95,8 @@ css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
-assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat must match the existing inner-page navigation and must not add a duplicate shortcut group"
-assert 'data-tool-set="duplicate"' not in tasbih, "Inner-page calculator shortcuts must retain the existing single-group navigation"
+assert 'data-tool-set="duplicate"' in zakat_markup, "Zakat calculator navigation must include the second accessible marquee group"
+assert 'data-tool-set="duplicate"' in tasbih, "Inner calculator pages must retain the duplicate group required for a seamless ticker"
 assert "grid-template-columns:repeat(6,minmax(0,1fr))" not in css.replace(" ", ""), "Zakat navigation must not be converted into a static six-column grid"
 assert "grid-template-columns:repeat(9,minmax(0,1fr))" not in css.replace(" ", ""), "Zakat navigation must not be converted into a static nine-column grid"
 assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available"
@@ -109,4 +109,5 @@ assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button mu
 print("Calculator ticker, all 17 destinations, inner-page header layout and Tasbih action smoke tests PASS")
 
 assert '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v3">' in zakat_markup, "Zakat pages must retain the cache-busted stylesheet URL"
-assert zakat_markup.count('data-tool-set="primary"') == 1, "Zakat page must render exactly one primary shortcut group"
+assert zakat_markup.count('data-tool-set="primary"') == 1 and zakat_markup.count('data-tool-set="duplicate"') == 1, "Zakat pages must render exactly one primary and one duplicate ticker group"
+assert 'aria-hidden="true"' in zakat_markup and 'tabindex="-1"' in zakat_markup, "Duplicate ticker links must be hidden from assistive technology and keyboard navigation"
