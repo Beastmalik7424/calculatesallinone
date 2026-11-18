@@ -144,6 +144,7 @@ TOOLS = [
             + '<div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-stone-200 bg-stone-50 p-3 dark:border-stone-700 dark:bg-stone-900">'
             + '<div class="min-w-0"><h2 class="text-base font-semibold text-stone-900 dark:text-stone-100">One-page Zakat calculator</h2><p class="text-xs text-stone-600 dark:text-stone-300">Choose your method, enter only applicable amounts, then calculate.</p></div>'
             + '<button id="zakat-submit" type="submit" class="@B@">Calculate Zakat</button></div>'
+            + result("zakat-result", True)
             + '<div class="zakat-section space-y-3" data-zakat-step="setup">'
             + '<p id="zakat-hanafi-setup-note" class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
@@ -215,12 +216,12 @@ TOOLS = [
             + '<div class="zakat-section space-y-3" data-zakat-step="jafari-trade">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Trading goods and ownership</h2>'
             + field("z-jafari-trade-value", "Current market value of qualifying trading goods")
-            + check("z-jafari-owner", "Owner is adult and sane")
+            + check("z-jafari-owner", "Owner remained adult and sane throughout the year")
             + check("z-jafari-acquired", "Trading goods were acquired through a contract of exchange, such as a purchase")
             + '</div>'
             + '<div class="zakat-section space-y-3" data-zakat-step="jafari-hawl-intent">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Hawl and profit intention</h2>'
-            + check("z-jafari-hawl", "One full lunar year has passed since the intention to profit")
+            + check("z-jafari-hawl", "One full year has passed since the intention to profit began")
             + check("z-jafari-intent", "Intention to profit continued throughout the year")
             + '</div>'
             + '<div class="zakat-section space-y-3" data-zakat-step="jafari-conditions">'
@@ -248,7 +249,6 @@ TOOLS = [
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Prices are converted to per-gram rates before Nisab is calculated. This is an estimate, not a fatwa.</p>'
             + '</div>'
             + '</form>'
-            + result("zakat-result", True)
         ),
         "guide": [
             ("What this calculator does", [
