@@ -22,6 +22,7 @@ DESCRIPTION_FALLBACKS = {
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
     "/tasbih-counter/": "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and keep progress in this browser when storage is available.",
+    "/query-calculator/": "Ask time, date and simple arithmetic questions in plain language. Convert years, months, weeks and hours, calculate Gregorian age from a birth date, and see the method.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
     "/ur/zakat-calculator/": "نقد رقم، سونا، بچت اور سرمایہ کاری پر حنفی زکوٰۃ کا تخمینہ لگائیں، یا سید سیستانی کے محدود جعفری تجارتی مال کا حساب دیکھیں۔ دھاتوں کی قیمت خود درج کریں۔",
@@ -47,6 +48,7 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/unit-converter/": "2026-11-14",
     # This date records the verified Tasbih target-persistence, storage-disclosure and content-restructure update.
     "/tasbih-counter/": "2026-11-15",
+    "/query-calculator/": "2026-11-19",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
@@ -174,7 +176,7 @@ def normalize_meta(raw, path, lang):
         "/about/": "About CalculatesAll | Project, Methods & Privacy",
         "/zakat-calculator/": "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab",
         "/ur/zakat-calculator/": "آن لائن زکوٰۃ کیلکولیٹر | حنفی اور سیستانی جعفری نصاب",
-        "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
+        "/query-calculator/": "Time & Date Query Calculator | CalculatesAll",
         "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
         "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
         "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
