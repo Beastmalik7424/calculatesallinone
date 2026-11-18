@@ -216,7 +216,7 @@ for (let i = 0; i < 1500; i++) {
     tradeGoodsValue, ...conditions
   });
   if (i % 2 === 0) {
-    assert.equal(result.status, "conditions_incomplete");
+    assert.equal(result.status, tradeGoodsValue >= threshold ? "conditions_incomplete" : "below_nisab");
     assert.equal(result.zakatBeforePaid, 0);
   } else {
     assert.equal(result.status, tradeGoodsValue >= threshold ? "payable" : "below_nisab");
