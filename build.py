@@ -75,12 +75,13 @@ def attach_notice_badge(ui, slug, language):
 
 
 
-def field(fid, label, step="0.01", hint=""):
+def field(fid, label, step="0.01", hint="", autocomplete=None):
     h = ""
     if hint:
         h = '<p class="text-sm text-stone-700 dark:text-stone-300 mt-1">' + hint + "</p>"
+    autocomplete_attr = (' autocomplete="' + html.escape(autocomplete, quote=True) + '"') if autocomplete else ""
     return ('<div><label class="@L@" for="' + fid + '">' + label + '</label>'
-            '<input id="' + fid + '" name="' + fid + '" class="@I@" type="number" min="0" step="' + step + '" inputmode="decimal">' + h + "</div>")
+            '<input id="' + fid + '" name="' + fid + '" class="@I@" type="number" min="0" step="' + step + '" inputmode="decimal"' + autocomplete_attr + '>' + h + "</div>")
 
 
 def check(fid, label):
@@ -184,7 +185,7 @@ TOOLS = [
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Business assets</h2>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + field("z-businesscash", "Business cash and bank balance")
-            + field("z-stock", "Trade inventory at current sale value")
+            + field("z-stock", "Trade inventory at current sale value", autocomplete="off")
             + '</div></div>'
             + '<div class="zakat-section space-y-3" data-zakat-step="sunni-assets-d">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Recoverable receivables</h2>'
@@ -1503,7 +1504,7 @@ CAROUSEL_SHORT_UR = {
 def calculator_carousel(lang="en", current_path=None):
     s = shell_strings(lang)
     groups = []
-    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/", "/zakat-calculator/", "/ur/zakat-calculator/") else (("primary", False),)
+    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else (("primary", False),)
     for group_name, duplicate in groups_to_render:
         links = []
         for slug, english_name, short_name in CAROUSEL_TOOLS:
