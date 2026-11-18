@@ -34,8 +34,6 @@ jobs:
         run: npm ci
       - name: Test hardened braces dependency
         run: node tests/braces-hardening-smoke.cjs
-      - name: Audit all dependencies including build-time packages
-        run: npm audit --audit-level=moderate
       - name: Check JavaScript syntax
         run: |
           node --check static/app.js
@@ -149,3 +147,7 @@ jobs:
       # Protected Vercel previews are verified separately through the authenticated Vercel connector.
       - name: Test safe monetization configuration
         run: python tests/monetization-smoke.py
+      - name: Audit production dependency graph
+        run: npm audit --omit=dev --audit-level=moderate
+      - name: Audit all dependencies including build-time packages
+        run: npm audit --audit-level=moderate

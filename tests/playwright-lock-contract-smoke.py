@@ -29,6 +29,8 @@ def validate_playwright_config(config):
         and config.get("ci_uses_npm_ci") is True
         and config.get("ci_has_no_ad_hoc_install") is True
         and config.get("ci_installs_chromium") is True
+        and config.get("first_screen_smoke_launch") is True
+        and config.get("first_screen_dependency_fallback") is True
     )
 
 
@@ -56,7 +58,9 @@ def repository_playwright_config(root=ROOT):
         "axe_integrity": axe_lock.get("integrity"),
         "ci_uses_npm_ci": all("run: npm ci" in workflow for workflow in (ci, site_build, first_screen)),
         "ci_has_no_ad_hoc_install": "npm install --no-save" not in workflows,
-        "ci_installs_chromium": all("npx playwright install --with-deps chromium" in workflow for workflow in (ci, first_screen)),
+        "ci_installs_chromium": "npx playwright install --with-deps chromium" in ci and "npx playwright install chromium" in first_screen,
+        "first_screen_smoke_launch": "chromium.launch" in first_screen,
+        "first_screen_dependency_fallback": "npx playwright install-deps chromium" in first_screen,
     }
 
 
@@ -77,6 +81,8 @@ class PlaywrightLockUnitTests(unittest.TestCase):
             "ci_uses_npm_ci": True,
             "ci_has_no_ad_hoc_install": True,
             "ci_installs_chromium": True,
+            "first_screen_smoke_launch": True,
+            "first_screen_dependency_fallback": True,
         }
 
     def test_accepts_exact_locked_playwright_version(self):
@@ -110,6 +116,16 @@ class PlaywrightLockUnitTests(unittest.TestCase):
     def test_rejects_missing_browser_install(self):
         config = self.valid_config()
         config["ci_installs_chromium"] = False
+        self.assertFalse(validate_playwright_config(config))
+
+    def test_rejects_missing_browser_smoke_launch(self):
+        config = self.valid_config()
+        config["first_screen_smoke_launch"] = False
+        self.assertFalse(validate_playwright_config(config))
+
+    def test_rejects_missing_dependency_fallback(self):
+        config = self.valid_config()
+        config["first_screen_dependency_fallback"] = False
         self.assertFalse(validate_playwright_config(config))
 
     def test_two_thousand_deterministic_lockfile_mutations(self):

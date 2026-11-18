@@ -31,14 +31,18 @@ CASES = {
     ],
     "calorie-calculator": [
         "resting energy expenditure (REE)",
-        "1,648.75 kcal/day REE",
+        "1,648.75 kcal/day resting energy",
         "1,978.5 kcal/day",
         "498 healthy adults aged 19–78",
-        "activity multipliers are consumer estimates",
-        "Pregnancy and breastfeeding estimates are available only for ages 19+",
+        "Mifflin–St Jeor is the default and recommended starting option",
+        "Revised Harris–Benedict",
+        "Katch–McArdle",
+        "not intended for pregnancy or breastfeeding",
+        "Estimate only – not medical advice",
+        "maintenance macro split",
+        "Your calculator measurements are not sent to a calculation server or API",
         "has not been medically reviewed",
         "REE is not a universal minimum safe calorie intake",
-        "does not implement the NIDDK dynamic weight-change model",
     ],
     "ratio-calculator": [
         "10:15",
@@ -108,26 +112,25 @@ def main():
         ]:
             if phrase not in home_text:
                 failures.append("Homepage is missing the verified answer-first summary: " + phrase)
-    # Regression: the Health hub must describe the same supported pregnancy and
-    # breastfeeding paths as the Adult Calorie Calculator.
+    # Regression: the Health hub and calculator page must describe the same adult-only scope.
     health_path = ROOT / "health" / "index.html"
     calorie_path = ROOT / "calorie-calculator" / "index.html"
     if not health_path.is_file():
         failures.append("/health/ was not generated for the calorie-scope consistency check")
     else:
         health_text = visible_text(health_path)
-        if "The calorie tool is for adults 18 and older and is not intended for pregnancy or breastfeeding." in health_text:
-            failures.append("/health/ incorrectly says the entire calorie tool excludes pregnancy and breastfeeding")
-        if "Separate National Academies DRI 2023 reference estimates are available for pregnancy and breastfeeding for adults aged 19 and older" not in health_text:
-            failures.append("/health/ must explain the separate National Academies DRI 2023 pregnancy and breastfeeding estimates and their 19+ eligibility")
+        if "not intended for pregnancy or breastfeeding" not in health_text:
+            failures.append("/health/ must state that the calorie calculator is not intended for pregnancy or breastfeeding")
+        if "three prediction formulas" not in health_text:
+            failures.append("/health/ must describe the three supported calorie formulas")
         if "The original Mifflin–St Jeor study included 498 healthy adults aged 19–78" not in health_text:
             failures.append("/health/ must distinguish the calculator's 18+ input eligibility from the original equation study's 19–78 sample")
     if not calorie_path.is_file():
         failures.append("/calorie-calculator/ was not generated for the Health hub consistency check")
     else:
         calorie_text = visible_text(calorie_path)
-        if "separate National Academies 2023 Dietary Reference Intakes for Energy method" not in calorie_text:
-            failures.append("/calorie-calculator/ no longer documents its separate pregnancy and breastfeeding method")
+        if "not intended for pregnancy or breastfeeding" not in calorie_text:
+            failures.append("/calorie-calculator/ must clearly exclude pregnancy and breastfeeding")
 
     if failures:
         for failure in failures:
