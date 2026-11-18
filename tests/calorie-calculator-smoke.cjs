@@ -96,7 +96,7 @@ const html = fs.readFileSync(pagePath, "utf8");
 for (const phrase of [
   "How many calories do I need", "total daily energy expenditure", "BMR",
   "calorie deficit", "maintenance calories", "activity level",
-  "Why calorie calculators give different results", "pregnancy",
+  "Why can calorie calculators give different results", "pregnancy",
   "not medical advice", "browser", "Mifflin–St Jeor", "Revised Harris–Benedict", "Katch–McArdle"
 ]) assert.ok(html.toLowerCase().includes(phrase.toLowerCase()), "Page content must cover: " + phrase);
 assert.match(html, /adults aged 18 or older/i);
