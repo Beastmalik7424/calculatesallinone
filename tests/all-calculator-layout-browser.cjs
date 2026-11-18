@@ -75,7 +75,8 @@ function rect(element) {
         const targetUrl = BASE_URL + route.path;
         let response;
         try {
-          response = await page.goto(targetUrl, { waitUntil: "networkidle", timeout: 30000 });
+          // Local static pages can keep analytics/font connections open. Load plus fonts.ready is deterministic for layout assertions.
+          response = await page.goto(targetUrl, { waitUntil: "load", timeout: 15000 });
           await page.waitForFunction(() => {
             const form = document.querySelector("#zakat-form");
             return !form || (form.getAttribute("data-current-step") === "setup" && !!form.getAttribute("data-step-order"));
