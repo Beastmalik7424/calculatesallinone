@@ -93,6 +93,9 @@ assert.equal(simulatedCases, 5000);
 const pagePath = path.join(__dirname, "..", "public", "calorie-calculator", "index.html");
 assert.ok(fs.existsSync(pagePath), "Calorie Calculator page must be generated");
 const html = fs.readFileSync(pagePath, "utf8");
+assert.match(html, /<title>Calorie Calculator: TDEE, BMR &amp; Macros \| CalculatesAll<\/title>/, "SEO finalization must preserve the upgraded calorie page title");
+assert.match(html, /<meta property="og:title" content="Calorie Calculator: TDEE, BMR &amp; Macros \| CalculatesAll">/, "Open Graph title must match the upgraded calorie page title");
+assert.doesNotMatch(html, /<title>Calorie Calculator \| Maintenance &amp; TDEE \| CalculatesAll<\/title>/, "The obsolete calorie page title must not be restored by SEO finalization");
 for (const phrase of [
   "How many calories do I need", "total daily energy expenditure", "BMR",
   "calorie deficit", "maintenance calories", "activity level",
