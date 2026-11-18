@@ -34,8 +34,10 @@ let browser;
     "Zakat pages must render one aria-hidden duplicate for the continuous ticker");
   assert.match(await shortcutNav.locator(".ca-calculator-track").evaluate(el => getComputedStyle(el).animationName), /ca-calculator-marquee/,
     "Zakat calculator shortcuts must move continuously like the shared ticker");
-  assert.equal(await shortcutNav.locator('[data-tool-shortcut]').count(), 17,
-    "All calculator destinations must remain available in the shortcut navigation");
+  assert.equal(await shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut]').count(), 17,
+    "All 17 calculator destinations must remain available in the primary shortcut group");
+  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"] [data-tool-shortcut]').count(), 17,
+    "The visual ticker duplicate must contain all 17 destinations");
   assert.ok(await shortcutNav.locator('[data-tool-shortcut][aria-current="page"]').evaluate(el => {
     const item = el.getBoundingClientRect();
     const nav = el.closest(".ca-calculator-carousel").getBoundingClientRect();
