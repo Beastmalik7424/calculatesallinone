@@ -1273,7 +1273,7 @@ TOOLS.extend([
             ]),
             ("Conversion rules and assumptions", [
                 "A year contains 12 calendar months. For conversions between years and fixed time units, this calculator uses the mean Gregorian year of 365.2425 days. Therefore 80 years ≈ 29,219.4 days, and 1 year = 8,765.82 hours. These are average-unit conversions, not counts for a particular start and end date.",
-                "A month does not have one fixed number of calendar days. When a question asks for months in days, the calculator uses the Gregorian average of 30.436875 days per month. For example, 115 months = 9 years and 7 months, or about 3,500.24 average days. Exact calendar days require the actual start and end dates.",
+                "A month does not have one fixed number of calendar days. When a question asks for months in days, the calculator uses the Gregorian average of 30.436875 days per month. For example, 115 months = 9 years and 7 months, or about 3,500.24 average days. For a date-specific result, exact calendar days require a start date and end date.",
                 "Smaller fixed units use 1 week = 7 days, 1 day = 24 hours, 1 hour = 60 minutes and 1 minute = 60 seconds. For example, 2 weeks = 336 hours and 3 days = 4,320 minutes. The same factors are used in reverse conversions."
             ]),
             ("Date of birth and Gregorian age", [
