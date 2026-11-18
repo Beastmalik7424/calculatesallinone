@@ -1507,7 +1507,10 @@ def calculator_carousel(lang="en", current_path=None):
     groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else (("primary", False),)
     for group_name, duplicate in groups_to_render:
         links = []
-        for slug, english_name, short_name in CAROUSEL_TOOLS:
+        tools_to_render = CAROUSEL_TOOLS
+        if current_path in ("/zakat-calculator/", "/ur/zakat-calculator/"):
+            tools_to_render = sorted(CAROUSEL_TOOLS, key=lambda item: item[0] != "zakat-calculator")
+        for slug, english_name, short_name in tools_to_render:
             if lang == "ur":
                 name = CAROUSEL_TRANSLATIONS["ur"][slug]
                 href = ("/ur/" if slug in URDU else "/") + slug + "/"
