@@ -80,7 +80,7 @@ jobs:
               '1 year = 8,765.82 hours',
               '365.2425 days',
               '30.436875 days',
-              'rejects unsupported questions',
+              'unsupported questions are not guessed',
           ]:
               assert phrase in h, f'missing generated page evidence: {phrase}'
           print('Generated Query Calculator SEO/content assertions: PASS')
