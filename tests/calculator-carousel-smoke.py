@@ -108,7 +108,7 @@ assert "ca-site-nav-topline" in zakat_markup, "Header must keep its separate top
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
 print("Calculator ticker, all 17 destinations, inner-page header layout and Tasbih action smoke tests PASS")
 
-assert '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v4">' in zakat_markup, "Zakat pages must use the current cache-busted stylesheet URL"
+assert '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v5">' in zakat_markup, "Zakat pages must use the current cache-busted stylesheet URL"
 assert zakat_markup.count('data-tool-set="primary"') == 1 and 'data-tool-set="duplicate"' not in zakat_markup, "Zakat pages must render one non-duplicated shortcut group"
 zakat_group = primary_group(zakat_markup, "/zakat-calculator/")
 current_zakat = re.search(r'data-tool-shortcut="zakat-calculator"[^>]*aria-current="page"', zakat_group)
