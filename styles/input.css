@@ -2518,6 +2518,20 @@ body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link {
   padding: .5rem .7rem;
   line-height: 1.2;
 }
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link {
+  font-size: 0;
+}
+body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link::after {
+  content: attr(data-short-label);
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: .78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: clip;
+  white-space: nowrap;
+}
 body:has(#main .ca-tool-zakat-calculator) .ca-calculator-link:focus-visible {
   outline: 3px solid #0369a1;
   outline-offset: -3px;
