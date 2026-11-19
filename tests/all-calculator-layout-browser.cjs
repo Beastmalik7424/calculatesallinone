@@ -207,7 +207,7 @@ function rect(element) {
               zakatAdvancedDetailsCount: advancedDetails.length,
               zakatAdvancedAllClosed: advancedDetails.length > 0 && advancedDetails.every(details => !details.open),
               zakatSecondaryOutsideDetails,
-              zakatPrimaryTouchTargets,
+              zakatPrimaryTouchTargets: primaryTouchTargets,
               zakatOuterCardUsesStandardShell: !!root && ["ca-tool-standard-calculator","mt-2","rounded-2xl","shadow-xl","ring-1","p-3","sm:p-4"].every(name => root.classList.contains(name)),
               zakatOuterCardStyle: rootStyle ? {
                 padding: rootStyle.padding,
