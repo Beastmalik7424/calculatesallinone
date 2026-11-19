@@ -104,6 +104,14 @@ let browser;
   }), "Active calculator shortcut must be visible in the ticker's initial frame and have a 44px touch target");
   assert.equal(await shortcutNav.locator('[data-tool-shortcut]').first().getAttribute("aria-current"), "page",
     "Current calculator shortcut must be first for immediate discoverability");
+  assert.equal(await page.locator("#zakat-result").isVisible(), true,
+    "The result panel must be visible on first paint");
+  const advancedDetails = page.locator("#zakat-form details").first();
+  assert.equal(await advancedDetails.evaluate(el => el.open), false,
+    "All secondary Zakat inputs must start inside a closed details section");
+  await advancedDetails.locator("summary").click();
+  assert.equal(await advancedDetails.evaluate(el => el.open), true,
+    "Secondary Zakat inputs must expand with one click");
 
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
     "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
