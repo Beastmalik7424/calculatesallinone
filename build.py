@@ -169,7 +169,7 @@ TOOLS = [
             + '<option value="silver">Silver: 483.84 g (105 common mithqals)</option>'
             + '</select></div>'
             + '<button id="zakat-submit" type="submit" class="@B@ w-full min-h-[44px]">Calculate Zakat</button>'
-            + result("zakat-result", False)'
+            + result("zakat-result", False)
             + '</div>'
             + '<details class="zakat-advanced mt-2 rounded-xl border border-stone-200 dark:border-stone-700 p-2">'
             + '<summary class="min-h-[44px] cursor-pointer flex items-center font-semibold text-stone-900 dark:text-stone-100">Additional assets, metal prices and conditions</summary>'
