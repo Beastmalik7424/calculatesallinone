@@ -50,7 +50,17 @@ let browser;
   assert.equal(await page.locator("#zakat-form").count(), 1, "Single Zakat form must be present");
   assert.equal(await page.locator("#zakat-next, #zakat-back, #zakat-step-progress").count(), 0,
     "Single-page calculator must not expose Next/Back wizard controls or step progress");
-  assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Calculate action must be visible at the top of the form");
+  assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Calculate action must be visible in the form");
+  assert.equal(await page.locator("#zakat-form button:visible, #zakat-form input:visible, #zakat-form select:visible").first().getAttribute("id"), "z-currency",
+    "The first visible form control must be the currency input, not an introductory hero button");
+  assert.ok(await page.locator("#zakat-submit").evaluate(el => {
+    const method = document.querySelector("#z-school-of-thought");
+    return !!method && !!(method.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
+  }), "The first-screen Calculate Zakat action must follow the currency and school selectors");
+  assert.ok(await page.locator("#zakat-submit-bottom").evaluate(el => {
+    const lastRequiredPrice = document.querySelector("#z-goldprice");
+    return !!lastRequiredPrice && !!(lastRequiredPrice.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
+  }), "The final Calculate Zakat action must follow all asset, liability, method and metal-price fields");
   assert.equal(await page.locator("#z-stock").getAttribute("autocomplete"), "off",
     "Financial trade-stock values must not be browser-autofilled");
   const englishAmountInputs = page.locator("#zakat-form input[type=number]");
@@ -154,6 +164,10 @@ let browser;
     }));
     assert.equal(metrics.documentWidth, metrics.width, "No horizontal overflow at " + viewport.width + "px");
     assert.ok(metrics.formWidth > 0 && metrics.formWidth <= metrics.width, "Form must fit viewport width at " + viewport.width + "px");
+    if (viewport.width <= 600) {
+      const setupColumns = await page.locator('#zakat-form [data-zakat-step="setup"] .grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+      assert.equal(setupColumns, 1, "Zakat setup selectors must stack to full width on narrow screens");
+    }
     assert.ok(metrics.controls.every(control => control.height >= 40), "Inputs/buttons must retain usable height at " + viewport.width + "px");
   }
 
@@ -176,8 +190,6 @@ let browser;
   // Urdu must be a complete localized experience, not an English form inside an RTL page.
   const urduFormText = await page.locator("#zakat-form").innerText();
   for (const untranslated of [
-    "One-page Zakat calculator",
-    "Choose your method, enter only applicable amounts, then calculate.",
     "Recoverable receivables",
     "Property held for resale (only if bought for resale)",
     "Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution.",
@@ -187,8 +199,6 @@ let browser;
     assert.equal(urduFormText.includes(untranslated), false,
       "Urdu Zakat form must not show untranslated English text: " + untranslated);
   }
-  assert.match(urduFormText, /ایک صفحے کا زکوٰۃ کیلکولیٹر/,
-    "Urdu form heading must be translated");
   assert.match(urduFormText, /قابلِ وصول رقوم/,
     "Urdu receivables heading must be translated");
   assert.match(urduFormText, /دوبارہ فروخت کے لیے رکھی گئی جائیداد/,

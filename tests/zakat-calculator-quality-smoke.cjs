@@ -149,9 +149,12 @@ for (const term of [
 assert.ok(enText.length > 500, "English Zakat page must contain the requested substantive guidance");
 assert.ok(urText.length > 300, "Urdu Zakat page must contain the translated guidance");
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
-  const submitAt = html.indexOf('type="submit"');
+  const submitAt = html.indexOf('id="zakat-submit"');
   const assetAt = html.indexOf('id="z-cash"');
-  assert.ok(submitAt > 0 && submitAt < assetAt, name + " Zakat submit action must precede the long asset-entry section");
+  const bottomSubmitAt = html.indexOf('id="zakat-submit-bottom"');
+  const lastPriceAt = html.indexOf('id="z-goldprice"');
+  assert.ok(submitAt > 0 && submitAt < assetAt, name + " first-screen Zakat action must follow setup selectors and precede the long asset-entry section");
+  assert.ok(bottomSubmitAt > lastPriceAt && lastPriceAt > 0, name + " final Zakat action must follow the metal-price fields");
   assert.doesNotMatch(html.slice(submitAt - 120, submitAt + 250), /sticky|top-20|z-20/, name + " Zakat submit action must stay in normal document flow and never overlap the header navigation");
 }
 assert.match(en, /application\/ld\+json/, "English page must retain structured data");
@@ -164,6 +167,8 @@ assert.ok(!ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must not cite 
 const zakatCss = fs.readFileSync(path.join(__dirname, "..", "styles", "input.css"), "utf8");
 assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \.zakat-section \.grid\s*\{\s*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)\s*!important;/,
   "Zakat asset steps must use a compact two-column field grid on mobile");
+assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \[data-zakat-step="setup"\] \.grid\s*\{\s*grid-template-columns:\s*minmax\(0, 1fr\)\s*!important;/,
+  "Zakat currency and method setup fields must stack at full width on mobile");
 assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form :is\(input:not\(\[type="checkbox"\]\), select, textarea\)\s*\{\s*min-height:\s*44px\s*!important;/,
   "Zakat form controls must retain accessible 44px minimum height");
 
