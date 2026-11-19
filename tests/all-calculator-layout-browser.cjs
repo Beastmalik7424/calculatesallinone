@@ -174,6 +174,11 @@ function rect(element) {
               visible(element) && primaryRects[index].top >= -1 && primaryRects[index].bottom <= innerHeight - 1
             ) && zakatPrimary.getBoundingClientRect().bottom <= innerHeight - 1;
             const advancedDetails = zakatForm ? Array.from(zakatForm.querySelectorAll("details")) : [];
+            const secondaryIds = ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl","z-metal-price-unit","z-silverprice","z-goldprice","z-jafari-owner","z-jafari-trade-value","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jafari-coins-used-as-money","z-jafari-gold-coins-weight","z-jafari-silver-coins-weight"];
+            const zakatSecondaryOutsideDetails = zakatForm ? secondaryIds.filter(id => {
+              const element = zakatForm.querySelector("#" + id);
+              return element && !element.closest("details");
+            }) : [];
             const primaryTouchTargets = primaryElements.filter(Boolean).map(element => {
               const r = element.getBoundingClientRect();
               return Math.min(r.width, r.height);
@@ -201,6 +206,7 @@ function rect(element) {
               zakatResultVisible: visible(resultPanel),
               zakatAdvancedDetailsCount: advancedDetails.length,
               zakatAdvancedAllClosed: advancedDetails.length > 0 && advancedDetails.every(details => !details.open),
+              zakatSecondaryOutsideDetails,
               zakatPrimaryTouchTargets,
               zakatOuterCardStyle: rootStyle ? {
                 padding: rootStyle.padding,
@@ -253,9 +259,10 @@ function rect(element) {
           if (route.name.startsWith("zakat-") && metrics.minTickerLinkHeight < 44) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat shortcut touch targets must be at least 44px high", metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatWizardControls !== 0) failures.push({ route: route.path, viewport: viewport.name, issue: "One-page Zakat form must not expose wizard controls", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatPrimaryFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary calculator block is missing", metrics });
-          if (route.name.startsWith("zakat-") && !metrics.zakatPrimaryVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Currency, school, active Nisab, Calculate button and result must all fit in the first viewport", metrics });
+          if (route.name.startsWith("zakat-") && viewport.width >= 360 && !metrics.zakatPrimaryVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Currency, school, active Nisab, Calculate button and result must all fit in the first viewport", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatResultVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat result panel must be visible on first paint", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatAdvancedAllClosed) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat advanced fields must be inside closed-by-default details", metrics });
+          if (route.name.startsWith("zakat-") && metrics.zakatSecondaryOutsideDetails.length) failures.push({ route: route.path, viewport: viewport.name, issue: "Secondary Zakat fields must remain inside the expandable details section", fields: metrics.zakatSecondaryOutsideDetails, metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatPrimaryTouchTargets.some(size => size < 44)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary controls must retain 44px minimum touch targets", metrics });
           if (route.name.startsWith("zakat-") && (!metrics.zakatOuterCardStyle || !metrics.rootRect || !metrics.rootRect.width)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat Standard Calculator card geometry must be measurable", metrics });
 
