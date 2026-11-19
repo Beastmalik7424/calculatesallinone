@@ -2517,6 +2517,14 @@ html.dark #main .ca-tool-zakat-calculator #zakat-form button {
 #main .ca-tool-zakat-calculator [data-zakat-primary] > .grid {
   gap: .5rem !important;
 }
+body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
+#main .ca-tool-zakat-calculator #zakat-result:empty {
+  display: block !important;
+  min-height: 44px !important;
+  margin: .35rem 0 0 !important;
+  padding: .5rem !important;
+  border-radius: .65rem !important;
+}
 #main .ca-tool-zakat-calculator #zakat-result {
   display: block !important;
   min-height: 44px !important;
