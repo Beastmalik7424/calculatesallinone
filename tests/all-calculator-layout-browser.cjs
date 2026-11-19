@@ -283,6 +283,7 @@ function rect(element) {
           if (route.name.startsWith("zakat-") && metrics.zakatPrimaryTouchTargets.some(size => size < 44)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary controls must retain 44px minimum touch targets", metrics });
           if (route.name.startsWith("zakat-") && (!metrics.zakatOuterCardStyle || !metrics.rootRect || !metrics.rootRect.width)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat Standard Calculator card geometry must be measurable", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatOuterCardUsesStandardShell) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat outer card must reuse the Standard Calculator shell classes", metrics });
+          if (route.name.startsWith("zakat-") && viewport.width === 1366 && viewport.height === 768 && metrics.headingRect && metrics.headingRect.height > 28) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat heading must retain the Standard Calculator one-line short-laptop height so the card starts at the same vertical position", metrics });
 
           if (route.name.startsWith("zakat-") && metrics.shortLabelFailures.length) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more shortcut labels are not visibly rendered", labels: metrics.shortLabelFailures, metrics });
           if (!metrics.rootFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing calculator container " + route.root });
