@@ -143,10 +143,10 @@ TOOLS = [
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
         "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
-            '<form id="zakat-form" class="space-y-5" novalidate>'
-            + '<div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-stone-200 bg-stone-50 p-3 dark:border-stone-700 dark:bg-stone-900">'
+            '<form id="zakat-form" class="max-w-xl mx-auto space-y-5" novalidate>'
+            + '<div class="flex flex-col items-stretch gap-3 rounded-xl border border-stone-200 bg-stone-50 p-3 text-center dark:border-stone-700 dark:bg-stone-900">'
             + '<div class="min-w-0"><h2 class="text-base font-semibold text-stone-900 dark:text-stone-100">One-page Zakat calculator</h2><p class="text-xs text-stone-600 dark:text-stone-300">Choose your method, enter only applicable amounts, then calculate.</p></div>'
-            + '<button id="zakat-submit" type="submit" class="@B@">Calculate Zakat</button></div>'
+            + '<button id="zakat-submit" type="submit" class="@B@ w-full">Calculate Zakat</button></div>'
             + result("zakat-result", True)
             + '<div class="zakat-section space-y-3" data-zakat-step="setup">'
             + '<p id="zakat-hanafi-setup-note" class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
