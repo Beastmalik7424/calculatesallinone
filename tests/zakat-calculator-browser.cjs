@@ -191,7 +191,7 @@ let browser;
       const setupColumns = await page.locator('#zakat-form [data-zakat-step="setup"] .grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
       assert.equal(setupColumns, 1, "Zakat setup selectors must stack to full width on narrow screens");
     }
-    assert.ok(metrics.controls.every(control => control.height >= 40), "Inputs/buttons must retain usable height at " + viewport.width + "px");
+    assert.ok(metrics.controls.every(control => control.height >= 44), "Every visible Zakat input, select and button must retain a 44px minimum touch target at " + viewport.width + "px");
   }
 
   // Urdu page must preserve RTL and the same no-wizard behaviour.
