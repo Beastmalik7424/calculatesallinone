@@ -2467,8 +2467,8 @@ html.dark #main .ca-tool-zakat-calculator {
 }
 #main .ca-tool-zakat-calculator #zakat-form {
   width: 100% !important;
-  max-width: none !important;
-  margin-inline: 0 !important;
+  max-width: 36rem !important;
+  margin-inline: auto !important;
 }
 #main .ca-tool-zakat-calculator #zakat-form :is(input:not([type="checkbox"]), select, textarea) {
   background: #f8fcfb !important;
