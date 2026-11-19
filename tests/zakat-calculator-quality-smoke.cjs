@@ -150,8 +150,8 @@ assert.ok(enText.length > 500, "English Zakat page must contain the requested su
 assert.ok(urText.length > 300, "Urdu Zakat page must contain the translated guidance");
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const submitAt = html.indexOf('type="submit"');
-  const assetAt = html.indexOf('id="z-cash"');
-  assert.ok(submitAt > 0 && submitAt < assetAt, name + " Zakat submit action must precede the long asset-entry section");
+  const lastPriceAt = html.indexOf('id="z-goldprice"');
+  assert.ok(submitAt > lastPriceAt && lastPriceAt > 0, name + " Zakat submit action must follow the metal-price fields");
   assert.doesNotMatch(html.slice(submitAt - 120, submitAt + 250), /sticky|top-20|z-20/, name + " Zakat submit action must stay in normal document flow and never overlap the header navigation");
 }
 assert.match(en, /application\/ld\+json/, "English page must retain structured data");
