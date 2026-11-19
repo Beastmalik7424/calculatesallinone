@@ -11,8 +11,10 @@ let browser;
   const layoutPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
   for (const viewport of [
     { width: 320, height: 740 },
+    { width: 360, height: 740 },
     { width: 390, height: 844 },
     { width: 768, height: 1024 },
+    { width: 1366, height: 768 },
     { width: 1366, height: 900 }
   ]) {
     await layoutPage.setViewportSize(viewport);
@@ -174,7 +176,7 @@ let browser;
     "Sistani personal gold coins must calculate 2.5% of the first gold Nisab when all separate conditions are met");
 
   // Responsive geometry: no horizontal overflow and accessible control heights.
-  for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }]) {
+  for (const viewport of [{ width: 320, height: 740 }, { width: 360, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1366, height: 768 }, { width: 1440, height: 900 }]) {
     await page.setViewportSize(viewport);
     const metrics = await page.evaluate(() => ({
       width: innerWidth,
