@@ -7,6 +7,35 @@ let browser;
 
 (async () => {
   browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
+  // Compare the actual inner calculator bounds, not only the shared outer card.
+  const layoutPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  for (const viewport of [
+    { width: 320, height: 740 },
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1366, height: 900 }
+  ]) {
+    await layoutPage.setViewportSize(viewport);
+    const standardResponse = await layoutPage.goto(BASE_URL + "/standard-calculator/", { waitUntil: "load" });
+    assert.equal(standardResponse && standardResponse.status(), 200, "Standard Calculator reference must load");
+    const standardBounds = await layoutPage.locator("#tool-calculator > .max-w-sm").evaluate(el => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, width: r.width };
+    });
+    const zakatResponse = await layoutPage.goto(BASE_URL + "/zakat-calculator/", { waitUntil: "load" });
+    assert.equal(zakatResponse && zakatResponse.status(), 200, "Zakat Calculator must load for inner-layout comparison");
+    const zakatBounds = await layoutPage.locator("#zakat-form").evaluate(el => {
+      const r = el.getBoundingClientRect();
+      return { x: r.x, width: r.width };
+    });
+    assert.ok(Math.abs(zakatBounds.width - standardBounds.width) <= 2,
+      "Zakat form width must match Standard Calculator at " + viewport.width +
+      "px (standard=" + standardBounds.width + ", zakat=" + zakatBounds.width + ")");
+    assert.ok(Math.abs(zakatBounds.x - standardBounds.x) <= 2,
+      "Zakat form must share Standard Calculator's horizontal position at " + viewport.width + "px");
+  }
+  await layoutPage.close();
+
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const pageErrors = [];
   const consoleErrors = [];
