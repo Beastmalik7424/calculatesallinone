@@ -164,6 +164,10 @@ let browser;
     }));
     assert.equal(metrics.documentWidth, metrics.width, "No horizontal overflow at " + viewport.width + "px");
     assert.ok(metrics.formWidth > 0 && metrics.formWidth <= metrics.width, "Form must fit viewport width at " + viewport.width + "px");
+    if (viewport.width <= 600) {
+      const setupColumns = await page.locator('#zakat-form [data-zakat-step="setup"] .grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+      assert.equal(setupColumns, 1, "Zakat setup selectors must stack to full width on narrow screens");
+    }
     assert.ok(metrics.controls.every(control => control.height >= 40), "Inputs/buttons must retain usable height at " + viewport.width + "px");
   }
 
