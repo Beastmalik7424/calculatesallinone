@@ -174,6 +174,8 @@ TOOLS = [
             + '</div>'
             + '<details class="zakat-advanced mt-2 rounded-xl border border-stone-200 dark:border-stone-700 p-2">'
             + '<summary class="min-h-[44px] cursor-pointer flex items-center font-semibold text-stone-900 dark:text-stone-100">Additional assets, metal prices and conditions</summary>'
+            + '<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.</p>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p>'
             + '<div id="z-sunni-asset-fields" class="space-y-3">'
             + '<div class="zakat-section space-y-3" data-zakat-step="sunni-assets-a">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
@@ -215,6 +217,7 @@ TOOLS = [
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
             + '</div></div>'
             + '<div id="z-jafari-fields" class="space-y-3" hidden>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution. The personal-coin option applies only to minted gold/silver coins that are prevalently used as money in transactions. For qualifying coins, the first Nisab must remain present for 11 lunar months. Sistani states that gold and silver are not currently used as money in transactions, so ordinary banknotes, bank deposits, bullion bars and jewellery are not included. Khums is separate. Other Ja\'fari authorities may differ.</p>'
             + '<div class="zakat-section space-y-3" data-zakat-step="jafari-ownership">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Ownership conditions</h2>'
             + check("z-jafari-owner", "Owner remained adult and sane throughout the year")
