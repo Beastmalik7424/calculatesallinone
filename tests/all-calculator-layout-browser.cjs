@@ -242,6 +242,22 @@ function rect(element) {
             };
           }, { rootSelector: route.root, actionSelector: route.action });
 
+          if (route.name.startsWith("zakat-")) {
+            const initialAdvanced = await page.locator("#zakat-form details").first().evaluate(node => node.open);
+            if (initialAdvanced) throw new Error("Zakat advanced section must start closed");
+            await page.locator("#zakat-form details > summary").first().click();
+            const expanded = await page.locator("#zakat-form details").first().evaluate(node => node.open);
+            const secondaryVisible = await page.locator("#zakat-form #z-cash").isVisible();
+            await page.locator("#zakat-form details > summary").first().click();
+            const collapsedAgain = await page.locator("#zakat-form details").first().evaluate(node => !node.open);
+            if (!expanded || !secondaryVisible || !collapsedAgain) throw new Error("Zakat advanced fields did not expand and collapse correctly");
+            await page.locator("#zakat-form #z-school-of-thought").selectOption("jafari-sistani");
+            const jafariNisabVisible = await page.locator("#z-jafari-nisab-primary select").isVisible();
+            const hanafiNisabHidden = !(await page.locator("#z-nisab-method").isVisible());
+            await page.locator("#zakat-form #z-school-of-thought").selectOption("sunni-hanafi");
+            const hanafiNisabVisible = await page.locator("#z-nisab-method").isVisible();
+            if (!jafariNisabVisible || !hanafiNisabHidden || !hanafiNisabVisible) throw new Error("School selector did not switch the primary Nisab control");
+          }
           const status = response ? response.status() : 0;
           const screenshotPath = "/tmp/calculator-layout-" + route.name + "-" + viewport.name + ".png";
           await page.screenshot({ path: screenshotPath, fullPage: false });
