@@ -978,9 +978,14 @@ for slug in calculator_slugs:
     calc_pos = urdu_html.find('<section id="tool-calculator"')
     h1_pos = urdu_html.find("<h1")
     lead_pos = urdu_html.find("<p", h1_pos) if h1_pos >= 0 else -1
-    assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
-        f"Urdu calculator must follow the heading and short lead: /ur/{slug}/"
-    )
+    if slug == "zakat-calculator":
+        assert h1_pos >= 0 and calc_pos > h1_pos and lead_pos > calc_pos, (
+            "Urdu Zakat must use Standard Calculator order: heading, calculator, then lead"
+        )
+    else:
+        assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
+            f"Urdu calculator must follow the heading and short lead: /ur/{slug}/"
+        )
     assert calc_pos < urdu_html.find("<h2"), f"Urdu calculator must appear before guide content: /ur/{slug}/"
     assert re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', urdu_html), (
         f"Urdu tool page must use the compact calculator-first main layout: /ur/{slug}/"
@@ -1209,10 +1214,17 @@ for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings
 
 # Urdu calculator templates must carry the same page-specific responsive hooks as English tools.
 for _slug in ("age-calculator", "bmi-calculator", "discount-calculator", "profit-loss-calculator",
-              "stopwatch", "tasbih-counter", "unit-converter", "zakat-calculator"):
+              "stopwatch", "tasbih-counter", "unit-converter"):
     _html = output_for_url(SITE + "/ur/" + _slug + "/").read_text(encoding="utf-8")
     assert 'id="tool-calculator" class="ca-tool-calculator ca-tool-' + _slug + ' mt-4"' in _html, (
         "Urdu calculator lost its page-specific responsive class: " + _slug
+    )
+for _lang in ("", "/ur"):
+    _html = output_for_url(SITE + _lang + "/zakat-calculator/").read_text(encoding="utf-8")
+    assert ('id="tool-calculator" class="ca-tool-standard-calculator ca-tool-zakat-calculator '
+            'mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 '
+            'ring-stone-200 dark:ring-stone-700 p-3 sm:p-4"') in _html, (
+        "Zakat calculator must reuse the exact Standard Calculator shell: " + (_lang or "en")
     )
 _ur_standard = output_for_url(SITE + "/ur/standard-calculator/").read_text(encoding="utf-8")
 assert 'id="tool-calculator" class="ca-tool-standard-calculator mt-4"' in _ur_standard, (

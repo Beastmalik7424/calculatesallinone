@@ -2151,12 +2151,19 @@ def tool_page(t):
         alternates = [("en", path), ("ur", "/ur" + path), ("x-default", path)]
     updated_date = LASTMOD.get(path)
     updated = ('<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: ' + updated_date + "</p>") if updated_date else ""
-    calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
-         if t["slug"] != "standard-calculator" else
-         '<section id="tool-calculator" class="ca-tool-standard-calculator mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="Calculator">')
-        + ui + '</section>'
-    )
+    if t["slug"] in {"standard-calculator", "zakat-calculator"}:
+        calculator_classes = "ca-tool-standard-calculator"
+        if t["slug"] == "zakat-calculator":
+            calculator_classes += " ca-tool-zakat-calculator"
+        calculator_section = (
+            '<section id="tool-calculator" class="' + calculator_classes + ' mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="Calculator">'
+            + ui + '</section>'
+        )
+    else:
+        calculator_section = (
+            '<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
+            + ui + '</section>'
+        )
     answer_note = answer_block(t["slug"], "en")
     breadcrumb_html = (
         '<nav aria-label="Breadcrumb" class="text-sm text-stone-800 dark:text-stone-200"><ol class="flex flex-wrap gap-2">'
@@ -2290,12 +2297,21 @@ def urdu_tool_page(t):
         for p in u["how"]:
             how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
-    calculator_section = (
-        ('<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4" aria-label="کیلکولیٹر">'
-         if t["slug"] != "standard-calculator" else
-         '<section id="tool-calculator" class="ca-tool-standard-calculator mt-4" aria-label="کیلکولیٹر">')
-        + ui + '</section>'
-    )
+    if t["slug"] == "zakat-calculator":
+        calculator_section = (
+            '<section id="tool-calculator" class="ca-tool-standard-calculator ca-tool-zakat-calculator mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="کیلکولیٹر">'
+            + ui + '</section>'
+        )
+    elif t["slug"] == "standard-calculator":
+        calculator_section = (
+            '<section id="tool-calculator" class="ca-tool-standard-calculator mt-4" aria-label="کیلکولیٹر">'
+            + ui + '</section>'
+        )
+    else:
+        calculator_section = (
+            '<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4" aria-label="کیلکولیٹر">'
+            + ui + '</section>'
+        )
     answer_note = "" if t["slug"] in ("bmi-calculator", "discount-calculator") else answer_block(t["slug"], "ur")
     primary_tool_content = calculator_section + answer_note
     body = (
@@ -2307,7 +2323,7 @@ def urdu_tool_page(t):
     )
     _lead_class = "mt-2 text-base leading-5" if t["slug"] == "bmi-calculator" else "mt-3 text-lg"
     _urdu_lead = '<p class="' + _lead_class + ' text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'
-    if t["slug"] == "standard-calculator":
+    if t["slug"] in {"standard-calculator", "zakat-calculator"}:
         body += primary_tool_content + _urdu_lead
     else:
         body += _urdu_lead + primary_tool_content
