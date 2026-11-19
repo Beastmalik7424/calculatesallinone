@@ -2504,8 +2504,8 @@ html.dark #main .ca-tool-zakat-calculator #zakat-form button {
 /* Zakat first-screen structure. The outer card intentionally reuses the Standard Calculator skin. */
 #main .ca-tool-zakat-calculator #zakat-form {
   width: 100%;
-  max-width: none;
-  margin: 0;
+  max-width: 36rem;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: .5rem;
