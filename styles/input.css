@@ -2405,6 +2405,13 @@ html.dark body:has(#main .ca-tool-zakat-calculator) #main>h1 {
   color: #bfdbfe !important;
 }
 
+/* The Urdu Zakat page follows the same mobile heading-to-calculator placement as Standard Calculator. */
+@media (max-width: 600px) {
+  #main:has(.ca-tool-zakat-calculator) > nav[aria-label="صفحہ کی ترتیب"] {
+    display: none !important;
+  }
+}
+
 /* Urdu Zakat: keep the RTL page layout while rendering numeric financial inputs LTR. */
 html[dir="rtl"] body:has(#zakat-form) #zakat-form input[type="number"],
 html[dir="rtl"] body:has(#zakat-form) #z-currency {
