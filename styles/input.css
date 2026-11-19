@@ -2377,6 +2377,34 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty + button[data-shar
   body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group[data-tool-set="duplicate"] { display: none !important; }
 }
 
+/* Preserve Zakat contrast surfaces without changing Standard Calculator geometry. */
+body:has(#main .ca-tool-zakat-calculator) #main {
+  background-color: #ffffff !important;
+  color: #1c1917 !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) #main {
+  background-color: #1c1917 !important;
+  color: #f5f5f4 !important;
+}
+body:has(#main .ca-tool-zakat-calculator) header,
+body:has(#main .ca-tool-zakat-calculator) footer {
+  background-color: #ffffff !important;
+  color: #1c1917 !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) header,
+html.dark body:has(#main .ca-tool-zakat-calculator) footer {
+  background-color: #1c1917 !important;
+  color: #f5f5f4 !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #main>h1 {
+  color: #1e3a8a !important;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) #main>h1 {
+  color: #bfdbfe !important;
+}
+
 /* Urdu Zakat: keep the RTL page layout while rendering numeric financial inputs LTR. */
 html[dir="rtl"] body:has(#zakat-form) #zakat-form input[type="number"],
 html[dir="rtl"] body:has(#zakat-form) #z-currency {
