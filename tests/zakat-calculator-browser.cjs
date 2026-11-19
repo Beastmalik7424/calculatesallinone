@@ -201,6 +201,61 @@ let browser;
   assert.match(urduBelowCoinResult, /لاگو نہیں/,
     "Urdu coin-only below-Nisab result must not display a zero business-goods threshold");
 
+
+  // The Zakat calculator shell must match the dedicated Standard Calculator,
+  // not merely keep its own controls visible. Compare rendered browser geometry
+  // and computed shell styles at real viewports, without scrolling either page.
+  for (const localePath of ["/zakat-calculator/", "/ur/zakat-calculator/"]) {
+    for (const viewport of [
+      { width: 320, height: 568 },
+      { width: 360, height: 740 },
+      { width: 390, height: 844 },
+      { width: 1366, height: 768 }
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto(BASE_URL + "/standard-calculator/", { waitUntil: "networkidle" });
+      const standardShell = await page.locator("#tool-calculator").evaluate(el => {
+        const r = el.getBoundingClientRect();
+        const h = document.querySelector("#main > h1").getBoundingClientRect();
+        const s = getComputedStyle(el);
+        return {
+          left: r.left, width: r.width, topGap: r.top - h.bottom,
+          paddingTop: s.paddingTop, paddingRight: s.paddingRight,
+          paddingBottom: s.paddingBottom, paddingLeft: s.paddingLeft,
+          borderRadius: s.borderRadius, borderTopWidth: s.borderTopWidth,
+          backgroundColor: s.backgroundColor, boxShadow: s.boxShadow,
+          marginTop: s.marginTop,
+          breadcrumbDisplay: getComputedStyle(document.querySelector("#main > nav[aria-label='Breadcrumb']")).display
+        };
+      });
+      await page.goto(BASE_URL + localePath, { waitUntil: "networkidle" });
+      const zakatShell = await page.locator("#tool-calculator").evaluate(el => {
+        const r = el.getBoundingClientRect();
+        const h = document.querySelector("#main > h1").getBoundingClientRect();
+        const s = getComputedStyle(el);
+        return {
+          left: r.left, width: r.width, topGap: r.top - h.bottom,
+          paddingTop: s.paddingTop, paddingRight: s.paddingRight,
+          paddingBottom: s.paddingBottom, paddingLeft: s.paddingLeft,
+          borderRadius: s.borderRadius, borderTopWidth: s.borderTopWidth,
+          backgroundColor: s.backgroundColor, boxShadow: s.boxShadow,
+          marginTop: s.marginTop,
+          breadcrumbDisplay: getComputedStyle(document.querySelector("#main > nav[aria-label='Breadcrumb']")).display
+        };
+      });
+      assert.ok(Math.abs(zakatShell.left - standardShell.left) <= 2,
+        localePath + " calculator must align horizontally with Standard Calculator at " + viewport.width + "px: " + JSON.stringify({ standardShell, zakatShell }));
+      assert.ok(Math.abs(zakatShell.width - standardShell.width) <= 2,
+        localePath + " calculator must have the same width as Standard Calculator at " + viewport.width + "px: " + JSON.stringify({ standardShell, zakatShell }));
+      for (const key of ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft", "borderRadius", "borderTopWidth", "backgroundColor", "boxShadow", "marginTop", "breadcrumbDisplay"]) {
+        assert.equal(zakatShell[key], standardShell[key],
+          localePath + " shell " + key + " must match Standard Calculator at " + viewport.width + "px: " + JSON.stringify({ standardShell, zakatShell }));
+      }
+      assert.ok(Math.abs(zakatShell.topGap - standardShell.topGap) <= 2,
+        localePath + " calculator vertical placement must match Standard Calculator at " + viewport.width + "px: " + JSON.stringify({ standardShell, zakatShell }));
+    }
+  }
+
   assert.deepEqual(pageErrors, [], "Zakat browser page must not produce uncaught JavaScript errors");
   assert.deepEqual(consoleErrors, [], "Zakat browser page must not produce console errors");
   console.log("Zakat browser: PASS (single-page Hanafi and Sistani flows, both locales, 4 responsive widths, no console errors)");
