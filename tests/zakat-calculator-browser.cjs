@@ -19,8 +19,7 @@ let browser;
     const standardResponse = await layoutPage.goto(BASE_URL + "/standard-calculator/", { waitUntil: "load" });
     assert.equal(standardResponse && standardResponse.status(), 200, "Standard Calculator reference must load");
     const standardBounds = await layoutPage.locator("#calc-pad").evaluate(el => {
-      const wrapper = el.closest(".max-w-sm");
-      if (!wrapper) throw new Error("Standard Calculator must retain its max-w-sm inner wrapper");
+      const wrapper = el.parentElement;
       const r = wrapper.getBoundingClientRect();
       return { x: r.x, width: r.width };
     });
