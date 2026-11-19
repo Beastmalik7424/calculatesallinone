@@ -54,9 +54,9 @@ let browser;
   assert.equal(await page.locator("#zakat-form button:visible, #zakat-form input:visible, #zakat-form select:visible").first().getAttribute("id"), "z-currency",
     "The first visible form control must be the currency input, not an introductory hero button");
   assert.ok(await page.locator("#zakat-submit").evaluate(el => {
-    const currency = document.querySelector("#z-currency");
-    return !!currency && !!(currency.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
-  }), "Calculate Zakat must follow the entry fields instead of appearing before them");
+    const lastRequiredPrice = document.querySelector("#z-goldprice");
+    return !!lastRequiredPrice && !!(lastRequiredPrice.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
+  }), "Calculate Zakat must follow all asset, liability, method and metal-price fields");
   assert.equal(await page.locator("#z-stock").getAttribute("autocomplete"), "off",
     "Financial trade-stock values must not be browser-autofilled");
   const englishAmountInputs = page.locator("#zakat-form input[type=number]");
