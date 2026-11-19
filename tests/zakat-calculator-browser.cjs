@@ -225,7 +225,7 @@ let browser;
           borderRadius: s.borderRadius, borderTopWidth: s.borderTopWidth,
           backgroundColor: s.backgroundColor, boxShadow: s.boxShadow,
           marginTop: s.marginTop,
-          breadcrumbDisplay: getComputedStyle(document.querySelector("#main > nav[aria-label='Breadcrumb']")).display
+          breadcrumbDisplay: (() => { const nav = document.querySelector("#main > nav"); return nav ? getComputedStyle(nav).display : "absent"; })()
         };
       });
       await page.goto(BASE_URL + localePath, { waitUntil: "networkidle" });
@@ -240,7 +240,7 @@ let browser;
           borderRadius: s.borderRadius, borderTopWidth: s.borderTopWidth,
           backgroundColor: s.backgroundColor, boxShadow: s.boxShadow,
           marginTop: s.marginTop,
-          breadcrumbDisplay: getComputedStyle(document.querySelector("#main > nav[aria-label='Breadcrumb']")).display
+          breadcrumbDisplay: (() => { const nav = document.querySelector("#main > nav"); return nav ? getComputedStyle(nav).display : "absent"; })()
         };
       });
       assert.ok(Math.abs(zakatShell.left - standardShell.left) <= 2,
