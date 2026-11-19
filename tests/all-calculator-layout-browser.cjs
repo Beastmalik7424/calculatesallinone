@@ -174,7 +174,7 @@ function rect(element) {
               visible(element) && primaryRects[index].top >= -1 && primaryRects[index].bottom <= innerHeight - 1
             ) && zakatPrimary.getBoundingClientRect().bottom <= innerHeight - 1;
             const advancedDetails = zakatForm ? Array.from(zakatForm.querySelectorAll("details")) : [];
-            const secondaryIds = ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl","z-metal-price-unit","z-silverprice","z-goldprice","z-jafari-owner","z-jafari-trade-value","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jafari-coins-used-as-money","z-jafari-gold-coins-weight","z-jafari-silver-coins-weight"];
+            const secondaryIds = ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl","z-metal-price-unit","z-silverprice","z-goldprice","z-jafari-owner","z-jafari-trade-value","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jafari-coins-used-as-money","z-jafari-gold-coins-weight","z-jafari-silver-coins-weight","z-jafari-gold-coins-hawl","z-jafari-silver-coins-hawl","z-jafari-coins-access"];
             const zakatSecondaryOutsideDetails = zakatForm ? secondaryIds.filter(id => {
               const element = zakatForm.querySelector("#" + id);
               return element && !element.closest("details");
@@ -208,6 +208,7 @@ function rect(element) {
               zakatAdvancedAllClosed: advancedDetails.length > 0 && advancedDetails.every(details => !details.open),
               zakatSecondaryOutsideDetails,
               zakatPrimaryTouchTargets,
+              zakatOuterCardUsesStandardShell: !!root && ["ca-tool-standard-calculator","mt-2","rounded-2xl","shadow-xl","ring-1","p-3","sm:p-4"].every(name => root.classList.contains(name)),
               zakatOuterCardStyle: rootStyle ? {
                 padding: rootStyle.padding,
                 borderRadius: rootStyle.borderRadius,
@@ -281,6 +282,7 @@ function rect(element) {
           if (route.name.startsWith("zakat-") && metrics.zakatSecondaryOutsideDetails.length) failures.push({ route: route.path, viewport: viewport.name, issue: "Secondary Zakat fields must remain inside the expandable details section", fields: metrics.zakatSecondaryOutsideDetails, metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatPrimaryTouchTargets.some(size => size < 44)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary controls must retain 44px minimum touch targets", metrics });
           if (route.name.startsWith("zakat-") && (!metrics.zakatOuterCardStyle || !metrics.rootRect || !metrics.rootRect.width)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat Standard Calculator card geometry must be measurable", metrics });
+          if (route.name.startsWith("zakat-") && !metrics.zakatOuterCardUsesStandardShell) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat outer card must reuse the Standard Calculator shell classes", metrics });
 
           if (route.name.startsWith("zakat-") && metrics.shortLabelFailures.length) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more shortcut labels are not visibly rendered", labels: metrics.shortLabelFailures, metrics });
           if (!metrics.rootFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing calculator container " + route.root });
