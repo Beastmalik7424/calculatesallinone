@@ -57,7 +57,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 
 ## Other tools
 
-- [Query Calculator](https://calculateallinone.vercel.app/query-calculator/): Supported natural-language arithmetic and time-conversion questions. It does not answer arbitrary questions.
+- [Time & Date Query Calculator](https://calculateallinone.vercel.app/query-calculator/): Defined plain-language time-unit conversions, mean Gregorian year and average-month estimates, Gregorian birth-date age, simple addition/subtraction, and a fixed Pakistan Independence Day lookup. Unsupported questions are rejected rather than guessed.
 - [Tasbih Counter](https://calculateallinone.vercel.app/tasbih-counter/): Browser-based count, undo, reset and target controls.
 
 ## Urdu tools

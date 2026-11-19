@@ -97,7 +97,7 @@ assert 420 <= len(about_words) <= 700, f"About page should provide concise, subs
 assert about_html.count("<h1") == 1, "About page must have exactly one H1"
 about_headings = ["Who maintains CalculatesAll?", "What calculators and tools are available?", "How are calculator methods and changes checked?", "What happens to calculator inputs?", "What are the limits of these tools?", "How can a calculation issue be reported?"]
 assert all(heading in about_html for heading in about_headings), "About page should have distinct, question-led sections that answer reader questions"
-assert "The Query Calculator accepts supported plain-language time-conversion questions" in about_html, "About page should describe the Query Calculator accurately and state its scope"
+assert "The Query Calculator accepts defined plain-language time and date conversions" in about_html and "rejects unsupported questions instead of guessing" in about_html, "About page should describe the Query Calculator accurately and state its scope"
 assert about_html.index("Who maintains CalculatesAll?") < about_html.index("What calculators and tools are available?") < about_html.index("How are calculator methods and changes checked?") < about_html.index("What happens to calculator inputs?") < about_html.index("What are the limits of these tools?") < about_html.index("How can a calculation issue be reported?"), "About sections should follow a clear reader-first sequence"
 for href in ("/profit-loss-calculator/", "/discount-calculator/", "/emi-calculator/", "/age-calculator/", "/years-to-days-calculator/", "/query-calculator/", "/unit-converter/", "/bmi-calculator/", "/zakat-calculator/", "/percentage-difference-calculator/", "/methodology/", "/editorial-policy/", "/privacy/", "/contact/", "/money/", "/math/", "/time/", "/health/", "/worship/"):
     assert 'href="' + href + '"' in about_html, f"About page should link to the relevant site resource: {href}"
@@ -339,7 +339,7 @@ for url in urls:
 # Keep titles specific to each calculator's actual job, without promising unsupported features.
 EXPECTED_INTENT_TITLES = {
     "/zakat-calculator/": "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab",
-    "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
+    "/query-calculator/": "Time & Date Query Calculator | CalculatesAll",
     "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
     "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
     "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
@@ -367,7 +367,7 @@ for attr, name in (("property", "og:description"), ("name", "twitter:description
 
 query_page = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
 assert "115 months in years and days" in query_page, "Query Calculator should show the month conversion example"
-assert "Pakistan's Independence Day" in query_page and "14 August 1947" in query_page, "Query Calculator should explain the supported Pakistan date lookup"
+assert "Pakistan independence date query" in query_page and "14 August 1947" in query_page, "Query Calculator should explain the supported Pakistan date lookup"
 assert "exact calendar days require a start date" in query_page, "Month-to-day estimates must disclose the calendar limitation"
 
 # Important calculator controls need stable form names for native form semantics and progressive fallback.
@@ -730,6 +730,10 @@ for url in urls:
             elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
                 assert item.get("dateModified") == "2026-11-16", (
                     "Zakat dateModified must match the verified Hanafi/Sistani, gram/tola, source and bilingual content update."
+                )
+            elif url == SITE + "/query-calculator/":
+                assert item.get("dateModified") == "2026-11-19", (
+                    "Query Calculator dateModified must match the verified Gregorian conversion method, supported-query scope and source update."
                 )
             else:
                 assert "dateModified" not in item, (
@@ -1283,3 +1287,9 @@ for _phrase in ("Illustrative small-shop Nisab comparison", "PKR 650,000",
                 "not a live market quote",
                 "do not choose a Nisab method based on which result is lower"):
     assert _phrase.lower() in _zakat_2026.lower(), "Zakat worked Nisab comparison missing: " + _phrase
+
+
+# Query Calculator must not contradict its mean Gregorian year conversion method.
+_query_calculator_html = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
+assert "this calculator uses the mean Gregorian year of 365.2425 days" in _query_calculator_html, "Query Calculator must disclose the mean Gregorian year used by its year conversions"
+assert "Questions about years use 365 days per year in this calculator." not in _query_calculator_html, "Outdated 365-day claim conflicts with the Query Calculator's mean Gregorian year method"

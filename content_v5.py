@@ -154,7 +154,7 @@ GUIDE_EXTRA["query-calculator"] = [
     ]),
     ("Checking an answer by hand", [
         "Divide the answer by each factor used in the question, in reverse order. For 4,320 minutes, dividing by 60 gives 72 hours, and dividing by 24 gives 3 days. This check confirms the unit chain and the arithmetic, using the same fixed factors the calculator uses.",
-        "Questions about years use 365 days per year in this calculator. A birth-date question counts exact Gregorian calendar days between the two dates you enter, so the two methods can differ by a few days over long periods.",
+        "Questions about years use the mean Gregorian year of 365.2425 days per year for fixed-unit conversions in this calculator. A birth-date question counts exact Gregorian calendar days between the two dates you enter, so the two methods can differ over long periods.",
     ]),
 ]
 GUIDE_EXTRA["stopwatch"].append(

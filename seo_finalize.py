@@ -22,6 +22,7 @@ DESCRIPTION_FALLBACKS = {
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
     "/tasbih-counter/": "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and keep progress in this browser when storage is available.",
+    "/query-calculator/": "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
     "/ur/zakat-calculator/": "نقد رقم، سونا، بچت اور سرمایہ کاری پر حنفی زکوٰۃ کا تخمینہ لگائیں، یا سید سیستانی کے محدود جعفری تجارتی مال کا حساب دیکھیں۔ دھاتوں کی قیمت خود درج کریں۔",
@@ -47,6 +48,7 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/unit-converter/": "2026-11-14",
     # This date records the verified Tasbih target-persistence, storage-disclosure and content-restructure update.
     "/tasbih-counter/": "2026-11-15",
+    "/query-calculator/": "2026-11-19",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
@@ -174,7 +176,7 @@ def normalize_meta(raw, path, lang):
         "/about/": "About CalculatesAll | Project, Methods & Privacy",
         "/zakat-calculator/": "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab",
         "/ur/zakat-calculator/": "آن لائن زکوٰۃ کیلکولیٹر | حنفی اور سیستانی جعفری نصاب",
-        "/query-calculator/": "Query Calculator: Time, Dates & Math | CalculatesAll",
+        "/query-calculator/": "Time & Date Query Calculator | CalculatesAll",
         "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
         "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
         "/compound-interest-calculator/": "Compound Interest Calculator Online | CalculatesAll",
@@ -210,7 +212,7 @@ def normalize_meta(raw, path, lang):
     "/contact/": "Contact CalculatesAll to report a calculator error, accessibility issue or translation problem. Include the page URL, inputs and expected result for review.",
     "/date-calculator/": "Compare dates with elapsed or inclusive day counts, calendar years, months and days, and decimal weeks. Gregorian leap-year and month-end rules are explained.",
     "/discount-calculator/": "Calculate your discount amount, final sale price and total savings from the original price and discount percentage. See the formula and a worked example.",
-    "/query-calculator/": "Ask in English, Roman Urdu and six other languages about time, months, birth dates and simple arithmetic. Includes the Pakistan Independence Day date.",
+    "/query-calculator/": "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits.",
     "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",
     "/stopwatch/": "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app.",
     "/years-to-days-calculator/": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",

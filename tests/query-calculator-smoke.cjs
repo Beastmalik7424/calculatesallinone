@@ -9,7 +9,7 @@ assert.match(html, /id="qt-result"/);
 assert.ok(html.includes("/assets/app.js?v="), "versioned JS asset missing");
 const listeners = {};
 const form = {addEventListener: (name, fn) => {listeners["form:" + name] = fn;}};
-const input = {value:"Ager birth date 29-02-1984 ho to age kitne days hogi?",addEventListener:(name, fn) => {listeners["input:" + name] = fn;}};
+const input = {value:"DOB 29-02-1984 age in days",addEventListener:(name, fn) => {listeners["input:" + name] = fn;}};
 const result = {textContent:""};
 const nodes = {"query-time-form":form,"qt-question":input,"qt-result":result};
 const document = {
@@ -35,6 +35,9 @@ input.value = "DOB 29-07-1984 age in months and days";
 listeners["form:submit"]({preventDefault(){}});
 assert.match(result.textContent,/15,429|15429/, "29 July 1984 to 26 October 2026 must be 15,429 days");
 assert.match(result.textContent,/42 years, 2 months, 27 days/, "DOB should report calendar years, months and days");
+input.value = "DOB 29 February 1984 age in days";
+listeners["form:submit"]({preventDefault(){}});
+assert.match(result.textContent,/Birth date: 29-02-1984/, "English month-name leap-day DOB must be parsed as 29 February 1984");
 const monthCases = [
  ["115 months in years and days",/9 years and 7 months.*3,500\.24 days/],
  ["115 mahine in years and days",/9 years and 7 months.*3,500\.24 days/],
@@ -105,6 +108,15 @@ for (const [q, expected] of yearDayQueries) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+const meanYearCases = [
+ ["80 years to days", /80 years ≈ 29,219\.4 days/],
+ ["1 year in hours", /1 year = 8,765\.82 hours.*mean Gregorian year of 365\.2425 days/]
+];
+for (const [q, expected] of meanYearCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
 
 const multiUnitCases = [
  ["34 years in days months and weeks", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],

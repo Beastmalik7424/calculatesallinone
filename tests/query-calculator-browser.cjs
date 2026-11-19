@@ -18,6 +18,8 @@ const { chromium } = require("playwright");
     assert.equal(await result.count(), 1);
 
     const inputCases = [
+      ["80 years to days", /80 years ≈ 29,219\.4 days/i],
+      ["1 year in hours", /1 year = 8,765\.82 hours.*mean Gregorian year of 365\.2425 days/i],
       ["34 years in days months and weeks", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
       ["thirty four years in days months and weeks", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
       ["34 months in days and weeks", /34 months = 1,034\.85 days.*147\.84 weeks/i],

@@ -1801,7 +1801,7 @@
   function initQueryTime () {
     var form = $("query-time-form")
     if (!form) return
-    var factors = { year: 365 * 86400, month: (365.2425 / 12) * 86400, day: 86400, week: 604800,
+    var factors = { year: 365.2425 * 86400, month: (365.2425 / 12) * 86400, day: 86400, week: 604800,
       hour: 3600, minute: 60, second: 1 }
     var aliases = { years: "year", year: "year", saal: "year", sal: "year",
       months: "month", month: "month", mahine: "month", mahinay: "month", mahina: "month", maheene: "month",
@@ -1922,7 +1922,11 @@
       var leapBirthday = /(?:29[ -]?(?:feb|february)|(?:feb|february)[ -]?29|29[ -]?(?:farwari|februari))/.test(question)
       var birthdayCountQuestion = /(?:birthday|birthdays|saalgirah|salgirah|bar|baar|times|kitni dafa)/.test(question)
       if (leapBirthday && dateMatch) {
-        var febDate = /(?:29[-/]0?2[-/]|[-/]0?2[-/]29)/.test(dateMatch[0])
+        // dateMatch is normalized to [full match, first, second, third].
+        // Named dates are normalized to DD-MM-YYYY, while ISO dates remain YYYY-MM-DD.
+        var febDate = dateMatch[1].length === 4
+          ? Number(dateMatch[2]) === 2 && Number(dateMatch[3]) === 29
+          : Number(dateMatch[1]) === 29 && Number(dateMatch[2]) === 2
         if (!febDate) {
           say("qt-result", "Your question mentions 29 February but the supplied date is different. Please confirm the correct date of birth, for example 29-02-1984 or 29-07-1984.")
           return
@@ -2292,9 +2296,11 @@
       }
       var sourceLabel = source + (value === 1 ? "" : "s")
       var targetLabel = target + (result === 1 ? "" : "s")
+      var methodNote = source === "year" || target === "year"
+        ? ". Uses the mean Gregorian year of 365.2425 days."
+        : ". Uses fixed unit conversion factors."
       say("qt-result", timeConversionFormat(value) + " " + sourceLabel +
-        " = " + timeConversionFormat(result) + " " + targetLabel +
-        ". Uses 365 days per year.")
+        " = " + timeConversionFormat(result) + " " + targetLabel + methodNote)
     }
     form.addEventListener("submit", calculateQuery)
     $("qt-question").addEventListener("change", calculateQuery)

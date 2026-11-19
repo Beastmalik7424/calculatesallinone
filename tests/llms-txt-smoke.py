@@ -31,7 +31,7 @@ assert difference_url in listed, "llms.txt must describe the percentage differen
 ratio_url = SITE + "/ratio-calculator/"
 assert ratio_url in sitemap_urls, "Ratio calculator must be indexable in the sitemap"
 assert ratio_url in listed, "llms.txt must describe the ratio calculator"
-assert "does not answer arbitrary questions" in llms
+assert "Unsupported questions are rejected rather than guessed." in llms, "llms.txt must accurately state that the Query Calculator rejects unsupported questions"
 assert "not a diagnosis" in llms
 assert "not a religious ruling" in llms
 assert "source references" in llms
