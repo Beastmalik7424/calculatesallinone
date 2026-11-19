@@ -167,6 +167,8 @@ assert.ok(!ur.includes("islamweb.net/en/fatwa/81355"), "Urdu page must not cite 
 const zakatCss = fs.readFileSync(path.join(__dirname, "..", "styles", "input.css"), "utf8");
 assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \.zakat-section \.grid\s*\{\s*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)\s*!important;/,
   "Zakat asset steps must use a compact two-column field grid on mobile");
+assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \[data-zakat-step="setup"\] \.grid\s*\{\s*grid-template-columns:\s*minmax\(0, 1fr\)\s*!important;/,
+  "Zakat currency and method setup fields must stack at full width on mobile");
 assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form :is\(input:not\(\[type="checkbox"\]\), select, textarea\)\s*\{\s*min-height:\s*44px\s*!important;/,
   "Zakat form controls must retain accessible 44px minimum height");
 
