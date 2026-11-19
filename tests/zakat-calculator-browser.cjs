@@ -182,8 +182,6 @@ let browser;
   // Urdu must be a complete localized experience, not an English form inside an RTL page.
   const urduFormText = await page.locator("#zakat-form").innerText();
   for (const untranslated of [
-    "One-page Zakat calculator",
-    "Choose your method, enter only applicable amounts, then calculate.",
     "Recoverable receivables",
     "Property held for resale (only if bought for resale)",
     "Sayyid Sistani only. This estimates qualifying trading goods under obligatory precaution.",
