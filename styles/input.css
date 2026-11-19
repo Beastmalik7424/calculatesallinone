@@ -2434,3 +2434,76 @@ html[dir="rtl"] body:has(#zakat-form) #zakat-form select {
   direction: rtl;
   text-align: right;
 }
+
+
+/* Zakat calculator: use the Standard Calculator's full-width soft-teal visual system. */
+body:has(#main .ca-tool-zakat-calculator) #main {
+  background: transparent !important;
+  color: #164e48 !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) #main {
+  background: transparent !important;
+  color: #e3f4f0 !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #main > h1 {
+  color: #164e48 !important;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+html.dark body:has(#main .ca-tool-zakat-calculator) #main > h1 {
+  color: #e3f4f0 !important;
+}
+#main .ca-tool-zakat-calculator {
+  width: 100%;
+  max-width: none;
+  background: #ffffff !important;
+  border-color: #cfe4e0 !important;
+  box-shadow: 0 12px 30px rgba(22, 78, 72, .07) !important;
+}
+html.dark #main .ca-tool-zakat-calculator {
+  background: #18332f !important;
+  border-color: #315a54 !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .18) !important;
+}
+#main .ca-tool-zakat-calculator #zakat-form {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+#main .ca-tool-zakat-calculator #zakat-form :is(input:not([type="checkbox"]), select, textarea) {
+  background: #f8fcfb !important;
+  border-color: #cfe4e0 !important;
+  color: #164e48 !important;
+  border-radius: .7rem !important;
+}
+html.dark #main .ca-tool-zakat-calculator #zakat-form :is(input:not([type="checkbox"]), select, textarea) {
+  background: #142c28 !important;
+  border-color: #315a54 !important;
+  color: #e3f4f0 !important;
+}
+#main .ca-tool-zakat-calculator #zakat-form label:not(.flex),
+#main .ca-tool-zakat-calculator #zakat-form .zakat-section h2 {
+  color: #164e48 !important;
+}
+html.dark #main .ca-tool-zakat-calculator #zakat-form label:not(.flex),
+html.dark #main .ca-tool-zakat-calculator #zakat-form .zakat-section h2 {
+  color: #e3f4f0 !important;
+}
+#main .ca-tool-zakat-calculator #zakat-form button {
+  background: #0f766e !important;
+  border-color: #0f766e !important;
+  color: #ffffff !important;
+}
+#main .ca-tool-zakat-calculator #zakat-form button:hover {
+  background: #0f5f57 !important;
+  border-color: #0f5f57 !important;
+}
+html.dark #main .ca-tool-zakat-calculator #zakat-form button {
+  background: #155e57 !important;
+  border-color: #155e57 !important;
+  color: #ffffff !important;
+}
+@media (max-width: 600px) {
+  #main .ca-tool-zakat-calculator { padding: .5rem !important; }
+  #main .ca-tool-zakat-calculator #zakat-form { gap: .5rem !important; }
+}
