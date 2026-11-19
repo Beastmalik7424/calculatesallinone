@@ -35,6 +35,21 @@ let browser;
     assert.ok(Math.abs(zakatBounds.x - standardBounds.x) <= 2,
       "Zakat form must share Standard Calculator's horizontal position at " + viewport.width + "px");
   }
+    const zakatFormStyle = await layoutPage.locator("#zakat-form").evaluate(el => {
+      const r = el.getBoundingClientRect();
+      const shell = document.querySelector("#tool-calculator").getBoundingClientRect();
+      const submit = getComputedStyle(document.querySelector("#zakat-submit"));
+      return {
+        formWidth: r.width,
+        shellInnerWidth: shell.width - parseFloat(getComputedStyle(document.querySelector("#tool-calculator")).paddingLeft) - parseFloat(getComputedStyle(document.querySelector("#tool-calculator")).paddingRight),
+        submitBackground: submit.backgroundColor,
+        introCard: [...el.querySelectorAll("h2")].some(h => h.textContent.trim() === "One-page Zakat calculator")
+      };
+    });
+    assert.equal(zakatFormStyle.introCard, false,
+      "Zakat must not show a separate introductory card inside the calculator shell");
+    assert.equal(zakatFormStyle.submitBackground, "rgb(15, 118, 110)",
+      "Zakat primary action must use the Standard Calculator teal action color");
   await layoutPage.close();
 
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
