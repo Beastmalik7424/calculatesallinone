@@ -36,7 +36,7 @@ STATIC = "static"
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
 I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 B = "bg-gradient-to-r from-sky-700 to-indigo-700 hover:from-sky-800 hover:to-indigo-800 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
-B_ZAKAT = "bg-sky-700 hover:bg-sky-800 dark:bg-indigo-700 dark:hover:bg-indigo-800 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
+B_ZAKAT = "bg-teal-700 hover:bg-teal-800 dark:bg-teal-700 dark:hover:bg-teal-600 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
 S = "border border-stone-500 dark:border-stone-400 text-stone-900 dark:text-stone-100 text-base font-medium px-5 py-3 rounded-lg min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 R = "mt-6 rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5 text-base leading-relaxed min-h-[3rem]"
 H2 = "text-2xl font-bold text-indigo-800 dark:text-indigo-200 mt-12"
@@ -146,7 +146,7 @@ TOOLS = [
             '<form id="zakat-form" class="max-w-xl mx-auto space-y-3" novalidate>'
             + result("zakat-result", True)
             + '<div class="zakat-section space-y-3" data-zakat-step="setup">'
-            + '<p id="zakat-hanafi-setup-note" class="rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-800 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
+            + '<p id="zakat-hanafi-setup-note" class="text-sm leading-snug text-stone-700 dark:text-stone-300">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
             + '<div class="grid sm:grid-cols-2 gap-4">'
             + '<div><label class="@L@" for="z-currency">Currency code (ISO 4217)</label>'
             + '<input id="z-currency" name="z-currency" class="@I@" type="text" value="PKR" maxlength="3" minlength="3" pattern="[A-Za-z]{3}" autocapitalize="characters" autocomplete="off" spellcheck="false">'
