@@ -158,6 +158,7 @@ TOOLS = [
             + '</select>'
             + '<p class="mt-1 text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p></div>'
             + '</div></div>'
+            + '<button id="zakat-submit" type="submit" class="@B@ w-full">Calculate Zakat</button>'
             + '<div id="z-sunni-fields" class="zakat-section space-y-3" data-zakat-step="nisab">'
             + '<div><label class="@L@" for="z-nisab-method">Nisab method</label>'
             + '<select id="z-nisab-method" name="z-nisab-method" class="@I@">'
@@ -265,7 +266,7 @@ TOOLS = [
             + '</div>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Prices are converted to per-gram rates before Nisab is calculated. This is an estimate, not a fatwa.</p>'
             + '</div>'
-            + '<button id="zakat-submit" type="submit" class="@B@ w-full">Calculate Zakat</button>'
+            + '<button id="zakat-submit-bottom" type="submit" class="@B@ w-full">Calculate Zakat</button>'
             + '</form>'
         ),
         "guide": [
