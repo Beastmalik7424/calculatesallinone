@@ -974,9 +974,14 @@ for slug in calculator_slugs:
     calc_pos = urdu_html.find('<section id="tool-calculator"')
     h1_pos = urdu_html.find("<h1")
     lead_pos = urdu_html.find("<p", h1_pos) if h1_pos >= 0 else -1
-    assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
-        f"Urdu calculator must follow the heading and short lead: /ur/{slug}/"
-    )
+    if slug == "zakat-calculator":
+        assert h1_pos >= 0 and calc_pos > h1_pos and lead_pos > calc_pos, (
+            "Urdu Zakat must use Standard Calculator order: heading, calculator, then lead"
+        )
+    else:
+        assert h1_pos >= 0 and lead_pos > h1_pos and calc_pos > lead_pos, (
+            f"Urdu calculator must follow the heading and short lead: /ur/{slug}/"
+        )
     assert calc_pos < urdu_html.find("<h2"), f"Urdu calculator must appear before guide content: /ur/{slug}/"
     assert re.search(r'<main id="main" class="[^"]*ca-tool-main[^"]*">', urdu_html), (
         f"Urdu tool page must use the compact calculator-first main layout: /ur/{slug}/"
