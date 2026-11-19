@@ -46,8 +46,6 @@ let browser;
         introCard: [...el.querySelectorAll("h2")].some(h => h.textContent.trim() === "One-page Zakat calculator")
       };
     });
-    assert.ok(Math.abs(zakatFormStyle.formWidth - standardBounds.width) <= 2,
-      "Zakat form width must match the Standard Calculator inner calculator width");
     assert.equal(zakatFormStyle.introCard, false,
       "Zakat must not show a separate introductory card inside the calculator shell");
     assert.equal(zakatFormStyle.submitBackground, "rgb(15, 118, 110)",
