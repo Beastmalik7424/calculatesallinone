@@ -2456,14 +2456,6 @@ html.dark body:has(#main .ca-tool-zakat-calculator) #main > h1 {
 #main .ca-tool-zakat-calculator {
   width: 100%;
   max-width: none;
-  background: #ffffff !important;
-  border-color: #cfe4e0 !important;
-  box-shadow: 0 12px 30px rgba(22, 78, 72, .07) !important;
-}
-html.dark #main .ca-tool-zakat-calculator {
-  background: #18332f !important;
-  border-color: #315a54 !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, .18) !important;
 }
 #main .ca-tool-zakat-calculator #zakat-form {
   width: 100% !important;
