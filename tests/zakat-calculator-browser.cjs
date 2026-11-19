@@ -331,7 +331,7 @@ let browser;
 
   assert.deepEqual(pageErrors, [], "Zakat browser page must not produce uncaught JavaScript errors");
   assert.deepEqual(consoleErrors, [], "Zakat browser page must not produce console errors");
-  console.log("Zakat browser: PASS (single-page Hanafi and Sistani flows, both locales, 4 responsive widths, no console errors)");
+  console.log("Zakat browser: PASS (single-page Hanafi and Sistani flows, both locales, 6 responsive widths, no console errors)");
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;
