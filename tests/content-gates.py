@@ -95,6 +95,17 @@ def main():
                 failures.append(f"/{slug}/ is missing worked example: {phrase}")
         if "OWNER TO PROVIDE" in text or "REQUIRES OWNER OR COUNSEL REVIEW" in text:
             failures.append(f"/{slug}/ contains an unresolved legal placeholder")
+    # Regression: the generated Query Calculator meta description must match its supported scope.
+    query_path = ROOT / "query-calculator" / "index.html"
+    if not query_path.is_file():
+        failures.append("/query-calculator/ was not generated for the meta-description check")
+    else:
+        query_html = query_path.read_text(encoding="utf-8")
+        meta_match = re.search(r'<meta name="description" content="([^"]*)"', query_html)
+        expected_description = "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits."
+        actual_description = html.unescape(meta_match.group(1)) if meta_match else ""
+        if actual_description != expected_description:
+            failures.append("/query-calculator/ meta description does not match its supported intent")
     home_path = ROOT / "index.html"
     if not home_path.is_file():
         failures.append("Homepage / was not generated")
