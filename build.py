@@ -2278,12 +2278,14 @@ def urdu_tool_page(t):
         for p in u["how"]:
             how += '<p class="' + P + '">' + p + "</p>"
     faq = faq_html(u["faq"])
-    if t["slug"] in {"standard-calculator", "zakat-calculator"}:
-        calculator_classes = "ca-tool-standard-calculator"
-        if t["slug"] == "zakat-calculator":
-            calculator_classes += " ca-tool-zakat-calculator"
+    if t["slug"] == "zakat-calculator":
         calculator_section = (
-            '<section id="tool-calculator" class="' + calculator_classes + ' mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="کیلکولیٹر">'
+            '<section id="tool-calculator" class="ca-tool-standard-calculator ca-tool-zakat-calculator mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="کیلکولیٹر">'
+            + ui + '</section>'
+        )
+    elif t["slug"] == "standard-calculator":
+        calculator_section = (
+            '<section id="tool-calculator" class="ca-tool-standard-calculator mt-4" aria-label="کیلکولیٹر">'
             + ui + '</section>'
         )
     else:
