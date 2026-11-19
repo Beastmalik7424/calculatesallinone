@@ -2377,6 +2377,14 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty + button[data-shar
   body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group[data-tool-set="duplicate"] { display: none !important; }
 }
 
+/* Match the Standard Calculator's 20px mobile page gutters. */
+@media (max-width: 640px) {
+  body:has(#main .ca-tool-zakat-calculator) #main.ca-tool-main {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+}
+
 /* Preserve Zakat contrast surfaces without changing Standard Calculator geometry. */
 body:has(#main .ca-tool-zakat-calculator) #main {
   background-color: #ffffff !important;
