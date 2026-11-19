@@ -50,7 +50,13 @@ let browser;
   assert.equal(await page.locator("#zakat-form").count(), 1, "Single Zakat form must be present");
   assert.equal(await page.locator("#zakat-next, #zakat-back, #zakat-step-progress").count(), 0,
     "Single-page calculator must not expose Next/Back wizard controls or step progress");
-  assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Calculate action must be visible at the top of the form");
+  assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Calculate action must be visible in the form");
+  assert.equal(await page.locator("#zakat-form button:visible, #zakat-form input:visible, #zakat-form select:visible").first().getAttribute("id"), "z-currency",
+    "The first visible form control must be the currency input, not an introductory hero button");
+  assert.ok(await page.locator("#zakat-submit").evaluate(el => {
+    const currency = document.querySelector("#z-currency");
+    return !!currency && !!(currency.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
+  }), "Calculate Zakat must follow the entry fields instead of appearing before them");
   assert.equal(await page.locator("#z-stock").getAttribute("autocomplete"), "off",
     "Financial trade-stock values must not be browser-autofilled");
   const englishAmountInputs = page.locator("#zakat-form input[type=number]");
