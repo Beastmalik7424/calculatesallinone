@@ -2562,7 +2562,7 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
 
 /* Match the Standard Calculator's compact title height on short desktop viewports. */
 @media (min-width: 601px) and (max-height: 850px) {
-  #main:has(.ca-tool-zakat-calculator) > h1 {
+  #main.ca-tool-main > h1.ca-tool-zakat-heading {
     margin-top: 4px !important;
     font-size: 24px !important;
     line-height: 1.1 !important;
