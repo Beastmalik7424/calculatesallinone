@@ -2232,6 +2232,8 @@ def urdu_tool_page(t):
             ui = ui.replace(en, ur)
     if t["slug"] == "standard-calculator":
         ui = ui.replace('>Scientific Mode</button>', '>سائنسی کیلکولیٹر</button>')
+    if t["slug"] == "zakat-calculator":
+        ui = ui.replace(">Additional assets, metal prices and conditions<", ">اضافی اثاثے، دھاتوں کی قیمتیں اور شرائط<")
     if t["slug"] == "profit-loss-calculator":
         ui = ui.replace("> Business P&amp;L</label>", "> کاروبار کا نفع و نقصان</label>")
         ui = ui.replace("> Product profit</label>", "> پروڈکٹ کا نفع</label>")
