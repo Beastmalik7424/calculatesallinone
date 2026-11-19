@@ -202,6 +202,14 @@ let browser;
   assert.equal(await page.locator("#zakat-next, #zakat-back, #zakat-step-progress").count(), 0,
     "Urdu calculator must not expose wizard navigation");
   assert.equal(await page.locator("#zakat-submit").isVisible(), true);
+  assert.equal(await page.locator("#zakat-result").isVisible(), true,
+    "Urdu result panel must be visible on first paint");
+  const urduAdvanced = page.locator("#zakat-form details").first();
+  assert.equal(await urduAdvanced.evaluate(el => el.open), false,
+    "Urdu secondary fields must also start collapsed");
+  await urduAdvanced.locator("summary").click();
+  assert.equal(await urduAdvanced.evaluate(el => el.open), true,
+    "Urdu secondary fields must expand with one click");
 
   const urAmountInputs = page.locator("#zakat-form input[type=number]");
   assert.ok(await urAmountInputs.count() >= 10, "Expected all Urdu Zakat amount inputs");
