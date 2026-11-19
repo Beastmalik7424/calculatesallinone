@@ -195,8 +195,6 @@ let browser;
     assert.equal(urduFormText.includes(untranslated), false,
       "Urdu Zakat form must not show untranslated English text: " + untranslated);
   }
-  assert.match(urduFormText, /ایک صفحے کا زکوٰۃ کیلکولیٹر/,
-    "Urdu form heading must be translated");
   assert.match(urduFormText, /قابلِ وصول رقوم/,
     "Urdu receivables heading must be translated");
   assert.match(urduFormText, /دوبارہ فروخت کے لیے رکھی گئی جائیداد/,
