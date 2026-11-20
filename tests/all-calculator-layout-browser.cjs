@@ -203,6 +203,8 @@ function rect(element) {
               zakatWizardControls,
               zakatPrimaryFound: !!zakatPrimary,
               zakatPrimaryVisible: primaryVisible,
+              zakatPrimaryScrollY: scrollY,
+              zakatPrimaryElementRects: primaryRects.map(r => r ? { top: Math.round(r.top), bottom: Math.round(r.bottom) } : null),
               zakatResultVisible: visible(resultPanel),
               zakatAdvancedDetailsCount: advancedDetails.length,
               zakatAdvancedAllClosed: advancedDetails.length > 0 && advancedDetails.every(details => !details.open),
