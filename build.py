@@ -2325,7 +2325,7 @@ def urdu_tool_page(t):
         '<li><a class="' + LINK + '" href="/ur/">صفحہ اول</a></li><li aria-hidden="true">/</li>'
         '<li><a class="' + LINK + '" href="/' + cat["slug"] + '/">' + cat_ur + '</a></li><li aria-hidden="true">/</li>'
         '<li aria-current="page">' + u["name"] + '</li></ol></nav>'
-        '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4">' + u["h1"] + '</h1>'
+        '<h1 class="text-3xl font-semibold text-stone-900 dark:text-stone-100 mt-4' + (' ca-tool-zakat-heading' if t["slug"] == "zakat-calculator" else '') + '">' + u["h1"] + '</h1>'
     )
     _lead_class = "mt-2 text-base leading-5" if t["slug"] == "bmi-calculator" else "mt-3 text-lg"
     _urdu_lead = '<p class="' + _lead_class + ' text-stone-900 dark:text-stone-100">' + u["lead"] + '</p>'

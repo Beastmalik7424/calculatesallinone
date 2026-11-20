@@ -201,6 +201,12 @@ let browser;
   assert.equal(ur && ur.status(), 200, "Urdu Zakat page must return HTTP 200");
   assert.equal(await page.locator("html").getAttribute("lang"), "ur");
   assert.equal(await page.locator("html").getAttribute("dir"), "rtl");
+  assert.equal(await page.locator("#main > h1.ca-tool-zakat-heading").count(), 1,
+    "Urdu Zakat heading must use the same compact first-screen heading hook as English");
+  await page.setViewportSize({ width: 1366, height: 768 });
+  assert.ok(await page.locator("#main > h1.ca-tool-zakat-heading").evaluate(el => el.getBoundingClientRect().height <= 28),
+    "Urdu Zakat heading must stay on one compact line at 1366x768 like Standard Calculator");
+  await page.setViewportSize({ width: 390, height: 844 });
   assert.equal(await page.locator("#zakat-next, #zakat-back, #zakat-step-progress").count(), 0,
     "Urdu calculator must not expose wizard navigation");
   assert.equal(await page.locator("#zakat-submit").isVisible(), true);
