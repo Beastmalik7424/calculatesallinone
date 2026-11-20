@@ -16,6 +16,7 @@ assert _title == "Advanced Example Online Calculator | CalculatesAll", _title
 assert "<title>" + _title + "</title>" in _normalized
 assert '<meta property="og:description" content="' + _description + '">' in _normalized, "Open Graph description should match normalized metadata"
 
+import hashlib
 import html as html_lib
 import json
 import os
@@ -26,6 +27,14 @@ from pathlib import Path
 from urllib.parse import urlparse
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
+css_asset = ROOT / "assets" / "site.css"
+assert css_asset.is_file(), "Built site must include the deployed CSS asset"
+css_version = hashlib.sha256(css_asset.read_bytes()).hexdigest()[:16]
+for generated_page in ROOT.rglob("*.html"):
+    generated_html = generated_page.read_text(encoding="utf-8")
+    assert f'/assets/site.css?v={css_version}' in generated_html, (
+        f"{generated_page} must reference the content-hash version of the CSS actually deployed"
+    )
 xml = ET.parse(ROOT / "sitemap.xml").getroot()
 ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.find("sm:loc", ns).text for node in xml.findall("sm:url", ns)]
