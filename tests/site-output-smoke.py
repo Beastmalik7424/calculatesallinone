@@ -34,6 +34,11 @@ for generated_page in ROOT.rglob("*.html"):
     generated_html = generated_page.read_text(encoding="utf-8")
     if "<html" not in generated_html.lower():
         continue  # Plain verification files may use an .html suffix without being web pages.
+    if generated_page == ROOT / "emi-calculator" / "index.html" and '/assets/site.css' not in generated_html:
+        assert "<style>" in generated_html and "</style>" in generated_html, (
+            "The standalone EMI page must retain its own inline stylesheet when it does not load the shared CSS asset"
+        )
+        continue
     assert f'/assets/site.css?v={css_version}' in generated_html, (
         f"{generated_page} must reference the content-hash version of the CSS actually deployed"
     )
@@ -778,7 +783,7 @@ for selector in (
 assert "background-color:#0f766e!important" in site_css, "Operator button background must be explicitly high-contrast"
 assert "background-color:#0f172a!important" in site_css, "Equals button background must be explicitly high-contrast"
 homepage_html = (ROOT / "index.html").read_text(encoding="utf-8")
-assert "/assets/site.css?v=20261118-zakat-mobile-ticker-v6" in homepage_html, "Homepage must load the current calculator layout stylesheet"
+assert f"/assets/site.css?v={css_version}" in homepage_html, "Homepage must load the content-hash version of the calculator layout stylesheet"
 assert ".ca-home-layout{display:grid" in site_css, "Homepage calculator layout must use the responsive single-column grid"
 homepage_layout_rule_start = site_css.find("#main .ca-home-layout{")
 homepage_layout_rule_end = site_css.find("}", homepage_layout_rule_start)
