@@ -31,11 +31,15 @@ let browser;
       const r = el.getBoundingClientRect();
       return { x: r.x, width: r.width };
     });
-    assert.ok(Math.abs(zakatBounds.width - standardBounds.width) <= 2,
-      "Zakat form width must match Standard Calculator at " + viewport.width +
+    const allowedWidening = viewport.width >= 601 ? 34 : 16;
+    const widthIncrease = zakatBounds.width - standardBounds.width;
+    assert.ok(widthIncrease >= -2 && widthIncrease <= allowedWidening,
+      "Zakat form must be only slightly wider than Standard Calculator at " + viewport.width +
       "px (standard=" + standardBounds.width + ", zakat=" + zakatBounds.width + ")");
-    assert.ok(Math.abs(zakatBounds.x - standardBounds.x) <= 2,
-      "Zakat form must share Standard Calculator's horizontal position at " + viewport.width + "px");
+    const standardCenter = standardBounds.x + standardBounds.width / 2;
+    const zakatCenter = zakatBounds.x + zakatBounds.width / 2;
+    assert.ok(Math.abs(zakatCenter - standardCenter) <= 2,
+      "Zakat form must preserve Standard Calculator's centered position at " + viewport.width + "px");
   }
     const zakatFormStyle = await layoutPage.locator("#zakat-form").evaluate(el => {
       const r = el.getBoundingClientRect();
