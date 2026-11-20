@@ -2287,6 +2287,13 @@ body:has(#zakat-form) {
   overflow-x: clip;
 }
 
+/* Retain a single setup column only on extra-narrow screens where two controls would cramp labels. */
+@media (max-width: 359px) {
+  body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
 /* Keep long Hanafi-source and Urdu explanatory text wrapping inside narrow Zakat content. */
 body:has(#zakat-form) #main p,
 body:has(#zakat-form) #main p a {
@@ -2304,7 +2311,7 @@ body:has(#zakat-form) #main p a {
     gap: .5rem !important;
   }
   body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid {
-    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
   body:has(#zakat-form) #zakat-form .zakat-section h2 { font-size: .95rem !important; line-height: 1.25 !important; }
   body:has(#zakat-form) #zakat-form .zakat-section p { font-size: .82rem !important; line-height: 1.3 !important; }
@@ -2383,8 +2390,8 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty + button[data-shar
 /* Match the Standard Calculator's 20px mobile page gutters. */
 @media (max-width: 640px) {
   body:has(#main .ca-tool-zakat-calculator) #main.ca-tool-main {
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
 }
 
@@ -2459,7 +2466,7 @@ html.dark body:has(#main .ca-tool-zakat-calculator) #main > h1 {
 }
 #main .ca-tool-zakat-calculator #zakat-form {
   width: 100% !important;
-  max-width: 36rem !important;
+  max-width: 38rem !important;
   margin-inline: auto !important;
 }
 #main .ca-tool-zakat-calculator #zakat-form :is(input:not([type="checkbox"]), select, textarea) {
@@ -2496,7 +2503,7 @@ html.dark #main .ca-tool-zakat-calculator #zakat-form button {
   color: #ffffff !important;
 }
 @media (max-width: 600px) {
-  #main .ca-tool-zakat-calculator { padding: .5rem !important; }
+  #main .ca-tool-zakat-calculator { padding: .35rem !important; }
   #main .ca-tool-zakat-calculator #zakat-form { gap: .5rem !important; }
 }
 
@@ -2504,7 +2511,7 @@ html.dark #main .ca-tool-zakat-calculator #zakat-form button {
 /* Zakat first-screen structure. The outer card intentionally reuses the Standard Calculator skin. */
 #main .ca-tool-zakat-calculator #zakat-form {
   width: 100%;
-  max-width: 36rem;
+  max-width: 38rem;
   margin-inline: auto;
   display: flex;
   flex-direction: column;
