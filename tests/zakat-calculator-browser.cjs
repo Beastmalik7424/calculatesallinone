@@ -197,6 +197,15 @@ let browser;
       const setupColumns = await page.locator('#zakat-form [data-zakat-step="setup"] .grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
       assert.equal(setupColumns, viewport.width >= 360 ? 2 : 1,
         "Zakat setup selectors must use two columns from 360px and stack below 360px");
+      if (viewport.width >= 360) {
+        const setupControlTops = await page.evaluate(() => [
+          document.querySelector("#z-currency").getBoundingClientRect().top,
+          document.querySelector("#z-school-of-thought").getBoundingClientRect().top
+        ]);
+        assert.ok(Math.abs(setupControlTops[0] - setupControlTops[1]) <= 2,
+          "Zakat Currency and School controls must align at the same vertical position at " +
+          viewport.width + "px (tops=" + setupControlTops.join(", ") + ")");
+      }
     }
     assert.ok(metrics.controls.every(control => control.height >= 44), "Every visible Zakat input, select and button must retain a 44px minimum touch target at " + viewport.width + "px");
   }
