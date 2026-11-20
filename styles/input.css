@@ -2595,7 +2595,7 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
 @media (min-width: 360px) {
   body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid > div > label {
     display: block;
-    min-height: 4.5rem;
+    min-height: 3rem;
     line-height: 1.25;
   }
 }
