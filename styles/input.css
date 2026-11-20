@@ -2591,6 +2591,15 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
 }
 
 
+/* Equal label tracks keep the Currency and School controls level in the two-column setup. */
+@media (min-width: 360px) {
+  body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid > div > label {
+    display: block;
+    min-height: 4.5rem;
+    line-height: 1.25;
+  }
+}
+
 /* Final breakpoint override: keep a single setup column only below 360px. */
 @media (max-width: 359px) {
   body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid {
