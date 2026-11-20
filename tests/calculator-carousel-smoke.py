@@ -1,4 +1,5 @@
 from pathlib import Path
+import hashlib
 import re
 
 ROOT = Path("public")
@@ -109,7 +110,8 @@ assert "ca-site-nav-topline" in zakat_markup, "Header must keep its separate top
 assert "#t-tap" in css and "min-height:48px" in css, "Tasbih Count one button must retain a visible, accessible touch target"
 print("Calculator ticker, all 17 destinations, inner-page header layout and Tasbih action smoke tests PASS")
 
-assert '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v6">' in zakat_markup, "Zakat pages must use the current cache-busted stylesheet URL"
+css_version = hashlib.sha256((ROOT / "assets" / "site.css").read_bytes()).hexdigest()[:16]
+assert f'<link rel="stylesheet" href="/assets/site.css?v={css_version}">' in zakat_markup, "Zakat pages must use the content-hash version of the deployed stylesheet"
 assert zakat_markup.count('data-tool-set="primary"') == 1 and zakat_markup.count('data-tool-set="duplicate"') == 1, "Zakat pages must render one accessible primary group and one aria-hidden marquee duplicate"
 zakat_group = primary_group(zakat_markup, "/zakat-calculator/")
 current_zakat = re.search(r'data-tool-shortcut="zakat-calculator"[^>]*aria-current="page"', zakat_group)
