@@ -481,6 +481,7 @@
     var hanafiSetupNote = $("zakat-hanafi-setup-note")
     var sunniAssetFields = $("z-sunni-asset-fields")
     var jafariFields = $("z-jafari-fields")
+    var jafariNisabPrimary = $("z-jafari-nisab-primary")
     var coinMoneyField = $("z-jafari-coins-used-as-money")
     var coinInputs = $("z-jafari-coin-inputs")
     function money(value, currency) {
@@ -499,6 +500,7 @@
       if (sunniFields) sunniFields.hidden = isJafari
       if (sunniAssetFields) sunniAssetFields.hidden = isJafari
       if (jafariFields) jafariFields.hidden = !isJafari
+      if (jafariNisabPrimary) jafariNisabPrimary.hidden = !isJafari
       if (resetNisab && nisabField && !isJafari) {
         nisabField.value = "silver"
       }
@@ -510,6 +512,7 @@
       if (sunniFields) sunniFields.hidden = isJafari
       if (sunniAssetFields) sunniAssetFields.hidden = isJafari
       if (jafariFields) jafariFields.hidden = !isJafari
+      if (jafariNisabPrimary) jafariNisabPrimary.hidden = !isJafari
       if (submitButton) {
         submitButton.hidden = false
         submitButton.textContent = lang() === "ur" ? "زکوٰۃ کا حساب کریں" : "Calculate Zakat"

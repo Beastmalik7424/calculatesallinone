@@ -11,8 +11,10 @@ let browser;
   const layoutPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
   for (const viewport of [
     { width: 320, height: 740 },
+    { width: 360, height: 740 },
     { width: 390, height: 844 },
     { width: 768, height: 1024 },
+    { width: 1366, height: 768 },
     { width: 1366, height: 900 }
   ]) {
     await layoutPage.setViewportSize(viewport);
@@ -104,6 +106,14 @@ let browser;
   }), "Active calculator shortcut must be visible in the ticker's initial frame and have a 44px touch target");
   assert.equal(await shortcutNav.locator('[data-tool-shortcut]').first().getAttribute("aria-current"), "page",
     "Current calculator shortcut must be first for immediate discoverability");
+  assert.equal(await page.locator("#zakat-result").isVisible(), true,
+    "The result panel must be visible on first paint");
+  const advancedDetails = page.locator("#zakat-form details").first();
+  assert.equal(await advancedDetails.evaluate(el => el.open), false,
+    "All secondary Zakat inputs must start inside a closed details section");
+  await advancedDetails.locator("summary").click();
+  assert.equal(await advancedDetails.evaluate(el => el.open), true,
+    "Secondary Zakat inputs must expand with one click");
 
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
     "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
@@ -166,7 +176,7 @@ let browser;
     "Sistani personal gold coins must calculate 2.5% of the first gold Nisab when all separate conditions are met");
 
   // Responsive geometry: no horizontal overflow and accessible control heights.
-  for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }]) {
+  for (const viewport of [{ width: 320, height: 740 }, { width: 360, height: 740 }, { width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1366, height: 768 }, { width: 1440, height: 900 }]) {
     await page.setViewportSize(viewport);
     const metrics = await page.evaluate(() => ({
       width: innerWidth,
@@ -183,7 +193,7 @@ let browser;
       const setupColumns = await page.locator('#zakat-form [data-zakat-step="setup"] .grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
       assert.equal(setupColumns, 1, "Zakat setup selectors must stack to full width on narrow screens");
     }
-    assert.ok(metrics.controls.every(control => control.height >= 40), "Inputs/buttons must retain usable height at " + viewport.width + "px");
+    assert.ok(metrics.controls.every(control => control.height >= 44), "Every visible Zakat input, select and button must retain a 44px minimum touch target at " + viewport.width + "px");
   }
 
   // Urdu page must preserve RTL and the same no-wizard behaviour.
@@ -194,6 +204,14 @@ let browser;
   assert.equal(await page.locator("#zakat-next, #zakat-back, #zakat-step-progress").count(), 0,
     "Urdu calculator must not expose wizard navigation");
   assert.equal(await page.locator("#zakat-submit").isVisible(), true);
+  assert.equal(await page.locator("#zakat-result").isVisible(), true,
+    "Urdu result panel must be visible on first paint");
+  const urduAdvanced = page.locator("#zakat-form details").first();
+  assert.equal(await urduAdvanced.evaluate(el => el.open), false,
+    "Urdu secondary fields must also start collapsed");
+  await urduAdvanced.locator("summary").click();
+  assert.equal(await urduAdvanced.evaluate(el => el.open), true,
+    "Urdu secondary fields must expand with one click");
 
   const urAmountInputs = page.locator("#zakat-form input[type=number]");
   assert.ok(await urAmountInputs.count() >= 10, "Expected all Urdu Zakat amount inputs");
@@ -313,7 +331,7 @@ let browser;
 
   assert.deepEqual(pageErrors, [], "Zakat browser page must not produce uncaught JavaScript errors");
   assert.deepEqual(consoleErrors, [], "Zakat browser page must not produce console errors");
-  console.log("Zakat browser: PASS (single-page Hanafi and Sistani flows, both locales, 4 responsive widths, no console errors)");
+  console.log("Zakat browser: PASS (single-page Hanafi and Sistani flows, both locales, 6 responsive widths, no console errors)");
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;

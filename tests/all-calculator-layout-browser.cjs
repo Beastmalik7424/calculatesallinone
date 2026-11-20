@@ -158,6 +158,32 @@ function rect(element) {
               ? document.elementFromPoint(actionRect.left + actionRect.width / 2, actionRect.top + actionRect.height / 2)
               : null;
             const actionReachable = !!action && !!hitTarget && (action === hitTarget || action.contains(hitTarget));
+            const zakatPrimary = zakatForm && zakatForm.querySelector("[data-zakat-primary]");
+            const schoolValue = zakatForm && zakatForm.querySelector("#z-school-of-thought")?.value;
+            const activeNisab = zakatForm && zakatForm.querySelector(schoolValue === "jafari-sistani" ? "#z-jafari-nisab-method" : "#z-nisab-method");
+            const resultPanel = zakatForm && zakatForm.querySelector("#zakat-result");
+            const primaryElements = zakatForm ? [
+              zakatForm.querySelector("#z-currency"),
+              zakatForm.querySelector("#z-school-of-thought"),
+              activeNisab,
+              zakatForm.querySelector("#zakat-submit"),
+              resultPanel
+            ] : [];
+            const primaryRects = primaryElements.map(element => element && element.getBoundingClientRect());
+            const primaryVisible = !!zakatPrimary && primaryElements.every((element, index) =>
+              visible(element) && primaryRects[index].top >= -1 && primaryRects[index].bottom <= innerHeight - 1
+            ) && zakatPrimary.getBoundingClientRect().bottom <= innerHeight - 1;
+            const advancedDetails = zakatForm ? Array.from(zakatForm.querySelectorAll("details")) : [];
+            const secondaryIds = ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl","z-metal-price-unit","z-silverprice","z-goldprice","z-jafari-owner","z-jafari-trade-value","z-jafari-acquired","z-jafari-hawl","z-jafari-intent","z-jafari-access","z-jafari-market","z-jafari-coins-used-as-money","z-jafari-gold-coins-weight","z-jafari-silver-coins-weight","z-jafari-gold-coins-hawl","z-jafari-silver-coins-hawl","z-jafari-coins-access"];
+            const zakatSecondaryOutsideDetails = zakatForm ? secondaryIds.filter(id => {
+              const element = zakatForm.querySelector("#" + id);
+              return element && !element.closest("details");
+            }) : [];
+            const primaryTouchTargets = primaryElements.filter(Boolean).map(element => {
+              const r = element.getBoundingClientRect();
+              return Math.min(r.width, r.height);
+            });
+            const rootStyle = root ? getComputedStyle(root) : null;
             return {
               viewport: { width: innerWidth, height: innerHeight },
               documentWidth: document.documentElement.scrollWidth,
@@ -175,6 +201,21 @@ function rect(element) {
               tickerScrollable,
               minTickerLinkHeight,
               zakatWizardControls,
+              zakatPrimaryFound: !!zakatPrimary,
+              zakatPrimaryVisible: primaryVisible,
+              zakatResultVisible: visible(resultPanel),
+              zakatAdvancedDetailsCount: advancedDetails.length,
+              zakatAdvancedAllClosed: advancedDetails.length > 0 && advancedDetails.every(details => !details.open),
+              zakatSecondaryOutsideDetails,
+              zakatPrimaryTouchTargets: primaryTouchTargets,
+              zakatOuterCardUsesStandardShell: !!root && ["ca-tool-standard-calculator","mt-2","rounded-2xl","shadow-xl","ring-1","p-3","sm:p-4"].every(name => root.classList.contains(name)),
+              zakatOuterCardStyle: rootStyle ? {
+                padding: rootStyle.padding,
+                borderRadius: rootStyle.borderRadius,
+                boxShadow: rootStyle.boxShadow,
+                marginTop: rootStyle.marginTop,
+                maxWidth: rootStyle.maxWidth
+              } : null,
               shortLabelFailures: primaryTickerLinks.filter(link => {
                 const label = (link.getAttribute("data-short-label") || "").trim();
                 const accessibleName = (link.getAttribute("aria-label") || "").trim();
@@ -202,6 +243,22 @@ function rect(element) {
             };
           }, { rootSelector: route.root, actionSelector: route.action });
 
+          if (route.name.startsWith("zakat-")) {
+            const initialAdvanced = await page.locator("#zakat-form details").first().evaluate(node => node.open);
+            if (initialAdvanced) throw new Error("Zakat advanced section must start closed");
+            await page.locator("#zakat-form details > summary").first().click();
+            const expanded = await page.locator("#zakat-form details").first().evaluate(node => node.open);
+            const secondaryVisible = await page.locator("#zakat-form #z-cash").isVisible();
+            await page.locator("#zakat-form details > summary").first().click();
+            const collapsedAgain = await page.locator("#zakat-form details").first().evaluate(node => !node.open);
+            if (!expanded || !secondaryVisible || !collapsedAgain) throw new Error("Zakat advanced fields did not expand and collapse correctly");
+            await page.locator("#zakat-form #z-school-of-thought").selectOption("jafari-sistani");
+            const jafariNisabVisible = await page.locator("#z-jafari-nisab-primary select").isVisible();
+            const hanafiNisabHidden = !(await page.locator("#z-nisab-method").isVisible());
+            await page.locator("#zakat-form #z-school-of-thought").selectOption("sunni-hanafi");
+            const hanafiNisabVisible = await page.locator("#z-nisab-method").isVisible();
+            if (!jafariNisabVisible || !hanafiNisabHidden || !hanafiNisabVisible) throw new Error("School selector did not switch the primary Nisab control");
+          }
           const status = response ? response.status() : 0;
           const screenshotPath = "/tmp/calculator-layout-" + route.name + "-" + viewport.name + ".png";
           await page.screenshot({ path: screenshotPath, fullPage: false });
@@ -218,6 +275,16 @@ function rect(element) {
           if (route.name.startsWith("zakat-") && viewport.width <= 1024 && !metrics.tickerScrollable) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat shortcut navigation must scroll horizontally on narrow viewports", metrics });
           if (route.name.startsWith("zakat-") && metrics.minTickerLinkHeight < 44) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat shortcut touch targets must be at least 44px high", metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatWizardControls !== 0) failures.push({ route: route.path, viewport: viewport.name, issue: "One-page Zakat form must not expose wizard controls", metrics });
+          if (route.name.startsWith("zakat-") && !metrics.zakatPrimaryFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary calculator block is missing", metrics });
+          if (route.name.startsWith("zakat-") && viewport.width >= 360 && !metrics.zakatPrimaryVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Currency, school, active Nisab, Calculate button and result must all fit in the first viewport", metrics });
+          if (route.name.startsWith("zakat-") && !metrics.zakatResultVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat result panel must be visible on first paint", metrics });
+          if (route.name.startsWith("zakat-") && !metrics.zakatAdvancedAllClosed) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat advanced fields must be inside closed-by-default details", metrics });
+          if (route.name.startsWith("zakat-") && metrics.zakatSecondaryOutsideDetails.length) failures.push({ route: route.path, viewport: viewport.name, issue: "Secondary Zakat fields must remain inside the expandable details section", fields: metrics.zakatSecondaryOutsideDetails, metrics });
+          if (route.name.startsWith("zakat-") && metrics.zakatPrimaryTouchTargets.some(size => size < 44)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary controls must retain 44px minimum touch targets", metrics });
+          if (route.name.startsWith("zakat-") && (!metrics.zakatOuterCardStyle || !metrics.rootRect || !metrics.rootRect.width)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat Standard Calculator card geometry must be measurable", metrics });
+          if (route.name.startsWith("zakat-") && !metrics.zakatOuterCardUsesStandardShell) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat outer card must reuse the Standard Calculator shell classes", metrics });
+          if (route.name.startsWith("zakat-") && viewport.width === 1366 && viewport.height === 768 && metrics.headingRect && metrics.headingRect.height > 28) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat heading must retain the Standard Calculator one-line short-laptop height so the card starts at the same vertical position", metrics });
+
           if (route.name.startsWith("zakat-") && metrics.shortLabelFailures.length) failures.push({ route: route.path, viewport: viewport.name, issue: "One or more shortcut labels are not visibly rendered", labels: metrics.shortLabelFailures, metrics });
           if (!metrics.rootFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing calculator container " + route.root });
           if (!metrics.actionFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Missing primary calculator action " + route.action });

@@ -2499,3 +2499,72 @@ html.dark #main .ca-tool-zakat-calculator #zakat-form button {
   #main .ca-tool-zakat-calculator { padding: .5rem !important; }
   #main .ca-tool-zakat-calculator #zakat-form { gap: .5rem !important; }
 }
+
+
+/* Zakat first-screen structure. The outer card intentionally reuses the Standard Calculator skin. */
+#main .ca-tool-zakat-calculator #zakat-form {
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+#main .ca-tool-zakat-calculator [data-zakat-primary] {
+  display: grid;
+  gap: .5rem;
+}
+#main .ca-tool-zakat-calculator [data-zakat-primary] > .grid {
+  gap: .5rem !important;
+}
+body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
+#main .ca-tool-zakat-calculator #zakat-result:empty {
+  display: block !important;
+  min-height: 44px !important;
+  margin: .35rem 0 0 !important;
+  padding: .5rem !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-radius: .65rem !important;
+}
+#main .ca-tool-zakat-calculator #zakat-result {
+  display: block !important;
+  min-height: 44px !important;
+  margin: .35rem 0 0 !important;
+  padding: .5rem !important;
+  border-radius: .65rem !important;
+  font-size: .9rem !important;
+  line-height: 1.25 !important;
+}
+#main .ca-tool-zakat-calculator .zakat-advanced {
+  margin-top: .25rem !important;
+}
+#main .ca-tool-zakat-calculator .zakat-advanced > summary {
+  min-height: 44px;
+  padding: .25rem .35rem;
+  list-style-position: inside;
+}
+#main .ca-tool-zakat-calculator #zakat-form button {
+  min-height: 44px;
+}
+@media (max-width: 600px) {
+  #main .ca-tool-zakat-calculator #zakat-form {
+    gap: .4rem;
+  }
+  #main .ca-tool-zakat-calculator [data-zakat-primary] {
+    gap: .4rem;
+  }
+  #main .ca-tool-zakat-calculator #zakat-result {
+    margin-top: .25rem !important;
+  }
+}
+
+
+/* Match the Standard Calculator's compact title height on short desktop viewports. */
+@media (min-width: 601px) and (max-height: 850px) {
+  #main.ca-tool-main > h1.ca-tool-zakat-heading {
+    margin-top: 4px !important;
+    font-size: 20px !important;
+    line-height: 1.32 !important;
+  }
+}
