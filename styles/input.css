@@ -2568,3 +2568,24 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
     line-height: 1.32 !important;
   }
 }
+
+
+/* Final Zakat mobile fit: tighten only the primary block while preserving 44px controls. */
+@media (max-width: 600px) {
+  #main .ca-tool-zakat-calculator #zakat-form { gap: .3rem !important; }
+  #main .ca-tool-zakat-calculator [data-zakat-primary] { gap: .3rem !important; }
+  #main .ca-tool-zakat-calculator [data-zakat-primary] > .zakat-section.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: .25rem !important;
+  }
+  #main .ca-tool-zakat-calculator [data-zakat-primary] > .zakat-section:first-child > p {
+    margin: 0 !important;
+    font-size: .72rem !important;
+    line-height: 1.15 !important;
+  }
+  #main .ca-tool-zakat-calculator [data-zakat-primary] > .zakat-section:first-child > .grid {
+    gap: .35rem !important;
+  }
+  #main .ca-tool-zakat-calculator #zakat-result {
+    margin-top: .15rem !important;
+  }
+}

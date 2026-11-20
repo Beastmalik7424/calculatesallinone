@@ -203,6 +203,8 @@ function rect(element) {
               zakatWizardControls,
               zakatPrimaryFound: !!zakatPrimary,
               zakatPrimaryVisible: primaryVisible,
+              zakatPrimaryScrollY: scrollY,
+              zakatPrimaryElementRects: primaryRects.map(r => r ? { top: Math.round(r.top), bottom: Math.round(r.bottom) } : null),
               zakatResultVisible: visible(resultPanel),
               zakatAdvancedDetailsCount: advancedDetails.length,
               zakatAdvancedAllClosed: advancedDetails.length > 0 && advancedDetails.every(details => !details.open),
@@ -277,6 +279,7 @@ function rect(element) {
           if (route.name.startsWith("zakat-") && metrics.zakatWizardControls !== 0) failures.push({ route: route.path, viewport: viewport.name, issue: "One-page Zakat form must not expose wizard controls", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatPrimaryFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary calculator block is missing", metrics });
           if (route.name.startsWith("zakat-") && viewport.width >= 360 && !metrics.zakatPrimaryVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Currency, school, active Nisab, Calculate button and result must all fit in the first viewport", metrics });
+          if (route.name.startsWith("zakat-") && metrics.zakatPrimaryScrollY !== 0) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary block must be verified from the initial page position without scrolling", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatResultVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat result panel must be visible on first paint", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatAdvancedAllClosed) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat advanced fields must be inside closed-by-default details", metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatSecondaryOutsideDetails.length) failures.push({ route: route.path, viewport: viewport.name, issue: "Secondary Zakat fields must remain inside the expandable details section", fields: metrics.zakatSecondaryOutsideDetails, metrics });
