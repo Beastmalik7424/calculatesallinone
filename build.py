@@ -26,7 +26,7 @@ SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools fo
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
     "/zakat-calculator/": "2026-11-15",
-    "/years-to-days-calculator/": "2026-11-17",
+    "/years-to-days-calculator/": "2026-11-21",
     "/unit-converter/": "2026-11-14",
     "/tasbih-counter/": "2026-11-15",
     "/query-calculator/": "2026-11-19",
