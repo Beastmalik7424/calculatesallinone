@@ -176,7 +176,7 @@ assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form \[data-zakat-step="s
   "Zakat currency and school fields must sit side by side on standard mobile widths");
 assert.match(zakatCss, /@media\s*\(max-width:\s*359px\)[\s\S]*?\[data-zakat-step="setup"\] \.grid\s*\{\s*grid-template-columns:\s*minmax\(0, 1fr\)\s*!important;/,
   "Zakat setup fields must retain a single-column fallback on very narrow screens");
-assert.match(zakatCss, /\[data-zakat-step="setup"\] \.grid > div > label\s*\{[\s\S]*?min-height:\s*4\.5rem;/,
+assert.match(zakatCss, /\[data-zakat-step="setup"\] \.grid > div > label\s*\{[\s\S]*?min-height:\s*3rem;/,
   "Zakat setup labels must have equal height so paired controls align vertically");
 assert.match(zakatCss, /#main \.ca-tool-zakat-calculator #zakat-form\s*\{[\s\S]*?max-width:\s*38rem;/,
   "Zakat calculator must be slightly wider than its previous 36rem width");
