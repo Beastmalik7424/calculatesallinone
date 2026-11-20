@@ -81,27 +81,80 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
                     foreground + " on " + background + " must meet WCAG AA 4.5:1",
                 )
 
+    def _assert_exact_locked_dependency(self, name, package, lock):
+        version = package.get("devDependencies", {}).get(name)
+        self.assertIsInstance(version, str, name + " must declare a version in package.json")
+        self.assertRegex(
+            version,
+            r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$",
+            name + " must be pinned to one exact semantic version",
+        )
+        lock_root = lock.get("packages", {}).get("", {}).get("devDependencies", {})
+        self.assertEqual(lock_root.get(name), version, name + " package-lock root must match package.json")
+        entry = lock.get("packages", {}).get("node_modules/" + name, {})
+        self.assertEqual(entry.get("version"), version, name + " lock entry must match package.json")
+        self.assertRegex(
+            entry.get("integrity", ""),
+            r"^sha512-[A-Za-z0-9+/]+={0,2}$",
+            name + " lock entry must include a valid SHA-512 integrity value",
+        )
+        return version, entry
+
+    def test_browser_dependency_contract_accepts_exact_version_bumps_and_rejects_ranges(self):
+        package = {"devDependencies": {"axe-core": "4.14.1", "playwright": "1.65.1"}}
+        integrity = "sha512-YWJjZA=="
+        lock = {
+            "packages": {
+                "": {"devDependencies": {"axe-core": "4.14.1", "playwright": "1.65.1"}},
+                "node_modules/axe-core": {"version": "4.14.1", "integrity": integrity},
+                "node_modules/playwright": {
+                    "version": "1.65.1",
+                    "integrity": integrity,
+                    "dependencies": {"playwright-core": "1.65.1"},
+                },
+                "node_modules/playwright-core": {"version": "1.65.1", "integrity": integrity},
+            }
+        }
+        self._assert_exact_locked_dependency("axe-core", package, lock)
+        playwright_version, playwright_entry = self._assert_exact_locked_dependency("playwright", package, lock)
+        core_version = playwright_entry.get("dependencies", {}).get("playwright-core")
+        core = lock.get("packages", {}).get("node_modules/playwright-core", {})
+        self.assertEqual(core_version, playwright_version)
+        self.assertEqual(core.get("version"), core_version)
+        self.assertRegex(core.get("integrity", ""), r"^sha512-[A-Za-z0-9+/]+={0,2}$")
+
+        for ranged_version in ("^1.65.1", "~1.65.1", ">=1.65.1", "1.65"):
+            with self.subTest(ranged_version=ranged_version):
+                with self.assertRaises(AssertionError):
+                    self._assert_exact_locked_dependency(
+                        "playwright",
+                        {"devDependencies": {"playwright": ranged_version}},
+                        lock,
+                    )
+
     def test_browser_dependencies_are_pinned_and_ci_uses_npm_ci(self):
         package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
         lock = json.loads((ROOT / "package-lock.json").read_text(encoding="utf-8"))
-        expected = {
-            "axe-core": ("4.13.0", "sha512-UzGt8zg7Ny8djbYMhxl2zuEevVa7r2gJjYY5Lwr1xM7+XU2nd6CkIWFTVcCIbAP63vSz71NaVyyuSk9lHKcy0A=="),
-            "playwright": ("1.64.1", "sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA=="),
-        }
-        manifest = package.get("devDependencies", {})
-        lock_root = lock.get("packages", {}).get("", {}).get("devDependencies", {})
-        for name, (version, integrity) in expected.items():
+        versions = {}
+        entries = {}
+        for name in ("axe-core", "playwright"):
             with self.subTest(package=name):
-                self.assertEqual(manifest.get(name), version, name + " must be exact-version pinned in package.json")
-                self.assertEqual(lock_root.get(name), version, name + " must be exact-version pinned in package-lock.json")
-                entry = lock.get("packages", {}).get("node_modules/" + name, {})
-                self.assertEqual(entry.get("version"), version, name + " lock entry must match the exact version")
-                self.assertEqual(entry.get("integrity"), integrity, name + " lock entry must match the verified npm integrity")
-        playwright = lock.get("packages", {}).get("node_modules/playwright", {})
+                versions[name], entries[name] = self._assert_exact_locked_dependency(name, package, lock)
+
+        playwright_core_version = entries["playwright"].get("dependencies", {}).get("playwright-core")
         core = lock.get("packages", {}).get("node_modules/playwright-core", {})
-        self.assertEqual(playwright.get("dependencies", {}).get("playwright-core"), "1.64.1")
-        self.assertEqual(core.get("version"), "1.64.1")
-        self.assertEqual(core.get("integrity"), "sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==")
+        self.assertRegex(
+            playwright_core_version or "",
+            r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$",
+            "playwright-core must be pinned to one exact semantic version",
+        )
+        self.assertEqual(playwright_core_version, versions["playwright"])
+        self.assertEqual(core.get("version"), playwright_core_version)
+        self.assertRegex(
+            core.get("integrity", ""),
+            r"^sha512-[A-Za-z0-9+/]+={0,2}$",
+            "playwright-core lock entry must include a valid SHA-512 integrity value",
+        )
         for workflow_path in (".github/workflows/ci.yml", ".github/workflows/site-build.yml"):
             workflow = (ROOT / workflow_path).read_text(encoding="utf-8")
             with self.subTest(workflow=workflow_path):
