@@ -2,36 +2,44 @@
 """Protect the lockfile-pinned Playwright CI dependency and browser install contract."""
 import json
 import random
+import re
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PLAYWRIGHT_VERSION = "1.64.1"
-PLAYWRIGHT_INTEGRITY = "sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA=="
-CORE_INTEGRITY = "sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ=="
-AXE_VERSION = "4.13.0"
-AXE_INTEGRITY = "sha512-UzGt8zg7Ny8djbYMhxl2zuEevVa7r2gJjYY5Lwr1xM7+XU2nd6CkIWFTVcCIbAP63vSz71NaVyyuSk9lHKcy0A=="
+EXACT_SEMVER = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$")
+SHA512_INTEGRITY = re.compile(r"^sha512-[A-Za-z0-9+/]{86}==$")
 
 
 def validate_playwright_config(config):
+    playwright_versions = [
+        config.get("manifest_version"),
+        config.get("lock_root_version"),
+        config.get("playwright_package_version"),
+        config.get("playwright_core_version"),
+        config.get("playwright_core_dependency"),
+    ]
+    axe_versions = [
+        config.get("axe_manifest_version"),
+        config.get("axe_lock_root_version"),
+        config.get("axe_package_version"),
+    ]
+    integrities = [
+        config.get("playwright_integrity"),
+        config.get("core_integrity"),
+        config.get("axe_integrity"),
+    ]
     return (
-        config.get("manifest_version") == PLAYWRIGHT_VERSION
-        and config.get("lock_root_version") == PLAYWRIGHT_VERSION
-        and config.get("playwright_package_version") == PLAYWRIGHT_VERSION
-        and config.get("playwright_core_version") == PLAYWRIGHT_VERSION
-        and config.get("playwright_core_dependency") == PLAYWRIGHT_VERSION
-        and config.get("playwright_integrity") == PLAYWRIGHT_INTEGRITY
-        and config.get("core_integrity") == CORE_INTEGRITY
-        and config.get("axe_manifest_version") == AXE_VERSION
-        and config.get("axe_lock_root_version") == AXE_VERSION
-        and config.get("axe_package_version") == AXE_VERSION
-        and config.get("axe_integrity") == AXE_INTEGRITY
+        all(isinstance(value, str) and EXACT_SEMVER.fullmatch(value) for value in playwright_versions)
+        and len(set(playwright_versions)) == 1
+        and all(isinstance(value, str) and EXACT_SEMVER.fullmatch(value) for value in axe_versions)
+        and len(set(axe_versions)) == 1
+        and all(isinstance(value, str) and SHA512_INTEGRITY.fullmatch(value) for value in integrities)
         and config.get("ci_uses_npm_ci") is True
         and config.get("ci_has_no_ad_hoc_install") is True
         and config.get("ci_installs_chromium") is True
         and config.get("first_screen_installs_locked_chromium") is True
     )
-
 
 def repository_playwright_config(root=ROOT):
     package = json.loads((root / "package.json").read_text(encoding="utf-8"))
@@ -65,17 +73,17 @@ def repository_playwright_config(root=ROOT):
 class PlaywrightLockUnitTests(unittest.TestCase):
     def valid_config(self):
         return {
-            "manifest_version": PLAYWRIGHT_VERSION,
-            "lock_root_version": PLAYWRIGHT_VERSION,
-            "playwright_package_version": PLAYWRIGHT_VERSION,
-            "playwright_core_version": PLAYWRIGHT_VERSION,
-            "playwright_core_dependency": PLAYWRIGHT_VERSION,
-            "playwright_integrity": PLAYWRIGHT_INTEGRITY,
-            "core_integrity": CORE_INTEGRITY,
-            "axe_manifest_version": AXE_VERSION,
-            "axe_lock_root_version": AXE_VERSION,
-            "axe_package_version": AXE_VERSION,
-            "axe_integrity": AXE_INTEGRITY,
+            "manifest_version": "1.64.1",
+            "lock_root_version": "1.64.1",
+            "playwright_package_version": "1.64.1",
+            "playwright_core_version": "1.64.1",
+            "playwright_core_dependency": "1.64.1",
+            "playwright_integrity": "sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA==",
+            "core_integrity": "sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==",
+            "axe_manifest_version": "4.13.0",
+            "axe_lock_root_version": "4.13.0",
+            "axe_package_version": "4.13.0",
+            "axe_integrity": "sha512-UzGt8zg7Ny8djbYMhxl2zuEevVa7r2gJjYY5Lwr1xM7+XU2nd6CkIWFTVcCIbAP63vSz71NaVyyuSk9lHKcy0A==",
             "ci_uses_npm_ci": True,
             "ci_has_no_ad_hoc_install": True,
             "ci_installs_chromium": True,
@@ -84,6 +92,32 @@ class PlaywrightLockUnitTests(unittest.TestCase):
 
     def test_accepts_exact_locked_playwright_version(self):
         self.assertTrue(validate_playwright_config(self.valid_config()))
+
+    def test_accepts_reviewed_exact_dependency_version_bumps(self):
+        axe_bump = self.valid_config()
+        axe_bump.update({
+            "axe_manifest_version": "4.14.1",
+            "axe_lock_root_version": "4.14.1",
+            "axe_package_version": "4.14.1",
+            "axe_integrity": "sha512-FHfa+lmNjQZfJz1q8wKqIDwC6DExcHt/pkjNQb09a3NPjCKg2rhu5qb2S4r76ASyFNNtuFooJpZe37OgudVGtQ==",
+        })
+        self.assertTrue(validate_playwright_config(axe_bump), "a reviewed exact axe-core update must be accepted")
+
+        playwright_bump = self.valid_config()
+        playwright_bump.update({
+            "manifest_version": "1.65.1",
+            "lock_root_version": "1.65.1",
+            "playwright_package_version": "1.65.1",
+            "playwright_core_version": "1.65.1",
+            "playwright_core_dependency": "1.65.1",
+            "playwright_integrity": "sha512-vJ1FuoOrNwOKHUIVEvSt3jT1L+wjjDpwhwIstKtfvTh8XIG4FG4bIFuvNdMxi81LGfAhUgUZleVFaOLY4RIUUw==",
+            "core_integrity": "sha512-hqPpz7blSMPxWVdoeE1yiBSzXsKiVOd2k+kjCvmUywD2GPO2Dd9HfcWnq9NN0GHbNZDFgZ9JfBFr+X5/BLo0qw==",
+        })
+        self.assertTrue(validate_playwright_config(playwright_bump), "a reviewed exact Playwright update must be accepted")
+
+        both_bumped = dict(axe_bump)
+        both_bumped.update(playwright_bump)
+        self.assertTrue(validate_playwright_config(both_bumped), "both reviewed exact updates must be accepted")
 
     def test_rejects_version_drift_in_each_lockfile_layer(self):
         valid = self.valid_config()
@@ -128,7 +162,7 @@ class PlaywrightLockUnitTests(unittest.TestCase):
             "playwright_core_version", "playwright_core_dependency",
             "axe_manifest_version", "axe_lock_root_version", "axe_package_version",
         ]
-        invalid_versions = ["1.63.0", "1.64.0", "1.65.0", "latest", "^1.64.1", "1.64.1-beta"]
+        invalid_versions = ["1.63.0", "1.64.0", "1.65.0", "latest", "^1.64.1", "~1.64.1", ">=1.64.1", "1.64"]
         for _ in range(1000):
             self.assertTrue(validate_playwright_config(dict(valid)))
         for _ in range(1000):
