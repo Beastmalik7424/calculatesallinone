@@ -220,7 +220,7 @@ assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
 assert "For this calculator’s date-only anniversary method" not in years_html, "Obsolete date-only anniversary wording must be removed"
-assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 26 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
+assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 27 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
 for phrase in (
     "Choose a conversion method",
     "Days = Years × Selected days per year.",
