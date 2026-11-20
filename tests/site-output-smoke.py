@@ -215,11 +215,12 @@ assert 'name="description" content="Convert years to days or days to years using
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 
-assert 'id="years-days-full-reference"' in years_html and "<summary" in years_html, "The full 26-row reference must be available in an accessible collapsible section"
+assert "Show all 27 years-to-days reference examples" in years_html, "The expanded reference must advertise all 27 examples"
+assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
 assert "For this calculator’s date-only anniversary method" not in years_html, "Obsolete date-only anniversary wording must be removed"
-assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 26 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
+assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 27 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
 for phrase in (
     "Choose a conversion method",
     "Days = Years × Selected days per year.",
@@ -732,8 +733,8 @@ for url in urls:
                     "Urdu BMI dateModified must match the verified substantive content and source update."
                 )
             elif url == SITE + "/years-to-days-calculator/":
-                assert item.get("dateModified") == "2026-11-17", (
-                    "Years-to-Days dateModified must match the latest verified 13-year answer and source update."
+                assert item.get("dateModified") == "2026-11-21", (
+                    "Years-to-Days dateModified must match the added 12-year reference update."
                 )
             elif url == SITE + "/unit-converter/":
                 assert item.get("dateModified") == "2026-11-14", (
