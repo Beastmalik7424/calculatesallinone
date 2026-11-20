@@ -31,11 +31,15 @@ let browser;
       const r = el.getBoundingClientRect();
       return { x: r.x, width: r.width };
     });
-    assert.ok(Math.abs(zakatBounds.width - standardBounds.width) <= 2,
-      "Zakat form width must match Standard Calculator at " + viewport.width +
+    const allowedWidening = viewport.width >= 601 ? 34 : 16;
+    const widthIncrease = zakatBounds.width - standardBounds.width;
+    assert.ok(widthIncrease >= -2 && widthIncrease <= allowedWidening,
+      "Zakat form must be only slightly wider than Standard Calculator at " + viewport.width +
       "px (standard=" + standardBounds.width + ", zakat=" + zakatBounds.width + ")");
-    assert.ok(Math.abs(zakatBounds.x - standardBounds.x) <= 2,
-      "Zakat form must share Standard Calculator's horizontal position at " + viewport.width + "px");
+    const standardCenter = standardBounds.x + standardBounds.width / 2;
+    const zakatCenter = zakatBounds.x + zakatBounds.width / 2;
+    assert.ok(Math.abs(zakatCenter - standardCenter) <= 2,
+      "Zakat form must preserve Standard Calculator's centered position at " + viewport.width + "px");
   }
     const zakatFormStyle = await layoutPage.locator("#zakat-form").evaluate(el => {
       const r = el.getBoundingClientRect();
@@ -189,9 +193,19 @@ let browser;
     }));
     assert.equal(metrics.documentWidth, metrics.width, "No horizontal overflow at " + viewport.width + "px");
     assert.ok(metrics.formWidth > 0 && metrics.formWidth <= metrics.width, "Form must fit viewport width at " + viewport.width + "px");
-    if (viewport.width <= 600) {
-      const setupColumns = await page.locator('#zakat-form [data-zakat-step="setup"] .grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
-      assert.equal(setupColumns, 1, "Zakat setup selectors must stack to full width on narrow screens");
+    {
+      const setupColumns = await page.locator('#zakat-form [data-zakat-step="setup"] .grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
+      assert.equal(setupColumns, viewport.width >= 360 ? 2 : 1,
+        "Zakat setup selectors must use two columns from 360px and stack below 360px");
+      if (viewport.width >= 360) {
+        const setupControlTops = await page.evaluate(() => [
+          document.querySelector("#z-currency").getBoundingClientRect().top,
+          document.querySelector("#z-school-of-thought").getBoundingClientRect().top
+        ]);
+        assert.ok(Math.abs(setupControlTops[0] - setupControlTops[1]) <= 2,
+          "Zakat Currency and School controls must align at the same vertical position at " +
+          viewport.width + "px (tops=" + setupControlTops.join(", ") + ")");
+      }
     }
     assert.ok(metrics.controls.every(control => control.height >= 44), "Every visible Zakat input, select and button must retain a 44px minimum touch target at " + viewport.width + "px");
   }

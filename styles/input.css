@@ -2304,7 +2304,7 @@ body:has(#zakat-form) #main p a {
     gap: .5rem !important;
   }
   body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid {
-    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
   body:has(#zakat-form) #zakat-form .zakat-section h2 { font-size: .95rem !important; line-height: 1.25 !important; }
   body:has(#zakat-form) #zakat-form .zakat-section p { font-size: .82rem !important; line-height: 1.3 !important; }
@@ -2459,7 +2459,7 @@ html.dark body:has(#main .ca-tool-zakat-calculator) #main > h1 {
 }
 #main .ca-tool-zakat-calculator #zakat-form {
   width: 100% !important;
-  max-width: 36rem !important;
+  max-width: 38rem !important;
   margin-inline: auto !important;
 }
 #main .ca-tool-zakat-calculator #zakat-form :is(input:not([type="checkbox"]), select, textarea) {
@@ -2504,7 +2504,7 @@ html.dark #main .ca-tool-zakat-calculator #zakat-form button {
 /* Zakat first-screen structure. The outer card intentionally reuses the Standard Calculator skin. */
 #main .ca-tool-zakat-calculator #zakat-form {
   width: 100%;
-  max-width: 36rem;
+  max-width: 38rem;
   margin-inline: auto;
   display: flex;
   flex-direction: column;
@@ -2587,5 +2587,22 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
   }
   #main .ca-tool-zakat-calculator #zakat-result {
     margin-top: .15rem !important;
+  }
+}
+
+
+/* Equal label tracks keep the Currency and School controls level in the two-column setup. */
+@media (min-width: 360px) {
+  body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid > div > label {
+    display: block;
+    min-height: 3rem;
+    line-height: 1.25;
+  }
+}
+
+/* Final breakpoint override: keep a single setup column only below 360px. */
+@media (max-width: 359px) {
+  body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
   }
 }

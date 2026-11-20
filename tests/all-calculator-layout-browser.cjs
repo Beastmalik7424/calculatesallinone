@@ -90,6 +90,11 @@ function rect(element) {
             const ticker = document.querySelector(".ca-calculator-carousel");
             const heading = document.querySelector("h1");
             const zakatForm = root && root.querySelector("#zakat-form");
+            const zakatFormWidth = zakatForm ? zakatForm.getBoundingClientRect().width : 0;
+            const zakatSetupGrid = zakatForm && zakatForm.querySelector('[data-zakat-step="setup"] .grid');
+            const zakatSetupColumnCount = zakatSetupGrid
+              ? getComputedStyle(zakatSetupGrid).gridTemplateColumns.trim().split(/\s+/).length
+              : 0;
             // One-page Zakat form: the currency input is the first always-visible field.
             const firstControl = zakatForm
               ? zakatForm.querySelector("#z-currency")
@@ -202,6 +207,8 @@ function rect(element) {
               minTickerLinkHeight,
               zakatWizardControls,
               zakatPrimaryFound: !!zakatPrimary,
+              zakatSetupColumnCount,
+              zakatFormWidth: Math.round(zakatFormWidth),
               zakatPrimaryVisible: primaryVisible,
               zakatPrimaryScrollY: scrollY,
               zakatPrimaryElementRects: primaryRects.map(r => r ? { top: Math.round(r.top), bottom: Math.round(r.bottom) } : null),
@@ -279,6 +286,8 @@ function rect(element) {
           if (route.name.startsWith("zakat-") && metrics.zakatWizardControls !== 0) failures.push({ route: route.path, viewport: viewport.name, issue: "One-page Zakat form must not expose wizard controls", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatPrimaryFound) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary calculator block is missing", metrics });
           if (route.name.startsWith("zakat-") && viewport.width >= 360 && !metrics.zakatPrimaryVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Currency, school, active Nisab, Calculate button and result must all fit in the first viewport", metrics });
+          if (route.name.startsWith("zakat-") && metrics.zakatSetupColumnCount !== (viewport.width >= 360 ? 2 : 1)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat currency and school fields must use two columns from 360px and a one-column fallback below 360px", metrics });
+          if (route.name.startsWith("zakat-") && viewport.width >= 601 && metrics.zakatFormWidth < 600) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat form must use the slightly widened 38rem desktop width when space is available", metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatPrimaryScrollY !== 0) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary block must be verified from the initial page position without scrolling", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatResultVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat result panel must be visible on first paint", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatAdvancedAllClosed) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat advanced fields must be inside closed-by-default details", metrics });
