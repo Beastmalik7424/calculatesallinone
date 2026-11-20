@@ -195,9 +195,9 @@ let browser;
     assert.ok(metrics.formWidth > 0 && metrics.formWidth <= metrics.width, "Form must fit viewport width at " + viewport.width + "px");
     {
       const setupColumns = await page.locator('#zakat-form [data-zakat-step="setup"] .grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length);
-      assert.equal(setupColumns, viewport.width >= 360 ? 2 : 1,
-        "Zakat setup selectors must use two columns from 360px and stack below 360px");
-      if (viewport.width >= 360) {
+      assert.equal(setupColumns, viewport.width >= 320 ? 2 : 1,
+        "Zakat setup selectors must use two columns from 320px and stack below 320px");
+      if (viewport.width >= 320) {
         const setupControlTops = await page.evaluate(() => [
           document.querySelector("#z-currency").getBoundingClientRect().top,
           document.querySelector("#z-school-of-thought").getBoundingClientRect().top
