@@ -85,6 +85,32 @@ class PlaywrightLockUnitTests(unittest.TestCase):
     def test_accepts_exact_locked_playwright_version(self):
         self.assertTrue(validate_playwright_config(self.valid_config()))
 
+    def test_accepts_reviewed_exact_dependency_version_bumps(self):
+        axe_bump = self.valid_config()
+        axe_bump.update({
+            "axe_manifest_version": "4.14.1",
+            "axe_lock_root_version": "4.14.1",
+            "axe_package_version": "4.14.1",
+            "axe_integrity": "sha512-FHfa+lmNjQZfJz1q8wKqIDwC6DExcHt/pkjNQb09a3NPjCKg2rhu5qb2S4r76ASyFNNtuFooJpZe37OgudVGtQ==",
+        })
+        self.assertTrue(validate_playwright_config(axe_bump), "a reviewed exact axe-core update must be accepted")
+
+        playwright_bump = self.valid_config()
+        playwright_bump.update({
+            "manifest_version": "1.65.1",
+            "lock_root_version": "1.65.1",
+            "playwright_package_version": "1.65.1",
+            "playwright_core_version": "1.65.1",
+            "playwright_core_dependency": "1.65.1",
+            "playwright_integrity": "sha512-vJ1FuoOrNwOKHUIVEvSt3jT1L+wjjDpwhwIstKtfvTh8XIG4FG4bIFuvNdMxi81LGfAhUgUZleVFaOLY4RIUUw==",
+            "core_integrity": "sha512-hqPpz7blSMPxWVdoeE1yiBSzXsKiVOd2k+kjCvmUywD2GPO2Dd9HfcWnq9NN0GHbNZDFgZ9JfBFr+X5/BLo0qw==",
+        })
+        self.assertTrue(validate_playwright_config(playwright_bump), "a reviewed exact Playwright update must be accepted")
+
+        both_bumped = dict(axe_bump)
+        both_bumped.update(playwright_bump)
+        self.assertTrue(validate_playwright_config(both_bumped), "both reviewed exact updates must be accepted")
+
     def test_rejects_version_drift_in_each_lockfile_layer(self):
         valid = self.valid_config()
         version_keys = [
