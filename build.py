@@ -1,3 +1,4 @@
+import hashlib
 import html
 import json
 import os
@@ -32,6 +33,15 @@ LASTMOD = {
 }
 OUT = "public"
 STATIC = "static"
+
+
+def css_asset_version():
+    css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), STATIC, "site.css")
+    with open(css_path, "rb") as css_file:
+        return hashlib.sha256(css_file.read()).hexdigest()[:16]
+
+
+CSS_ASSET_VERSION = css_asset_version()
 
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
 I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
@@ -1721,7 +1731,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + verification
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
-        + '<link rel="stylesheet" href="/assets/site.css?v=20261118-zakat-mobile-ticker-v6">\n'
+        + '<link rel="stylesheet" href="/assets/site.css?v=' + CSS_ASSET_VERSION + '">\n'
         + ld + ads + "</head>\n"
     )
 

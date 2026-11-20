@@ -1,5 +1,7 @@
 const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const crypto = require("node:crypto");
 
 const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, "");
 const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/", "/percentage-difference-calculator/", "/ratio-calculator/"];
@@ -92,7 +94,8 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
     const homeResponse = await desktop.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 30000 });
     assert.equal(homeResponse && homeResponse.status(), 200, "homepage should return HTTP 200 on desktop");
     const stylesheetHref = await desktop.locator('link[rel="stylesheet"][href*="site.css"]').first().getAttribute("href");
-    assert.ok(stylesheetHref && stylesheetHref.includes("20261118-zakat-mobile-ticker-v6"), "homepage must request the cache-busted candidate stylesheet");
+    const cssVersion = crypto.createHash("sha256").update(fs.readFileSync("public/assets/site.css")).digest("hex").slice(0, 16);
+    assert.equal(stylesheetHref, `/assets/site.css?v=${cssVersion}`, "homepage must request the SHA-256 version of the CSS bytes served by this build");
     // The root-relative stylesheet URL above loads this build's generated CSS in the local test server.
     const homeCalculator = await desktop.locator(".ca-home-calculator .ca-calculator-engine").boundingBox();
     const homeTitle = await desktop.locator(".ca-home-header h1").boundingBox();
