@@ -32,6 +32,8 @@ assert css_asset.is_file(), "Built site must include the deployed CSS asset"
 css_version = hashlib.sha256(css_asset.read_bytes()).hexdigest()[:16]
 for generated_page in ROOT.rglob("*.html"):
     generated_html = generated_page.read_text(encoding="utf-8")
+    if "<html" not in generated_html.lower():
+        continue  # Plain verification files may use an .html suffix without being web pages.
     assert f'/assets/site.css?v={css_version}' in generated_html, (
         f"{generated_page} must reference the content-hash version of the CSS actually deployed"
     )
