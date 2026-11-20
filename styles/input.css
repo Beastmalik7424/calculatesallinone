@@ -2287,13 +2287,6 @@ body:has(#zakat-form) {
   overflow-x: clip;
 }
 
-/* Retain a single setup column only on extra-narrow screens where two controls would cramp labels. */
-@media (max-width: 359px) {
-  body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-}
-
 /* Keep long Hanafi-source and Urdu explanatory text wrapping inside narrow Zakat content. */
 body:has(#zakat-form) #main p,
 body:has(#zakat-form) #main p a {
@@ -2594,5 +2587,13 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
   }
   #main .ca-tool-zakat-calculator #zakat-result {
     margin-top: .15rem !important;
+  }
+}
+
+
+/* Final breakpoint override: keep a single setup column only below 360px. */
+@media (max-width: 359px) {
+  body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
   }
 }
