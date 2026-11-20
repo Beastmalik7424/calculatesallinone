@@ -2591,18 +2591,12 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
 }
 
 
-/* Equal label tracks keep the Currency and School controls level in the two-column setup. */
-@media (min-width: 360px) {
+/* Equal label tracks keep Currency and School aligned, including compact 320px phones. */
+@media (min-width: 320px) {
   body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid > div > label {
     display: block;
     min-height: 3rem;
-    line-height: 1.25;
-  }
-}
-
-/* Final breakpoint override: keep a single setup column only below 360px. */
-@media (max-width: 359px) {
-  body:has(#zakat-form) #zakat-form [data-zakat-step="setup"] .grid {
-    grid-template-columns: minmax(0, 1fr) !important;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
   }
 }
