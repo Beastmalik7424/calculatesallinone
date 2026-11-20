@@ -2383,8 +2383,8 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty + button[data-shar
 /* Match the Standard Calculator's 20px mobile page gutters. */
 @media (max-width: 640px) {
   body:has(#main .ca-tool-zakat-calculator) #main.ca-tool-main {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: .75rem !important;
   }
 }
 
@@ -2496,7 +2496,7 @@ html.dark #main .ca-tool-zakat-calculator #zakat-form button {
   color: #ffffff !important;
 }
 @media (max-width: 600px) {
-  #main .ca-tool-zakat-calculator { padding: .35rem !important; }
+  #main .ca-tool-zakat-calculator { padding: .5rem !important; }
   #main .ca-tool-zakat-calculator #zakat-form { gap: .5rem !important; }
 }
 
