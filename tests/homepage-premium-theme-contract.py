@@ -86,7 +86,7 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
         self.assertIsInstance(version, str, name + " must declare a version in package.json")
         self.assertRegex(
             version,
-            r"^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$",
+            r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$",
             name + " must be pinned to one exact semantic version",
         )
         lock_root = lock.get("packages", {}).get("", {}).get("devDependencies", {})
@@ -145,7 +145,7 @@ class PremiumSoftTealThemeUnitTests(unittest.TestCase):
         core = lock.get("packages", {}).get("node_modules/playwright-core", {})
         self.assertRegex(
             playwright_core_version or "",
-            r"^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$",
+            r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$",
             "playwright-core must be pinned to one exact semantic version",
         )
         self.assertEqual(playwright_core_version, versions["playwright"])
