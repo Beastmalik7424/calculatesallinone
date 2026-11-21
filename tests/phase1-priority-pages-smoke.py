@@ -289,7 +289,7 @@ def check_years_quick_reference():
 
     def table_rows(table_html):
         parsed = []
-        for year, cells_html in re.findall(r"<tr>\s*<th\b[^>]*scope=['"]row['"][^>]*>(.*?)</th>(.*?)</tr>", table_html, re.S | re.I):
+        for year, cells_html in re.findall(r'<tr>\s*<th\b[^>]*scope="row"[^>]*>(.*?)</th>(.*?)</tr>', table_html, re.S | re.I):
             cells = [
                 html.unescape(re.sub(r"<[^>]+>", "", value)).strip()
                 for value in re.findall(r"<td\b[^>]*>(.*?)</td>", cells_html, re.S | re.I)
