@@ -740,7 +740,7 @@ for url in urls:
                 )
             elif url == SITE + "/years-to-days-calculator/":
                 assert item.get("dateModified") == "2026-11-21", (
-                    "Years-to-Days dateModified must match the added 12-year reference update."
+                    "Years-to-Days dateModified must match the GSC-backed 7- and 19-year reference update."
                 )
             elif url == SITE + "/unit-converter/":
                 assert item.get("dateModified") == "2026-11-14", (
