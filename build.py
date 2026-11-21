@@ -153,7 +153,7 @@ TOOLS = [
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
         "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
-            '<form id="zakat-form" class="ca-calculator-engine w-full max-w-xl mx-auto" novalidate>'
+            '<form id="zakat-form" class="ca-calculator-engine w-full max-w-xl mx-auto pb-20" novalidate>'
             + '<div data-zakat-primary>'
             + '<div class="zakat-section space-y-2" data-zakat-step="setup">'
             + '<p id="zakat-hanafi-setup-note" class="text-xs leading-tight text-stone-700 dark:text-stone-300">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
