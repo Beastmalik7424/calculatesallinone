@@ -78,10 +78,22 @@ let browser;
     const method = document.querySelector("#z-school-of-thought");
     return !!method && !!(method.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
   }), "The first-screen Calculate Zakat action must follow the currency and school selectors");
-  assert.ok(await page.locator("#zakat-submit-bottom").evaluate(el => {
+  assert.ok(await page.locator("#zakat-submit").evaluate(el => {
     const lastRequiredPrice = document.querySelector("#z-goldprice");
     return !!lastRequiredPrice && !!(lastRequiredPrice.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
-  }), "The final Calculate Zakat action must follow all asset, liability, method and metal-price fields");
+  }), "The single Calculate Zakat action must follow all asset, liability, method and metal-price fields");
+  assert.ok(await page.locator("#zakat-result").evaluate(el => !!(document.querySelector("#zakat-submit").compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
+    "The result panel must follow the single Calculate action in document order");
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1366, height: 768 }]) {
+    await page.setViewportSize(viewport);
+    const bounds = await page.locator("#zakat-submit").evaluate(el => {
+      const r = el.getBoundingClientRect();
+      return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, height: r.height, vw: innerWidth, vh: innerHeight };
+    });
+    assert.ok(bounds.height >= 44 && bounds.top >= 0 && bounds.bottom <= bounds.vh && bounds.left >= 0 && bounds.right <= bounds.vw,
+      "Calculate button must be fully visible without scrolling at " + viewport.width + "x" + viewport.height + ": " + JSON.stringify(bounds));
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
   assert.equal(await page.locator("#z-stock").getAttribute("autocomplete"), "off",
     "Financial trade-stock values must not be browser-autofilled");
   const englishAmountInputs = page.locator("#zakat-form input[type=number]");
@@ -113,11 +125,8 @@ let browser;
   assert.equal(await page.locator("#zakat-result").isVisible(), true,
     "The result panel must be visible on first paint");
   const advancedDetails = page.locator("#zakat-form details").first();
-  assert.equal(await advancedDetails.evaluate(el => el.open), false,
-    "All secondary Zakat inputs must start inside a closed details section");
-  await advancedDetails.locator("summary").click();
   assert.equal(await advancedDetails.evaluate(el => el.open), true,
-    "Secondary Zakat inputs must expand with one click");
+    "All Zakat asset, method, metal-price and condition inputs must be expanded before the single Calculate action");
 
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
     "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
@@ -135,6 +144,13 @@ let browser;
   await page.locator("#zakat-submit").click();
   const hanafiResult = await page.locator("#zakat-result").innerText();
   assert.match(hanafiResult, /2,500/, "Hanafi calculation must independently return PKR 2,500");
+
+  // User-requested PKR 200,000 / silver PKR 300 per gram case.
+  await page.locator("#z-cash").fill("200000");
+  await page.locator("#z-silverprice").fill("300");
+  await page.locator("#zakat-submit").click();
+  assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\.00)?/,
+    "Hanafi silver-Nisab example must calculate exactly PKR 5,000.00");
 
   // Sistani business-goods path: only trade goods count, ordinary Hanafi cash fields are hidden.
   await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
@@ -227,11 +243,8 @@ let browser;
   assert.equal(await page.locator("#zakat-result").isVisible(), true,
     "Urdu result panel must be visible on first paint");
   const urduAdvanced = page.locator("#zakat-form details").first();
-  assert.equal(await urduAdvanced.evaluate(el => el.open), false,
-    "Urdu secondary fields must also start collapsed");
-  await urduAdvanced.locator("summary").click();
   assert.equal(await urduAdvanced.evaluate(el => el.open), true,
-    "Urdu secondary fields must expand with one click");
+    "Urdu asset, method, metal-price and condition inputs must be expanded before the single Calculate action");
 
   const urAmountInputs = page.locator("#zakat-form input[type=number]");
   assert.ok(await urAmountInputs.count() >= 10, "Expected all Urdu Zakat amount inputs");
@@ -282,6 +295,15 @@ let browser;
     assert.equal(metrics.formDirection, "rtl", "Urdu form must remain RTL at " + viewport.width + "px");
   }
 
+  // Same independently checkable Hanafi calculation in the Urdu RTL interface.
+  await page.locator("#z-school-of-thought").selectOption("sunni-hanafi");
+  await page.locator("#z-cash").fill("200000");
+  await page.locator("#z-silverprice").fill("300");
+  await page.locator("#z-hawl").check();
+  await page.locator("#zakat-submit").click();
+  assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\.00)?/,
+    "Urdu Hanafi silver-Nisab example must calculate exactly PKR 5,000.00");
+
   // Urdu Sistani coin-only below-Nisab result must not display a zero business-goods threshold.
   await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
   await page.locator("#z-jafari-coins-used-as-money").check();
@@ -294,6 +316,38 @@ let browser;
   assert.match(urduBelowCoinResult, /لاگو نہیں/,
     "Urdu coin-only below-Nisab result must not display a zero business-goods threshold");
 
+
+  // Deterministic 1,000-case viewport/input simulation for both locales.
+  let simulationSeed = 20261121;
+  function simulationRandom() { simulationSeed = (simulationSeed * 1664525 + 1013904223) >>> 0; return simulationSeed / 4294967296; }
+  for (const localePath of ["/zakat-calculator/", "/ur/zakat-calculator/"]) {
+    await page.goto(BASE_URL + localePath, { waitUntil: "networkidle" });
+    for (let i = 0; i < 500; i++) {
+      const width = 320 + Math.floor(simulationRandom() * 1281);
+      const height = 568 + Math.floor(simulationRandom() * 633);
+      await page.setViewportSize({ width, height });
+      const cash = Math.floor(simulationRandom() * 100000000) / 100;
+      const silverPrice = 1 + Math.floor(simulationRandom() * 100000) / 100;
+      await page.locator("#z-cash").fill(String(cash));
+      await page.locator("#z-silverprice").fill(String(silverPrice));
+      const metrics = await page.evaluate(() => {
+        const button = document.querySelector("#zakat-submit").getBoundingClientRect();
+        return {
+          viewportWidth: innerWidth,
+          viewportHeight: innerHeight,
+          documentWidth: document.documentElement.scrollWidth,
+          buttonTop: button.top,
+          buttonBottom: button.bottom,
+          buttonLeft: button.left,
+          buttonRight: button.right,
+          buttonHeight: button.height
+        };
+      });
+      assert.equal(metrics.documentWidth, metrics.viewportWidth, localePath + " simulation " + i + " must not overflow horizontally");
+      assert.ok(metrics.buttonHeight >= 44 && metrics.buttonTop >= 0 && metrics.buttonBottom <= metrics.viewportHeight && metrics.buttonLeft >= 0 && metrics.buttonRight <= metrics.viewportWidth,
+        localePath + " simulation " + i + " must keep Calculate fully visible: " + JSON.stringify(metrics));
+    }
+  }
 
   // The Zakat calculator shell must match the dedicated Standard Calculator,
   // not merely keep its own controls visible. Compare rendered browser geometry

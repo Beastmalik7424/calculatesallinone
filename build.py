@@ -153,7 +153,7 @@ TOOLS = [
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
         "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
-            '<form id="zakat-form" class="ca-calculator-engine w-full max-w-xl mx-auto" novalidate>'
+            '<form id="zakat-form" class="ca-calculator-engine w-full max-w-xl mx-auto pb-20" novalidate>'
             + '<div data-zakat-primary>'
             + '<div class="zakat-section space-y-2" data-zakat-step="setup">'
             + '<p id="zakat-hanafi-setup-note" class="text-xs leading-tight text-stone-700 dark:text-stone-300">Choose a silver or gold Nisab method. The 2.5% estimate applies only when the selected threshold and Hawl conditions are met.</p>'
@@ -179,10 +179,8 @@ TOOLS = [
             + '<option value="gold" selected>Gold: 69.12 g (15 common mithqals)</option>'
             + '<option value="silver">Silver: 483.84 g (105 common mithqals)</option>'
             + '</select></div>'
-            + '<button id="zakat-submit" type="submit" class="@B@ w-full min-h-[44px]">Calculate Zakat</button>'
-            + result("zakat-result", False)
             + '</div>'
-            + '<details class="zakat-advanced mt-2 rounded-xl border border-stone-200 dark:border-stone-700 p-2">'
+            + '<details open class="zakat-advanced mt-2 rounded-xl border border-stone-200 dark:border-stone-700 p-2">'
             + '<summary class="min-h-[44px] cursor-pointer flex items-center font-semibold text-stone-900 dark:text-stone-100">Additional assets, metal prices and conditions</summary>'
             + '<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.</p>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p>'
@@ -280,8 +278,11 @@ TOOLS = [
             + '</div>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Prices are converted to per-gram rates before Nisab is calculated. This is an estimate, not a fatwa.</p>'
             + '</div>'
-            + '<button id="zakat-submit-bottom" type="submit" class="@B@ w-full">Calculate Zakat</button>'
             + '</details>'
+            + '<div class="fixed inset-x-0 bottom-0 z-20 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700 px-3 pt-2 pb-2">'
+            + '<button id="zakat-submit" type="submit" class="@B@ w-full max-w-xl mx-auto min-h-[44px]">Calculate Zakat</button>'
+            + '</div>'
+            + result("zakat-result", False)
             + '</form>'
         ),
         "guide": [
@@ -822,7 +823,7 @@ CATEGORIES = [
 URDU = {
     "zakat-calculator": {
         "name": "زکوٰۃ کیلکولیٹر",
-        "title": "حنفی اور جعفری زکوٰۃ کیلکولیٹر | گرام اور تولہ | CalculatesAll",
+        "title": "آن لائن زکوٰۃ کیلکولیٹر: حنفی اور جعفری | CalculatesAll",
         "description": "حنفی یا سید سیستانی کے جعفری طریقے سے زکوٰۃ کا تخمینہ لگائیں۔ سونے اور چاندی کی قیمت گرام یا معیاری تولہ میں درج کریں۔",
         "h1": "حنفی اور جعفری زکوٰۃ کیلکولیٹر",
         "lead": "یہ کیلکولیٹر مفت ہے اور اکاؤنٹ بنانے کی ضرورت نہیں۔ حساب آپ کے براؤزر میں ہوتا ہے۔ دھاتوں کی قیمت خود درج کریں کیونکہ یہاں لائیو مارکیٹ ریٹس حاصل نہیں کیے جاتے۔ دو الگ حسابی طریقوں میں سے انتخاب کریں: سنی حنفی، یا آیت اللہ سید سیستانی کے مخصوص جعفری تجارتی مال اور اہل ڈھلے ہوئے سکوں کے محدود احکام۔ سونے اور چاندی کی قیمت فی گرام یا واضح طور پر متعین سندھ کے معیاری تولہ کے مطابق درج کریں۔ حساب کے مفروضے، ماخذ اور حدود ضرور پڑھیں۔",
@@ -2024,7 +2025,7 @@ def tool_page(t):
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     if t["slug"] == "zakat-calculator":
-        title = "Zakat Calculator | Hanafi & Ja'fari | Gram and Tola"
+        title = "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab"
         desc = "Hanafi Zakat on cash, gold, silver, stock and receivables, or Sayyid Sistani's limited Ja'fari trading-goods method, with clear assumptions."
         ui = t["ui"]
         guide = t["guide"]
