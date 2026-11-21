@@ -345,6 +345,6 @@ GUIDE_EXTRA["unit-converter"].append(
 GUIDE_EXTRA["profit-loss-calculator"].append(
     ("Gross profit, operating profit and net profit are different measures", [
         "A gross profit calculator, operating profit calculator and profit margin calculator answer related but different questions. In Business P&L mode, gross profit = revenue − cost of goods sold. Operating profit = gross profit − the operating expenses entered. Each margin is the relevant profit divided by revenue and multiplied by 100. Product mode instead compares one item’s selling price with its entered cost to show product profit, markup and gross margin.",
-        "This calculator does not calculate net profit after interest and tax, or break-even sales, because those require additional inputs that these modes do not collect. Do not treat operating profit as take-home profit or as a complete financial statement. Reconcile the estimate with the full accounting records before making a business or tax decision.",
+        "This calculator does not calculate net profit after interest and tax. It also does not calculate break-even sales, because those measures require additional inputs that these modes do not collect. Do not treat operating profit as take-home profit or as a complete financial statement. Reconcile the estimate with the full accounting records before making a business or tax decision.",
     ])
 )
