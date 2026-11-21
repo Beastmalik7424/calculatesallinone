@@ -15,6 +15,7 @@ PAGES = {
             "What is the percentage change from 80 to 100?",
             "Why does a 20% rise followed by a 20% fall not return to the starting amount?",
             "How do I find the whole when I know the part and percentage?",
+            "What is the difference between percentage points and percentage change?",
         ],
         "related": ["discount-calculator", "profit-loss-calculator", "fraction-calculator"],
         "headings": ["Worked percentage examples", "Discounts and tax", "Percentage increase and decrease"],
