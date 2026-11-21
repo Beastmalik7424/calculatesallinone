@@ -214,7 +214,7 @@ function rect(element) {
               zakatPrimaryElementRects: primaryRects.map(r => r ? { top: Math.round(r.top), bottom: Math.round(r.bottom) } : null),
               zakatResultVisible: visible(resultPanel),
               zakatAdvancedDetailsCount: advancedDetails.length,
-              zakatAdvancedAllClosed: advancedDetails.length > 0 && advancedDetails.every(details => !details.open),
+              zakatAdvancedAllOpen: advancedDetails.length > 0 && advancedDetails.every(details => details.open),
               zakatSecondaryOutsideDetails,
               zakatPrimaryTouchTargets: primaryTouchTargets,
               zakatOuterCardUsesStandardShell: !!root && ["ca-tool-standard-calculator","mt-2","rounded-2xl","shadow-xl","ring-1","p-3","sm:p-4"].every(name => root.classList.contains(name)),
@@ -254,13 +254,11 @@ function rect(element) {
 
           if (route.name.startsWith("zakat-")) {
             const initialAdvanced = await page.locator("#zakat-form details").first().evaluate(node => node.open);
-            if (initialAdvanced) throw new Error("Zakat advanced section must start closed");
-            await page.locator("#zakat-form details > summary").first().click();
-            const expanded = await page.locator("#zakat-form details").first().evaluate(node => node.open);
             const secondaryVisible = await page.locator("#zakat-form #z-cash").isVisible();
-            await page.locator("#zakat-form details > summary").first().click();
-            const collapsedAgain = await page.locator("#zakat-form details").first().evaluate(node => !node.open);
-            if (!expanded || !secondaryVisible || !collapsedAgain) throw new Error("Zakat advanced fields did not expand and collapse correctly");
+            const metalPriceVisible = await page.locator("#zakat-form #z-silverprice").isVisible();
+            if (!initialAdvanced || !secondaryVisible || !metalPriceVisible) {
+              throw new Error("Zakat asset, metal-price and condition fields must be expanded and accessible on initial load");
+            }
             await page.locator("#zakat-form #z-school-of-thought").selectOption("jafari-sistani");
             const jafariNisabVisible = await page.locator("#z-jafari-nisab-primary select").isVisible();
             const hanafiNisabHidden = !(await page.locator("#z-nisab-method").isVisible());
@@ -290,7 +288,7 @@ function rect(element) {
           if (route.name.startsWith("zakat-") && viewport.width >= 601 && metrics.zakatFormWidth < 600) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat form must use the slightly widened 38rem desktop width when space is available", metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatPrimaryScrollY !== 0) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary block must be verified from the initial page position without scrolling", metrics });
           if (route.name.startsWith("zakat-") && !metrics.zakatResultVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat result panel must be visible on first paint", metrics });
-          if (route.name.startsWith("zakat-") && !metrics.zakatAdvancedAllClosed) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat advanced fields must be inside closed-by-default details", metrics });
+          if (route.name.startsWith("zakat-") && !metrics.zakatAdvancedAllOpen) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat asset, metal-price and condition fields must be expanded on initial load", metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatSecondaryOutsideDetails.length) failures.push({ route: route.path, viewport: viewport.name, issue: "Secondary Zakat fields must remain inside the expandable details section", fields: metrics.zakatSecondaryOutsideDetails, metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatPrimaryTouchTargets.some(size => size < 44)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat primary controls must retain 44px minimum touch targets", metrics });
           if (route.name.startsWith("zakat-") && (!metrics.zakatOuterCardStyle || !metrics.rootRect || !metrics.rootRect.width)) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat Standard Calculator card geometry must be measurable", metrics });
