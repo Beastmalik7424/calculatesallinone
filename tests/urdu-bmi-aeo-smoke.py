@@ -49,6 +49,8 @@ def main():
     assert 'id="bmi-urdu-summary"' not in body, "Redundant summary must not repeat the opening formula and category explanation"
     assert "وزن اور قد کی پیمائش کیسے درست رکھیں?" in body, "Missing practical measurement guidance"
     assert "جنوبی ایشیائی افراد کے لیے اضافی BMI حدود کیا ہیں?" in body, "Missing South Asian risk-threshold explanation"
+    assert "پاکستان میں BMI calculator" in body, "Missing GSC-backed Pakistan BMI query explanation"
+    assert "Body Mass Index کا اردو مطلب جسمانی کمیت کا اشاریہ ہے" in body, "Missing GSC-backed Urdu meaning explanation"
     for repeated_heading in (
         "BMI کیا ہے اور اسے کیسے نکالتے ہیں?",
         "بالغوں کے BMI کی معیاری حدود کیا ہیں?",
@@ -88,7 +90,7 @@ def main():
     assert "https://github.com/Beastmalik7424/calculatesallinone" in organization.get("sameAs", []), "Organization must link to its official source repository"
     assert page.get("author", {}).get("@id") == SITE + "/#maintainer", "WebPage author entity is missing"
     assert page.get("publisher", {}).get("@id") == SITE + "/#organization", "WebPage publisher entity is missing"
-    assert page.get("dateModified") == "2026-11-09", "Verified page-specific content update date is missing"
+    assert page.get("dateModified") == "2026-11-21", "Verified page-specific content update date is missing"
     citations = " ".join(page.get("citation", []))
     for domain in ("who.int", "cdc.gov", "nhs.uk", "pubmed.ncbi.nlm.nih.gov"):
         assert domain in citations, f"Missing structured citation: {domain}"

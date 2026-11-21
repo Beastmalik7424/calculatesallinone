@@ -35,8 +35,8 @@ URDU_DESCRIPTION_FALLBACKS = {
     "/ur/tasbih-counter/": "ڈیجیٹل تسبیح کاؤنٹر میں گنتی، منتخب عبارت اور ہدف اسی براؤزر میں محفوظ رکھیں، جب مقامی اسٹوریج دستیاب ہو۔ گنتی واپس لینے اور ری سیٹ کرنے کا طریقہ دیکھیں۔",
 }
 VERIFIED_PAGE_UPDATE_DATES = {
-    # This date records the verified Urdu BMI threshold-copy correction and source check in this change.
-    "/ur/bmi-calculator/": "2026-11-09",
+    # This date records the GSC-backed Urdu BMI search-intent explanation and source check.
+    "/ur/bmi-calculator/": "2026-11-21",
     # This date records the new global Nisab, currency, asset and Urdu guidance update.
     "/zakat-calculator/": "2026-11-16",
     "/ur/zakat-calculator/": "2026-11-16",
@@ -44,10 +44,12 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/age-calculator/": "2026-11-11",
     # This date records the GSC-backed 7- and 19-year reference rows and verified three-method arithmetic.
     "/years-to-days-calculator/": "2026-11-21",
-    # This date records the verified unit definitions, conversion formulas, rounding and input-limit review.
-    "/unit-converter/": "2026-11-14",
-    # This date records the verified Tasbih target-persistence, storage-disclosure and content-restructure update.
-    "/tasbih-counter/": "2026-11-15",
+    # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
+    "/unit-converter/": "2026-11-21",
+    # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
+    "/tasbih-counter/": "2026-11-21",
+    # This date records the GSC-backed online profit and loss calculator explanation.
+    "/profit-loss-calculator/": "2026-11-21",
     "/query-calculator/": "2026-11-19",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
