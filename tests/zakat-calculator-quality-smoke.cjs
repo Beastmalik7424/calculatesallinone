@@ -156,11 +156,22 @@ assert.ok(urText.length > 300, "Urdu Zakat page must contain the translated guid
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const submitAt = html.indexOf('id="zakat-submit"');
   const assetAt = html.indexOf('id="z-cash"');
-  const bottomSubmitAt = html.indexOf('id="zakat-submit-bottom"');
   const lastPriceAt = html.indexOf('id="z-goldprice"');
-  assert.ok(submitAt > 0 && submitAt < assetAt, name + " first-screen Zakat action must follow setup selectors and precede the long asset-entry section");
-  assert.ok(bottomSubmitAt > lastPriceAt && lastPriceAt > 0, name + " final Zakat action must follow the metal-price fields");
-  assert.doesNotMatch(html.slice(submitAt - 120, submitAt + 250), /sticky|top-20|z-20/, name + " Zakat submit action must stay in normal document flow and never overlap the header navigation");
+  const resultAt = html.indexOf('id="zakat-result"');
+  assert.ok(assetAt > 0 && lastPriceAt > assetAt, name + " asset and price inputs must be present");
+  assert.ok(submitAt > lastPriceAt, name + " Calculate button must follow every input");
+  assert.ok(resultAt > submitAt, name + " result must follow the Calculate button");
+  assert.equal(html.indexOf('id="zakat-submit-bottom"'), -1, name + " must expose a single Calculate button");
+  const beforeSubmit = html.slice(Math.max(0, submitAt - 260), submitAt);
+  assert.match(beforeSubmit, /fixed inset-x-0 bottom-0/, name + " Calculate button must remain pinned to the viewport bottom on initial load");
+  assert.doesNotMatch(beforeSubmit, /top-0|top-\\d/, name + " Calculate button must not be pinned to the top");
+  for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
+    "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
+    assert.ok(html.indexOf('id="' + id + '"') < submitAt, name + " input must precede Calculate: " + id);
+  }
+  for (const match of html.matchAll(/id="(z-jafari-[^"]+)"/g)) {
+    assert.ok(match.index < submitAt, name + " Ja'fari input must precede Calculate: " + match[1]);
+  }
 }
 assert.match(en, /application\/ld\+json/, "English page must retain structured data");
 assert.match(ur, /application\/ld\+json/, "Urdu page must retain structured data");
