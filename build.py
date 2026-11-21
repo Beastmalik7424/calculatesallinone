@@ -179,13 +179,8 @@ TOOLS = [
             + '<option value="gold" selected>Gold: 69.12 g (15 common mithqals)</option>'
             + '<option value="silver">Silver: 483.84 g (105 common mithqals)</option>'
             + '</select></div>'
-            + '<button id="zakat-submit" type="submit" class="@B@ w-full min-h-[44px]">Calculate Zakat</button>'
-            + result("zakat-result", False)
             + '</div>'
-            + '<details class="zakat-advanced mt-2 rounded-xl border border-stone-200 dark:border-stone-700 p-2">'
-            + '<summary class="min-h-[44px] cursor-pointer flex items-center font-semibold text-stone-900 dark:text-stone-100">Additional assets, metal prices and conditions</summary>'
-            + '<p class="mt-2 text-sm text-stone-700 dark:text-stone-300">Examples: PKR, USD, GBP, EUR, SAR, AED, INR. Use one currency for every amount and metal price.</p>'
-            + '<p class="text-sm text-stone-700 dark:text-stone-300">Choose the method you follow. The Shia Ja\'fari option is specifically limited to Sayyid Sistani\'s published rulings, not every Ja\'fari authority.</p>'
+            + '<div class="zakat-expanded-assets mt-2 space-y-3">'
             + '<div id="z-sunni-asset-fields" class="space-y-3">'
             + '<div class="zakat-section space-y-3" data-zakat-step="sunni-assets-a">'
             + '<h2 class="text-lg font-semibold text-stone-900 dark:text-stone-100">Eligible assets</h2>'
@@ -280,8 +275,9 @@ TOOLS = [
             + '</div>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Prices are converted to per-gram rates before Nisab is calculated. This is an estimate, not a fatwa.</p>'
             + '</div>'
-            + '<button id="zakat-submit-bottom" type="submit" class="@B@ w-full">Calculate Zakat</button>'
-            + '</details>'
+            + result("zakat-result", False)
+            + '<button id="zakat-submit" type="submit" class="@B@ w-full min-h-[44px]">Calculate Zakat</button>'
+            + '</div>'
             + '</form>'
         ),
         "guide": [
