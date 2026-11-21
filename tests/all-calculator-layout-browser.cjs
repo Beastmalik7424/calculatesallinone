@@ -95,7 +95,8 @@ function rect(element) {
             const zakatSetupColumnCount = zakatSetupGrid
               ? getComputedStyle(zakatSetupGrid).gridTemplateColumns.trim().split(/\s+/).length
               : 0;
-            // One-page Zakat form: the currency input is the first always-visible field.
+            // Expanded Zakat form: setup controls and the fixed Calculate action must be visible;
+            // the result panel stays visible in the document after the action, below the full input set.
             const firstControl = zakatForm
               ? zakatForm.querySelector("#z-currency")
               : root && root.querySelector("input:not([type='hidden']), select, textarea, button");
@@ -171,8 +172,7 @@ function rect(element) {
               zakatForm.querySelector("#z-currency"),
               zakatForm.querySelector("#z-school-of-thought"),
               activeNisab,
-              zakatForm.querySelector("#zakat-submit"),
-              resultPanel
+              zakatForm.querySelector("#zakat-submit")
             ] : [];
             const primaryRects = primaryElements.map(element => element && element.getBoundingClientRect());
             const primaryVisible = !!zakatPrimary && primaryElements.every((element, index) =>
