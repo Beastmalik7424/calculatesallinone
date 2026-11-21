@@ -18,6 +18,10 @@ CASES = {
             "25% of 200",
             "30 out of 120",
             "starting value",
+            "45 is 18% of the whole",
+            "45 ÷ 0.18 = 250",
+            "percentage points",
+            "25 percentage points",
         ],
     },
     "percentage-difference-calculator": {
@@ -46,6 +50,9 @@ CASES = {
             "100:200:400",
             "1:2:4",
             "three-term ratio",
+            "150 split in 2:3",
+            "60 and 90",
+            "does not have a dedicated total-allocation mode",
         ],
     },
     "fraction-calculator": {
@@ -56,6 +63,8 @@ CASES = {
             "common denominator",
             "improper fractions",
             "denominator cannot be zero",
+            "7/4 = 1 3/4",
+            "does not convert the result into a mixed-number display",
         ],
     },
     "compound-interest-calculator": {
@@ -100,7 +109,7 @@ for slug, spec in CASES.items():
     assert title and 25 <= len(title_text) <= title_limit, f"Invalid title: {slug}"
     if slug == "date-calculator":
         assert title_text == "Date Difference Calculator | Days Between Dates", "Date calculator title must preserve the exact requested search-intent wording"
-        headings = [unescape(value) for value in re.findall(r"<h2[^>]*>(.*?)</h2>", source)]
+        headings = [unescape(value) for value in re.findall(r"<h2[^>]*>(.*?)</h2>", source, re.S)]
         assert "Gregorian leap-year rule" in headings, "Date calculator must label its Gregorian leap-year explanation accurately"
         assert "Calendar-day counting limitations" in headings, "Date calculator limitations need a heading that matches the content"
         assert "Check the required counting rule" in headings, "Date calculator must explain that elapsed, inclusive and business-day rules differ"
