@@ -124,6 +124,8 @@ def check_urdu_bmi():
         assert f'href="{target}"' in body, f"Urdu BMI missing relevant link: {target}"
         assert (ROOT / target.strip("/") / "index.html").is_file(), f"Broken Urdu BMI target: {target}"
     assert "Related calculators" in body or "متعلقہ کیلکولیٹر" in body, "Urdu BMI related tools section missing"
+    assert "پاکستان میں BMI calculator" in body, "Urdu BMI page is missing the observed Pakistan BMI query wording"
+    assert "Body Mass Index کا اردو مطلب جسمانی کمیت کا اشاریہ ہے" in body, "Urdu BMI page is missing the observed Urdu meaning query"
     assert len(re.findall(r"<summary\b", body, re.I)) >= 6, "Urdu BMI needs six visible FAQs"
     links = re.findall(r'<link\b[^>]*hreflang=["\']([^"\']+)["\'][^>]*href=["\']([^"\']+)["\']', source, re.I)
     assert {(lang, href) for lang, href in links} >= {
@@ -156,6 +158,12 @@ def check_targeted_content():
         ],
         "unit-converter": [
             "Maintained by Muhammad Fayyaz Adeel",
+            "Can centimeters be converted to pounds or kilograms?",
+            "how many centimeters are in a pound",
+            "cm to kg",
+            "cm to lb",
+            "Centimeters measure length",
+            "pounds and kilograms measure mass",
             "Supported unit categories and choices",
             "Weight: kilograms (kg), grams (g), pounds (lb) and ounces (oz)",
             "Length: metres (m), centimetres (cm), kilometres (km), feet (ft), inches (in) and miles (mi)",
@@ -171,6 +179,10 @@ def check_targeted_content():
         ],
         "tasbih-counter": [
             "Maintained by Muhammad Fayyaz Adeel",
+            "Tasbih calculator and free online Tasbeeh counter",
+            "calculator tasbih",
+            "free online Tasbeeh counter",
+            "does not listen to recitation",
             "What is a digital Tasbih counter?",
             "How to use this online Tasbih counter",
             "Five phrases and plain meanings",
@@ -185,15 +197,24 @@ def check_targeted_content():
             "Can I count with a keyboard?",
             "What happens if browser storage is unavailable?",
         ],
+        "profit-loss-calculator": [
+            "Maintained by Muhammad Fayyaz Adeel",
+            "Using an online profit and loss calculator",
+            "online profit and loss calculator",
+            "Business P&L estimates gross profit",
+            "Product profit compares a selling price",
+            "profit and loss calculator online",
+        ],
     }
     for slug, phrases in required.items():
         content = visible_text(slug)
         for phrase in phrases:
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
     expected_dates = {
-        "tasbih-counter": "2026-11-15",
+        "tasbih-counter": "2026-11-21",
         "years-to-days-calculator": "2026-11-21",
-        "unit-converter": "2026-11-14",
+        "unit-converter": "2026-11-21",
+        "profit-loss-calculator": "2026-11-21",
     }
     for slug, expected_date in expected_dates.items():
         assert f"Last updated: {expected_date}" in visible_text(slug), f"/{slug}/ must display its verified update date"

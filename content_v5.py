@@ -316,3 +316,27 @@ GUIDE_EXTRA["years-to-days-calculator"] = [
         "For two dates, use the <a href='/date-calculator/'>Date Difference Calculator</a>. For age from a birth date, use the <a href='/age-calculator/'>Age Calculator</a>.",
     ]),
 ]
+
+
+# Search Console-backed language additions. These sections answer real query wording
+# without changing calculator controls, formulas, page URLs or first-screen layout.
+GUIDE_EXTRA.setdefault("tasbih-counter", []).append(
+    ("Tasbih calculator and free online Tasbeeh counter", [
+        "People searching for a Tasbih calculator, calculator tasbih or a free online Tasbeeh counter are usually looking for a simple way to record dhikr counts. This page records deliberate taps, supports preset or custom phrases and targets, and provides undo and reset controls.",
+        "It is a counting tool only. It does not listen to recitation, verify pronunciation or determine a religious ruling.",
+    ])
+)
+
+GUIDE_EXTRA["profit-loss-calculator"].append(
+    ("Using an online profit and loss calculator", [
+        "This online profit and loss calculator has two distinct modes. Business P&L estimates gross profit and net operating profit from revenue, cost of goods sold and entered expenses. Product profit compares a selling price with its cost price and shows profit or loss, markup and gross margin.",
+        "A profit and loss calculator online is only as complete as the amounts entered. Include relevant direct costs, keep all amounts in one currency, and check whether taxes, refunds, platform charges or other expenses are outside the selected inputs.",
+    ])
+)
+
+GUIDE_EXTRA["unit-converter"].append(
+    ("Can centimeters be converted to pounds or kilograms?", [
+        "No direct conversion exists between centimeters and pounds or kilograms. Centimeters measure length, while pounds and kilograms measure mass. A question such as 'how many centimeters are in a pound', or a request for cm to kg or cm to lb, mixes different physical quantities, so there is no valid conversion factor.",
+        "Use the length category to convert centimeters to inches, or the weight category to convert pounds to kilograms. Convert like quantities only.",
+    ])
+)
