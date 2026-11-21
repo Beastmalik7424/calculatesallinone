@@ -284,15 +284,15 @@ def check_years_quick_reference():
     section_marker = "Quick reference: years to days"
     assert section_marker in source, "Years-to-days quick reference section is missing"
     quick_section = source.split(section_marker, 1)[1]
-    quick_match = re.search(r"<table\\b[^>]*>(.*?)</table>", quick_section, re.S | re.I)
+    quick_match = re.search(r"<table\b[^>]*>(.*?)</table>", quick_section, re.S | re.I)
     assert quick_match, "Years-to-days quick reference table is missing"
 
     def table_rows(table_html):
         parsed = []
-        for year, cells_html in re.findall(r"<tr>\\s*<th\\b[^>]*>(.*?)</th>(.*?)</tr>", table_html, re.S | re.I):
+        for year, cells_html in re.findall(r"<tr>\s*<th\b[^>]*>(.*?)</th>(.*?)</tr>", table_html, re.S | re.I):
             cells = [
                 html.unescape(re.sub(r"<[^>]+>", "", value)).strip()
-                for value in re.findall(r"<td\\b[^>]*>(.*?)</td>", cells_html, re.S | re.I)
+                for value in re.findall(r"<td\b[^>]*>(.*?)</td>", cells_html, re.S | re.I)
             ]
             parsed.append((html.unescape(re.sub(r"<[^>]+>", "", year)).strip(), cells))
         return parsed
@@ -318,7 +318,7 @@ def check_years_quick_reference():
     assert dict(quick_rows) == expected_values, "Quick-reference arithmetic changed"
 
     full_reference = quick_section.split('id="years-days-full-reference"', 1)[1]
-    full_match = re.search(r"<table\\b[^>]*>(.*?)</table>", full_reference, re.S | re.I)
+    full_match = re.search(r"<table\b[^>]*>(.*?)</table>", full_reference, re.S | re.I)
     assert full_match, "Expanded years-to-days reference table is missing"
     full_rows = table_rows(full_match.group(1))
     assert len(full_rows) == 29, f"Expanded reference must retain 29 examples, got {len(full_rows)}"
