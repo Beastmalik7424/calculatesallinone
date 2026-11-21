@@ -215,12 +215,18 @@ assert 'name="description" content="Convert years to days or days to years using
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 
-assert "Show all 27 years-to-days reference examples" in years_html, "The expanded reference must advertise all 27 examples"
+assert "Show all 29 years-to-days reference examples" in years_html, "The expanded reference must advertise all 29 examples"
 assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
+# Search Console's 28-day query sample shows meaningful impressions for both 7-year and 19-year conversions.
+# Each value must appear in the short visible reference and the expanded reference table.
+_year_7_row = '<tr><th scope="row" class="border-b p-3">7</th><td class="border-b p-3">2,555</td><td class="border-b p-3">2,556.75</td><td class="border-b p-3">2,556.6975</td></tr>'
+_year_19_row = '<tr><th scope="row" class="border-b p-3">19</th><td class="border-b p-3">6,935</td><td class="border-b p-3">6,939.75</td><td class="border-b p-3">6,939.6075</td></tr>'
+assert years_html.count(_year_7_row) == 2, "The 7-year GSC query row must appear in both reference tables"
+assert years_html.count(_year_19_row) == 2, "The 19-year GSC query row must appear in both reference tables"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
 assert "For this calculator’s date-only anniversary method" not in years_html, "Obsolete date-only anniversary wording must be removed"
-assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 27 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
+assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 29 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
 for phrase in (
     "Choose a conversion method",
     "Days = Years × Selected days per year.",
