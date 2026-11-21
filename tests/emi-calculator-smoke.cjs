@@ -16,6 +16,8 @@ assert.match(scheduleRegion[1], /\baria-label="Repayment schedule"/, "Scrollable
 assert.ok(html.includes('property="og:image" content="https://calculateallinone.vercel.app/assets/og-image.png"'), "EMI page must use the generated canonical social preview image");
 assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "EMI page must expose a large social preview");
 assert.ok(html.includes("For a 5 lakh loan EMI estimate, enter 500,000 as the loan amount"), "EMI page must answer the observed 5 lakh loan EMI query without assuming a rate or term");
+assert.ok(html.includes("Pakistan loan EMI calculator") && html.includes("monthly instalment"), "EMI guide must use relevant Pakistan loan and monthly instalment search language");
+assert.ok(html.includes("reducing-balance") && html.includes("flat-rate markup"), "EMI guide must distinguish reducing-balance EMI from flat-rate markup");
 const schemaBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
   .map(([, raw]) => JSON.parse(raw));
 const schemas = schemaBlocks.flatMap(schema => Array.isArray(schema) ? schema : [schema]);
