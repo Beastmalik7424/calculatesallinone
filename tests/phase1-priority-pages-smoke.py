@@ -278,11 +278,66 @@ def check_tasbih_content_structure():
     assert "does not sync across devices" in content.lower(), "The page must explain device-local storage"
 
 
+
+def check_years_quick_reference():
+    source = read_page("years-to-days-calculator")
+    section_marker = "Quick reference: years to days"
+    assert section_marker in source, "Years-to-days quick reference section is missing"
+    quick_section = source.split(section_marker, 1)[1]
+    quick_match = re.search(r"<table\\b[^>]*>(.*?)</table>", quick_section, re.S | re.I)
+    assert quick_match, "Years-to-days quick reference table is missing"
+
+    def table_rows(table_html):
+        parsed = []
+        for year, cells_html in re.findall(r"<tr>\\s*<th\\b[^>]*>(.*?)</th>(.*?)</tr>", table_html, re.S | re.I):
+            cells = [
+                html.unescape(re.sub(r"<[^>]+>", "", value)).strip()
+                for value in re.findall(r"<td\\b[^>]*>(.*?)</td>", cells_html, re.S | re.I)
+            ]
+            parsed.append((html.unescape(re.sub(r"<[^>]+>", "", year)).strip(), cells))
+        return parsed
+
+    expected_years = ["2", "3", "5", "7", "10", "13", "19", "20"]
+    quick_rows = table_rows(quick_match.group(1))
+    actual_years = [year for year, _ in quick_rows]
+    assert actual_years == expected_years, (
+        "Quick reference must prioritize observed 28-day GSC year queries without changing its table structure; "
+        f"expected={expected_years!r}, actual={actual_years!r}"
+    )
+
+    expected_values = {
+        "2": ["730", "730.5", "730.485"],
+        "3": ["1095", "1095.75", "1095.7275"],
+        "5": ["1825", "1826.25", "1826.2125"],
+        "7": ["2555", "2556.75", "2556.6975"],
+        "10": ["3650", "3652.5", "3652.425"],
+        "13": ["4745", "4748.25", "4748.1525"],
+        "19": ["6935", "6939.75", "6939.6075"],
+        "20": ["7300", "7305", "7304.85"],
+    }
+    assert dict(quick_rows) == expected_values, "Quick-reference arithmetic changed"
+
+    full_reference = quick_section.split('id="years-days-full-reference"', 1)[1]
+    full_match = re.search(r"<table\\b[^>]*>(.*?)</table>", full_reference, re.S | re.I)
+    assert full_match, "Expanded years-to-days reference table is missing"
+    full_rows = table_rows(full_match.group(1))
+    assert len(full_rows) == 29, f"Expanded reference must retain 29 examples, got {len(full_rows)}"
+    assert set(expected_years).issubset({year for year, _ in full_rows}), "Quick-reference rows must remain in the expanded table"
+
+    visible = visible_text("years-to-days-calculator")
+    assert "Last updated: 2026-11-22" in visible, "Visible update date must match the substantive quick-reference refresh"
+    schemas = jsonld_documents(source, "years-to-days-calculator")
+    webpage = next((item for item in schemas if item.get("@type") == "WebPage"), None)
+    assert webpage and webpage.get("dateModified") == "2026-11-22", "Structured dateModified must match the visible update date"
+
+
+
 def main():
     for slug, spec in CASES.items():
         check_english_page(slug, spec)
     check_urdu_bmi()
     check_targeted_content()
+    check_years_quick_reference()
     check_tasbih_content_structure()
     print("PASS: priority pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD, preserved canonicals, and research-backed content")
     return 0
