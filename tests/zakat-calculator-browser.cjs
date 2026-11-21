@@ -149,7 +149,7 @@ let browser;
   await page.locator("#z-cash").fill("200000");
   await page.locator("#z-silverprice").fill("300");
   await page.locator("#zakat-submit").click();
-  assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\\.00)?/,
+  assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\.00)?/,
     "Hanafi silver-Nisab example must calculate exactly PKR 5,000.00");
 
   // Sistani business-goods path: only trade goods count, ordinary Hanafi cash fields are hidden.
@@ -301,7 +301,7 @@ let browser;
   await page.locator("#z-silverprice").fill("300");
   await page.locator("#z-hawl").check();
   await page.locator("#zakat-submit").click();
-  assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\\.00)?/,
+  assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\.00)?/,
     "Urdu Hanafi silver-Nisab example must calculate exactly PKR 5,000.00");
 
   // Urdu Sistani coin-only below-Nisab result must not display a zero business-goods threshold.
