@@ -145,6 +145,13 @@ let browser;
   const hanafiResult = await page.locator("#zakat-result").innerText();
   assert.match(hanafiResult, /2,500/, "Hanafi calculation must independently return PKR 2,500");
 
+  // User-requested PKR 200,000 / silver PKR 300 per gram case.
+  await page.locator("#z-cash").fill("200000");
+  await page.locator("#z-silverprice").fill("300");
+  await page.locator("#zakat-submit").click();
+  assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\\.00)?/,
+    "Hanafi silver-Nisab example must calculate exactly PKR 5,000.00");
+
   // Sistani business-goods path: only trade goods count, ordinary Hanafi cash fields are hidden.
   await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
   assert.equal(await page.locator("#z-jafari-fields").isVisible(), true, "Sistani section must become visible");
@@ -288,6 +295,15 @@ let browser;
     assert.equal(metrics.formDirection, "rtl", "Urdu form must remain RTL at " + viewport.width + "px");
   }
 
+  // Same independently checkable Hanafi calculation in the Urdu RTL interface.
+  await page.locator("#z-school-of-thought").selectOption("sunni-hanafi");
+  await page.locator("#z-cash").fill("200000");
+  await page.locator("#z-silverprice").fill("300");
+  await page.locator("#z-hawl").check();
+  await page.locator("#zakat-submit").click();
+  assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\\.00)?/,
+    "Urdu Hanafi silver-Nisab example must calculate exactly PKR 5,000.00");
+
   // Urdu Sistani coin-only below-Nisab result must not display a zero business-goods threshold.
   await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
   await page.locator("#z-jafari-coins-used-as-money").check();
@@ -300,6 +316,38 @@ let browser;
   assert.match(urduBelowCoinResult, /لاگو نہیں/,
     "Urdu coin-only below-Nisab result must not display a zero business-goods threshold");
 
+
+  // Deterministic 1,000-case viewport/input simulation for both locales.
+  let simulationSeed = 20261121;
+  function simulationRandom() { simulationSeed = (simulationSeed * 1664525 + 1013904223) >>> 0; return simulationSeed / 4294967296; }
+  for (const localePath of ["/zakat-calculator/", "/ur/zakat-calculator/"]) {
+    await page.goto(BASE_URL + localePath, { waitUntil: "networkidle" });
+    for (let i = 0; i < 500; i++) {
+      const width = 320 + Math.floor(simulationRandom() * 1281);
+      const height = 568 + Math.floor(simulationRandom() * 633);
+      await page.setViewportSize({ width, height });
+      const cash = Math.floor(simulationRandom() * 100000000) / 100;
+      const silverPrice = 1 + Math.floor(simulationRandom() * 100000) / 100;
+      await page.locator("#z-cash").fill(String(cash));
+      await page.locator("#z-silverprice").fill(String(silverPrice));
+      const metrics = await page.evaluate(() => {
+        const button = document.querySelector("#zakat-submit").getBoundingClientRect();
+        return {
+          viewportWidth: innerWidth,
+          viewportHeight: innerHeight,
+          documentWidth: document.documentElement.scrollWidth,
+          buttonTop: button.top,
+          buttonBottom: button.bottom,
+          buttonLeft: button.left,
+          buttonRight: button.right,
+          buttonHeight: button.height
+        };
+      });
+      assert.equal(metrics.documentWidth, metrics.viewportWidth, localePath + " simulation " + i + " must not overflow horizontally");
+      assert.ok(metrics.buttonHeight >= 44 && metrics.buttonTop >= 0 && metrics.buttonBottom <= metrics.viewportHeight && metrics.buttonLeft >= 0 && metrics.buttonRight <= metrics.viewportWidth,
+        localePath + " simulation " + i + " must keep Calculate fully visible: " + JSON.stringify(metrics));
+    }
+  }
 
   // The Zakat calculator shell must match the dedicated Standard Calculator,
   // not merely keep its own controls visible. Compare rendered browser geometry
