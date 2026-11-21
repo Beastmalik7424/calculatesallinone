@@ -735,24 +735,28 @@ for url in urls:
                     "Age page dateModified must match the verified leap-day disclosure update."
                 )
             elif url.endswith("/ur/bmi-calculator/"):
-                assert item.get("dateModified") == "2026-11-09", (
-                    "Urdu BMI dateModified must match the verified substantive content and source update."
+                assert item.get("dateModified") == "2026-11-21", (
+                    "Urdu BMI dateModified must match the GSC-backed search-intent explanation."
                 )
             elif url == SITE + "/years-to-days-calculator/":
                 assert item.get("dateModified") == "2026-11-21", (
                     "Years-to-Days dateModified must match the GSC-backed 7- and 19-year reference update."
                 )
             elif url == SITE + "/unit-converter/":
-                assert item.get("dateModified") == "2026-11-14", (
-                    "Unit Converter dateModified must match the verified formulas, sources and limitations update."
+                assert item.get("dateModified") == "2026-11-21", (
+                    "Unit Converter dateModified must match the GSC-backed dimensional-conversion explanation."
                 )
             elif url == SITE + "/tasbih-counter/":
-                assert item.get("dateModified") == "2026-11-15", (
-                    "Tasbih Counter dateModified must match the verified target-persistence and content update."
+                assert item.get("dateModified") == "2026-11-21", (
+                    "Tasbih Counter dateModified must match the GSC-backed Tasbih calculator and Tasbeeh-counter wording."
                 )
             elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
                 assert item.get("dateModified") == "2026-11-16", (
                     "Zakat dateModified must match the verified Hanafi/Sistani, gram/tola, source and bilingual content update."
+                )
+            elif url == SITE + "/profit-loss-calculator/":
+                assert item.get("dateModified") == "2026-11-21", (
+                    "Profit and Loss dateModified must match the GSC-backed online calculator explanation."
                 )
             elif url == SITE + "/query-calculator/":
                 assert item.get("dateModified") == "2026-11-19", (
