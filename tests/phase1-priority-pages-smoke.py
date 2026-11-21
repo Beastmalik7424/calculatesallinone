@@ -217,7 +217,7 @@ def check_targeted_content():
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
     expected_dates = {
         "tasbih-counter": "2026-11-21",
-        "years-to-days-calculator": "2026-11-21",
+        "years-to-days-calculator": "2026-11-22",
         "unit-converter": "2026-11-21",
         "profit-loss-calculator": "2026-11-21",
     }
