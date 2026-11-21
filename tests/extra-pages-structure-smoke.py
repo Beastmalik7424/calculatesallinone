@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-"""Verify useful structure, visible FAQs and relevant internal paths on extra calculators."""
+from pathlib import Path
 import json
 import re
-from pathlib import Path
 
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
@@ -16,6 +14,8 @@ PAGES = {
             "What percentage is 30 out of 120?",
             "What is the percentage change from 80 to 100?",
             "Why does a 20% rise followed by a 20% fall not return to the starting amount?",
+            "How do I find the whole when I know the part and percentage?",
+            "What is the difference between percentage points and percentage change?",
         ],
         "related": ["discount-calculator", "profit-loss-calculator", "fraction-calculator"],
         "headings": ["Worked percentage examples", "Discounts and tax", "Percentage increase and decrease"],
@@ -45,6 +45,7 @@ PAGES = {
             "Can I enter decimal values?",
             "Can a ratio contain zero?",
             "Does scaling change a ratio?",
+            "How do I split a total in a ratio?",
         ],
         "related": ["percentage-calculator", "percentage-difference-calculator", "fraction-calculator"],
         "headings": ["What a ratio compares", "Simplify a ratio with the GCD", "Simplify a three-term ratio", "Ratios with decimal inputs", "Solve a proportion with one missing value", "Scale an equivalent ratio", "Input limits and units"],
@@ -57,6 +58,7 @@ PAGES = {
             "How do I divide two fractions?",
             "Can a fraction have a zero denominator?",
             "Can I enter decimal numerators or denominators?",
+            "How do I convert an improper fraction to a mixed number?",
         ],
         "related": ["percentage-calculator", "standard-calculator", "unit-converter"],
         "headings": ["Adding and subtracting fractions", "Multiplying and dividing fractions", "Improper fractions and zero denominators"],

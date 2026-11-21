@@ -130,6 +130,8 @@ FAQS = {
         ("What percentage is 30 out of 120?", "25%. Divide 30 by 120 and multiply by 100."),
         ("What is the percentage change from 80 to 100?", "A 25% increase. The change is 20, and 20 divided by the starting value 80 is 0.25."),
         ("Why does a 20% rise followed by a 20% fall not return to the starting amount?", "Starting from 100, a 20% rise gives 120. A 20% fall from 120 is 24, leaving 96."),
+        ("How do I find the whole when I know the part and percentage?", "Divide the part by the percentage written as a decimal. If 45 is 18% of the whole, calculate 45 ÷ 0.18 = 250. Formula: whole = part ÷ (percentage ÷ 100). This calculator offers percentage-of, percentage-share and percentage-change modes, but no dedicated find-the-whole input mode."),
+        ("What is the difference between percentage points and percentage change?", "If a rate rises from 20% to 25%, the increase is 5 percentage points. The relative percentage change is (25 − 20) ÷ 20 × 100 = 25%. Use percentage points to subtract two rates; use percentage change when measuring the change relative to the starting rate."),
     ],
     "percentage-difference-calculator": [
         ("What is the percentage difference between 80 and 100?", "22.2222%. The absolute difference is 20 and the average is 90, so 20 ÷ 90 × 100 = 22.2222%."),
@@ -146,13 +148,15 @@ FAQS = {
         ("How do I solve A:B = C:D?", "Enter exactly three positive values and leave the missing term blank. The calculator uses A × D = B × C to solve the fourth value."),
         ("Can I enter decimal values?", "The two-term and three-term simplify modes, and the two-term scale mode, accept non-negative decimal values with up to six decimal places. Scaling uses exact integer arithmetic and can return up to twelve decimal places. Inputs with more than six decimal places are rejected."),
         ("Can a ratio contain zero?", "In two-term simplify and scale modes, one term may be zero but both cannot be zero. In three-term simplify mode, one or two terms may be zero, but not all three. Proportion mode requires positive known values. Negative terms are not accepted."),
-        ("Does scaling change a ratio?", "No. Multiplying both terms by the same positive factor creates an equivalent ratio. For example, 2:3 scaled by 4 becomes 8:12.")
+        ("Does scaling change a ratio?", "No. Multiplying both terms by the same positive factor creates an equivalent ratio. For example, 2:3 scaled by 4 becomes 8:12."),
+        ("How do I split a total in a ratio?", "Add the ratio parts, divide the total by that sum, then multiply by each part. For 150 split in 2:3, there are 5 parts, so one part is 150 ÷ 5 = 30 and the shares are 60 and 90. This calculator simplifies and scales ratios and solves proportions; it does not have a dedicated total-allocation mode.")
     ],
 "fraction-calculator": [
         ("What is 1/2 + 1/3?", "5/6. Convert to sixths: 3/6 + 2/6 = 5/6."),
         ("How do I divide two fractions?", "Multiply the first fraction by the reciprocal of the second. For example, 3/4 divided by 1/2 is 3/2."),
         ("Can a fraction have a zero denominator?", "No. A zero denominator is invalid because division by zero is undefined."),
         ("Can I enter decimal numerators or denominators?", "No. Enter whole-number numerators and denominators. Convert a decimal first, for example 0.75 is 3/4."),
+        ("How do I convert an improper fraction to a mixed number?", "Divide the numerator by the denominator. For 7/4, 7 ÷ 4 gives a quotient of 1 and a remainder of 3, so 7/4 = 1 3/4. This calculator returns a simplified fraction and does not convert the result into a mixed-number display."),
     ],
     "compound-interest-calculator": [
         ("How much is 1,000 at 10% compounded semiannually for one year?", "1,102.50. Each six-month period earns 5%, so the balance is 1,000 × 1.05 × 1.05."),
