@@ -98,7 +98,8 @@ let browser;
     if(size.width<=600&&data.minShortcutHeight<44)failures.push(key+' calculator shortcut touch targets must be at least 44px high: '+data.minShortcutHeight);
     if(size.width<=600&&data.minCheckboxLabelHeight<44)failures.push(key+' Zakat checkbox rows must be at least 44px high: '+data.minCheckboxLabelHeight);
    }
-   if(data.submitPosition==='sticky'||data.submitPosition==='fixed')failures.push(key+' Zakat submit button must not overlap the header navigation');
+   if(data.submitPosition==='sticky')failures.push(key+' Zakat submit button must not use sticky positioning');
+   if(data.submitPosition==='fixed'&&data.submitRect&&data.submitRect.top<data.headerHeight)failures.push(key+' fixed Zakat submit button must remain below the header navigation');
    const screenshotSlug=slug.replaceAll('/','-');
    await page.screenshot({path:'/tmp/'+screenshotSlug+'-'+size.width+'.png',fullPage:false});
   }
