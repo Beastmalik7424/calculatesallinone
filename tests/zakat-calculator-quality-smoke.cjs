@@ -164,7 +164,7 @@ for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   assert.equal(html.indexOf('id="zakat-submit-bottom"'), -1, name + " must expose a single Calculate button");
   const beforeSubmit = html.slice(Math.max(0, submitAt - 260), submitAt);
   assert.match(beforeSubmit, /fixed inset-x-0 bottom-0/, name + " Calculate button must remain pinned to the viewport bottom on initial load");
-  assert.doesNotMatch(beforeSubmit, /top-0|top-\\d/, name + " Calculate button must not be pinned to the top");
+  assert.doesNotMatch(beforeSubmit, /top-0|top-[0-9]/, name + " Calculate button must not be pinned to the top");
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
     "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
     assert.ok(html.indexOf('id="' + id + '"') < submitAt, name + " input must precede Calculate: " + id);
