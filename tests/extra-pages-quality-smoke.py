@@ -21,7 +21,8 @@ CASES = {
             "45 is 18% of the whole",
             "45 ÷ 0.18 = 250",
             "percentage points",
-            "25 percentage points",
+            "5 percentage points",
+            "relative percentage change",
         ],
     },
     "percentage-difference-calculator": {
