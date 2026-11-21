@@ -204,6 +204,11 @@ def check_targeted_content():
             "Business P&L estimates gross profit",
             "Product profit compares a selling price",
             "profit and loss calculator online",
+            "gross profit calculator",
+            "operating profit calculator",
+            "profit margin calculator",
+            "does not calculate net profit after interest and tax",
+            "does not calculate break-even sales",
         ],
     }
     for slug, phrases in required.items():
