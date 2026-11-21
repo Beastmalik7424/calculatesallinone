@@ -78,10 +78,22 @@ let browser;
     const method = document.querySelector("#z-school-of-thought");
     return !!method && !!(method.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
   }), "The first-screen Calculate Zakat action must follow the currency and school selectors");
-  assert.ok(await page.locator("#zakat-submit-bottom").evaluate(el => {
+  assert.ok(await page.locator("#zakat-submit").evaluate(el => {
     const lastRequiredPrice = document.querySelector("#z-goldprice");
     return !!lastRequiredPrice && !!(lastRequiredPrice.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
-  }), "The final Calculate Zakat action must follow all asset, liability, method and metal-price fields");
+  }), "The single Calculate Zakat action must follow all asset, liability, method and metal-price fields");
+  assert.ok(await page.locator("#zakat-result").evaluate(el => !!(document.querySelector("#zakat-submit").compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)),
+    "The result panel must follow the single Calculate action in document order");
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1366, height: 768 }]) {
+    await page.setViewportSize(viewport);
+    const bounds = await page.locator("#zakat-submit").evaluate(el => {
+      const r = el.getBoundingClientRect();
+      return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, height: r.height, vw: innerWidth, vh: innerHeight };
+    });
+    assert.ok(bounds.height >= 44 && bounds.top >= 0 && bounds.bottom <= bounds.vh && bounds.left >= 0 && bounds.right <= bounds.vw,
+      "Calculate button must be fully visible without scrolling at " + viewport.width + "x" + viewport.height + ": " + JSON.stringify(bounds));
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
   assert.equal(await page.locator("#z-stock").getAttribute("autocomplete"), "off",
     "Financial trade-stock values must not be browser-autofilled");
   const englishAmountInputs = page.locator("#zakat-form input[type=number]");
@@ -113,11 +125,8 @@ let browser;
   assert.equal(await page.locator("#zakat-result").isVisible(), true,
     "The result panel must be visible on first paint");
   const advancedDetails = page.locator("#zakat-form details").first();
-  assert.equal(await advancedDetails.evaluate(el => el.open), false,
-    "All secondary Zakat inputs must start inside a closed details section");
-  await advancedDetails.locator("summary").click();
   assert.equal(await advancedDetails.evaluate(el => el.open), true,
-    "Secondary Zakat inputs must expand with one click");
+    "All Zakat asset, method, metal-price and condition inputs must be expanded before the single Calculate action");
 
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
     "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
@@ -227,11 +236,8 @@ let browser;
   assert.equal(await page.locator("#zakat-result").isVisible(), true,
     "Urdu result panel must be visible on first paint");
   const urduAdvanced = page.locator("#zakat-form details").first();
-  assert.equal(await urduAdvanced.evaluate(el => el.open), false,
-    "Urdu secondary fields must also start collapsed");
-  await urduAdvanced.locator("summary").click();
   assert.equal(await urduAdvanced.evaluate(el => el.open), true,
-    "Urdu secondary fields must expand with one click");
+    "Urdu asset, method, metal-price and condition inputs must be expanded before the single Calculate action");
 
   const urAmountInputs = page.locator("#zakat-form input[type=number]");
   assert.ok(await urAmountInputs.count() >= 10, "Expected all Urdu Zakat amount inputs");
