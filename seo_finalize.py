@@ -42,8 +42,8 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/ur/zakat-calculator/": "2026-11-16",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
-    # This date records the GSC-backed 7- and 19-year reference rows and verified three-method arithmetic.
-    "/years-to-days-calculator/": "2026-11-21",
+    # This date records the GSC-backed quick-reference row selection and verified three-method arithmetic.
+    "/years-to-days-calculator/": "2026-11-22",
     # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
     # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
