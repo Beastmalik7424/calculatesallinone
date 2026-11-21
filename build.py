@@ -275,9 +275,9 @@ TOOLS = [
             + '</div>'
             + '<p class="text-sm text-stone-700 dark:text-stone-300">Prices are converted to per-gram rates before Nisab is calculated. This is an estimate, not a fatwa.</p>'
             + '</div>'
+            + '</div>'
             + result("zakat-result", False)
             + '<button id="zakat-submit" type="submit" class="@B@ w-full min-h-[44px]">Calculate Zakat</button>'
-            + '</div>'
             + '</form>'
         ),
         "guide": [
