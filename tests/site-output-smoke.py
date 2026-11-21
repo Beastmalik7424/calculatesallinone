@@ -46,8 +46,6 @@ xml = ET.parse(ROOT / "sitemap.xml").getroot()
 ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.find("sm:loc", ns).text for node in xml.findall("sm:url", ns)]
 sitemap_urls = set(urls)
-sitemap_lastmods = {node.find("sm:loc", ns).text: node.find("sm:lastmod", ns).text for node in xml.findall("sm:url", ns)}
-assert sitemap_lastmods.get(SITE + "/zakat-calculator/") == "2026-11-16", "Zakat sitemap lastmod must match its verified substantive content update"
 titles = {}
 descriptions = {}
 assert urls, "Sitemap has no URLs"
@@ -76,6 +74,8 @@ def output_for_url(url):
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
+zakat_html = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
+assert "Last updated: 2026-11-16" in zakat_html, "Zakat visible update date must match its verified substantive content update"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
 home_head = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
 assert home_head, "Homepage must have a valid head element"
