@@ -74,14 +74,18 @@ let browser;
   assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Calculate action must be visible in the form");
   assert.equal(await page.locator("#zakat-form button:visible, #zakat-form input:visible, #zakat-form select:visible").first().getAttribute("id"), "z-currency",
     "The first visible form control must be the currency input, not an introductory hero button");
-  assert.ok(await page.locator("#zakat-submit").evaluate(el => {
-    const method = document.querySelector("#z-school-of-thought");
-    return !!method && !!(method.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
-  }), "The first-screen Calculate Zakat action must follow the currency and school selectors");
-  assert.ok(await page.locator("#zakat-submit-bottom").evaluate(el => {
-    const lastRequiredPrice = document.querySelector("#z-goldprice");
-    return !!lastRequiredPrice && !!(lastRequiredPrice.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING);
-  }), "The final Calculate Zakat action must follow all asset, liability, method and metal-price fields");
+  assert.ok(await page.locator("#z-goldprice").evaluate(el => {
+    const result = document.querySelector("#zakat-result");
+    return !!result && !!(el.compareDocumentPosition(result) & Node.DOCUMENT_POSITION_FOLLOWING);
+  }), "The result area must follow all Hanafi asset, liability and metal-price fields");
+  assert.ok(await page.locator("#zakat-result").evaluate(el => {
+    const submit = document.querySelector("#zakat-submit");
+    return !!submit && !!(el.compareDocumentPosition(submit) & Node.DOCUMENT_POSITION_FOLLOWING);
+  }), "Calculate Zakat must follow the result area at the bottom of the form");
+  assert.equal(await page.locator("#zakat-form #zakat-submit-bottom").count(), 0,
+    "The form must have one Calculate action, not a duplicate top/bottom pair");
+  assert.equal(await page.locator("#zakat-form").evaluate(form => form.lastElementChild && form.lastElementChild.id), "zakat-submit",
+    "Calculate Zakat must be the final form element");
   assert.equal(await page.locator("#z-stock").getAttribute("autocomplete"), "off",
     "Financial trade-stock values must not be browser-autofilled");
   const englishAmountInputs = page.locator("#zakat-form input[type=number]");
@@ -112,12 +116,8 @@ let browser;
     "Current calculator shortcut must be first for immediate discoverability");
   assert.equal(await page.locator("#zakat-result").isVisible(), true,
     "The result panel must be visible on first paint");
-  const advancedDetails = page.locator("#zakat-form details").first();
-  assert.equal(await advancedDetails.evaluate(el => el.open), false,
-    "All secondary Zakat inputs must start inside a closed details section");
-  await advancedDetails.locator("summary").click();
-  assert.equal(await advancedDetails.evaluate(el => el.open), true,
-    "Secondary Zakat inputs must expand with one click");
+  assert.equal(await page.locator("#zakat-form details.zakat-advanced").count(), 0,
+    "All applicable Hanafi assets and metal-price inputs must be expanded by default");
 
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
     "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
@@ -226,12 +226,12 @@ let browser;
   assert.equal(await page.locator("#zakat-submit").isVisible(), true);
   assert.equal(await page.locator("#zakat-result").isVisible(), true,
     "Urdu result panel must be visible on first paint");
-  const urduAdvanced = page.locator("#zakat-form details").first();
-  assert.equal(await urduAdvanced.evaluate(el => el.open), false,
-    "Urdu secondary fields must also start collapsed");
-  await urduAdvanced.locator("summary").click();
-  assert.equal(await urduAdvanced.evaluate(el => el.open), true,
-    "Urdu secondary fields must expand with one click");
+  assert.equal(await page.locator("#zakat-form details.zakat-advanced").count(), 0,
+    "Urdu asset and metal-price inputs must also be expanded by default");
+  for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
+    "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
+    assert.equal(await page.locator("#" + id).isVisible(), true, "Urdu Hanafi field must be visible on initial load: " + id);
+  }
 
   const urAmountInputs = page.locator("#zakat-form input[type=number]");
   assert.ok(await urAmountInputs.count() >= 10, "Expected all Urdu Zakat amount inputs");

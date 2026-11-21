@@ -154,13 +154,21 @@ for (const term of [
 assert.ok(enText.length > 500, "English Zakat page must contain the requested substantive guidance");
 assert.ok(urText.length > 300, "Urdu Zakat page must contain the translated guidance");
 for (const [name, html] of [["English", en], ["Urdu", ur]]) {
-  const submitAt = html.indexOf('id="zakat-submit"');
-  const assetAt = html.indexOf('id="z-cash"');
-  const bottomSubmitAt = html.indexOf('id="zakat-submit-bottom"');
-  const lastPriceAt = html.indexOf('id="z-goldprice"');
-  assert.ok(submitAt > 0 && submitAt < assetAt, name + " first-screen Zakat action must follow setup selectors and precede the long asset-entry section");
-  assert.ok(bottomSubmitAt > lastPriceAt && lastPriceAt > 0, name + " final Zakat action must follow the metal-price fields");
-  assert.doesNotMatch(html.slice(submitAt - 120, submitAt + 250), /sticky|top-20|z-20/, name + " Zakat submit action must stay in normal document flow and never overlap the header navigation");
+  const formMatch = html.match(/<form id="zakat-form"[\s\S]*?<\/form>/);
+  assert.ok(formMatch, name + " Zakat form must be present");
+  const form = formMatch[0];
+  const assetAt = form.indexOf('id="z-cash"');
+  const lastPriceAt = form.indexOf('id="z-goldprice"');
+  const resultAt = form.indexOf('id="zakat-result"');
+  const submitAt = form.indexOf('id="zakat-submit"');
+  assert.ok(assetAt > 0 && lastPriceAt > assetAt, name + " asset and metal-price fields must remain in the form");
+  assert.ok(resultAt > lastPriceAt, name + " result panel must follow every applicable asset and metal-price field");
+  assert.ok(submitAt > resultAt, name + " Calculate action must follow the result panel at the bottom of the form");
+  assert.equal((form.match(/id="zakat-submit"/g) || []).length, 1, name + " form must expose exactly one Calculate action");
+  assert.doesNotMatch(form, /id="zakat-submit-bottom"/, name + " form must not keep a duplicate lower Calculate action");
+  assert.doesNotMatch(form, /<details[^>]*class="zakat-advanced"/, name + " asset fields must not be hidden inside a collapsible details panel");
+  assert.doesNotMatch(form, /<summary[^>]*>Additional assets/i, name + " form must not require an Additional assets expansion");
+  assert.doesNotMatch(form, /<summary[^>]*>اضافی اثاثے/i, name + " Urdu form must not require an Additional assets expansion");
 }
 assert.match(en, /application\/ld\+json/, "English page must retain structured data");
 assert.match(ur, /application\/ld\+json/, "Urdu page must retain structured data");
@@ -182,6 +190,13 @@ assert.match(zakatCss, /#main \.ca-tool-zakat-calculator #zakat-form\s*\{[\s\S]*
   "Zakat calculator must be slightly wider than its previous 36rem width");
 assert.match(zakatCss, /body:has\(#zakat-form\) #zakat-form :is\(input:not\(\[type="checkbox"\]\), select, textarea\)\s*\{\s*min-height:\s*44px\s*!important;/,
   "Zakat form controls must retain accessible 44px minimum height");
+
+assert.match(zakatCss, /#main \.ca-tool-zakat-calculator #zakat-result:empty\s*\{\s*display:\s*block !important;/,
+  "The empty Zakat result area must remain visible before calculation");
+assert.match(zakatCss, /#zakat-result:empty::before/,
+  "The visible empty result area must explain where the estimate will appear");
+assert.match(zakatCss, /html\[lang="ur"\][\s\S]*#zakat-result:empty::before/,
+  "The empty result placeholder must be localized on the Urdu page");
 
 console.log("Zakat global calculator content and localization gates: PASS");
 
