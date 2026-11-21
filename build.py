@@ -25,7 +25,7 @@ CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").st
 SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
-    "/zakat-calculator/": "2026-11-15",
+    "/zakat-calculator/": "2026-11-16",
     "/years-to-days-calculator/": "2026-11-21",
     "/unit-converter/": "2026-11-21",
     "/tasbih-counter/": "2026-11-21",
