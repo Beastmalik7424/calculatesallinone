@@ -741,8 +741,8 @@ for url in urls:
                     "Urdu BMI dateModified must match the GSC-backed search-intent explanation."
                 )
             elif url == SITE + "/years-to-days-calculator/":
-                assert item.get("dateModified") == "2026-11-21", (
-                    "Years-to-Days dateModified must match the GSC-backed 7- and 19-year reference update."
+                assert item.get("dateModified") == "2026-11-22", (
+                    "Years-to-Days dateModified must match the GSC-backed quick-reference row selection."
                 )
             elif url == SITE + "/unit-converter/":
                 assert item.get("dateModified") == "2026-11-21", (
