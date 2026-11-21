@@ -46,6 +46,8 @@ xml = ET.parse(ROOT / "sitemap.xml").getroot()
 ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.find("sm:loc", ns).text for node in xml.findall("sm:url", ns)]
 sitemap_urls = set(urls)
+sitemap_lastmods = {node.find("sm:loc", ns).text: node.find("sm:lastmod", ns).text for node in xml.findall("sm:url", ns)}
+assert sitemap_lastmods.get(SITE + "/zakat-calculator/") == "2026-11-16", "Zakat sitemap lastmod must match its verified substantive content update"
 titles = {}
 descriptions = {}
 assert urls, "Sitemap has no URLs"
