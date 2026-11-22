@@ -48,6 +48,8 @@ CASES = {
         "up to six decimal places",
     ],
     "years-to-days-calculator": [
+        "10 years = 3,652.425 days",
+        "19 years = 6,939.6075 days",
         "For exact calendar dates, this calculator counts whole calendar days between anniversaries.",
         "29 10,585 10,592.25 10,592.0325",
         "6 2,190 2,191.5 2,191.455",
