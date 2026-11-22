@@ -34,7 +34,7 @@ CASES = {
     },
     "years-to-days-calculator": {
         "title": "Years to Days Calculator | How Many Days in X Years?",
-        "description": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",
+        "description": "10 years = 3,652.425 days; 19 years = 6,939.6075. Compare 365-day, 365.25-day and Gregorian 365.2425-day averages, or count exact days from a start date.",
         "form": 'id="years-days-form"',
         "category": "/time/",
         "related": ["/date-calculator/", "/age-calculator/", "/query-calculator/", "/unit-converter/"],
