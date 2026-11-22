@@ -335,7 +335,7 @@ for url in urls:
         assert html_lib.unescape(title_match.group(1)) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
             "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
         )
-        assert desc_match.group(1) == "Free Tasbih and Tasbeeh counter for dhikr and zikr. Count 33, 99 or custom targets, undo taps and keep progress on this device when storage allows.", (
+        assert desc_match.group(1) == "Free Tasbih and Tasbeeh counter for dhikr and zikr. Count 33, 99, 100 or custom targets, undo taps and keep progress on this device when storage allows.", (
             "Tasbih description must be specific, useful and aligned with the page."
         )
     if url == SITE + "/age-calculator/":
