@@ -213,7 +213,10 @@ urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
-assert 'name="description" content="Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days."' in years_html, "Years-to-Days meta description must explain all conversion methods and exact calendar mode"
+_years_snippet = "10 years = 3,652.425 days; 19 years = 6,939.6075. Compare 365-day, 365.25-day and Gregorian averages, or count exact days from a start date."
+assert f'<meta name="description" content="{_years_snippet}">' in years_html, "Years-to-Days search snippet must surface the GSC-backed 10-year and 19-year answers"
+assert f'<meta property="og:description" content="{_years_snippet}">' in years_html, "Years-to-Days Open Graph description must match the search snippet"
+assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_html, "Years-to-Days Twitter description must match the search snippet"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 
