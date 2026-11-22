@@ -297,7 +297,7 @@ def check_years_quick_reference():
             parsed.append((html.unescape(re.sub(r"<[^>]+>", "", year)).strip(), cells))
         return parsed
 
-    expected_years = ["2", "3", "5", "7", "10", "13", "19", "20"]
+    expected_years = ["2", "3", "5", "7", "9", "10", "13", "20"]
     quick_rows = table_rows(quick_match.group(1))
     actual_years = [year for year, _ in quick_rows]
     assert actual_years == expected_years, (
@@ -312,7 +312,7 @@ def check_years_quick_reference():
         "7": ["2,555", "2,556.75", "2,556.6975"],
         "10": ["3,650", "3,652.5", "3,652.425"],
         "13": ["4,745", "4,748.25", "4,748.1525"],
-        "19": ["6,935", "6,939.75", "6,939.6075"],
+        "9": ["3,285", "3,287.25", "3,287.1825"],
         "20": ["7,300", "7,305", "7,304.85"],
     }
     assert dict(quick_rows) == expected_values, "Quick-reference arithmetic changed"
@@ -323,6 +323,7 @@ def check_years_quick_reference():
     full_rows = table_rows(full_match.group(1))
     assert len(full_rows) == 29, f"Expanded reference must retain 29 examples, got {len(full_rows)}"
     assert set(expected_years).issubset({year for year, _ in full_rows}), "Quick-reference rows must remain in the expanded table"
+    assert "19" in {year for year, _ in full_rows}, "Removing 19 years from the quick table must not remove it from the expanded reference"
 
     visible = visible_text("years-to-days-calculator")
     assert "Last updated: 2026-11-22" in visible, "Visible update date must match the substantive quick-reference refresh"
