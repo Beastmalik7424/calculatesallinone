@@ -660,7 +660,7 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Free online digital tasbih counter for dhikr and zikr with 33, 99 and custom targets. Tap to count on mobile or desktop; no app download needed.",
+        "description": "Free online digital tasbih counter for dhikr and zikr with 33, 99, 100 and custom targets. Tap to count on mobile or desktop; no app download needed.",
         "h1": "Free Online Tasbih Counter",
         "lead": "Count dhikr on this device. Choose a phrase and target, then undo a tap if needed.",
         "ui": (
