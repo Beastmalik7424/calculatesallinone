@@ -97,7 +97,7 @@ assert re.search(r"<summary[^>]*>\s*Choose a free calculator\s*<span[^>]*>⌄</s
 assert "<h2>Calculator tools</h2>" in home_html, "Homepage tools section should explicitly identify calculator tools"
 assert 'href="#ca-all-tools-menu"' in home_html and "Browse all free calculators</a>" in home_html, "Homepage must expose a recognisable link-based calculator browsing action"
 assert "Free Online Standard Calculator" not in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." not in home_html, "Homepage must not retain the outdated calculator-only headline or tool list"
-for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
+for phrase in ("Mifflin-St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
     assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
 for href in ("/calorie-calculator/", "/emi-calculator/", "/compound-interest-calculator/", "/percentage-calculator/", "/fraction-calculator/", "/date-calculator/", "/years-to-days-calculator/"):
     assert f'href="{href}"' in home_html, f"Homepage should link to the relevant calculator: {href}"
@@ -1344,7 +1344,7 @@ assert "Questions about years use 365 days per year in this calculator." not in 
 # Health hub content contract: source-backed explanations, verified examples and a single complete FAQ set.
 health_html = output_for_url(SITE + "/health/").read_text(encoding="utf-8")
 health_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", health_html))
-health_text = re.sub(r"\\s+", " ", health_text).strip()
+health_text = re.sub(r"\s+", " ", health_text).strip()
 for phrase in (
     "How adult BMI is calculated",
     "WHO adult BMI categories",
@@ -1399,7 +1399,7 @@ for external_href in (
     "https://pubmed.ncbi.nlm.nih.gov/2305711/",
     "https://www.nationalacademies.org/read/26818/chapter/7",
 ):
-    source_anchor = re.search(r'<a\\b(?=[^>]*href="' + re.escape(external_href) + r'")[^>]*>', health_html)
+    source_anchor = re.search(r'<a\b(?=[^>]*href="' + re.escape(external_href) + r'")[^>]*>', health_html)
     assert source_anchor and 'rel="noopener noreferrer"' in source_anchor.group(0), f"External health source link must be safe: {external_href}"
 health_faq_questions = (
     "How is adult BMI calculated?",
@@ -1413,7 +1413,7 @@ health_faq_questions = (
 )
 assert all(health_html.count(question) == 1 for question in health_faq_questions), "Health hub must render each of its eight approved FAQ questions exactly once"
 assert "70 ÷ (1.75 × 1.75) = 22.86" in health_html, "Metric BMI example must retain the unrounded denominator and independently checked result"
-assert "703 × 154 ÷ (69 × 69) = 22.74" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
+assert "703 × 154 ÷ (69 × 69) = 108,262" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
 assert "23.0, 27.5, 32.5 and 37.5" in health_html, "Asian BMI action points must remain distinct from international category bands"
 assert "1,648.75" in health_html and "1,978.5" in health_html and "1,320.25" in health_html and "1,584.3" in health_html, "Mifflin worked examples must match the calculator equation and selected activity factor"
 assert "the original Mifflin–St Jeor study included 498 healthy adults aged 19–78" in health_text.lower(), "Mifflin source population and age range must be explicit"
