@@ -92,6 +92,9 @@ def check_english_page(slug, spec):
     assert h1_pos >= 0 and lead_match, f"Missing first-screen heading/value proposition: {slug}"
     if slug == "unit-converter":
         assert h1_pos < form_pos < lead_match.start(), f"Existing calculator-first layout must remain unchanged: {slug}"
+        unit_value = re.search(r'<input\b[^>]*id="u-val"[^>]*>', source)
+        assert unit_value, "Unit Converter value input must exist"
+        assert not re.search(r"\bmin\s*=", unit_value.group(0)), "Unit Converter value input must not declare min=0 because Celsius and Fahrenheit accept negative values above absolute zero"
     else:
         assert h1_pos < lead_match.start() < form_pos, f"Lead must appear between H1 and calculator: {slug}"
 
