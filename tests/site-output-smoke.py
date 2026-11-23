@@ -1378,6 +1378,7 @@ for phrase in (
     "1,584.3 kcal/day",
     "activity multiplier",
     "not a diagnosis",
+    "has not been medically reviewed",
 ):
     assert phrase.lower() in health_text.lower(), f"Health hub is missing verified content: {phrase}"
 for href in (
