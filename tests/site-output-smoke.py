@@ -1412,7 +1412,7 @@ health_faq_questions = (
     "Is a BMI or calorie estimate a medical diagnosis?",
 )
 assert all(health_html.count(question) == 1 for question in health_faq_questions), "Health hub must render each of its eight approved FAQ questions exactly once"
-assert "70 ÷ (1.75 × 1.75) = 22.86" in health_html, "Metric BMI example must retain the unrounded denominator and independently checked result"
+assert "70 ÷ (1.75 × 1.75) = 70 ÷ 3.0625" in health_html and "22.86" in health_html, "Metric BMI example must retain the unrounded denominator and independently checked result"
 assert "703 × 154 ÷ (69 × 69) = 108,262" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
 assert "23.0, 27.5, 32.5 and 37.5" in health_html, "Asian BMI action points must remain distinct from international category bands"
 assert "1,648.75" in health_html and "1,978.5" in health_html and "1,320.25" in health_html and "1,584.3" in health_html, "Mifflin worked examples must match the calculator equation and selected activity factor"
