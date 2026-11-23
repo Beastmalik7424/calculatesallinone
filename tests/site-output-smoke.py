@@ -1385,7 +1385,7 @@ for phrase in (
     "has not been medically reviewed",
     "CDC BMI calculation guidance",
     "CDC BMI calculation guidance",
-    "the calculator displays four broad labels",
+    "the English calculator result displays four broad labels",
     "does not display obesity classes I, II and III as separate result labels",
     "703 is a rounded conversion factor",
 ):
