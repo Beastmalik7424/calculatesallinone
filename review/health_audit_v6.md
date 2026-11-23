@@ -93,10 +93,3 @@ No qualified medical professional reviewed or approved this guide. The visible d
 **Production publication: NOT performed at the time this report was written.**
 
 The remaining publication decision should preserve the medical-review disclosure and must not imply a plagiarism score or clinical sign-off that was not obtained.
-
-
-## Post-publication precision follow-up (2026-11-23)
-
-A live-page source recheck identified one omitted detail in the WHO BMI table: the underweight range is further divided into severe thinness (<16.00), moderate thinness (16.00–16.99), and mild thinness (17.00–18.49). The Health body and WHO BMI FAQ now state these subcategories explicitly while retaining the principal adult cut-offs and the separate Asian public-health action points. A regression assertion requires the underweight subcategory disclosure in both the body and visible FAQ.
-
-This follow-up changes Health copy and its output assertions only. No calculator logic, formulas, page layout, calculator placement, routes, CSS, navigation, metadata, canonical or sitemap was changed. The original v6 production update remains deployed. This v7 correction is pending its own review and production release.
