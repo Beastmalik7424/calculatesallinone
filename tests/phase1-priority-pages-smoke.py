@@ -336,10 +336,20 @@ def check_years_quick_reference():
 
 
 
+def check_urdu_unit_converter():
+    path = ROOT / "ur" / "unit-converter" / "index.html"
+    assert path.exists(), "Existing Urdu Unit Converter page must remain generated"
+    source = path.read_text(encoding="utf-8")
+    unit_value = re.search(r'<input\b[^>]*id="u-val"[^>]*>', source)
+    assert unit_value, "Urdu Unit Converter value input must exist"
+    assert not re.search(r"\bmin\s*=", unit_value.group(0)), "Urdu Unit Converter value input must allow valid negative temperatures"
+
+
 def main():
     for slug, spec in CASES.items():
         check_english_page(slug, spec)
     check_urdu_bmi()
+    check_urdu_unit_converter()
     check_targeted_content()
     check_years_quick_reference()
     check_tasbih_content_structure()
