@@ -205,3 +205,52 @@ The Health hub claims relevant to this change and its surrounding BMI/calorie ex
 - The preview evidence remains the READY Vercel preview recorded above. No production deployment or merge was performed.
 
 **Final audit disposition:** source-based medical accuracy review and automated/manual originality screening are complete within the stated limits. Licensed-clinician sign-off and the exact local full-worktree test remain outstanding. PR #324 stays Draft and production remains unchanged.
+
+
+## 12. Final online CI verification and release disposition
+
+Verification update: 23 November 2026. This section supersedes earlier statements in this report that the exact full-worktree test had not been run.
+
+### Exact Health content/scope test
+
+The repository's GitHub Actions build workflow was updated in a CI-only change to:
+- check out full Git history (`fetch-depth: 0`), making the base commit available for the test's `git show` comparison;
+- run `python3 tests/health_content_v8.py` on the clean GitHub-hosted runner.
+
+On commit `024f09571e5bda02e3a9f2d7c269d8edd84f9691`, the exact test step completed successfully in GitHub Actions. This is the full repository worktree test on the online CI runner, not the earlier isolated source-snapshot alternative. The full-history checkout succeeded, the base commit comparison ran, and the test returned success.
+
+### Independent regression and layout verification on the same commit
+
+The following PR-associated workflows completed successfully:
+- Build and smoke test: the Health scope test, dependency checks, JS/Python syntax, calculator behavior, input validation, architecture baseline, site build, contextual links, CSP hashes, sitemap XML and coverage, scoped SEO, HTML validation, and redirect configuration all passed. The built-page Lighthouse SEO audit also passed. At the time of this report update, the ten-page Lighthouse audit was still running, with headless console and final monetization steps pending.
+- Site build and monetization checks: success.
+- Workflow security contract: success.
+- Query Calculator independent verification: success, including complete repository build/regression suite.
+- Zakat calculator QA: success.
+- Zakat focused verification: success.
+- First-screen calculator browser audit: success, including Zakat first-screen interactions, EMI viewport and calculator placement, English/Urdu Zakat flows, calorie and query calculator browser flows, extra calculator regressions, and all-calculator first-screen layout checks. Screenshot artifact `first-screen-screenshots` was produced by run 45217887763.
+
+The latest Vercel deployment for commit `024f09571e5bda02e3a9f2d7c269d8edd84f9691` was READY and the Vercel commit status was SUCCESS. An unauthenticated external page fetch returned `login_required`, so HTML from that exact protected preview could not be independently fetched. Earlier accessible preview evidence for the same page content returned HTTP 200 and the Health page DOM tag outline matched production (362 tags).
+
+### Exact changed-file scope
+
+The PR now changes exactly five files:
+1. `.github/workflows/ci.yml` — CI-only full-history checkout and invocation of the Health content/scope test.
+2. `content_v13.py` — Health hub body content only.
+3. `build.py` — one WHO BMI FAQ tuple only.
+4. `tests/health_content_v8.py` — focused content and scope regression test.
+5. `review/health_audit_v8.md` — this audit record.
+
+No calculator formula, calculator code, other page content, CSS, layout, navigation, route, metadata, canonical, sitemap, robots or ads code was changed. First-screen and all-calculator layout browser audits passed. No production merge or deployment was performed.
+
+### Medical sign-off boundary
+
+The independent source review found no factual conflict in the audited claims. It is not a licensed clinician's sign-off. PM&DC provides a public practitioners register for verifying a named doctor's registration and licence validity, but it does not itself certify that this Health page has received clinical review. No named clinician has reviewed or approved the page in this workflow. Therefore the page must continue to say that it has not been medically reviewed, and PR #324 must remain Draft until a qualified clinician explicitly reviews and signs off.
+
+### Final disposition
+
+- Exact Health content/scope test: **PASS** on GitHub Actions full-history worktree.
+- Repository build/regression and calculator/browser/layout checks: **PASS** in the completed workflows listed above.
+- Remaining CI checks at this report's timestamp: ten-page Lighthouse audit, headless console test, and monetization step in the main Build and smoke test workflow.
+- Formal licensed-clinician review: **not obtained** and cannot be represented as completed by AI or source comparison.
+- PR #324: **open, Draft, unmerged**. Production remains unchanged.
