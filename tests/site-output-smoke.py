@@ -1371,7 +1371,7 @@ for phrase in (
     "27.5",
     "32.5",
     "37.5",
-    "Mifflin–St Jeor",
+    "Mifflin-St Jeor",
     "1,648.75 kcal/day",
     "1,978.5 kcal/day",
     "1,320.25 kcal/day",
@@ -1416,7 +1416,7 @@ assert "70 ÷ (1.75 × 1.75) = 70 ÷ 3.0625" in health_html and "22.86" in healt
 assert "703 × 154 ÷ (69 × 69) = 108,262" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
 assert "23.0, 27.5, 32.5 and 37.5" in health_html, "Asian BMI action points must remain distinct from international category bands"
 assert "1,648.75" in health_html and "1,978.5" in health_html and "1,320.25" in health_html and "1,584.3" in health_html, "Mifflin worked examples must match the calculator equation and selected activity factor"
-assert "the original Mifflin–St Jeor study included 498 healthy adults aged 19–78" in health_text.lower(), "Mifflin source population and age range must be explicit"
+assert "the original 1990 study included 498 healthy adults aged 19 to 78" in health_text.lower(), "Mifflin source population and age range must be explicit"
 assert "BMI is a screening measure" in health_text, "Health hub must not present BMI as a diagnosis"
 assert "unrounded BMI" in health_html and "rounds only the displayed number to one decimal place" in health_html, "Health hub must preserve the calculator's exact-threshold and display-rounding behavior"
 assert health_html.count("<h1") == 1, "Health hub must retain exactly one H1"
