@@ -961,6 +961,14 @@
         return
       }
       if (cat === "temp") {
+        if (from === "K" && v < 0) {
+          say("conv-result", t("convKelvin"))
+          return
+        }
+        if ((from === "C" && v < -273.15) || (from === "F" && v < -459.67)) {
+          say("conv-result", t("convAbsoluteZero"))
+          return
+        }
         var celsius = toCelsius(v, from)
         if (celsius < -273.1500001) {
           say("conv-result", t("convAbsoluteZero"))
