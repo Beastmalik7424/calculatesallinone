@@ -47,6 +47,7 @@
       convEnter: "Enter a numeric value.",
       convAbsoluteZero: "Temperature cannot be below absolute zero (-273.15 °C).",
       convKelvin: "Kelvin cannot be below zero, which is absolute zero.",
+      convRange: "Result exceeds the supported numeric range.",
       convNeg: "A {cat} cannot be negative.",
       convResult: "{v} {from} equals {out} {to}.",
       calcError: "Error",
@@ -114,6 +115,7 @@
       convEnter: "عددی قدر لکھیں۔",
       convAbsoluteZero: "درجہ حرارت مطلق صفر (-273.15 °C) سے کم نہیں ہو سکتا۔",
       convKelvin: "کیلون صفر سے کم نہیں ہو سکتا، کیونکہ یہ مطلق صفر ہے۔",
+      convRange: "نتیجہ معاون عددی حد سے تجاوز کرتا ہے۔",
       convNeg: "{cat} منفی نہیں ہو سکتی۔",
       convResult: "{v} {from} برابر ہے {out} {to} کے۔",
       calcError: "خرابی",
@@ -164,6 +166,7 @@
       convEnter: "أدخل قيمة رقمية.",
       convAbsoluteZero: "لا يمكن أن تكون درجة الحرارة أقل من الصفر المطلق (-273.15 °م).",
       convKelvin: "لا يمكن أن تكون درجة الحرارة بالكلفن أقل من الصفر، فهو الصفر المطلق.",
+      convRange: "تتجاوز النتيجة النطاق العددي المدعوم.",
       convNeg: "لا يمكن أن تكون قيمة {cat} سالبة.",
       convResult: "‏{v} {from} تساوي {out} {to}.",
       calcError: "خطأ",
@@ -207,6 +210,7 @@
       convEnter: "संख्यात्मक मान दर्ज करें।",
       convAbsoluteZero: "तापमान परम शून्य (-273.15 °C) से कम नहीं हो सकता।",
       convKelvin: "केल्विन का मान शून्य से कम नहीं हो सकता, क्योंकि यही परम शून्य है।",
+      convRange: "परिणाम समर्थित संख्यात्मक सीमा से अधिक है।",
       convNeg: "{cat} ऋणात्मक नहीं हो सकता।",
       convResult: "{v} {from} = {out} {to}।",
       calcError: "त्रुटि",
@@ -250,6 +254,7 @@
       convEnter: "Introduce un valor numérico.",
       convAbsoluteZero: "La temperatura no puede ser inferior al cero absoluto (-273,15 °C).",
       convKelvin: "Los kelvin no pueden ser inferiores a cero, que es el cero absoluto.",
+      convRange: "El resultado supera el rango numérico admitido.",
       convNeg: "El valor de {cat} no puede ser negativo.",
       convResult: "{v} {from} equivale a {out} {to}.",
       calcError: "Error",
@@ -293,6 +298,7 @@
       convEnter: "Saisissez une valeur numérique.",
       convAbsoluteZero: "La température ne peut pas être inférieure au zéro absolu (-273,15 °C).",
       convKelvin: "La température en kelvins ne peut pas être inférieure à zéro, qui correspond au zéro absolu.",
+      convRange: "Le résultat dépasse la plage numérique prise en charge.",
       convNeg: "La valeur de {cat} ne peut pas être négative.",
       convResult: "{v} {from} équivaut à {out} {to}.",
       calcError: "Erreur",
@@ -935,13 +941,13 @@
 
   function toCelsius (v, unit) {
     if (unit === "C") return v
-    if (unit === "F") return (v - 32) * 5 / 9
+    if (unit === "F") return (v - 32) * (5 / 9)
     return v - 273.15
   }
 
   function fromCelsius (c, unit) {
     if (unit === "C") return c
-    if (unit === "F") return c * 9 / 5 + 32
+    if (unit === "F") return c * (9 / 5) + 32
     return c + 273.15
   }
 
@@ -975,6 +981,10 @@
           return
         }
         var converted = fromCelsius(celsius, to)
+        if (!isFinite(converted)) {
+          say("conv-result", t("convRange"))
+          return
+        }
         say("conv-result", t("convResult", { v: fmt(v), from: unitName(from), out: converted.toFixed(2), to: unitName(to) }))
         return
       }
@@ -983,7 +993,11 @@
         return
       }
       var base = UNITS[cat].base
-      var out = v * base[from] / base[to]
+      var out = v * (base[from] / base[to])
+      if (!isFinite(out)) {
+        say("conv-result", t("convRange"))
+        return
+      }
       var shown = Number(out.toPrecision(6)).toLocaleString(MSG[lang()].numeric, { maximumFractionDigits: 6 })
       say("conv-result", t("convResult", { v: fmt(v), from: unitName(from), out: shown, to: unitName(to) }))
     })
