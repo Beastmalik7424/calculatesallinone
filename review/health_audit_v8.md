@@ -254,3 +254,31 @@ The independent source review found no factual conflict in the audited claims. I
 - Remaining CI checks at this report's timestamp: ten-page Lighthouse audit, headless console test, and monetization step in the main Build and smoke test workflow.
 - Formal licensed-clinician review: **not obtained** and cannot be represented as completed by AI or source comparison.
 - PR #324: **open, Draft, unmerged**. Production remains unchanged.
+
+
+## 12. Final online CI verification update
+
+Date: 23 November 2026.
+
+The focused test was subsequently wired into `.github/workflows/ci.yml` and run on a clean GitHub Actions checkout with full git history. This supersedes the earlier source-snapshot-only limitation recorded in Sections 9 and 11.
+
+### Exact test and full repository verification
+
+- Commit `024f09571e5bda02e3a9f2d7c269d8edd84f9691`: `python3 tests/health_content_v8.py` — **PASS** in the GitHub Actions Build and smoke test job. The test had the full-history checkout needed to compare against base commit `02a302020622ff3c4e2e6aa75f15a12fd9a5f830`.
+- The complete Build and smoke test workflow run `45217887536` — **SUCCESS**. All 37 steps completed successfully, including the Health content/scope contract, dependency and security checks, calculator behavior and input validation, complete site build, sitemap and internal-link checks, scoped SEO audits, HTML validation, HTTP 301 configuration, Lighthouse SEO audits on built pages and ten scoped pages, headless browser console checks, and monetization configuration.
+- The other six PR-associated workflow runs on the same commit — **SUCCESS**: Site build and monetization checks (`45217887685`), Workflow security contract (`45217887509`), Query Calculator independent verification (`45217887540`), Zakat calculator QA (`45217887561`), First-screen calculator browser audit (`45217887763`), and Zakat focused verification (`45217887863`).
+- First-screen browser audit included Zakat interactions, EMI viewport and calculator placement, Zakat English/Urdu flows, calorie and query calculator flows, extra calculator regressions, every calculator first-screen layout, and saved screenshots. All steps passed.
+- The full-history online test supersedes the earlier note that the local full-worktree invocation had not been run. The local environment limitation remains historical context only; the test was executed in the clean online CI worktree.
+
+### Latest PR head and code equivalence
+
+- The current PR head at this review point is `b2cf906d95f63cafd1a72f0417b91930a2f50e77`.
+- GitHub commit comparison confirms this head differs from fully verified commit `024f09571e5bda02e3a9f2d7c269d8edd84f9691` by exactly one file: this audit report (`review/health_audit_v8.md`), with 49 lines added and no product-code changes.
+- Therefore all product code, the focused Health regression test, and the CI workflow itself are byte-for-byte unchanged from the fully passing seven-workflow verification commit.
+- The latest head's own Actions executions include successful security, monetization, Zakat QA, and first-screen audit runs. Its Build and smoke test, Query Calculator independent verification, and Zakat focused verification executions were still running at the last status check while installing Chromium / running extended Lighthouse. These later runs have no recorded failure; the equivalent full suite on the immediately preceding code-identical commit completed successfully.
+
+### Final disposition
+
+The WHO medical-source editorial review and automated/manual originality screening are complete within the limitations already stated. The Health-specific test has now passed in the full-history online CI worktree. The only substantive external approval still unavailable is formal review and sign-off by a licensed physician or registered dietitian. The page must continue to state that it has not been medically reviewed.
+
+PR #324 remains open, Draft, mergeable, and unmerged. Production remains unchanged. No layout, positioning, CSS, navigation, routes, formulas, or calculator behavior was changed.
