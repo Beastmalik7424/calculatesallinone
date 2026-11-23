@@ -1383,6 +1383,7 @@ for phrase in (
     "activity multiplier",
     "not a diagnosis",
     "has not been medically reviewed",
+    "CDC BMI calculation guidance",
     "the calculator displays four broad labels",
     "does not display obesity classes I, II and III as separate result labels",
     "703 is a rounded conversion factor",
@@ -1397,6 +1398,12 @@ for href in (
     "https://iris.who.int/bitstream/handle/10665/43190/9241593024_eng.pdf",
     "https://pubmed.ncbi.nlm.nih.gov/14726171/",
     "https://pubmed.ncbi.nlm.nih.gov/2305711/",
+    "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
+    "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
+    "https://www.cdc.gov/bmi/adult-calculator/index.html",
+    "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
+    "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
+    "https://www.cdc.gov/bmi/adult-calculator/index.html",
     "https://www.nationalacademies.org/read/26818/chapter/7",
 ):
     assert 'href="' + href + '"' in health_html, f"Health hub must link to the relevant internal tool or primary source: {href}"
