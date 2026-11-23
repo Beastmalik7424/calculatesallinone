@@ -1411,7 +1411,7 @@ health_faq_questions = (
     "Why can two calorie calculators give different results?",
     "Is a BMI or calorie estimate a medical diagnosis?",
 )
-health_faq_summaries = [html_lib.unescape(re.sub(r"<[^>]+>", "", summary)).strip() for summary in re.findall(r"<summary\\b[^>]*>(.*?)</summary>", health_html, re.S)]
+health_faq_summaries = [html_lib.unescape(re.sub(r"<[^>]+>", "", summary)).strip() for summary in re.findall(r"<summary\b[^>]*>(.*?)</summary>", health_html, re.S)]
 assert all(health_faq_summaries.count(question) == 1 for question in health_faq_questions), "Health hub must render each of its eight approved FAQ questions exactly once in the visible FAQ summaries"
 assert "70 ÷ (1.75 × 1.75) = 70 ÷ 3.0625" in health_html and "22.86" in health_html, "Metric BMI example must retain the unrounded denominator and independently checked result"
 assert "703 × 154 ÷ (69 × 69) = 108,262" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
