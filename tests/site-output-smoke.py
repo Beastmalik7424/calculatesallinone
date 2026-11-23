@@ -1386,6 +1386,10 @@ for phrase in (
     "CDC BMI calculation guidance",
     "CDC BMI calculation guidance",
     "the English calculator result displays four broad labels",
+    "severe thinness",
+    "moderate thinness",
+    "mild thinness",
+    "the WHO table also subdivides underweight into severe, moderate and mild thinness",
     "does not display obesity classes I, II and III as separate result labels",
     "703 factor is a rounded conversion factor",
 ):
@@ -1438,6 +1442,7 @@ assert "separate National Academies DRI 2023 life-stage path" in calorie_faq_ans
 who_faq_block = next((block for block in health_faq_blocks if "What are the WHO adult BMI categories?" in block), "")
 who_faq_answer = html_lib.unescape(re.sub(r"<[^>]+>", " ", who_faq_block))
 assert "groups the obesity classes into one displayed obesity label" in who_faq_answer, "BMI FAQ must disclose the difference between the WHO table and the calculator result labels"
+assert "severe, moderate and mild thinness subcategories" in who_faq_answer, "BMI FAQ must disclose the WHO underweight subcategories"
 assert "70 ÷ (1.75 × 1.75) = 70 ÷ 3.0625" in health_html and "22.86" in health_html, "Metric BMI example must retain the unrounded denominator and independently checked result"
 assert "703 × 154 ÷ (69 × 69) = 108,262" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
 assert "23.0, 27.5, 32.5 and 37.5" in health_html, "Asian BMI action points must remain distinct from international category bands"
