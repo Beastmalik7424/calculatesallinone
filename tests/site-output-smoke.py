@@ -1418,7 +1418,7 @@ health_faq_questions = (
 )
 health_faq_summaries = [html_lib.unescape(re.sub(r"<[^>]+>", "", summary)).strip() for summary in re.findall(r"<summary\b[^>]*>(.*?)</summary>", health_html, re.S)]
 assert all(health_faq_summaries.count(question) == 1 for question in health_faq_questions), "Health hub must render each of its eight approved FAQ questions exactly once in the visible FAQ summaries"
-health_faq_blocks = re.findall(r"<details\\b[^>]*>(.*?)</details>", health_html, re.S)
+health_faq_blocks = re.findall(r"<details\b[^>]*>(.*?)</details>", health_html, re.S)
 calorie_faq_block = next((block for block in health_faq_blocks if "How does the adult calorie estimate work?" in block), "")
 calorie_faq_answer = html_lib.unescape(re.sub(r"<[^>]+>", " ", calorie_faq_block))
 assert "separate National Academies DRI 2023 life-stage path" in calorie_faq_answer, "Calorie FAQ must distinguish the standard adult estimate from pregnancy and breastfeeding estimates"
