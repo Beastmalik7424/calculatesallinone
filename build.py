@@ -1884,8 +1884,10 @@ def write(path, content):
 
 
 def years_to_days_reference_html():
+# GSC queries dated 2026-10-27 through 2026-11-23 show demand for 4-, 15- and 25-year variants.
+    # Surface those existing, verified values in the short table as well as the expanded reference.
     years_values = [1, 1.5, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 25, 29, 30, 32, 40, 50, 60, 74, 80, 100]
-    quick_values = [2, 3, 5, 7, 9, 10, 13, 20]
+    quick_values = [2, 3, 4, 5, 7, 9, 10, 13, 15, 20, 25]
     def formatted(value):
         return format(value, ",.5f").rstrip("0").rstrip(".")
     def table_rows(values):
