@@ -1339,3 +1339,85 @@ for _phrase in ("Illustrative small-shop Nisab comparison", "PKR 650,000",
 _query_calculator_html = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
 assert "this calculator uses the mean Gregorian year of 365.2425 days" in _query_calculator_html, "Query Calculator must disclose the mean Gregorian year used by its year conversions"
 assert "Questions about years use 365 days per year in this calculator." not in _query_calculator_html, "Outdated 365-day claim conflicts with the Query Calculator's mean Gregorian year method"
+
+
+# Health hub content contract: source-backed explanations, verified examples and a single complete FAQ set.
+health_html = output_for_url(SITE + "/health/").read_text(encoding="utf-8")
+health_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", health_html))
+health_text = re.sub(r"\\s+", " ", health_text).strip()
+for phrase in (
+    "How adult BMI is calculated",
+    "WHO adult BMI categories",
+    "Asian populations and additional BMI action points",
+    "Adult daily calorie estimates",
+    "How to use health estimates responsibly",
+    "BMI = weight (kg) ÷ height (m)²",
+    "70 kg",
+    "1.75 m",
+    "22.86",
+    "154 lb",
+    "69 inches",
+    "22.7",
+    "18.50",
+    "24.99",
+    "25.00",
+    "29.99",
+    "30.00",
+    "34.99",
+    "35.00",
+    "39.99",
+    "40.00",
+    "23.0",
+    "27.5",
+    "32.5",
+    "37.5",
+    "Mifflin–St Jeor",
+    "1,648.75 kcal/day",
+    "1,978.5 kcal/day",
+    "1,320.25 kcal/day",
+    "1,584.3 kcal/day",
+    "activity multiplier",
+    "not a diagnosis",
+):
+    assert phrase.lower() in health_text.lower(), f"Health hub is missing verified content: {phrase}"
+for href in (
+    "/bmi-calculator/",
+    "/calorie-calculator/",
+    "/methodology/",
+    "/editorial-policy/",
+    "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
+    "https://iris.who.int/bitstream/handle/10665/43190/9241593024_eng.pdf",
+    "https://pubmed.ncbi.nlm.nih.gov/14726171/",
+    "https://pubmed.ncbi.nlm.nih.gov/2305711/",
+    "https://www.nationalacademies.org/read/26818/chapter/7",
+):
+    assert 'href="' + href + '"' in health_html, f"Health hub must link to the relevant internal tool or primary source: {href}"
+for external_href in (
+    "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
+    "https://iris.who.int/bitstream/handle/10665/43190/9241593024_eng.pdf",
+    "https://pubmed.ncbi.nlm.nih.gov/14726171/",
+    "https://pubmed.ncbi.nlm.nih.gov/2305711/",
+    "https://www.nationalacademies.org/read/26818/chapter/7",
+):
+    source_anchor = re.search(r'<a\\b(?=[^>]*href="' + re.escape(external_href) + r'")[^>]*>', health_html)
+    assert source_anchor and 'rel="noopener noreferrer"' in source_anchor.group(0), f"External health source link must be safe: {external_href}"
+health_faq_questions = (
+    "How is adult BMI calculated?",
+    "What are the WHO adult BMI categories?",
+    "What do the additional Asian BMI action points mean?",
+    "Can BMI tell me how much body fat I have?",
+    "How should BMI be interpreted for children and teenagers?",
+    "How does the adult calorie estimate work?",
+    "Why can two calorie calculators give different results?",
+    "Is a BMI or calorie estimate a medical diagnosis?",
+)
+assert all(health_html.count(question) == 1 for question in health_faq_questions), "Health hub must render each of its eight approved FAQ questions exactly once"
+assert "70 ÷ (1.75 × 1.75) = 22.86" in health_html, "Metric BMI example must retain the unrounded denominator and independently checked result"
+assert "703 × 154 ÷ (69 × 69) = 22.74" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
+assert "23.0, 27.5, 32.5 and 37.5" in health_html, "Asian BMI action points must remain distinct from international category bands"
+assert "1,648.75" in health_html and "1,978.5" in health_html and "1,320.25" in health_html and "1,584.3" in health_html, "Mifflin worked examples must match the calculator equation and selected activity factor"
+assert "the original Mifflin–St Jeor study included 498 healthy adults aged 19–78" in health_text.lower(), "Mifflin source population and age range must be explicit"
+assert "BMI is a screening measure" in health_text, "Health hub must not present BMI as a diagnosis"
+assert "unrounded BMI" in health_html and "rounds only the displayed number to one decimal place" in health_html, "Health hub must preserve the calculator's exact-threshold and display-rounding behavior"
+assert health_html.count("<h1") == 1, "Health hub must retain exactly one H1"
+assert 'href="/bmi-calculator/"' in health_html and 'href="/calorie-calculator/"' in health_html, "Health hub must retain direct links to both health calculators"
