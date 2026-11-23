@@ -97,7 +97,7 @@ assert re.search(r"<summary[^>]*>\s*Choose a free calculator\s*<span[^>]*>⌄</s
 assert "<h2>Calculator tools</h2>" in home_html, "Homepage tools section should explicitly identify calculator tools"
 assert 'href="#ca-all-tools-menu"' in home_html and "Browse all free calculators</a>" in home_html, "Homepage must expose a recognisable link-based calculator browsing action"
 assert "Free Online Standard Calculator" not in home_html and "Free browser calculators: Tasbih Calculator, Days to Years Calculator and EMI Calculator. No sign-up." not in home_html, "Homepage must not retain the outdated calculator-only headline or tool list"
-for phrase in ("Mifflin-St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
+for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "fixed nominal annual rate and compounding frequency", "signed Gregorian calendar days"):
     assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
 for href in ("/calorie-calculator/", "/emi-calculator/", "/compound-interest-calculator/", "/percentage-calculator/", "/fraction-calculator/", "/date-calculator/", "/years-to-days-calculator/"):
     assert f'href="{href}"' in home_html, f"Homepage should link to the relevant calculator: {href}"
