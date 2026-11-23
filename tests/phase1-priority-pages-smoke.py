@@ -92,6 +92,9 @@ def check_english_page(slug, spec):
     assert h1_pos >= 0 and lead_match, f"Missing first-screen heading/value proposition: {slug}"
     if slug == "unit-converter":
         assert h1_pos < form_pos < lead_match.start(), f"Existing calculator-first layout must remain unchanged: {slug}"
+        unit_value = re.search(r'<input\b[^>]*id="u-val"[^>]*>', source)
+        assert unit_value, "Unit Converter value input must exist"
+        assert not re.search(r"\bmin\s*=", unit_value.group(0)), "Unit Converter value input must not declare min=0 because Celsius and Fahrenheit accept negative values above absolute zero"
     else:
         assert h1_pos < lead_match.start() < form_pos, f"Lead must appear between H1 and calculator: {slug}"
 
@@ -333,10 +336,20 @@ def check_years_quick_reference():
 
 
 
+def check_urdu_unit_converter():
+    path = ROOT / "ur" / "unit-converter" / "index.html"
+    assert path.exists(), "Existing Urdu Unit Converter page must remain generated"
+    source = path.read_text(encoding="utf-8")
+    unit_value = re.search(r'<input\b[^>]*id="u-val"[^>]*>', source)
+    assert unit_value, "Urdu Unit Converter value input must exist"
+    assert not re.search(r"\bmin\s*=", unit_value.group(0)), "Urdu Unit Converter value input must allow valid negative temperatures"
+
+
 def main():
     for slug, spec in CASES.items():
         check_english_page(slug, spec)
     check_urdu_bmi()
+    check_urdu_unit_converter()
     check_targeted_content()
     check_years_quick_reference()
     check_tasbih_content_structure()

@@ -556,7 +556,9 @@ TOOLS = [
             '<div class="grid sm:grid-cols-3 gap-4">'
             '<div><label class="@L@" for="u-cat">Category</label>'
             '<select id="u-cat" class="@I@"><option value="weight">Weight</option><option value="length">Length</option><option value="temp">Temperature</option></select></div>'
-            + field("u-val", "Value", step="any")
+            + '<div><label class="@L@" for="u-val">Value</label>'
+            + '<input id="u-val" name="u-val" class="@I@" type="number" step="any" inputmode="decimal" autocomplete="off">'
+            + '</div>'
             + '<div><label class="@L@" for="u-from">From</label><select id="u-from" class="@I@"></select></div>'
             + '</div>'
             '<div><label class="@L@" for="u-to">To</label><select id="u-to" class="@I@"></select></div>'
