@@ -1383,6 +1383,9 @@ for phrase in (
     "activity multiplier",
     "not a diagnosis",
     "has not been medically reviewed",
+    "the calculator displays four broad labels",
+    "does not display obesity classes I, II and III as separate result labels",
+    "703 is a rounded conversion factor",
 ):
     assert phrase.lower() in health_text.lower(), f"Health hub is missing verified content: {phrase}"
 for href in (
@@ -1422,6 +1425,9 @@ health_faq_blocks = re.findall(r"<details\b[^>]*>(.*?)</details>", health_html, 
 calorie_faq_block = next((block for block in health_faq_blocks if "How does the adult calorie estimate work?" in block), "")
 calorie_faq_answer = html_lib.unescape(re.sub(r"<[^>]+>", " ", calorie_faq_block))
 assert "separate National Academies DRI 2023 life-stage path" in calorie_faq_answer, "Calorie FAQ must distinguish the standard adult estimate from pregnancy and breastfeeding estimates"
+who_faq_block = next((block for block in health_faq_blocks if "What are the WHO adult BMI categories?" in block), "")
+who_faq_answer = html_lib.unescape(re.sub(r"<[^>]+>", " ", who_faq_block))
+assert "groups the obesity classes into one displayed obesity label" in who_faq_answer, "BMI FAQ must disclose the difference between the WHO table and the calculator result labels"
 assert "70 ÷ (1.75 × 1.75) = 70 ÷ 3.0625" in health_html and "22.86" in health_html, "Metric BMI example must retain the unrounded denominator and independently checked result"
 assert "703 × 154 ÷ (69 × 69) = 108,262" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
 assert "23.0, 27.5, 32.5 and 37.5" in health_html, "Asian BMI action points must remain distinct from international category bands"
