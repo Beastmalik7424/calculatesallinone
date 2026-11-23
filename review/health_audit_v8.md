@@ -163,3 +163,45 @@ PR #323 was confirmed closed and unmerged. A new draft PR, #324, was opened afte
 ## 10. Medical and originality limitations
 
 **Medical review not completed. Plagiarism and originality clearance not completed.**
+
+
+## 11. Follow-up independent source and originality review
+
+Follow-up review date: 23 November 2026. This section supersedes the earlier pending-status notes above where a later result is recorded.
+
+### Medical-content source verification
+
+The Health hub claims relevant to this change and its surrounding BMI/calorie explanations were cross-checked against independent primary or authoritative sources:
+
+- WHO, *The SuRF Report 2*, Table 3.1, printed page 22: severe thinness <16.00 kg/m²; moderate thinness 16.00–16.99; mild thinness 17.00–18.49. Primary source: https://iris.who.int/bitstream/handle/10665/43190/9241593024_eng.pdf.
+- WHO, *Malnutrition in women* and NLiS help content: confirms adult BMI is a screening/population indicator, <18.5 underweight and <17.0 thinness; the NLiS combined indicator groups moderate and severe thinness and is not a replacement for the three-band SuRF table.
+- WHO 2021 SEARO District Clinician Manual, adult classification table: independently reproduces the three thinness bands for adults and states that interpretation must remain in clinical context.
+- NCBI Bookshelf, WHO consolidated TB guidelines, 2025, Table 1 and definitions: independently gives adult severe undernutrition <16, moderate 16.0–16.99, mild 17.0–18.49, and underweight <18.5; child/adolescent definitions use age-specific measures.
+- CDC adult BMI guidance and CDC's 16 December 2025 BMI overview: confirm BMI is a screening measure, not a diagnosis; adult CDC categories apply from age 20, while ages 2–19 use BMI-for-age percentiles.
+- Mifflin et al., 1990, PubMed PMID 2305711: confirms the equation coefficients and the original sample of 498 healthy adults aged 19–78.
+- National Academies of Sciences, Engineering, and Medicine, *Dietary Reference Intakes for Energy* (2023), Tables 5-16 and 5-17 and breastfeeding equations: confirms separate age/sex/life-stage equations and the inactive, low-active, active and very-active PAL categories used for the pregnancy/lactation path.
+- WHO Expert Consultation, 2004, PubMed PMID 14726171: confirms that Asian BMI action points 23.0, 27.5, 32.5 and 37.5 are additional public-health action points, not a replacement set of universal individual diagnostic thresholds.
+
+**Finding:** no factual conflict was identified in the audited claims against these sources. The copy correctly distinguishes WHO population classification, CDC adult age scope, BMI screening limitations, the original Mifflin-St Jeor study population, consumer activity multipliers, and the separate National Academies life-stage estimates. No calculator formula or result behavior was changed.
+
+**Review boundary:** this is an independent source-based editorial and medical-accuracy review, not a review by a licensed physician or registered dietitian. No clinician has been identified as the reviewer, and no professional credential or medical-review claim is made. The existing page statement that the guide has not been medically reviewed must remain. A formal clinician sign-off cannot be manufactured by an online source comparison.
+
+### Originality and similarity screening
+
+- The complete Health body content section and the newly changed WHO FAQ text were submitted to the AISEO plagiarism checker in a follow-up run.
+- Checker result: 1,461 words counted; plagiarism/similarity score 6%; uniqueness score 94%; 89 matched words; one returned source reference.
+- The matched phrases were short, common technical expressions (BMI formula wording, broad BMI labels, equation coefficients, and standard age/category references). The only returned source URL was a Brave search redirect (https://search.brave.com/go/v1), not an attributable publication. It is therefore not valid evidence that the text was copied from a particular source.
+- Targeted indexed-web searches for distinctive sentences in the Health copy did not surface an exact sentence-level match. This is a bounded manual search, not an exhaustive search of every web page or unpublished work.
+- The first automated attempt returned HTTP 502. The subsequent complete-content submission succeeded.
+
+**Finding:** the automated and manual screens did not identify a substantiated unattributed passage. The 94% uniqueness result is a screening result, not a legal opinion or guarantee of originality. No text was rewritten solely to chase a numerical score.
+
+### Updated release and scope status
+
+- PR #324 was freshly verified as **open, Draft, mergeable, and not merged**. It remains Draft in accordance with the explicit release instruction.
+- The PR still changes exactly four paths: `content_v13.py`, `build.py`, `tests/health_content_v8.py`, and this report. No other page, calculator, formula, layout, CSS, navigation, route, or production file was changed.
+- The latest recorded Build and smoke test run #45214489071 completed successfully. All 33 listed build/test/SEO/browser/monetization steps and the job completion steps passed. The six other PR-associated workflow runs also completed successfully.
+- The committed custom AST test was previously exercised with the source-snapshot alternative: base fixture failed as expected and updated fixture passed. The exact full-worktree invocation remains not run because the execution environment could not connect to github.com. Do not describe the snapshot run as the full-worktree test.
+- The preview evidence remains the READY Vercel preview recorded above. No production deployment or merge was performed.
+
+**Final audit disposition:** source-based medical accuracy review and automated/manual originality screening are complete within the stated limits. Licensed-clinician sign-off and the exact local full-worktree test remain outstanding. PR #324 stays Draft and production remains unchanged.
