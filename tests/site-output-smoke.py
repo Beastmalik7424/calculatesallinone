@@ -1387,7 +1387,7 @@ for phrase in (
     "CDC BMI calculation guidance",
     "the English calculator result displays four broad labels",
     "does not display obesity classes I, II and III as separate result labels",
-    "703 is a rounded conversion factor",
+    "703 factor is a rounded conversion factor",
 ):
     assert phrase.lower() in health_text.lower(), f"Health hub is missing verified content: {phrase}"
 for href in (
