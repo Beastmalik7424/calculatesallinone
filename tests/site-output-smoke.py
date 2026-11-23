@@ -1384,6 +1384,7 @@ for phrase in (
     "not a diagnosis",
     "has not been medically reviewed",
     "CDC BMI calculation guidance",
+    "CDC BMI calculation guidance",
     "the calculator displays four broad labels",
     "does not display obesity classes I, II and III as separate result labels",
     "703 is a rounded conversion factor",
@@ -1400,6 +1401,7 @@ for href in (
     "https://pubmed.ncbi.nlm.nih.gov/2305711/",
     "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
     "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
+    "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
     "https://www.cdc.gov/bmi/adult-calculator/index.html",
     "https://www.nationalacademies.org/read/26818/chapter/7",
 ):
@@ -1411,6 +1413,7 @@ for external_href in (
     "https://pubmed.ncbi.nlm.nih.gov/2305711/",
     "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
     "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
+    "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
     "https://www.cdc.gov/bmi/adult-calculator/index.html",
     "https://www.nationalacademies.org/read/26818/chapter/7",
 ):
