@@ -1401,9 +1401,6 @@ for href in (
     "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
     "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
     "https://www.cdc.gov/bmi/adult-calculator/index.html",
-    "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
-    "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
-    "https://www.cdc.gov/bmi/adult-calculator/index.html",
     "https://www.nationalacademies.org/read/26818/chapter/7",
 ):
     assert 'href="' + href + '"' in health_html, f"Health hub must link to the relevant internal tool or primary source: {href}"
@@ -1412,9 +1409,12 @@ for external_href in (
     "https://iris.who.int/bitstream/handle/10665/43190/9241593024_eng.pdf",
     "https://pubmed.ncbi.nlm.nih.gov/14726171/",
     "https://pubmed.ncbi.nlm.nih.gov/2305711/",
+    "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
+    "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
+    "https://www.cdc.gov/bmi/adult-calculator/index.html",
     "https://www.nationalacademies.org/read/26818/chapter/7",
 ):
-    source_anchor = re.search(r'<a\b(?=[^>]*href="' + re.escape(external_href) + r'")[^>]*>', health_html)
+    source_anchor = re.search(r'<a\\b(?=[^>]*href="' + re.escape(external_href) + r'")[^>]*>', health_html)
     assert source_anchor and 'rel="noopener noreferrer"' in source_anchor.group(0), f"External health source link must be safe: {external_href}"
 health_faq_questions = (
     "How is adult BMI calculated?",
