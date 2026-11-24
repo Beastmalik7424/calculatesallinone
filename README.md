@@ -7,8 +7,6 @@
 
 Free, browser-based calculators for everyday calculations across health, money, mathematics, dates, time, and worship-related needs.
 
-**Website:** https://calculateallinone.vercel.app/
-
 ## What it offers
 
 CalculateAllInOne brings practical calculators together in one place, including:
