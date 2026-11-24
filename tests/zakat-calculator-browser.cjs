@@ -167,7 +167,9 @@ let browser;
   await page.waitForFunction(() => {
     const result = document.querySelector("#zakat-result");
     const rect = result.getBoundingClientRect();
-    return window.scrollY > 0 && rect.top >= 60 && rect.top < innerHeight * 0.75;
+    const header = document.querySelector("header");
+    return window.scrollY > 0 && rect.top >= header.getBoundingClientRect().bottom + 8 &&
+      rect.top < innerHeight * 0.75;
   });
   const reducedMotionScroll = await page.evaluate(() => window.__zakatScrollOptions);
   assert.equal(reducedMotionScroll && reducedMotionScroll.behavior, "auto",
@@ -355,7 +357,9 @@ let browser;
   await page.waitForFunction(() => {
     const result = document.querySelector("#zakat-result");
     const rect = result.getBoundingClientRect();
-    return window.scrollY > 0 && rect.top >= 60 && rect.top < innerHeight * 0.75;
+    const header = document.querySelector("header");
+    return window.scrollY > 0 && rect.top >= header.getBoundingClientRect().bottom + 8 &&
+      rect.top < innerHeight * 0.75;
   });
   const urduScroll = await page.evaluate(() => window.__zakatScrollOptions);
   assert.equal(urduScroll && urduScroll.behavior, "smooth",
