@@ -2177,7 +2177,7 @@ def tool_page(t):
         "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator"), ("query-calculator", "Query Calculator"), ("unit-converter", "Unit Converter")],
         "query-calculator": [("years-to-days-calculator", "Years to Days Calculator"), ("age-calculator", "Age Calculator")],
         "unit-converter": [("bmi-calculator", "Adult BMI Calculator"), ("calorie-calculator", "Calorie Calculator")],
-        "bmi-calculator": [("calorie-calculator", "Adult Calorie Calculator"), ("health", "Health Calculators and Guidance")],
+        "bmi-calculator": [("calorie-calculator", "Adult Calorie Calculator")],
     }
     related_items = related_map.get(t["slug"], [])
     related = "".join(
