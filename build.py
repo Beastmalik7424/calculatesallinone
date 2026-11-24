@@ -22,7 +22,7 @@ ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lowe
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
-SITE_DESCRIPTION = "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."
+SITE_DESCRIPTION = "Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversions and a Tasbih counter. Clear formulas, no sign-up."
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
     "/zakat-calculator/": "2026-11-16",
@@ -2663,9 +2663,9 @@ def home_app_page(lang):
         tools_heading_action = '<span class="ca-home-free">' + s["free"] + '</span>'
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
-        desc = "Free online calculators for health, money, business, dates, mathematics and everyday conversions, with clear formulas and no sign-up."
+        desc = "Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and Tasbih counter. Clear formulas, no sign-up."
         h1 = "Free Online Calculators"
-        lead = "Free online calculators for health, money, business, dates, maths and everyday tasks. Calculate BMI, Zakat, EMI, profit and loss with clear formulas and no sign-up."
+        lead = "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and a Tasbih counter. Clear formulas, browser-based results and no sign-up."
         more_h = "Calculator tools"
         tools_heading_action = '<a class="ca-home-free no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="#ca-all-tools-menu" aria-label="Browse all free calculator tools">Browse all free calculators</a>'
     trust = ""
