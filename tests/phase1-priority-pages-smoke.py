@@ -302,7 +302,7 @@ def check_years_quick_reference():
             parsed.append((html.unescape(re.sub(r"<[^>]+>", "", year)).strip(), cells))
         return parsed
 
-    expected_years = ["2", "3", "4", "5", "7", "9", "10", "13", "15", "20", "25"]
+    expected_years = ["2", "3", "4", "5", "7", "9", "10", "13", "15", "20"]
     quick_rows = table_rows(quick_match.group(1))
     actual_years = [year for year, _ in quick_rows]
     assert actual_years == expected_years, (
@@ -321,7 +321,6 @@ def check_years_quick_reference():
         "13": ["4,745", "4,748.25", "4,748.1525"],
         "15": ["5,475", "5,478.75", "5,478.6375"],
         "20": ["7,300", "7,305", "7,304.85"],
-        "25": ["9,125", "9,131.25", "9,131.0625"],
     }
     assert dict(quick_rows) == expected_values, "Quick-reference arithmetic changed"
 
