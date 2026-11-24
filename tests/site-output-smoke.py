@@ -1297,7 +1297,7 @@ print("PASS: header brand logo links to the root homepage on all locale routes")
 _bmi_2026 = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
 assert "2026 Standards of Care in Overweight and Obesity" in _bmi_2026, "BMI must explain the current 2026 clinical assessment context"
 assert "waist-to-height ratio" in _bmi_2026.lower(), "BMI must explain waist-to-height ratio alongside BMI"
-assert "does not ask for waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply waist-based clinical criteria"
+assert "does not ask for ethnicity or waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply ethnicity- or waist-based clinical criteria"
 assert "doi.org/10.2337/doci26-0003" in _bmi_2026, "BMI must link the 2026 clinical standards source"
 assert "https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" in _bmi_2026, "BMI must link the NHS adult BMI benchmark"
 assert "https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" in _bmi_2026, "BMI must link the NHS waist-to-height benchmark"
