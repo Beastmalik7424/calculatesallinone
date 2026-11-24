@@ -2165,7 +2165,7 @@ def tool_page(t):
             "publisher": {"@id": SITE_URL + "/#organization"},
             "isPartOf": {"@id": SITE_URL + "/#website"},
             "breadcrumb": {"@id": url + "#breadcrumb"},
-            "citation": ["https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html"],
+            "citation": ["https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"],
             "inLanguage": "en",
         })
     related_map = {
