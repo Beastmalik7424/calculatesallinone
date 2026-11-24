@@ -422,7 +422,7 @@ TOOLS = [
         "category": "money",
         "name": "Profit and Loss Calculator",
         "app": "UtilitiesApplication",
-        "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
+        "description": "Free profit and loss calculator: estimate gross profit and net operating profit from revenue, cost of goods sold and entered expenses, or compare product profit, markup and gross margin from cost and selling price.",
         "h1": "Profit and Loss Calculator",
         "lead": "This profit loss calculator compares business operating profit with product-level profit or loss, markup and margin.",
         "ui": (
