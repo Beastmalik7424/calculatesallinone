@@ -156,7 +156,7 @@ const { chromium } = require("playwright");
         "Life-stage results must disclose chronic-condition evidence limits");
       assert.match(bothText, /do not rely on this estimate for treatment or dietary decisions/i,
         "Life-stage results must warn against clinical reliance for chronic conditions");
-      assert.equal(await page.locator('#calorie-result a[href="https://www.nationalacademies.org/read/26818/chapter/7"]').count(), 1, "Both results must cite the primary National Academies source");
+      assert.equal(await page.locator('#calorie-result a[href="https://www.ncbi.nlm.nih.gov/books/NBK588659/"]').count(), 1, "Both results must cite the primary National Academies source");
       await page.locator("#cal-eligibility").selectOption("pregnant");
       assert.equal(await page.locator("#cal-pregnancy-fields").isVisible(), true);
       assert.equal(await page.locator("#cal-breastfeeding-fields").isVisible(), false);
