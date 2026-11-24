@@ -84,7 +84,7 @@ assert re.match(r"\s*<meta\s+charset=", home_head.group(1), re.I), "Homepage UTF
 assert home_head.group(1).find('name="msvalidate.01"') > home_head.group(1).find('charset='), "Bing verification must follow the charset declaration"
 assert not re.search(r"\r?\n[ \t\r]*\r?\n", home_head.group(1)), "Homepage head must not contain blank-line pollution"
 assert "Free Online Calculators" in home_html, "Homepage H1 must identify the calculator collection"
-assert "Free online calculators for health, money, business, dates, maths and everyday tasks." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
+assert "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and a Tasbih counter. Clear formulas, browser-based results and no sign-up." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
 assert "Browse all free calculators" in home_html, "Homepage must expose a clear calculator-browsing action"
 for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
@@ -93,7 +93,7 @@ assert SITE + "/#organization" in home_html and SITE + "/#maintainer" in home_ht
 assert "How it works" in home_html and "Choose a calculator" in home_html and "Enter your values" in home_html and "Review the result and formula" in home_html, "Homepage should explain the calculator workflow"
 assert 'href="/money/"' in home_html and 'href="/math/"' in home_html and "Money and Business" in home_html and "Math and Converters" in home_html, "Homepage should provide clear category hub calls to action"
 assert "CalculatesAll is a free online calculator project independently maintained by Muhammad Fayyaz Adeel." in home_html, "Homepage should identify the free service and maintainer consistently"
-assert "Free Online Calculators" in home_html and "Free online calculators for health, money, business, dates, maths and everyday tasks." in home_html, "Homepage should describe its full calculator scope in the opening copy"
+assert "Free Online Calculators" in home_html and "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and a Tasbih counter. Clear formulas, browser-based results and no sign-up." in home_html, "Homepage should describe its full calculator scope in the opening copy"
 assert re.search(r"<summary[^>]*>\s*Choose a free calculator\s*<span[^>]*>⌄</span></summary>", home_html), "Homepage tools menu must provide a clear free-calculator call to action"
 assert "<h2>Calculator tools</h2>" in home_html, "Homepage tools section should explicitly identify calculator tools"
 assert 'href="#ca-all-tools-menu"' in home_html and "Browse all free calculators</a>" in home_html, "Homepage must expose a recognisable link-based calculator browsing action"
@@ -102,10 +102,11 @@ for phrase in ("Mifflin–St Jeor equation", "fixed-rate monthly installment", "
     assert phrase.lower() in home_html.lower(), ("homepage method context", phrase)
 for href in ("/calorie-calculator/", "/emi-calculator/", "/compound-interest-calculator/", "/percentage-calculator/", "/fraction-calculator/", "/date-calculator/", "/years-to-days-calculator/"):
     assert f'href="{href}"' in home_html, f"Homepage should link to the relevant calculator: {href}"
-assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
+assert "Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversions and a Tasbih counter. Clear formulas, no sign-up." in home_html, "Homepage should state a clear, consistent service description"
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 assert "https://github.com/Beastmalik7424" in about_html and "source repository" in about_html, "About page should expose the verified public maintainer profile and source repository"
 assert "CalculatesAll is the public site name for CalculateAllInOne." in about_html, "About page must reconcile the public brand name with the source-project name"
+assert "CalculatesAll is the public site name for CalculateAllInOne. Free browser tools cover adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and Tasbih counting. Each relevant page explains its method and limits." in about_html, "About page must state the core calculators and their browser-based scope clearly"
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
 about_main_match = re.search(r"<main\b[^>]*>(.*?)</main>", about_html, re.S)
@@ -140,6 +141,7 @@ home_orgs = [node for node in home_nodes if node.get("@type") == "Organization" 
 assert len(home_orgs) == 1 and home_orgs[0].get("@id") == SITE + "/#organization", "Homepage must expose exactly one canonical CalculatesAll Organization entity"
 home_sites = [node for node in home_nodes if node.get("@type") == "WebSite" and node.get("name") == "CalculatesAll"]
 assert len(home_sites) == 1 and home_sites[0].get("@id") == SITE + "/#website", "Homepage must expose exactly one canonical WebSite entity"
+assert home_orgs[0].get("description") == "Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversions and a Tasbih counter. Clear formulas, no sign-up." and home_sites[0].get("description") == "Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversions and a Tasbih counter. Clear formulas, no sign-up.", "Organization and WebSite descriptions must match the visible core calculator offering"
 home_people = [node for node in home_nodes if node.get("@type") == "Person" and node.get("name") == "Muhammad Fayyaz Adeel"]
 assert len(home_people) == 1 and home_people[0].get("@id") == SITE + "/#maintainer", "Homepage must expose exactly one canonical maintainer entity"
 assert home_people[0].get("sameAs") == ["https://github.com/Beastmalik7424"], "Maintainer entity should link only to the verified public GitHub profile"
@@ -197,7 +199,7 @@ assert 'href="mailto:' in contact_html, "Contact page must retain its direct ema
 profit_html = output_for_url(SITE + "/profit-loss-calculator/").read_text(encoding="utf-8")
 assert "Maintained by <a" in profit_html and "Muhammad Fayyaz Adeel" in profit_html and 'href="/about/"' in profit_html, "Calculator guide should have an honest maintainer byline"
 assert any(node.get("@type") == "WebPage" and node.get("author", {}).get("@id") == SITE + "/#maintainer" for node in profit_nodes), "Calculator WebPage schema should reference the named maintainer"
-assert '"description":"Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks."' in profit_html, "Calculator schema should use the same organization description as the homepage"
+assert '"description":"Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversions and a Tasbih counter. Clear formulas, no sign-up."' in profit_html, "Calculator schema should use the same organization description as the homepage"
 # Only pages flagged by the completed crawler get metadata changes; keep copy page-specific.
 for path in ("/affiliate-disclosure/", "/compound-interest-calculator/", "/contact/", "/date-calculator/", "/discount-calculator/", "/fraction-calculator/", "/stopwatch/", "/worship/", "/zakat-calculator/"):
     page_html = output_for_url(SITE + path).read_text(encoding="utf-8")
