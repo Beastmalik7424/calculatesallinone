@@ -159,7 +159,7 @@ bmi_html = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
 bmi_nodes = jsonld_nodes(bmi_html)
 bmi_pages = [node for node in bmi_nodes if node.get("@type") == "WebPage"]
 assert len(bmi_pages) == 1, "English BMI page must expose exactly one WebPage entity"
-assert "free BMI calculator online for adults" in bmi_html.lower(), "BMI page must state its online adult calculator purpose in natural visible copy"
+assert "free bmi calculator online for adults" in bmi_html.lower(), "BMI page must state its online adult calculator purpose in natural visible copy"
 bmi_page = bmi_pages[0]
 assert bmi_page.get("@id") == SITE + "/bmi-calculator/#webpage", "BMI WebPage must have a stable page-specific @id"
 assert bmi_page.get("author", {}).get("@id") == SITE + "/#maintainer", "BMI WebPage author must resolve to the visible maintainer"
