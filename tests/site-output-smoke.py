@@ -105,7 +105,7 @@ for href in ("/calorie-calculator/", "/emi-calculator/", "/compound-interest-cal
 assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 assert "https://github.com/Beastmalik7424" in about_html and "source repository" in about_html, "About page should expose the verified public maintainer profile and source repository"
-assert "CalculatesAll is the public website name of the CalculateAllInOne project." in about_html, "About page must reconcile the public brand name with the source-project name"
+assert "CalculatesAll is the public site name for CalculateAllInOne." in about_html, "About page must reconcile the public brand name with the source-project name"
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
 about_main_match = re.search(r"<main\b[^>]*>(.*?)</main>", about_html, re.S)
