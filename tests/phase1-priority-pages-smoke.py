@@ -374,6 +374,9 @@ def check_bmi_content():
     assert 'id="bmi-form"' in bmi_source and 'id="b-kg"' in bmi_source and 'id="b-cm"' in bmi_source, "BMI calculator controls must remain present"
     assert 'href="/calorie-calculator/"' in bmi_source, "BMI page must retain its relevant adult calorie calculator link"
     assert len(re.findall(r"<summary\b", bmi_source, re.I)) >= 8, "BMI page must retain its useful FAQs"
+    for heading in ("How to use this BMI calculator", "What is body mass index (BMI)?", "BMI formula and unit conversions", "Standard adult BMI categories", "BMI interpretation for South Asian adults", "Waist-to-height ratio: an additional measure", "What BMI cannot tell you", "Using your result responsibly", "How BMI and calorie estimates differ", "Medical disclaimer"):
+        assert bmi_text.count(heading) == 1, "BMI section must appear exactly once: " + heading
+    assert "How to measure consistently" not in bmi_text and "Pakistan and South Asia context" not in bmi_text, "Superseded BMI sections must not be duplicated"
 
 
 def check_urdu_unit_converter():
