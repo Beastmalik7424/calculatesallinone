@@ -29,7 +29,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 ## Money calculators
 
 - [EMI Calculator](https://calculateallinone.vercel.app/emi-calculator/): Monthly instalment estimate, repayment schedule and prepayment scenarios. Not a bank offer or loan approval.
-- [Zakat Calculator](https://calculateallinone.vercel.app/zakat-calculator/): Arithmetic using the silver Nisab method stated on the page. Not a religious ruling for every school or circumstance.
+- [Zakat Calculator](https://calculateallinone.vercel.app/zakat-calculator/): Estimates Hanafi Zakat on eligible cash, gold, silver, trade stock and recoverable receivables using a selectable silver or gold Nisab, or applies the limited Ja'fari trading-goods method published by Sayyid Sistani. Metal prices are entered by the user. Not a religious ruling for every school or circumstance.
 - [Profit and Loss Calculator](https://calculateallinone.vercel.app/profit-loss-calculator/): Business gross/net operating profit and product profit calculations.
 - [Discount Calculator](https://calculateallinone.vercel.app/discount-calculator/): Discount amount and reduced price.
 - [Compound Interest Calculator](https://calculateallinone.vercel.app/compound-interest-calculator/): Growth from a starting balance, nominal annual rate, duration and compounding frequency. Excludes recurring deposits, withdrawals, fees and tax unless stated otherwise.
@@ -62,15 +62,15 @@ This index helps automated systems discover the site's pages. It is not a replac
 
 ## Urdu tools
 
-- [Urdu Age Calculator](https://calculateallinone.vercel.app/ur/age-calculator/)
-- [Urdu BMI Calculator](https://calculateallinone.vercel.app/ur/bmi-calculator/)
-- [Urdu Discount Calculator](https://calculateallinone.vercel.app/ur/discount-calculator/)
-- [Urdu Profit and Loss Calculator](https://calculateallinone.vercel.app/ur/profit-loss-calculator/)
-- [Urdu Standard Calculator](https://calculateallinone.vercel.app/ur/standard-calculator/)
-- [Urdu Stopwatch](https://calculateallinone.vercel.app/ur/stopwatch/)
-- [Urdu Tasbih Counter](https://calculateallinone.vercel.app/ur/tasbih-counter/)
-- [Urdu Unit Converter](https://calculateallinone.vercel.app/ur/unit-converter/)
-- [Urdu Zakat Calculator](https://calculateallinone.vercel.app/ur/zakat-calculator/)
+- [Urdu Age Calculator](https://calculateallinone.vercel.app/ur/age-calculator/): Urdu-language age calculation in Gregorian years, months and days, with total elapsed days.
+- [Urdu BMI Calculator](https://calculateallinone.vercel.app/ur/bmi-calculator/): Adult BMI screening in Urdu with kg/lb and cm/feet-and-inches inputs, WHO categories and a clear not-a-diagnosis limitation.
+- [Urdu Discount Calculator](https://calculateallinone.vercel.app/ur/discount-calculator/): Calculates the discount amount, savings and final sale price from the original price and discount rate.
+- [Urdu Profit and Loss Calculator](https://calculateallinone.vercel.app/ur/profit-loss-calculator/): Calculates product profit or loss and business operating profit from revenue, costs and expenses.
+- [Urdu Standard Calculator](https://calculateallinone.vercel.app/ur/standard-calculator/): Browser-based arithmetic and scientific functions, including percentages, parentheses, roots and logarithms.
+- [Urdu Stopwatch](https://calculateallinone.vercel.app/ur/stopwatch/): Browser stopwatch with start, stop and reset controls; displayed precision depends on device and browser performance.
+- [Urdu Tasbih Counter](https://calculateallinone.vercel.app/ur/tasbih-counter/): Urdu-language dhikr counter with count, target and reset controls; local storage is used when available.
+- [Urdu Unit Converter](https://calculateallinone.vercel.app/ur/unit-converter/): Converts supported weight, length and temperature units with stated conversion methods.
+- [Urdu Zakat Calculator](https://calculateallinone.vercel.app/ur/zakat-calculator/): Urdu guidance for the stated Hanafi method and Sayyid Sistani's limited Ja'fari trading-goods method; metal prices are entered by the user.
 
 ## Usage and accuracy notes
 
