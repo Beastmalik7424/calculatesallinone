@@ -2663,7 +2663,7 @@ def home_app_page(lang):
         tools_heading_action = '<span class="ca-home-free">' + s["free"] + '</span>'
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
-        desc = "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and Tasbih counter. Clear formulas, no sign-up."
+        desc = "Free online calculators for adult BMI, Zakat, EMI, profit/loss, dates, unit conversion and Tasbih counting. Clear methods, no sign-up."
         h1 = "Free Online Calculators"
         lead = "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and a Tasbih counter. Clear formulas, browser-based results and no sign-up."
         more_h = "Calculator tools"
@@ -2998,7 +2998,7 @@ def main():
         else:
             entries.append((path, []))
     static_pages = [
-        ("/about/", "About CalculatesAll | Project, Methods & Privacy", "Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details.", "About CalculatesAll", ABOUT_EXTRA),
+        ("/about/", "About CalculatesAll | Project, Methods & Privacy", "Meet the CalculatesAll maintainer, explore free browser calculators, and review methods, privacy and contact information.", "About CalculatesAll", ABOUT_EXTRA),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "This policy explains what information CalculatesAll handles when you use the website. It applies to every page on calculateallinone.vercel.app.",
             "<strong>Calculator entries.</strong> The numbers and dates you type into a calculator are processed by JavaScript in your own browser. They are not sent to our server and we do not keep a copy of them.",
