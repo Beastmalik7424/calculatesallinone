@@ -336,6 +336,41 @@ def check_years_quick_reference():
 
 
 
+
+def check_bmi_and_calorie_content():
+    """Guard the requested adult health-tool instructions and disclaimers."""
+    bmi_source = read_page("bmi-calculator")
+    bmi_text = visible_text("bmi-calculator")
+    assert "How to use this BMI calculator" in bmi_text, "BMI page needs a clear usage guide"
+    for step in (
+        "Step 1: Choose the weight unit",
+        "Step 2: Choose the height unit",
+        "Step 3: Enter your measurements",
+        "Step 4: Select Calculate BMI",
+    ):
+        assert step in bmi_text, "BMI usage guide is missing: " + step
+    assert "How BMI and calorie estimates differ" in bmi_text, "BMI page must explain the related calorie estimate"
+    assert "Disclaimer: This tool is for informational purposes only and is not a substitute for professional medical advice." in bmi_text, "BMI page must show the explicit medical disclaimer"
+    assert 'href="/calorie-calculator/"' in bmi_source, "BMI page must link to the adult calorie calculator"
+    assert 'id="bmi-form"' in bmi_source and 'id="b-kg"' in bmi_source and 'id="b-cm"' in bmi_source, "BMI calculator inputs must remain present"
+    assert len(re.findall(r"<summary\\b", bmi_source, re.I)) >= 5, "BMI page must retain its five useful FAQs"
+
+    calorie_source = read_page("calorie-calculator")
+    calorie_text = visible_text("calorie-calculator")
+    assert "How to use the Adult Calorie Calculator" in calorie_text, "Calorie page needs a clear usage guide"
+    for step in (
+        "Step 1: Enter your age",
+        "Step 2: Select the equation coefficient",
+        "Step 3: Enter your weight and height",
+        "Step 4: Choose the activity assumption",
+        "Step 5: Calculate and review the estimate",
+    ):
+        assert step in calorie_text, "Calorie usage guide is missing: " + step
+    assert "Disclaimer: This tool is for informational purposes only and is not a substitute for professional medical advice." in calorie_text, "Calorie page must show the explicit medical disclaimer"
+    assert 'href="/bmi-calculator/"' in calorie_source, "Calorie page must link to the adult BMI calculator"
+    assert 'id="calorie-form"' in calorie_source and 'id="calorie-result"' in calorie_source, "Calorie calculator form and result must remain present"
+    assert len(re.findall(r"<summary\\b", calorie_source, re.I)) >= 5, "Calorie page must retain its existing FAQs"
+
 def check_urdu_unit_converter():
     path = ROOT / "ur" / "unit-converter" / "index.html"
     assert path.exists(), "Existing Urdu Unit Converter page must remain generated"
@@ -351,6 +386,7 @@ def main():
     check_urdu_bmi()
     check_urdu_unit_converter()
     check_targeted_content()
+    check_bmi_and_calorie_content()
     check_years_quick_reference()
     check_tasbih_content_structure()
     print("PASS: priority pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD, preserved canonicals, and research-backed content")
