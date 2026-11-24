@@ -353,7 +353,7 @@ def check_bmi_and_calorie_content():
     assert "Disclaimer: This tool is for informational purposes only and is not a substitute for professional medical advice." in bmi_text, "BMI page must show the explicit medical disclaimer"
     assert 'href="/calorie-calculator/"' in bmi_source, "BMI page must link to the adult calorie calculator"
     assert 'id="bmi-form"' in bmi_source and 'id="b-kg"' in bmi_source and 'id="b-cm"' in bmi_source, "BMI calculator inputs must remain present"
-    assert len(re.findall(r"<summary\\b", bmi_source, re.I)) >= 5, "BMI page must retain its five useful FAQs"
+    assert len(re.findall(r"<summary\b", bmi_source, re.I)) >= 5, "BMI page must retain its five useful FAQs"
 
     calorie_source = read_page("calorie-calculator")
     calorie_text = visible_text("calorie-calculator")
@@ -369,7 +369,7 @@ def check_bmi_and_calorie_content():
     assert "Disclaimer: This tool is for informational purposes only and is not a substitute for professional medical advice." in calorie_text, "Calorie page must show the explicit medical disclaimer"
     assert 'href="/bmi-calculator/"' in calorie_source, "Calorie page must link to the adult BMI calculator"
     assert 'id="calorie-form"' in calorie_source and 'id="calorie-result"' in calorie_source, "Calorie calculator form and result must remain present"
-    assert len(re.findall(r"<summary\\b", calorie_source, re.I)) >= 5, "Calorie page must retain its existing FAQs"
+    assert len(re.findall(r"<summary\b", calorie_source, re.I)) >= 5, "Calorie page must retain its existing FAQs"
 
 def check_urdu_unit_converter():
     path = ROOT / "ur" / "unit-converter" / "index.html"
