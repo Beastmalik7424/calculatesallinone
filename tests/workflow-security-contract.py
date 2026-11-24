@@ -113,7 +113,7 @@ class RepositoryWorkflowPermissionsIntegrationTests(unittest.TestCase):
         path = ROOT / ".github/workflows/vercel-preview-fallback.yml"
         content = path.read_text(encoding="utf-8")
         self.assertRegex(content, r"(?m)^  workflow_dispatch:")
-        self.assertNotRegex(content, r"(?m)^  push\\s*:", "Vercel Git integration handles normal pushes; the credentialed fallback is manual-only")
+        self.assertNotRegex(content, r"(?m)^  push\s*:", "Vercel Git integration handles normal pushes; the credentialed fallback is manual-only")
 
 
 
