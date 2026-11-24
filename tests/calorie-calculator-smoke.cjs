@@ -180,7 +180,7 @@ assert.match(html, /competitive athletes/i, "Page must explain the limitations f
 assert.match(html, /metabolic conditions/i, "Page must explain the limitations for metabolic conditions");
 assert.match(html, /https:\/\/www\.mayoclinic\.org\/healthy-lifestyle\/weight-loss\/in-depth\/calorie-calculator\/itt-20402304/, "Page must cite Mayo Clinic safety guidance");
 assert.match(html, /https:\/\/www\.nal\.usda\.gov\/human-nutrition-and-food-safety\/dri-calculator/, "Page must link to the official DRI calculator reference");
-assert.match(html, /https:\/\/www\.nationalacademies\.org\/read\/26818\/chapter\/7/);
+assert.match(html, /https:\/\/www\.ncbi\.nlm\.nih\.gov\/books\/NBK588659\//);
 assert.match(html, /cal-pregnancy-weeks/);
 assert.match(html, /cal-breastfeeding-stage/);
 assert.match(html, /PAL 1\.00–&lt;1\.53/);
