@@ -2528,7 +2528,7 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
   border-radius: .65rem !important;
 }
 #main .ca-tool-zakat-calculator #zakat-result {
-  scroll-margin-top: 6rem !important;
+  scroll-margin-top: 6rem;
   display: block !important;
   min-height: 44px !important;
   margin: .35rem 0 0 !important;
