@@ -523,6 +523,14 @@
         if (!resultPanel.isConnected || !resultPanel.textContent.trim()) return
         var prefersReducedMotion = !!(window.matchMedia &&
           window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+        var stickyHeader = document.querySelector("header")
+        if (stickyHeader && typeof window.getComputedStyle === "function") {
+          var headerPosition = window.getComputedStyle(stickyHeader).position
+          if (headerPosition === "sticky" || headerPosition === "fixed") {
+            resultPanel.style.scrollMarginTop =
+              Math.ceil(stickyHeader.getBoundingClientRect().height + 16) + "px"
+          }
+        }
         resultPanel.scrollIntoView({
           behavior: prefersReducedMotion ? "auto" : "smooth",
           block: "start"
