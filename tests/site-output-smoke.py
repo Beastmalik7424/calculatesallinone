@@ -1143,7 +1143,7 @@ for slug, phrases in {
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
-    if slug in {"tasbih-counter", "zakat-calculator"}:
+    if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator"}:
         guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     else:
         guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
@@ -1156,7 +1156,7 @@ assert "PKR 36,153" not in emi_guide
 
 # Regression: the specialized BMI template must include the supplemental editorial guide.
 _bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
-assert "Exact-value worked example" in _bmi_html, "BMI exact-value worked example missing from generated page"
+assert "BMI formula and unit conversions" in _bmi_html, "BMI formula and worked example section missing from generated page"
 assert "22.8571" in _bmi_html and "22.9" in _bmi_html, "BMI 70 kg / 1.75 m example missing"
 assert "Common questions" in _bmi_html, "BMI FAQ guide missing"
 
