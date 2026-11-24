@@ -177,7 +177,6 @@ let browser;
       options: window.__zakatScrollOptions
     };
   });
-  console.log("ZAKAT_SCROLL_DEBUG_EN", JSON.stringify(englishScrollMetrics));
   assert.ok(englishScrollMetrics.scrollY > 0 &&
     englishScrollMetrics.resultTop >= englishScrollMetrics.headerBottom + 8 &&
     englishScrollMetrics.resultTop < 844 * 0.75,
@@ -378,7 +377,6 @@ let browser;
       options: window.__zakatScrollOptions
     };
   });
-  console.log("ZAKAT_SCROLL_DEBUG_UR", JSON.stringify(urduScrollMetrics));
   assert.ok(urduScrollMetrics.scrollY > 0 &&
     urduScrollMetrics.resultTop >= urduScrollMetrics.headerBottom + 8 &&
     urduScrollMetrics.resultTop < 844 * 0.75,
