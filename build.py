@@ -2019,7 +2019,7 @@ BMI_GUIDE = [
     ]),
     ("Standard adult BMI categories", [
         "The standard WHO adult categories used by this calculator are: underweight below 18.5 kg/m²; healthy or normal weight from 18.5 to below 25; overweight from 25 to below 30; and obesity from 30 or higher.",
-        "These are broad screening categories, not personal health targets or diagnoses. The calculator uses the exact, unrounded BMI to select a category and rounds only the number shown on screen. For example, an exact BMI of 24.98 may display as 25.0 while remaining below the 25.0 category boundary.",
+        "These are broad screening categories, not personal health targets or diagnoses. This calculator selects the category using the unrounded BMI and rounds only the displayed number to one decimal place. For example, an exact BMI of 24.98 may display as 25.0 while remaining below the 25.0 category boundary.",
         "The standard adult categories shown here are the international WHO ranges. Clinical guidance may add population-specific thresholds or assess other risk measures alongside BMI."
     ]),
     ("BMI interpretation for South Asian adults", [
