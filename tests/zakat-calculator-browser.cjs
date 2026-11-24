@@ -174,6 +174,13 @@ let browser;
     "Reduced-motion users must receive non-animated result scrolling");
   assert.equal(reducedMotionScroll && reducedMotionScroll.block, "start",
     "The result must align below the sticky header");
+  const scrollBeforeInputEdit = await page.evaluate(() => window.scrollY);
+  await page.locator("#z-cash").evaluate(el => {
+    el.value = "100001";
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  assert.equal(await page.evaluate(() => window.scrollY), scrollBeforeInputEdit,
+    "Editing a field after calculation must not trigger another automatic scroll");
   await page.emulateMedia({ reducedMotion: "no-preference" });
 
   // User-requested PKR 200,000 / silver PKR 300 per gram case.
@@ -327,7 +334,15 @@ let browser;
   }
 
   // Same independently checkable Hanafi calculation in the Urdu RTL interface.
-  await page.evaluate(() => { window.scrollTo(0, 0); window.__zakatScrollOptions = null; });
+  await page.evaluate(() => {
+    window.scrollTo(0, 0);
+    window.__zakatScrollOptions = null;
+    const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (options) {
+      if (this.id === "zakat-result") window.__zakatScrollOptions = options || {};
+      return original.call(this, options);
+    };
+  });
   await page.locator("#z-school-of-thought").selectOption("sunni-hanafi");
   await page.locator("#z-cash").fill("200000");
   await page.locator("#z-silverprice").fill("300");
