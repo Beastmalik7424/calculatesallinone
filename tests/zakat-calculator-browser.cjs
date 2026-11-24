@@ -160,6 +160,7 @@ let browser;
   await page.locator("#z-cash").fill("100000");
   await page.locator("#z-silverprice").fill("100");
   await page.locator("#z-hawl").check();
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.locator("#zakat-submit").click();
   const hanafiResult = await page.locator("#zakat-result").innerText();
   assert.match(hanafiResult, /2,500/, "Hanafi calculation must independently return PKR 2,500");
@@ -331,6 +332,7 @@ let browser;
   await page.locator("#z-cash").fill("200000");
   await page.locator("#z-silverprice").fill("300");
   await page.locator("#z-hawl").check();
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.locator("#zakat-submit").click();
   assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\.00)?/,
     "Urdu Hanafi silver-Nisab example must calculate exactly PKR 5,000.00");
