@@ -411,9 +411,9 @@ assert 'id="b-kg-error"' in bmi_html and 'aria-describedby="b-cm-error"' in bmi_
 assert 'id="b-ft" name="b-ft"' in bmi_html and 'type="text" inputmode="numeric" pattern="[0-9]+"' in bmi_html, "Feet input must preserve raw text for strict validation"
 assert 'id="b-kg" name="b-kg"' in bmi_html and 'type="text" inputmode="decimal" pattern="[0-9]+([.][0-9]+)?"' in bmi_html, "Weight input must preserve raw text for strict validation"
 assert 'id="b-lb"' in bmi_html and 'id="bmi-weight-lb"' in bmi_html, "Target BMI page must offer pounds alongside kilograms"
-assert "<title>BMI Calculator for Adults | cm or ft/in | CalculatesAll</title>" in bmi_html, "BMI title must be complete and unique"
-assert "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor." in bmi_html, "English BMI disclaimer must be visible in page content"
-assert "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit." in bmi_html, "English BMI guide must document independent weight units"
+assert "<title>Adult BMI Calculator | kg, lb, cm &amp; ft/in | CalculatesAll</title>" in bmi_html, "BMI title must be complete and unique"
+assert "This calculator and its explanations are for general information only. They are not a medical diagnosis, individual risk assessment or substitute for professional medical advice." in bmi_html, "English BMI disclaimer must be visible in page content"
+assert "Metric formula: BMI = weight in kilograms" in bmi_html and "U.S. customary formula: BMI = 703" in bmi_html, "English BMI guide must document metric and U.S. customary formulas"
 urdu_bmi_html = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
 for control_name in ("bmi-height-unit", "bmi-weight-unit", "b-kg", "b-lb", "b-cm", "b-ft", "b-in"):
     assert 'name="' + control_name + '"' in urdu_bmi_html, f"Urdu BMI control missing form name: {control_name}"
