@@ -76,6 +76,7 @@ def output_for_url(url):
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 zakat_html = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
 assert "Last updated: 2026-11-16" in zakat_html, "Zakat visible update date must match its verified substantive content update"
+assert "This Zakat calculator supports users in Pakistan and worldwide" in zakat_html, "Zakat page must clearly state its Pakistan-specific and international scope"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
 home_head = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
 assert home_head, "Homepage must have a valid head element"
@@ -104,6 +105,7 @@ for href in ("/calorie-calculator/", "/emi-calculator/", "/compound-interest-cal
 assert "Free browser-based calculators and everyday utility tools for people worldwide, covering arithmetic, business figures, dates, unit conversions and everyday tasks." in home_html, "Homepage should state a clear, consistent service description"
 about_html = output_for_url(SITE + "/about/").read_text(encoding="utf-8")
 assert "https://github.com/Beastmalik7424" in about_html and "source repository" in about_html, "About page should expose the verified public maintainer profile and source repository"
+assert "CalculatesAll is the public website name of the CalculateAllInOne project." in about_html, "About page must reconcile the public brand name with the source-project name"
 for page_name, page_html in (("About", about_html), ("Contact", output_for_url(SITE + "/contact/").read_text(encoding="utf-8")), ("Methodology", output_for_url(SITE + "/methodology/").read_text(encoding="utf-8"))):
     assert '"@id":"' + SITE + '/#organization"' in page_html and '"@id":"' + SITE + '/#maintainer"' in page_html, f"{page_name} page should include the canonical organization and maintainer entities"
 about_main_match = re.search(r"<main\b[^>]*>(.*?)</main>", about_html, re.S)
@@ -157,6 +159,7 @@ bmi_html = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
 bmi_nodes = jsonld_nodes(bmi_html)
 bmi_pages = [node for node in bmi_nodes if node.get("@type") == "WebPage"]
 assert len(bmi_pages) == 1, "English BMI page must expose exactly one WebPage entity"
+assert "free BMI calculator online for adults" in bmi_html.lower(), "BMI page must state its online adult calculator purpose in natural visible copy"
 bmi_page = bmi_pages[0]
 assert bmi_page.get("@id") == SITE + "/bmi-calculator/#webpage", "BMI WebPage must have a stable page-specific @id"
 assert bmi_page.get("author", {}).get("@id") == SITE + "/#maintainer", "BMI WebPage author must resolve to the visible maintainer"
@@ -460,6 +463,7 @@ assert organization_schema is not None, "Homepage Organization schema is require
 contact_point = organization_schema.get("contactPoint", {})
 assert contact_point.get("@type") == "ContactPoint" and contact_point.get("email"), "Organization schema must expose the configured support email"
 assert contact_point.get("url") == SITE + "/contact/", "Organization schema must link to the canonical contact page"
+assert "CalculateAllInOne" in organization_schema.get("alternateName", []), "Organization schema must expose the verified source-project name as an alternate name"
 assert "silver or gold Nisab" in home_html and "25.0 to 29.9" in home_html, "Homepage proof points must describe selectable Zakat methods and WHO adult BMI ranges"
 # The Urdu root is a localized site homepage, not a standard-calculator landing page.
 urdu_home_url = SITE + "/ur/"
