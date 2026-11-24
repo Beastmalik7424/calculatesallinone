@@ -2015,7 +2015,7 @@ BMI_GUIDE = [
     ("BMI formula and unit conversions", [
         "Metric formula: BMI = weight in kilograms ÷ (height in metres × height in metres). Convert centimetres to metres by dividing the height by 100 before squaring it.",
         "U.S. customary formula: BMI = 703 × weight in pounds ÷ (height in inches × height in inches). Convert feet and inches to total inches first: (feet × 12) + inches.",
-        "Example of the metric formula: 70 kg ÷ (1.75 × 1.75) = 22.857..., which is displayed as 22.9 kg/m². The formula uses weight and height only; it does not use age, sex or ethnicity as calculation inputs."
+        "Example of the metric formula: 70 kg ÷ (1.75 × 1.75) = 22.8571 kg/m² before display rounding, which is shown as 22.9 kg/m². The formula uses weight and height only; it does not use age, sex or ethnicity as calculation inputs."
     ]),
     ("Standard adult BMI categories", [
         "The standard WHO adult categories used by this calculator are: underweight below 18.5 kg/m²; healthy or normal weight from 18.5 to below 25; overweight from 25 to below 30; and obesity from 30 or higher.",
