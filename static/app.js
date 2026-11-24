@@ -617,27 +617,27 @@
         }
         if (school === "jafari-sistani") {
           if (result.status === "conditions_incomplete") {
-            showCalculatedResult( t("zakatSistaniConditions"))
+            showCalculatedResult(t("zakatSistaniConditions"))
             return
           }
           if (result.status === "below_nisab") {
-            showCalculatedResult( t("zakatSistaniBelow", formatted))
+            showCalculatedResult(t("zakatSistaniBelow", formatted))
             return
           }
-          showCalculatedResult( t("zakatSistaniDue", formatted))
+          showCalculatedResult(t("zakatSistaniDue", formatted))
           return
         }
         if (result.status === "below_nisab") {
-          showCalculatedResult( t("zakatBelow", formatted))
+          showCalculatedResult(t("zakatBelow", formatted))
           return
         }
         if (result.status === "hawl_incomplete") {
-          showCalculatedResult( t("zakatHawl", formatted))
+          showCalculatedResult(t("zakatHawl", formatted))
           return
         }
         var message = t("zakatDue", formatted)
         if (result.overpayment > 0) message += " " + t("zakatOverpaid")
-        showCalculatedResult( message)
+        showCalculatedResult(message)
       } catch (error) {
         var reason = String(error && error.message || "")
         if (/metal price/i.test(reason)) say("zakat-result", t("zakatNoPrice"))
