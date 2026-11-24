@@ -116,7 +116,7 @@ function calculateLifeStageCalories(input){
   if(!Number.isFinite(lactationEer)||lactationEer<=0)throw new Error("These breastfeeding inputs do not produce a usable estimate.");
   breastfeeding=Object.freeze({eerKcalPerDay:lactationEer,stage:stage==="exclusive_0_6"?"Exclusive breastfeeding, 0–6 months postpartum":"Partial breastfeeding, 7–12 months postpartum",method:stage==="exclusive_0_6"?"National Academies DRI 2023, Table 5-18":"National Academies DRI 2023, Table 5-19",formula:stage==="exclusive_0_6"?"Adult female TEE + 540 kcal/day milk production − 140 kcal/day energy mobilization.":"Adult female TEE + 380 kcal/day milk production."});
  }
- return Object.freeze({age:age,weightKg:weightKg,heightCm:heightCm,activityCategory:pal,pregnancy:pregnancy,breastfeeding:breastfeeding,combinedTargetKcalPerDay:null,sourceUrl:"https://www.nationalacademies.org/read/26818/chapter/7"});
+ return Object.freeze({age:age,weightKg:weightKg,heightCm:heightCm,activityCategory:pal,pregnancy:pregnancy,breastfeeding:breastfeeding,combinedTargetKcalPerDay:null,sourceUrl:"https://www.ncbi.nlm.nih.gov/books/NBK588659/"});
 }
 
 function formatEquationKcal(value){
