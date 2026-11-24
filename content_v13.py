@@ -153,7 +153,7 @@ CONTACT_EXTRA = [
 ]
 
 ABOUT_EXTRA = [
-    "CalculatesAll is the public site name for CalculateAllInOne. Free browser calculators cover money, dates, units, arithmetic, health screening and daily tasks. Relevant tool pages explain methods and limitations.",
+    "CalculatesAll is the public site name for CalculateAllInOne. Free browser tools cover adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and Tasbih counting. Each relevant page explains its method and limits.",
     "Use a tool to check a routine calculation, then review its inputs, units, method, worked example where provided and stated limitations. No account or download is required.",
     "The main tools are available in English, with Urdu versions of many tools. Short introductory pages in Arabic, Hindi, Spanish and French link to the English tools.",
 ]
