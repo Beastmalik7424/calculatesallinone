@@ -25,6 +25,14 @@ money = page("money")
 math = page("math")
 time = page("time")
 
+profit_loss_hub_description = (
+    "Free profit and loss calculator: estimate gross profit and net operating profit from revenue, "
+    "cost of goods sold and entered expenses, or compare product profit, markup and gross margin "
+    "from cost and selling price."
+)
+assert profit_loss_hub_description.lower() in money.lower(), "Money hub must describe the calculator's actual gross and net operating profit outputs"
+assert "business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price" not in money.lower(), "Money hub must not imply that the simplified calculator computes full net profit"
+
 for phrase in (
     "How is profit margin calculated?",
     "gross margin is 40% of sales",
