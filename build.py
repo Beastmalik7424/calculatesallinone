@@ -2663,7 +2663,7 @@ def home_app_page(lang):
         tools_heading_action = '<span class="ca-home-free">' + s["free"] + '</span>'
     else:
         title = "CalculatesAll | Free Online Calculators and Utility Tools"
-        desc = "Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and Tasbih counter. Clear formulas, no sign-up."
+        desc = "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and Tasbih counter. Clear formulas, no sign-up."
         h1 = "Free Online Calculators"
         lead = "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and a Tasbih counter. Clear formulas, browser-based results and no sign-up."
         more_h = "Calculator tools"
