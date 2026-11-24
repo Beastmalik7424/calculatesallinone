@@ -336,6 +336,49 @@ def check_years_quick_reference():
 
 
 
+
+def check_bmi_content():
+    """Guard BMI guidance, source transparency and unchanged calculator controls."""
+    bmi_source = read_page("bmi-calculator")
+    bmi_text = visible_text("bmi-calculator")
+    required = (
+        "How to use this BMI calculator",
+        "What is body mass index (BMI)?",
+        "BMI formula and unit conversions",
+        "Standard adult BMI categories",
+        "BMI interpretation for South Asian adults",
+        "Waist-to-height ratio: an additional measure",
+        "What BMI cannot tell you",
+        "Using your result responsibly",
+        "Medical disclaimer",
+        "23.0 to 27.4",
+        "27.5 or above",
+        "does not automatically apply",
+        "unrounded BMI",
+        "BMI = weight in kilograms",
+        "CDC's adult BMI categories are for ages 20 and older",
+    )
+    for phrase in required:
+        assert phrase.lower() in bmi_text.lower(), "BMI page is missing researched content: " + phrase
+    for source_url in (
+        "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight",
+        "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
+        "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
+        "https://www.nice.org.uk/guidance/ng246/chapter/Identifying-and-assessing-overweight-obesity-and-central-adiposity",
+        "https://pubmed.ncbi.nlm.nih.gov/14726171/",
+    ):
+        assert source_url in bmi_source, "BMI page is missing an authoritative reference: " + source_url
+    assert "reviewed by" not in bmi_text.lower(), "BMI page must not imply an unverified medical review"
+    assert "medically reviewed" not in bmi_text.lower(), "BMI page must not claim medical review that has not occurred"
+    assert "doctor-approved" not in bmi_text.lower(), "BMI page must not claim unverified doctor approval"
+    assert 'id="bmi-form"' in bmi_source and 'id="b-kg"' in bmi_source and 'id="b-cm"' in bmi_source, "BMI calculator controls must remain present"
+    assert 'href="/calorie-calculator/"' in bmi_source, "BMI page must retain its relevant adult calorie calculator link"
+    assert len(re.findall(r"<summary\b", bmi_source, re.I)) >= 8, "BMI page must retain its useful FAQs"
+    for heading in ("How to use this BMI calculator", "What is body mass index (BMI)?", "BMI formula and unit conversions", "Standard adult BMI categories", "BMI interpretation for South Asian adults", "Waist-to-height ratio: an additional measure", "What BMI cannot tell you", "Using your result responsibly", "How BMI and calorie estimates differ", "Medical disclaimer"):
+        assert bmi_text.count(heading) == 1, "BMI section must appear exactly once: " + heading
+    assert "How to measure consistently" not in bmi_text and "Pakistan and South Asia context" not in bmi_text, "Superseded BMI sections must not be duplicated"
+
+
 def check_urdu_unit_converter():
     path = ROOT / "ur" / "unit-converter" / "index.html"
     assert path.exists(), "Existing Urdu Unit Converter page must remain generated"
@@ -351,6 +394,7 @@ def main():
     check_urdu_bmi()
     check_urdu_unit_converter()
     check_targeted_content()
+    check_bmi_content()
     check_years_quick_reference()
     check_tasbih_content_structure()
     print("PASS: priority pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD, preserved canonicals, and research-backed content")

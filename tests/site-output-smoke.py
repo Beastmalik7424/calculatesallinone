@@ -411,9 +411,9 @@ assert 'id="b-kg-error"' in bmi_html and 'aria-describedby="b-cm-error"' in bmi_
 assert 'id="b-ft" name="b-ft"' in bmi_html and 'type="text" inputmode="numeric" pattern="[0-9]+"' in bmi_html, "Feet input must preserve raw text for strict validation"
 assert 'id="b-kg" name="b-kg"' in bmi_html and 'type="text" inputmode="decimal" pattern="[0-9]+([.][0-9]+)?"' in bmi_html, "Weight input must preserve raw text for strict validation"
 assert 'id="b-lb"' in bmi_html and 'id="bmi-weight-lb"' in bmi_html, "Target BMI page must offer pounds alongside kilograms"
-assert "<title>BMI Calculator for Adults | cm or ft/in | CalculatesAll</title>" in bmi_html, "BMI title must be complete and unique"
-assert "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor." in bmi_html, "English BMI disclaimer must be visible in page content"
-assert "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit." in bmi_html, "English BMI guide must document independent weight units"
+assert "<title>Adult BMI Calculator | kg, lb, cm &amp; ft/in | CalculatesAll</title>" in bmi_html, "BMI title must be complete and unique"
+assert "This calculator and its explanations are for general information only. They are not a medical diagnosis, individual risk assessment or substitute for professional medical advice." in bmi_html, "English BMI disclaimer must be visible in page content"
+assert "Metric formula: BMI = weight in kilograms" in bmi_html and "U.S. customary formula: BMI = 703" in bmi_html, "English BMI guide must document metric and U.S. customary formulas"
 urdu_bmi_html = output_for_url(SITE + "/ur/bmi-calculator/").read_text(encoding="utf-8")
 for control_name in ("bmi-height-unit", "bmi-weight-unit", "b-kg", "b-lb", "b-cm", "b-ft", "b-in"):
     assert 'name="' + control_name + '"' in urdu_bmi_html, f"Urdu BMI control missing form name: {control_name}"
@@ -1143,7 +1143,7 @@ for slug, phrases in {
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
 }.items():
-    if slug in {"tasbih-counter", "zakat-calculator"}:
+    if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator"}:
         guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     else:
         guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
@@ -1156,7 +1156,7 @@ assert "PKR 36,153" not in emi_guide
 
 # Regression: the specialized BMI template must include the supplemental editorial guide.
 _bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
-assert "Exact-value worked example" in _bmi_html, "BMI exact-value worked example missing from generated page"
+assert "BMI formula and unit conversions" in _bmi_html, "BMI formula and worked example section missing from generated page"
 assert "22.8571" in _bmi_html and "22.9" in _bmi_html, "BMI 70 kg / 1.75 m example missing"
 assert "Common questions" in _bmi_html, "BMI FAQ guide missing"
 
@@ -1297,7 +1297,7 @@ print("PASS: header brand logo links to the root homepage on all locale routes")
 _bmi_2026 = output_for_url(SITE + "/bmi-calculator/").read_text(encoding="utf-8")
 assert "2026 Standards of Care in Overweight and Obesity" in _bmi_2026, "BMI must explain the current 2026 clinical assessment context"
 assert "waist-to-height ratio" in _bmi_2026.lower(), "BMI must explain waist-to-height ratio alongside BMI"
-assert "does not ask for waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply waist-based clinical criteria"
+assert "does not ask for ethnicity or waist measurements" in _bmi_2026, "BMI must state that the calculator does not apply ethnicity- or waist-based clinical criteria"
 assert "doi.org/10.2337/doci26-0003" in _bmi_2026, "BMI must link the 2026 clinical standards source"
 assert "https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" in _bmi_2026, "BMI must link the NHS adult BMI benchmark"
 assert "https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" in _bmi_2026, "BMI must link the NHS waist-to-height benchmark"

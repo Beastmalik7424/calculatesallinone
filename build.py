@@ -366,7 +366,7 @@ TOOLS = [
         "app": "HealthApplication",
         "description": "Calculate adult body mass index in metric or imperial units with WHO weight category ranges.",
         "h1": "BMI Calculator for Adults",
-        "lead": "Calculate your body mass index in metric or imperial units. BMI is a screening measure for adults. It is not a diagnosis.",
+        "lead": "Use this adult BMI calculator to calculate Body Mass Index from weight and height. Select kilograms or pounds and centimetres or feet and inches, enter your measurements, and view the BMI and standard adult screening category. BMI is a screening measure, not a diagnosis. This calculator does not automatically apply ethnicity-specific BMI thresholds.",
         "ui": (
             '<form id="bmi-form" class="space-y-5" novalidate>'
             '<div><label class="@L@" for="bmi-unit">Units</label>'
@@ -2001,37 +2001,68 @@ def answer_block(slug, lang="en"):
 
 
 BMI_GUIDE = [
-    ("The formula", [
-        "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit. When kg is selected, adult BMI is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first.",
-        "For feet and inches, convert total height to centimetres with (feet × 12 + inches) × 2.54. If kg is selected, the calculator uses the metric formula. If lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches squared.",
+    ("How to use this BMI calculator", [
+        "<strong>Step 1: Choose your weight unit.</strong> Select kilograms (kg) or pounds (lb).",
+        "<strong>Step 2: Choose your height unit.</strong> Select centimetres (cm) or feet and inches. The weight and height units can be selected independently.",
+        "<strong>Step 3: Enter your measurements.</strong> Use your current weight and measure your height without shoes. If you choose feet and inches, enter them in separate fields. Do not enter a value such as 5.7 to mean 5 feet 7 inches.",
+        "<strong>Step 4: Select Calculate BMI.</strong> Read the BMI value and the standard adult screening category. The category is assigned from the unrounded calculation; the displayed BMI is rounded to one decimal place.",
+        "For comparisons over time, use the same scale and similar measurement conditions. Small changes in hydration, clothing and measurement technique can affect a single reading."
     ]),
-    ("Adult BMI categories", [
-        "For adults, the standard WHO categories are underweight below 18.5, normal weight from 18.5 to below 25, overweight from 25 to below 30, and obesity from 30 upward. This calculator assigns the category using the unrounded BMI and rounds only the displayed number to one decimal place. A displayed value of 25.0 can therefore remain in the normal weight category when the exact BMI is just below 25.",
-        "These categories are population-level screening ranges. They do not determine whether an individual is healthy, and they should not be used as a personal diagnosis or treatment plan.",
+    ("What is body mass index (BMI)?", [
+        "Body mass index (BMI) is a number calculated from a person's weight and height. It is commonly used as a quick screening measure to place adult weight relative to height into broad categories. It is not a direct measurement of body fat and cannot diagnose a health condition.",
+        "BMI is useful because it is simple and inexpensive to calculate. A result is only one part of a health assessment. Waist measurement, medical history, blood pressure, laboratory findings, body composition and other factors can change how a result should be interpreted."
     ]),
-    ("Worked examples", [
-        "If an adult weighs 70 kg and is 170 cm tall, the calculation is 70 ÷ (1.70 × 1.70), giving a BMI of 24.2 after rounding. The displayed adult category is normal weight.",
-        "For someone who is 5 ft 7 in tall, total height is 67 inches. Converting that to centimetres gives 170.18 cm. With a weight of 70 kg, BMI is also about 24.2. Enter feet and inches separately rather than entering a decimal number such as 5.7 feet.",
+    ("BMI formula and unit conversions", [
+        "Metric formula: BMI = weight in kilograms ÷ (height in metres × height in metres). Convert centimetres to metres by dividing the height by 100 before squaring it.",
+        "U.S. customary formula: BMI = 703 × weight in pounds ÷ (height in inches × height in inches). Convert feet and inches to total inches first: (feet × 12) + inches.",
+        "Example of the metric formula: 70 kg ÷ (1.75 × 1.75) = 22.8571 kg/m² before display rounding, which is shown as 22.9 kg/m². The formula uses weight and height only; it does not use age, sex or ethnicity as calculation inputs."
+    ]),
+    ("Standard adult BMI categories", [
+        "The standard WHO adult categories used by this calculator are: underweight below 18.5 kg/m²; healthy or normal weight from 18.5 to below 25; overweight from 25 to below 30; and obesity from 30 or higher.",
+        "These are broad screening categories, not personal health targets or diagnoses. This calculator selects the category using the unrounded BMI and rounds only the displayed number to one decimal place. For example, an exact BMI of 24.98 may display as 25.0 while remaining below the 25.0 category boundary.",
+        "The standard adult categories shown here are the international WHO ranges. Clinical guidance may add population-specific thresholds or assess other risk measures alongside BMI."
+    ]),
+    ("BMI interpretation for South Asian adults", [
+        "South Asian adults can have increased cardiometabolic risk at a lower BMI than the standard international thresholds suggest. The WHO Expert Consultation retained the international BMI classifications but identified additional public-health action points at 23.0, 27.5, 32.5 and 37.5 kg/m² because risk levels differ among Asian populations.",
+        "NICE guidance recommends lower practical thresholds for people from South Asian, Chinese, other Asian, Middle Eastern, Black African and African-Caribbean backgrounds: overweight at BMI 23.0 to 27.4, and obesity at BMI 27.5 or above. These are guidance thresholds for risk assessment, not a diagnosis from BMI alone.",
+        "The American Diabetes Association (ADA) 2026 Standards of Care also distinguish BMI screening from clinical diagnosis. For adults with an Asian background, the guideline describes obesity criteria that include BMI of 27.5 or higher, or BMI of 23 or higher together with a waist-to-height ratio of at least 0.5 or a waist circumference of at least 80 cm for women or 90 cm for men. These are clinical criteria that require additional measurements and professional interpretation.",
+        "<strong>Important:</strong> This calculator displays standard WHO adult categories. It does not ask for ethnicity or waist measurements, and it does not automatically apply the lower NICE or ADA criteria. A South Asian user should not treat the displayed category as a complete assessment of individual risk."
+    ]),
+    ("Waist-to-height ratio: an additional measure", [
+        "BMI does not show where body fat is stored. For adults with BMI below 35 kg/m², NICE recommends considering waist-to-height ratio alongside BMI as a practical estimate of central adiposity.",
+        "To calculate the ratio, measure your waist and height in the same unit, then divide waist measurement by height measurement. For example, a 85 cm waist divided by a 170 cm height gives 0.50.",
+        "NICE classifies a waist-to-height ratio of 0.4 to 0.49 as healthy central adiposity, 0.5 to 0.59 as increased central adiposity, and 0.6 or higher as high central adiposity. Its simple public message is to aim to keep waist measurement below half of height. This is another screening measure, not a diagnosis."
     ]),
     ("What BMI cannot tell you", [
-        "BMI does not measure body fat directly or show where fat is stored. A person with substantial muscle mass may have a higher BMI without having the same body-fat level as another person with the same BMI. Body frame, fat distribution, health history and other measurements can change how the result should be interpreted.",
-        "BMI categories for adults are not suitable for children and teenagers, who need age- and sex-specific growth charts. BMI also needs special interpretation during pregnancy and may be less informative for some older adults or people with fluid retention, recent illness or changes in muscle mass.",
+        "BMI cannot distinguish fat mass from muscle, bone or other lean tissue. A very muscular person may have a higher BMI without having the same body-fat level as someone with the same BMI. BMI also does not show whether fat is stored around the waist or elsewhere.",
+        "Interpret BMI cautiously in adults aged 65 and over, people with high muscle mass, people with fluid retention or conditions that affect height, and during pregnancy. Recent illness, changes in muscle mass and a person's medical history can also affect interpretation.",
+        "Children and teenagers need age- and sex-specific BMI-for-age percentiles because their bodies are still growing. This calculator does not calculate child or teen percentiles. The CDC's adult BMI categories are for ages 20 and older, while the NHS adult service starts at 18; age rules therefore depend on the health guidance being followed."
     ]),
-    ("Using the result responsibly", [
-        "BMI is a general screening tool. It does not measure body fat directly and does not replace advice from a doctor.",
-        "Use the number as one starting point, not as a complete assessment of health. A healthcare professional may consider waist circumference, blood pressure, blood tests, medicines, family history, activity and nutrition alongside BMI.",
-        "Speak with a qualified clinician if you are worried about weight changes, have symptoms, are pregnant, have a medical condition, or need advice for a child or teenager. Do not change medication, restrict food severely or start a treatment plan based on this calculator alone.",
-        "The calculator accepts adult heights from 50 to 260 cm, or feet from 1 to 8 and inches from 0 to 11.99. Weight input limits are 20 to 300 kg or 44.1 to 661.3 lb. These are input limits for this tool, not medical recommendations.",
+    ("Using your result responsibly", [
+        "Use BMI as a starting point for understanding weight relative to height, not as a complete picture of health. A healthcare professional may consider waist-to-height ratio, blood pressure, blood tests, medicines, family history, symptoms and other clinical information.",
+        "If you are concerned about unexplained weight change, symptoms, pregnancy, a medical condition or an eating disorder, seek advice from a qualified healthcare professional rather than relying on a calculator result. Do not start a restrictive diet, change medication or make a treatment decision based only on BMI.",
+        "The height and weight limits accepted by this calculator are technical input limits. They are not recommended weights, healthy ranges or medical advice."
+    ]),
+    ("How BMI and calorie estimates differ", [
+        "BMI compares weight with height and returns a screening measure. A calorie calculator estimates daily energy needs using additional inputs such as age, height, weight and an activity assumption. These tools answer different questions: BMI does not calculate calorie needs, and a calorie estimate does not diagnose health or measure body composition.",
+        'For a separate estimate of adult maintenance calories and an explanation of its equation and assumptions, use the <a class="' + LINK + '" href="/calorie-calculator/">Adult Calorie Calculator</a>. Its result is an estimate, not a dietary prescription.'
+    ]),
+    ("Medical disclaimer", [
+        "This calculator and its explanations are for general information only. They are not a medical diagnosis, individual risk assessment or substitute for professional medical advice."
     ]),
 ]
 BMI_FAQ = [
-    ("Can I use this BMI calculator for children or teenagers?", "No. This calculator uses adult BMI categories. Children and teenagers need age- and sex-specific BMI-for-age growth charts interpreted in the right context."),
-    ("Does BMI measure body fat?", "No. BMI uses height and weight only. It cannot directly measure body fat or distinguish muscle from fat."),
-    ("Is a BMI of 25 a diagnosis?", "No. An exact adult BMI of 25.0 is the start of the overweight screening category, not a diagnosis. A displayed value of 25.0 may be rounded from a slightly lower exact BMI, so the category is based on the unrounded value. A clinician can interpret it with other health information."),
-    ("Why can the displayed BMI and category appear to differ near a boundary?", "The category is selected using the unrounded BMI. The displayed number is rounded to one decimal place. For example, an exact BMI of 24.98 displays as 25.0 but remains in the normal weight category. At exactly 25.0, the adult screening category is overweight."),
-    ("What should I do with my result?", "Treat it as general information. Discuss concerns or major weight changes with a qualified healthcare professional, especially if you have symptoms or a medical condition."),
+    ("How is BMI calculated?", "BMI is weight in kilograms divided by height in metres squared. For pounds and inches, multiply weight in pounds by 703 and divide by height in inches squared. The calculator performs the unit conversions for the selected inputs."),
+    ("What is a healthy adult BMI?", "The standard WHO adult healthy or normal weight range is 18.5 to below 25 kg/m². It is a screening range, not a guarantee of good health or a personal target for every individual."),
+    ("Does BMI interpretation differ for South Asian adults?", "Yes. NICE recommends lower practical thresholds for South Asian and several other population groups: overweight at 23.0 to 27.4 kg/m² and obesity at 27.5 kg/m² or above. This calculator displays standard WHO categories and does not automatically apply those lower thresholds."),
+    ("Does BMI measure body fat?", "No. BMI uses height and weight. It does not directly measure body fat, distinguish muscle from fat or show where fat is stored."),
+    ("Does the adult BMI category depend on sex?", "The standard CDC adult BMI categories for people aged 20 and older use the same BMI ranges regardless of sex. BMI still does not provide a complete individual health assessment."),
+    ("Can I use this BMI calculator for a child or teenager?", "No. Children and teenagers need BMI-for-age percentiles interpreted using age and sex. This calculator does not calculate growth-chart percentiles."),
+    ("Should I also measure my waist?", "For adults with BMI below 35 kg/m², NICE recommends considering waist-to-height ratio alongside BMI. Divide waist measurement by height measurement using the same units. A ratio of 0.5 or more indicates increased central adiposity under NICE guidance."),
+    ("Why can the displayed BMI and category appear to differ near a boundary?", "The category is selected using the unrounded BMI, while the displayed number is rounded to one decimal place. An exact BMI of 24.98 can display as 25.0 but remain below the 25.0 overweight boundary."),
+    ("Is a BMI result a diagnosis?", "No. BMI is a screening measure. A qualified healthcare professional can interpret it with your medical history, waist measurement, blood pressure, laboratory findings and other relevant factors.")
 ]
-BMI_SOURCES = 'Adult BMI categories follow the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization</a> classification. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" target="_blank" rel="noopener noreferrer">NHS adult BMI calculator</a> explains ethnicity-specific interpretation. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" target="_blank" rel="noopener noreferrer">NHS waist-to-height ratio calculator</a> explains the half-height check. The <a class="' + LINK + '" href="https://doi.org/10.2337/doci26-0003" target="_blank" rel="noopener noreferrer">2026 Standards of Care in Overweight and Obesity</a> describes current clinical assessment criteria. This calculator displays standard adult WHO categories and does not diagnose a condition.'
+BMI_SOURCES = 'Primary public-health references: <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization (WHO): obesity and overweight</a> for international adult BMI classifications; <a class="' + LINK + '" href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener noreferrer">Centers for Disease Control and Prevention (CDC): adult BMI categories</a> for the 20-and-older adult category guidance; <a class="' + LINK + '" href="https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html" target="_blank" rel="noopener noreferrer">CDC: calculating BMI</a> for metric and U.S. customary formulas; <a class="' + LINK + '" href="https://www.nice.org.uk/guidance/ng246/chapter/Identifying-and-assessing-overweight-obesity-and-central-adiposity" target="_blank" rel="noopener noreferrer">National Institute for Health and Care Excellence (NICE), NG246</a> for lower BMI thresholds for specified ethnic groups and waist-to-height ratio guidance; <a class="' + LINK + '" href="https://pubmed.ncbi.nlm.nih.gov/14726171/" target="_blank" rel="noopener noreferrer">WHO Expert Consultation, Lancet (2004)</a> for Asian-population BMI action points; and <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" target="_blank" rel="noopener noreferrer">NHS adult BMI calculator guidance</a> for adult use and interpretation; <a class="' + LINK + '" href="https://doi.org/10.2337/doci26-0003" target="_blank" rel="noopener noreferrer">American Diabetes Association (ADA): 2026 Standards of Care in Overweight and Obesity</a> for current clinical criteria; and the <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" target="_blank" rel="noopener noreferrer">NHS waist-to-height ratio calculator</a> for a practical measurement reference. These references are provided so readers can verify the information and consult the original guidance.'
 
 def tool_page(t):
     path = "/" + t["slug"] + "/"
@@ -2045,8 +2076,8 @@ def tool_page(t):
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
     elif t["slug"] == "bmi-calculator":
-        title = "BMI Calculator for Adults | cm or ft/in | CalculatesAll"
-        desc = "Calculate adult BMI using kilograms and centimetres or kilograms with feet and inches. See WHO adult BMI ranges and their limitations."
+        title = "Adult BMI Calculator | kg, lb, cm & ft/in | CalculatesAll"
+        desc = "Calculate adult BMI using kg or lb and cm or feet and inches. See WHO ranges, South Asian BMI guidance, formulas, examples and limitations."
         ui = BMI_UI
         guide = BMI_GUIDE + GUIDE_EXTRA.get(t["slug"], [])
         faqs = BMI_FAQ
@@ -2164,6 +2195,7 @@ def tool_page(t):
         "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator"), ("query-calculator", "Query Calculator"), ("unit-converter", "Unit Converter")],
         "query-calculator": [("years-to-days-calculator", "Years to Days Calculator"), ("age-calculator", "Age Calculator")],
         "unit-converter": [("bmi-calculator", "Adult BMI Calculator"), ("calorie-calculator", "Calorie Calculator")],
+        "bmi-calculator": [("calorie-calculator", "Adult Calorie Calculator")],
     }
     related_items = related_map.get(t["slug"], [])
     related = "".join(

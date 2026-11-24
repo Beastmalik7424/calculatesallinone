@@ -12,15 +12,7 @@ REVIEW_STATUS = {
 
 GUIDE_EXTRA = {
     "zakat-calculator": [],
-    "bmi-calculator": [
-        ("How to measure consistently", [
-            "For a useful comparison, use the same scale and similar conditions each time. Measure height without shoes, stand upright and look straight ahead. Record weight and height in the units selected above, and check that centimetres have not been entered as metres.",
-            "If you track changes over time, compare measurements taken under similar conditions rather than treating one reading as a diagnosis. The input limits shown by this calculator are technical limits for the form, not target weights or medical recommendations.",
-        ]),
-        ("Exact-value worked example", [
-            "For an adult weighing 70 kg and measuring 175 cm, convert height to 1.75 m and calculate 70 ÷ (1.75 × 1.75) = 22.8571 kg/m², displayed as 22.9. This falls in the adult WHO normal weight range of 18.5 to below 25 kg/m². It is a screening category, not a diagnosis.",
-        ]),
-    ],
+    "bmi-calculator": [],
     "profit-loss-calculator": [],
     "discount-calculator": [
         ("Worked example: discount and sales tax", [
@@ -268,13 +260,6 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
 
 # Focused educational depth for the Zakat, BMI and profit/loss tools.
 # Zakat guidance is maintained in build.py's bilingual Zakat page entry.
-GUIDE_EXTRA["bmi-calculator"].append(
-    ("Pakistan and South Asia context", [
-        "Body composition and the distribution of body fat can differ between populations, and some South Asian guidance discusses cardiometabolic risk at lower BMI values than the standard international adult cut-offs. The WHO 2004 Expert Consultation identified 23.0 and 27.5 kg/m² as additional public-health action points, while noting that one new cutoff could not be set for every Asian population. These action points are not a replacement for the standard WHO adult categories shown by this calculator. A qualified local health professional can interpret BMI alongside waist measurement, medical history and other relevant information. This page does not assign a South Asian diagnosis or provide a personal risk estimate.",
-        "Clinical guidance adds a second layer to those public-health action points. The 2026 Standards of Care in Overweight and Obesity recommends screening Asian-background adults for excess adiposity from BMI 23 kg/m². For a clinical diagnosis of obesity, it uses BMI 27.5 kg/m² or above, or BMI 23–27.4 together with central adiposity (waist-to-height ratio at least 0.5 or waist circumference at least 80 cm for women or 90 cm for men). The standards note that some Asian countries may need population-specific cutoffs. NHS guidance also advises adults with BMI below 35 to keep their waist below half their height; for a height of 175 cm, half is 87.5 cm. These are clinical screening and assessment criteria, not a diagnosis from this calculator. This tool does not ask for waist measurements or apply ethnicity-specific categories.",
-    ])
-)
-
 GUIDE_EXTRA["profit-loss-calculator"].extend([
     ("When product profit differs from operating profit", [
         "Suppose a business records PKR 100,000 in revenue, PKR 60,000 in cost of goods sold and PKR 15,000 in entered operating expenses. Gross profit is PKR 40,000. Net operating profit is PKR 25,000, and operating margin is PKR 25,000 ÷ PKR 100,000 × 100 = 25%. This business-level result is not the same as the markup or gross margin on one product.",
