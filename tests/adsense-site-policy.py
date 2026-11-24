@@ -100,10 +100,14 @@ for repeated_heading in (
 ):
     check(not has_heading("bmi-calculator", repeated_heading),
           f"/bmi-calculator/ repeats material already covered in '{repeated_heading}'")
-check(has_heading("bmi-calculator", "How to measure consistently"),
-      "/bmi-calculator/ must retain its practical measurement guidance")
-check(has_heading("bmi-calculator", "Pakistan and South Asia context"),
-      "/bmi-calculator/ must retain its distinct South Asian context and thresholds")
+check(has_heading("bmi-calculator", "How to use this BMI calculator"),
+      "/bmi-calculator/ must retain clear practical measurement instructions")
+check(has_heading("bmi-calculator", "BMI interpretation for South Asian adults"),
+      "/bmi-calculator/ must retain its source-backed South Asian thresholds")
+check(not has_heading("bmi-calculator", "How to measure consistently"),
+      "/bmi-calculator/ must not reintroduce superseded duplicate measurement guidance")
+check(not has_heading("bmi-calculator", "Pakistan and South Asia context"),
+      "/bmi-calculator/ must not reintroduce the superseded duplicate South Asia section")
 
 check(has_heading("profit-loss-calculator", "When product profit differs from operating profit"),
       "/profit-loss-calculator/ must distinguish product profit from business operating profit with a worked example")
