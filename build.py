@@ -1886,8 +1886,8 @@ def write(path, content):
 
 def years_to_days_reference_html():
     years_values = [1, 1.5, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 25, 29, 30, 32, 40, 50, 60, 74, 80, 100]
-    # GSC query evidence from 2026-10-27 through 2026-11-23 supports these additional quick answers.
-    quick_values = [2, 3, 4, 5, 7, 9, 10, 13, 15, 20, 25]
+    # Recent finalized GSC data (2026-11-19 through 2026-11-21) supports adding 4- and 15-year examples.
+    quick_values = [2, 3, 4, 5, 7, 9, 10, 13, 15, 20]
     def formatted(value):
         return format(value, ",.5f").rstrip("0").rstrip(".")
     def table_rows(values):
