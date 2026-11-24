@@ -1,8 +1,11 @@
 # CalculateAllInOne
 
-Free, browser-based calculators for everyday calculations across health, money, mathematics, dates, time, and worship-related needs.
-
+**Public website brand:** CalculatesAll  
 **Website:** https://calculateallinone.vercel.app/
+
+`CalculateAllInOne` is the source-project and repository name. `CalculatesAll` is the public website brand used in the site title, page content and structured organization identity.
+
+Free, browser-based calculators for everyday calculations across health, money, mathematics, dates, time, and worship-related needs.
 
 ## What it offers
 

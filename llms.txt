@@ -2,6 +2,8 @@
 
 > Free browser-based calculators for money, health, math, dates and everyday tasks. Each tool states its inputs, method and limitations; results are general estimates, not professional advice.
 
+CalculatesAll is the public website brand. CalculateAllInOne is the source-project and repository name.
+
 CalculatesAll is a free collection of browser-based calculators and everyday utility tools. Calculator inputs are processed in the browser. Results depend on the inputs, units, formulas and limitations stated on each page.
 
 This index helps automated systems discover the site's pages. It is not a replacement for the individual calculator explanations or their cited sources.
@@ -58,7 +60,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 ## Other tools
 
 - [Time & Date Query Calculator](https://calculateallinone.vercel.app/query-calculator/): Defined plain-language time-unit conversions, mean Gregorian year and average-month estimates, Gregorian birth-date age, simple addition/subtraction, and a fixed Pakistan Independence Day lookup. Unsupported questions are rejected rather than guessed.
-- [Tasbih Counter](https://calculateallinone.vercel.app/tasbih-counter/): Browser-based count, undo, reset and target controls.
+- [Tasbih Counter](https://calculateallinone.vercel.app/tasbih-counter/): Online tasbih calculator and dhikr counter with phrase and target selection, undo and reset controls. Counts stay on this device when browser storage is available.
 
 ## Urdu tools
 

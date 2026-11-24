@@ -153,7 +153,7 @@ TOOLS = [
         "app": "FinanceApplication",
         "description": "Estimate Hanafi Zakat on eligible cash, gold, silver, trade stock and recoverable receivables, or Sayyid Sistani's limited Ja'fari business-goods method. Enter metal prices.",
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
-        "lead": "No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
+        "lead": "This Zakat calculator supports users in Pakistan and worldwide, with a separate explanation of Pakistan's bank-deduction threshold and personal Nisab. No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="ca-calculator-engine w-full max-w-xl mx-auto pb-20" novalidate>'
             + '<div data-zakat-primary>'
@@ -366,7 +366,7 @@ TOOLS = [
         "app": "HealthApplication",
         "description": "Calculate adult body mass index in metric or imperial units with WHO weight category ranges.",
         "h1": "BMI Calculator for Adults",
-        "lead": "Use this adult BMI calculator to calculate Body Mass Index from weight and height. Select kilograms or pounds and centimetres or feet and inches, enter your measurements, and view the BMI and standard adult screening category. BMI is a screening measure, not a diagnosis. This calculator does not automatically apply ethnicity-specific BMI thresholds.",
+        "lead": "Use this free BMI calculator online for adults to calculate Body Mass Index from weight and height. Select kilograms or pounds and centimetres or feet and inches, enter your measurements, and view the BMI and standard adult screening category. BMI is a screening measure, not a diagnosis. This calculator does not automatically apply ethnicity-specific BMI thresholds.",
         "ui": (
             '<form id="bmi-form" class="space-y-5" novalidate>'
             '<div><label class="@L@" for="bmi-unit">Units</label>'
@@ -662,7 +662,7 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Free online digital tasbih counter for dhikr and zikr with 33, 99, 100 and custom targets. Tap to count on mobile or desktop; no app download needed.",
+        "description": "Free online tasbih calculator and digital dhikr counter with 33, 99, 100 and custom targets. Tap to count on mobile or desktop; no app download needed.",
         "h1": "Free Online Tasbih Counter",
         "lead": "Count dhikr on this device. Choose a phrase and target, then undo a tap if needed.",
         "ui": (
@@ -1665,6 +1665,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
              "publisher": {"@id": SITE_URL + "/#organization"}},
             {"@context": "https://schema.org", "@type": "Organization", "@id": SITE_URL + "/#organization",
              "name": "CalculatesAll", "url": SITE_URL + "/", "description": SITE_DESCRIPTION,
+             "alternateName": ["CalculateAllInOne"],
              "sameAs": ["https://github.com/Beastmalik7424/calculatesallinone"],
              "logo": SITE_URL + "/assets/favicon.svg",
              "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": CONTACT_EMAIL, "url": SITE_URL + "/contact/"}},
@@ -2105,7 +2106,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
-        desc = "Free online tasbih calculator for dhikr and zikr. Count 33, 99 or a custom target, undo taps and keep progress in this browser when storage is available."
+        desc = "Free online tasbih calculator and tasbeeh counter for dhikr. Choose a phrase and target, undo taps and keep progress on this device when storage allows."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]

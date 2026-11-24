@@ -34,6 +34,10 @@ assert ratio_url in listed, "llms.txt must describe the ratio calculator"
 assert "Unsupported questions are rejected rather than guessed." in llms, "llms.txt must accurately state that the Query Calculator rejects unsupported questions"
 assert "not a diagnosis" in llms
 assert "not a religious ruling" in llms
+assert "CalculatesAll is the public website brand. CalculateAllInOne is the source-project and repository name." in llms, "llms.txt must reconcile the public brand with the source-project identity"
+tasbih_entries = [line for line in llms.splitlines() if "https://calculateallinone.vercel.app/tasbih-counter/" in line]
+assert len(tasbih_entries) == 1 and "tasbih calculator" in tasbih_entries[0].lower(), "llms.txt must describe the Tasbih page using its observed calculator search intent"
+assert "undo and reset" in tasbih_entries[0].lower() and "browser storage" in tasbih_entries[0].lower(), "llms.txt must accurately describe the Tasbih controls and local-storage limitation"
 
 zakat_url = SITE + "/zakat-calculator/"
 zakat_entries = [line for line in llms.splitlines() if zakat_url in line]
