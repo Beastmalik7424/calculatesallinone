@@ -366,7 +366,7 @@ TOOLS = [
         "app": "HealthApplication",
         "description": "Calculate adult body mass index in metric or imperial units with WHO weight category ranges.",
         "h1": "BMI Calculator for Adults",
-        "lead": "Calculate your body mass index in metric or imperial units. BMI is a screening measure for adults. It is not a diagnosis.",
+        "lead": "Use this BMI Calculator for adults to estimate Body Mass Index from weight and height in metric or imperial units. BMI is a screening measure that compares weight with height; it does not directly measure body fat or diagnose a health condition. Review the method, category limits and source notes before interpreting the result.",
         "ui": (
             '<form id="bmi-form" class="space-y-5" novalidate>'
             '<div><label class="@L@" for="bmi-unit">Units</label>'
@@ -2001,6 +2001,12 @@ def answer_block(slug, lang="en"):
 
 
 BMI_GUIDE = [
+    ("How to use this BMI calculator", [
+        "<strong>Step 1: Choose the weight unit.</strong> Select kilograms (kg) or pounds (lb) in the weight-unit options.",
+        "<strong>Step 2: Choose the height unit.</strong> Select centimetres (cm) or feet and inches. Weight and height units can be selected independently.",
+        "<strong>Step 3: Enter your measurements.</strong> Enter your current weight and height carefully. If using feet and inches, enter the feet and inches in their separate fields rather than using a decimal-foot value.",
+        "<strong>Step 4: Select Calculate BMI.</strong> Review the displayed BMI and adult screening category. The category is selected from the unrounded calculation, while the displayed BMI is rounded to one decimal place.",
+    ]),
     ("The formula", [
         "Weight can be entered in kilograms (kg) or pounds (lb), independently of the height unit. When kg is selected, adult BMI is calculated by dividing weight in kilograms by height in metres squared. When height is entered in centimetres, divide it by 100 first.",
         "For feet and inches, convert total height to centimetres with (feet × 12 + inches) × 2.54. If kg is selected, the calculator uses the metric formula. If lb is selected, BMI equals 703 multiplied by weight in pounds, divided by total height in inches squared.",
@@ -2013,6 +2019,10 @@ BMI_GUIDE = [
         "If an adult weighs 70 kg and is 170 cm tall, the calculation is 70 ÷ (1.70 × 1.70), giving a BMI of 24.2 after rounding. The displayed adult category is normal weight.",
         "For someone who is 5 ft 7 in tall, total height is 67 inches. Converting that to centimetres gives 170.18 cm. With a weight of 70 kg, BMI is also about 24.2. Enter feet and inches separately rather than entering a decimal number such as 5.7 feet.",
     ]),
+    ("How BMI and calorie estimates differ", [
+        "BMI compares weight with height to produce a body mass index screening measure. A calorie calculator estimates energy needs from inputs such as age, weight, height and an activity assumption. These tools answer different questions: BMI does not calculate daily calorie needs, and a calorie estimate does not diagnose health or determine body composition.",
+        'For a separate estimate of adult maintenance calories and an explanation of its equation and assumptions, use the <a class="' + LINK + '" href="/calorie-calculator/">Adult Calorie Calculator</a>. Its result is an estimate, not a dietary prescription.',
+    ]),
     ("What BMI cannot tell you", [
         "BMI does not measure body fat directly or show where fat is stored. A person with substantial muscle mass may have a higher BMI without having the same body-fat level as another person with the same BMI. Body frame, fat distribution, health history and other measurements can change how the result should be interpreted.",
         "BMI categories for adults are not suitable for children and teenagers, who need age- and sex-specific growth charts. BMI also needs special interpretation during pregnancy and may be less informative for some older adults or people with fluid retention, recent illness or changes in muscle mass.",
@@ -2023,6 +2033,9 @@ BMI_GUIDE = [
         "Speak with a qualified clinician if you are worried about weight changes, have symptoms, are pregnant, have a medical condition, or need advice for a child or teenager. Do not change medication, restrict food severely or start a treatment plan based on this calculator alone.",
         "The calculator accepts adult heights from 50 to 260 cm, or feet from 1 to 8 and inches from 0 to 11.99. Weight input limits are 20 to 300 kg or 44.1 to 661.3 lb. These are input limits for this tool, not medical recommendations.",
     ]),
+    ("Medical disclaimer", [
+        "Disclaimer: This tool is for informational purposes only and is not a substitute for professional medical advice.",
+    ]),
 ]
 BMI_FAQ = [
     ("Can I use this BMI calculator for children or teenagers?", "No. This calculator uses adult BMI categories. Children and teenagers need age- and sex-specific BMI-for-age growth charts interpreted in the right context."),
@@ -2031,7 +2044,7 @@ BMI_FAQ = [
     ("Why can the displayed BMI and category appear to differ near a boundary?", "The category is selected using the unrounded BMI. The displayed number is rounded to one decimal place. For example, an exact BMI of 24.98 displays as 25.0 but remains in the normal weight category. At exactly 25.0, the adult screening category is overweight."),
     ("What should I do with my result?", "Treat it as general information. Discuss concerns or major weight changes with a qualified healthcare professional, especially if you have symptoms or a medical condition."),
 ]
-BMI_SOURCES = 'Adult BMI categories follow the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization</a> classification. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" target="_blank" rel="noopener noreferrer">NHS adult BMI calculator</a> explains ethnicity-specific interpretation. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" target="_blank" rel="noopener noreferrer">NHS waist-to-height ratio calculator</a> explains the half-height check. The <a class="' + LINK + '" href="https://doi.org/10.2337/doci26-0003" target="_blank" rel="noopener noreferrer">2026 Standards of Care in Overweight and Obesity</a> describes current clinical assessment criteria. This calculator displays standard adult WHO categories and does not diagnose a condition.'
+BMI_SOURCES = 'Adult BMI categories follow the <a class="' + LINK + '" href="https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight" target="_blank" rel="noopener noreferrer">World Health Organization</a> classification. The <a class="' + LINK + '" href="https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html" target="_blank" rel="noopener noreferrer">CDC BMI calculation guidance</a> documents the metric and U.S. customary formulas. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-body-mass-index/calculate-bmi-for-adults" target="_blank" rel="noopener noreferrer">NHS adult BMI calculator</a> explains ethnicity-specific interpretation. The <a class="' + LINK + '" href="https://www.nhs.uk/health-assessment-tools/calculate-your-waist-to-height-ratio" target="_blank" rel="noopener noreferrer">NHS waist-to-height ratio calculator</a> explains the half-height check. The <a class="' + LINK + '" href="https://doi.org/10.2337/doci26-0003" target="_blank" rel="noopener noreferrer">2026 Standards of Care in Overweight and Obesity</a> describes current clinical assessment criteria. This calculator displays standard adult WHO categories and does not diagnose a condition.'
 
 def tool_page(t):
     path = "/" + t["slug"] + "/"
@@ -2152,7 +2165,7 @@ def tool_page(t):
             "publisher": {"@id": SITE_URL + "/#organization"},
             "isPartOf": {"@id": SITE_URL + "/#website"},
             "breadcrumb": {"@id": url + "#breadcrumb"},
-            "citation": ["https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"],
+            "citation": ["https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html"],
             "inLanguage": "en",
         })
     related_map = {
@@ -2164,6 +2177,7 @@ def tool_page(t):
         "years-to-days-calculator": [("date-calculator", "Date Difference Calculator"), ("age-calculator", "Age Calculator"), ("query-calculator", "Query Calculator"), ("unit-converter", "Unit Converter")],
         "query-calculator": [("years-to-days-calculator", "Years to Days Calculator"), ("age-calculator", "Age Calculator")],
         "unit-converter": [("bmi-calculator", "Adult BMI Calculator"), ("calorie-calculator", "Calorie Calculator")],
+        "bmi-calculator": [("calorie-calculator", "Adult Calorie Calculator"), ("health", "Health Calculators and Guidance")],
     }
     related_items = related_map.get(t["slug"], [])
     related = "".join(
