@@ -128,7 +128,7 @@ assert 'href="mailto:malikadeelbhatti@gmail.com"' in about_html, "About page sho
 assert re.search(r"<caption\b", about_html) and re.search(r"<th\s+scope=", about_html), "About page's assumptions table should have accessible caption and column headers"
 assert "Every calculator is independently verified" not in about_html and "certified expert" not in about_html.lower(), "About page must not invent universal review or credential claims"
 assert '<title>About CalculatesAll | Project, Methods &amp; Privacy</title>' in about_html, "About title should clearly identify the page and its useful scope"
-assert 'name="description" content="Meet the maintainer of CalculatesAll, explore its free browser-based calculators, learn how methods are checked, and find privacy and contact details."' in about_html, "About meta description should accurately summarize the page"
+assert 'name="description" content="Meet the CalculatesAll maintainer, explore free browser calculators, and review methods, privacy and contact information."' in about_html, "About meta description should accurately summarize the page"
 def jsonld_nodes(page_html):
     nodes = []
     for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', page_html, re.S):
@@ -1409,7 +1409,7 @@ for href in (
     "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
     "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
     "https://www.cdc.gov/bmi/adult-calculator/index.html",
-    "https://www.nationalacademies.org/read/26818/chapter/7",
+    "https://www.ncbi.nlm.nih.gov/books/NBK588659/",
 ):
     assert 'href="' + href + '"' in health_html, f"Health hub must link to the relevant internal tool or primary source: {href}"
 for external_href in (
@@ -1421,7 +1421,7 @@ for external_href in (
     "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
     "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
     "https://www.cdc.gov/bmi/adult-calculator/index.html",
-    "https://www.nationalacademies.org/read/26818/chapter/7",
+    "https://www.ncbi.nlm.nih.gov/books/NBK588659/",
 ):
     source_anchor = re.search(r'<a\b(?=[^>]*href="' + re.escape(external_href) + r'")[^>]*>', health_html)
     assert source_anchor and 'rel="noopener noreferrer"' in source_anchor.group(0), f"External health source link must be safe: {external_href}"
