@@ -41,6 +41,11 @@ assert len(zakat_entries) == 1, "llms.txt must describe the English Zakat calcul
 assert "Hanafi" in zakat_entries[0] and "Sayyid Sistani" in zakat_entries[0], "Zakat summary must accurately identify both supported calculation methods"
 assert "silver or gold Nisab" in zakat_entries[0], "Zakat summary must not imply that only the silver Nisab option exists"
 assert "silver Nisab method stated on the page" not in zakat_entries[0], "Zakat summary must not misdescribe the live calculator's selectable Nisab methods"
+urdu_section = llms.split("## Urdu tools", 1)[1].split("## Usage and accuracy notes", 1)[0]
+urdu_entries = [line for line in urdu_section.splitlines() if line.startswith("- [")]
+assert len(urdu_entries) == 9, f"Expected 9 published Urdu tool links, found {len(urdu_entries)}"
+assert all(": " in line for line in urdu_entries), "Each Urdu tool link must include a concise, accurate description for machine readers"
+assert "Sayyid Sistani" in next(line for line in urdu_entries if "/ur/zakat-calculator/" in line), "Urdu Zakat entry must identify the limited Sistani method"
 assert "source references" in llms
 assert re.search(r"^# CalculatesAll\s*\n> Free browser-based calculators for money, health, math, dates and everyday tasks\. Each tool states its inputs, method and limitations; results are general estimates, not professional advice\.", llms), "llms.txt should give AI readers a concise, accurate summary directly under the H1"
 assert "expert reviewed" not in llms.lower()
