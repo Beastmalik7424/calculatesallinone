@@ -533,7 +533,7 @@
           window.requestAnimationFrame(scrollResultIntoView)
         })
       } else {
-        window.setTimeout(scrollResultIntoView, 0)
+        scrollResultIntoView()
       }
     }
     function renderStep() {
