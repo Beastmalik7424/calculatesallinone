@@ -137,13 +137,43 @@ let browser;
     assert.equal(await page.locator("#" + id).count(), 0, "Unverified asset must not be offered: " + id);
   }
 
+  // Validation errors must not move the user away from the form.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.locator("#z-currency").fill("ZZZ");
+  await page.locator("#zakat-submit").click();
+  await page.waitForTimeout(50);
+  assert.equal(await page.evaluate(() => window.scrollY), 0,
+    "Invalid Zakat input must not trigger automatic result scrolling");
+  await page.locator("#z-currency").fill("PKR");
+
   // Hanafi independent expected-value case: PKR 100,000 net wealth, silver at PKR 100/g.
+  await page.evaluate(() => {
+    window.scrollTo(0, 0);
+    window.__zakatScrollOptions = null;
+    const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (options) {
+      if (this.id === "zakat-result") window.__zakatScrollOptions = options || {};
+      return original.call(this, options);
+    };
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.locator("#z-cash").fill("100000");
   await page.locator("#z-silverprice").fill("100");
   await page.locator("#z-hawl").check();
   await page.locator("#zakat-submit").click();
   const hanafiResult = await page.locator("#zakat-result").innerText();
   assert.match(hanafiResult, /2,500/, "Hanafi calculation must independently return PKR 2,500");
+  await page.waitForFunction(() => {
+    const result = document.querySelector("#zakat-result");
+    const rect = result.getBoundingClientRect();
+    return window.scrollY > 0 && rect.top >= 60 && rect.top < innerHeight * 0.75;
+  });
+  const reducedMotionScroll = await page.evaluate(() => window.__zakatScrollOptions);
+  assert.equal(reducedMotionScroll && reducedMotionScroll.behavior, "auto",
+    "Reduced-motion users must receive non-animated result scrolling");
+  assert.equal(reducedMotionScroll && reducedMotionScroll.block, "start",
+    "The result must align below the sticky header");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
 
   // User-requested PKR 200,000 / silver PKR 300 per gram case.
   await page.locator("#z-cash").fill("200000");
@@ -296,6 +326,7 @@ let browser;
   }
 
   // Same independently checkable Hanafi calculation in the Urdu RTL interface.
+  await page.evaluate(() => { window.scrollTo(0, 0); window.__zakatScrollOptions = null; });
   await page.locator("#z-school-of-thought").selectOption("sunni-hanafi");
   await page.locator("#z-cash").fill("200000");
   await page.locator("#z-silverprice").fill("300");
@@ -303,6 +334,17 @@ let browser;
   await page.locator("#zakat-submit").click();
   assert.match(await page.locator("#zakat-result").innerText(), /5,000(?:\.00)?/,
     "Urdu Hanafi silver-Nisab example must calculate exactly PKR 5,000.00");
+
+  await page.waitForFunction(() => {
+    const result = document.querySelector("#zakat-result");
+    const rect = result.getBoundingClientRect();
+    return window.scrollY > 0 && rect.top >= 60 && rect.top < innerHeight * 0.75;
+  });
+  const urduScroll = await page.evaluate(() => window.__zakatScrollOptions);
+  assert.equal(urduScroll && urduScroll.behavior, "smooth",
+    "Urdu result scrolling must use smooth motion when reduced motion is not requested");
+  assert.equal(urduScroll && urduScroll.block, "start",
+    "Urdu result must align below the sticky header without changing RTL layout");
 
   // Urdu Sistani coin-only below-Nisab result must not display a zero business-goods threshold.
   await page.locator("#z-school-of-thought").selectOption("jafari-sistani");
