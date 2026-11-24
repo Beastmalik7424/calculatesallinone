@@ -25,6 +25,20 @@ money = page("money")
 math = page("math")
 time = page("time")
 
+profit_loss_hub_description = (
+    "Free profit and loss calculator: estimate gross profit and net operating profit from revenue, "
+    "cost of goods sold and entered expenses, or compare product profit, markup and gross margin "
+    "from cost and selling price."
+)
+assert profit_loss_hub_description.lower() in money.lower(), "Money hub must describe the calculator's actual gross and net operating profit outputs"
+assert "business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price" not in money.lower(), "Money hub must not imply that the simplified calculator computes full net profit"
+
+urdu_profit_loss = (Path("public") / "ur" / "profit-loss-calculator" / "index.html").read_text(encoding="utf-8")
+urdu_profit_description = re.search(r'<meta name="description" content="([^"]*)"', urdu_profit_loss)
+expected_urdu_profit_description = "کاروباری آمدنی، لاگت اور اخراجات سے آپریٹنگ منافع، یا پروڈکٹ کی قیمت خرید و فروخت سے منافع، مارک اپ اور مارجن معلوم کریں۔"
+assert urdu_profit_description and urdu_profit_description.group(1) == expected_urdu_profit_description, "Urdu Profit and Loss snippet must describe operating profit, not full net profit"
+assert "خالص منافع" not in urdu_profit_description.group(1), "Urdu Profit and Loss snippet must not claim full net profit"
+
 for phrase in (
     "How is profit margin calculated?",
     "gross margin is 40% of sales",

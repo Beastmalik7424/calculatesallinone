@@ -6,22 +6,6 @@ on:
         description: Exact 40-character commit SHA to deploy
         required: true
         type: string
-  push:
-    branches:
-      - main
-      - deploy/zakat-hanafi-jafari-2026-11-16
-      - feature/zakat-hanafi-jafari-tola-clean-2026-11-16
-    paths:
-      - '.github/workflows/vercel-preview-fallback.yml'
-      - 'build.py'
-      - 'seo_finalize.py'
-      - 'static/app.js'
-      - 'static/zakat-calculator.js'
-      - 'package.json'
-      - 'tests/zakat-fiqh-methods.cjs'
-      - 'tests/zakat-calculator-quality-smoke.cjs'
-      - 'tests/zakat-calculator-browser.cjs'
-      - 'tests/site-output-smoke.py'
 permissions:
   contents: read
 concurrency:
