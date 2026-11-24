@@ -227,13 +227,19 @@ assert "Quick reference: years to days" in years_html, "Years-to-Days page shoul
 
 assert "Show all 29 years-to-days reference examples" in years_html, "The expanded reference must advertise all 29 examples"
 assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
-# The finalized 28-day GSC page-query sample shows meaningful impressions for 7-year and 9-year conversions.
-# Both must appear in the short visible reference and the expanded table; 19 years stays in the expanded table.
+# The 2026-10-27 through 2026-11-23 GSC query sample shows impressions for 4-, 7-, 9-, 15- and 25-year variants.
+# Keep the useful 4-, 7-, 9-, 15- and 25-year answers in both tables; 19 years remains in the expanded table.
+_year_4_row = '<tr><th scope="row" class="border-b p-3">4</th><td class="border-b p-3">1,460</td><td class="border-b p-3">1,461</td><td class="border-b p-3">1,460.97</td></tr>'
 _year_7_row = '<tr><th scope="row" class="border-b p-3">7</th><td class="border-b p-3">2,555</td><td class="border-b p-3">2,556.75</td><td class="border-b p-3">2,556.6975</td></tr>'
 _year_9_row = '<tr><th scope="row" class="border-b p-3">9</th><td class="border-b p-3">3,285</td><td class="border-b p-3">3,287.25</td><td class="border-b p-3">3,287.1825</td></tr>'
+_year_15_row = '<tr><th scope="row" class="border-b p-3">15</th><td class="border-b p-3">5,475</td><td class="border-b p-3">5,478.75</td><td class="border-b p-3">5,478.6375</td></tr>'
+_year_25_row = '<tr><th scope="row" class="border-b p-3">25</th><td class="border-b p-3">9,125</td><td class="border-b p-3">9,131.25</td><td class="border-b p-3">9,131.0625</td></tr>'
 _year_19_row = '<tr><th scope="row" class="border-b p-3">19</th><td class="border-b p-3">6,935</td><td class="border-b p-3">6,939.75</td><td class="border-b p-3">6,939.6075</td></tr>'
+assert years_html.count(_year_4_row) == 2, "The 4-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_7_row) == 2, "The 7-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_9_row) == 2, "The 9-year GSC query row must appear in both reference tables"
+assert years_html.count(_year_15_row) == 2, "The 15-year GSC query row must appear in both reference tables"
+assert years_html.count(_year_25_row) == 2, "The 25-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_19_row) == 1, "The 19-year row must remain in the expanded reference without taking a quick-reference slot"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
@@ -270,7 +276,10 @@ for question in ("Which year-length methods can I use?", "Does exact calendar mo
 # reference table useful for those exact intents, and verify each value with Decimal.
 _year_reference_expected = {
     "1.5": ("547.5", "547.875", "547.86375"),
+    "4": ("1,460", "1,461", "1,460.97"),
     "9": ("3,285", "3,287.25", "3,287.1825"),
+    "15": ("5,475", "5,478.75", "5,478.6375"),
+    "25": ("9,125", "9,131.25", "9,131.0625"),
     "14": ("5,110", "5,113.5", "5,113.395"),
     "16": ("5,840", "5,844", "5,843.88"),
     "21": ("7,665", "7,670.25", "7,670.0925"),

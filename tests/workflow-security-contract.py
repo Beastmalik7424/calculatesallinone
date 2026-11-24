@@ -109,6 +109,11 @@ class RepositoryWorkflowPermissionsIntegrationTests(unittest.TestCase):
                 failures.append(relative_path + ": expected top-level permissions: contents: read and no job override")
         self.assertEqual(failures, [], "\n".join(failures))
 
+    def test_vercel_prebuilt_fallback_is_manual_only(self):
+        path = ROOT / ".github/workflows/vercel-preview-fallback.yml"
+        content = path.read_text(encoding="utf-8")
+        self.assertRegex(content, r"(?m)^  workflow_dispatch:")
+        self.assertNotRegex(content, r"(?m)^  push\\s*:", "Vercel Git integration handles normal pushes; the credentialed fallback is manual-only")
 
 
 
