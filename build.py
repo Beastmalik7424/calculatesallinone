@@ -422,7 +422,7 @@ TOOLS = [
         "category": "money",
         "name": "Profit and Loss Calculator",
         "app": "UtilitiesApplication",
-        "description": "Free profit and loss calculator: calculate business net profit, profit margin, product profit percentage and markup from revenue, costs and selling price.",
+        "description": "Free profit and loss calculator: estimate gross profit and net operating profit from revenue, cost of goods sold and entered expenses, or compare product profit, markup and gross margin from cost and selling price.",
         "h1": "Profit and Loss Calculator",
         "lead": "This profit loss calculator compares business operating profit with product-level profit or loss, markup and margin.",
         "ui": (
@@ -1886,7 +1886,8 @@ def write(path, content):
 
 def years_to_days_reference_html():
     years_values = [1, 1.5, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 25, 29, 30, 32, 40, 50, 60, 74, 80, 100]
-    quick_values = [2, 3, 5, 7, 9, 10, 13, 20]
+    # GSC query evidence from 2026-10-27 through 2026-11-23 supports these additional quick answers.
+    quick_values = [2, 3, 4, 5, 7, 9, 10, 13, 15, 20, 25]
     def formatted(value):
         return format(value, ",.5f").rstrip("0").rstrip(".")
     def table_rows(values):
