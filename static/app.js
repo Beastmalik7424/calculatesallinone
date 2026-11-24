@@ -512,6 +512,38 @@
       }
     }
     var submitButton = $("zakat-submit")
+    function showCalculatedResult(message) {
+      var resultPanel = $("zakat-result")
+      if (!resultPanel) {
+        say("zakat-result", message)
+        return
+      }
+      say("zakat-result", message)
+      function scrollResultIntoView() {
+        if (!resultPanel.isConnected || !resultPanel.textContent.trim()) return
+        var prefersReducedMotion = !!(window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+        var stickyHeader = document.querySelector("header")
+        if (stickyHeader && typeof window.getComputedStyle === "function") {
+          var headerPosition = window.getComputedStyle(stickyHeader).position
+          if (headerPosition === "sticky" || headerPosition === "fixed") {
+            resultPanel.style.scrollMarginTop =
+              Math.ceil(stickyHeader.getBoundingClientRect().height + 16) + "px"
+          }
+        }
+        resultPanel.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start"
+        })
+      }
+      if (typeof window.requestAnimationFrame === "function") {
+        window.requestAnimationFrame(function () {
+          window.requestAnimationFrame(scrollResultIntoView)
+        })
+      } else {
+        scrollResultIntoView()
+      }
+    }
     function renderStep() {
       var isJafari = schoolField && schoolField.value === "jafari-sistani"
       if (hanafiSetupNote) hanafiSetupNote.hidden = isJafari
@@ -593,27 +625,27 @@
         }
         if (school === "jafari-sistani") {
           if (result.status === "conditions_incomplete") {
-            say("zakat-result", t("zakatSistaniConditions"))
+            showCalculatedResult(t("zakatSistaniConditions"))
             return
           }
           if (result.status === "below_nisab") {
-            say("zakat-result", t("zakatSistaniBelow", formatted))
+            showCalculatedResult(t("zakatSistaniBelow", formatted))
             return
           }
-          say("zakat-result", t("zakatSistaniDue", formatted))
+          showCalculatedResult(t("zakatSistaniDue", formatted))
           return
         }
         if (result.status === "below_nisab") {
-          say("zakat-result", t("zakatBelow", formatted))
+          showCalculatedResult(t("zakatBelow", formatted))
           return
         }
         if (result.status === "hawl_incomplete") {
-          say("zakat-result", t("zakatHawl", formatted))
+          showCalculatedResult(t("zakatHawl", formatted))
           return
         }
         var message = t("zakatDue", formatted)
         if (result.overpayment > 0) message += " " + t("zakatOverpaid")
-        say("zakat-result", message)
+        showCalculatedResult(message)
       } catch (error) {
         var reason = String(error && error.message || "")
         if (/metal price/i.test(reason)) say("zakat-result", t("zakatNoPrice"))

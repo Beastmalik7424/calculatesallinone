@@ -300,3 +300,26 @@ const banuriFatwaUrl = "https://www.banuri.edu.pk/readquestion/144608101364/17-0
 assert.ok(enText.includes("Banuri Town") && enText.includes("fatwa 144608101364"), "English Hanafi guide must identify the Pakistan-specific Banuri Town Nisab position");
 assert.ok(urText.includes("بنوری ٹاؤن") && urText.includes("فتویٰ نمبر 144608101364"), "Urdu Hanafi guide must identify the Pakistan-specific Banuri Town Nisab position");
 assert.ok(en.includes(banuriFatwaUrl) && ur.includes(banuriFatwaUrl), "Both language pages must link to the same primary Hanafi source");
+
+
+// Zakat-only compact form and result-scroll regression contract.
+const zakatCssSource = fs.readFileSync(path.join(__dirname, "..", "styles", "input.css"), "utf8");
+const zakatAppSource = fs.readFileSync(path.join(__dirname, "..", "static", "app.js"), "utf8");
+for (const [locale, html] of [["English", en], ["Urdu", ur]]) {
+  assert.match(html, /class="zakat-section space-y-2" data-zakat-step="sunni-assets-a"/,
+    locale + " Zakat asset sections must use compact vertical spacing");
+  assert.doesNotMatch(html, /class="zakat-section space-y-3"/,
+    locale + " Zakat sections must not retain the previous loose vertical spacing");
+  assert.match(html, /<h2 class="text-base font-semibold/,
+    locale + " Zakat section headings must use compact text-base sizing");
+  assert.doesNotMatch(html, /<h2 class="text-lg font-semibold/,
+    locale + " Zakat section headings must not retain text-lg sizing");
+  assert.match(html, /class="grid sm:grid-cols-2 gap-2"/,
+    locale + " Zakat asset grids must use tightened gaps");
+}
+assert.match(zakatCssSource, /#main \.ca-tool-zakat-calculator #zakat-result\s*\{[^}]*scroll-margin-top:\s*6rem/s,
+  "Zakat result must reserve space below the sticky site header when scrolled into view");
+assert.match(zakatAppSource, /scrollIntoView\(/,
+  "Zakat calculation must scroll the result into view after it is rendered");
+assert.match(zakatAppSource, /prefers-reduced-motion/,
+  "Zakat result scrolling must respect the reduced-motion accessibility preference");
