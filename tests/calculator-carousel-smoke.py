@@ -99,7 +99,7 @@ assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its
 assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat ticker must match the Standard Calculator page (single group, no duplicate marquee)"
 assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pages must retain their existing single shortcut group"
 assert "@keyframes ca-calculator-marquee" in css, "The homepage marquee animation must remain available"
-base_track_rules = re.findall(r"\.ca-calculator-track\s*\{([^}]*)\}", css)
+base_track_rules = re.findall(r"(?:^|})\.ca-calculator-track\{([^}]*)\}", css)
 assert base_track_rules and all("animation:" not in rule for rule in base_track_rules), "Single-group inner-page tickers must not run the two-group marquee animation"
 home_track_overrides = re.findall(r"body:has\(#main \.ca-home-header\) \.ca-calculator-track\s*\{([^}]*)\}", css)
 assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in home_track_overrides), "Only homepages with duplicated groups may run the continuous marquee"
