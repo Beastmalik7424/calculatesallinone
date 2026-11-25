@@ -1249,15 +1249,15 @@ for _lang_path in ("/ar/", "/es/", "/fr/"):
 _ur_zakat_compact = output_for_url(SITE + "/ur/zakat-calculator/").read_text(encoding="utf-8")
 for _label in ("گھر میں موجود نقد رقم", "بینک اور کرنٹ اکاؤنٹ کی رقم", "قابلِ زکوٰۃ سونے کی مالیت",
                "قابلِ زکوٰۃ چاندی کی مالیت", "فروخت کے لیے کاروباری مال کی موجودہ قیمت",
-               "واپس ملنے والے قرض اور قابلِ وصول رقوم", "قابلِ کٹوتی قلیل مدتی قرض اور واجبات",
+               "واپس ملنے والے قرض اور قابلِ وصول رقوم", "موبائل والیٹ کا بیلنس (جاز کیش، ایزی پیسہ، سدا پے)", "اس وقت قابلِ کٹوتی قرض (رقم لکھیں، نہ ہو تو 0)",
                "چاندی کی فی گرام قیمت", "ایک مکمل قمری زکوٰۃ سال (حول) پورا ہو چکا ہے", "زکوٰۃ کا حساب کریں"):
     assert _label in _ur_zakat_compact, "Urdu Zakat label missing: " + _label
 for _english_label in ("Cash held at home", "Eligible gold value", "Eligible silver value",
                        "Trade inventory at current sale value", "Recoverable loans and receivables",
-                       "Eligible short-term debts and dues", "Silver price per gram",
+                       "Eligible debts due now (enter amount, or 0 if none)", "Silver price per gram",
                        "One full lunar Zakat year (hawl) is complete", "Calculate Zakat"):
     assert _english_label not in _ur_zakat_compact, "English Zakat label leaked into Urdu page: " + _english_label
-for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-businesscash", "z-stock", "z-recv", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
+for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-wallet", "z-savings", "z-gold", "z-silver", "z-businesscash", "z-stock", "z-recv", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
     assert 'id="' + _field_id + '"' in _ur_zakat_compact, "Urdu Zakat field ID changed: " + _field_id
 
 # Urdu calculator templates must carry the same page-specific responsive hooks as English tools.
