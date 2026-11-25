@@ -16,7 +16,7 @@ SITE = "https://calculateallinone.vercel.app"
 CASES = {
     "tasbih-counter": {
         "title": "Tasbih Calculator Online | Dhikr Counter | CalculatesAll",
-        "description": "Use this free Tasbih calculator for dhikr. Choose a 33, 99, 100 or custom target, undo taps, and keep your count on this device. No sign-up required.",
+        "description": "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count.",
         "form": 'id="tasbih-app"',
         "category": "/worship/",
         "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
@@ -222,7 +222,7 @@ def check_targeted_content():
         for phrase in phrases:
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
     expected_dates = {
-        "tasbih-counter": "2026-11-21",
+        "tasbih-counter": "2026-11-25",
         "years-to-days-calculator": "2026-11-24",
         "unit-converter": "2026-11-21",
         "profit-loss-calculator": "2026-11-21",
