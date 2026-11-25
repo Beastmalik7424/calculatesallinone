@@ -28,7 +28,7 @@ LASTMOD = {
     "/zakat-calculator/": "2026-11-25",
     "/years-to-days-calculator/": "2026-11-24",
     "/unit-converter/": "2026-11-21",
-    "/tasbih-counter/": "2026-11-21",
+    "/tasbih-counter/": "2026-11-25",
     "/profit-loss-calculator/": "2026-11-21",
     "/ur/bmi-calculator/": "2026-11-21",
     "/query-calculator/": "2026-11-19",
@@ -2111,7 +2111,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
-        desc = "Free online tasbih calculator and tasbeeh counter for dhikr. Choose a phrase and target, undo taps and keep progress on this device when storage allows."
+        desc = "Use this free Tasbih calculator for dhikr. Choose a 33, 99, 100 or custom target, undo taps, and keep your count on this device. No sign-up required."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
