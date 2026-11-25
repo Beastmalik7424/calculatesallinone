@@ -222,7 +222,7 @@ def check_targeted_content():
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
     expected_dates = {
         "tasbih-counter": "2026-11-21",
-        "years-to-days-calculator": "2026-11-22",
+        "years-to-days-calculator": "2026-11-24",
         "unit-converter": "2026-11-21",
         "profit-loss-calculator": "2026-11-21",
     }
@@ -333,10 +333,10 @@ def check_years_quick_reference():
     assert "19" in {year for year, _ in full_rows}, "Removing 19 years from the quick table must not remove it from the expanded reference"
 
     visible = visible_text("years-to-days-calculator")
-    assert "Last updated: 2026-11-22" in visible, "Visible update date must match the substantive quick-reference refresh"
+    assert "Last updated: 2026-11-24" in visible, "Visible update date must match the substantive quick-reference refresh"
     schemas = jsonld_documents(source, "years-to-days-calculator")
     webpage = next((item for item in schemas if item.get("@type") == "WebPage"), None)
-    assert webpage and webpage.get("dateModified") == "2026-11-22", "Structured dateModified must match the visible update date"
+    assert webpage and webpage.get("dateModified") == "2026-11-24", "Structured dateModified must match the visible update date"
 
 
 
