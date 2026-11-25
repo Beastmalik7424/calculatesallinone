@@ -113,6 +113,8 @@ zakat_header_class = re.search(r'<header class="([^"]*)"', zakat_html)
 zakat_footer_class = re.search(r'<footer class="([^"]*)"', zakat_html)
 assert zakat_header_class and "bg-white " in zakat_header_class.group(1) and "bg-white/80" not in zakat_header_class.group(1), "Site header must use an opaque surface for predictable text contrast"
 assert zakat_footer_class and "bg-white " in zakat_footer_class.group(1) and "bg-white/80" not in zakat_footer_class.group(1), "Site footer must use an opaque surface for predictable text contrast"
+zakat_footer = re.search(r'<footer\\b[^>]*>(.*?)</footer>', zakat_html, re.S)
+assert zakat_footer and re.search(r'<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm [^"]*dark:text-stone-200', zakat_footer.group(1)), "Footer copy must use a light text token on the dark footer surface in dark mode"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
 home_head = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
 assert home_head, "Homepage must have a valid head element"
