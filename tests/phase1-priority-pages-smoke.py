@@ -334,6 +334,19 @@ def check_years_quick_reference():
     assert "19" in {year for year, _ in full_rows}, "Removing 19 years from the quick table must not remove it from the expanded reference"
 
     visible = visible_text("years-to-days-calculator")
+    gsc_query_answers = (
+        ("How many days in 2 years?", "730.485 days"),
+        ("How many days in 3 years?", "1,095.7275 days"),
+        ("How many days in 5 years?", "1,826.2125 days"),
+        ("How many days in 10 years?", "3,652.425 days"),
+        ("How many days in 19 years?", "6,939.6075 days"),
+        ("How many days in 30 years?", "10,957.275 days"),
+    )
+    for question, answer in gsc_query_answers:
+        assert question in visible and answer in visible, (
+            "Years-to-Days content must directly answer observed GSC queries with verified values: " + question
+        )
+    assert "Last updated: 2026-11-24" in visible, "Visible update date must match the substantive quick-reference refresh"
     assert "Last updated: 2026-11-24" in visible, "Visible update date must match the substantive quick-reference refresh"
     schemas = jsonld_documents(source, "years-to-days-calculator")
     webpage = next((item for item in schemas if item.get("@type") == "WebPage"), None)
