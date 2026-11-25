@@ -38,8 +38,8 @@ VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the GSC-backed Urdu BMI search-intent explanation and source check.
     "/ur/bmi-calculator/": "2026-11-21",
     # This date records the new global Nisab, currency, asset and Urdu guidance update.
-    "/zakat-calculator/": "2026-11-16",
-    "/ur/zakat-calculator/": "2026-11-16",
+    "/zakat-calculator/": "2026-11-25",
+    "/ur/zakat-calculator/": "2026-11-25",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
     # This date records the GSC-backed quick-reference row selection and verified three-method arithmetic.
