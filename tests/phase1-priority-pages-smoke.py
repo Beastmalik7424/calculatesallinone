@@ -185,6 +185,7 @@ def check_targeted_content():
         "tasbih-counter": [
             "Maintained by Muhammad Fayyaz Adeel",
             "Tasbih calculator and free online Tasbeeh counter",
+            "tasbih counter online",
             "calculator tasbih",
             "free online Tasbeeh counter",
             "does not listen to recitation",
