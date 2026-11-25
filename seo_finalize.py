@@ -21,7 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
-    "/tasbih-counter/": "Use this free Tasbih calculator for dhikr. Choose a 33, 99, 100 or custom target, undo taps, and keep your count on this device. No sign-up required.",
+    "/tasbih-counter/": "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count.",
     "/query-calculator/": "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
@@ -235,7 +235,7 @@ def normalize_meta(raw, path, lang):
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Use this free Tasbih calculator for dhikr. Choose a 33, 99, 100 or custom target, undo taps, and keep your count on this device. No sign-up required."
+        desc = "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count."
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
