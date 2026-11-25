@@ -296,10 +296,11 @@ assert.ok(enTitle && decodeMeta(enTitle[1]) === "Zakat Calculator Online | Hanaf
 assert.ok(urTitle && decodeMeta(urTitle[1]).includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
 assert.ok(enDescription && decodeMeta(enDescription[1]).includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
 assert.ok(urText.includes("احتیاطِ واجب کی بنا پر"), "Urdu Sistani guidance must explicitly retain the obligatory-precaution qualification");
-const banuriFatwaUrl = "https://islamqa.org/hanafi/darulifta-deoband/109691/sahib-e-nisab/";
-assert.ok(enText.includes("Darul Uloom Deoband") && enText.includes("fatwa 1146/907/D=10/1434") && enText.includes("109691"), "English Hanafi guide must cite the verified Darul Uloom Deoband combined-Nisab fatwa");
-assert.ok(urText.includes("دارالعلوم دیوبند") && urText.includes("فتویٰ 1146/907/D=10/1434") && urText.includes("109691"), "Urdu Hanafi guide must cite the verified Darul Uloom Deoband combined-Nisab fatwa");
-assert.ok(en.includes(banuriFatwaUrl) && ur.includes(banuriFatwaUrl), "Both language pages must link to the same Hanafi source");
+const deobandFatwaUrl = "https://darulifta-deoband.com/home/en/qa/47525";
+assert.ok(enText.includes("Darul Uloom Deoband") && enText.includes("fatwa 1146/907/D=10/1434") && enText.includes("612 g silver Nisab"), "English Hanafi guide must describe the combined gold-and-cash example and identify the Deoband fatwa");
+assert.ok(urText.includes("دارالعلوم دیوبند") && urText.includes("فتویٰ 1146/907/D=10/1434") && urText.includes("612 گرام چاندی"), "Urdu Hanafi guide must describe the combined gold-and-cash example and identify the Deoband fatwa");
+assert.ok(en.includes(deobandFatwaUrl) && ur.includes(deobandFatwaUrl), "Both language pages must link directly to the official Darul Uloom Deoband source");
+assert.ok(!en.includes("islamqa.org/hanafi/darulifta-deoband/109691") && !ur.includes("islamqa.org/hanafi/darulifta-deoband/109691"), "Both language pages must avoid the secondary mirror when the primary source is available");
 
 
 // Zakat-only compact form and result-scroll regression contract.
