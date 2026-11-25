@@ -361,7 +361,8 @@ console.log("PASS: 3+ input examples each for Zakat, BMI, profit/loss, age, disc
   assert.match(generated, /id="yd-start-date"/);
   assert.match(generated, /id="yd-calendar-option" value="calendar"/);
   assert.match(generated, /href="https:\/\/calculateallinone\.vercel\.app\/years-to-days-calculator\/"/);
-  assert.match(generated, /20261116-hanafi-jafari-1/);
+  assert.match(generated, /\/assets\/zakat-calculator\.js\?v=[a-f0-9]{16}/);
+  assert.match(generated, /\/assets\/app\.js\?v=[a-f0-9]{16}/);
   console.log("PASS: exact calendar day count, leap years, invalid dates and generated controls");
 }
 
