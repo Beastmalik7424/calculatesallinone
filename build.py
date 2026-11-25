@@ -1827,7 +1827,7 @@ def shell(main_html, lang="en", current_path=None):
         + '</nav></header>\n'
         '<main id="main" class="' + main_classes + '">' + main_html + '</main>\n'
         '<footer class="mt-12 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700">'
-        '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'
+        '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800 dark:text-stone-200">'
         '<div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">'
         '<p>' + s["tag"] + '</p>'
         '<nav class="flex flex-wrap gap-5" aria-label="' + s["footer"] + '">'
