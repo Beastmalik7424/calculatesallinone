@@ -156,7 +156,7 @@ try:
     for path, expected_date in VERIFIED_PAGE_UPDATE_DATES.items():
         page = read(ROOT / path.strip("/") / "index.html")
         page_nodes = []
-        for match in re.finditer(r'<script\\b[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>', page, re.S | re.I):
+        for match in re.finditer(r"""<script\b[^>]*type=["']application/ld\+json["'][^>]*>(.*?)</script>""", page, re.S | re.I):
             try:
                 parsed = json.loads(match.group(1))
             except json.JSONDecodeError as exc:
