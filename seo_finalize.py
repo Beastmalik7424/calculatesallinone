@@ -220,7 +220,7 @@ def normalize_meta(raw, path, lang):
     "/years-to-days-calculator/": "10 years = 3,652.425 days; 19 years = 6,939.6075. Compare 365-day, 365.25-day and Gregorian 365.2425-day averages, or count exact days from a start date.",
     "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
-    "/zakat-calculator/": "Hanafi Zakat on cash, gold, silver, stock and receivables, or Sayyid Sistani's limited Ja'fari trading-goods method, with clear assumptions."
+    "/zakat-calculator/": "Calculate Zakat in PKR or other currencies using Hanafi or Sayyid Sistani's limited Ja'fari method. Enter cash, gold, silver, assets and eligible debts."
 }
     urdu_description_overrides = {
     "/ur/age-calculator/": "تاریخ پیدائش اور مطلوبہ تاریخ درج کرکے عمر سال، مہینوں اور دنوں میں معلوم کریں۔ کل گزرے دن بھی دیکھیں اور کیلکولیٹر کے تاریخوں کے حساب کا طریقہ سمجھیں۔",
