@@ -22,7 +22,6 @@ const en = page("zakat-calculator");
 const ur = page("ur/zakat-calculator");
 const enText = visibleText(en);
 const urText = visibleText(ur);
-
 for (const id of [
   "z-currency", "z-school-of-thought", "z-nisab-method", "z-metal-price-unit",
   "z-jafari-nisab-method", "z-jafari-trade-value", "z-jafari-owner", "z-jafari-acquired",
@@ -30,7 +29,7 @@ for (const id of [
   "z-jafari-coins-used-as-money", "z-jafari-coin-inputs", "z-jafari-gold-coins-weight",
   "z-jafari-silver-coins-weight", "z-jafari-gold-coins-hawl", "z-jafari-silver-coins-hawl",
   "z-jafari-coins-access",
-  "z-silverprice", "z-goldprice", "z-cash", "z-bank", "z-savings",
+  "z-silverprice", "z-goldprice", "z-cash", "z-bank", "z-wallet", "z-savings",
   "z-gold", "z-silver", "z-jewellery", "z-businesscash", "z-stock", "z-recv",
   "z-property", "z-debts", "z-paid",
   "z-hawl", "zakat-result"
@@ -53,7 +52,7 @@ for (const term of [
   
   "Hawl checkbox is self-reported", "does not track balances throughout the lunar year",
    "not a complete Hanafi fiqh engine",
-  "Do not enter the same jewellery value in both", "Muhammad Fayyaz Adeel"
+  "Do not enter the same jewellery value in both", "Enter each mobile wallet balance only once", "Pakistan Zakat calculator", "Muhammad Fayyaz Adeel"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
@@ -62,7 +61,7 @@ for (const term of [
   "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتی ہے",
   "سیستانی", "جعفری", "احتیاطِ واجب", "خمس", "69.12", "483.84",
   "11.6638", "حنفی", "تجارتی مال",
-  "محمد فیاض عدیل", "خود تصدیق", "پورے قمری سال", "ایک ہی زیور کی قیمت", "مکمل فقہی انجن"
+  "محمد فیاض عدیل", "خود تصدیق", "پورے قمری سال", "ایک ہی زیور کی قیمت", "مکمل فقہی انجن", "موبائل والیٹ کی رقم صرف ایک بار درج کریں"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
 }
@@ -111,7 +110,7 @@ for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const wrapperAt = html.indexOf('id="z-sunni-asset-fields"');
   const jafariAt = html.indexOf('id="z-jafari-fields"');
   assert.ok(wrapperAt >= 0 && jafariAt > wrapperAt, name + " Sunni assets/liabilities wrapper must precede the Ja'fari section");
-  for (const id of ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
+  for (const id of ["z-cash","z-bank","z-wallet","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
     const fieldAt = html.indexOf('id="' + id + '"');
     assert.ok(fieldAt > wrapperAt && fieldAt < jafariAt, name + " Sunni-only field must be inside its visibility wrapper: " + id);
   }
@@ -166,7 +165,7 @@ for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   assert.match(beforeSubmit, /fixed inset-x-0 bottom-0/, name + " Calculate button must remain pinned to the viewport bottom on initial load");
   assert.doesNotMatch(beforeSubmit, /top-0|top-[0-9]/, name + " Calculate button must not be pinned to the top");
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
-    "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
+    "z-cash","z-bank","z-wallet","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
     assert.ok(html.indexOf('id="' + id + '"') < submitAt, name + " input must precede Calculate: " + id);
   }
   for (const match of html.matchAll(/id="(z-jafari-[^"]+)"/g)) {
@@ -216,6 +215,12 @@ assert.equal(result.netAssets, 29900);
 assert.equal(result.status, "below_nisab");
 assert.equal(result.balanceDue, 0);
 
+// Regression contract: mobile wallet balances are zakatable cash assets on the Sunni/Hanafi path.
+assert.ok(require("../static/zakat-calculator.js").assetKeys.includes("wallet"), "Wallet must be a first-class Sunni asset key");
+result = calculate({ ...base, assets: { cash: 10000, bank: 20000, wallet: 5000 } });
+assert.equal(result.totalAssets, 35000, "Mobile wallet balance must be included exactly once in total assets");
+assert.equal(result.netAssets, 34900, "Wallet balance must flow into net assets before liabilities");
+
 result = calculate({ ...base, assets: { cash: 70000 } });
 assert.equal(result.status, "payable");
 assert.equal(result.zakatBeforePaid, 1747.5);
@@ -247,6 +252,7 @@ for (const [nisabMethod, grams, priceKey] of [["gold-87", 87.48, "goldPricePerGr
 
 for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
   assert.throws(() => calculate({ ...base, assets: { cash: bad } }));
+  assert.throws(() => calculate({ ...base, assets: { wallet: bad } }), "Invalid wallet amounts must be rejected");
   assert.throws(() => calculate({ ...base, liabilities: bad }));
   assert.throws(() => calculate({ ...base, silverPricePerGram: bad }));
   assert.throws(() => calculate({ ...base, zakatPaid: bad }));
@@ -292,9 +298,9 @@ const enTitle = en.match(/<title>(.*?)<\/title>/i);
 const urTitle = ur.match(/<title>(.*?)<\/title>/i);
 const enDescription = en.match(/<meta name="description" content="([^"]*)"/i);
 const decodeMeta = (value) => value.replace(/&#x27;|&#39;/gi, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
-assert.ok(enTitle && decodeMeta(enTitle[1]) === "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab", "English title must target the calculator's actual supported methods");
+assert.ok(enTitle && decodeMeta(enTitle[1]) === "Pakistan Zakat Calculator | Hanafi & Sistani Ja'fari", "English title must target Pakistan search intent and the supported methods");
 assert.ok(urTitle && decodeMeta(urTitle[1]).includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
-assert.ok(enDescription && decodeMeta(enDescription[1]).includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
+assert.ok(enDescription && decodeMeta(enDescription[1]).includes("PKR or other currencies") && decodeMeta(enDescription[1]).includes("limited Ja'fari method"), "English description must disclose Pakistan and international scope and the limited Sistani method");
 assert.ok(urText.includes("احتیاطِ واجب کی بنا پر"), "Urdu Sistani guidance must explicitly retain the obligatory-precaution qualification");
 const deobandFatwaUrl = "https://darulifta-deoband.com/home/en/qa/47525";
 assert.ok(enText.includes("Darul Uloom Deoband") && enText.includes("fatwa 1146/907/D=10/1434") && enText.includes("612 g silver Nisab"), "English Hanafi guide must describe the combined gold-and-cash example and identify the Deoband fatwa");

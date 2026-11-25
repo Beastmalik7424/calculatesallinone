@@ -21,7 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
-    "/tasbih-counter/": "Free online tasbih calculator and tasbeeh counter. Choose a dhikr phrase and target, undo taps, and track your count on this device.",
+    "/tasbih-counter/": "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count.",
     "/query-calculator/": "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
@@ -38,8 +38,8 @@ VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the GSC-backed Urdu BMI search-intent explanation and source check.
     "/ur/bmi-calculator/": "2026-11-21",
     # This date records the new global Nisab, currency, asset and Urdu guidance update.
-    "/zakat-calculator/": "2026-11-16",
-    "/ur/zakat-calculator/": "2026-11-16",
+    "/zakat-calculator/": "2026-11-25",
+    "/ur/zakat-calculator/": "2026-11-25",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
     # This date records the GSC-backed quick-reference row selection and verified three-method arithmetic.
@@ -47,7 +47,7 @@ VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
     # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
-    "/tasbih-counter/": "2026-11-21",
+    "/tasbih-counter/": "2026-11-25",
     # This date records the GSC-backed online profit and loss calculator explanation.
     "/profit-loss-calculator/": "2026-11-21",
     "/query-calculator/": "2026-11-19",
@@ -176,7 +176,7 @@ def normalize_meta(raw, path, lang):
     title = html.unescape(title_match.group(1).strip())
     title_overrides = {
         "/about/": "About CalculatesAll | Project, Methods & Privacy",
-        "/zakat-calculator/": "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab",
+        "/zakat-calculator/": "Pakistan Zakat Calculator | Hanafi & Sistani Ja'fari",
         "/ur/zakat-calculator/": "آن لائن زکوٰۃ کیلکولیٹر | حنفی اور سیستانی جعفری نصاب",
         "/query-calculator/": "Time & Date Query Calculator | CalculatesAll",
         "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
@@ -220,7 +220,7 @@ def normalize_meta(raw, path, lang):
     "/years-to-days-calculator/": "10 years = 3,652.425 days; 19 years = 6,939.6075. Compare 365-day, 365.25-day and Gregorian 365.2425-day averages, or count exact days from a start date.",
     "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
-    "/zakat-calculator/": "Hanafi Zakat on cash, gold, silver, stock and receivables, or Sayyid Sistani's limited Ja'fari trading-goods method, with clear assumptions."
+    "/zakat-calculator/": "Estimate Zakat in PKR or other currencies with Hanafi or Sayyid Sistani's limited Ja'fari method. Add cash, wallets, gold, silver and eligible debts."
 }
     urdu_description_overrides = {
     "/ur/age-calculator/": "تاریخ پیدائش اور مطلوبہ تاریخ درج کرکے عمر سال، مہینوں اور دنوں میں معلوم کریں۔ کل گزرے دن بھی دیکھیں اور کیلکولیٹر کے تاریخوں کے حساب کا طریقہ سمجھیں۔",
@@ -235,7 +235,7 @@ def normalize_meta(raw, path, lang):
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Free online tasbih calculator and tasbeeh counter. Choose a dhikr phrase and target, undo taps, and track your count on this device."
+        desc = "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count."
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
@@ -424,6 +424,8 @@ def main():
         canonical = SITE + path
         node = ET.SubElement(urlset, "{http://www.sitemaps.org/schemas/sitemap/0.9}url")
         ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}loc").text = canonical
+        if path in VERIFIED_PAGE_UPDATE_DATES:
+            ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod").text = VERIFIED_PAGE_UPDATE_DATES[path]
         for code, href in re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', raw):
             if href in indexable_urls:
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})
@@ -435,7 +437,7 @@ def main():
         "Sitemap: " + SITE + "/sitemap.xml\n",
         encoding="utf-8",
     )
-    report = ["SEO build report", "Freshness metadata: dateModified set only for verified page-specific updates; sitemap lastmod omitted", "Indexable pages: " + str(len(indexable)),
+    report = ["SEO build report", "Freshness metadata: dateModified and sitemap lastmod emitted only for verified page-specific substantive updates", "Indexable pages: " + str(len(indexable)),
               "Noindex pages: " + str(len(noindex_list)), "Sitemap URLs: " + str(len(indexable)),
               "Titles: unique and within page-specific limits", "Descriptions: unique, page-specific and 70-160 characters",
               "JSON-LD: parsed and serialized as valid JSON", "Hub decisions:"]

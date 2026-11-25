@@ -475,7 +475,7 @@
     var form = $("zakat-form")
     if (!form) return
     var assetFields = [
-      ["cash", "z-cash"], ["bank", "z-bank"], ["savings", "z-savings"],
+      ["cash", "z-cash"], ["bank", "z-bank"], ["wallet", "z-wallet"], ["savings", "z-savings"],
       ["gold", "z-gold"], ["silver", "z-silver"], ["jewellery", "z-jewellery"],
       ["businessCash", "z-businesscash"], ["stock", "z-stock"],
       ["receivables", "z-recv"], ["property", "z-property"]

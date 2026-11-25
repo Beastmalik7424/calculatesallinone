@@ -83,10 +83,10 @@ let browser;
    const urduPage=slug.startsWith('ur/');
    const isZakat=slug.endsWith('zakat-calculator');
    if(isZakat){
-    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible||data.duplicateGroups!==1)failures.push(key+' calculator shortcuts must expose all 17 primary links and one moving duplicate group');
-    if(!data.tickerScrollable)failures.push(key+' moving calculator ticker must have an overflow-sized track');
+    if(!data.carouselVisible||data.carouselCount!==17||!data.allLinksVisible||data.duplicateGroups!==0)failures.push(key+' calculator shortcuts must expose all 17 links in one semantic group with no duplicate marquee');
+    if(size.width<=1024&&!data.tickerScrollable)failures.push(key+' narrow-screen calculator ticker must remain horizontally scrollable');
     if(!data.allLabelsFit)failures.push(key+' calculator shortcut labels are clipped or missing accessible names');
-    if(!data.activeShortcutVisible||data.activeShortcutIndex!==0)failures.push(key+' current calculator shortcut must be first and visible in the navigation viewport');
+    if(!data.activeShortcutVisible)failures.push(key+' current calculator shortcut must be visible in the navigation viewport');
     if(data.carouselBottom>205)failures.push(key+' calculator shortcut grid takes too much first-screen space');
     if(data.activeHref!=='/'+slug+'/')failures.push(key+' current calculator shortcut is not active: '+data.activeHref);
     if(data.calculatorTop>=size.height||data.formTop>=size.height)failures.push(key+' Zakat calculator form must begin on the first screen');

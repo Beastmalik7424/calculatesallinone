@@ -96,13 +96,21 @@ css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
-assert 'data-tool-set="duplicate"' in zakat_markup, "Zakat pages must retain the continuously moving calculator ticker"
+assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat ticker must match the Standard Calculator page (single group, no duplicate marquee)"
 assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pages must retain their existing single shortcut group"
-assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available on unaffected pages"
-assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Unaffected calculator pages must retain the shared continuous ticker animation"
+assert "@keyframes ca-calculator-marquee" in css, "The homepage marquee animation must remain available"
+base_track_rules = re.findall(r"(?:^|})\.ca-calculator-track\{([^}]*)\}", css)
+assert base_track_rules and all("animation:" not in rule for rule in base_track_rules), "Single-group inner-page tickers must not run the two-group marquee animation"
+duplicate_group_track_overrides = re.findall(r"body:has\(\.ca-calculator-group\[data-tool-set=[\"']?duplicate[\"']?\]\)\s*\.ca-calculator-track\s*\{([^}]*)\}", css)
+assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in duplicate_group_track_overrides), "Only pages with a duplicate visual group may run the continuous marquee"
+standard_markup = output_for("/standard-calculator/")
+assert 'data-tool-set="duplicate"' not in standard_markup, "Standard Calculator must retain its single-group shortcut ticker"
+emi_markup = output_for("/emi-calculator/")
+assert 'data-tool-set="duplicate"' in emi_markup, "EMI page must retain its duplicate group for continuous marquee motion"
 zakat_track_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-track\{([^}]*)\}", css)
-assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in zakat_track_overrides), "Zakat pages must enable the shared continuous ticker animation"
-assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Zakat pages must use the continuous shared ticker animation"
+assert any("animation:none" in rule and "transform:none" in rule for rule in zakat_track_overrides), "Single-group Zakat tickers must stay stationary and scrollable"
+zakat_carousel_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-carousel\s*\{([^}]*)\}", css)
+assert any("overflow-x:auto" in rule and "overflow-y:hidden" in rule for rule in zakat_carousel_overrides), "Zakat shortcut links must remain reachable by horizontal scrolling"
 zakat_link_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-link\{([^}]*)\}", css)
 assert zakat_link_overrides and all("min-height:44px" in rule and "height:44px" in rule for rule in zakat_link_overrides), "Zakat shortcut links must meet the 44px touch-target design target"
 assert "theme-toggle" in zakat_markup and zakat_markup.index('id="theme-toggle"') < zakat_markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
@@ -112,11 +120,11 @@ print("Calculator ticker, all 17 destinations, inner-page header layout and Tasb
 
 css_version = hashlib.sha256((ROOT / "assets" / "site.css").read_bytes()).hexdigest()[:16]
 assert f'<link rel="stylesheet" href="/assets/site.css?v={css_version}">' in zakat_markup, "Zakat pages must use the content-hash version of the deployed stylesheet"
-assert zakat_markup.count('data-tool-set="primary"') == 1 and zakat_markup.count('data-tool-set="duplicate"') == 1, "Zakat pages must render one accessible primary group and one aria-hidden marquee duplicate"
+assert zakat_markup.count('data-tool-set="primary"') == 1 and zakat_markup.count('data-tool-set="duplicate"') == 0, "Zakat pages must render one primary ticker group, like the Standard Calculator page"
 zakat_group = primary_group(zakat_markup, "/zakat-calculator/")
 current_zakat = re.search(r'data-tool-shortcut="zakat-calculator"[^>]*aria-current="page"', zakat_group)
 first_calorie = re.search(r'data-tool-shortcut="calorie-calculator"', zakat_group)
-assert current_zakat and first_calorie and current_zakat.start() < first_calorie.start(), "Current Zakat shortcut must appear first"
+assert current_zakat and first_calorie and first_calorie.start() < current_zakat.start(), "Zakat ticker must retain the shared default calculator order and mark the current page"
 assert re.search(r'<input id="z-stock"[^>]*autocomplete="off"', zakat_markup), "Financial trade-stock input must disable browser autofill"
 zakat_amount_inputs = re.findall(r'<input id="z-[^"]+"[^>]*type="number"[^>]*>', zakat_markup)
 assert zakat_amount_inputs and all('autocomplete="off"' in item for item in zakat_amount_inputs), "Every financial amount input must explicitly disable inappropriate browser autofill"

@@ -42,6 +42,27 @@ for generated_page in ROOT.rglob("*.html"):
     assert f'/assets/site.css?v={css_version}' in generated_html, (
         f"{generated_page} must reference the content-hash version of the CSS actually deployed"
     )
+
+# Shared JavaScript must use content-hash URLs so browser caches cannot retain stale calculator code.
+for js_asset_name in ("zakat-calculator.js", "app.js"):
+    js_asset = ROOT / "assets" / js_asset_name
+    assert js_asset.is_file(), f"Built site must include {js_asset_name}"
+    js_version = hashlib.sha256(js_asset.read_bytes()).hexdigest()[:16]
+    js_references = []
+    for generated_page in ROOT.rglob("*.html"):
+        generated_html = generated_page.read_text(encoding="utf-8")
+        if "<html" not in generated_html.lower():
+            continue
+        js_references.extend(re.findall(
+            r'<script[^>]*src="/assets/' + re.escape(js_asset_name) + r'[?]v=([^"]+)"',
+            generated_html
+        ))
+    assert js_references, f"Generated pages must reference the shared {js_asset_name} asset"
+    assert all(version == js_version for version in js_references), (
+        f"Every {js_asset_name} URL must use the deployed file's SHA-256 version "
+        f"{js_version}; found {js_references!r}"
+    )
+
 xml = ET.parse(ROOT / "sitemap.xml").getroot()
 ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.find("sm:loc", ns).text for node in xml.findall("sm:url", ns)]
@@ -65,18 +86,25 @@ assert set(lastmod_entries) <= set(urls), "Sitemap lastmod entries must refer on
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
-assert not lastmod_entries, (
-    "Sitemap must omit lastmod until reliable page-specific substantive update dates are tracked. "
-    f"Unexpected entries: {lastmod_entries!r}"
+seo_source = Path("seo_finalize.py").read_text(encoding="utf-8")
+date_block = re.search(r"VERIFIED_PAGE_UPDATE_DATES\s*=\s*\{(.*?)\n\}", seo_source, re.S)
+assert date_block, "Verified page-specific update-date registry must exist"
+verified_dates = dict(re.findall(r'"([^"]+)": "([0-9]{4}-[0-9]{2}-[0-9]{2})"', date_block.group(1)))
+expected_lastmod = {SITE + path: value for path, value in verified_dates.items()}
+assert lastmod_entries == expected_lastmod, (
+    "Sitemap lastmod must be emitted only for pages with verified substantive update dates. "
+    f"Expected {expected_lastmod!r}, got {lastmod_entries!r}"
 )
+assert lastmod_entries.get(SITE + "/zakat-calculator/") == "2026-11-25"
+assert lastmod_entries.get(SITE + "/tasbih-counter/") == "2026-11-25"
 def output_for_url(url):
     parsed = urlparse(url)
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
     path = parsed.path.strip("/")
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 zakat_html = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
-assert "Last updated: 2026-11-16" in zakat_html, "Zakat visible update date must match its verified substantive content update"
-assert "This Zakat calculator supports users in Pakistan and worldwide" in zakat_html, "Zakat page must clearly state its Pakistan-specific and international scope"
+assert "Last updated: 2026-11-25" in zakat_html, "Zakat visible update date must match the wallet and debt guidance update"
+assert "This Pakistan Zakat calculator supports people in Pakistan and worldwide" in zakat_html and "annual bank-deduction threshold separately from personal Nisab" in zakat_html, "Zakat page must clearly state its Pakistan-specific and international scope"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
 home_head = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
 assert home_head, "Homepage must have a valid head element"
@@ -86,6 +114,7 @@ assert not re.search(r"\r?\n[ \t\r]*\r?\n", home_head.group(1)), "Homepage head 
 assert "Free Online Calculators" in home_html, "Homepage H1 must identify the calculator collection"
 assert "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and a Tasbih counter. Clear formulas, browser-based results and no sign-up." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
 assert "Browse all free calculators" in home_html, "Homepage must expose a clear calculator-browsing action"
+assert 'href="#all-tools"' in home_html and "Choose a free calculator" in home_html, "Homepage must expose a clear first-screen calculator CTA"
 for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
@@ -330,6 +359,8 @@ for url in urls:
     titles[url] = title_match.group(1)
     descriptions[url] = desc_match.group(1)
     assert 70 <= len(descriptions[url]) <= 160, f"Meta description length outside 70-160 characters: {url} ({len(descriptions[url])})"
+    if url == SITE + "/zakat-calculator/":
+        assert html_lib.unescape(descriptions[url]) == "Estimate Zakat in PKR or other currencies with Hanafi or Sayyid Sistani's limited Ja'fari method. Add cash, wallets, gold, silver and eligible debts.", "Zakat description must preserve the approved search-intent copy after HTML escaping"
     if url in {SITE + path for path in ("/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/", "/discount-calculator/", "/stopwatch/")}:
         for attr, name, expected in (
             ("property", "og:title", title_match.group(1)),
@@ -348,7 +379,7 @@ for url in urls:
         assert html_lib.unescape(title_match.group(1)) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
             "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
         )
-        assert desc_match.group(1) == "Free online tasbih calculator and tasbeeh counter. Choose a dhikr phrase and target, undo taps, and track your count on this device.", (
+        assert desc_match.group(1) == "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count.", (
             "Tasbih description must be specific, useful and aligned with the page."
         )
     if url == SITE + "/age-calculator/":
@@ -381,7 +412,7 @@ for url in urls:
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
 # Keep titles specific to each calculator's actual job, without promising unsupported features.
 EXPECTED_INTENT_TITLES = {
-    "/zakat-calculator/": "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab",
+    "/zakat-calculator/": "Pakistan Zakat Calculator | Hanafi & Sistani Ja'fari",
     "/query-calculator/": "Time & Date Query Calculator | CalculatesAll",
     "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
     "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
@@ -768,12 +799,12 @@ for url in urls:
                     "Unit Converter dateModified must match the GSC-backed dimensional-conversion explanation."
                 )
             elif url == SITE + "/tasbih-counter/":
-                assert item.get("dateModified") == "2026-11-21", (
-                    "Tasbih Counter dateModified must match the GSC-backed Tasbih calculator and Tasbeeh-counter wording."
+                assert item.get("dateModified") == "2026-11-25", (
+                    "Tasbih Counter dateModified must match the GSC-backed snippet and search-intent update."
                 )
             elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
-                assert item.get("dateModified") == "2026-11-16", (
-                    "Zakat dateModified must match the verified Hanafi/Sistani, gram/tola, source and bilingual content update."
+                assert item.get("dateModified") == "2026-11-25", (
+                    "Zakat dateModified must match the wallet and debt guidance update in both locales."
                 )
             elif url == SITE + "/profit-loss-calculator/":
                 assert item.get("dateModified") == "2026-11-21", (
@@ -1249,15 +1280,15 @@ for _lang_path in ("/ar/", "/es/", "/fr/"):
 _ur_zakat_compact = output_for_url(SITE + "/ur/zakat-calculator/").read_text(encoding="utf-8")
 for _label in ("گھر میں موجود نقد رقم", "بینک اور کرنٹ اکاؤنٹ کی رقم", "قابلِ زکوٰۃ سونے کی مالیت",
                "قابلِ زکوٰۃ چاندی کی مالیت", "فروخت کے لیے کاروباری مال کی موجودہ قیمت",
-               "واپس ملنے والے قرض اور قابلِ وصول رقوم", "قابلِ کٹوتی قلیل مدتی قرض اور واجبات",
+               "واپس ملنے والے قرض اور قابلِ وصول رقوم", "موبائل والیٹ کا بیلنس (جاز کیش، ایزی پیسہ، سدا پے)", "اس وقت قابلِ کٹوتی قرض (رقم لکھیں، نہ ہو تو 0)",
                "چاندی کی فی گرام قیمت", "ایک مکمل قمری زکوٰۃ سال (حول) پورا ہو چکا ہے", "زکوٰۃ کا حساب کریں"):
     assert _label in _ur_zakat_compact, "Urdu Zakat label missing: " + _label
 for _english_label in ("Cash held at home", "Eligible gold value", "Eligible silver value",
                        "Trade inventory at current sale value", "Recoverable loans and receivables",
-                       "Eligible short-term debts and dues", "Silver price per gram",
+                       "Eligible debts due now (enter amount, or 0 if none)", "Silver price per gram",
                        "One full lunar Zakat year (hawl) is complete", "Calculate Zakat"):
     assert _english_label not in _ur_zakat_compact, "English Zakat label leaked into Urdu page: " + _english_label
-for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-businesscash", "z-stock", "z-recv", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
+for _field_id in ("z-currency", "z-nisab-method", "z-cash", "z-bank", "z-wallet", "z-savings", "z-gold", "z-silver", "z-businesscash", "z-stock", "z-recv", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result"):
     assert 'id="' + _field_id + '"' in _ur_zakat_compact, "Urdu Zakat field ID changed: " + _field_id
 
 # Urdu calculator templates must carry the same page-specific responsive hooks as English tools.

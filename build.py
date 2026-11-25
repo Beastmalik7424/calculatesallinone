@@ -25,10 +25,10 @@ CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").st
 SITE_DESCRIPTION = "Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversions and a Tasbih counter. Clear formulas, no sign-up."
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
-    "/zakat-calculator/": "2026-11-16",
+    "/zakat-calculator/": "2026-11-25",
     "/years-to-days-calculator/": "2026-11-24",
     "/unit-converter/": "2026-11-21",
-    "/tasbih-counter/": "2026-11-21",
+    "/tasbih-counter/": "2026-11-25",
     "/profit-loss-calculator/": "2026-11-21",
     "/ur/bmi-calculator/": "2026-11-21",
     "/query-calculator/": "2026-11-19",
@@ -37,13 +37,19 @@ OUT = "public"
 STATIC = "static"
 
 
+def static_asset_version(filename):
+    asset_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), STATIC, filename)
+    with open(asset_path, "rb") as asset_file:
+        return hashlib.sha256(asset_file.read()).hexdigest()[:16]
+
+
 def css_asset_version():
-    css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), STATIC, "site.css")
-    with open(css_path, "rb") as css_file:
-        return hashlib.sha256(css_file.read()).hexdigest()[:16]
+    return static_asset_version("site.css")
 
 
 CSS_ASSET_VERSION = css_asset_version()
+ZAKAT_JS_ASSET_VERSION = static_asset_version("zakat-calculator.js")
+APP_JS_ASSET_VERSION = static_asset_version("app.js")
 
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
 I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
@@ -153,7 +159,7 @@ TOOLS = [
         "app": "FinanceApplication",
         "description": "Estimate Hanafi Zakat on eligible cash, gold, silver, trade stock and recoverable receivables, or Sayyid Sistani's limited Ja'fari business-goods method. Enter metal prices.",
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
-        "lead": "This Zakat calculator supports users in Pakistan and worldwide, with a separate explanation of Pakistan's bank-deduction threshold and personal Nisab. No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
+        "lead": "This Pakistan Zakat calculator supports people in Pakistan and worldwide. It explains Pakistan's annual bank-deduction threshold separately from personal Nisab, while international users can enter their own currency and metal prices. No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="ca-calculator-engine w-full max-w-xl mx-auto pb-20" novalidate>'
             + '<div data-zakat-primary>'
@@ -193,8 +199,10 @@ TOOLS = [
             + '<div class="grid sm:grid-cols-2 gap-2">'
             + field("z-cash", "Cash held at home")
             + field("z-bank", "Bank and current account balances")
+            + field("z-wallet", "Mobile wallet balance (JazzCash, Easypaisa, SadaPay)")
             + field("z-savings", "Savings, deposits and cash equivalents")
-            + '</div></div>'
+            + '</div>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">Enter each mobile wallet balance only once. If it is already included in cash, bank or savings, do not enter it again.</p></div>'
             + '<div class="zakat-section space-y-2" data-zakat-step="sunni-assets-b">'
             + '<h2 class="text-base font-semibold text-stone-900 dark:text-stone-100">Gold, silver and jewellery</h2>'
             + '<div class="grid sm:grid-cols-2 gap-2">'
@@ -221,9 +229,10 @@ TOOLS = [
             + '<div class="zakat-section space-y-2" data-zakat-step="sunni-liabilities">'
             + '<h2 class="text-base font-semibold text-stone-900 dark:text-stone-100">Liabilities and payments</h2>'
             + '<div class="grid sm:grid-cols-2 gap-2">'
-            + field("z-debts", "Eligible short-term debts and dues")
+            + field("z-debts", "Eligible debts due now (enter amount, or 0 if none)")
             + field("z-paid", "Zakat already paid for this Zakat year")
             + '</div>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">For long-term loans, enter only qualifying instalments due within the next 12 months, not the full outstanding balance. Follow qualified Hanafi guidance for uncertain debts.</p>'
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
             + '</div></div>'
             + '<div id="z-jafari-fields" class="space-y-2" hidden>'
@@ -662,7 +671,7 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Free online tasbih calculator and digital dhikr counter with 33, 99, 100 and custom targets. Tap to count on mobile or desktop; no app download needed.",
+        "description": "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count.",
         "h1": "Free Online Tasbih Counter",
         "lead": "Count dhikr on this device. Choose a phrase and target, then undo a tap if needed.",
         "ui": (
@@ -873,6 +882,8 @@ URDU = {
             ("Enter market values in the selected currency. Leave categories you do not own at zero.", "منتخب کرنسی میں موجودہ مالیت درج کریں۔ جو اثاثہ آپ کے پاس نہیں، اسے صفر رہنے دیں۔"),
             ("Cash held at home", "گھر میں موجود نقد رقم"),
             ("Bank and current account balances", "بینک اور کرنٹ اکاؤنٹ کی رقم"),
+            ("Mobile wallet balance (JazzCash, Easypaisa, SadaPay)", "موبائل والیٹ کا بیلنس (جاز کیش، ایزی پیسہ، سدا پے)"),
+            ("Enter each mobile wallet balance only once. If it is already included in cash, bank or savings, do not enter it again.", "موبائل والیٹ کی رقم صرف ایک بار درج کریں۔ اگر یہ پہلے ہی نقد رقم، بینک یا بچت میں شامل ہے تو اسے دوبارہ درج نہ کریں۔"),
             ("Savings, deposits and cash equivalents", "بچت، ڈپازٹس اور نقد کے متبادل"),
             ("Eligible gold value", "قابلِ زکوٰۃ سونے کی مالیت"),
             ("Eligible silver value", "قابلِ زکوٰۃ چاندی کی مالیت"),
@@ -907,7 +918,8 @@ URDU = {
             ("Silver price in selected unit", "منتخب اکائی میں چاندی کی قیمت"),
             ("24-karat gold price in selected unit", "منتخب اکائی میں 24 قیراط سونے کی قیمت"),
             ("Eligible liabilities and payments", "قابلِ کٹوتی واجبات اور ادائیگیاں"),
-            ("Eligible short-term debts and dues", "قابلِ کٹوتی قلیل مدتی قرض اور واجبات"),
+            ("Eligible debts due now (enter amount, or 0 if none)", "اس وقت قابلِ کٹوتی قرض (رقم لکھیں، نہ ہو تو 0)"),
+            ("For long-term loans, enter only qualifying instalments due within the next 12 months, not the full outstanding balance. Follow qualified Hanafi guidance for uncertain debts.", "طویل مدتی قرض کے لیے پوری باقی رقم کے بجائے صرف آئندہ 12 ماہ کی اہل اقساط درج کریں۔ غیر یقینی قرض کے بارے میں مستند حنفی عالم سے رہنمائی لیں۔"),
             ("Zakat already paid for this Zakat year", "اس زکوٰۃ سال میں پہلے ادا کی گئی زکوٰۃ"),
             ("One full lunar Zakat year (hawl) is complete", "ایک مکمل قمری زکوٰۃ سال (حول) پورا ہو چکا ہے"),
             ("The Hanafi method includes qualifying gold and silver jewellery when eligible under Hanafi guidance. Enter metal value only, avoid duplicate entry, and ask a qualified scholar about unusual jewellery or trade holdings.", "حنفی طریقہ اہل سونے اور چاندی کے زیورات کو حنفی رہنمائی کے مطابق شامل کرتا ہے۔ صرف دھات کی مالیت درج کریں، ایک ہی زیور دوبارہ شمار نہ کریں، اور غیر معمولی زیورات یا تجارتی مال کے بارے میں مستند عالم سے پوچھیں۔"),
@@ -1586,12 +1598,10 @@ CAROUSEL_SHORT_UR = {
 def calculator_carousel(lang="en", current_path=None):
     s = shell_strings(lang)
     groups = []
-    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/", "/zakat-calculator/", "/ur/zakat-calculator/") else (("primary", False),)
+    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else (("primary", False),)
     for group_name, duplicate in groups_to_render:
         links = []
         tools_to_render = CAROUSEL_TOOLS
-        if current_path in ("/zakat-calculator/", "/ur/zakat-calculator/"):
-            tools_to_render = sorted(CAROUSEL_TOOLS, key=lambda item: item[0] != "zakat-calculator")
         for slug, english_name, short_name in tools_to_render:
             if lang == "ur":
                 name = CAROUSEL_TRANSLATIONS["ur"][slug]
@@ -1835,9 +1845,9 @@ def shell(main_html, lang="en", current_path=None):
         + lang_links(lang, s, current_path) +
         '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
         '</div></footer>\n'
-        '<script src="/assets/zakat-calculator.js?v=20261116-hanafi-jafari-1" defer></script>\n'
-        '<script src="/assets/app.js?v=20261116-hanafi-jafari-1" defer></script>\n'
-        '</body>\n</html>\n'
+        + '<script src="/assets/zakat-calculator.js?v=' + ZAKAT_JS_ASSET_VERSION + '" defer></script>\n'
+        + '<script src="/assets/app.js?v=' + APP_JS_ASSET_VERSION + '" defer></script>\n'
+        + '</body>\n</html>\n'
     )
 
 
@@ -2071,8 +2081,8 @@ def tool_page(t):
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     if t["slug"] == "zakat-calculator":
-        title = "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab"
-        desc = "Hanafi Zakat on cash, gold, silver, stock and receivables, or Sayyid Sistani's limited Ja'fari trading-goods method, with clear assumptions."
+        title = "Pakistan Zakat Calculator | Hanafi & Sistani Ja'fari"
+        desc = "Calculate Zakat in PKR or other currencies using Hanafi or Sayyid Sistani's limited Ja'fari method. Enter cash, gold, silver, assets and eligible debts."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
@@ -2107,7 +2117,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
-        desc = "Free online tasbih calculator and tasbeeh counter for dhikr. Choose a phrase and target, undo taps and keep progress on this device when storage allows."
+        desc = "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]

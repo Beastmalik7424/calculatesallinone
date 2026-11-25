@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """Focused build-output checks for the ten scoped SEO URLs."""
+import datetime
 import html
+import json
 import re
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import urlparse
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from seo_finalize import VERIFIED_PAGE_UPDATE_DATES
 
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
@@ -130,18 +135,44 @@ try:
     for path, decision in TARGETS.items():
         url = SITE + path
         check((url in locs) == (decision == "index"), "sitemap membership mismatch for " + url)
-        if decision == "index":
-            node = next((n for n in root.findall("sm:url", ns) if n.findtext("sm:loc", namespaces=ns) == url), None)
-            lastmod = node.findtext("sm:lastmod", namespaces=ns) if node is not None else None
-            check(lastmod is None, "unverified lastmod must be omitted for " + url)
     check(SITE + "/percentage-difference-calculator/" in locs, "percentage difference page is missing from the indexable sitemap")
     check(SITE + "/ratio-calculator/" in locs, "ratio calculator page is missing from the indexable sitemap")
     print(SITE + "/percentage-difference-calculator/")
     for url in locs:
         check(url.endswith("/"), "sitemap URL lacks trailing slash: " + str(url))
+    actual_lastmod = {}
     for node in root.findall("sm:url", ns):
-        check(node.find("sm:lastmod", ns) is None,
-              "sitemap must omit unverified lastmod: " + str(node.findtext("sm:loc", namespaces=ns)))
+        loc = node.findtext("sm:loc", namespaces=ns)
+        lastmod = node.findtext("sm:lastmod", namespaces=ns)
+        if lastmod is not None:
+            actual_lastmod[loc] = lastmod
+    expected_lastmod = {SITE + path: date for path, date in VERIFIED_PAGE_UPDATE_DATES.items()}
+    check(actual_lastmod == expected_lastmod,
+          "sitemap lastmod must exactly match verified page-specific update dates")
+    for url, lastmod in actual_lastmod.items():
+        try:
+            datetime.date.fromisoformat(lastmod)
+        except ValueError:
+            errors.append("invalid sitemap lastmod date for " + str(url) + ": " + str(lastmod))
+    for path, expected_date in VERIFIED_PAGE_UPDATE_DATES.items():
+        page = read(ROOT / path.strip("/") / "index.html")
+        page_nodes = []
+        for match in re.finditer(r"""<script\b[^>]*type=["']application/ld\+json["'][^>]*>(.*?)</script>""", page, re.S | re.I):
+            try:
+                parsed = json.loads(match.group(1))
+            except json.JSONDecodeError as exc:
+                errors.append(path + ": invalid JSON-LD while checking dateModified: " + str(exc))
+                continue
+            page_nodes.extend(parsed if isinstance(parsed, list) else [parsed])
+        matching_pages = [
+            item for item in page_nodes
+            if isinstance(item, dict)
+            and item.get("@type") in ("WebPage", "AboutPage", "ProfilePage")
+            and item.get("url") == SITE + path
+        ]
+        check(bool(matching_pages), path + ": missing canonical page JSON-LD for verified update date")
+        check(all(item.get("dateModified") == expected_date for item in matching_pages),
+              path + ": JSON-LD dateModified must match the verified update date")
     print("SITEMAP_SCOPED_INDEXABLE_URLS")
     for path, decision in TARGETS.items():
         if decision == "index":
