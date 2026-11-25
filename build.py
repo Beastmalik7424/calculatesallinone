@@ -195,7 +195,8 @@ TOOLS = [
             + field("z-bank", "Bank and current account balances")
             + field("z-wallet", "Mobile wallet balance (JazzCash, Easypaisa, SadaPay)")
             + field("z-savings", "Savings, deposits and cash equivalents")
-            + '</div></div>'
+            + '</div>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">Enter each mobile wallet balance only once. If it is already included in cash, bank or savings, do not enter it again.</p></div>'
             + '<div class="zakat-section space-y-2" data-zakat-step="sunni-assets-b">'
             + '<h2 class="text-base font-semibold text-stone-900 dark:text-stone-100">Gold, silver and jewellery</h2>'
             + '<div class="grid sm:grid-cols-2 gap-2">'
@@ -876,6 +877,7 @@ URDU = {
             ("Cash held at home", "گھر میں موجود نقد رقم"),
             ("Bank and current account balances", "بینک اور کرنٹ اکاؤنٹ کی رقم"),
             ("Mobile wallet balance (JazzCash, Easypaisa, SadaPay)", "موبائل والیٹ کا بیلنس (جاز کیش، ایزی پیسہ، سدا پے)"),
+            ("Enter each mobile wallet balance only once. If it is already included in cash, bank or savings, do not enter it again.", "موبائل والیٹ کی رقم صرف ایک بار درج کریں۔ اگر یہ پہلے ہی نقد رقم، بینک یا بچت میں شامل ہے تو اسے دوبارہ درج نہ کریں۔"),
             ("Savings, deposits and cash equivalents", "بچت، ڈپازٹس اور نقد کے متبادل"),
             ("Eligible gold value", "قابلِ زکوٰۃ سونے کی مالیت"),
             ("Eligible silver value", "قابلِ زکوٰۃ چاندی کی مالیت"),
