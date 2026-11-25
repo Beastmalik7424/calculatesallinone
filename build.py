@@ -2075,8 +2075,8 @@ def tool_page(t):
     url = SITE_URL + path
     cat = next(c for c in CATEGORIES if c["slug"] == t["category"])
     if t["slug"] == "zakat-calculator":
-        title = "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab"
-        desc = "Hanafi Zakat on cash, gold, silver, stock and receivables, or Sayyid Sistani's limited Ja'fari trading-goods method, with clear assumptions."
+        title = "Pakistan Zakat Calculator | Hanafi & Sistani Ja'fari"
+        desc = "Calculate Zakat in PKR or other currencies using Hanafi or Sayyid Sistani's limited Ja'fari method. Enter cash, gold, silver, assets and eligible debts."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
