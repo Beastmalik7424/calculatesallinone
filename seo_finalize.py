@@ -47,7 +47,7 @@ VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
     # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
-    "/tasbih-counter/": "2026-11-21",
+    "/tasbih-counter/": "2026-11-25",
     # This date records the GSC-backed online profit and loss calculator explanation.
     "/profit-loss-calculator/": "2026-11-21",
     "/query-calculator/": "2026-11-19",
@@ -235,7 +235,7 @@ def normalize_meta(raw, path, lang):
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Free online tasbih calculator and tasbeeh counter. Choose a dhikr phrase and target, undo taps, and track your count on this device."
+        desc = "Use this free Tasbih calculator for dhikr. Choose a 33, 99, 100 or custom target, undo taps, and keep your count on this device. No sign-up required."
     if path == "/age-calculator/":
         desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
     if path == "/unit-converter/":
