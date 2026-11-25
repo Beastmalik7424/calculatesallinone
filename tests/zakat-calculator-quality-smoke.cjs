@@ -25,7 +25,7 @@ const urText = visibleText(ur);
 const enTitle = (en.match(/<title>(.*?)<\\/title>/i) || [])[1] || "";
 const enDescription = (en.match(/<meta name="description" content="([^"]+)"/i) || [])[1] || "";
 assert.ok(enTitle.includes("Pakistan Zakat Calculator"), "Zakat title must target the Pakistan search intent");
-assert.ok(enDescription.includes("PKR or another currency") && enDescription.includes("Sayyid Sistani"),
+assert.ok(enDescription.includes("PKR or other currencies") && enDescription.includes("Sayyid Sistani"),
   "Zakat description must state its Pakistan and international scope plus both methods");
 
 for (const id of [
