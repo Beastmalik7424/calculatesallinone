@@ -1755,8 +1755,8 @@ header nav:has(.ca-site-nav-topline) > div { min-width: 0; }
   min-width: max-content;
   height: 100%;
 }
-/* The marquee is safe only on homepages, where the track contains two identical groups. */
-body:has(#main .ca-home-header) .ca-calculator-track {
+/* The marquee is safe only when the track contains a second visual group. */
+body:has(.ca-calculator-group[data-tool-set="duplicate"]) .ca-calculator-track {
   animation: ca-calculator-marquee 48s linear infinite;
 }
 .ca-calculator-group {
