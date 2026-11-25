@@ -11,7 +11,8 @@
    const labels={
     of:["Percentage (%)","Number"],
     share:["Part","Whole"],
-    change:["Starting value","New value"]
+    change:["Starting value","New value"],
+      whole:["Part","Percentage (%)"]
    };
    const selected=labels[percentageMode.value]||labels.of;
    if(valueLabel)valueLabel.textContent=selected[0];
@@ -47,6 +48,9 @@
     if(kind==="share"){
      const answer=window.ExtraCalculators.percentageShare(a,b);
      result="Answer: "+answer.toLocaleString("en-US",{maximumFractionDigits:8})+"% | Calculation: "+a+" ÷ "+b+" × 100";
+     }else if(kind==="whole"){
+      const answer=window.ExtraCalculators.percentageWhole(a,b);
+      result="Answer: "+answer.toLocaleString("en-US",{maximumFractionDigits:8})+" | Calculation: "+a+" ÷ ("+b+" ÷ 100)";
     }else if(kind==="change"){
      const answer=window.ExtraCalculators.percentageChange(a,b);
      const direction=answer>0?"Increase of ":answer<0?"Decrease of ":"No change: ";

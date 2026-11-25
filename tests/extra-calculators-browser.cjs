@@ -153,7 +153,15 @@ const {chromium}=require("playwright");
    if(!(await result.innerText()).includes("18%")||!(await result.innerText()).includes("45 ÷ 250 × 100"))throw Error("Reverse percentage should return 18%");
    await total.fill("0");await form.locator("button[type=submit]").click();
    if(!(await result.innerText()).includes("whole amount cannot be zero"))throw Error("Reverse percentage must reject a zero whole amount");
-   await mode.selectOption("change");
+   await mode.selectOption("whole");
+    if((await result.innerText()).trim()!=="")throw Error("Changing to find-the-whole mode must clear stale results");
+    if(await page.locator('label[for="value"]').innerText()!=="Part")throw Error("Find-the-whole first label is incorrect");
+    if(await page.locator('label[for="total"]').innerText()!=="Percentage (%)")throw Error("Find-the-whole second label is incorrect");
+    await value.fill("45");await total.fill("18");await form.locator("button[type=submit]").click();
+    if(!(await result.innerText()).includes("Answer: 250")||!(await result.innerText()).includes("45 ÷ (18 ÷ 100)"))throw Error("45 is 18% of 250 should return 250");
+    await total.fill("0");await form.locator("button[type=submit]").click();
+    if(!(await result.innerText()).includes("percentage cannot be zero"))throw Error("Find-the-whole mode must reject a zero percentage");
+    await mode.selectOption("change");
    if((await result.innerText()).trim()!=="")throw Error("Changing to percentage-change mode must clear stale results");
    if(await page.locator('label[for="value"]').innerText()!=="Starting value")throw Error("Percentage-change start label is incorrect");
    if(await page.locator('label[for="total"]').innerText()!=="New value")throw Error("Percentage-change end label is incorrect");
@@ -164,7 +172,7 @@ const {chromium}=require("playwright");
    await value.fill("0");await total.fill("100");await form.locator("button[type=submit]").click();
    if(!(await result.innerText()).includes("starting value must be greater than zero"))throw Error("Percentage change must reject a zero starting value");
    if(errors.length)throw Error("Percentage browser errors at "+viewport.width+"px: "+errors.join("; "));
-   console.log("/percentage-calculator/ "+viewport.width+"px PASS: all three modes, validation, dynamic labels and stale-result clearing");
+   console.log("/percentage-calculator/ "+viewport.width+"px PASS: all four modes, validation, dynamic labels and stale-result clearing");
    await page.close();
   }
 
