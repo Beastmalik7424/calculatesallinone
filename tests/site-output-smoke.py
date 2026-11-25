@@ -54,7 +54,7 @@ for js_asset_name in ("zakat-calculator.js", "app.js"):
         if "<html" not in generated_html.lower():
             continue
         js_references.extend(re.findall(
-            r'<script\\b[^>]*src="/assets/' + re.escape(js_asset_name) + r'\\?v=([^"]+)"',
+            r'<script[^>]*src="/assets/' + re.escape(js_asset_name) + r'[?]v=([^"]+)"',
             generated_html
         ))
     assert js_references, f"Generated pages must reference the shared {js_asset_name} asset"
