@@ -216,6 +216,12 @@ assert.equal(result.netAssets, 29900);
 assert.equal(result.status, "below_nisab");
 assert.equal(result.balanceDue, 0);
 
+// Regression contract: mobile wallet balances are zakatable cash assets on the Sunni/Hanafi path.
+assert.ok(require("../static/zakat-calculator.js").assetKeys.includes("wallet"), "Wallet must be a first-class Sunni asset key");
+result = calculate({ ...base, assets: { cash: 10000, bank: 20000, wallet: 5000 } });
+assert.equal(result.totalAssets, 35000, "Mobile wallet balance must be included exactly once in total assets");
+assert.equal(result.netAssets, 34900, "Wallet balance must flow into net assets before liabilities");
+
 result = calculate({ ...base, assets: { cash: 70000 } });
 assert.equal(result.status, "payable");
 assert.equal(result.zakatBeforePaid, 1747.5);
