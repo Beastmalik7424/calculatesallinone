@@ -42,8 +42,8 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/ur/zakat-calculator/": "2026-11-25",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
-    # This date records the GSC-backed quick-reference row selection and verified three-method arithmetic.
-    "/years-to-days-calculator/": "2026-11-24",
+    # This date records the GSC-backed question-led answers and snippet refresh; calculator methods remain unchanged.
+    "/years-to-days-calculator/": "2026-11-26",
     # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
     # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
@@ -217,7 +217,7 @@ def normalize_meta(raw, path, lang):
     "/query-calculator/": "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits.",
     "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",
     "/stopwatch/": "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app.",
-    "/years-to-days-calculator/": "10 years = 3,652.425 days; 19 years = 6,939.6075. Compare 365-day, 365.25-day and Gregorian 365.2425-day averages, or count exact days from a start date.",
+    "/years-to-days-calculator/": "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date.",
     "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
     "/zakat-calculator/": "Estimate Zakat in PKR or other currencies with Hanafi or Sayyid Sistani's limited Ja'fari method. Add cash, wallets, gold, silver and eligible debts."
