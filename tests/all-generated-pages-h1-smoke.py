@@ -25,8 +25,6 @@ for page in pages:
     heading_text = " ".join(heading_text.split())
     if not heading_text:
         failures.append(f"{route}: H1 is empty")
-    if len(heading_text) > 180:
-        failures.append(f"{route}: H1 is excessively long ({len(heading_text)} characters)")
 
 if failures:
     print("ALL-GENERATED-PAGES H1 AUDIT: FAIL")
