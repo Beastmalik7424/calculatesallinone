@@ -7,6 +7,7 @@
  function finite(...values){if(values.some(v=>typeof v!=="number"||!Number.isFinite(v)))throw Error("Enter valid finite numbers");}
  function percentage(part,total){finite(part,total);const result=Math.abs(part)>=Math.abs(total)?(part/100)*total:part*(total/100);if(!Number.isFinite(result))throw Error("Result exceeds supported range");return result;}
  function percentageShare(part,whole){finite(part,whole);if(whole===0)throw Error("The whole amount cannot be zero");const result=part/whole*100;if(!Number.isFinite(result))throw Error("Result exceeds supported range");return result;}
+  function percentageWhole(part,percentage){finite(part,percentage);if(percentage===0)throw Error("The percentage cannot be zero");const result=part/(percentage/100);if(!Number.isFinite(result))throw Error("Result exceeds supported range");return result;}
  function percentageChange(start,end){
   finite(start,end);
   if(start<=0)throw Error("The starting value must be greater than zero");
