@@ -266,6 +266,17 @@ function rect(element) {
             const hanafiNisabVisible = await page.locator("#z-nisab-method").isVisible();
             if (!jafariNisabVisible || !hanafiNisabHidden || !hanafiNisabVisible) throw new Error("School selector did not switch the primary Nisab control");
           }
+          if (route.name.startsWith("zakat-")) {
+            const activeShortcut = page.locator('header .ca-calculator-carousel [data-tool-set="primary"] a[aria-current="page"]');
+            if (await activeShortcut.count() !== 1) throw new Error("Zakat current-page shortcut marker must exist exactly once");
+            await activeShortcut.evaluate(el => el.scrollIntoView({ block: "nearest", inline: "nearest" }));
+            const activeReachable = await activeShortcut.evaluate(el => {
+              const item = el.getBoundingClientRect();
+              const nav = el.closest(".ca-calculator-carousel").getBoundingClientRect();
+              return item.height >= 44 && item.left >= nav.left - 1 && item.right <= nav.right + 1;
+            });
+            if (!activeReachable) throw new Error("Zakat current-page shortcut must be reachable by horizontal scrolling with a 44px touch target");
+          }
           const status = response ? response.status() : 0;
           const screenshotPath = "/tmp/calculator-layout-" + route.name + "-" + viewport.name + ".png";
           await page.screenshot({ path: screenshotPath, fullPage: false });
@@ -278,7 +289,7 @@ function rect(element) {
           if (metrics.tickerFound && !metrics.tickerInViewport) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker is outside the initial viewport", metrics });
           if (metrics.tickerFound && metrics.tickerLinkCount < 15) failures.push({ route: route.path, viewport: viewport.name, issue: "Calculator ticker does not expose the full calculator shortcut set", metrics });
           if (route.name.startsWith("zakat-") && metrics.tickerLinkCount !== 17) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat navigation must expose all 17 calculator shortcuts", metrics });
-          if (route.name.startsWith("zakat-") && !metrics.activeShortcutVisible) failures.push({ route: route.path, viewport: viewport.name, issue: "Current Zakat shortcut must be visible in the navigation ticker", metrics });
+          if (route.name.startsWith("zakat-") && metrics.activeShortcutIndex < 0) failures.push({ route: route.path, viewport: viewport.name, issue: "Current Zakat shortcut must be marked in the primary navigation group", metrics });
           if (route.name.startsWith("zakat-") && viewport.width <= 1024 && !metrics.tickerScrollable) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat shortcut navigation must scroll horizontally on narrow viewports", metrics });
           if (route.name.startsWith("zakat-") && metrics.minTickerLinkHeight < 44) failures.push({ route: route.path, viewport: viewport.name, issue: "Zakat shortcut touch targets must be at least 44px high", metrics });
           if (route.name.startsWith("zakat-") && metrics.zakatWizardControls !== 0) failures.push({ route: route.path, viewport: viewport.name, issue: "One-page Zakat form must not expose wizard controls", metrics });
