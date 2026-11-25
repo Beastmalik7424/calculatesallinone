@@ -424,6 +424,8 @@ def main():
         canonical = SITE + path
         node = ET.SubElement(urlset, "{http://www.sitemaps.org/schemas/sitemap/0.9}url")
         ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}loc").text = canonical
+        if path in VERIFIED_PAGE_UPDATE_DATES:
+            ET.SubElement(node, "{http://www.sitemaps.org/schemas/sitemap/0.9}lastmod").text = VERIFIED_PAGE_UPDATE_DATES[path]
         for code, href in re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', raw):
             if href in indexable_urls:
                 ET.SubElement(node, "{http://www.w3.org/1999/xhtml}link", {"rel":"alternate","hreflang":code,"href":href})
@@ -435,7 +437,7 @@ def main():
         "Sitemap: " + SITE + "/sitemap.xml\n",
         encoding="utf-8",
     )
-    report = ["SEO build report", "Freshness metadata: dateModified set only for verified page-specific updates; sitemap lastmod omitted", "Indexable pages: " + str(len(indexable)),
+    report = ["SEO build report", "Freshness metadata: dateModified and sitemap lastmod emitted only for verified page-specific substantive updates", "Indexable pages: " + str(len(indexable)),
               "Noindex pages: " + str(len(noindex_list)), "Sitemap URLs: " + str(len(indexable)),
               "Titles: unique and within page-specific limits", "Descriptions: unique, page-specific and 70-160 characters",
               "JSON-LD: parsed and serialized as valid JSON", "Hub decisions:"]
