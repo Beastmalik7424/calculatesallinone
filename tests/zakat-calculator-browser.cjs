@@ -103,14 +103,14 @@ let browser;
       "Every English Zakat amount input must disable browser autofill: " + await input.getAttribute("id"));
   }
   const shortcutNav = page.locator("header .ca-calculator-carousel");
-  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 1,
-    "Zakat pages must render one aria-hidden duplicate for the continuous ticker");
+  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 0,
+    "Zakat ticker must match the Standard Calculator page (no duplicate group)");
   assert.match(await shortcutNav.locator(".ca-calculator-track").evaluate(el => getComputedStyle(el).animationName), /ca-calculator-marquee/,
     "Zakat calculator shortcuts must move continuously like the shared ticker");
   assert.equal(await shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut]').count(), 17,
     "All 17 calculator destinations must remain available in the primary shortcut group");
-  assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"] [data-tool-shortcut]').count(), 17,
-    "The visual ticker duplicate must contain all 17 destinations");
+  assert.equal(await shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut]').count(), 17,
+    "The ticker must contain all 17 destinations");
   // Freeze the marquee at its initial frame so this visibility assertion is deterministic.
   await shortcutNav.locator(".ca-calculator-track").evaluate(el => {
     for (const animation of el.getAnimations()) { animation.pause(); animation.currentTime = 0; }
@@ -120,8 +120,8 @@ let browser;
     const nav = el.closest(".ca-calculator-carousel").getBoundingClientRect();
     return item.height >= 44 && item.left >= nav.left && item.right <= nav.right;
   }), "Active calculator shortcut must be visible in the ticker's initial frame and have a 44px touch target");
-  assert.equal(await shortcutNav.locator('[data-tool-shortcut]').first().getAttribute("aria-current"), "page",
-    "Current calculator shortcut must be first for immediate discoverability");
+  assert.equal(await shortcutNav.locator('[data-tool-shortcut="zakat-calculator"]').first().getAttribute("aria-current"), "page",
+    "Current Zakat shortcut must be marked as the current page");
   assert.equal(await page.locator("#zakat-result").isVisible(), true,
     "The result panel must be visible on first paint");
   const advancedDetails = page.locator("#zakat-form details").first();
@@ -129,7 +129,7 @@ let browser;
     "All Zakat asset, method, metal-price and condition inputs must be expanded before the single Calculate action");
 
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
-    "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
+    "z-cash","z-bank","z-wallet","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
     assert.equal(await page.locator("#" + id).count(), 1, "Missing supported Hanafi field " + id);
     assert.equal(await page.locator("#" + id).isVisible(), true, "All Hanafi inputs must be accessible on the same page: " + id);
   }
