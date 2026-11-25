@@ -53,7 +53,7 @@ for (const term of [
   
   "Hawl checkbox is self-reported", "does not track balances throughout the lunar year",
    "not a complete Hanafi fiqh engine",
-  "Do not enter the same jewellery value in both", "Enter each mobile wallet balance only once", "Muhammad Fayyaz Adeel"
+  "Do not enter the same jewellery value in both", "Enter each mobile wallet balance only once", "Pakistan Zakat calculator", "Muhammad Fayyaz Adeel"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
