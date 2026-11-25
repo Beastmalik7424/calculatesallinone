@@ -65,10 +65,17 @@ assert set(lastmod_entries) <= set(urls), "Sitemap lastmod entries must refer on
 assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entries.values()), (
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
-assert not lastmod_entries, (
-    "Sitemap must omit lastmod until reliable page-specific substantive update dates are tracked. "
-    f"Unexpected entries: {lastmod_entries!r}"
+seo_source = Path("seo_finalize.py").read_text(encoding="utf-8")
+date_block = re.search(r"VERIFIED_PAGE_UPDATE_DATES\\s*=\\s*\\{(.*?)\\n\\}", seo_source, re.S)
+assert date_block, "Verified page-specific update-date registry must exist"
+verified_dates = dict(re.findall(r'"([^"]+)": "([0-9]{4}-[0-9]{2}-[0-9]{2})"', date_block.group(1)))
+expected_lastmod = {SITE + path: value for path, value in verified_dates.items()}
+assert lastmod_entries == expected_lastmod, (
+    "Sitemap lastmod must be emitted only for pages with verified substantive update dates. "
+    f"Expected {expected_lastmod!r}, got {lastmod_entries!r}"
 )
+assert lastmod_entries.get(SITE + "/zakat-calculator/") == "2026-11-25"
+assert lastmod_entries.get(SITE + "/tasbih-counter/") == "2026-11-25"
 def output_for_url(url):
     parsed = urlparse(url)
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
