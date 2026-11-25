@@ -76,7 +76,7 @@ def output_for_url(url):
     return ROOT / path / "index.html" if path else ROOT / "index.html"
 zakat_html = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
 assert "Last updated: 2026-11-25" in zakat_html, "Zakat visible update date must match the wallet and debt guidance update"
-assert "This Zakat calculator supports users in Pakistan and worldwide" in zakat_html, "Zakat page must clearly state its Pakistan-specific and international scope"
+assert "This Pakistan Zakat calculator supports people in Pakistan and worldwide" in zakat_html and "annual bank-deduction threshold separately from personal Nisab" in zakat_html, "Zakat page must clearly state its Pakistan-specific and international scope"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
 home_head = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
 assert home_head, "Homepage must have a valid head element"
