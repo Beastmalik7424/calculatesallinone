@@ -22,12 +22,6 @@ const en = page("zakat-calculator");
 const ur = page("ur/zakat-calculator");
 const enText = visibleText(en);
 const urText = visibleText(ur);
-const enTitle = (en.match(/<title>(.*?)<\/title>/i) || [])[1] || "";
-const enDescription = (en.match(/<meta name="description" content="([^"]+)"/i) || [])[1] || "";
-assert.ok(enTitle.includes("Pakistan Zakat Calculator"), "Zakat title must target the Pakistan search intent");
-assert.ok(enDescription.includes("PKR or other currencies") && enDescription.includes("Sayyid Sistani"),
-  "Zakat description must state its Pakistan and international scope plus both methods");
-
 for (const id of [
   "z-currency", "z-school-of-thought", "z-nisab-method", "z-metal-price-unit",
   "z-jafari-nisab-method", "z-jafari-trade-value", "z-jafari-owner", "z-jafari-acquired",
@@ -304,9 +298,9 @@ const enTitle = en.match(/<title>(.*?)<\/title>/i);
 const urTitle = ur.match(/<title>(.*?)<\/title>/i);
 const enDescription = en.match(/<meta name="description" content="([^"]*)"/i);
 const decodeMeta = (value) => value.replace(/&#x27;|&#39;/gi, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
-assert.ok(enTitle && decodeMeta(enTitle[1]) === "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab", "English title must target the calculator's actual supported methods");
+assert.ok(enTitle && decodeMeta(enTitle[1]) === "Pakistan Zakat Calculator | Hanafi & Sistani Ja'fari", "English title must target Pakistan search intent and the supported methods");
 assert.ok(urTitle && decodeMeta(urTitle[1]).includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
-assert.ok(enDescription && decodeMeta(enDescription[1]).includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
+assert.ok(enDescription && decodeMeta(enDescription[1]).includes("PKR or other currencies") && decodeMeta(enDescription[1]).includes("limited Ja'fari method"), "English description must disclose Pakistan and international scope and the limited Sistani method");
 assert.ok(urText.includes("احتیاطِ واجب کی بنا پر"), "Urdu Sistani guidance must explicitly retain the obligatory-precaution qualification");
 const banuriFatwaUrl = "https://islamqa.org/hanafi/darulifta-deoband/109691/sahib-e-nisab/";
 assert.ok(enText.includes("Darul Uloom Deoband") && enText.includes("fatwa 1146/907/D=10/1434") && enText.includes("109691"), "English Hanafi guide must cite the verified Darul Uloom Deoband combined-Nisab fatwa");
