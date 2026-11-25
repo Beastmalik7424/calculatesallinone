@@ -153,7 +153,7 @@ TOOLS = [
         "app": "FinanceApplication",
         "description": "Estimate Hanafi Zakat on eligible cash, gold, silver, trade stock and recoverable receivables, or Sayyid Sistani's limited Ja'fari business-goods method. Enter metal prices.",
         "h1": "Zakat Calculator: Hanafi and Ja'fari (Sayyid Sistani)",
-        "lead": "This Zakat calculator supports users in Pakistan and worldwide, with a separate explanation of Pakistan's bank-deduction threshold and personal Nisab. No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
+        "lead": "This Pakistan Zakat calculator supports people in Pakistan and worldwide. It explains Pakistan's annual bank-deduction threshold separately from personal Nisab, while international users can enter their own currency and metal prices. No sign-up is required. Your calculation runs in this browser, and you enter metal prices yourself because live market rates are not fetched. Choose one of two separate methods: Sunni Hanafi or the specific Ja'fari trading-goods ruling published by Sayyid Sistani. Enter gold and silver prices per gram or per the clearly defined Sindh-standard tola. Review the method, source notes and exclusions before relying on the estimate.",
         "ui": (
             '<form id="zakat-form" class="ca-calculator-engine w-full max-w-xl mx-auto pb-20" novalidate>'
             + '<div data-zakat-primary>'
@@ -2746,6 +2746,7 @@ def home_app_page(lang):
         '<p class="ca-home-badge">' + free_label + '</p>'
         '<h1>' + h1 + '</h1>'
         '<p class="ca-home-lead">' + lead + '</p>'
+        + ('<a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools" aria-label="Choose a free calculator">Choose a free calculator</a>' if not urdu else '<a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools" aria-label="مفت کیلکولیٹر منتخب کریں">مفت کیلکولیٹر منتخب کریں</a>')
         '</div>'
         '<div class="ca-home-layout">'
         '<aside class="ca-home-side ca-home-side-left">'
