@@ -53,7 +53,7 @@ APP_JS_ASSET_VERSION = static_asset_version("app.js")
 
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
 I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
-B = "bg-sky-800 hover:bg-sky-900 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
+B = "bg-teal-700 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 B_ZAKAT = "bg-teal-700 hover:bg-teal-800 dark:bg-teal-700 dark:hover:bg-teal-600 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
 S = "border border-stone-500 dark:border-stone-400 text-stone-900 dark:text-stone-100 text-base font-medium px-5 py-3 rounded-lg min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 R = "mt-6 rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5 text-base leading-relaxed min-h-[3rem]"
@@ -1810,7 +1810,7 @@ def shell(main_html, lang="en", current_path=None):
     if current_path == "/calorie-calculator/":
         main_classes += " ca-tool-calorie-calculator"
     return (
-        '<body class="min-h-screen bg-slate-50 dark:bg-slate-950 text-stone-900 dark:text-stone-100 antialiased">\n'
+        '<body class="min-h-screen bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 antialiased">\n'
         '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-700 shadow-sm">'
