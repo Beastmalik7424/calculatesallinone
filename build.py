@@ -25,7 +25,7 @@ CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").st
 SITE_DESCRIPTION = "Free browser-based calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversions and a Tasbih counter. Clear formulas, no sign-up."
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
-    "/zakat-calculator/": "2026-11-16",
+    "/zakat-calculator/": "2026-11-25",
     "/years-to-days-calculator/": "2026-11-24",
     "/unit-converter/": "2026-11-21",
     "/tasbih-counter/": "2026-11-21",
