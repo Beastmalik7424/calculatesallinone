@@ -26,7 +26,7 @@ SITE_DESCRIPTION = "Free browser-based calculators for adult BMI, Zakat, EMI, pr
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
     "/zakat-calculator/": "2026-11-25",
-    "/years-to-days-calculator/": "2026-11-24",
+    "/years-to-days-calculator/": "2026-11-26",
     "/unit-converter/": "2026-11-21",
     "/tasbih-counter/": "2026-11-25",
     "/profit-loss-calculator/": "2026-11-21",
@@ -1274,10 +1274,10 @@ TOOLS.extend([
         ),
         "guide": [
             ("Quick answers to common years-to-days questions", [
-                "Using the 365.2425-day Gregorian mean, 5 years = 1,826.2125 days using the Gregorian average. The 365-day method gives 1,825 days, while the 365.25-day Julian average gives 1,826.25 days.",
-                "10 years = 3,652.425 days using the 365.2425-day Gregorian mean. The 365-day method gives 3,650 days, while the 365.25-day Julian average gives 3,652.5 days. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory</a> explains the Gregorian leap-year rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST</a> defines the mean Gregorian year. This is an average conversion, not an exact count between two calendar dates.",
-                "19 years = 6,939.6075 days using the 365.2425-day Gregorian mean. The 365-day method gives 6,935 days, while the 365.25-day Julian average gives 6,939.75 days. This is an average conversion, not an exact count between two calendar dates.",
-                "Using the 365.2425-day Gregorian mean, 30 years = 10,957.275 days using the Gregorian average. The 365-day method gives 10,950 days, while the 365.25-day Julian average gives 10,957.5 days.",
+                "How many days in 5 years? Using the 365.2425-day Gregorian mean, 5 years = 1,826.2125 days using the Gregorian average. The 365-day method gives 1,825 days, while the 365.25-day Julian average gives 1,826.25 days.",
+                "How many days in 10 years? Using the 365.2425-day Gregorian mean, 10 years = 3,652.425 days. The 365-day method gives 3,650 days, while the 365.25-day Julian average gives 3,652.5 days. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory</a> explains the Gregorian leap-year rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST</a> defines the mean Gregorian year. This is an average conversion, not an exact count between two calendar dates.",
+                "How many days in 19 years? Using the 365.2425-day Gregorian mean, 19 years = 6,939.6075 days. The 365-day method gives 6,935 days, while the 365.25-day Julian average gives 6,939.75 days. This is an average conversion, not an exact count between two calendar dates.",
+                "How many days in 30 years? Using the 365.2425-day Gregorian mean, 30 years = 10,957.275 days. The 365-day method gives 10,950 days, while the 365.25-day Julian average gives 10,957.5 days.",
                 "For the reverse question, 70,000 days ÷ 365.2425 = 191.6535 years using the Gregorian mean. This is a decimal-year estimate, not an exact calendar age.",
                 "Exact calendar days depend on the start date because the actual Gregorian interval may include leap days. Enter the start date and a whole number of years in Exact calendar years when you need the elapsed day count for a specific anniversary.",
                 "The Gregorian rule adds 97 leap days in each 400-year cycle, which produces the 365.2425-day average. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory leap-year explanation</a> describes the rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST's year definition</a> identifies the average Gregorian year as 365.2425 days."
@@ -1288,7 +1288,10 @@ TOOLS.extend([
             ("Does exact calendar mode include leap days?", "Yes. It counts actual Gregorian calendar days up to, but not including, the ending anniversary. A 29 February start uses 1 March when the ending year is not a leap year."),
             ("Can I convert days to years?", "Yes. Select Days to years and choose one of the three fixed year lengths. The result is a decimal-year estimate with an approximate years, months and days breakdown."),
             ("Can exact calendar mode use decimal years?", "No. Exact calendar mode accepts whole years and a valid Gregorian start date. The fixed 365, 365.25 and 365.2425 methods accept decimal values."),
-            ("How many days are in 13 years?", "Using the 365.2425-day Gregorian average, 13 years is 4,748.1525 days (about 4,748.15 days). The exact count in a calendar interval can differ because leap days depend on the start date. Use Exact calendar years to count an actual 13-year anniversary interval."),
+            ("How many days in 2 years?", "Using the 365.2425-day Gregorian average, 2 years = 730.485 days. The 365-day method gives 730 days, while the 365.25-day Julian average gives 730.5 days. Exact calendar days depend on the start date."),
+            ("How many days in 3 years?", "Using the 365.2425-day Gregorian average, 3 years = 1,095.7275 days. The 365-day method gives 1,095 days, while the 365.25-day Julian average gives 1,095.75 days. Exact calendar days depend on the start date."),
+            ("How many days in 4 years?", "Using the 365.2425-day Gregorian average, 4 years = 1,460.97 days. The 365-day method gives 1,460 days, while the 365.25-day Julian average gives 1,461 days. Exact calendar days depend on the start date."),
+            ("How many days in 13 years?", "Using the 365.2425-day Gregorian average, 13 years is 4,748.1525 days (about 4,748.15 days). The exact count in a calendar interval can differ because leap days depend on the start date. Use Exact calendar years to count an actual 13-year anniversary interval."),
         ],
         "sources": 'Julian year: exactly 365.25 days (<a class="' + LINK + '" href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noopener noreferrer">NASA/JPL astrodynamic parameters</a>). Gregorian mean year: 365.2425 days over the 400-year cycle (<a class="' + LINK + '" href="https://aa.usno.navy.mil/faq/leap_years" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory leap-year guidance</a>).'
     },

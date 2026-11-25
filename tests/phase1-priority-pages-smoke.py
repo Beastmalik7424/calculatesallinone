@@ -34,7 +34,7 @@ CASES = {
     },
     "years-to-days-calculator": {
         "title": "Years to Days Calculator | How Many Days in X Years?",
-        "description": "10 years = 3,652.425 days; 19 years = 6,939.6075. Compare 365-day, 365.25-day and Gregorian 365.2425-day averages, or count exact days from a start date.",
+        "description": "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date.",
         "form": 'id="years-days-form"',
         "category": "/time/",
         "related": ["/date-calculator/", "/age-calculator/", "/query-calculator/", "/unit-converter/"],
@@ -337,8 +337,10 @@ def check_years_quick_reference():
     gsc_query_answers = (
         ("How many days in 2 years?", "730.485 days"),
         ("How many days in 3 years?", "1,095.7275 days"),
+        ("How many days in 4 years?", "1,460.97 days"),
         ("How many days in 5 years?", "1,826.2125 days"),
         ("How many days in 10 years?", "3,652.425 days"),
+        ("How many days in 13 years?", "4,748.1525 days"),
         ("How many days in 19 years?", "6,939.6075 days"),
         ("How many days in 30 years?", "10,957.275 days"),
     )
@@ -346,11 +348,10 @@ def check_years_quick_reference():
         assert question in visible and answer in visible, (
             "Years-to-Days content must directly answer observed GSC queries with verified values: " + question
         )
-    assert "Last updated: 2026-11-24" in visible, "Visible update date must match the substantive quick-reference refresh"
-    assert "Last updated: 2026-11-24" in visible, "Visible update date must match the substantive quick-reference refresh"
+    assert "Last updated: 2026-11-26" in visible, "Visible update date must match the GSC-backed question-led answer and snippet refresh"
     schemas = jsonld_documents(source, "years-to-days-calculator")
     webpage = next((item for item in schemas if item.get("@type") == "WebPage"), None)
-    assert webpage and webpage.get("dateModified") == "2026-11-24", "Structured dateModified must match the visible update date"
+    assert webpage and webpage.get("dateModified") == "2026-11-26", "Structured dateModified must match the visible update date"
 
 
 

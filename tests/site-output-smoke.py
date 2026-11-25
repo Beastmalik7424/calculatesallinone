@@ -256,9 +256,9 @@ urdu_age_html = output_for_url(SITE + "/ur/age-calculator/").read_text(encoding=
 urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
-assert "Last updated: 2026-11-24" in years_html, "Years-to-days visible update date must match the 24 November 2026 GSC-supported quick-answer update"
+assert "Last updated: 2026-11-26" in years_html, "Years-to-days visible update date must match the 26 November 2026 GSC-backed question-answer refresh"
 assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
-_years_snippet = "10 years = 3,652.425 days; 19 years = 6,939.6075. Compare 365-day, 365.25-day and Gregorian 365.2425-day averages, or count exact days from a start date."
+_years_snippet = "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date."
 assert f'<meta name="description" content="{_years_snippet}">' in years_html, "Years-to-Days search snippet must surface the GSC-backed 10-year and 19-year answers"
 assert f'<meta property="og:description" content="{_years_snippet}">' in years_html, "Years-to-Days Open Graph description must match the search snippet"
 assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_html, "Years-to-Days Twitter description must match the search snippet"
@@ -801,8 +801,8 @@ for url in urls:
                     "Urdu BMI dateModified must match the GSC-backed search-intent explanation."
                 )
             elif url == SITE + "/years-to-days-calculator/":
-                assert item.get("dateModified") == "2026-11-24", (
-                    "Years-to-Days dateModified must match the GSC-backed quick-reference row selection."
+                assert item.get("dateModified") == "2026-11-26", (
+                    "Years-to-Days dateModified must match the GSC-backed question-answer refresh."
                 )
             elif url == SITE + "/unit-converter/":
                 assert item.get("dateModified") == "2026-11-21", (
