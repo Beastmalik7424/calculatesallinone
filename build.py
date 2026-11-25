@@ -665,7 +665,7 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Free online tasbih calculator and digital dhikr counter with 33, 99, 100 and custom targets. Tap to count on mobile or desktop; no app download needed.",
+        "description": "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count.",
         "h1": "Free Online Tasbih Counter",
         "lead": "Count dhikr on this device. Choose a phrase and target, then undo a tap if needed.",
         "ui": (
@@ -2111,7 +2111,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
-        desc = "Use this free Tasbih calculator for dhikr. Choose a 33, 99, 100 or custom target, undo taps, and keep your count on this device. No sign-up required."
+        desc = "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
