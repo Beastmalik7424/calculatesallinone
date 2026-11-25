@@ -2746,8 +2746,8 @@ def home_app_page(lang):
         '<p class="ca-home-badge">' + free_label + '</p>'
         '<h1>' + h1 + '</h1>'
         '<p class="ca-home-lead">' + lead + '</p>'
-        + ('<a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools" aria-label="Choose a free calculator">Choose a free calculator</a>' if not urdu else '<a class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-sky-700 px-5 py-3 font-semibold text-white hover:bg-sky-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800" href="#all-tools" aria-label="مفت کیلکولیٹر منتخب کریں">مفت کیلکولیٹر منتخب کریں</a>')
-        + '</div><div class="ca-home-layout">'
+        '</div>'
+        '<div class="ca-home-layout">'
         '<aside class="ca-home-side ca-home-side-left">'
         '<span class="ca-home-side-icon" aria-hidden="true">✦</span>'
         '<p class="ca-home-side-eyebrow">' + s["confidence"] + '</p>'
