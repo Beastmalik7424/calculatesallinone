@@ -122,7 +122,7 @@ const fs2=require("node:fs");
 const extraSource=fs2.readFileSync(require("node:path").join(__dirname,"..","extra_calculator_pages.py"),"utf8");
 assert.match(extraSource,/what percentage the part represents of another/);
 assert.match(extraSource,/Calculate a percentage, find a percentage share, measure percentage change, or find the whole from a known part and percentage/);
-assert.ok(extraSource.includes("whole = part / (percentage / 100)"), "Reverse percentage guide must state the rearranged formula");
+assert.ok(extraSource.includes("whole = part ÷ (percentage ÷ 100)"), "Reverse percentage guide must state the rearranged formula");
 const percentagePage=fs2.readFileSync(require("node:path").join(__dirname,"..","public","percentage-calculator","index.html"),"utf8");
 assert.match(percentagePage,/<option value=["']whole["']>/,"Percentage calculator must render the find-the-whole mode");
 assert.match(extraSource,/18% of PKR 2,500/);
