@@ -105,21 +105,26 @@ let browser;
   const shortcutNav = page.locator("header .ca-calculator-carousel");
   assert.equal(await shortcutNav.locator('[data-tool-set="duplicate"]').count(), 0,
     "Zakat ticker must match the Standard Calculator page (no duplicate group)");
-  assert.match(await shortcutNav.locator(".ca-calculator-track").evaluate(el => getComputedStyle(el).animationName), /ca-calculator-marquee/,
-    "Zakat calculator shortcuts must move continuously like the shared ticker");
-  assert.equal(await shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut]').count(), 17,
-    "All 17 calculator destinations must remain available in the primary shortcut group");
+  const track = shortcutNav.locator(".ca-calculator-track");
+  assert.equal(await track.evaluate(el => getComputedStyle(el).animationName), "none",
+    "A single-group ticker must not run the two-group marquee animation");
+  const scrollMetrics = await shortcutNav.evaluate(el => ({
+    overflowX: getComputedStyle(el).overflowX,
+    clientWidth: el.clientWidth,
+    scrollWidth: el.scrollWidth
+  }));
+  assert.equal(scrollMetrics.overflowX, "auto", "Single-group ticker must support horizontal scrolling");
+  assert.ok(scrollMetrics.scrollWidth > scrollMetrics.clientWidth,
+    "All 17 shortcut links must remain reachable in the horizontally scrollable ticker");
   assert.equal(await shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut]').count(), 17,
     "The ticker must contain all 17 destinations");
-  // Freeze the marquee at its initial frame so this visibility assertion is deterministic.
-  await shortcutNav.locator(".ca-calculator-track").evaluate(el => {
-    for (const animation of el.getAnimations()) { animation.pause(); animation.currentTime = 0; }
-  });
-  assert.ok(await shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut][aria-current="page"]').evaluate(el => {
+  const activeShortcut = shortcutNav.locator('[data-tool-set="primary"] [data-tool-shortcut][aria-current="page"]');
+  await activeShortcut.evaluate(el => el.scrollIntoView({ block: "nearest", inline: "nearest" }));
+  assert.ok(await activeShortcut.evaluate(el => {
     const item = el.getBoundingClientRect();
     const nav = el.closest(".ca-calculator-carousel").getBoundingClientRect();
     return item.height >= 44 && item.left >= nav.left && item.right <= nav.right;
-  }), "Active calculator shortcut must be visible in the ticker's initial frame and have a 44px touch target");
+  }), "Active calculator shortcut must be reachable by horizontal scrolling and have a 44px touch target");
   assert.equal(await shortcutNav.locator('[data-tool-shortcut="zakat-calculator"]').first().getAttribute("aria-current"), "page",
     "Current Zakat shortcut must be marked as the current page");
   assert.equal(await page.locator("#zakat-result").isVisible(), true,
