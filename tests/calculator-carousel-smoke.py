@@ -98,11 +98,15 @@ zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
 assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat ticker must match the Standard Calculator page (single group, no duplicate marquee)"
 assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pages must retain their existing single shortcut group"
-assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available on unaffected pages"
-assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Unaffected calculator pages must retain the shared continuous ticker animation"
+assert "@keyframes ca-calculator-marquee" in css, "The homepage marquee animation must remain available"
+base_track_rules = re.findall(r"\.ca-calculator-track\s*\{([^}]*)\}", css)
+assert base_track_rules and all("animation:" not in rule for rule in base_track_rules), "Single-group inner-page tickers must not run the two-group marquee animation"
+home_track_overrides = re.findall(r"body:has\(#main \.ca-home-header\) \.ca-calculator-track\s*\{([^}]*)\}", css)
+assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in home_track_overrides), "Only homepages with duplicated groups may run the continuous marquee"
 zakat_track_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-track\{([^}]*)\}", css)
-assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in zakat_track_overrides), "Zakat pages must enable the shared continuous ticker animation"
-assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Zakat pages must use the continuous shared ticker animation"
+assert any("animation:none" in rule and "transform:none" in rule for rule in zakat_track_overrides), "Single-group Zakat tickers must stay stationary and scrollable"
+zakat_carousel_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-carousel\s*\{([^}]*)\}", css)
+assert any("overflow-x:auto" in rule and "overflow-y:hidden" in rule for rule in zakat_carousel_overrides), "Zakat shortcut links must remain reachable by horizontal scrolling"
 zakat_link_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-link\{([^}]*)\}", css)
 assert zakat_link_overrides and all("min-height:44px" in rule and "height:44px" in rule for rule in zakat_link_overrides), "Zakat shortcut links must meet the 44px touch-target design target"
 assert "theme-toggle" in zakat_markup and zakat_markup.index('id="theme-toggle"') < zakat_markup.index('class="ca-calculator-carousel"'), "Theme control must remain in the upper header row"
