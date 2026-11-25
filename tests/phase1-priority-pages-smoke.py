@@ -152,8 +152,8 @@ def check_targeted_content():
         "years-to-days-calculator": [
             "Maintained by Muhammad Fayyaz Adeel",
             "Quick answers to common years-to-days questions",
-            "5 years = 1,826.2125 days using the Gregorian average",
-            "30 years = 10,957.275 days using the Gregorian average",
+            "How many days in 5 years? Using the 365.2425-day Gregorian mean, 5 years = 1,826.2125 days using the Gregorian average",
+            "How many days in 30 years? Using the 365.2425-day Gregorian mean, 30 years = 10,957.275 days",
             "How many days are in 13 years?",
             "4,748.1525 days",
             "70,000 days ÷ 365.2425 = 191.6535 years",
@@ -223,7 +223,7 @@ def check_targeted_content():
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
     expected_dates = {
         "tasbih-counter": "2026-11-25",
-        "years-to-days-calculator": "2026-11-24",
+        "years-to-days-calculator": "2026-11-26",
         "unit-converter": "2026-11-21",
         "profit-loss-calculator": "2026-11-21",
     }
