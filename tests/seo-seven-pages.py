@@ -77,7 +77,7 @@ for path, raw in pages.items():
     check(not re.search(r"<img\b(?![^>]*\balt\s*=)", raw, re.I), path + ": image missing alt attribute")
     if path in ("/about/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/", "/percentage-difference-calculator/", "/ratio-calculator/"):
         schemas = []
-        for match in re.finditer(r"""<script\b[^>]*type=["']application/ld\+json["'][^>]*>(.*?)</script>""", page, re.S | re.I):
+        for match in re.finditer(r'<script\b[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', raw, re.S | re.I):
             try:
                 obj = __import__("json").loads(match.group(1))
                 schemas.extend(obj if isinstance(obj, list) else [obj])
