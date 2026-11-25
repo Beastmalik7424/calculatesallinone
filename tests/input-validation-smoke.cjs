@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const vm = require("node:vm");
 
 const ids = [
-  "zakat-form", "z-currency", "z-nisab-method", "z-cash", "z-bank", "z-savings", "z-gold", "z-silver", "z-businesscash", "z-stock", "z-recv", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result",
+  "zakat-form", "z-currency", "z-nisab-method", "z-cash", "z-bank", "z-wallet", "z-savings", "z-gold", "z-silver", "z-businesscash", "z-stock", "z-recv", "z-property", "z-debts", "z-paid", "z-silverprice", "z-goldprice", "z-hawl", "zakat-result",
   "conv-form", "u-cat", "u-val", "u-from", "u-to", "conv-result"
 ];
 const elements = {};
