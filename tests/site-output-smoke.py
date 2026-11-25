@@ -42,6 +42,27 @@ for generated_page in ROOT.rglob("*.html"):
     assert f'/assets/site.css?v={css_version}' in generated_html, (
         f"{generated_page} must reference the content-hash version of the CSS actually deployed"
     )
+
+# Shared JavaScript must use content-hash URLs so browser caches cannot retain stale calculator code.
+for js_asset_name in ("zakat-calculator.js", "app.js"):
+    js_asset = ROOT / "assets" / js_asset_name
+    assert js_asset.is_file(), f"Built site must include {js_asset_name}"
+    js_version = hashlib.sha256(js_asset.read_bytes()).hexdigest()[:16]
+    js_references = []
+    for generated_page in ROOT.rglob("*.html"):
+        generated_html = generated_page.read_text(encoding="utf-8")
+        if "<html" not in generated_html.lower():
+            continue
+        js_references.extend(re.findall(
+            r'<script\\b[^>]*src="/assets/' + re.escape(js_asset_name) + r'\\?v=([^"]+)"',
+            generated_html
+        ))
+    assert js_references, f"Generated pages must reference the shared {js_asset_name} asset"
+    assert all(version == js_version for version in js_references), (
+        f"Every {js_asset_name} URL must use the deployed file's SHA-256 version "
+        f"{js_version}; found {js_references!r}"
+    )
+
 xml = ET.parse(ROOT / "sitemap.xml").getroot()
 ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 urls = [node.find("sm:loc", ns).text for node in xml.findall("sm:url", ns)]
