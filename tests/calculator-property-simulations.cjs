@@ -54,6 +54,7 @@ function simulate(fn, count) {
 // Golden reference values independently recorded from the published equations and exact arithmetic.
 close(extra.percentage(...refs.referenceCases.percentage.input), refs.referenceCases.percentage.expected);
 close(extra.percentageShare(...refs.referenceCases.percentageShare.input), refs.referenceCases.percentageShare.expected);
+close(extra.percentageWhole(...refs.referenceCases.percentageWhole.input), refs.referenceCases.percentageWhole.expected);
 close(extra.percentageChange(...refs.referenceCases.percentageChange.input), refs.referenceCases.percentageChange.expected);
 deepEqual(extra.percentageDifference(...refs.referenceCases.percentageDifference.input), refs.referenceCases.percentageDifference.expected);
 deepEqual(extra.fraction(...refs.referenceCases.fractionAdd.input), refs.referenceCases.fractionAdd.expected);
@@ -80,6 +81,15 @@ simulate(() => {
   if (whole === 0) whole = 0.01;
   const part = integer(-100000, 100000) / 100;
   close(extra.percentageShare(part, whole) * whole / 100, part);
+}, 1000);
+
+// 1,000 reverse-percentage calculations checked by reconstructing the known part.
+simulate(() => {
+  const whole = integer(-1000000, 1000000) / 100;
+  let percent = integer(-10000, 10000) / 100;
+  if (percent === 0) percent = 0.01;
+  const part = whole * percent / 100;
+  close(extra.percentageWhole(part, percent), whole);
 }, 1000);
 
 // 1,000 percentage-change calculations against the independent textbook definition.
