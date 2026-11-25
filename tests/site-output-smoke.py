@@ -86,6 +86,7 @@ assert not re.search(r"\r?\n[ \t\r]*\r?\n", home_head.group(1)), "Homepage head 
 assert "Free Online Calculators" in home_html, "Homepage H1 must identify the calculator collection"
 assert "Free online calculators for adult BMI, Zakat, EMI, profit and loss, dates, unit conversion and a Tasbih counter. Clear formulas, browser-based results and no sign-up." in home_html, "Homepage must provide a concise answer-first description of its calculator scope"
 assert "Browse all free calculators" in home_html, "Homepage must expose a clear calculator-browsing action"
+assert 'href="#all-tools"' in home_html and "Choose a free calculator" in home_html, "Homepage must expose a clear first-screen calculator CTA"
 for phrase in ("online calculator", "profit and loss calculator", "tasbih counter", "years to days calculator", "adult calorie calculator", "emi calculator", "free browser-based calculators"):
     assert phrase in home_html.lower(), f"Homepage should naturally explain this relevant service phrase: {phrase}"
 assert "Muhammad Fayyaz Adeel" in home_html and 'href="/about/"' in home_html, "Homepage should identify its maintainer and link to the About page"
