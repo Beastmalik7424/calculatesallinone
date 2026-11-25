@@ -134,7 +134,7 @@ const ROUTES = ["/zakat-calculator/", "/bmi-calculator/", "/tasbih-counter/"];
           return {
             surfaceInfo,
             bodyOpaque: alpha(surfaceInfo.bodyBackground) >= 0.999,
-            mainOpaque: alpha(surfaceInfo.mainBackground) >= 0.999,
+            mainBackgroundResolved: alpha(surfaceInfo.mainBackground) === 0 || alpha(surfaceInfo.mainBackground) >= 0.999,
             calculatorBackgroundResolved: calculatorAlpha === 0 || calculatorAlpha >= 0.999,
             count,
             lowest,
@@ -151,7 +151,7 @@ const ROUTES = ["/zakat-calculator/", "/bmi-calculator/", "/tasbih-counter/"];
         if (result.surfaceInfo.bodyBackgroundImage !== "none") failures.push({ route, theme, issue: "Body background image must not sit behind text", value: result.surfaceInfo.bodyBackgroundImage });
         if (!result.bodyOpaque) failures.push({ route, theme, issue: "Body background must resolve to a solid color", value: result.surfaceInfo.bodyBackground });
         if (result.surfaceInfo.mainBackgroundImage !== "none") failures.push({ route, theme, issue: "Main content background must not use a gradient", value: result.surfaceInfo.mainBackgroundImage });
-        if (!result.mainOpaque) failures.push({ route, theme, issue: "Main content must have a fully opaque background", value: result.surfaceInfo.mainBackground });
+        if (!result.mainBackgroundResolved) failures.push({ route, theme, issue: "Main content background must be transparent over the opaque body or fully opaque", value: result.surfaceInfo.mainBackground });
         if (!result.calculatorBackgroundResolved) failures.push({ route, theme, issue: "Calculator card must be transparent over the opaque main surface or fully opaque, not translucent", value: result.surfaceInfo.calculatorBackground });
         if (result.surfaceInfo.calculatorBackgroundImage !== "none") failures.push({ route, theme, issue: "Calculator card must not use a gradient background", value: result.surfaceInfo.calculatorBackgroundImage });
         if (result.surfaceInfo.counterBackgroundImage && result.surfaceInfo.counterBackgroundImage !== "none") failures.push({ route, theme, issue: "Tasbih counter output must not use a gradient background", value: result.surfaceInfo.counterBackgroundImage });
