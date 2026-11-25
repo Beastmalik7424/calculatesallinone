@@ -30,7 +30,7 @@ for (const id of [
   "z-jafari-coins-used-as-money", "z-jafari-coin-inputs", "z-jafari-gold-coins-weight",
   "z-jafari-silver-coins-weight", "z-jafari-gold-coins-hawl", "z-jafari-silver-coins-hawl",
   "z-jafari-coins-access",
-  "z-silverprice", "z-goldprice", "z-cash", "z-bank", "z-savings",
+  "z-silverprice", "z-goldprice", "z-cash", "z-bank", "z-wallet", "z-savings",
   "z-gold", "z-silver", "z-jewellery", "z-businesscash", "z-stock", "z-recv",
   "z-property", "z-debts", "z-paid",
   "z-hawl", "zakat-result"
@@ -111,7 +111,7 @@ for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   const wrapperAt = html.indexOf('id="z-sunni-asset-fields"');
   const jafariAt = html.indexOf('id="z-jafari-fields"');
   assert.ok(wrapperAt >= 0 && jafariAt > wrapperAt, name + " Sunni assets/liabilities wrapper must precede the Ja'fari section");
-  for (const id of ["z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
+  for (const id of ["z-cash","z-bank","z-wallet","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
     const fieldAt = html.indexOf('id="' + id + '"');
     assert.ok(fieldAt > wrapperAt && fieldAt < jafariAt, name + " Sunni-only field must be inside its visibility wrapper: " + id);
   }
@@ -166,7 +166,7 @@ for (const [name, html] of [["English", en], ["Urdu", ur]]) {
   assert.match(beforeSubmit, /fixed inset-x-0 bottom-0/, name + " Calculate button must remain pinned to the viewport bottom on initial load");
   assert.doesNotMatch(beforeSubmit, /top-0|top-[0-9]/, name + " Calculate button must not be pinned to the top");
   for (const id of ["z-currency","z-school-of-thought","z-nisab-method","z-metal-price-unit","z-silverprice","z-goldprice",
-    "z-cash","z-bank","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
+    "z-cash","z-bank","z-wallet","z-savings","z-gold","z-silver","z-jewellery","z-businesscash","z-stock","z-recv","z-property","z-debts","z-paid","z-hawl"]) {
     assert.ok(html.indexOf('id="' + id + '"') < submitAt, name + " input must precede Calculate: " + id);
   }
   for (const match of html.matchAll(/id="(z-jafari-[^"]+)"/g)) {
@@ -253,6 +253,7 @@ for (const [nisabMethod, grams, priceKey] of [["gold-87", 87.48, "goldPricePerGr
 
 for (const bad of [-1, NaN, Infinity, -Infinity, "not-a-number"]) {
   assert.throws(() => calculate({ ...base, assets: { cash: bad } }));
+  assert.throws(() => calculate({ ...base, assets: { wallet: bad } }), "Invalid wallet amounts must be rejected");
   assert.throws(() => calculate({ ...base, liabilities: bad }));
   assert.throws(() => calculate({ ...base, silverPricePerGram: bad }));
   assert.throws(() => calculate({ ...base, zakatPaid: bad }));
