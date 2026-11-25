@@ -338,6 +338,8 @@ for url in urls:
     titles[url] = title_match.group(1)
     descriptions[url] = desc_match.group(1)
     assert 70 <= len(descriptions[url]) <= 160, f"Meta description length outside 70-160 characters: {url} ({len(descriptions[url])})"
+    if url == SITE + "/zakat-calculator/":
+        assert html_lib.unescape(descriptions[url]) == "Estimate Zakat in PKR or other currencies with Hanafi or Sayyid Sistani's limited Ja'fari method. Add cash, wallets, gold, silver and eligible debts.", "Zakat description must preserve the approved search-intent copy after HTML escaping"
     if url in {SITE + path for path in ("/age-calculator/", "/unit-converter/", "/profit-loss-calculator/", "/tasbih-counter/", "/discount-calculator/", "/stopwatch/")}:
         for attr, name, expected in (
             ("property", "og:title", title_match.group(1)),
