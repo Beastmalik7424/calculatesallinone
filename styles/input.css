@@ -1754,6 +1754,9 @@ header nav:has(.ca-site-nav-topline) > div { min-width: 0; }
   width: max-content;
   min-width: max-content;
   height: 100%;
+}
+/* The marquee is safe only on homepages, where the track contains two identical groups. */
+body:has(#main .ca-home-header) .ca-calculator-track {
   animation: ca-calculator-marquee 48s linear infinite;
 }
 .ca-calculator-group {
@@ -2324,15 +2327,15 @@ body:has(#zakat-form) #zakat-form :is(input:not([type="checkbox"]), select, text
 }
 
 
-/* Zakat pages: reuse the shared continuous ticker after the calculator list.
-   Keep one semantic link set and one aria-hidden visual duplicate for seamless motion. */
+/* Zakat pages: keep one semantic shortcut group, matching the Standard Calculator page. */
 body:has(#main .ca-tool-zakat-calculator) .ca-calculator-carousel {
   display: block;
   width: 100%;
   max-width: none;
   min-width: 0;
   height: 44px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
 }
@@ -2341,7 +2344,8 @@ body:has(#main .ca-tool-zakat-calculator) .ca-calculator-track {
   width: max-content;
   min-width: max-content;
   height: 100%;
-  animation: ca-calculator-marquee 48s linear infinite;
+  animation: none;
+  transform: none;
 }
 body:has(#main .ca-tool-zakat-calculator) .ca-calculator-group {
   min-height: 44px;
