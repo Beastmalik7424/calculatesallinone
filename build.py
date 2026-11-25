@@ -1806,7 +1806,7 @@ def shell(main_html, lang="en", current_path=None):
     urdu_tool_paths = {"/ur/" + slug + "/" for slug in URDU if slug != "standard-calculator"}
     main_classes = main_width + " mx-auto px-5 py-10"
     if current_path in tool_paths | urdu_tool_paths:
-        main_classes += " ca-tool-main"
+        main_classes += " ca-tool-main bg-white dark:bg-stone-900"
     if current_path == "/calorie-calculator/":
         main_classes += " ca-tool-calorie-calculator"
     return (
@@ -1817,7 +1817,7 @@ def shell(main_html, lang="en", current_path=None):
         '<div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-teal-300/30 blur-3xl"></div></div>\n'
         '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
-        '<header class="sticky top-0 z-20 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-b border-stone-200 dark:border-stone-700 shadow-sm">'
+        '<header class="sticky top-0 z-20 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-700 shadow-sm">'
         '<nav class="ca-site-nav max-w-screen-2xl mx-auto w-full px-4 py-2 flex flex-col items-stretch gap-2" aria-label="' + s["main"] + '">'
         '<div class="ca-site-nav-topline flex w-full items-center justify-between gap-3" dir="ltr">'
         '<a href="' + home + '" aria-label="CalculatesAll' + brand_home_label + '" class="font-extrabold text-xl text-slate-900 dark:text-white min-h-[44px] inline-flex items-center gap-2"><span aria-hidden="true" class="inline-block h-3 w-3 rounded-sm bg-gradient-to-br from-teal-500 to-indigo-600"></span>CalculatesAll<span class="sr-only">' + brand_home_label + '</span></a>'
@@ -1826,8 +1826,8 @@ def shell(main_html, lang="en", current_path=None):
         + calculator_carousel(lang, current_path)
         + '</nav></header>\n'
         '<main id="main" class="' + main_classes + '">' + main_html + '</main>\n'
-        '<footer class="mt-12 bg-white/80 dark:bg-stone-900/80 backdrop-blur border-t border-stone-200 dark:border-stone-700">'
-        '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800">'
+        '<footer class="mt-12 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700">'
+        '<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm text-stone-800 dark:text-stone-200">'
         '<div class="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">'
         '<p>' + s["tag"] + '</p>'
         '<nav class="flex flex-wrap gap-5" aria-label="' + s["footer"] + '">'
@@ -2262,7 +2262,7 @@ def tool_page(t):
     opening_lead = '<p class="ca-tool-lead mt-3 text-base leading-relaxed text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
     body = (
         ("" if t["slug"] == "profit-loss-calculator" else breadcrumb_html)
-        + '<h1 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-700 via-indigo-700 to-sky-700 bg-clip-text text-transparent mt-4' + (' ca-tool-zakat-heading' if t["slug"] == "zakat-calculator" else '') + '"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
+        + '<h1 class="text-3xl font-extrabold text-indigo-900 dark:text-indigo-100 mt-4' + (' ca-tool-zakat-heading' if t["slug"] == "zakat-calculator" else '') + '"><span aria-hidden="true">' + TILE_ICON.get(t["slug"], "") + '</span> ' + t["h1"] + '</h1>'
         + (opening_lead + primary_tool_content
            if priority_first_screen
            else primary_tool_content + '<p class="ca-tool-lead-after mt-3 text-base text-stone-900 dark:text-stone-100">' + t["lead"] + '</p>'
