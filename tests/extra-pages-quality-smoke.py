@@ -27,6 +27,9 @@ CASES = {
             "percentage = (obtained marks ÷ total marks) × 100",
             "82.4%",
             "board or university grading scales can differ",
+            "overall percentage = (Σ obtained marks ÷ Σ total marks) × 100",
+            "do not average subject percentages when their total marks differ",
+            "105/150 = 70%",
         ],
     },
     "percentage-difference-calculator": {
