@@ -1809,13 +1809,22 @@ def shell(main_html, lang="en", current_path=None):
         main_classes += " ca-tool-main bg-white dark:bg-stone-900"
     if current_path == "/calorie-calculator/":
         main_classes += " ca-tool-calorie-calculator"
-    return (
-        '<body class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased">\n'
+    tool_page = current_path in tool_paths | urdu_tool_paths
+    body_classes = (
+        "min-h-screen text-stone-900 dark:text-stone-100 antialiased ca-tool-page"
+        if tool_page
+        else "min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased"
+    )
+    background_decoration = "" if tool_page else (
         '<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">'
         '<div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-violet-300/30 blur-3xl"></div>'
         '<div class="absolute top-1/3 -right-24 h-80 w-80 rounded-full bg-sky-300/35 blur-3xl"></div>'
         '<div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-teal-300/30 blur-3xl"></div></div>\n'
-        '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
+    )
+    return (
+        '<body class="' + body_classes + '">\n'
+        + background_decoration
+        + '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-700 shadow-sm">'
         '<nav class="ca-site-nav max-w-screen-2xl mx-auto w-full px-4 py-2 flex flex-col items-stretch gap-2" aria-label="' + s["main"] + '">'

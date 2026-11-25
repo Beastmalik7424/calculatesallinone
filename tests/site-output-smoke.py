@@ -113,6 +113,11 @@ zakat_header_class = re.search(r'<header class="([^"]*)"', zakat_html)
 zakat_footer_class = re.search(r'<footer class="([^"]*)"', zakat_html)
 assert zakat_header_class and "bg-white " in zakat_header_class.group(1) and "bg-white/80" not in zakat_header_class.group(1), "Site header must use an opaque surface for predictable text contrast"
 assert zakat_footer_class and "bg-white " in zakat_footer_class.group(1) and "bg-white/80" not in zakat_footer_class.group(1), "Site footer must use an opaque surface for predictable text contrast"
+zakat_body_class = re.search(r'<body class="([^"]*)"', zakat_html)
+assert zakat_body_class and "ca-tool-page" in zakat_body_class.group(1) and "bg-gradient" not in zakat_body_class.group(1), "Calculator pages must not retain the shared gradient body background"
+assert 'aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"' not in zakat_html, "Calculator pages must not render the decorative fixed gradient overlay behind text"
+assert "body.ca-tool-page{background-color:#f8fafc!important;background-image:none!important}" in css_asset.read_text(encoding="utf-8"), "Built CSS must give calculator pages a deterministic solid light background"
+assert "html.dark body.ca-tool-page{background-color:#0f172a!important;background-image:none!important}" in css_asset.read_text(encoding="utf-8"), "Built CSS must give calculator pages a deterministic solid dark background"
 zakat_footer = re.search(r'<footer class="[^"]*">(.*?)</footer>', zakat_html, re.S)
 assert zakat_footer and re.search(r'<div class="max-w-5xl mx-auto px-5 py-8 flex flex-col gap-4 text-sm [^"]*dark:text-stone-200', zakat_footer.group(1)), "Footer copy must use a light text token on the dark footer surface in dark mode"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
