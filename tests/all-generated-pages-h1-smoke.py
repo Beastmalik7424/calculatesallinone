@@ -14,20 +14,19 @@ if not pages:
 
 for page in pages:
     source = page.read_text(encoding="utf-8")
-    visible_markup = re.sub(r"(?is)<(script|style)\\b.*?</\\1>", " ", source)
-    headings = re.findall(r"(?is)<h1\\b[^>]*>(.*?)</h1>", visible_markup)
-    route = "/" + page.parent.relative_to(ROOT).as_posix().strip("./") + "/"
-    if route == "/./":
-        route = "/"
+    visible_markup = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", source)
+    headings = re.findall(r"(?is)<h1\b[^>]*>(.*?)</h1>", visible_markup)
+    relative = page.parent.relative_to(ROOT).as_posix()
+    route = "/" if relative == "." else "/" + relative.strip("/") + "/"
     if len(headings) != 1:
         failures.append(f"{route}: expected exactly one H1, found {len(headings)}")
         continue
-    text = html.unescape(re.sub(r"(?is)<[^>]+>", " ", headings[0]))
-    text = " ".join(text.split())
-    if not text:
+    heading_text = html.unescape(re.sub(r"(?is)<[^>]+>", " ", headings[0]))
+    heading_text = " ".join(heading_text.split())
+    if not heading_text:
         failures.append(f"{route}: H1 is empty")
-    if len(text) > 180:
-        failures.append(f"{route}: H1 is excessively long ({len(text)} characters)")
+    if len(heading_text) > 180:
+        failures.append(f"{route}: H1 is excessively long ({len(heading_text)} characters)")
 
 if failures:
     print("ALL-GENERATED-PAGES H1 AUDIT: FAIL")
