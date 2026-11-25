@@ -37,13 +37,19 @@ OUT = "public"
 STATIC = "static"
 
 
+def static_asset_version(filename):
+    asset_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), STATIC, filename)
+    with open(asset_path, "rb") as asset_file:
+        return hashlib.sha256(asset_file.read()).hexdigest()[:16]
+
+
 def css_asset_version():
-    css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), STATIC, "site.css")
-    with open(css_path, "rb") as css_file:
-        return hashlib.sha256(css_file.read()).hexdigest()[:16]
+    return static_asset_version("site.css")
 
 
 CSS_ASSET_VERSION = css_asset_version()
+ZAKAT_JS_ASSET_VERSION = static_asset_version("zakat-calculator.js")
+APP_JS_ASSET_VERSION = static_asset_version("app.js")
 
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
 I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
@@ -1839,9 +1845,9 @@ def shell(main_html, lang="en", current_path=None):
         + lang_links(lang, s, current_path) +
         '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
         '</div></footer>\n'
-        '<script src="/assets/zakat-calculator.js?v=20261116-hanafi-jafari-1" defer></script>\n'
-        '<script src="/assets/app.js?v=20261116-hanafi-jafari-1" defer></script>\n'
-        '</body>\n</html>\n'
+        + '<script src="/assets/zakat-calculator.js?v=' + ZAKAT_JS_ASSET_VERSION + '" defer></script>\n'
+        + '<script src="/assets/app.js?v=' + APP_JS_ASSET_VERSION + '" defer></script>\n'
+        + '</body>\n</html>\n'
     )
 
 
