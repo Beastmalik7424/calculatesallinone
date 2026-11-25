@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import urlparse
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from seo_finalize import VERIFIED_PAGE_UPDATE_DATES
 
 ROOT = Path("public")
