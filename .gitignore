@@ -3,3 +3,4 @@ node_modules/
 __pycache__/
 .vercel/
 .DS_Store
+seo-build-report.txt

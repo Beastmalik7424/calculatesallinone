@@ -296,10 +296,10 @@ assert.ok(enTitle && decodeMeta(enTitle[1]) === "Zakat Calculator Online | Hanaf
 assert.ok(urTitle && decodeMeta(urTitle[1]).includes("آن لائن زکوٰۃ کیلکولیٹر"), "Urdu title must identify the online Zakat calculator");
 assert.ok(enDescription && decodeMeta(enDescription[1]).includes("limited Ja'fari trading-goods method"), "English description must disclose the limited Sistani scope");
 assert.ok(urText.includes("احتیاطِ واجب کی بنا پر"), "Urdu Sistani guidance must explicitly retain the obligatory-precaution qualification");
-const banuriFatwaUrl = "https://www.banuri.edu.pk/readquestion/144608101364/17-02-2025";
-assert.ok(enText.includes("Banuri Town") && enText.includes("fatwa 144608101364"), "English Hanafi guide must identify the Pakistan-specific Banuri Town Nisab position");
-assert.ok(urText.includes("بنوری ٹاؤن") && urText.includes("فتویٰ نمبر 144608101364"), "Urdu Hanafi guide must identify the Pakistan-specific Banuri Town Nisab position");
-assert.ok(en.includes(banuriFatwaUrl) && ur.includes(banuriFatwaUrl), "Both language pages must link to the same primary Hanafi source");
+const banuriFatwaUrl = "https://islamqa.org/hanafi/darulifta-deoband/109691/sahib-e-nisab/";
+assert.ok(enText.includes("Darul Uloom Deoband") && enText.includes("fatwa 1146/907/D=10/1434") && enText.includes("109691"), "English Hanafi guide must cite the verified Darul Uloom Deoband combined-Nisab fatwa");
+assert.ok(urText.includes("دارالعلوم دیوبند") && urText.includes("فتویٰ 1146/907/D=10/1434") && urText.includes("109691"), "Urdu Hanafi guide must cite the verified Darul Uloom Deoband combined-Nisab fatwa");
+assert.ok(en.includes(banuriFatwaUrl) && ur.includes(banuriFatwaUrl), "Both language pages must link to the same Hanafi source");
 
 
 // Zakat-only compact form and result-scroll regression contract.
