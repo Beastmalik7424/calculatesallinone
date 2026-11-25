@@ -59,13 +59,17 @@ const ROUTES = ["/zakat-calculator/", "/bmi-calculator/", "/tasbih-counter/"];
           };
           const main = document.querySelector("main#main");
           const root = document.querySelector("#tool-calculator");
+          const counter = document.querySelector("#t-count");
+          const decorativeOverlay = document.querySelector("body > div[aria-hidden='true'].pointer-events-none.fixed.inset-0");
           const surfaceInfo = {
             bodyBackground: getComputedStyle(document.body).backgroundColor,
             bodyBackgroundImage: getComputedStyle(document.body).backgroundImage,
             mainBackground: main ? getComputedStyle(main).backgroundColor : null,
             mainBackgroundImage: main ? getComputedStyle(main).backgroundImage : null,
             calculatorBackground: root ? getComputedStyle(root).backgroundColor : null,
-            calculatorBackgroundImage: root ? getComputedStyle(root).backgroundImage : null
+            calculatorBackgroundImage: root ? getComputedStyle(root).backgroundImage : null,
+            counterBackgroundImage: counter ? getComputedStyle(counter).backgroundImage : null,
+            decorativeOverlayPresent: !!decorativeOverlay
           };
           const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
           const unresolved = [], lowContrast = [];
@@ -107,10 +111,12 @@ const ROUTES = ["/zakat-calculator/", "/bmi-calculator/", "/tasbih-counter/"];
             const c = parse(value);
             return c ? c.a : 0;
           };
+          const calculatorAlpha = alpha(surfaceInfo.calculatorBackground);
           return {
             surfaceInfo,
+            bodyOpaque: alpha(surfaceInfo.bodyBackground) >= 0.999,
             mainOpaque: alpha(surfaceInfo.mainBackground) >= 0.999,
-            calculatorOpaque: alpha(surfaceInfo.calculatorBackground) >= 0.999,
+            calculatorBackgroundResolved: calculatorAlpha === 0 || calculatorAlpha >= 0.999,
             count,
             lowest,
             unresolved: unresolved.slice(0, 10),
@@ -122,9 +128,13 @@ const ROUTES = ["/zakat-calculator/", "/bmi-calculator/", "/tasbih-counter/"];
         checkedTextNodes += result.count;
         console.log("CONTRAST_AUDIT " + route + " " + theme + " " + JSON.stringify(result));
         if (result.surfaceInfo.bodyBackgroundImage !== "none") failures.push({ route, theme, issue: "Body background image must not sit behind text", value: result.surfaceInfo.bodyBackgroundImage });
+        if (!result.bodyOpaque) failures.push({ route, theme, issue: "Body background must resolve to a solid color", value: result.surfaceInfo.bodyBackground });
         if (result.surfaceInfo.mainBackgroundImage !== "none") failures.push({ route, theme, issue: "Main content background must not use a gradient", value: result.surfaceInfo.mainBackgroundImage });
         if (!result.mainOpaque) failures.push({ route, theme, issue: "Main content must have a fully opaque background", value: result.surfaceInfo.mainBackground });
-        if (!result.calculatorOpaque) failures.push({ route, theme, issue: "Calculator card must have a fully opaque background", value: result.surfaceInfo.calculatorBackground });
+        if (!result.calculatorBackgroundResolved) failures.push({ route, theme, issue: "Calculator card must be transparent over the opaque main surface or fully opaque, not translucent", value: result.surfaceInfo.calculatorBackground });
+        if (result.surfaceInfo.calculatorBackgroundImage !== "none") failures.push({ route, theme, issue: "Calculator card must not use a gradient background", value: result.surfaceInfo.calculatorBackgroundImage });
+        if (result.surfaceInfo.counterBackgroundImage && result.surfaceInfo.counterBackgroundImage !== "none") failures.push({ route, theme, issue: "Tasbih counter output must not use a gradient background", value: result.surfaceInfo.counterBackgroundImage });
+        if (result.surfaceInfo.decorativeOverlayPresent) failures.push({ route, theme, issue: "Decorative fixed gradient overlay must be absent on calculator pages" });
         if (result.unresolvedCount) failures.push({ route, theme, issue: "Visible text has unresolved gradient/transparent background", count: result.unresolvedCount, examples: result.unresolved });
         if (result.lowContrastCount) failures.push({ route, theme, issue: "Visible text is below WCAG contrast threshold", count: result.lowContrastCount, examples: result.lowContrast });
       }
