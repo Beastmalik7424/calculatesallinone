@@ -66,7 +66,7 @@ assert all(re.fullmatch(r"\d{4}-\d{2}-\d{2}", value) for value in lastmod_entrie
     "Sitemap lastmod values must use YYYY-MM-DD format."
 )
 seo_source = Path("seo_finalize.py").read_text(encoding="utf-8")
-date_block = re.search(r"VERIFIED_PAGE_UPDATE_DATES\\s*=\\s*\\{(.*?)\\n\\}", seo_source, re.S)
+date_block = re.search(r"VERIFIED_PAGE_UPDATE_DATES\s*=\s*\{(.*?)\n\}", seo_source, re.S)
 assert date_block, "Verified page-specific update-date registry must exist"
 verified_dates = dict(re.findall(r'"([^"]+)": "([0-9]{4}-[0-9]{2}-[0-9]{2})"', date_block.group(1)))
 expected_lastmod = {SITE + path: value for path, value in verified_dates.items()}
