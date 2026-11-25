@@ -53,7 +53,7 @@ APP_JS_ASSET_VERSION = static_asset_version("app.js")
 
 L = "block text-base font-medium text-stone-800 dark:text-stone-200 mb-1"
 I = "w-full rounded-lg border border-stone-400 dark:border-stone-400 bg-white dark:bg-stone-900 px-3 py-3 text-base min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
-B = "bg-gradient-to-r from-sky-700 to-indigo-700 hover:from-sky-800 hover:to-indigo-800 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
+B = "bg-sky-800 hover:bg-sky-900 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 B_ZAKAT = "bg-teal-700 hover:bg-teal-800 dark:bg-teal-700 dark:hover:bg-teal-600 text-white text-base font-semibold px-5 py-3 rounded-xl min-h-[44px] shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
 S = "border border-stone-500 dark:border-stone-400 text-stone-900 dark:text-stone-100 text-base font-medium px-5 py-3 rounded-lg min-h-[44px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-800"
 R = "mt-6 rounded-xl bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 p-5 text-base leading-relaxed min-h-[3rem]"
@@ -1810,11 +1810,7 @@ def shell(main_html, lang="en", current_path=None):
     if current_path == "/calorie-calculator/":
         main_classes += " ca-tool-calorie-calculator"
     return (
-        '<body class="min-h-screen bg-gradient-to-br from-slate-100 via-sky-50 to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950 text-stone-900 dark:text-stone-100 antialiased">\n'
-        '<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">'
-        '<div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-violet-300/30 blur-3xl"></div>'
-        '<div class="absolute top-1/3 -right-24 h-80 w-80 rounded-full bg-sky-300/35 blur-3xl"></div>'
-        '<div class="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-teal-300/30 blur-3xl"></div></div>\n'
+        '<body class="min-h-screen bg-slate-50 dark:bg-slate-950 text-stone-900 dark:text-stone-100 antialiased">\n'
         '<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2 focus:rounded">' + s["skip"] + '</a>\n'
         '<div class="h-1.5 bg-gradient-to-r from-teal-500 via-sky-500 to-indigo-500"></div>'
         '<header class="sticky top-0 z-20 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-700 shadow-sm">'
@@ -2228,12 +2224,12 @@ def tool_page(t):
         if t["slug"] == "zakat-calculator":
             calculator_classes += " ca-tool-zakat-calculator"
         calculator_section = (
-            '<section id="tool-calculator" class="' + calculator_classes + ' mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="Calculator">'
+            '<section id="tool-calculator" class="' + calculator_classes + ' mt-2 rounded-2xl bg-white dark:bg-stone-900 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="Calculator">'
             + ui + '</section>'
         )
     else:
         calculator_section = (
-            '<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
+            '<section id="tool-calculator" class="ca-tool-calculator ca-tool-' + t["slug"] + ' mt-4 rounded-2xl bg-white dark:bg-stone-900 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-5 sm:p-6" aria-label="Calculator">'
             + ui + '</section>'
         )
     answer_note = answer_block(t["slug"], "en")
@@ -2373,7 +2369,7 @@ def urdu_tool_page(t):
     faq = faq_html(u["faq"])
     if t["slug"] == "zakat-calculator":
         calculator_section = (
-            '<section id="tool-calculator" class="ca-tool-standard-calculator ca-tool-zakat-calculator mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="کیلکولیٹر">'
+            '<section id="tool-calculator" class="ca-tool-standard-calculator ca-tool-zakat-calculator mt-2 rounded-2xl bg-white dark:bg-stone-900 shadow-xl ring-1 ring-stone-200 dark:ring-stone-700 p-3 sm:p-4" aria-label="کیلکولیٹر">'
             + ui + '</section>'
         )
     elif t["slug"] == "standard-calculator":
