@@ -101,7 +101,7 @@ assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pa
 assert "@keyframes ca-calculator-marquee" in css, "The homepage marquee animation must remain available"
 base_track_rules = re.findall(r"(?:^|})\.ca-calculator-track\{([^}]*)\}", css)
 assert base_track_rules and all("animation:" not in rule for rule in base_track_rules), "Single-group inner-page tickers must not run the two-group marquee animation"
-duplicate_group_track_overrides = re.findall(r'body:has\(\.ca-calculator-group\[data-tool-set="duplicate"\]\) \.ca-calculator-track\s*\{([^}]*)\}', css)
+duplicate_group_track_overrides = re.findall(r"body:has\(\.ca-calculator-group\[data-tool-set=[\"']?duplicate[\"']?\]\)\s*\.ca-calculator-track\s*\{([^}]*)\}", css)
 assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in duplicate_group_track_overrides), "Only pages with a duplicate visual group may run the continuous marquee"
 standard_markup = output_for("/standard-calculator/")
 assert 'data-tool-set="duplicate"' not in standard_markup, "Standard Calculator must retain its single-group shortcut ticker"
