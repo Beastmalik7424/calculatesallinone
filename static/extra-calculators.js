@@ -160,5 +160,5 @@
   const signed=value=>value===0?0:value*sign;
   return {years:signed(years),months:signed(months),days:signed(days),weeks:signed(totalDays/7)};
  }
- return {percentage,percentageShare,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference,dateBreakdown};
+ return {percentage,percentageShare,percentageWhole,percentageChange,percentageDifference,simplifyRatio,simplifyRatioThree,solveProportion,scaleRatio,fraction,compound,dateDifference,dateBreakdown};
 });
