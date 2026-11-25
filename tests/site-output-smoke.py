@@ -105,6 +105,14 @@ def output_for_url(url):
 zakat_html = output_for_url(SITE + "/zakat-calculator/").read_text(encoding="utf-8")
 assert "Last updated: 2026-11-25" in zakat_html, "Zakat visible update date must match the wallet and debt guidance update"
 assert "This Pakistan Zakat calculator supports people in Pakistan and worldwide" in zakat_html and "annual bank-deduction threshold separately from personal Nisab" in zakat_html, "Zakat page must clearly state its Pakistan-specific and international scope"
+zakat_main_class = re.search(r'<main id="main" class="([^"]*)"', zakat_html)
+assert zakat_main_class and "bg-white" in zakat_main_class.group(1) and "dark:bg-stone-900" in zakat_main_class.group(1), "Calculator main content must use an opaque, theme-aware surface so body gradients cannot make text contrast indeterminate"
+zakat_h1_class = re.search(r'<h1 class="([^"]*)"', zakat_html)
+assert zakat_h1_class and "text-indigo-900" in zakat_h1_class.group(1) and "dark:text-indigo-100" in zakat_h1_class.group(1) and "bg-gradient" not in zakat_h1_class.group(1), "Calculator H1 must use a solid accessible text colour rather than gradient-clipped transparent text"
+zakat_header_class = re.search(r'<header class="([^"]*)"', zakat_html)
+zakat_footer_class = re.search(r'<footer class="([^"]*)"', zakat_html)
+assert zakat_header_class and "bg-white " in zakat_header_class.group(1) and "bg-white/80" not in zakat_header_class.group(1), "Site header must use an opaque surface for predictable text contrast"
+assert zakat_footer_class and "bg-white " in zakat_footer_class.group(1) and "bg-white/80" not in zakat_footer_class.group(1), "Site footer must use an opaque surface for predictable text contrast"
 home_html = output_for_url(SITE + "/").read_text(encoding="utf-8")
 home_head = re.search(r"<head\b[^>]*>(.*?)</head>", home_html, re.S | re.I)
 assert home_head, "Homepage must have a valid head element"
