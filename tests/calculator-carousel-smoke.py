@@ -96,7 +96,7 @@ css = (ROOT / "assets" / "site.css").read_text(encoding="utf-8")
 homepage_markup = output_for("/")
 zakat_markup = output_for("/zakat-calculator/")
 assert 'data-tool-set="duplicate"' in homepage_markup, "Homepage must retain its moving carousel for the existing calculator-first layout"
-assert 'data-tool-set="duplicate"' in zakat_markup, "Zakat pages must retain the continuously moving calculator ticker"
+assert 'data-tool-set="duplicate"' not in zakat_markup, "Zakat ticker must match the Standard Calculator page (single group, no duplicate marquee)"
 assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pages must retain their existing single shortcut group"
 assert "@keyframes ca-calculator-marquee" in css, "The shared calculator ticker animation must remain available on unaffected pages"
 assert re.search(r"\.ca-calculator-track\s*\{[^}]*animation:\s*ca-calculator-marquee\s+48s\s+linear\s+infinite", css), "Unaffected calculator pages must retain the shared continuous ticker animation"
@@ -112,11 +112,11 @@ print("Calculator ticker, all 17 destinations, inner-page header layout and Tasb
 
 css_version = hashlib.sha256((ROOT / "assets" / "site.css").read_bytes()).hexdigest()[:16]
 assert f'<link rel="stylesheet" href="/assets/site.css?v={css_version}">' in zakat_markup, "Zakat pages must use the content-hash version of the deployed stylesheet"
-assert zakat_markup.count('data-tool-set="primary"') == 1 and zakat_markup.count('data-tool-set="duplicate"') == 1, "Zakat pages must render one accessible primary group and one aria-hidden marquee duplicate"
+assert zakat_markup.count('data-tool-set="primary"') == 1 and zakat_markup.count('data-tool-set="duplicate"') == 0, "Zakat pages must render one primary ticker group, like the Standard Calculator page"
 zakat_group = primary_group(zakat_markup, "/zakat-calculator/")
 current_zakat = re.search(r'data-tool-shortcut="zakat-calculator"[^>]*aria-current="page"', zakat_group)
 first_calorie = re.search(r'data-tool-shortcut="calorie-calculator"', zakat_group)
-assert current_zakat and first_calorie and current_zakat.start() < first_calorie.start(), "Current Zakat shortcut must appear first"
+assert current_zakat and first_calorie and first_calorie.start() < current_zakat.start(), "Zakat ticker must retain the shared default calculator order and mark the current page"
 assert re.search(r'<input id="z-stock"[^>]*autocomplete="off"', zakat_markup), "Financial trade-stock input must disable browser autofill"
 zakat_amount_inputs = re.findall(r'<input id="z-[^"]+"[^>]*type="number"[^>]*>', zakat_markup)
 assert zakat_amount_inputs and all('autocomplete="off"' in item for item in zakat_amount_inputs), "Every financial amount input must explicitly disable inappropriate browser autofill"
