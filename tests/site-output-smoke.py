@@ -1311,7 +1311,7 @@ for _slug in ("age-calculator", "bmi-calculator", "discount-calculator", "profit
 for _lang in ("", "/ur"):
     _html = output_for_url(SITE + _lang + "/zakat-calculator/").read_text(encoding="utf-8")
     assert ('id="tool-calculator" class="ca-tool-standard-calculator ca-tool-zakat-calculator '
-            'mt-2 rounded-2xl bg-white/95 dark:bg-stone-900/95 shadow-xl ring-1 '
+            'mt-2 rounded-2xl bg-white dark:bg-stone-900 shadow-xl ring-1 '
             'ring-stone-200 dark:ring-stone-700 p-3 sm:p-4"') in _html, (
         "Zakat calculator must reuse the exact Standard Calculator shell: " + (_lang or "en")
     )

@@ -2605,3 +2605,19 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
     overflow-wrap: anywhere;
   }
 }
+
+/* WCAG 2.2 AA: keep Tasbih calculator surfaces resolvable in both themes. */
+#main .ca-tool-tasbih-counter {
+  background: #f3f9f3 !important;
+  border-color: #c5d9c8 !important;
+}
+.dark #main .ca-tool-tasbih-counter {
+  background: #1c1917 !important;
+  border-color: #57534e !important;
+}
+.dark #main .ca-tool-tasbih-counter .ca-tasbih-shell label {
+  color: #e7e5e4 !important;
+}
+#main .ca-tool-tasbih-counter .ca-tasbih-shell #t-count {
+  background: #103f34 !important;
+}
