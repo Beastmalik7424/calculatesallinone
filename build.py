@@ -193,6 +193,7 @@ TOOLS = [
             + '<div class="grid sm:grid-cols-2 gap-2">'
             + field("z-cash", "Cash held at home")
             + field("z-bank", "Bank and current account balances")
+            + field("z-wallet", "Mobile wallet balance (JazzCash, Easypaisa, SadaPay)")
             + field("z-savings", "Savings, deposits and cash equivalents")
             + '</div></div>'
             + '<div class="zakat-section space-y-2" data-zakat-step="sunni-assets-b">'
@@ -221,9 +222,10 @@ TOOLS = [
             + '<div class="zakat-section space-y-2" data-zakat-step="sunni-liabilities">'
             + '<h2 class="text-base font-semibold text-stone-900 dark:text-stone-100">Liabilities and payments</h2>'
             + '<div class="grid sm:grid-cols-2 gap-2">'
-            + field("z-debts", "Eligible short-term debts and dues")
+            + field("z-debts", "Eligible debts due now (enter amount, or 0 if none)")
             + field("z-paid", "Zakat already paid for this Zakat year")
             + '</div>'
+            + '<p class="text-sm text-stone-700 dark:text-stone-300">For long-term loans, enter only qualifying instalments due within the next 12 months, not the full outstanding balance. Follow qualified Hanafi guidance for uncertain debts.</p>'
             + check("z-hawl", "One full lunar Zakat year (hawl) is complete")
             + '</div></div>'
             + '<div id="z-jafari-fields" class="space-y-2" hidden>'
@@ -873,6 +875,7 @@ URDU = {
             ("Enter market values in the selected currency. Leave categories you do not own at zero.", "منتخب کرنسی میں موجودہ مالیت درج کریں۔ جو اثاثہ آپ کے پاس نہیں، اسے صفر رہنے دیں۔"),
             ("Cash held at home", "گھر میں موجود نقد رقم"),
             ("Bank and current account balances", "بینک اور کرنٹ اکاؤنٹ کی رقم"),
+            ("Mobile wallet balance (JazzCash, Easypaisa, SadaPay)", "موبائل والیٹ کا بیلنس (جاز کیش، ایزی پیسہ، سدا پے)"),
             ("Savings, deposits and cash equivalents", "بچت، ڈپازٹس اور نقد کے متبادل"),
             ("Eligible gold value", "قابلِ زکوٰۃ سونے کی مالیت"),
             ("Eligible silver value", "قابلِ زکوٰۃ چاندی کی مالیت"),
@@ -907,7 +910,8 @@ URDU = {
             ("Silver price in selected unit", "منتخب اکائی میں چاندی کی قیمت"),
             ("24-karat gold price in selected unit", "منتخب اکائی میں 24 قیراط سونے کی قیمت"),
             ("Eligible liabilities and payments", "قابلِ کٹوتی واجبات اور ادائیگیاں"),
-            ("Eligible short-term debts and dues", "قابلِ کٹوتی قلیل مدتی قرض اور واجبات"),
+            ("Eligible debts due now (enter amount, or 0 if none)", "اس وقت قابلِ کٹوتی قرض (رقم لکھیں، نہ ہو تو 0)"),
+            ("For long-term loans, enter only qualifying instalments due within the next 12 months, not the full outstanding balance. Follow qualified Hanafi guidance for uncertain debts.", "طویل مدتی قرض کے لیے پوری باقی رقم کے بجائے صرف آئندہ 12 ماہ کی اہل اقساط درج کریں۔ غیر یقینی قرض کے بارے میں مستند حنفی عالم سے رہنمائی لیں۔"),
             ("Zakat already paid for this Zakat year", "اس زکوٰۃ سال میں پہلے ادا کی گئی زکوٰۃ"),
             ("One full lunar Zakat year (hawl) is complete", "ایک مکمل قمری زکوٰۃ سال (حول) پورا ہو چکا ہے"),
             ("The Hanafi method includes qualifying gold and silver jewellery when eligible under Hanafi guidance. Enter metal value only, avoid duplicate entry, and ask a qualified scholar about unusual jewellery or trade holdings.", "حنفی طریقہ اہل سونے اور چاندی کے زیورات کو حنفی رہنمائی کے مطابق شامل کرتا ہے۔ صرف دھات کی مالیت درج کریں، ایک ہی زیور دوبارہ شمار نہ کریں، اور غیر معمولی زیورات یا تجارتی مال کے بارے میں مستند عالم سے پوچھیں۔"),
@@ -1586,12 +1590,10 @@ CAROUSEL_SHORT_UR = {
 def calculator_carousel(lang="en", current_path=None):
     s = shell_strings(lang)
     groups = []
-    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/", "/zakat-calculator/", "/ur/zakat-calculator/") else (("primary", False),)
+    groups_to_render = (("primary", False), ("duplicate", True)) if current_path in ("/", "/ur/", "/ar/", "/hi/", "/es/", "/fr/") else (("primary", False),)
     for group_name, duplicate in groups_to_render:
         links = []
         tools_to_render = CAROUSEL_TOOLS
-        if current_path in ("/zakat-calculator/", "/ur/zakat-calculator/"):
-            tools_to_render = sorted(CAROUSEL_TOOLS, key=lambda item: item[0] != "zakat-calculator")
         for slug, english_name, short_name in tools_to_render:
             if lang == "ur":
                 name = CAROUSEL_TRANSLATIONS["ur"][slug]
