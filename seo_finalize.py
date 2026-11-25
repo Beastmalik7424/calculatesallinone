@@ -176,7 +176,7 @@ def normalize_meta(raw, path, lang):
     title = html.unescape(title_match.group(1).strip())
     title_overrides = {
         "/about/": "About CalculatesAll | Project, Methods & Privacy",
-        "/zakat-calculator/": "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab",
+        "/zakat-calculator/": "Pakistan Zakat Calculator | Hanafi & Sistani Ja'fari",
         "/ur/zakat-calculator/": "آن لائن زکوٰۃ کیلکولیٹر | حنفی اور سیستانی جعفری نصاب",
         "/query-calculator/": "Time & Date Query Calculator | CalculatesAll",
         "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
