@@ -53,7 +53,7 @@ for (const term of [
   
   "Hawl checkbox is self-reported", "does not track balances throughout the lunar year",
    "not a complete Hanafi fiqh engine",
-  "Do not enter the same jewellery value in both", "Muhammad Fayyaz Adeel"
+  "Do not enter the same jewellery value in both", "Enter each mobile wallet balance only once", "Muhammad Fayyaz Adeel"
 ]) {
   assert.ok(enText.toLowerCase().includes(term.toLowerCase()), "English page missing approved content: " + term);
 }
@@ -62,7 +62,7 @@ for (const term of [
   "اثاثے", "واجبات", "2.5", "رمضان کے پہلے دن", "ہر سال بدلتی ہے",
   "سیستانی", "جعفری", "احتیاطِ واجب", "خمس", "69.12", "483.84",
   "11.6638", "حنفی", "تجارتی مال",
-  "محمد فیاض عدیل", "خود تصدیق", "پورے قمری سال", "ایک ہی زیور کی قیمت", "مکمل فقہی انجن"
+  "محمد فیاض عدیل", "خود تصدیق", "پورے قمری سال", "ایک ہی زیور کی قیمت", "مکمل فقہی انجن", "والٹ کی رقم ایک ہی بار درج کریں"
 ]) {
   assert.ok(urText.includes(term), "Urdu page missing approved localized content: " + term);
 }
