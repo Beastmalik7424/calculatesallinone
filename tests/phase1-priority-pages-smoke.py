@@ -340,7 +340,7 @@ def check_years_quick_reference():
         ("How many days in 4 years?", "1,460.97 days"),
         ("How many days in 5 years?", "1,826.2125 days"),
         ("How many days in 10 years?", "3,652.425 days"),
-        ("How many days in 13 years?", "4,748.1525 days"),
+        ("How many days are in 13 years?", "4,748.1525 days"),
         ("How many days in 19 years?", "6,939.6075 days"),
         ("How many days in 30 years?", "10,957.275 days"),
     )
