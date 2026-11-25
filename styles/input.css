@@ -2605,3 +2605,14 @@ body:has(#main .ca-tool-zakat-calculator) #zakat-result:empty,
     overflow-wrap: anywhere;
   }
 }
+
+
+/* Calculator tools use a deterministic solid canvas for WCAG contrast calculations. */
+body.ca-tool-page {
+  background-color: #f8fafc !important;
+  background-image: none !important;
+}
+html.dark body.ca-tool-page {
+  background-color: #0f172a !important;
+  background-image: none !important;
+}
