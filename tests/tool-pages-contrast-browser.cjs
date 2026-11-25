@@ -107,6 +107,25 @@ const ROUTES = ["/zakat-calculator/", "/bmi-calculator/", "/tasbih-counter/"];
             const threshold = large ? 3 : 4.5;
             if (ratio + 0.01 < threshold) lowContrast.push({ ratio: Math.round(ratio * 100) / 100, threshold, text: text.slice(0, 80), selector: el.tagName.toLowerCase() + (el.id ? "#" + el.id : "") });
           }
+          const controlIssues = [];
+          for (const el of document.querySelectorAll("input,textarea,select")) {
+            if (!visible(el)) continue;
+            const style = getComputedStyle(el);
+            const bg = parse(style.backgroundColor);
+            if (!bg || bg.a < 0.999) continue;
+            if (el.placeholder) {
+              const rawPlaceholder = parse(getComputedStyle(el, "::placeholder").color);
+              if (rawPlaceholder && rawPlaceholder.a > 0) {
+                const placeholderColor = rawPlaceholder.a < 0.999 ? blend(rawPlaceholder, bg) : rawPlaceholder;
+                const ratio = contrast(placeholderColor, bg);
+                if (ratio + 0.01 < 4.5) controlIssues.push({ kind: "placeholder", ratio: Math.round(ratio * 100) / 100, placeholder: el.placeholder.slice(0, 80), selector: el.tagName.toLowerCase() + (el.id ? "#" + el.id : "") });
+              }
+            }
+            if (el.value) {
+              const ratio = contrast(parse(style.color), bg);
+              if (ratio + 0.01 < 4.5) controlIssues.push({ kind: "input-value", ratio: Math.round(ratio * 100) / 100, value: String(el.value).slice(0, 40), selector: el.tagName.toLowerCase() + (el.id ? "#" + el.id : "") });
+            }
+          }
           const alpha = value => {
             const c = parse(value);
             return c ? c.a : 0;
@@ -122,7 +141,9 @@ const ROUTES = ["/zakat-calculator/", "/bmi-calculator/", "/tasbih-counter/"];
             unresolved: unresolved.slice(0, 10),
             unresolvedCount: unresolved.length,
             lowContrast: lowContrast.slice(0, 10),
-            lowContrastCount: lowContrast.length
+            lowContrastCount: lowContrast.length,
+            controlIssues: controlIssues.slice(0, 10),
+            controlIssuesCount: controlIssues.length
           };
         });
         checkedTextNodes += result.count;
@@ -137,6 +158,7 @@ const ROUTES = ["/zakat-calculator/", "/bmi-calculator/", "/tasbih-counter/"];
         if (result.surfaceInfo.decorativeOverlayPresent) failures.push({ route, theme, issue: "Decorative fixed gradient overlay must be absent on calculator pages" });
         if (result.unresolvedCount) failures.push({ route, theme, issue: "Visible text has unresolved gradient/transparent background", count: result.unresolvedCount, examples: result.unresolved });
         if (result.lowContrastCount) failures.push({ route, theme, issue: "Visible text is below WCAG contrast threshold", count: result.lowContrastCount, examples: result.lowContrast });
+        if (result.controlIssuesCount) failures.push({ route, theme, issue: "Form control text or placeholder is below WCAG contrast threshold", count: result.controlIssuesCount, examples: result.controlIssues });
       }
       if (pageErrors.length) failures.push({ route, issue: "Browser runtime errors", pageErrors });
       await page.close();
