@@ -307,7 +307,7 @@ GUIDE_EXTRA["years-to-days-calculator"] = [
 # without changing calculator controls, formulas, page URLs or first-screen layout.
 GUIDE_EXTRA.setdefault("tasbih-counter", []).append(
     ("Tasbih calculator and free online Tasbeeh counter", [
-        "People searching for a Tasbih calculator, calculator tasbih or a free online Tasbeeh counter are usually looking for a simple way to record dhikr counts. This page records deliberate taps, supports preset or custom phrases and targets, and provides undo and reset controls.",
+        "People searching for a Tasbih calculator, a tasbih counter online, calculator tasbih or a free online Tasbeeh counter are usually looking for a simple way to record dhikr counts. This page records deliberate taps, supports preset or custom phrases and targets, and provides undo and reset controls.",
         "It is a counting tool only. It does not listen to recitation, verify pronunciation or determine a religious ruling.",
     ])
 )
