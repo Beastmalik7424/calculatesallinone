@@ -391,7 +391,7 @@ for url in urls:
     assert '<meta name="robots" content="index, follow">' in html, f"Page not indexable: {url}"
 # Keep titles specific to each calculator's actual job, without promising unsupported features.
 EXPECTED_INTENT_TITLES = {
-    "/zakat-calculator/": "Zakat Calculator Online | Hanafi and Sistani Ja'fari Nisab",
+    "/zakat-calculator/": "Pakistan Zakat Calculator | Hanafi & Sistani Ja'fari",
     "/query-calculator/": "Time & Date Query Calculator | CalculatesAll",
     "/percentage-calculator/": "Percentage Calculator: What Is X% of Y? | CalculatesAll",
     "/fraction-calculator/": "Fraction Calculator with Simplified Answers | CalculatesAll",
