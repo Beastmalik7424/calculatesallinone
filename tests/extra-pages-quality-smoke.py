@@ -23,6 +23,10 @@ CASES = {
             "percentage points",
             "5 percentage points",
             "relative percentage change",
+            "marks percentage calculator",
+            "percentage = (obtained marks ÷ total marks) × 100",
+            "82.4%",
+            "board or university grading scales can differ",
         ],
     },
     "percentage-difference-calculator": {
