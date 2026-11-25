@@ -101,8 +101,12 @@ assert 'data-tool-set="duplicate"' not in tasbih, "Unrelated inner calculator pa
 assert "@keyframes ca-calculator-marquee" in css, "The homepage marquee animation must remain available"
 base_track_rules = re.findall(r"(?:^|})\.ca-calculator-track\{([^}]*)\}", css)
 assert base_track_rules and all("animation:" not in rule for rule in base_track_rules), "Single-group inner-page tickers must not run the two-group marquee animation"
-home_track_overrides = re.findall(r"body:has\(#main \.ca-home-header\) \.ca-calculator-track\s*\{([^}]*)\}", css)
-assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in home_track_overrides), "Only homepages with duplicated groups may run the continuous marquee"
+duplicate_group_track_overrides = re.findall(r'body:has\(\.ca-calculator-group\[data-tool-set="duplicate"\]\) \.ca-calculator-track\s*\{([^}]*)\}', css)
+assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rule in duplicate_group_track_overrides), "Only pages with a duplicate visual group may run the continuous marquee"
+standard_markup = output_for("/standard-calculator/")
+assert 'data-tool-set="duplicate"' not in standard_markup, "Standard Calculator must retain its single-group shortcut ticker"
+emi_markup = output_for("/emi-calculator/")
+assert 'data-tool-set="duplicate"' in emi_markup, "EMI page must retain its duplicate group for continuous marquee motion"
 zakat_track_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-track\{([^}]*)\}", css)
 assert any("animation:none" in rule and "transform:none" in rule for rule in zakat_track_overrides), "Single-group Zakat tickers must stay stationary and scrollable"
 zakat_carousel_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-carousel\s*\{([^}]*)\}", css)
