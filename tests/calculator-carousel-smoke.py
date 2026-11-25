@@ -106,7 +106,7 @@ assert any("animation:ca-calculator-marquee 48s linear infinite" in rule for rul
 standard_markup = output_for("/standard-calculator/")
 assert 'data-tool-set="duplicate"' not in standard_markup, "Standard Calculator must retain its single-group shortcut ticker"
 emi_markup = output_for("/emi-calculator/")
-assert 'data-tool-set="duplicate"' in emi_markup, "EMI page must retain its duplicate group for continuous marquee motion"
+assert 'data-tool-set="duplicate"' not in emi_markup, "EMI page must use a single scrollable shortcut group like other inner pages"
 zakat_track_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-track\{([^}]*)\}", css)
 assert any("animation:none" in rule and "transform:none" in rule for rule in zakat_track_overrides), "Single-group Zakat tickers must stay stationary and scrollable"
 zakat_carousel_overrides = re.findall(r"body:has\(#main \.ca-tool-zakat-calculator\) \.ca-calculator-carousel\s*\{([^}]*)\}", css)
