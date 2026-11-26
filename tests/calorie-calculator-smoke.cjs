@@ -105,14 +105,14 @@ const base = {
 
 const revisedMale = calculateMaintenanceCalories({ ...base, formula: "harris-benedict" });
 assert.equal(revisedMale.equation, "Revised Harris–Benedict (1984)");
-assert.equal(revisedMale.restingKcalPerDay, 1695.667);
-assert.equal(revisedMale.maintenanceKcalPerDay, 2034.8004);
+assert.ok(Math.abs(revisedMale.restingKcalPerDay - 1695.667) < 1e-9, "Revised Harris–Benedict male REE must match the published coefficients");
+assert.ok(Math.abs(revisedMale.maintenanceKcalPerDay - 2034.8004) < 1e-9, "Revised Harris–Benedict male maintenance must match the activity multiplier");
 
 const revisedFemale = calculateMaintenanceCalories({
   ...base, coefficient: "female", formula: "harris-benedict"
 });
-assert.equal(revisedFemale.restingKcalPerDay, 1507.133);
-assert.equal(revisedFemale.maintenanceKcalPerDay, 1808.5596);
+assert.ok(Math.abs(revisedFemale.restingKcalPerDay - 1507.133) < 1e-9, "Revised Harris–Benedict female REE must match the published coefficients");
+assert.ok(Math.abs(revisedFemale.maintenanceKcalPerDay - 1808.5596) < 1e-9, "Revised Harris–Benedict female maintenance must match the activity multiplier");
 
 const katch = calculateMaintenanceCalories({
   age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 20,
@@ -120,8 +120,8 @@ const katch = calculateMaintenanceCalories({
 });
 assert.equal(katch.equation, "Katch–McArdle (Cunningham 1991)");
 assert.equal(katch.leanMassKg, 56);
-assert.equal(katch.restingKcalPerDay, 1579.6);
-assert.equal(katch.maintenanceKcalPerDay, 1895.52);
+assert.ok(Math.abs(katch.restingKcalPerDay - 1579.6) < 1e-9, "Katch–McArdle/Cunningham REE must match the fat-free-mass equation");
+assert.ok(Math.abs(katch.maintenanceKcalPerDay - 1895.52) < 1e-9, "Katch–McArdle/Cunningham maintenance must match the activity multiplier");
 assert.equal(katch.coefficient, null, "Katch–McArdle must not require a sex coefficient");
 
 invalid({ ...base, formula: "unknown" }, /formula/i);
