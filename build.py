@@ -1927,7 +1927,7 @@ def years_to_days_reference_html():
 
 
 def days_to_years_reference_html():
-    day_counts = [1, 7, 30, 300, 336, 365, 504, 571, 724, 854, 1009, 1068, 1125, 1145, 1188, 1297, 1300, 1392, 1412, 1460, 1476, 1599, 1719, 1833, 1879, 2000, 2092, 2104, 2141, 2255, 2392, 2436, 2504, 2555, 2600, 3113, 4015, 5000, 7200, 7300, 10949, 10957, 11574, 12000, 13000, 13800, 14000, 19710, 21000, 21900, 27375, 28000, 36500, 42069, 70000, 500000, 800000]
+    day_counts = [1, 7, 30, 300, 336, 365, 504, 571, 724, 854, 1009, 1068, 1125, 1145, 1188, 1297, 1300, 1392, 1412, 1460, 1476, 1599, 1719, 1833, 1879, 2000, 2092, 2104, 2141, 2255, 2392, 2436, 2504, 2555, 2600, 3113, 4015, 5000, 7200, 7300, 10000, 10949, 10957, 11574, 12000, 13000, 13800, 14000, 19710, 21000, 21900, 27375, 28000, 36500, 42069, 70000, 500000, 800000]
     out = ('<section class="mt-10"><h2 class="' + H2 + '">Worked reference: days to years</h2>'
            '<p class="' + P + '">Convert days to decimal years by dividing by 365, 365.25 or 365.2425. Values are rounded to four decimal places; these are duration estimates, not calendar ages.</p>'
            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
