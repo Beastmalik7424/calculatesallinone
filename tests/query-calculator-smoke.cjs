@@ -108,6 +108,20 @@ for (const [q, expected] of yearDayQueries) {
  assert.match(result.textContent, expected, q + " => " + result.textContent);
 }
 
+const fullQuestionCases = [
+ ["How many hours are in 2 weeks?", /336 hours/],
+ ["How many minutes are in 3 days?", /4,320 minutes/],
+ ["What are 115 months in years and days?", /9 years and 7 months.*3,500\.24 days/],
+ ["How many days are in 80 years?", /80 years ≈ 29,219\.4 days/],
+ ["How many years are in 2,555 days?", /2,555 days ≈ 6\.9954 years/],
+ ["How many days are in 30 years?", /30 years ≈ 10,957\.28 days/]
+];
+for (const [q, expected] of fullQuestionCases) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+
 const meanYearCases = [
  ["80 years to days", /80 years ≈ 29,219\.4 days/],
  ["1 year in hours", /1 year = 8,765\.82 hours.*mean Gregorian year of 365\.2425 days/]
