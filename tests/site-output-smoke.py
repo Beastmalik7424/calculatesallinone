@@ -277,9 +277,10 @@ for phrase in (
     "14 thousand days to years",
     "21k days in years",
     "1.3k days in years",
+    "10,000 days",
 ):
     assert phrase in years_html, "Years-to-Days page is missing a GSC-backed query family: " + phrase
-assert years_html.count('scope="row" class="border-b p-3"') == 136, "All 16 quick, 63 year and 57 reverse-day reference rows must be present"
+assert years_html.count('scope="row" class="border-b p-3"') == 137, "All 16 quick, 63 year and 58 reverse-day reference rows must be present"
 
 assert "Show all 63 GSC-informed years-to-days reference examples" in years_html, "The expanded reference must advertise all 63 GSC-informed year examples"
 assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
