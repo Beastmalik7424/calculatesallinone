@@ -26,6 +26,7 @@ SITE_DESCRIPTION = "Free browser-based calculators for adult BMI, Zakat, EMI, pr
 # Visible dates reflect the latest substantive content update for each page.
 LASTMOD = {
     "/zakat-calculator/": "2026-11-25",
+    "/percentage-calculator/": "2026-11-26",
     "/years-to-days-calculator/": "2026-11-26",
     "/unit-converter/": "2026-11-21",
     "/tasbih-counter/": "2026-11-25",
