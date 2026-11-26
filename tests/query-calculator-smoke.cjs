@@ -10,7 +10,7 @@ assert.match(html, /id="qt-question"[^>]*value="How many days old is someone bor
 assert.ok(html.includes("/assets/app.js?v="), "versioned JS asset missing");
 const listeners = {};
 const form = {addEventListener: (name, fn) => {listeners["form:" + name] = fn;}};
-const input = {value:"DOB 29-02-1984 age in days",addEventListener:(name, fn) => {listeners["input:" + name] = fn;}};
+const input = {value:"How many days old is someone born on 29-02-1984?",addEventListener:(name, fn) => {listeners["input:" + name] = fn;}};
 const result = {textContent:""};
 const nodes = {"query-time-form":form,"qt-question":input,"qt-result":result};
 const document = {
