@@ -333,3 +333,16 @@ GUIDE_EXTRA["profit-loss-calculator"].append(
         "This calculator does not calculate net profit after interest and tax. It also does not calculate break-even sales, because those measures require additional inputs that these modes do not collect. Do not treat operating profit as take-home profit or as a complete financial statement. Reconcile the estimate with the full accounting records before making a business or tax decision.",
     ])
 )
+
+# Full natural-language questions for the Query Calculator.
+# Each example is a supported question pattern with its method and limitations.
+GUIDE_EXTRA["query-calculator"].append(
+    ("Full questions with worked answers", [
+        "How many hours are in 2 weeks? Two weeks contain 2 × 7 = 14 days. Each day contains 24 hours, so 14 × 24 = 336 hours. The result is 336 hours.",
+        "How many minutes are in 3 days? Three days contain 3 × 24 = 72 hours. Each hour contains 60 minutes, so 72 × 60 = 4,320 minutes. The result is 4,320 minutes.",
+        "What are 115 months in years and days? 115 months equal 9 years and 7 months because 115 ÷ 12 gives 9 whole years with 7 months remaining. Using the mean Gregorian month of 30.436875 days, 115 months are approximately 3,500.24 days. This is an average-duration estimate, not an exact calendar interval.",
+        "How many days are in 80 years? Using the Query Calculator's mean Gregorian year of 365.2425 days, 80 × 365.2425 = 29,219.4 days. This is a fixed-duration conversion. An exact 80-year calendar interval must be counted from its actual start date.",
+        "How many years are in 2,555 days? Divide 2,555 by 365.2425. The result is approximately 6.9954 Gregorian-average years, rounded to four decimal places. This is a decimal-year estimate, not an exact calendar age.",
+        "How many days are in 30 years? Using the mean Gregorian year, 30 × 365.2425 = 10,957.275 days. A 365-day convention gives 10,950 days, while a 365.25-day Julian average gives 10,957.5 days. The Query Calculator uses the Gregorian average for this fixed-unit question.",
+    ])
+)
