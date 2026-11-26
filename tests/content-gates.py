@@ -141,6 +141,10 @@ def main():
             failures.append("/health/ must explain the separate National Academies DRI 2023 pregnancy and breastfeeding estimates and their 19+ eligibility")
         if "The original Mifflin–St Jeor study included 498 healthy adults aged 19–78" not in health_text:
             failures.append("/health/ must distinguish the calculator's 18+ input eligibility from the original equation study's 19–78 sample")
+        if "The calorie tool offers Mifflin–St Jeor, Revised Harris–Benedict and Katch–McArdle" not in health_text:
+            failures.append("/health/ must describe all three standard adult calorie formula choices")
+        if "The calorie tool offers a standard Mifflin-St Jeor maintenance estimate" in health_text:
+            failures.append("/health/ must not describe the upgraded calorie tool as Mifflin-only")
     if not calorie_path.is_file():
         failures.append("/calorie-calculator/ was not generated for the Health hub consistency check")
     else:
