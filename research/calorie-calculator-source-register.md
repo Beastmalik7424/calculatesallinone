@@ -60,7 +60,7 @@ These activity values are configuration assumptions supplied for a consumer esti
 
 ## Validation policy
 
-- Age accepts whole years from 18 to 120. Age 18 and ages above 78 are accepted only with an explicit note that they fall outside the original Mifflin study sample.
+- Age accepts whole years from 18 to 120. The Mifflin option flags age 18 and ages above 78 because they fall outside its original 19–78 study sample. This note is specific to Mifflin and does not describe the study populations for Revised Harris–Benedict or Katch–McArdle/Cunningham.
 - Weight is normalized to kilograms and checked against a broad 20–500 kg input guardrail.
 - Height is normalized to centimetres and checked against a broad 100–250 cm input guardrail for Mifflin–St Jeor and Revised Harris–Benedict. It is not requested for Katch–McArdle/Cunningham because that equation does not use height.
 - Katch–McArdle/Cunningham requires a user-supplied body-fat percentage between 3% and 70% as a broad input guardrail, not a clinical reference range. Fat-free mass is derived from weight and that percentage.
@@ -69,7 +69,7 @@ These activity values are configuration assumptions supplied for a consumer esti
 - Weight conversion uses 1 lb = 0.45359237 kg. Height conversion uses 1 inch = 2.54 cm. Raw values are normalized once and not repeatedly converted during unit toggles.
 - Intermediate calculations retain full JavaScript number precision. Formatting is applied only to displayed results.
 - No statistical confidence interval is calculated.
-- Pregnancy and breastfeeding use the separate National Academies DRI 2023 path. The three standard adult formulas do not apply to those life stages; the Katch option is not available for pregnancy or breastfeeding.
+- For female-coefficient Mifflin/Harris selections, a pregnancy and breastfeeding status is required. Pregnancy/breastfeeding selections switch to the separate National Academies DRI 2023 path; a declined status produces no estimate. Katch is not available for pregnancy or breastfeeding.
 - The output is REE multiplied by an app-defined activity assumption. It is not a measured TDEE and is not a weight-loss or weight-gain prescription.
 
 ## Historical review and release status (2 November 2026)
