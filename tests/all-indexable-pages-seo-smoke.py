@@ -129,6 +129,31 @@ for route in indexable:
     check(len(page_entities) == 1,
           route + ": expected exactly one page-level WebPage/AboutPage entity")
 
+# Structured freshness metadata must match the tracked substantive page-update date.
+# These two pages currently have tracked LASTMOD values and page-level WebPage entities.
+for route, expected_date in {
+    "/zakat-calculator/": "2026-11-25",
+    "/ur/bmi-calculator/": "2026-11-21",
+}.items():
+    raw = read_text(output_path(route))
+    blocks = re.findall(
+        r'<script\\b[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>',
+        raw, re.S | re.I
+    )
+    entities = []
+    for block in blocks:
+        try:
+            parsed = json.loads(block)
+        except json.JSONDecodeError:
+            continue
+        nodes = parsed if isinstance(parsed, list) else [parsed]
+        entities.extend(node for node in nodes if isinstance(node, dict)
+                        and node.get("@type") == "WebPage")
+    check(len(entities) == 1, route + ": expected one WebPage entity for freshness validation")
+    if len(entities) == 1:
+        check(entities[0].get("dateModified") == expected_date,
+              route + ": dateModified must match the tracked substantive update date " + expected_date)
+
 check(len(set(titles.values())) == len(titles), "duplicate titles across indexable pages")
 check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across indexable pages")
 
