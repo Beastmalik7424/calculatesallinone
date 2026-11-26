@@ -265,7 +265,7 @@ assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 
-assert "Show all 36 years-to-days reference examples" in years_html, "The expanded reference must advertise all 36 examples"
+assert "Show all 37 years-to-days reference examples" in years_html, "The expanded reference must advertise all 36 examples"
 assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
 # Recent finalized GSC data (2026-11-19 through 2026-11-21) supports 4- and 15-year examples.
 # Keep those alongside established 7- and 9-year answers in both tables; 19 and 25 years remain in the expanded table.
@@ -297,6 +297,7 @@ _gsc_day_examples = (
     "1,188 3.2548 3.2526 3.2526",
     "1,297 3.5534 3.5510 3.5511",
     "2,600 7.1233 7.1184 7.1186",
+    "2,504 6.8603 6.8556 6.8557",
 )
 _years_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", years_html))
 _years_text = re.sub(r"\s+", " ", _years_text).strip()
@@ -325,6 +326,7 @@ _year_reference_expected = {
     "40": ("14,600", "14,610", "14,609.7"),
     "60": ("21,900", "21,915", "21,914.55"),
     "74": ("27,010", "27,028.5", "27,027.945"),
+    "65": ("23,725", "23,741.25", "23,740.7625"),
     "8": ("2,920", "2,922", "2,921.94"),
     "17": ("6,205", "6,209.25", "6,209.1225"),
     "18": ("6,570", "6,574.5", "6,574.365"),
