@@ -61,6 +61,11 @@ for slug in TOOLS_WITH_EXAMPLE:
 
 check(has_heading("tasbih-counter", "Worked example: target and remaining count"),
       "/tasbih-counter/ must contain one checkable target/remaining-count example.")
+
+tasbih_html = (ROOT / "tasbih-counter" / "index.html").read_text(encoding="utf-8")
+tasbih_description = re.search(r'<meta name="description" content="([^"]+)"', tasbih_html)
+check(tasbih_description is not None and "Tasbih calculator" in tasbih_description.group(1) and "digital Tasbih counter" in tasbih_description.group(1),
+      "/tasbih-counter/ search snippet must retain the primary GSC query and include the Google Trends rising phrase digital Tasbih counter.")
 check(not has_heading("tasbih-counter", "Method"),
       "/tasbih-counter/ should not repeat a separate generic method section.")
 check(not has_heading("tasbih-counter", "Limits"),
