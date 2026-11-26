@@ -18,6 +18,14 @@ const { chromium } = require("playwright");
     assert.equal(await result.count(), 1);
 
     const inputCases = [
+      // Full Search Console-style questions must bind the unit after the
+      // quantity as the source, even when the target unit appears earlier.
+      ["How many days are in 5 years?", /5 years ≈ 1,826\\.21 days/i],
+      ["How many days in 5 years?", /5 years ≈ 1,826\\.21 days/i],
+      ["How many days is 5 years?", /5 years ≈ 1,826\\.21 days/i],
+      ["5 years is how many days?", /5 years ≈ 1,826\\.21 days/i],
+      ["Convert 5 years into days.", /5 years ≈ 1,826\\.21 days/i],
+      ["How many years are in 2,555 days?", /2,555 days ≈ 6\\.995 years/i],
       ["80 years to days", /80 years ≈ 29,219\.4 days/i],
       ["1 year in hours", /1 year = 8,765\.82 hours.*mean Gregorian year of 365\.2425 days/i],
       ["34 years in days months and weeks", /34 years = 12,418\.25 days.*408 months.*1,774\.04 weeks/i],
