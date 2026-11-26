@@ -181,7 +181,7 @@ FAQS = {
 SOURCE_LINKS = {
     "percentage-calculator": [
         ("OpenStax: Percent applications and percent increase", "https://openstax.org/books/prealgebra-2e/pages/6-2-solve-general-applications-of-percent", "Textbook reference for percent applications, increase and decrease calculations."),
-        ("IBCC: New Grading System for SSC and HSSC", "https://ibcc.edu.pk/faqs/new-grading-system-ssc-hssc-faqs/", "Official explanation of Pakistan's phased 10-point SSC/HSSC grading policy, 40% passing threshold and expected full-adoption timeline."),
+        ("IBCC: New Grading System of SSC and HSSC", "https://ibcc.edu.pk/faqs/new-grading-system-of-ssc-hssc-faqs/", "Official explanation of Pakistan's phased 10-point SSC/HSSC grading policy, 40% passing threshold and expected full-adoption timeline."),
     ],
     "percentage-difference-calculator": [
         ("Math Is Fun: Percentage Difference", "https://www.mathsisfun.org/percentage-difference", "Explains why the absolute difference is divided by the average when neither value is a starting point."),
