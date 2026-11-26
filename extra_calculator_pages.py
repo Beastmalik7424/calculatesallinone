@@ -1,5 +1,6 @@
 """Standalone calculator page definitions. Uses the existing site's shell and metadata pipeline."""
 import html
+from seo_finalize import VERIFIED_PAGE_UPDATE_DATES
 
 PAGES = [
  ("percentage-calculator","Percentage Calculator","Use this percentage calculator for marks, percentage share, finding the whole and percentage change, with clear formulas and worked examples.",[("value","Percentage (%)","number"),("total","Number","number")],"What is 25% of 200? Enter 25 and 200 to get 50. Formula: percentage divided by 100, multiplied by the number."),
@@ -270,6 +271,9 @@ def build_extra_pages(head,shell,write):
         for related_path,related_title in RELATED_LINKS[slug]:
             body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="'+related_path+'">'+html.escape(related_title)+'</a></li>'
         body+='<li class="mt-2"><a class="text-sky-800 underline dark:text-sky-300" href="'+category_path+'">All '+html.escape(category_name)+' tools</a></li></ul></nav>'
+        updated_date = VERIFIED_PAGE_UPDATE_DATES.get(path)
+        if updated_date:
+            body+='<p class="mt-8 text-sm text-stone-800 dark:text-stone-200">Last updated: '+updated_date+'</p>'
         breadcrumb_items=[
             {"@type":"ListItem","position":1,"name":"Home","item":site+"/"},
             {"@type":"ListItem","position":2,"name":category_name,"item":site+category_path},
