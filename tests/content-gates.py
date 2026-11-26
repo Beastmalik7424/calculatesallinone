@@ -12,6 +12,12 @@ from pathlib import Path
 ROOT = Path("public")
 CASES = {
     "query-calculator": [
+        "How many hours are in 2 weeks?",
+        "How many minutes are in 3 days?",
+        "What is 115 months in years and days?",
+        "How many days are in 80 years?",
+        "How many years are in 2,555 days?",
+        "How many days are in 30 years?",
         "2 weeks = 336 hours",
         "3 days = 4,320 minutes",
         "To check a fixed-unit result, reverse the conversion.",
