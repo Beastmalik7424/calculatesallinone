@@ -118,6 +118,7 @@ const { chromium } = require("playwright");
       assert.match(katchText, /Katch–McArdle \(Cunningham 1991\)/);
       assert.equal(await page.locator('#calorie-result a[href="https://pubmed.ncbi.nlm.nih.gov/1957828/"]').count(), 1);
       await page.locator("#cal-body-fat").fill("71");
+      assert.equal(await page.locator("#calorie-result").isVisible(), false, "Editing body-fat input must clear the stale result");
       await page.locator("#cal-calculate").click();
       assert.match(await page.locator("#calorie-error").innerText(), /body-fat percentage/i);
 
