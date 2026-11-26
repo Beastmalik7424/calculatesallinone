@@ -329,7 +329,7 @@ def check_years_quick_reference():
     full_match = re.search(r"<table\b[^>]*>(.*?)</table>", full_reference, re.S | re.I)
     assert full_match, "Expanded years-to-days reference table is missing"
     full_rows = table_rows(full_match.group(1))
-    assert len(full_rows) == 36, f"Expanded reference must contain 36 GSC-aligned examples, got {len(full_rows)}"
+    assert len(full_rows) == 37, f"Expanded reference must contain 37 GSC-aligned examples, got {len(full_rows)}"
     assert set(expected_years).issubset({year for year, _ in full_rows}), "Quick-reference rows must remain in the expanded table"
     assert "19" in {year for year, _ in full_rows}, "Removing 19 years from the quick table must not remove it from the expanded reference"
     gsc_missing_year_rows = {
@@ -340,6 +340,7 @@ def check_years_quick_reference():
         "23": ["8,395", "8,400.75", "8,400.5775"],
         "28": ["10,220", "10,227", "10,226.79"],
         "36": ["13,140", "13,149", "13,148.73"],
+        "65": ["23,725", "23,741.25", "23,740.7625"],
     }
     full_row_map = dict(full_rows)
     for year, values in gsc_missing_year_rows.items():
