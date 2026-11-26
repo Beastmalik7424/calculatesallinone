@@ -341,7 +341,9 @@ def check_years_quick_reference():
         "28": ["10,220", "10,227", "10,226.79"],
         "36": ["13,140", "13,149", "13,148.73"],
     }
-    assert dict(full_rows).items() >= gsc_missing_year_rows.items(), "Expanded reference must directly answer missing GSC year-count queries with all three verified methods"
+    full_row_map = dict(full_rows)
+    for year, values in gsc_missing_year_rows.items():
+        assert full_row_map.get(year) == values, f"Expanded reference is missing the verified GSC row for {year} years"
 
     visible = visible_text("years-to-days-calculator")
     gsc_query_answers = (
