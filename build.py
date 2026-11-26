@@ -1898,8 +1898,9 @@ def write(path, content):
 
 def years_to_days_reference_html():
     years_values = [0.2, 0.5, 1, 1.5, 2, 2.6, 3, 3.5, 3.75, 4, 4.16667, 5, 5.5, 6, 6.66667, 6.83333, 7, 7.83333, 8, 8.5, 8.83333, 9, 9.25, 10, 11, 11.16667, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 29.4, 30, 31, 32, 34, 36, 40, 41, 43, 47, 48, 50, 59, 60, 65, 74, 75, 78, 80, 83, 90, 100, 10000]
-    # Recent finalized GSC data (2026-11-19 through 2026-11-21) supports adding 4- and 15-year examples.
-    quick_values = [2, 3, 4, 5, 7, 9, 10, 13, 15, 20]
+    # 2026-11-26 GSC export: 312 visible year/day/month-intent query rows.
+    # Include the distinct numeric year quantities in the expandable reference table.
+    quick_values = [2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 30]
     def formatted(value):
         return format(value, ",.5f").rstrip("0").rstrip(".")
     def table_rows(values):
@@ -1925,7 +1926,7 @@ def years_to_days_reference_html():
 
 
 def days_to_years_reference_html():
-    day_counts = [1, 7, 30, 300, 336, 365, 504, 571, 724, 854, 1009, 1068, 1125, 1145, 1188, 1297, 1392, 1412, 1460, 1476, 1599, 1719, 1833, 1879, 2000, 2092, 2104, 2141, 2255, 2392, 2436, 2504, 2555, 2600, 3113, 4015, 5000, 7200, 7300, 10949, 10957, 11574, 12000, 13000, 13800, 19710, 21900, 27375, 28000, 36500, 42069, 70000, 500000, 800000]
+    day_counts = [1, 7, 30, 300, 336, 365, 504, 571, 724, 854, 1009, 1068, 1125, 1145, 1188, 1297, 1392, 1412, 1460, 1476, 1599, 1719, 1833, 1879, 2000, 2092, 2104, 2141, 2255, 2392, 2436, 2504, 2555, 2600, 3113, 4015, 1300, 5000, 7200, 7300, 10949, 10957, 11574, 12000, 13000, 13800, 14000, 19710, 21000, 21900, 27375, 28000, 36500, 42069, 70000, 500000, 800000]
     out = ('<section class="mt-10"><h2 class="' + H2 + '">Worked reference: days to years</h2>'
            '<p class="' + P + '">Convert days to decimal years by dividing by 365, 365.25 or 365.2425. Values are rounded to four decimal places; these are duration estimates, not calendar ages.</p>'
            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
