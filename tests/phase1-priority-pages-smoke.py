@@ -329,9 +329,22 @@ def check_years_quick_reference():
     full_match = re.search(r"<table\b[^>]*>(.*?)</table>", full_reference, re.S | re.I)
     assert full_match, "Expanded years-to-days reference table is missing"
     full_rows = table_rows(full_match.group(1))
-    assert len(full_rows) == 29, f"Expanded reference must retain 29 examples, got {len(full_rows)}"
+    assert len(full_rows) == 37, f"Expanded reference must contain 37 GSC-aligned examples, got {len(full_rows)}"
     assert set(expected_years).issubset({year for year, _ in full_rows}), "Quick-reference rows must remain in the expanded table"
     assert "19" in {year for year, _ in full_rows}, "Removing 19 years from the quick table must not remove it from the expanded reference"
+    gsc_missing_year_rows = {
+        "8": ["2,920", "2,922", "2,921.94"],
+        "17": ["6,205", "6,209.25", "6,209.1225"],
+        "18": ["6,570", "6,574.5", "6,574.365"],
+        "22": ["8,030", "8,035.5", "8,035.335"],
+        "23": ["8,395", "8,400.75", "8,400.5775"],
+        "28": ["10,220", "10,227", "10,226.79"],
+        "36": ["13,140", "13,149", "13,148.73"],
+        "65": ["23,725", "23,741.25", "23,740.7625"],
+    }
+    full_row_map = dict(full_rows)
+    for year, values in gsc_missing_year_rows.items():
+        assert full_row_map.get(year) == values, f"Expanded reference is missing the verified GSC row for {year} years"
 
     visible = visible_text("years-to-days-calculator")
     gsc_query_answers = (
