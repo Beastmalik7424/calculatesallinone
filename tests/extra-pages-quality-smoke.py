@@ -23,6 +23,22 @@ CASES = {
             "percentage points",
             "5 percentage points",
             "relative percentage change",
+            "marks percentage calculator",
+            "percentage = (obtained marks ÷ total marks) × 100",
+            "82.4%",
+            "board or university grading scales can differ",
+            "Pakistan grading note",
+            "IBCC's revised 10-point SSC/HSSC grading policy",
+            "First Annual Examinations 2026",
+            "Grade 9 and Grade 11",
+            "full adoption is expected by 2028",
+            "40% minimum passing percentage",
+            "does not assign a grade, GPA, division or pass/fail result",
+            "check your board's current notification",
+            "Last updated: 2026-11-26",
+            "overall percentage = (Σ obtained marks ÷ Σ total marks) × 100",
+            "do not average subject percentages when their total marks differ",
+            "105/150 = 70%",
         ],
     },
     "percentage-difference-calculator": {
@@ -163,6 +179,14 @@ for slug, spec in CASES.items():
     assert any(schema.get("@type") == "WebPage" and expected_domain in " ".join(schema.get("citation", [])) for schema in schemas), f"Missing structured source citations: {slug}"
 
 percentage_html = (ROOT / "percentage-calculator" / "index.html").read_text(encoding="utf-8")
+assert 'href="https://ibcc.edu.pk/faqs/new-grading-system-of-ssc-hssc-faqs/"' in percentage_html, "Missing official IBCC grading-policy reference"
+percentage_scripts = re.findall(r'<script[^>]+type="application/ld\+json"[^>]*>(.*?)</script>', percentage_html, re.S)
+percentage_schemas = [json.loads(item) for item in percentage_scripts]
+assert any(schema.get("@type") == "WebPage"
+           and schema.get("dateModified") == "2026-11-26"
+           and "ibcc.edu.pk" in " ".join(schema.get("citation", []))
+           for schema in percentage_schemas), "Missing verified IBCC source and 2026-11-26 date in percentage page-level schema"
+
 for value in (r'value=["\']of["\']', r'value=["\']share["\']', r'value=["\']change["\']', r'id=["\']percentage-mode["\']'):
     assert re.search(value, percentage_html), f"Missing percentage mode control: {value}"
 

@@ -824,6 +824,10 @@ for url in urls:
                 assert item.get("dateModified") == "2026-11-19", (
                     "Query Calculator dateModified must match the verified Gregorian conversion method, supported-query scope and source update."
                 )
+            elif url == SITE + "/percentage-calculator/":
+                assert item.get("dateModified") == "2026-11-26", (
+                    "Percentage Calculator dateModified must match the sourced marks and IBCC grading-policy content update."
+                )
             else:
                 assert "dateModified" not in item, (
                     f"Do not publish unverified dateModified on {url}."

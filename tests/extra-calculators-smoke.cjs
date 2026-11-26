@@ -121,7 +121,7 @@ console.log("Extra calculator button visibility CSS regression: PASS");
 const fs2=require("node:fs");
 const extraSource=fs2.readFileSync(require("node:path").join(__dirname,"..","extra_calculator_pages.py"),"utf8");
 assert.match(extraSource,/what percentage the part represents of another/);
-assert.match(extraSource,/Calculate a percentage, find a percentage share, measure percentage change, or find the whole from a known part and percentage/);
+assert.match(extraSource,/Use this percentage calculator for marks, percentage share, finding the whole and percentage change, with clear formulas and worked examples/);
 assert.ok(extraSource.includes("whole = part ÷ (percentage ÷ 100)"), "Reverse percentage guide must state the rearranged formula");
 const percentagePage=fs2.readFileSync(require("node:path").join(__dirname,"..","public","percentage-calculator","index.html"),"utf8");
 assert.match(percentagePage,/<option value=["']whole["']>/,"Percentage calculator must render the find-the-whole mode");

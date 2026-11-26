@@ -39,6 +39,8 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/ur/bmi-calculator/": "2026-11-21",
     # This date records the new global Nisab, currency, asset and Urdu guidance update.
     "/zakat-calculator/": "2026-11-25",
+    # This date records the marks-percentage guidance and official IBCC grading-policy context.
+    "/percentage-calculator/": "2026-11-26",
     "/ur/zakat-calculator/": "2026-11-25",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
