@@ -1301,7 +1301,7 @@ TOOLS.extend([
     {
         "slug": "query-calculator", "category": "time",
         "name": "Query Calculator", "app": "UtilitiesApplication",
-        "description": "Ask full time and date questions, such as how many days are in 5 years or how many years are in 2,555 days. Convert time units and calculate Gregorian age.",
+        "description": "Ask supported time, date and simple arithmetic questions in plain language. Convert years, months, weeks and hours, calculate Gregorian age from a birth date, and see the method.",
         "h1": "Time & Date Query Calculator",
         "lead": "Ask complete natural-language questions, including forward and reverse conversions, decimal durations, and combined years-plus-months. Examples: “How many days are in 5 years?”, “5 years is how many days?”, “How many years are in 2,555 days?”, “How many years and days are in 115 months?”, and “How many days are in 6 years and 10 months?”. Results use stated conversion rules, and unsupported questions are not guessed.",
         "ui": (
