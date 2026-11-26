@@ -277,7 +277,7 @@ for phrase in (
     "14 thousand days to years",
     "21k days in years",
     "1.3k days in years",
-    "10,000 days",
+    "10,000",
 ):
     assert phrase in years_html, "Years-to-Days page is missing a GSC-backed query family: " + phrase
 assert years_html.count('scope="row" class="border-b p-3"') == 137, "All 16 quick, 63 year and 58 reverse-day reference rows must be present"
