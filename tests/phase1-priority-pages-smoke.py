@@ -318,11 +318,11 @@ def check_years_quick_reference():
             parsed.append((html.unescape(re.sub(r"<[^>]+>", "", year)).strip(), cells))
         return parsed
 
-    expected_years = ["2", "3", "4", "5", "7", "9", "10", "13", "15", "20"]
+    expected_years = ["2", "3", "4", "5", "7", "9", "10", "11", "12", "13", "14", "15", "16", "19", "20", "30"]
     quick_rows = table_rows(quick_match.group(1))
     actual_years = [year for year, _ in quick_rows]
     assert actual_years == expected_years, (
-        "Quick reference must prioritize observed 28-day GSC year queries without changing its table structure; "
+        "Quick reference must prioritize observed three-month GSC year queries without changing its table structure; "
         f"expected={expected_years!r}, actual={actual_years!r}"
     )
 
