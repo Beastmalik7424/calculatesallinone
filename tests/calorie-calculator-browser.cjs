@@ -14,8 +14,8 @@ const { chromium } = require("playwright");
         if (request.method() !== "GET") nonGetRequests.push(request.method() + " " + request.url());
         const queryKeys = Array.from(new URL(request.url()).searchParams.keys());
         const postData = request.postData() || "";
-        const sensitiveKeys = /(?:^|[?&,"'])(?:age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)["']?\s*[:=]/i;
-        if (queryKeys.some(key => /^(age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)$/i.test(key)) || sensitiveKeys.test(postData)) {
+        const sensitiveKeys = /(?:^|[?&,"'])(?:age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|bodyFatPercent|bodyFat|leanMassKg|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)["']?\s*[:=]/i;
+        if (queryKeys.some(key => /^(age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|bodyFatPercent|bodyFat|leanMassKg|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)$/i.test(key)) || sensitiveKeys.test(postData)) {
           measurementLeaks.push(request.method() + " " + request.url());
         }
       });
@@ -107,6 +107,8 @@ const { chromium } = require("playwright");
       await page.locator("#cal-coefficient").selectOption("katch-mcardle");
       assert.equal(await page.locator("#cal-body-fat-field").isVisible(), true);
       assert.equal(await page.locator("#cal-height-field").isVisible(), false, "Katch–McArdle must not request unused height data");
+      const katchButtonBottom = await page.locator("#cal-calculate").evaluate(el => el.getBoundingClientRect().bottom);
+      assert.ok(katchButtonBottom <= viewport.height - 2, "Calculate action must remain visible when the Katch body-fat field is active at " + viewport.width + "px");
       assert.equal(await page.locator("#cal-eligibility-field").isVisible(), false, "Katch–McArdle must not expose pregnancy eligibility for a formula that is not used for life-stage estimates");
       await page.locator("#cal-body-fat").fill("20");
       await page.locator("#cal-calculate").click();
@@ -120,6 +122,7 @@ const { chromium } = require("playwright");
       assert.match(await page.locator("#calorie-error").innerText(), /body-fat percentage/i);
 
       await page.locator("#cal-coefficient").selectOption("harris-benedict-female");
+      await page.locator("#cal-height-cm").fill("175");
       assert.equal(await page.locator("#cal-eligibility-field").isVisible(), true);
       assert.equal(await page.locator("#cal-body-fat-field").isVisible(), false);
       await page.locator("#cal-eligibility").selectOption("no");
