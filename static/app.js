@@ -1955,10 +1955,10 @@
       })
       // Normalize comma- and space-grouped thousands before extracting quantities.
       // This supports GSC wording such as "1 125 days to years" and "36 500 days".
-      question = question.replace(/(?<=\\d),(?=\\d{3}(?:\\D|$))/g, "")
-        .replace(/(?<=\\d)\\s+(?=\\d{3}(?:\\D|$))/g, "")
+      question = question.replace(/(?<=\d),(?=\d{3}(?:\D|$))/g, "")
+        .replace(/(?<=\d)\s+(?=\d{3}(?:\D|$))/g, "")
       // Accept the common fractional phrasing "8 and a half years".
-      question = question.replace(/\\b(\\d+(?:\\.\\d+)?)\\s+and\\s+a\\s+half(?=\\s+(?:years?|months?|weeks?|days?)\\b)/g,
+      question = question.replace(/\b(\d+(?:\.\d+)?)\s+and\s+a\s+half(?=\s+(?:years?|months?|weeks?|days?)\b)/g,
         function (match, whole) { return String(Number(whole) + 0.5) })
 
 
@@ -2209,12 +2209,12 @@
       }
       // Handle compound year-and-month durations as two source quantities.
       // These are average-duration conversions, not exact calendar intervals.
-      var compoundDuration = question.match(/(\\d+(?:\\.\\d+)?)\\s+years?\\s+and\\s+(\\d+(?:\\.\\d+)?)\\s+months?/i)
+      var compoundDuration = question.match(/(\d+(?:\.\d+)?)\s+years?\s+and\s+(\d+(?:\.\d+)?)\s+months?/i)
       if (!compoundDuration) {
-        var reverseCompound = question.match(/(\\d+(?:\\.\\d+)?)\\s+months?\\s+and\\s+(\\d+(?:\\.\\d+)?)\\s+years?/i)
+        var reverseCompound = question.match(/(\d+(?:\.\d+)?)\s+months?\s+and\s+(\d+(?:\.\d+)?)\s+years?/i)
         if (reverseCompound) compoundDuration = [reverseCompound[0], reverseCompound[2], reverseCompound[1]]
       }
-      if (compoundDuration && /\\bdays?\\b/i.test(question)) {
+      if (compoundDuration && /\bdays?\b/i.test(question)) {
         var compoundYears = Number(compoundDuration[1])
         var compoundMonths = Number(compoundDuration[2])
         if (Number.isFinite(compoundYears) && Number.isFinite(compoundMonths) &&
