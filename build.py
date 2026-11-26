@@ -1303,12 +1303,12 @@ TOOLS.extend([
         "name": "Query Calculator", "app": "UtilitiesApplication",
         "description": "Ask supported time, date and simple arithmetic questions in plain language. Convert years, months, weeks and hours, calculate Gregorian age from a birth date, and see the method.",
         "h1": "Time & Date Query Calculator",
-        "lead": "Ask complete natural-language questions, including forward and reverse conversions, decimal durations, and combined years-plus-months. Examples: “How many days are in 5 years?”, “How many years are in 2,555 days?”, and “How many days are in 6 years and 10 months?”. Results use stated conversion rules, and unsupported questions are not guessed.",
+        "lead": "Ask complete natural-language questions, including forward and reverse conversions, decimal durations, and combined years-plus-months. Examples: “How many days are in 5 years?”, “5 years is how many days?”, “How many years are in 2,555 days?”, and “How many days are in 6 years and 10 months?”. Results use stated conversion rules, and unsupported questions are not guessed.",
         "ui": (
             '<form id="query-time-form" class="space-y-4" novalidate>'
             '<label class="@L@" for="qt-question">Your question</label>'
             '<input class="@I@" id="qt-question" type="text" maxlength="500" value="How many days are in 5 years?" required>'
-            '<p class="text-sm">Try a complete question: “How many days are in 5 years?”, “How many days is 10 years?”, “How many years are in 2,555 days?”, “How many days are in 6 years and 10 months?”, “How many days is 8 and a half years?”, or “How many hours are in 3 weeks?”. For age, ask “How old am I if I was born on 29 July 1984?”. Exact calendar totals need a start date.</p>'
+            '<p class="text-sm">Try a complete question: “How many days are in 5 years?”, “5 years is how many days?”, “How many days is 10 years?”, “How many years are in 2,555 days?”, “How many days are in 6 years and 10 months?”, “How many days is 8 and a half years?”, or “How many hours are in 3 weeks?”. For age, ask “How old am I if I was born on 29 July 1984?”. Exact calendar totals need a start date.</p>'
             '<button class="@B@" type="submit">Calculate Answer</button></form>'
             '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a supported question and tap Calculate Answer.</div>'
         ),
