@@ -104,7 +104,7 @@ def main():
     else:
         query_html = query_path.read_text(encoding="utf-8")
         meta_match = re.search(r'<meta name="description" content="([^"]*)"', query_html)
-        expected_description = "Ask full time and date questions, such as how many days are in 5 years or how many years are in 2,555 days. Convert time units and calculate Gregorian age."
+        expected_description = "Ask supported time, date and simple arithmetic questions in plain language. Convert years, months, weeks and hours, calculate Gregorian age from a birth date, and see the method."
         actual_description = html.unescape(meta_match.group(1)) if meta_match else ""
         if actual_description != expected_description:
             failures.append("/query-calculator/ meta description does not match its supported intent")
