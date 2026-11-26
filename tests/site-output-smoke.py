@@ -255,6 +255,10 @@ for path in ("/ur/age-calculator/", "/ur/bmi-calculator/", "/ur/discount-calcula
 urdu_age_html = output_for_url(SITE + "/ur/age-calculator/").read_text(encoding="utf-8")
 urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
+query_html = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
+assert 'value="How many days are in 5 years?"' in query_html, "Query Calculator should start with a complete natural-language question, not a number-only prompt"
+assert "5 years is how many days?" in query_html and "How many years are in 2,555 days?" in query_html, "Query Calculator must show complete forward and reverse question examples"
+assert "How many hours are in 3 weeks?" in query_html, "Query Calculator should demonstrate a full sentence outside the years-to-days topic"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "Last updated: 2026-11-26" in years_html, "Years-to-days visible update date must match the 26 November 2026 GSC-backed question-answer refresh"
 assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
