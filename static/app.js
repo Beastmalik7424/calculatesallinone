@@ -1898,6 +1898,11 @@
       ]
 
       multilingualTerms.forEach(function (item) { question = question.replace(item[0], item[1]) })
+      // Normalize explicit thousands notation found in Search Console queries:
+      // "14 thousand", "21k" and "1.3k" all represent numeric quantities.
+      question = question.replace(/\b(\d+(?:\.\d+)?)\s*(?:thousand|k)\b/gi, function (match, amount) {
+        return String(Number(amount) * 1000)
+      })
       // Accept spoken cardinal numbers as well as numeric digits. Keep this
       // deterministic and dependency-free so the query tool works offline.
       var spokenNumberWords = {
@@ -1958,7 +1963,7 @@
       question = question.replace(/(?<=\d),(?=\d{3}(?:\D|$))/g, "")
         .replace(/(?<=\d)\s+(?=\d{3}(?:\D|$))/g, "")
       // Accept the common fractional phrasing "8 and a half years".
-      question = question.replace(/\b(\d+(?:\.\d+)?)\s+and\s+a\s+half(?=\s+(?:years?|months?|weeks?|days?)\b)/g,
+      question = question.replace(/\b(\d+(?:\.\d+)?)\s+and\s+(?:a|1)\s+half(?=\s+(?:years?|months?|weeks?|days?)\b)/g,
         function (match, whole) { return String(Number(whole) + 0.5) })
 
 
