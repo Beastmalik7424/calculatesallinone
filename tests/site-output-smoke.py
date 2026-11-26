@@ -281,11 +281,11 @@ assert years_html.count(_year_4_row) == 2, "The 4-year GSC query row must appear
 assert years_html.count(_year_7_row) == 2, "The 7-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_9_row) == 2, "The 9-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_15_row) == 2, "The 15-year GSC query row must appear in both reference tables"
-assert years_html.count(_year_19_row) == 1, "The 19-year row must remain in the expanded reference without taking a quick-reference slot"
+assert years_html.count(_year_19_row) == 2, "The 19-year GSC query row must appear in both reference tables"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
 assert "For this calculator’s date-only anniversary method" not in years_html, "Obsolete date-only anniversary wording must be removed"
-assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 37 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
+assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 64 GSC-informed years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
 for phrase in (
     "Choose a conversion method",
     "Days = Years × Selected days per year.",
