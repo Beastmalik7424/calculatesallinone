@@ -789,7 +789,7 @@ HUB_CONTENT = {
         ],
     },
     "health": {
-        "intro": "The Health hub brings together an adult BMI screening tool and adult daily calorie estimates. BMI compares weight with height using standard adult thresholds. The calorie tool offers a standard Mifflin-St Jeor maintenance estimate and separate National Academies DRI 2023 pregnancy and breastfeeding reference estimates. All results are estimates for understanding, not diagnoses or treatment instructions.",
+        "intro": "The Health hub brings together an adult BMI screening tool and adult daily calorie estimates. BMI compares weight with height using standard adult thresholds. The calorie tool offers Mifflin–St Jeor, Revised Harris–Benedict and Katch–McArdle options for standard adult resting-energy estimates, plus separate National Academies DRI 2023 pregnancy and breastfeeding reference estimates. All results are estimates for understanding, not diagnoses or treatment instructions.",
         "faq": [
             ("How is adult BMI calculated?", "BMI is weight in kilograms divided by height in metres squared. For 70 kg and 1.75 m, calculate 70 ÷ (1.75 × 1.75) = 70 ÷ 3.0625 = 22.86, which displays as 22.9 after rounding to one decimal place."),
             ("What are the WHO adult BMI categories?", "The WHO table lists underweight below 18.50, normal range 18.50 to 24.99, pre-obese 25.00 to 29.99, obese class I 30.00 to 34.99, obese class II 35.00 to 39.99, and obese class III at 40.00 or higher. The English calculator result groups the obesity classes into one displayed obesity label. It displays four broad labels and selects them from the unrounded BMI using the 18.5, 25 and 30 thresholds."),
@@ -1355,7 +1355,7 @@ TOOLS.append({
     "category": "health",
     "name": "Adult Calorie Calculator",
     "app": "HealthApplication",
-    "description": "Estimate adult maintenance calories using the Mifflin–St Jeor resting-energy equation and a clearly stated consumer activity assumption. Results are estimates, not medical advice.",
+    "description": "Estimate adult maintenance calories with Mifflin–St Jeor, Revised Harris–Benedict or Katch–McArdle. Compare assumptions and TDEE. Results are estimates, not medical advice.",
     "h1": "Adult Calorie Calculator",
     "lead": "Estimate adult daily maintenance calories from resting energy expenditure and an explicit activity assumption.",
     "guide": [],
