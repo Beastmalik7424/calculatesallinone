@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Audit every indexable generated page, not only a hand-picked SEO sample."""
+import ast
 import html
 import json
 import re
@@ -129,12 +130,36 @@ for route in indexable:
     check(len(page_entities) == 1,
           route + ": expected exactly one page-level WebPage/AboutPage entity")
 
-# Structured freshness metadata must match the tracked substantive page-update date.
-# These two pages currently have tracked LASTMOD values and page-level WebPage entities.
-for route, expected_date in {
-    "/zakat-calculator/": "2026-11-25",
-    "/ur/bmi-calculator/": "2026-11-21",
-}.items():
+# Keep JSON-LD freshness and sitemap lastmod aligned with the single verified-date registry.
+finalizer_tree = ast.parse(read_text(ROOT.parent / "seo_finalize.py"))
+date_mapping_node = next(
+    (node.value for node in finalizer_tree.body
+     if isinstance(node, ast.Assign)
+     and any(isinstance(target, ast.Name) and target.id == "VERIFIED_PAGE_UPDATE_DATES"
+             for target in node.targets)),
+    None,
+)
+check(date_mapping_node is not None, "seo_finalize.py must define VERIFIED_PAGE_UPDATE_DATES")
+verified_dates = {}
+if date_mapping_node is not None:
+    try:
+        verified_dates = ast.literal_eval(date_mapping_node)
+    except (ValueError, TypeError) as exc:
+        ERRORS.append("VERIFIED_PAGE_UPDATE_DATES must remain a literal mapping: " + str(exc))
+
+sitemap_lastmods = {}
+try:
+    final_sitemap = ET.parse(sitemap_path).getroot()
+    ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    for node in final_sitemap.findall("sm:url", ns):
+        loc = node.findtext("sm:loc", namespaces=ns)
+        lastmod = node.findtext("sm:lastmod", namespaces=ns)
+        if loc and lastmod and loc.startswith(SITE):
+            sitemap_lastmods[loc[len(SITE):]] = lastmod
+except (ET.ParseError, OSError) as exc:
+    ERRORS.append("Could not verify sitemap freshness dates: " + str(exc))
+
+for route, expected_date in verified_dates.items():
     raw = read_text(output_path(route))
     blocks = re.findall(
         r"<script\b[^>]*type=['\"]application/ld\+json['\"][^>]*>(.*?)</script>",
@@ -148,11 +173,30 @@ for route, expected_date in {
             continue
         nodes = parsed if isinstance(parsed, list) else [parsed]
         entities.extend(node for node in nodes if isinstance(node, dict)
-                        and node.get("@type") == "WebPage")
-    check(len(entities) == 1, route + ": expected one WebPage entity for freshness validation")
+                        and node.get("@type") in ("WebPage", "AboutPage", "ProfilePage"))
+    check(len(entities) == 1, route + ": expected one page entity for freshness validation")
     if len(entities) == 1:
         check(entities[0].get("dateModified") == expected_date,
-              route + ": dateModified must match the tracked substantive update date " + expected_date)
+              route + ": JSON-LD dateModified must match VERIFIED_PAGE_UPDATE_DATES")
+    check(sitemap_lastmods.get(route) == expected_date,
+          route + ": sitemap lastmod must match VERIFIED_PAGE_UPDATE_DATES")
+
+for route in set(indexable) - set(verified_dates):
+    raw = read_text(output_path(route))
+    blocks = re.findall(
+        r"<script\b[^>]*type=['\"]application/ld\+json['\"][^>]*>(.*?)</script>",
+        raw, re.S | re.I
+    )
+    for block in blocks:
+        try:
+            parsed = json.loads(block)
+        except json.JSONDecodeError:
+            continue
+        nodes = parsed if isinstance(parsed, list) else [parsed]
+        for node in nodes:
+            if isinstance(node, dict) and node.get("@type") in ("WebPage", "AboutPage", "ProfilePage"):
+                check("dateModified" not in node,
+                      route + ": do not emit dateModified without a verified substantive update date")
 
 check(len(set(titles.values())) == len(titles), "duplicate titles across indexable pages")
 check(len(set(descriptions.values())) == len(descriptions), "duplicate descriptions across indexable pages")
