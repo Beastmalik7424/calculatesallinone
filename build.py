@@ -1303,12 +1303,12 @@ TOOLS.extend([
         "name": "Query Calculator", "app": "UtilitiesApplication",
         "description": "Ask supported time, date and simple arithmetic questions in plain language. Convert years, months, weeks and hours, calculate Gregorian age from a birth date, and see the method.",
         "h1": "Time & Date Query Calculator",
-        "lead": "Type a supported question in plain language, such as 115 months in years and days, 80 years to days, a date of birth, or 2 weeks to hours. Results use stated conversion rules, and unsupported questions are not guessed.",
+        "lead": "Type a complete question in plain language, such as “How many days are in 5 years?”, “Convert 115 months into years and days”, “How many hours are in 2 weeks?”, or “How old am I if I was born on 29 July 1984?”. Results use stated conversion rules, and unsupported questions are not guessed.",
         "ui": (
             '<form id="query-time-form" class="space-y-4" novalidate>'
             '<label class="@L@" for="qt-question">Your question</label>'
-            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="DOB 29-02-1984 age in days" required>'
-            '<p class="text-sm">Try: 115 months in years and days, 80 years to days, DOB 29-07-1984 age in days, or 2 weeks in hours. Exact calendar totals need a start date.</p>'
+            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="How many days are in 5 years?" required>'
+            '<p class="text-sm">Try a complete question: “How many days are in 5 years?”, “5 years is how many days?”, “Convert 5 years into days”, “How many years are in 2,555 days?”, or “How many hours are in 3 weeks?”. For age, ask “How old am I if I was born on 29 July 1984?”. Exact calendar totals need a start date.</p>'
             '<button class="@B@" type="submit">Calculate Answer</button></form>'
             '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a supported question and tap Calculate Answer.</div>'
         ),
@@ -1897,7 +1897,7 @@ def write(path, content):
 
 
 def years_to_days_reference_html():
-    years_values = [1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 30, 32, 36, 40, 50, 60, 65, 74, 80, 100]
+    years_values = [0.2, 0.5, 1, 1.5, 2, 2.6, 3, 3.5, 3.75, 4, 4.16667, 5, 5.5, 6, 6.66667, 6.83333, 7, 7.83333, 8, 8.5, 8.83333, 9, 9.25, 10, 11, 11.16667, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 29.4, 30, 31, 32, 34, 36, 40, 41, 43, 47, 48, 50, 59, 60, 65, 74, 75, 78, 80, 83, 90, 100, 10000]
     # Recent finalized GSC data (2026-11-19 through 2026-11-21) supports adding 4- and 15-year examples.
     quick_values = [2, 3, 4, 5, 7, 9, 10, 13, 15, 20]
     def formatted(value):
@@ -1918,14 +1918,14 @@ def years_to_days_reference_html():
            '<p class="' + P + '">A short comparison for common examples. Fixed-year methods are estimates; exact calendar totals depend on the start date.</p>'
            + table_start + table_rows(quick_values) + table_end
            + '<details id="years-days-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
-           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 37 years-to-days reference examples</summary>'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all GSC-informed years-to-days reference examples</summary>'
            + table_start + table_rows(years_values) + table_end
            + '</details><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. The expanded table is a duration reference, not a substitute for a date-specific count.</p></section>')
     return out
 
 
 def days_to_years_reference_html():
-    day_counts = [724, 1068, 1145, 1188, 1297, 1476, 2436, 2504, 2600, 7200, 27375, 28000, 42069]
+    day_counts = [1, 7, 30, 300, 336, 365, 504, 571, 724, 854, 1009, 1068, 1125, 1145, 1188, 1297, 1392, 1412, 1460, 1476, 1599, 1719, 1833, 1879, 2000, 2092, 2104, 2141, 2255, 2392, 2436, 2504, 2555, 2600, 3113, 4015, 5000, 7200, 7300, 10949, 10957, 11574, 12000, 13000, 13800, 19710, 21900, 27375, 28000, 36500, 42069, 70000, 500000, 800000]
     out = ('<section class="mt-10"><h2 class="' + H2 + '">Worked reference: days to years</h2>'
            '<p class="' + P + '">Convert days to decimal years by dividing by 365, 365.25 or 365.2425. Values are rounded to four decimal places; these are duration estimates, not calendar ages.</p>'
            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
