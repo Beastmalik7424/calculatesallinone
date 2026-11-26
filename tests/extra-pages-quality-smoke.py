@@ -179,7 +179,7 @@ for slug, spec in CASES.items():
     assert any(schema.get("@type") == "WebPage" and expected_domain in " ".join(schema.get("citation", [])) for schema in schemas), f"Missing structured source citations: {slug}"
 
 percentage_html = (ROOT / "percentage-calculator" / "index.html").read_text(encoding="utf-8")
-assert 'href="https://ibcc.edu.pk/faqs/new-grading-system-ssc-hssc-faqs/"' in percentage_html, "Missing official IBCC grading-policy reference"
+assert 'href="https://ibcc.edu.pk/faqs/new-grading-system-of-ssc-hssc-faqs/"' in percentage_html, "Missing official IBCC grading-policy reference"
 percentage_scripts = re.findall(r'<script[^>]+type="application/ld\+json"[^>]*>(.*?)</script>', percentage_html, re.S)
 percentage_schemas = [json.loads(item) for item in percentage_scripts]
 assert any(schema.get("@type") == "WebPage"
