@@ -145,6 +145,8 @@ def main():
             failures.append("/health/ must describe all three standard adult calorie formula choices")
         if "The calorie tool offers a standard Mifflin-St Jeor maintenance estimate" in health_text:
             failures.append("/health/ must not describe the upgraded calorie tool as Mifflin-only")
+        if "Estimate adult maintenance calories with Mifflin–St Jeor, Revised Harris–Benedict or Katch–McArdle. Compare assumptions and TDEE. Results are estimates, not medical advice." not in health_text:
+            failures.append("/health/ calculator card description must match the live three-formula calculator")
     if not calorie_path.is_file():
         failures.append("/calorie-calculator/ was not generated for the Health hub consistency check")
     else:
