@@ -215,6 +215,40 @@ simulate(() => {
   close(result.maintenanceKcalPerDay, resting * activity.multiplier);
 }, 1000);
 
+// 1,000 Revised Harris–Benedict estimates checked against the published 1984 coefficients.
+simulate(() => {
+  const age = integer(18, 100), weightKg = integer(3000, 20000) / 100;
+  const heightCm = integer(13000, 22000) / 100;
+  const coefficient = random() < 0.5 ? "male" : "female";
+  const activity = calorie.ACTIVITY_PRESETS[integer(0, calorie.ACTIVITY_PRESETS.length - 1)];
+  const resting = coefficient === "male"
+    ? 88.362 + 13.397 * weightKg + 4.799 * heightCm - 5.677 * age
+    : 447.593 + 9.247 * weightKg + 3.098 * heightCm - 4.330 * age;
+  const result = calorie.calculateMaintenanceCalories({
+    age, weight: weightKg, weightUnit: "kg", heightUnit: "cm", heightCm,
+    coefficient, formula: "harris-benedict", activityId: activity.id,
+    pregnancyStatus: coefficient === "female" ? "no" : undefined
+  });
+  close(result.restingKcalPerDay, resting);
+  close(result.maintenanceKcalPerDay, resting * activity.multiplier);
+}, 1000);
+
+// 1,000 Katch–McArdle estimates checked against an independent lean-mass oracle.
+simulate(() => {
+  const age = integer(18, 100), weightKg = integer(3000, 20000) / 100;
+  const bodyFatPercent = integer(300, 7000) / 100;
+  const activity = calorie.ACTIVITY_PRESETS[integer(0, calorie.ACTIVITY_PRESETS.length - 1)];
+  const leanMassKg = weightKg * (1 - bodyFatPercent / 100);
+  const resting = 370 + 21.6 * leanMassKg;
+  const result = calorie.calculateMaintenanceCalories({
+    age, weight: weightKg, weightUnit: "kg", bodyFatPercent,
+    formula: "katch-mcardle", activityId: activity.id
+  });
+  close(result.leanMassKg, leanMassKg);
+  close(result.restingKcalPerDay, resting);
+  close(result.maintenanceKcalPerDay, resting * activity.multiplier);
+}, 1000);
+
 // 1,000 DRI 2023 adult life-stage cases, checked against independently transcribed equation coefficients.
 simulate(() => {
   const age = integer(19, 80), heightCm = integer(15000, 20000) / 100, weightKg = integer(4500, 12000) / 100;
@@ -262,13 +296,16 @@ const percentagePage = fs.readFileSync(path.join(root, "public", "percentage-cal
 const fractionPage = fs.readFileSync(path.join(root, "public", "fraction-calculator", "index.html"), "utf8");
 match(caloriePage, /\/assets\/calorie-calculator\.js\?v=/, "generated calorie page must load the tested calorie engine");
 match(caloriePage, /id="calorie-form"/, "generated calorie page must expose the expected form contract");
+match(caloriePage, /value="harris-benedict-male"/, "generated calorie page must expose Revised Harris–Benedict");
+match(caloriePage, /value="katch-mcardle"/, "generated calorie page must expose Katch–McArdle");
+match(caloriePage, /id="cal-body-fat-field"/, "generated calorie page must expose the conditional body-fat input");
 match(percentagePage, /\/assets\/extra-calculators\.js/, "generated percentage page must load the tested extra-calculator engine");
 match(percentagePage, /\/assets\/extra-calculators-ui\.js/, "generated percentage page must load the calculator UI adapter");
 match(percentagePage, /id="extra-calculator-form"/, "generated percentage page must expose its form contract");
 match(fractionPage, /\/assets\/extra-calculators\.js/, "generated fraction page must load the tested extra-calculator engine");
 match(fractionPage, /id="extra-calculator-form"/, "generated fraction page must expose its form contract");
 
-equal(simulations, 15000, "all planned deterministic simulation cases must execute");
+equal(simulations, 17000, "all planned deterministic simulation cases must execute");
 console.log("PASS: " + simulations + " deterministic calculator simulations (seed 20261114)");
 console.log("PASS: " + assertionCount + " independently counted unit/property assertions");
 console.log("PASS: 3 generated-page integration contracts");

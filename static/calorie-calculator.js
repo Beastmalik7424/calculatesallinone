@@ -20,32 +20,66 @@ function calculateMaintenanceCalories(input){
  if(!Number.isInteger(age))throw new Error("Age must be a whole number of years.");
  if(age<18)throw new Error("This calculator is for adults aged 18 or older.");
  if(age>120)throw new Error("Enter an age from 18 to 120 years.");
+ var formula=input.formula||"mifflin";
+ if(!["mifflin","harris-benedict","katch-mcardle"].includes(formula))throw new Error("Choose one of the supported calorie formulas.");
  var coefficient=input.coefficient;
- if(coefficient!=="male"&&coefficient!=="female")throw new Error("Choose one of the published equation coefficients to continue.");
- if(coefficient==="female"){
-  if(!["no","pregnant","breastfeeding","both","prefer_not_to_say"].includes(input.pregnancyStatus))throw new Error("Select a pregnancy and breastfeeding status.");
-  if(input.pregnancyStatus==="prefer_not_to_say")throw new Error("To continue, select “Neither applies”. If you prefer not to disclose, no estimate will be calculated.");
-  if(input.pregnancyStatus!=="no")throw new Error("This calculator is not intended for pregnancy or breastfeeding. It does not provide an ordinary maintenance estimate for these circumstances.");
+ if(formula!=="katch-mcardle"){
+  if(coefficient!=="male"&&coefficient!=="female")throw new Error("Choose the published male or female equation coefficient.");
+  if(coefficient==="female"){
+   if(!["no","pregnant","breastfeeding","both","prefer_not_to_say"].includes(input.pregnancyStatus))throw new Error("Select a pregnancy and breastfeeding status.");
+   if(input.pregnancyStatus==="prefer_not_to_say")throw new Error("To continue, select “Neither applies”. If you prefer not to disclose, no estimate will be calculated.");
+   if(input.pregnancyStatus!=="no")throw new Error("This standard adult formula is not intended for pregnancy or breastfeeding. Use the separate National Academies DRI 2023 life-stage method.");
+  }
+ }else if(["pregnant","breastfeeding","both"].includes(input.pregnancyStatus)){
+  throw new Error("Katch–McArdle is not intended for pregnancy or breastfeeding.");
  }
  if(input.weightUnit!=="kg"&&input.weightUnit!=="lb")throw new Error("Choose a supported weight unit (kg or lb).");
  var weight=number(input.weight,"weight");
  var weightKg=input.weightUnit==="lb"?weight*LB_TO_KG:weight;
  if(!Number.isFinite(weightKg)||weightKg<20||weightKg>500)throw new Error("Enter a weight that converts to 20–500 kg. This broad input guardrail catches likely entry errors; it is not a clinical range.");
- var heightCm;
- if(input.heightUnit==="cm")heightCm=number(input.heightCm,"height in centimetres");
- else if(input.heightUnit==="ft-in"){
-  var feet=number(input.heightFeet,"height in feet"), inches=number(input.heightInches,"remaining height in inches");
-  if(!Number.isInteger(feet)||feet<3||feet>8)throw new Error("Enter a whole number of feet from 3 to 8.");
-  if(inches<0||inches>=12)throw new Error("Remaining inches must be at least 0 and less than 12.");
-  heightCm=(feet*12+inches)*IN_TO_CM;
- }else throw new Error("Choose a supported height unit (cm or feet and inches).");
- if(!Number.isFinite(heightCm)||heightCm<100||heightCm>250)throw new Error("Enter a height that converts to 100–250 cm. This broad input guardrail catches likely entry errors; it is not a clinical range.");
+ var heightCm=null;
+ if(formula!=="katch-mcardle"){
+  if(input.heightUnit==="cm")heightCm=number(input.heightCm,"height in centimetres");
+  else if(input.heightUnit==="ft-in"){
+   var feet=number(input.heightFeet,"height in feet"), inches=number(input.heightInches,"remaining height in inches");
+   if(!Number.isInteger(feet)||feet<3||feet>8)throw new Error("Enter a whole number of feet from 3 to 8.");
+   if(inches<0||inches>=12)throw new Error("Remaining inches must be at least 0 and less than 12.");
+   heightCm=(feet*12+inches)*IN_TO_CM;
+  }else throw new Error("Choose a supported height unit (cm or feet and inches).");
+  if(!Number.isFinite(heightCm)||heightCm<100||heightCm>250)throw new Error("Enter a height that converts to 100–250 cm. This broad input guardrail catches likely entry errors; it is not a clinical range.");
+ }
  var activity=ACTIVITY_PRESETS.find(function(x){return x.id===input.activityId;});
  if(!activity)throw new Error("Choose one of the listed activity assumptions.");
- var resting=coefficient==="male"?(10*weightKg)+(6.25*heightCm)-(5*age)+5:(10*weightKg)+(6.25*heightCm)-(5*age)-161;
+ var resting,equation,sourceUrl,sourceLabel,formulaWorking,leanMassKg=null,bodyFatPercent=null;
+ if(formula==="mifflin"){
+  resting=coefficient==="male"?(10*weightKg)+(6.25*heightCm)-(5*age)+5:(10*weightKg)+(6.25*heightCm)-(5*age)-161;
+  equation="Mifflin–St Jeor (1990)";
+  sourceUrl="https://pubmed.ncbi.nlm.nih.gov/2305711/";
+  sourceLabel="Mifflin–St Jeor original paper (PubMed)";
+  formulaWorking="10 × "+formatEquationKcal(weightKg)+" + 6.25 × "+formatEquationKcal(heightCm)+" − 5 × "+age+(coefficient==="male"?" + 5":" − 161");
+ }else if(formula==="harris-benedict"){
+  resting=coefficient==="male"
+   ?88.362+13.397*weightKg+4.799*heightCm-5.677*age
+   :447.593+9.247*weightKg+3.098*heightCm-4.330*age;
+  equation="Revised Harris–Benedict (1984)";
+  sourceUrl="https://pubmed.ncbi.nlm.nih.gov/6741850/";
+  sourceLabel="Roza and Shizgal revised Harris–Benedict paper (PubMed)";
+  formulaWorking=coefficient==="male"
+   ?"88.362 + 13.397 × "+formatEquationKcal(weightKg)+" + 4.799 × "+formatEquationKcal(heightCm)+" − 5.677 × "+age
+   :"447.593 + 9.247 × "+formatEquationKcal(weightKg)+" + 3.098 × "+formatEquationKcal(heightCm)+" − 4.330 × "+age;
+ }else{
+  bodyFatPercent=number(input.bodyFatPercent,"body-fat percentage");
+  if(bodyFatPercent<3||bodyFatPercent>70)throw new Error("Enter a body-fat percentage from 3 to 70. This broad input guardrail is not a clinical range.");
+  leanMassKg=weightKg*(1-bodyFatPercent/100);
+  resting=370+21.6*leanMassKg;
+  equation="Katch–McArdle";
+  sourceUrl="https://pmc.ncbi.nlm.nih.gov/articles/PMC5477436/";
+  sourceLabel="Peer-reviewed Katch–McArdle equation comparison";
+  formulaWorking="370 + 21.6 × "+formatEquationKcal(leanMassKg)+" kg fat-free mass";
+ }
  var maintenance=resting*activity.multiplier;
  if(!Number.isFinite(resting)||!Number.isFinite(maintenance)||resting<=0||maintenance<=0)throw new Error("These entries do not produce a usable estimate. Check the values and units.");
- return Object.freeze({age:age,weightKg:weightKg,heightCm:heightCm,coefficient:coefficient,equation:"Mifflin–St Jeor (1990)",restingKcalPerDay:resting,maintenanceKcalPerDay:maintenance,activity:activity,outsideOriginalStudyAgeRange:age<19||age>78});
+ return Object.freeze({age:age,weightKg:weightKg,heightCm:heightCm,coefficient:coefficient||null,formula:formula,equation:equation,formulaWorking:formulaWorking,sourceUrl:sourceUrl,sourceLabel:sourceLabel,leanMassKg:leanMassKg,bodyFatPercent:bodyFatPercent,restingKcalPerDay:resting,maintenanceKcalPerDay:maintenance,activity:activity,outsideOriginalStudyAgeRange:formula==="mifflin"&&(age<19||age>78)});
 }
 
 var DRI_ACTIVITY_CATEGORIES=Object.freeze(["inactive","low_active","active","very_active"]);
@@ -136,21 +170,38 @@ function initialize(doc){
  var unit=byId("cal-height-unit"),metric=byId("cal-height-metric"),imperial=byId("cal-height-imperial");
  var cm=byId("cal-height-cm"),ft=byId("cal-height-ft"),inch=byId("cal-height-in"),heightLabel=byId("cal-height-label");
  var error=byId("calorie-error"),result=byId("calorie-result");
- var coefficient=byId("cal-coefficient"),eligibilityField=byId("cal-eligibility-field"),eligibility=byId("cal-eligibility");
+ var coefficient=byId("cal-coefficient"),eligibilityField=byId("cal-eligibility-field"),eligibility=byId("cal-eligibility"),bodyFatField=byId("cal-body-fat-field"),bodyFatInput=byId("cal-body-fat"),heightField=byId("cal-height-field");
  function clear(){error.textContent="";result.hidden=true;result.replaceChildren();}
+ function selectedProfile(){
+  var value=coefficient.value;
+  if(value==="mifflin-male")return {formula:"mifflin",coefficient:"male"};
+  if(value==="mifflin-female")return {formula:"mifflin",coefficient:"female"};
+  if(value==="harris-benedict-male")return {formula:"harris-benedict",coefficient:"male"};
+  if(value==="harris-benedict-female")return {formula:"harris-benedict",coefficient:"female"};
+  if(value==="katch-mcardle")return {formula:"katch-mcardle",coefficient:null};
+  return {formula:"mifflin",coefficient:null};
+ }
  function updateHeight(){
-  var imp=unit.value==="ft-in";metric.hidden=imp;imperial.hidden=!imp;
-  metric.style.display=imp?"none":"block";imperial.style.display=imp?"grid":"none";
+  var katch=coefficient.value==="katch-mcardle",imp=unit.value==="ft-in";
+  heightField.hidden=katch;unit.disabled=katch;
+  metric.hidden=imp||katch;imperial.hidden=!imp||katch;
+  metric.style.display=imp||katch?"none":"block";imperial.style.display=imp&&!katch?"grid":"none";
   heightLabel.textContent=imp?"Height (ft / in)":"Height (cm)";
   heightLabel.htmlFor=imp?"cal-height-ft":"cal-height-cm";
-  cm.disabled=imp;ft.disabled=!imp;inch.disabled=!imp;clear();
+  cm.disabled=imp||katch;ft.disabled=!imp||katch;inch.disabled=!imp||katch;clear();
  }
  function updateEligibility(){
-  var female=coefficient.value==="female";
+  var profile=selectedProfile(),female=profile.coefficient==="female",katch=profile.formula==="katch-mcardle";
   eligibilityField.hidden=!female;
   eligibility.disabled=!female;
   eligibility.required=female;
   if(!female)eligibility.value="";
+  bodyFatField.hidden=!katch;
+  bodyFatInput.disabled=!katch;
+  bodyFatInput.required=katch;
+  if(!katch)bodyFatInput.value="";
+  if(katch){cm.value="";ft.value="";inch.value="";}
+  updateHeight();
   var status=eligibility.value;
   var lifeStage=female&&["pregnant","breastfeeding","both"].includes(status);
   var lifeFields=byId("cal-life-stage-fields");
@@ -175,8 +226,9 @@ function initialize(doc){
   clear();
   try{
    var status=byId("cal-eligibility").value;
-   var common={age:byId("cal-age").value,weight:byId("cal-weight").value,weightUnit:byId("cal-weight-unit").value,heightUnit:unit.value,heightCm:cm.value,heightFeet:ft.value,heightInches:inch.value,coefficient:byId("cal-coefficient").value,pregnancyStatus:status};
-   if(common.coefficient==="female"&&["pregnant","breastfeeding","both"].includes(status)){
+   var profile=selectedProfile();
+    var common={age:byId("cal-age").value,weight:byId("cal-weight").value,weightUnit:byId("cal-weight-unit").value,heightUnit:unit.value,heightCm:cm.value,heightFeet:ft.value,heightInches:inch.value,coefficient:profile.coefficient,formula:profile.formula,bodyFatPercent:bodyFatInput.value,pregnancyStatus:status};
+    if(common.coefficient==="female"&&["pregnant","breastfeeding","both"].includes(status)){
     var life=calculateLifeStageCalories(Object.assign({},common,{lifeStageActivityId:byId("cal-life-stage-activity").value,pregnancyWeeks:byId("cal-pregnancy-weeks").value,prePregnancyWeight:byId("cal-prepregnancy-weight").value,breastfeedingStage:byId("cal-breastfeeding-stage").value}));
     add("h3","text-lg font-semibold","Estimated daily energy requirement");
     add("p","mt-1 text-sm","Method: National Academies Dietary Reference Intakes for Energy (2023). Activity category: "+life.activityCategory.replace("_"," ")+".");
@@ -199,25 +251,28 @@ function initialize(doc){
     result.hidden=false;return;
    }
    var x=calculateMaintenanceCalories(Object.assign({},common,{activityId:byId("cal-activity").value}));
-   add("h3","text-lg font-semibold","Your estimated daily energy");
-   add("p","mt-1 text-sm","Equation: "+x.equation+".");
-   add("p","mt-2","Estimated resting energy expenditure (REE): "+fmt(x.restingKcalPerDay)+" kcal/day.");
-   add("p","mt-1 text-xl font-bold","Estimated maintenance calories: "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
-   add("p","mt-2","Calculation: "+formatEquationKcal(x.restingKcalPerDay)+" × "+x.activity.multiplier+" activity factor = "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
-   add("p","mt-2 text-sm","Activity assumption: "+x.activity.label+". "+x.activity.description);
-   if(x.outsideOriginalStudyAgeRange)add("p","mt-2 text-sm","Age-range note: the original Mifflin–St Jeor study sample was 19–78 years. Your entered age is outside that original sample range, so this result has an additional evidence limitation.");
-   add("p","mt-2 text-sm","Activity assumption version: "+x.activity.version+". "+x.activity.limitations);
-   var sourceLine=doc.createElement("p");sourceLine.className="mt-2 text-sm";
-   sourceLine.appendChild(doc.createTextNode("Equation source: "));
-   var sourceLink=doc.createElement("a");sourceLink.href="https://pubmed.ncbi.nlm.nih.gov/2305711/";sourceLink.target="_blank";sourceLink.rel="noopener noreferrer";sourceLink.textContent="Mifflin–St Jeor original paper (PubMed)";
-   sourceLine.appendChild(sourceLink);result.appendChild(sourceLine);
+    add("h3","text-lg font-semibold","Your estimated daily energy");
+    add("p","mt-1 text-sm","Equation: "+x.equation+".");
+    add("p","mt-2","Estimated resting energy expenditure (REE): "+fmt(x.restingKcalPerDay)+" kcal/day.");
+    add("p","mt-1 text-xl font-bold","Estimated maintenance calories: "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
+    add("p","mt-2 text-sm","Formula working: "+x.formulaWorking+" = "+formatEquationKcal(x.restingKcalPerDay)+" kcal/day.");
+    add("p","mt-2","Maintenance calculation: "+formatEquationKcal(x.restingKcalPerDay)+" × "+x.activity.multiplier+" activity factor = "+fmt(x.maintenanceKcalPerDay)+" kcal/day.");
+    add("p","mt-2 text-sm","Activity assumption: "+x.activity.label+". "+x.activity.description);
+    if(x.formula==="katch-mcardle")add("p","mt-2 text-sm","Estimated fat-free mass: "+formatEquationKcal(x.leanMassKg)+" kg from "+formatEquationKcal(x.weightKg)+" kg body weight and "+formatEquationKcal(x.bodyFatPercent)+"% body fat. Age and height are not part of this equation. The estimate depends on the accuracy of the body-fat measurement.");
+    if(x.formula==="harris-benedict")add("p","mt-2 text-sm","The 1984 revision reported about 14% precision for normally nourished subjects and was found unreliable in malnourished patients. It is a population estimate, not a measured requirement.");
+    if(x.outsideOriginalStudyAgeRange)add("p","mt-2 text-sm","Age-range note: the original Mifflin–St Jeor study sample was 19–78 years. Your entered age is outside that original sample range, so this result has an additional evidence limitation.");
+    add("p","mt-2 text-sm","Activity assumption version: "+x.activity.version+". "+x.activity.limitations);
+    var sourceLine=doc.createElement("p");sourceLine.className="mt-2 text-sm";
+    sourceLine.appendChild(doc.createTextNode("Equation source: "));
+    var sourceLink=doc.createElement("a");sourceLink.href=x.sourceUrl;sourceLink.target="_blank";sourceLink.rel="noopener noreferrer";sourceLink.textContent=x.sourceLabel;
+    sourceLine.appendChild(sourceLink);result.appendChild(sourceLine);
    add("p","mt-2 text-sm","This is a population-equation estimate, not a measured metabolic rate or a personalized medical prescription.");
    result.hidden=false;
   }catch(e){
    var message=e&&e.message?e.message:"The estimate could not be calculated. Check the entries and try again.";
    if(/not intended for pregnancy or breastfeeding/i.test(message)){
     add("h3","text-lg font-semibold","Pregnancy and breastfeeding need a different estimate");
-    add("p","mt-2 text-sm","This adult Mifflin–St Jeor calculator does not calculate energy needs during pregnancy or breastfeeding.");
+    add("p","mt-2 text-sm","The standard adult maintenance formulas do not calculate energy needs during pregnancy or breastfeeding.");
     add("p","mt-2 text-sm","The USDA National Agricultural Library DRI Calculator includes pregnancy and breastfeeding inputs. It is designed for healthcare professionals, so use it with a qualified healthcare professional.");
     var guidanceLink=doc.createElement("a");
     guidanceLink.href="https://www.nal.usda.gov/human-nutrition-and-food-safety/dri-calculator";
@@ -239,7 +294,7 @@ function initialize(doc){
  });
  byId("cal-calculate").addEventListener("click",calculate);
  byId("cal-reset").addEventListener("click",function(){
-  ["cal-age","cal-weight","cal-height-cm","cal-height-ft","cal-height-in","cal-pregnancy-weeks","cal-prepregnancy-weight"].forEach(function(id){byId(id).value="";});
+  ["cal-age","cal-weight","cal-height-cm","cal-height-ft","cal-height-in","cal-body-fat","cal-pregnancy-weeks","cal-prepregnancy-weight"].forEach(function(id){byId(id).value="";});
   byId("cal-weight-unit").value="kg";unit.value="cm";byId("cal-coefficient").value="";byId("cal-activity").value="";byId("cal-life-stage-activity").value="inactive";byId("cal-eligibility").value="";byId("cal-breastfeeding-stage").value="";
   updateHeight();updateEligibility();clear();byId("cal-age").focus();
  });

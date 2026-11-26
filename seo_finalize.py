@@ -190,7 +190,7 @@ def normalize_meta(raw, path, lang):
         "/math/": "Math Calculators and Unit Converters | CalculatesAll",
         "/contact/": "Contact CalculatesAll | Help and Feedback",
         "/health/": "Health Calculators and BMI Guide | CalculatesAll",
-        "/calorie-calculator/": "Calorie Calculator | Maintenance & TDEE | CalculatesAll",
+        "/calorie-calculator/": "Calorie Calculator | TDEE & 3 Formulas | CalculatesAll",
         "/terms/": "Terms of Use | CalculatesAll Free Tools",
         "/time/": "Date and Time Calculators | CalculatesAll",
         "/ur/age-calculator/": "عمر کیلکولیٹر | سال، مہینے اور دن",

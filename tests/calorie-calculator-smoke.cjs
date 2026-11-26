@@ -102,6 +102,37 @@ const base = {
   age: 30, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175,
   coefficient: "male", activityId: "sedentary", pregnancyStatus: "no"
 };
+
+const revisedMale = calculateMaintenanceCalories({ ...base, formula: "harris-benedict" });
+assert.equal(revisedMale.equation, "Revised Harris–Benedict (1984)");
+assert.ok(Math.abs(revisedMale.restingKcalPerDay - 1695.667) < 1e-9, "Revised Harris–Benedict male REE must match the published coefficients");
+assert.ok(Math.abs(revisedMale.maintenanceKcalPerDay - 2034.8004) < 1e-9, "Revised Harris–Benedict male maintenance must match the activity multiplier");
+
+const revisedFemale = calculateMaintenanceCalories({
+  ...base, coefficient: "female", formula: "harris-benedict"
+});
+assert.ok(Math.abs(revisedFemale.restingKcalPerDay - 1507.133) < 1e-9, "Revised Harris–Benedict female REE must match the published coefficients");
+assert.ok(Math.abs(revisedFemale.maintenanceKcalPerDay - 1808.5596) < 1e-9, "Revised Harris–Benedict female maintenance must match the activity multiplier");
+
+const katch = calculateMaintenanceCalories({
+  age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 20,
+  formula: "katch-mcardle", activityId: "sedentary"
+});
+assert.equal(katch.equation, "Katch–McArdle");
+assert.equal(katch.leanMassKg, 56);
+assert.ok(Math.abs(katch.restingKcalPerDay - 1579.6) < 1e-9, "Katch–McArdle REE must match the fat-free-mass equation");
+assert.ok(Math.abs(katch.maintenanceKcalPerDay - 1895.52) < 1e-9, "Katch–McArdle maintenance must match the activity multiplier");
+assert.equal(katch.coefficient, null, "Katch–McArdle must not require a sex coefficient");
+
+invalid({ ...base, formula: "unknown" }, /formula/i);
+invalid({ ...base, formula: "harris-benedict", coefficient: "unknown" }, /coefficient/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", coefficient: "male", formula: "harris-benedict", activityId: "sedentary" }, /height/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175, coefficient: "female", formula: "harris-benedict", activityId: "sedentary" }, /pregnancy and breastfeeding status/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 20, formula: "katch-mcardle", activityId: "sedentary", pregnancyStatus: "pregnant" }, /pregnancy or breastfeeding/i);
+assert.equal(katch.heightCm, null, "Katch–McArdle must not request or calculate from height");
+invalid({ age: 30, weight: 70, weightUnit: "kg", formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 0, formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 71, formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
 invalid({ ...base, age: 17 }, /18 or older/);
 invalid({ ...base, age: 121 }, /age/i);
 invalid({ ...base, age: NaN }, /age/i);
@@ -172,6 +203,18 @@ assert.ok(html.includes("Calorie Calculator") && html.includes("Maintenance") &&
 assert.ok(html.includes("How many calories do I need to maintain my weight?"), "Visible FAQ must answer the core maintenance-calorie query");
 assert.ok(html.includes("https://www.ncbi.nlm.nih.gov/books/NBK591031/"), "Page must cite the National Academies energy-expenditure definitions");
 assert.match(html, /Mifflin–St Jeor/);
+assert.match(html, /value="mifflin-male"/, "Formula selector must retain Mifflin–St Jeor as an option");
+assert.match(html, /value="harris-benedict-male"/, "Formula selector must expose Revised Harris–Benedict");
+assert.match(html, /value="katch-mcardle"/, "Formula selector must expose Katch–McArdle");
+assert.match(html, /id="cal-body-fat-field"/, "Katch–McArdle must have a conditional body-fat input");
+assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/6741850\//, "Revised Harris–Benedict must cite Roza and Shizgal (1984)");
+assert.match(html, /https:\/\/pmc\.ncbi\.nlm\.nih\.gov\/articles\/PMC5477436\//, "Katch–McArdle must cite a peer-reviewed formula comparison");
+assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/7435418\//, "The page must distinguish the separate Cunningham 1980 equation");
+assert.match(html, /Cunningham is a separate equation \(500 \+ 22/, "The page must not conflate Katch–McArdle and Cunningham");
+assert.match(html, /88\.362 \+ 13\.397/, "Page must disclose the male Revised Harris–Benedict coefficients");
+assert.match(html, /447\.593 \+ 9\.247/, "Page must disclose the female Revised Harris–Benedict coefficients");
+assert.match(html, /370 \+ 21\.6/, "Page must disclose the fat-free-mass equation");
+assert.doesNotMatch(html, /macro split|macro target/i, "Calculator must not imply unvalidated macro prescriptions");
 assert.match(html, /498 healthy adults/);
 assert.match(html, /pregnancy and breastfeeding estimates use separate/i);
 assert.match(html, /National Academies DRI 2023/);

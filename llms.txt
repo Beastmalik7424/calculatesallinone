@@ -54,7 +54,7 @@ This index helps automated systems discover the site's pages. It is not a replac
 
 ## Health tools
 
-- [Adult Calorie Calculator](https://calculateallinone.vercel.app/calorie-calculator/): Browser-based adult maintenance-calorie estimate using the Mifflin–St Jeor resting-energy equation and an explicitly stated consumer activity assumption. Not a medical prescription or a dynamic weight-loss model.
+- [Adult Calorie Calculator](https://calculateallinone.vercel.app/calorie-calculator/): Browser-based adult maintenance-calorie estimate with Mifflin–St Jeor, Revised Harris–Benedict and Katch–McArdle formula options. Katch uses an entered body-fat estimate; pregnancy and breastfeeding use a separate National Academies DRI 2023 method. Not a medical prescription or a dynamic weight-loss model.
 - [Adult BMI Calculator](https://calculateallinone.vercel.app/bmi-calculator/): Adult BMI screening calculation. It is not a diagnosis.
 
 ## Other tools
