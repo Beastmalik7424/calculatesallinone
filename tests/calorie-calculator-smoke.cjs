@@ -126,6 +126,10 @@ assert.equal(katch.coefficient, null, "Katch–McArdle must not require a sex co
 
 invalid({ ...base, formula: "unknown" }, /formula/i);
 invalid({ ...base, formula: "harris-benedict", coefficient: "unknown" }, /coefficient/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", coefficient: "male", formula: "harris-benedict", activityId: "sedentary" }, /height/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175, coefficient: "female", formula: "harris-benedict", activityId: "sedentary" }, /pregnancy and breastfeeding status/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 20, formula: "katch-mcardle", activityId: "sedentary", pregnancyStatus: "pregnant" }, /pregnancy or breastfeeding/i);
+assert.equal(katch.heightCm, null, "Katch–McArdle must not request or calculate from height");
 invalid({ age: 30, weight: 70, weightUnit: "kg", formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
 invalid({ age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 0, formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
 invalid({ age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 71, formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
