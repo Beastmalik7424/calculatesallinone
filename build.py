@@ -1894,7 +1894,7 @@ def write(path, content):
 
 
 def years_to_days_reference_html():
-    years_values = [1, 1.5, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 25, 29, 30, 32, 40, 50, 60, 74, 80, 100]
+    years_values = [1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 30, 32, 36, 40, 50, 60, 74, 80, 100]
     # Recent finalized GSC data (2026-11-19 through 2026-11-21) supports adding 4- and 15-year examples.
     quick_values = [2, 3, 4, 5, 7, 9, 10, 13, 15, 20]
     def formatted(value):
@@ -1915,7 +1915,7 @@ def years_to_days_reference_html():
            '<p class="' + P + '">A short comparison for common examples. Fixed-year methods are estimates; exact calendar totals depend on the start date.</p>'
            + table_start + table_rows(quick_values) + table_end
            + '<details id="years-days-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
-           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 29 years-to-days reference examples</summary>'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 36 years-to-days reference examples</summary>'
            + table_start + table_rows(years_values) + table_end
            + '</details><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. The expanded table is a duration reference, not a substitute for a date-specific count.</p></section>')
     return out
