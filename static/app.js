@@ -1860,9 +1860,9 @@
     if (!form) return
     var factors = { year: 365.2425 * 86400, month: (365.2425 / 12) * 86400, day: 86400, week: 604800,
       hour: 3600, minute: 60, second: 1 }
-    var aliases = { years: "year", year: "year", saal: "year", sal: "year",
+    var aliases = { years: "year", year: "year", saal: "year", sal: "year", jaar: "year", jaren: "year",
       months: "month", month: "month", mahine: "month", mahinay: "month", mahina: "month", maheene: "month",
-      days: "day", day: "day", din: "day",
+      days: "day", day: "day", din: "day", dag: "day", dagen: "day",
       weeks: "week", week: "week", haftay: "week", hafta: "week",
       hours: "hour", hour: "hour", ghantay: "hour", ghanta: "hour",
       minutes: "minute", minute: "minute", min: "minute",
