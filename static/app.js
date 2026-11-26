@@ -1903,6 +1903,17 @@
       question = question.replace(/\b(\d+(?:\.\d+)?)\s*(?:thousand|k)\b/gi, function (match, amount) {
         return String(Number(amount) * 1000)
       })
+      // Resolve fractional "and a half" wording before number-word parsing.
+      // Otherwise the article "a" can be consumed as the number one.
+      var fractionalNumberWords = {
+        one:1, two:2, three:3, four:4, five:5, six:6,
+        seven:7, eight:8, nine:9, ten:10, eleven:11, twelve:12
+      }
+      question = question.replace(/\b(\d+(?:\.\d+)?|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+and\s+a\s+half(?=\s+(?:years?|months?|weeks?|days?)\b)/gi,
+        function (match, amount) {
+          var value = /^\d/.test(amount) ? Number(amount) : fractionalNumberWords[amount.toLowerCase()]
+          return String(value + 0.5)
+        })
       // Accept spoken cardinal numbers as well as numeric digits. Keep this
       // deterministic and dependency-free so the query tool works offline.
       var spokenNumberWords = {
@@ -1962,9 +1973,6 @@
       // This supports GSC wording such as "1 125 days to years" and "36 500 days".
       question = question.replace(/(?<=\d),(?=\d{3}(?:\D|$))/g, "")
         .replace(/(?<=\d)\s+(?=\d{3}(?:\D|$))/g, "")
-      // Accept the common fractional phrasing "8 and a half years".
-      question = question.replace(/\b(\d+(?:\.\d+)?)\s+and\s+(?:a|1)\s+half(?=\s+(?:years?|months?|weeks?|days?)\b)/g,
-        function (match, whole) { return String(Number(whole) + 0.5) })
 
 
       // Calendar-date questions take priority over generic time-unit conversions.
