@@ -1444,7 +1444,11 @@ for phrase in (
     "1,978.5 kcal/day",
     "1,320.25 kcal/day",
     "1,584.3 kcal/day",
-    "standard adult Mifflin-St Jeor maintenance path",
+    "Revised Harris–Benedict",
+    "Katch–McArdle/Cunningham",
+    "337 subjects",
+    "fat-free mass",
+    "All three standard adult formula paths",
     "National Academies DRI 2023 activity categories",
     "not validated for Pakistan or every population",
     "does not combine them into one daily target",
@@ -1467,6 +1471,10 @@ for href in (
     "https://iris.who.int/bitstream/handle/10665/43190/9241593024_eng.pdf",
     "https://pubmed.ncbi.nlm.nih.gov/14726171/",
     "https://pubmed.ncbi.nlm.nih.gov/2305711/",
+    "https://pubmed.ncbi.nlm.nih.gov/6741850/",
+    "https://pubmed.ncbi.nlm.nih.gov/1957828/",
+    "https://pubmed.ncbi.nlm.nih.gov/6741850/",
+    "https://pubmed.ncbi.nlm.nih.gov/1957828/",
     "https://www.cdc.gov/growth-chart-training/hcp/using-bmi/calculating-bmi.html",
     "https://www.cdc.gov/bmi/child-teen-calculator/index.html",
     "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
@@ -1509,7 +1517,7 @@ assert "groups the obesity classes into one displayed obesity label" in who_faq_
 assert "70 ÷ (1.75 × 1.75) = 70 ÷ 3.0625" in health_html and "22.86" in health_html, "Metric BMI example must retain the unrounded denominator and independently checked result"
 assert "703 × 154 ÷ (69 × 69) = 108,262" in health_html, "Imperial BMI example must show the correct 703 formula and unrounded result"
 assert "23.0, 27.5, 32.5 and 37.5" in health_html, "Asian BMI action points must remain distinct from international category bands"
-assert "1,648.75" in health_html and "1,978.5" in health_html and "1,320.25" in health_html and "1,584.3" in health_html, "Mifflin worked examples must match the calculator equation and selected activity factor"
+assert "1,648.75" in health_html and "1,978.5" in health_html and "1,320.25" in health_html and "1,584.3" in health_html and "1,695.667" in health_html and "2,034.8" in health_html and "1,579.6" in health_html and "1,895.5" in health_html, "All three formula worked examples must match their equations and selected activity factor"
 assert "the original mifflin–st jeor study included 498 healthy adults aged 19–78" in health_text.lower(), "Mifflin source population and age range must be explicit"
 assert "BMI is a screening measure" in health_text, "Health hub must not present BMI as a diagnosis"
 assert health_text.count("Those are reference estimates, not personal prescriptions.") == 0, "Health hub must not repeat the pregnancy and breastfeeding reference-estimate disclaimer"
