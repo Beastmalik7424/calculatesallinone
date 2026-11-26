@@ -115,7 +115,7 @@ const { chromium } = require("playwright");
       const katchText = await page.locator("#calorie-result").innerText();
       assert.match(katchText, /Katch–McArdle/);
       assert.match(katchText, /1,895\.5 kcal\/day/);
-      assert.match(katchText, /Katch–McArdle \(Cunningham 1991\)/);
+      assert.match(katchText, /Peer-reviewed Katch–McArdle equation comparison/);
       assert.equal(await page.locator('#calorie-result a[href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5477436/"]').count(), 1);
       await page.locator("#cal-body-fat").fill("71");
       assert.equal(await page.locator("#calorie-result").isVisible(), false, "Editing body-fat input must clear the stale result");
