@@ -1,5 +1,17 @@
 name: First-screen calculator browser audit
 on:
+  push:
+    branches:
+      - main
+      - 'fix/query-calculator-*'
+    paths:
+      - 'build.py'
+      - 'content_v5.py'
+      - 'tests/all-calculator-smoke.cjs'
+      - 'tests/site-output-smoke.py'
+      - 'static/app.js'
+      - 'tests/query-calculator-browser.cjs'
+      - '.github/workflows/first-screen-audit.yml'
   pull_request:
     paths:
       - 'build.py'
