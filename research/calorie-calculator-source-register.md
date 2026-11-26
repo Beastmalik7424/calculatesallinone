@@ -1,14 +1,48 @@
 # Adult Calorie Calculator source and assumptions register
 
-Verification date: 2026-11-02  
-Feature version: 1.0  
+Original source audit: 2026-11-02  
+Latest research update: 2026-11-26  
+Production feature version: 1.0; proposed branch version: 1.1  
 Publication scope: English adult maintenance estimate only
+
+## 26 November 2026 implementation and evidence update
+
+**Release state:** The production calculator remains Mifflin–St Jeor only. PR #354 is a draft branch under GitHub Actions verification; its proposed three-formula upgrade is not merged or deployed. Do not describe the new options as live until the merge and production URL are verified.
+
+**Proposed formula scope:**
+- Mifflin–St Jeor remains the default.
+- Revised Harris–Benedict (Roza and Shizgal, 1984) is added as an alternative using its published male/female coefficients.
+- Katch–McArdle/Cunningham (370 + 21.6 × fat-free mass in kg) is added as an alternative. The user must supply a body-fat percentage; the calculator derives fat-free mass. It does not measure or estimate body fat. Age remains an adult-eligibility input; height is not requested because this equation does not use it.
+- The existing National Academies DRI 2023 pregnancy/breastfeeding path remains separate and unchanged. No calorie deficit, surplus, weight-loss/gain prescription or macro target is added.
+- Katch body-fat input guardrail is 3–70%. This is an input-error guardrail, not a clinical reference range. Users are told not to guess the value.
+
+**Additional primary sources:**
+- Revised Harris–Benedict: Roza and Shizgal (1984), PubMed 6741850. The paper evaluated 337 subjects, reported about 14% precision in normally nourished individuals and cautioned that the equation was unreliable in malnourished patients.
+- Fat-free-mass equation: Cunningham (1991), PubMed 1957828. The proposed equation is REE = 370 + 21.6 × fat-free mass. The page labels this commonly used consumer-calculator method Katch–McArdle/Cunningham and explicitly discloses the body-fat measurement dependency.
+
+**First-party GSC evidence, 4 October–24 November 2026:**
+- 367 visible query rows were returned for the property. Search Console can omit anonymized queries, so query rows do not equal page-level totals.
+- 313 visible query variants contained year/day terms and accounted for 942 impressions with zero clicks. Most of these queries were positioned well beyond page one. The Years-to-Days page was subsequently updated with a 37-row quick-reference table and answer-first metadata on 26 November; the GSC date window ends before that update and cannot measure its effect yet.
+- The exact query "tasbih calculator" rose from 18 impressions in 28 October–10 November to 46 impressions in 11–24 November. Average position in the latter period was 7.35 with zero clicks. This is a GSC trend, not a Google Trends measurement.
+- The site index audit found nine discovered-but-not-indexed URLs: percentage calculator, percentage difference calculator, ratio calculator, calorie calculator, compound interest calculator, date calculator, Math hub, Money hub and Worship hub. Five were rechecked; four inspections timed out. The sitemap itself was healthy and was resubmitted on 26 November. Submission does not guarantee crawling or indexing.
+
+**Competitor benchmark, named comparison set:**
+- Calculator.net reports around 200 calculators and its calorie calculator offers Mifflin–St Jeor, Revised Harris–Benedict and Katch–McArdle. The proposed branch closes this specific formula-choice gap, but not its breadth, editorial review claims or related food-energy tools.
+- Omni Calculator lists 3,938 calculators across 14 categories. Its calorie calculator combines formula explanations, examples and related health tools. Matching its breadth is not a realistic first release; prioritize query-backed depth.
+- CalculatorSoup differentiates with formula transparency and step-by-step work across math, finance, time and conversion tools.
+- GigaCalculator emphasizes contextual input help, formula assumptions and source references across calculator categories.
+- Math.tools focuses on interactive mathematical tools, graphs and developer-facing interfaces; it is a narrower overlap for general-purpose calculators.
+- CalculateAll's differentiators remain Pakistan-relevant Zakat methods, Tasbih counting, local currency context and selected Urdu pages. The main remaining competitive gaps are breadth, independent brand corroboration and external citations, not crawler access.
+
+**Test plan for PR #354 (pending results):** fixed reference cases for all three formulas, 2,000 additional deterministic property simulations (17,000 total), browser interaction and first-screen checks for default and Katch states, body-fat input privacy checks, source-link validation, and regression checks that retain the DRI life-stage path. Do not record PASS until the current PR head's checks complete successfully.
 
 ## Claim and source register
 
 | Claim or implementation | Source | Population / scope | Implementation use | Limitation | Pages/components using claim |
 |---|---|---|---|---|
 | Mifflin–St Jeor resting-energy equations use the published male and female coefficients | Mifflin MD, St Jeor ST et al. “A new predictive equation for resting energy expenditure in healthy individuals.” American Journal of Clinical Nutrition, 1990. [PubMed 2305711](https://pubmed.ncbi.nlm.nih.gov/2305711/) | Original study included 498 healthy adults aged 19–78 | REE formula only | Predictive equation, not an individual metabolic measurement or guarantee. The original study sample does not cover age 18 or ages above 78. | `/calorie-calculator/`, `static/calorie-calculator.js`, `calorie_calculator.py` |
+| Revised Harris–Benedict resting-energy equations use the published 1984 coefficients | Roza AM, Shizgal HM. Revised Harris–Benedict equation (1984). [PubMed 6741850](https://pubmed.ncbi.nlm.nih.gov/6741850/) | 337 subjects in the revision study | Alternative REE formula for adult maintenance estimate | The authors reported about 14% precision in normally nourished individuals and cautioned that the equation was unreliable in malnourished patients. It is a population prediction, not a measured value. | /calorie-calculator/, static/calorie-calculator.js, calorie_calculator.py |
+| Fat-free-mass equation REE = 370 + 21.6 × FFM | Cunningham JJ (1991). [PubMed 1957828](https://pubmed.ncbi.nlm.nih.gov/1957828/) | Population equation based on fat-free mass | Alternative formula labelled Katch–McArdle/Cunningham in the calculator | Requires a user-supplied body-fat percentage to derive FFM. The calculator does not measure body fat; measurement error changes the result. | /calorie-calculator/, static/calorie-calculator.js, calorie_calculator.py |
 | Adult energy requirements can be discussed using BMR and physical activity level concepts | FAO/WHO/UNU, *Human Energy Requirements*, 2004. [Full report](https://www.fao.org/4/y5686e/y5686e00.htm) and [adult energy requirements chapter](https://www.fao.org/4/y5686e/y5686e07.htm) | Population-level adult energy requirements and PAL framework | Context for distinguishing the report's BMR/PAL framework from this consumer calculator | Not the source of the Mifflin equation or the five consumer multipliers. No FAO certification or endorsement is claimed. | `/calorie-calculator/`, `calorie_calculator.py`, `research/calorie-calculator-source-register.md` |
 | Adult guidance should exclude people under 18 and pregnant or breastfeeding users from an ordinary planner | NIDDK, [About the Body Weight Planner](https://www.niddk.nih.gov/health-information/weight-management/body-weight-planner) | NIDDK planner states adults 18+ and excludes younger people and pregnant or breastfeeding women | Conservative eligibility boundary and user-facing exclusion | The NIDDK planner is a different dynamic model. This calculator does not implement it and does not claim NIDDK approval. | `/calorie-calculator/`, `calorie_calculator.py`, `static/calorie-calculator.js` |
 
@@ -22,22 +56,23 @@ Publication scope: English adult maintenance estimate only
 | very_active | 1.0 | 1.725 | Very active | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
 | extra_active | 1.0 | 1.9 | Extra active | Application-defined consumer preset | Approximate heuristic, not individually validated or a measured PAL. |
 
-These activity values are configuration assumptions supplied for a consumer estimate. They are not coefficients from the Mifflin–St Jeor study and are not represented as FAO/WHO/UNU PAL categories. They have not been clinically validated for this website.
+These activity values are configuration assumptions supplied for a consumer estimate. They are not coefficients from Mifflin–St Jeor, Revised Harris–Benedict or Katch–McArdle/Cunningham, and are not represented as FAO/WHO/UNU PAL categories. They have not been clinically validated for this website.
 
 ## Validation policy
 
 - Age accepts whole years from 18 to 120. Age 18 and ages above 78 are accepted only with an explicit note that they fall outside the original Mifflin study sample.
 - Weight is normalized to kilograms and checked against a broad 20–500 kg input guardrail.
-- Height is normalized to centimetres and checked against a broad 100–250 cm input guardrail.
+- Height is normalized to centimetres and checked against a broad 100–250 cm input guardrail for Mifflin–St Jeor and Revised Harris–Benedict. It is not requested for Katch–McArdle/Cunningham because that equation does not use height.
+- Katch–McArdle/Cunningham requires a user-supplied body-fat percentage between 3% and 70% as a broad input guardrail, not a clinical reference range. Fat-free mass is derived from weight and that percentage.
 - These are broad input-error guardrails, not medical reference ranges or population eligibility criteria.
 - Inputs must be finite numbers. Empty, malformed, non-finite, zero, negative and unsupported unit values are rejected.
 - Weight conversion uses 1 lb = 0.45359237 kg. Height conversion uses 1 inch = 2.54 cm. Raw values are normalized once and not repeatedly converted during unit toggles.
 - Intermediate calculations retain full JavaScript number precision. Formatting is applied only to displayed results.
 - No statistical confidence interval is calculated.
-- Pregnancy, breastfeeding, both, or a declined eligibility answer blocks the ordinary estimate.
+- Pregnancy and breastfeeding use the separate National Academies DRI 2023 path. The three standard adult formulas do not apply to those life stages; the Katch option is not available for pregnancy or breastfeeding.
 - The output is REE multiplied by an app-defined activity assumption. It is not a measured TDEE and is not a weight-loss or weight-gain prescription.
 
-## Review and release status
+## Historical review and release status (2 November 2026)
 
 Evidence date: 2026-11-02. Feature branch head at verification: `8d55ff38774072a42a092ff2c88db049fc55c3f4`.
 
@@ -56,7 +91,7 @@ Evidence date: 2026-11-02. Feature branch head at verification: `8d55ff38774072a
 
 ## Market demand and competitor evidence
 
-### Search-demand measurement
+### Historical search-demand measurement (2 November 2026)
 
 Keyword Tool Guest was queried on 2026-11-02 using Google, Global / Worldwide, English. The following are the provider's cached monthly search-volume estimates for the selected terms. They are third-party estimates, not CalculateAll GSC impressions, guaranteed traffic, or independently measured visits. Only cached rows returned numeric metrics. The reported competition field is not an organic SEO difficulty score; top-of-page bid is an advertising metric.
 
@@ -73,7 +108,7 @@ Keyword Tool Guest was queried on 2026-11-02 using Google, Global / Worldwide, E
 
 The guest tool returned autocomplete suggestions but no cached numeric volume for `years to days calculator`, `profit and loss calculator`, `standard deviation calculator`, `Pakistan electricity bill calculator`, `matric marks calculator` and `FBR salary tax calculator`. No volume is claimed for those terms.
 
-### First-party Google Search Console evidence
+### First-party Google Search Console evidence (2 November 2026 snapshot)
 
 For `https://calculateallinone.vercel.app/`, the 90-day window 2026-08-02 to 2026-10-30 reported 28 clicks, 396 impressions, 7.07% CTR and average position 34.3. Page-level examples:
 
@@ -84,7 +119,7 @@ For `https://calculateallinone.vercel.app/`, the 90-day window 2026-08-02 to 202
 | `/tasbih-counter/` | 1 | 40 | 2.50% | 13.3 |
 | `/standard-calculator/` | 0 | 40 | 0% | 16.6 |
 
-Search Console omits some rare queries for privacy, so query rows do not sum to the site's page-level totals. The calorie page is not yet on production and therefore has no first-party Search Console demand data.
+Search Console omits some rare queries for privacy, so query rows do not sum to the site's page-level totals. At the 2 November 2026 snapshot the calorie page was not yet on production. It is live by 26 November; the updated GSC evidence above covers the full site and the current production page.
 
 ### Competitor coverage and strategy
 
@@ -94,7 +129,7 @@ Search Console omits some rare queries for privacy, so query rows do not sum to 
 ### Opportunity assessment
 
 - The new adult maintenance calculator addresses a measured global keyword cluster, especially `maintenance calorie calculator` and `TDEE calculator`. The feature deliberately competes on transparent assumptions, primary-source citation, adult eligibility boundaries, browser-local calculation and no weight-loss/gain prescription, rather than matching the competitors' broader diet-planning scope.
-- Body-fat calculation has a reported 201,000 global monthly searches, but it is health/YMYL content. Defer it until the formula, measurement instructions and qualified review can be independently validated.
+- A standalone body-fat calculator remains deferred because it would require validated measurement guidance and qualified review. The proposed Katch option only accepts a body-fat percentage supplied by the user to derive fat-free mass; it does not estimate body fat or prescribe a target.
 - GPA has a reported 1,220,000 global monthly searches, but the provider trend is −45%. Regional variants appeared as autocomplete suggestions, but no numeric volume was returned for them. Do not treat the broad global term as proof of demand for a Pakistan-specific GPA tool.
 - Mortgage has a reported 4,090,000 global monthly searches, but it is a broad, mature category already covered extensively by competitors. It is not the next low-competition target.
 - Pakistan electricity-bill and salary-tax ideas surfaced in autocomplete, but numeric volume was unavailable. These topics also require current official tariff or tax-year data and frequent maintenance. Do not implement them without a primary-source update process and stronger demand evidence.
@@ -106,13 +141,13 @@ Search-volume status: partial cached global Google keyword metrics are recorded 
 
 | Query seed / primary intent | Related questions served | Destination | Evidence needed | Existing content coverage | Publication status |
 |---|---|---|---|---|---|
-| calorie calculator; daily calorie calculator; maintenance calorie calculator | How many calories do I need daily? What is maintenance energy? | `/calorie-calculator/` | Mifflin–St Jeor original equation, stated activity assumptions, independently checked examples | Existing BMI page does not estimate maintenance calories; this page adds a distinct calculation intent | English page planned for release; not production-published |
+| calorie calculator; daily calorie calculator; maintenance calorie calculator | How many calories do I need daily? What is maintenance energy? | `/calorie-calculator/` | Mifflin–St Jeor original equation, stated activity assumptions, independently checked examples | Existing BMI page does not estimate maintenance calories; this page adds a distinct calculation intent | Published in English by 2026-11-26; the three-formula upgrade remains pending PR #354 |
 | TDEE calculator; daily calorie needs; how many calories do I need | What does the activity factor mean? Are exercise calories included? | `/calorie-calculator/` | Explain REE × app-defined factor; distinguish this estimate from measured TEE and from FAO/WHO/UNU PAL calculations | Existing health hub had BMI-focused content; new page adds the missing maintenance estimate | English page planned for release; not production-published |
 | BMR calculator; resting energy calculator; Mifflin St Jeor calculator | Is REE the same as BMR or RMR? Is BMR a safe minimum? | `/calorie-calculator/` | Original 1990 paper, accurate terminology and explicit limitations | Existing BMI page does not explain the Mifflin equation or REE | English page planned for release; not production-published |
 | calorie calculator kg cm; calorie calculator pounds feet | How are pounds and feet/inches converted? Why can rounding change results? | `/calorie-calculator/` | Exact unit conversion constants, metric/imperial equivalence fixtures, rounding tests | No equivalent existing unit-aware calorie estimator | English page planned for release; not production-published |
-| why calorie calculators differ; activity level calculator explanation | Why does another calculator show a different estimate? What if activity is uncertain? | `/calorie-calculator/` | Compare equation, population, activity assumptions and rounding without unsupported accuracy claims | Existing general methodology page does not cover calorie-estimate differences in detail | English FAQ planned for release; not production-published |
+| why calorie calculators differ; activity level calculator explanation | Why does another calculator show a different estimate? What if activity is uncertain? | `/calorie-calculator/` | Compare equation, population, activity assumptions and rounding without unsupported accuracy claims | Existing general methodology page does not cover calorie-estimate differences in detail | Published in English by 2026-11-26; FAQ coverage updated for three formulas |
 | is this calorie calculator free; does it need sign-up; are measurements stored | Does reset clear entries? Are values sent to an API? | `/calorie-calculator/` | Verify browser code, network requests, URL and storage behavior; check existing privacy policy and third-party scripts | General privacy page exists; page-specific FAQ documents this feature's behavior and limits | English FAQ planned for release; not production-published |
-| can teenagers use a calorie calculator; pregnancy calorie calculator; breastfeeding calories | Who is excluded and why? | `/calorie-calculator/` | Adult eligibility boundary, NIDDK disclaimer context, no ordinary result for excluded selections | Existing BMI page is not a substitute for this calculator's eligibility rules | English safety explanation planned for release; not production-published |
+| can teenagers use a calorie calculator; pregnancy calorie calculator; breastfeeding calories | Who is excluded and why? | `/calorie-calculator/` | Adult eligibility boundary, NIDDK disclaimer context, no ordinary result for excluded selections | Existing BMI page is not a substitute for this calculator's eligibility rules | Published in English by 2026-11-26; DRI life-stage path remains separate |
 | daily kitni calories chahiye; meri maintenance calories kitni hain; calories kaise calculate karein; روزانہ کتنی کیلوریز چاہئیں; کیلوری کیلکولیٹر | Urdu explanation of REE, activity assumptions, safety and result interpretation | No localized destination currently published | Competent Urdu translation review of every scientific, safety, form, result, navigation and metadata string | Existing Urdu journey does not yet include this calculator | Planned; unpublished until competent language review |
 
 This map deliberately consolidates related intents on one useful calculator page. It does not imply measured demand, search volume, indexing, rankings, AI citations or language support.
