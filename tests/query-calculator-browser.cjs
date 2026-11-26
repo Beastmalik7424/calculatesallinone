@@ -32,7 +32,7 @@ const { chromium } = require("playwright");
       ["How many days are in five and a half years?", /5\.5 years ≈ 2,008\.83 days/i],
       ["How many years are in 2,555 days?", /2,555 days ≈ 6\.9954 years/i],
       ["How many hours are in 3 weeks?", /3 weeks = 504 hours/i],
-      ["How many years are in 2,555 days?", /2,555 days ≈ 6\.995 years/i],
+      ["How many years are in 2,555 days?", /2,555 days ≈ 6\.9954 years/i],
       ["How many days are in 6 years and 10 months?", /6 years and 10 months ≈ 2,495\.82 days/i],
       ["How many days is 4 years and 2 months?", /4 years and 2 months ≈ 1,521\.84 days/i],
       ["1 125 days to years", /1,125 days ≈ 3\.08 years/i],
