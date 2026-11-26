@@ -270,7 +270,7 @@ assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 
-assert "Show all 64 years-to-days reference examples" in years_html, "The expanded reference must advertise all 64 GSC-informed year examples"
+assert "Show all 64 GSC-informed years-to-days reference examples" in years_html, "The expanded reference must advertise all 64 GSC-informed year examples"
 assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
 # The 2026-11-26 three-month GSC export supports the expanded year-value set; the quick table prioritizes repeated query amounts.
 _year_4_row = '<tr><th scope="row" class="border-b p-3">4</th><td class="border-b p-3">1,460</td><td class="border-b p-3">1,461</td><td class="border-b p-3">1,460.97</td></tr>'
