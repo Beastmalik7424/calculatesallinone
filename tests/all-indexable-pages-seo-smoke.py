@@ -137,7 +137,7 @@ for route, expected_date in {
 }.items():
     raw = read_text(output_path(route))
     blocks = re.findall(
-        r'<script\\b[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>',
+        r"<script\b[^>]*type=['\"]application/ld\+json['\"][^>]*>(.*?)</script>",
         raw, re.S | re.I
     )
     entities = []
