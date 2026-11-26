@@ -463,7 +463,7 @@ for attr, name in (("property", "og:description"), ("name", "twitter:description
     assert social and html_lib.unescape(social.group(1)) == expected_date_description, f"Stale {name} on date calculator"
 
 query_page = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
-assert "115 months in years and days" in query_page, "Query Calculator should show the month conversion example"
+assert "How many years and days are in 115 months?" in query_page, "Query Calculator should show a complete month-conversion question"
 assert "Pakistan independence date query" in query_page and "14 August 1947" in query_page, "Query Calculator should explain the supported Pakistan date lookup"
 assert "exact calendar days require a start date" in query_page, "Month-to-day estimates must disclose the calendar limitation"
 
