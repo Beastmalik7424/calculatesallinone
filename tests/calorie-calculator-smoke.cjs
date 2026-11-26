@@ -205,6 +205,10 @@ assert.match(html, /value="katch-mcardle"/, "Formula selector must expose Katch�
 assert.match(html, /id="cal-body-fat-field"/, "Katch–McArdle must have a conditional body-fat input");
 assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/6741850\//, "Revised Harris–Benedict must cite Roza and Shizgal (1984)");
 assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/1957828\//, "The fat-free-mass equation must cite Cunningham (1991)");
+assert.match(html, /88\.362 \+ 13\.397/, "Page must disclose the male Revised Harris–Benedict coefficients");
+assert.match(html, /447\.593 \+ 9\.247/, "Page must disclose the female Revised Harris–Benedict coefficients");
+assert.match(html, /370 \+ 21\.6/, "Page must disclose the fat-free-mass equation");
+assert.doesNotMatch(html, /macro split|macro target/i, "Calculator must not imply unvalidated macro prescriptions");
 assert.match(html, /498 healthy adults/);
 assert.match(html, /pregnancy and breastfeeding estimates use separate/i);
 assert.match(html, /National Academies DRI 2023/);
