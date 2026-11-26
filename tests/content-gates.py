@@ -15,7 +15,7 @@ CASES = {
         "2 weeks = 336 hours",
         "3 days = 4,320 minutes",
         "To check a fixed-unit result, reverse the conversion.",
-        "115 months in years and days",
+        "How many years and days are in 115 months?",
         "115 months = 9 years and 7 months",
         "80 years ≈ 29,219.4 days",
         "1 year = 8,765.82 hours",
@@ -104,7 +104,7 @@ def main():
     else:
         query_html = query_path.read_text(encoding="utf-8")
         meta_match = re.search(r'<meta name="description" content="([^"]*)"', query_html)
-        expected_description = "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits."
+        expected_description = "Ask full time and date questions, such as how many days are in 5 years or how many years are in 2,555 days. Convert time units and calculate Gregorian age."
         actual_description = html.unescape(meta_match.group(1)) if meta_match else ""
         if actual_description != expected_description:
             failures.append("/query-calculator/ meta description does not match its supported intent")
