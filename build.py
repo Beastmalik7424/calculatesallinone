@@ -1894,7 +1894,7 @@ def write(path, content):
 
 
 def years_to_days_reference_html():
-    years_values = [1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 30, 32, 36, 40, 50, 60, 74, 80, 100]
+    years_values = [1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 30, 32, 36, 40, 50, 60, 65, 74, 80, 100]
     # Recent finalized GSC data (2026-11-19 through 2026-11-21) supports adding 4- and 15-year examples.
     quick_values = [2, 3, 4, 5, 7, 9, 10, 13, 15, 20]
     def formatted(value):
@@ -1915,14 +1915,14 @@ def years_to_days_reference_html():
            '<p class="' + P + '">A short comparison for common examples. Fixed-year methods are estimates; exact calendar totals depend on the start date.</p>'
            + table_start + table_rows(quick_values) + table_end
            + '<details id="years-days-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
-           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 36 years-to-days reference examples</summary>'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 37 years-to-days reference examples</summary>'
            + table_start + table_rows(years_values) + table_end
            + '</details><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. The expanded table is a duration reference, not a substitute for a date-specific count.</p></section>')
     return out
 
 
 def days_to_years_reference_html():
-    day_counts = [724, 1068, 1145, 1188, 1297, 1476, 2436, 2600, 7200, 27375, 28000, 42069]
+    day_counts = [724, 1068, 1145, 1188, 1297, 1476, 2436, 2504, 2600, 7200, 27375, 28000, 42069]
     out = ('<section class="mt-10"><h2 class="' + H2 + '">Worked reference: days to years</h2>'
            '<p class="' + P + '">Convert days to decimal years by dividing by 365, 365.25 or 365.2425. Values are rounded to four decimal places; these are duration estimates, not calendar ages.</p>'
            '<div class="mt-4 overflow-x-auto"><table class="w-full border-collapse text-left text-sm">'
