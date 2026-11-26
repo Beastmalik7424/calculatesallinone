@@ -1897,7 +1897,7 @@ def write(path, content):
 
 
 def years_to_days_reference_html():
-    years_values = [0.2, 0.5, 1, 1.5, 2, 2.6, 3, 3.5, 3.75, 4, 4.16667, 5, 5.5, 6, 6.66667, 6.83333, 7, 7.83333, 8, 8.5, 8.83333, 9, 9.25, 10, 11, 11.16667, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 29.4, 30, 31, 32, 34, 36, 40, 41, 43, 47, 48, 50, 59, 60, 65, 74, 75, 78, 80, 83, 90, 100, 10000]
+    years_values = [0.2, 1, 1.5, 2, 2.6, 3, 3.5, 3.75, 4, 4.16667, 5, 5.5, 6, 6.66667, 6.83333, 7, 7.83333, 8, 8.5, 8.83333, 9, 9.25, 10, 11, 11.16667, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 29.4, 30, 31, 32, 34, 36, 40, 41, 43, 47, 48, 50, 59, 60, 65, 74, 75, 78, 80, 83, 90, 100, 10000]
     # 2026-11-26 GSC export: 312 visible year/day/month-intent query rows.
     # Include the distinct numeric year quantities in the expandable reference table.
     quick_values = [2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 30]
@@ -1919,7 +1919,7 @@ def years_to_days_reference_html():
            '<p class="' + P + '">A short comparison for common examples. Fixed-year methods are estimates; exact calendar totals depend on the start date.</p>'
            + table_start + table_rows(quick_values) + table_end
            + '<details id="years-days-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
-           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 64 GSC-informed years-to-days reference examples</summary>'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 63 GSC-informed years-to-days reference examples</summary>'
            + table_start + table_rows(years_values) + table_end
            + '</details><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. The expanded table is a duration reference, not a substitute for a date-specific count.</p></section>')
     return out
