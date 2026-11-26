@@ -102,6 +102,33 @@ const base = {
   age: 30, weight: 70, weightUnit: "kg", heightUnit: "cm", heightCm: 175,
   coefficient: "male", activityId: "sedentary", pregnancyStatus: "no"
 };
+
+const revisedMale = calculateMaintenanceCalories({ ...base, formula: "harris-benedict" });
+assert.equal(revisedMale.equation, "Revised Harris–Benedict (1984)");
+assert.equal(revisedMale.restingKcalPerDay, 1695.667);
+assert.equal(revisedMale.maintenanceKcalPerDay, 2034.8004);
+
+const revisedFemale = calculateMaintenanceCalories({
+  ...base, coefficient: "female", formula: "harris-benedict"
+});
+assert.equal(revisedFemale.restingKcalPerDay, 1507.133);
+assert.equal(revisedFemale.maintenanceKcalPerDay, 1808.5596);
+
+const katch = calculateMaintenanceCalories({
+  age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 20,
+  formula: "katch-mcardle", activityId: "sedentary"
+});
+assert.equal(katch.equation, "Katch–McArdle (Cunningham 1991)");
+assert.equal(katch.leanMassKg, 56);
+assert.equal(katch.restingKcalPerDay, 1579.6);
+assert.equal(katch.maintenanceKcalPerDay, 1895.52);
+assert.equal(katch.coefficient, null, "Katch–McArdle must not require a sex coefficient");
+
+invalid({ ...base, formula: "unknown" }, /formula/i);
+invalid({ ...base, formula: "harris-benedict", coefficient: "unknown" }, /coefficient/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 0, formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
+invalid({ age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 71, formula: "katch-mcardle", activityId: "sedentary" }, /body-fat/i);
 invalid({ ...base, age: 17 }, /18 or older/);
 invalid({ ...base, age: 121 }, /age/i);
 invalid({ ...base, age: NaN }, /age/i);
@@ -172,6 +199,12 @@ assert.ok(html.includes("Calorie Calculator") && html.includes("Maintenance") &&
 assert.ok(html.includes("How many calories do I need to maintain my weight?"), "Visible FAQ must answer the core maintenance-calorie query");
 assert.ok(html.includes("https://www.ncbi.nlm.nih.gov/books/NBK591031/"), "Page must cite the National Academies energy-expenditure definitions");
 assert.match(html, /Mifflin–St Jeor/);
+assert.match(html, /value="mifflin-male"/, "Formula selector must retain Mifflin–St Jeor as an option");
+assert.match(html, /value="harris-benedict-male"/, "Formula selector must expose Revised Harris–Benedict");
+assert.match(html, /value="katch-mcardle"/, "Formula selector must expose Katch–McArdle");
+assert.match(html, /id="cal-body-fat-field"/, "Katch–McArdle must have a conditional body-fat input");
+assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/6741850\//, "Revised Harris–Benedict must cite Roza and Shizgal (1984)");
+assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/1957828\//, "The fat-free-mass equation must cite Cunningham (1991)");
 assert.match(html, /498 healthy adults/);
 assert.match(html, /pregnancy and breastfeeding estimates use separate/i);
 assert.match(html, /National Academies DRI 2023/);
