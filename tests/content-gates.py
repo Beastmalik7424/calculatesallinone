@@ -15,7 +15,7 @@ CASES = {
         "2 weeks = 336 hours",
         "3 days = 4,320 minutes",
         "To check a fixed-unit result, reverse the conversion.",
-        "115 months in years and days",
+        "How many years and days are in 115 months?",
         "115 months = 9 years and 7 months",
         "80 years ≈ 29,219.4 days",
         "1 year = 8,765.82 hours",

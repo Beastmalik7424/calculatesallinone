@@ -318,11 +318,11 @@ def check_years_quick_reference():
             parsed.append((html.unescape(re.sub(r"<[^>]+>", "", year)).strip(), cells))
         return parsed
 
-    expected_years = ["2", "3", "4", "5", "7", "9", "10", "13", "15", "20"]
+    expected_years = ["2", "3", "4", "5", "7", "9", "10", "11", "12", "13", "14", "15", "16", "19", "20", "30"]
     quick_rows = table_rows(quick_match.group(1))
     actual_years = [year for year, _ in quick_rows]
     assert actual_years == expected_years, (
-        "Quick reference must prioritize observed 28-day GSC year queries without changing its table structure; "
+        "Quick reference must prioritize observed three-month GSC year queries without changing its table structure; "
         f"expected={expected_years!r}, actual={actual_years!r}"
     )
 
@@ -334,9 +334,15 @@ def check_years_quick_reference():
         "7": ["2,555", "2,556.75", "2,556.6975"],
         "9": ["3,285", "3,287.25", "3,287.1825"],
         "10": ["3,650", "3,652.5", "3,652.425"],
+        "11": ["4,015", "4,017.75", "4,017.6675"],
+        "12": ["4,380", "4,383", "4,382.91"],
         "13": ["4,745", "4,748.25", "4,748.1525"],
+        "14": ["5,110", "5,113.5", "5,113.395"],
         "15": ["5,475", "5,478.75", "5,478.6375"],
+        "16": ["5,840", "5,844", "5,843.88"],
+        "19": ["6,935", "6,939.75", "6,939.6075"],
         "20": ["7,300", "7,305", "7,304.85"],
+        "30": ["10,950", "10,957.5", "10,957.275"],
     }
     assert dict(quick_rows) == expected_values, "Quick-reference arithmetic changed"
 
@@ -344,9 +350,9 @@ def check_years_quick_reference():
     full_match = re.search(r"<table\b[^>]*>(.*?)</table>", full_reference, re.S | re.I)
     assert full_match, "Expanded years-to-days reference table is missing"
     full_rows = table_rows(full_match.group(1))
-    assert len(full_rows) == 37, f"Expanded reference must contain 37 GSC-aligned examples, got {len(full_rows)}"
+    assert len(full_rows) == 63, f"Expanded reference must contain 63 GSC-informed examples, got {len(full_rows)}"
     assert set(expected_years).issubset({year for year, _ in full_rows}), "Quick-reference rows must remain in the expanded table"
-    assert "19" in {year for year, _ in full_rows}, "Removing 19 years from the quick table must not remove it from the expanded reference"
+    assert "19" in {year for year, _ in full_rows}, "The 19-year GSC row must remain in the expanded reference"
     gsc_missing_year_rows = {
         "8": ["2,920", "2,922", "2,921.94"],
         "17": ["6,205", "6,209.25", "6,209.1225"],

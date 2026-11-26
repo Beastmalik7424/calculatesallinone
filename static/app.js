@@ -1860,9 +1860,9 @@
     if (!form) return
     var factors = { year: 365.2425 * 86400, month: (365.2425 / 12) * 86400, day: 86400, week: 604800,
       hour: 3600, minute: 60, second: 1 }
-    var aliases = { years: "year", year: "year", saal: "year", sal: "year",
+    var aliases = { years: "year", year: "year", saal: "year", sal: "year", jaar: "year", jaren: "year",
       months: "month", month: "month", mahine: "month", mahinay: "month", mahina: "month", maheene: "month",
-      days: "day", day: "day", din: "day",
+      days: "day", day: "day", din: "day", dag: "day", dagen: "day",
       weeks: "week", week: "week", haftay: "week", hafta: "week",
       hours: "hour", hour: "hour", ghantay: "hour", ghanta: "hour",
       minutes: "minute", minute: "minute", min: "minute",
@@ -1898,6 +1898,22 @@
       ]
 
       multilingualTerms.forEach(function (item) { question = question.replace(item[0], item[1]) })
+      // Normalize explicit thousands notation found in Search Console queries:
+      // "14 thousand", "21k" and "1.3k" all represent numeric quantities.
+      question = question.replace(/\b(\d+(?:\.\d+)?)\s*(?:thousand|k)\b/gi, function (match, amount) {
+        return String(Number(amount) * 1000)
+      })
+      // Resolve fractional "and a half" wording before number-word parsing.
+      // Otherwise the article "a" can be consumed as the number one.
+      var fractionalNumberWords = {
+        one:1, two:2, three:3, four:4, five:5, six:6,
+        seven:7, eight:8, nine:9, ten:10, eleven:11, twelve:12
+      }
+      question = question.replace(/\b(\d+(?:\.\d+)?|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+and\s+a\s+half(?=\s+(?:years?|months?|weeks?|days?)\b)/gi,
+        function (match, amount) {
+          var value = /^\d/.test(amount) ? Number(amount) : fractionalNumberWords[amount.toLowerCase()]
+          return String(value + 0.5)
+        })
       // Accept spoken cardinal numbers as well as numeric digits. Keep this
       // deterministic and dependency-free so the query tool works offline.
       var spokenNumberWords = {
@@ -1953,8 +1969,11 @@
         var value = spokenNumberValue(phrase.toLowerCase().split(/[\s-]+/))
         return before + (value === null ? phrase : String(value))
       })
-      // Remove standard thousands separators before extracting the quantity.
+      // Normalize comma- and space-grouped thousands before extracting quantities.
+      // This supports GSC wording such as "1 125 days to years" and "36 500 days".
       question = question.replace(/(?<=\d),(?=\d{3}(?:\D|$))/g, "")
+        .replace(/(?<=\d)\s+(?=\d{3}(?:\D|$))/g, "")
+
 
       // Calendar-date questions take priority over generic time-unit conversions.
       // Dates are interpreted as DD-MM-YYYY, DD/MM/YYYY or ISO YYYY-MM-DD.
@@ -2198,6 +2217,28 @@
           say("qt-result", yearCount + " calendar years from 1 January " + firstYear + " = " +
             timeConversionFormat(yearCount * 365 + leapDays) + " days (" + leapDays +
             " leap day" + (leapDays === 1 ? "" : "s") + " counted).")
+          return
+        }
+      }
+      // Handle compound year-and-month durations as two source quantities.
+      // These are average-duration conversions, not exact calendar intervals.
+      var compoundDuration = question.match(/(\d+(?:\.\d+)?)\s+years?\s+and\s+(\d+(?:\.\d+)?)\s+months?/i)
+      if (!compoundDuration) {
+        var reverseCompound = question.match(/(\d+(?:\.\d+)?)\s+months?\s+and\s+(\d+(?:\.\d+)?)\s+years?/i)
+        if (reverseCompound) compoundDuration = [reverseCompound[0], reverseCompound[2], reverseCompound[1]]
+      }
+      if (compoundDuration && /\bdays?\b/i.test(question)) {
+        var compoundYears = Number(compoundDuration[1])
+        var compoundMonths = Number(compoundDuration[2])
+        if (Number.isFinite(compoundYears) && Number.isFinite(compoundMonths) &&
+            compoundYears >= 0 && compoundMonths >= 0 &&
+            compoundYears <= 1000000 && compoundMonths <= 12000000) {
+          var compoundDays = Math.round((compoundYears * 365.2425 +
+            compoundMonths * (365.2425 / 12)) * 100) / 100
+          say("qt-result", timeConversionFormat(compoundYears) + " years and " +
+            timeConversionFormat(compoundMonths) + " months ≈ " +
+            timeConversionFormat(compoundDays) + " days. Uses the Gregorian average of " +
+            "365.2425 days per year (30.436875 days per month); exact calendar totals depend on the dates.")
           return
         }
       }
