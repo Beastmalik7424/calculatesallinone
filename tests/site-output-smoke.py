@@ -265,7 +265,7 @@ assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
 
-assert "Show all 36 years-to-days reference examples" in years_html, "The expanded reference must advertise all 29 examples"
+assert "Show all 36 years-to-days reference examples" in years_html, "The expanded reference must advertise all 36 examples"
 assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
 # Recent finalized GSC data (2026-11-19 through 2026-11-21) supports 4- and 15-year examples.
 # Keep those alongside established 7- and 9-year answers in both tables; 19 and 25 years remain in the expanded table.
