@@ -39,7 +39,7 @@ CalculatesAll is an independently maintained collection of free online calculato
 ### Health and worship tools
 
 - [Adult BMI calculator](https://calculateallinone.vercel.app/bmi-calculator/) — provides an adult BMI screening result, not a medical diagnosis.
-- [Adult calorie calculator](https://calculateallinone.vercel.app/calorie-calculator/) — estimates adult maintenance energy with Mifflin–St Jeor, Revised Harris–Benedict or Katch–McArdle/Cunningham; pregnancy and breastfeeding use a separate DRI 2023 reference path. It is not a medical prescription.
+- [Adult calorie calculator](https://calculateallinone.vercel.app/calorie-calculator/) — estimates adult maintenance energy with Mifflin–St Jeor, Revised Harris–Benedict or Katch–McArdle; pregnancy and breastfeeding use a separate DRI 2023 reference path. It is not a medical prescription.
 - [Tasbih counter](https://calculateallinone.vercel.app/tasbih-counter/) — counts deliberate taps for selected or custom dhikr phrases and targets. It does not listen to or verify recitation.
 
 ## Site information

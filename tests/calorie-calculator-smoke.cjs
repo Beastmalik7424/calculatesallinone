@@ -118,10 +118,10 @@ const katch = calculateMaintenanceCalories({
   age: 30, weight: 70, weightUnit: "kg", bodyFatPercent: 20,
   formula: "katch-mcardle", activityId: "sedentary"
 });
-assert.equal(katch.equation, "Katch–McArdle (Cunningham 1991)");
+assert.equal(katch.equation, "Katch–McArdle");
 assert.equal(katch.leanMassKg, 56);
-assert.ok(Math.abs(katch.restingKcalPerDay - 1579.6) < 1e-9, "Katch–McArdle/Cunningham REE must match the fat-free-mass equation");
-assert.ok(Math.abs(katch.maintenanceKcalPerDay - 1895.52) < 1e-9, "Katch–McArdle/Cunningham maintenance must match the activity multiplier");
+assert.ok(Math.abs(katch.restingKcalPerDay - 1579.6) < 1e-9, "Katch–McArdle REE must match the fat-free-mass equation");
+assert.ok(Math.abs(katch.maintenanceKcalPerDay - 1895.52) < 1e-9, "Katch–McArdle maintenance must match the activity multiplier");
 assert.equal(katch.coefficient, null, "Katch–McArdle must not require a sex coefficient");
 
 invalid({ ...base, formula: "unknown" }, /formula/i);
@@ -208,7 +208,9 @@ assert.match(html, /value="harris-benedict-male"/, "Formula selector must expose
 assert.match(html, /value="katch-mcardle"/, "Formula selector must expose Katch–McArdle");
 assert.match(html, /id="cal-body-fat-field"/, "Katch–McArdle must have a conditional body-fat input");
 assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/6741850\//, "Revised Harris–Benedict must cite Roza and Shizgal (1984)");
-assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/1957828\//, "The fat-free-mass equation must cite Cunningham (1991)");
+assert.match(html, /https:\/\/pmc\.ncbi\.nlm\.nih\.gov\/articles\/PMC5477436\//, "Katch–McArdle must cite a peer-reviewed formula comparison");
+assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/7435418\//, "The page must distinguish the separate Cunningham 1980 equation");
+assert.match(html, /Cunningham is a separate equation \(500 \+ 22/, "The page must not conflate Katch–McArdle and Cunningham");
 assert.match(html, /88\.362 \+ 13\.397/, "Page must disclose the male Revised Harris–Benedict coefficients");
 assert.match(html, /447\.593 \+ 9\.247/, "Page must disclose the female Revised Harris–Benedict coefficients");
 assert.match(html, /370 \+ 21\.6/, "Page must disclose the fat-free-mass equation");

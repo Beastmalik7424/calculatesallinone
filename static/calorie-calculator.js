@@ -72,9 +72,9 @@ function calculateMaintenanceCalories(input){
   if(bodyFatPercent<3||bodyFatPercent>70)throw new Error("Enter a body-fat percentage from 3 to 70. This broad input guardrail is not a clinical range.");
   leanMassKg=weightKg*(1-bodyFatPercent/100);
   resting=370+21.6*leanMassKg;
-  equation="Katch–McArdle (Cunningham 1991)";
-  sourceUrl="https://pubmed.ncbi.nlm.nih.gov/1957828/";
-  sourceLabel="Cunningham 1991 fat-free-mass equation (PubMed)";
+  equation="Katch–McArdle";
+  sourceUrl="https://pmc.ncbi.nlm.nih.gov/articles/PMC5477436/";
+  sourceLabel="Peer-reviewed Katch–McArdle equation comparison";
   formulaWorking="370 + 21.6 × "+formatEquationKcal(leanMassKg)+" kg fat-free mass";
  }
  var maintenance=resting*activity.multiplier;
