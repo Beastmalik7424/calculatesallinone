@@ -180,10 +180,12 @@ for slug, spec in CASES.items():
 
 percentage_html = (ROOT / "percentage-calculator" / "index.html").read_text(encoding="utf-8")
 assert 'href="https://ibcc.edu.pk/faqs/new-grading-system-ssc-hssc-faqs/"' in percentage_html, "Missing official IBCC grading-policy reference"
+percentage_scripts = re.findall(r'<script[^>]+type="application/ld\+json"[^>]*>(.*?)</script>', percentage_html, re.S)
+percentage_schemas = [json.loads(item) for item in percentage_scripts]
 assert any(schema.get("@type") == "WebPage"
            and schema.get("dateModified") == "2026-11-26"
            and "ibcc.edu.pk" in " ".join(schema.get("citation", []))
-           for schema in schemas), "Missing verified IBCC source and 2026-11-26 date in page-level schema"
+           for schema in percentage_schemas), "Missing verified IBCC source and 2026-11-26 date in percentage page-level schema"
 
 for value in (r'value=["\']of["\']', r'value=["\']share["\']', r'value=["\']change["\']', r'id=["\']percentage-mode["\']'):
     assert re.search(value, percentage_html), f"Missing percentage mode control: {value}"
