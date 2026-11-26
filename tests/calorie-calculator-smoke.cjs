@@ -210,7 +210,7 @@ assert.match(html, /id="cal-body-fat-field"/, "Katch–McArdle must have a condi
 assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/6741850\//, "Revised Harris–Benedict must cite Roza and Shizgal (1984)");
 assert.match(html, /https:\/\/pmc\.ncbi\.nlm\.nih\.gov\/articles\/PMC5477436\//, "Katch–McArdle must cite a peer-reviewed formula comparison");
 assert.match(html, /https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/7435418\//, "The page must distinguish the separate Cunningham 1980 equation");
-assert.match(html, /Cunningham is a separate equation \(500 \+ 22/, "The page must not conflate Katch–McArdle and Cunningham");
+assert.match(html, /Cunningham.s separate 500 \+ 22/, "The page must not conflate Katch–McArdle and Cunningham");
 assert.match(html, /88\.362 \+ 13\.397/, "Page must disclose the male Revised Harris–Benedict coefficients");
 assert.match(html, /447\.593 \+ 9\.247/, "Page must disclose the female Revised Harris–Benedict coefficients");
 assert.match(html, /370 \+ 21\.6/, "Page must disclose the fat-free-mass equation");
