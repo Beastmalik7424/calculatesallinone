@@ -6,10 +6,11 @@ const js = fs.readFileSync("static/app.js", "utf8");
 const html = fs.readFileSync("public/query-calculator/index.html", "utf8");
 assert.match(html, /id="query-time-form"/);
 assert.match(html, /id="qt-result"/);
+assert.match(html, /id="qt-question"[^>]*value="How many days old is someone born on 29-02-1984\?"/, "Query Calculator should load a complete natural-language question, not a numeric fragment");
 assert.ok(html.includes("/assets/app.js?v="), "versioned JS asset missing");
 const listeners = {};
 const form = {addEventListener: (name, fn) => {listeners["form:" + name] = fn;}};
-const input = {value:"DOB 29-02-1984 age in days",addEventListener:(name, fn) => {listeners["input:" + name] = fn;}};
+const input = {value:"How many days old is someone born on 29-02-1984?",addEventListener:(name, fn) => {listeners["input:" + name] = fn;}};
 const result = {textContent:""};
 const nodes = {"query-time-form":form,"qt-question":input,"qt-result":result};
 const document = {
@@ -103,6 +104,20 @@ const yearDayQueries = [
  ["كم يوم في 3 سنوات", /3 years ≈ 1,095.73 days/]
 ];
 for (const [q, expected] of yearDayQueries) {
+ input.value = q;
+ listeners["form:submit"]({preventDefault(){}});
+ assert.match(result.textContent, expected, q + " => " + result.textContent);
+}
+
+const fullQuestionCases = [
+ ["How many hours are in 2 weeks?", /336 hours/],
+ ["How many minutes are in 3 days?", /4,320 minutes/],
+ ["What are 115 months in years and days?", /9 years and 7 months.*3,500\.24 days/],
+ ["How many days are in 80 years?", /80 years ≈ 29,219\.4 days/],
+ ["How many years are in 2,555 days?", /2,555 days ≈ 6\.9954 years/],
+ ["How many days are in 30 years?", /30 years ≈ 10,957\.28 days/]
+];
+for (const [q, expected] of fullQuestionCases) {
  input.value = q;
  listeners["form:submit"]({preventDefault(){}});
  assert.match(result.textContent, expected, q + " => " + result.textContent);

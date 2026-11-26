@@ -1303,12 +1303,12 @@ TOOLS.extend([
         "name": "Query Calculator", "app": "UtilitiesApplication",
         "description": "Ask supported time, date and simple arithmetic questions in plain language. Convert years, months, weeks and hours, calculate Gregorian age from a birth date, and see the method.",
         "h1": "Time & Date Query Calculator",
-        "lead": "Type a supported question in plain language, such as 115 months in years and days, 80 years to days, a date of birth, or 2 weeks to hours. Results use stated conversion rules, and unsupported questions are not guessed.",
+        "lead": "Ask a complete question in plain language, such as How many hours are in 2 weeks?, How many days are in 80 years?, or What are 115 months in years and days?. Results use stated conversion rules, and unsupported questions are not guessed.",
         "ui": (
             '<form id="query-time-form" class="space-y-4" novalidate>'
             '<label class="@L@" for="qt-question">Your question</label>'
-            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="DOB 29-02-1984 age in days" required>'
-            '<p class="text-sm">Try: 115 months in years and days, 80 years to days, DOB 29-07-1984 age in days, or 2 weeks in hours. Exact calendar totals need a start date.</p>'
+            '<input class="@I@" id="qt-question" type="text" maxlength="160" value="How many days old is someone born on 29-02-1984?" required>'
+            '<p class="text-sm">Try: How many hours are in 2 weeks? How many minutes are in 3 days? What are 115 months in years and days? Exact calendar totals need a start date.</p>'
             '<button class="@B@" type="submit">Calculate Answer</button></form>'
             '<div id="qt-result" class="@R@" role="status" aria-live="polite">Enter a supported question and tap Calculate Answer.</div>'
         ),
