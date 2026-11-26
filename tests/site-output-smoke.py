@@ -269,6 +269,17 @@ assert f'<meta property="og:description" content="{_years_snippet}">' in years_h
 assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_html, "Years-to-Days Twitter description must match the search snippet"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
+for phrase in (
+    "How many days are in 13 years?",
+    "How many days in 19 years?",
+    "How many days is 30 years?",
+    "How many years are in 2,555 days?",
+    "14 thousand days to years",
+    "21k days in years",
+    "1.3k days in years",
+):
+    assert phrase in years_html, "Years-to-Days page is missing a GSC-backed query family: " + phrase
+assert years_html.count('scope="row" class="border-b p-3"') == 136, "All 16 quick, 63 year and 57 reverse-day reference rows must be present"
 
 assert "Show all 63 GSC-informed years-to-days reference examples" in years_html, "The expanded reference must advertise all 63 GSC-informed year examples"
 assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
