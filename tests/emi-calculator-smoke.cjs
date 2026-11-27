@@ -17,6 +17,9 @@ assert.ok(html.includes('property="og:image" content="https://calculateallinone.
 assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "EMI page must expose a large social preview");
 assert.ok(html.includes("For a 5 lakh loan EMI estimate, enter 500,000 as the loan amount"), "EMI page must answer the observed 5 lakh loan EMI query without assuming a rate or term");
 assert.match(html, /<summary>How do I estimate the EMI for a 5 lakh loan\\?<\\/summary>/, "EMI FAQ must answer the observed 5 lakh loan query");
+assert.ok(html.includes('name="description" content="Calculate monthly EMI, total interest and repayment schedule. Compare two loans, model prepayments and estimate affordability before reviewing a lender offer."'), "EMI meta description should describe the calculator outputs without promotional filler");
+assert.ok(html.includes('property="og:description" content="Calculate monthly EMI, total interest and repayment schedule. Compare two loans, model prepayments and estimate affordability before reviewing a lender offer."'), "EMI Open Graph description must match the search snippet");
+assert.ok(html.includes('name="twitter:description" content="Calculate monthly EMI, total interest and repayment schedule. Compare two loans, model prepayments and estimate affordability before reviewing a lender offer."'), "EMI Twitter description must match the search snippet");
 assert.match(html, /The loan amount alone is not enough to calculate EMI; enter the annual rate and repayment term too\\./, "EMI 5-lakh FAQ must not invent an installment without a rate and term");
 assert.ok(html.includes("Pakistan loan EMI calculator") && html.includes("monthly instalment"), "EMI guide must use relevant Pakistan loan and monthly instalment search language");
 assert.ok(html.includes("reducing-balance") && html.includes("flat-rate markup"), "EMI guide must distinguish reducing-balance EMI from flat-rate markup");
