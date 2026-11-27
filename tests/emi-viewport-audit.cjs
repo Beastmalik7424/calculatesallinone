@@ -41,5 +41,5 @@ const BASE_URL = (process.env.BASE_URL || 'http://127.0.0.1:4174').replace(/\/+$
  }
  await browser.close();
  if(failures.length){console.error('EMI VIEWPORT FAILURES:',failures.join('; '));process.exitCode=1;}
- else console.log('EMI viewport/browser checks PASS: Calculate action and first EMI result are visible without scrolling');
+ else console.log('EMI viewport/browser checks PASS: first result visible at 390x844; Calculate action visible at 390x844 and 1366x768; valid metrics at all widths');
 })().catch(e=>{console.error(e);process.exitCode=1});
