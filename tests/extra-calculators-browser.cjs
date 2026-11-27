@@ -438,6 +438,13 @@ function isExpectedGooglePreferredSourceReportOnlyNotice(text) {
    if((await page.locator("#t-count").innerText()).trim()!=="32")throw Error("Tasbih undo should return count to 32");
    await page.locator("#t-reset").click();
    if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih reset should return count to 0");
+   await page.locator("#t-tap").focus();
+   await page.keyboard.press("Enter");
+   if((await page.locator("#t-count").innerText()).trim()!=="1")throw Error("Tasbih Count one must support keyboard Enter activation");
+   await page.keyboard.press("Space");
+   if((await page.locator("#t-count").innerText()).trim()!=="2")throw Error("Tasbih Count one must support keyboard Space activation");
+   await page.locator("#t-reset").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih keyboard test cleanup must reset the count");
    await page.locator("#t-phrase").selectOption("custom");
    await page.locator("#t-custom-phrase").fill("Test dhikr");
    if(await page.locator("#t-custom-phrase").isDisabled())throw Error("Tasbih custom phrase field should enable");
