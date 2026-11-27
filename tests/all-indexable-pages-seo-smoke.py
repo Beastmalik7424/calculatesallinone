@@ -6,6 +6,7 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from urllib.parse import unquote, urljoin, urlsplit
 
 ROOT = Path("public")
 SITE = "https://calculateallinone.vercel.app"
@@ -28,6 +29,22 @@ def read_text(path):
 
 def output_path(route):
     return ROOT / route.strip("/") / "index.html" if route != "/" else ROOT / "index.html"
+
+
+def tag_attributes(tag):
+    return {
+        key.lower(): html.unescape(value)
+        for key, value in re.findall(r'''([:\\w-]+)\\s*=\\s*["']([^"']*)["']''', tag)
+    }
+
+
+def meta_values(raw, attribute, key):
+    values = []
+    for tag in re.findall(r"<meta\\b[^>]*>", raw, re.I):
+        attrs = tag_attributes(tag)
+        if attrs.get(attribute) == key and "content" in attrs:
+            values.append(attrs["content"])
+    return values
 
 
 indexable = [line.strip() for line in read_text(INDEXABLE_FILE).splitlines() if line.strip()]
@@ -102,6 +119,33 @@ for route in indexable:
     check(robots_matches and robots_matches[0].strip().lower() == "index, follow",
           route + ": indexable route must use 'index, follow'")
 
+    if title_matches and description_matches:
+        expected_title = html.unescape(title_matches[0]).strip()
+        expected_description = html.unescape(description_matches[0]).strip()
+        for attribute, key, expected in (
+            ("property", "og:title", expected_title),
+            ("property", "og:description", expected_description),
+            ("name", "twitter:title", expected_title),
+            ("name", "twitter:description", expected_description),
+        ):
+            values = meta_values(raw, attribute, key)
+            check(len(values) == 1, route + ": expected exactly one " + key)
+            check(values == [expected], route + ": " + key + " must match the normalized page title/description")
+
+    page_url = SITE + route
+    for link_tag in re.findall(r"<link\\b[^>]*>", raw, re.I):
+        attrs = tag_attributes(link_tag)
+        if "alternate" not in attrs.get("rel", "").lower().split() or "hreflang" not in attrs:
+            continue
+        language = attrs["hreflang"].lower()
+        check(bool(re.fullmatch(r"(?:[a-z]{2}(?:-[a-z0-9]{2,8})*|x-default)", language)),
+              route + ": invalid hreflang value " + language)
+        alternate = urlsplit(urljoin(page_url, attrs.get("href", "")))
+        if alternate.netloc.lower() == urlsplit(SITE).netloc.lower():
+            alternate_path = unquote(alternate.path or "/")
+            check(alternate_path.endswith("/"), route + ": same-site hreflang target must use a trailing-slash route: " + alternate_path)
+            check(output_path(alternate_path).is_file(), route + ": same-site hreflang target does not exist: " + alternate_path)
+
     check(bool(re.search(r"<main\b", markup, re.I)), route + ": missing main landmark")
     check(bool(re.search(r'<html\b[^>]*\blang=["\'][a-z]{2}(?:-[A-Za-z0-9-]+)?["\']', raw, re.I)),
           route + ": missing valid HTML language declaration")
@@ -167,5 +211,5 @@ if ERRORS:
 print("ALL-INDEXABLE-PAGES SEO AUDIT: PASS")
 print("Indexable routes checked:", len(indexable))
 print("Noindex routes checked:", len(noindex))
-print("Titles, descriptions, canonicals, robots, H1, language, image alt, JSON-LD and sitemap coverage: PASS")
+print("Titles, descriptions, social metadata, hreflang targets, canonicals, robots, H1, language, image alt, JSON-LD and sitemap coverage: PASS")
 print("OAI-SearchBot robots permission: PASS")
