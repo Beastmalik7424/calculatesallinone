@@ -116,6 +116,8 @@ The original code/test SHA `9b5d764774d65c2cc5321c6cf220d6f9ec2992b0` did not ha
 
 The browser automation provider available through the connected HYPD plan denied access. The Skyvern browser session creation interface returned a schema mismatch, and the TinyFish browser wallet had a negative balance. No paid browser automation or account top-up was initiated. Therefore an interactive live-preview session is still **not verified**. GitHub Actions' Playwright browser checks are the reliable alternative for the tested built artifact, but they are not a live deployed-browser check.
 
+The later documentation-only commit `ae4319b6957745a147de4e501ee393ea0937057d` has a Vercel Git status of **failure** with a `build-rate-limit` target and no deployment was found for that SHA. This did not change the app code. The READY preview at `89ea871...` remains the latest verified deployment of the same app code. Do not claim that `ae4319...` itself is deployed.
+
 ## Originality spot-check and remaining evidence gates
 
 The independent AISEO full-document plagiarism API was called with the complete, unmodified HTML of each of the three deployed page documents:
@@ -125,8 +127,9 @@ The independent AISEO full-document plagiarism API was called with the complete,
 
 Five exact-phrase web searches were also attempted against representative sentences from the pages. No direct copied-page match was returned for the sampled wording, but search-engine phrase checks cannot certify originality or replace a full-document plagiarism report. **No originality percentage is claimed.**
 
-- Exact code-head GitHub Actions: **7 workflows were associated with `9b5d764...`; the latest documentation-head run must be polled to completion before it can be reported as final.**
-- Build, generated-page smoke, Lighthouse, and headless Playwright checks: **in progress on `89ea871...` at the last poll; steps 1–31 passed, step 32 was running, step 33 pending.**
+- Exact code-head GitHub Actions: **PASS (7/7) for `9b5d764...`**.
+- Documentation-head GitHub Actions: **PASS (7/7) for `89ea871...`**. The Build and smoke test completed all 33 substantive steps, including Lighthouse SEO audits for ten pages, headless browser console checks on ten pages, and safe monetization configuration. All setup/cleanup steps also completed successfully.
+- The next commit `ae4319b...` changed only this report. No application code, tests, CSS, or configuration changed in that commit. GitHub returned no new workflow run for that docs-only commit at the time of the poll.
 - CSS stylesheet files changed: **NONE**. The standalone EMI HTML diff changes metadata, structured data and content only; no inline style or CSS rules changed.
 - Calculator first-screen and EMI viewport checks: **PASS in the existing GitHub Actions browser audits**.
 - EMI engine regression: **26 deterministic checks plus 2,000 seeded schedule-reconciliation scenarios**.
@@ -135,7 +138,7 @@ Five exact-phrase web searches were also attempted against representative senten
 - GSC: **verified only for 22–24 November 2026**; 26 November export and keyword trend data remain unavailable.
 - Competitor comparison: **five substantive comparison pages reviewed per topic**. This is a content/feature benchmark, not proof of exact Google top-five ranking positions.
 - Independent originality score: **NOT VERIFIED** because the provider failed before returning results.
-- Vercel preview: **READY for documentation SHA `89ea871...`**, with HTTP 200 verified on the eight listed routes.
+- Vercel preview: **READY for documentation SHA `89ea871...`**, with HTTP 200 verified on the eight listed routes. The later docs-only SHA `ae4319...` was not deployed because its Vercel status reported `build-rate-limit`.
 - Interactive browser verification of the deployed preview: **NOT VERIFIED**. GitHub Actions Playwright checks against the generated build remain the reliable available alternative.
 - AdSense approval and account-side consent: **NOT VERIFIED**; only Google can approve the account and automated CI cannot inspect account settings.
 
