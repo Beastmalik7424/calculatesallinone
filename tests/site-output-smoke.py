@@ -849,8 +849,8 @@ for url in urls:
                     "Profit and Loss dateModified must match the GSC-backed online calculator explanation."
                 )
             elif url == SITE + "/query-calculator/":
-                assert item.get("dateModified") == "2026-11-19", (
-                    "Query Calculator dateModified must match the verified Gregorian conversion method, supported-query scope and source update."
+                assert item.get("dateModified") == "2026-11-27", (
+                    "Query Calculator dateModified must match the GSC-backed question-led examples and parser coverage refresh."
                 )
             elif url == SITE + "/percentage-calculator/":
                 assert item.get("dateModified") == "2026-11-26", (
