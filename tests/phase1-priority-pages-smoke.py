@@ -241,6 +241,7 @@ def check_targeted_content():
         "years-to-days-calculator": "2026-11-27",
         "unit-converter": "2026-11-21",
         "profit-loss-calculator": "2026-11-21",
+        "query-calculator": "2026-11-27",
     }
     for slug, expected_date in expected_dates.items():
         assert f"Last updated: {expected_date}" in visible_text(slug), f"/{slug}/ must display its verified update date"
