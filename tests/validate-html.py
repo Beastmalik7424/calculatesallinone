@@ -63,6 +63,13 @@ def fetch_validator_result(path, opener=None):
     )
 
 
+def is_approved_vendor_attribute_diagnostic(message):
+    """Allow only Google's documented Preferred Sources marker attribute."""
+    return message.get("message") == (
+        "Attribute “google-add-preferred-source-btn” not allowed on element “div” at this point."
+    )
+
+
 def main():
     failed = False
     for index, path in enumerate(FILES):
@@ -80,7 +87,7 @@ def main():
                 failed = True
             else:
                 messages = result.get("messages", [])
-                errors = [m for m in messages if m.get("type") in ("error", "fatal")]
+                errors = [m for m in messages if m.get("type") in ("error", "fatal") and not is_approved_vendor_attribute_diagnostic(m)]
                 warnings = [
                     m for m in messages
                     if m.get("type") == "info" and m.get("subType") == "warning"
