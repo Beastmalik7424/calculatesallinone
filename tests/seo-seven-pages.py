@@ -147,6 +147,8 @@ try:
         if lastmod is not None:
             actual_lastmod[loc] = lastmod
     expected_lastmod = {SITE + path: date for path, date in VERIFIED_PAGE_UPDATE_DATES.items()}
+    check(VERIFIED_PAGE_UPDATE_DATES.get("/tasbih-counter/") == "2026-11-27",
+          "Tasbih sitemap lastmod must reflect the verified 2026-11-27 metadata correction")
     check(actual_lastmod == expected_lastmod,
           "sitemap lastmod must exactly match verified page-specific update dates")
     for url, lastmod in actual_lastmod.items():

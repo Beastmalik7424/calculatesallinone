@@ -96,7 +96,7 @@ assert lastmod_entries == expected_lastmod, (
     f"Expected {expected_lastmod!r}, got {lastmod_entries!r}"
 )
 assert lastmod_entries.get(SITE + "/zakat-calculator/") == "2026-11-25"
-assert lastmod_entries.get(SITE + "/tasbih-counter/") == "2026-11-25"
+assert lastmod_entries.get(SITE + "/tasbih-counter/") == "2026-11-27"
 def output_for_url(url):
     parsed = urlparse(url)
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
@@ -837,8 +837,8 @@ for url in urls:
                     "Unit Converter dateModified must match the GSC-backed dimensional-conversion explanation."
                 )
             elif url == SITE + "/tasbih-counter/":
-                assert item.get("dateModified") == "2026-11-25", (
-                    "Tasbih Counter dateModified must match the GSC-backed snippet and search-intent update."
+                assert item.get("dateModified") == "2026-11-27", (
+                    "Tasbih Counter dateModified must match the verified metadata correction."
                 )
             elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
                 assert item.get("dateModified") == "2026-11-25", (
