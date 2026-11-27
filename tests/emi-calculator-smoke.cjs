@@ -28,7 +28,7 @@ assert.ok(!shareLinkSource.includes("location.pathname+'?'+params.toString()"), 
 assert.ok(selectTabStart > readParamsStart, "EMI page must keep a testable shared-link reader");
 const readParamsSource = html.slice(readParamsStart, selectTabStart);
 assert.ok(readParamsSource.includes("location.hash?location.hash.slice(1):location.search"), "EMI page must read fragment links and preserve legacy query links");
-assert.ok(html.includes("Share links include your loan amount, annual rate, term, currency and first installment month in the URL fragment. Anyone with the link can view those settings."), "EMI page must disclose which values a shared link exposes to its recipient");
+assert.ok(shareLinkSource.includes("Anyone with the link can view those settings."), "Share action must disclose which loan settings are exposed to link recipients without adding first-screen content");
 const relatedFooterStart = html.indexOf('<nav aria-label="Related calculators">');
 assert.ok(relatedFooterStart >= 0, "EMI page must retain its related-calculator footer navigation");
 const relatedFooter = html.slice(relatedFooterStart, html.indexOf("</nav>", relatedFooterStart));
