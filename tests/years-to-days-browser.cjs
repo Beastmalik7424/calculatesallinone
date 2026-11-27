@@ -71,6 +71,12 @@ const viewports = [
       await value.fill("80");
       await submit();
       assert.match(await result.innerText(), /80 years = 29,219\.4 days/);
+      await value.fill("19");
+      await submit();
+      assert.match(await result.innerText(), /19 years = 6,939\.6075 days/);
+      await value.fill("30");
+      await submit();
+      assert.match(await result.innerText(), /30 years = 10,957\.275 days/);
 
       await method.selectOption("365.25");
       await submit();
