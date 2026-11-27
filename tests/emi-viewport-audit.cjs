@@ -9,7 +9,7 @@ const { chromium } = require('playwright');
   if((size.width===360&&size.height===740)||(size.width===390&&size.height===844)){
    const firstScreen=await page.locator('#loan-form button[type=submit]').evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,viewport:innerHeight,visible:r.top>=0&&r.bottom<=innerHeight}});
    console.log('EMI initial Calculate button visibility',JSON.stringify(firstScreen));
-   if(!firstScreen.visible)failures.push('390x844 Calculate EMI button is below the initial viewport');
+   if(!firstScreen.visible)failures.push('mobile Calculate EMI button is below the initial viewport');
   }
   await page.locator('#amount').fill('895842100');
   await page.locator('#rate').fill('12');
@@ -18,7 +18,7 @@ const { chromium } = require('playwright');
   if((size.width===360&&size.height===740)||(size.width===390&&size.height===844)){
    const firstScreenResult=await page.locator('#metrics').evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,viewport:innerHeight,visible:r.top>=0&&r.bottom<=innerHeight}});
    console.log('EMI initial result visibility after calculate',JSON.stringify(firstScreenResult));
-   if(!firstScreenResult.visible)failures.push('390x844 EMI result metrics are below the initial viewport after calculation');
+   if(!firstScreenResult.visible)failures.push('mobile EMI result metrics are below the initial viewport after calculation');
   }
   const d=await page.evaluate(()=>{
    const q=s=>document.querySelector(s).getBoundingClientRect();
