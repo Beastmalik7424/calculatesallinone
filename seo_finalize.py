@@ -52,7 +52,8 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/tasbih-counter/": "2026-11-25",
     # This date records the GSC-backed online profit and loss calculator explanation.
     "/profit-loss-calculator/": "2026-11-21",
-    "/query-calculator/": "2026-11-19",
+    # This date records the GSC-backed question-led examples and parser coverage refresh.
+    "/query-calculator/": "2026-11-27",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 
