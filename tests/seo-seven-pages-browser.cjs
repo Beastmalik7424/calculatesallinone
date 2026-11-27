@@ -2,6 +2,11 @@ const { chromium } = require("playwright");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const crypto = require("node:crypto");
+function isExpectedGooglePreferredSourceReportOnlyNotice(text) {
+  return text.startsWith('Framing \'https://news.google.com/\' violates the following report-only Content Security Policy directive: "frame-ancestors \'self\'".') &&
+    text.includes("The violation has been logged, but no further action has been taken.");
+}
+
 
 const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, "");
 const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calculator/", "/editorial-policy/", "/health/", "/percentage-difference-calculator/", "/ratio-calculator/"];
@@ -13,7 +18,7 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
     for (const path of paths) {
       const page = await browser.newPage();
       const errors = [];
-      page.on("console", msg => { if (msg.type() === "error") errors.push("console: " + msg.text()); });
+      page.on("console", msg => { if (msg.type() === "error" && !isExpectedGooglePreferredSourceReportOnlyNotice(msg.text())) errors.push("console: " + msg.text()); });
       page.on("pageerror", err => errors.push("pageerror: " + err.message));
       const response = await page.goto(base + path, { waitUntil: "load", timeout: 30000 });
       const status = response ? response.status() : 0;
@@ -27,7 +32,7 @@ const paths = ["/about/", "/ar/", "/es/", "/fr/", "/contact/", "/discount-calcul
     // End-to-end calculator checks in a real browser, in addition to parser unit tests.
     const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
     const calculatorErrors = [];
-    page.on("console", msg => { if (msg.type() === "error") calculatorErrors.push("console: " + msg.text()); });
+    page.on("console", msg => { if (msg.type() === "error" && !isExpectedGooglePreferredSourceReportOnlyNotice(msg.text())) calculatorErrors.push("console: " + msg.text()); });
     page.on("pageerror", err => calculatorErrors.push("pageerror: " + err.message));
     const response = await page.goto(base + "/standard-calculator/", { waitUntil: "load", timeout: 30000 });
     assert.equal(response && response.status(), 200, "calculator page should return HTTP 200");
