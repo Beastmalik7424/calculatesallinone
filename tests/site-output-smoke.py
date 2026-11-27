@@ -299,6 +299,8 @@ assert years_html.count(_year_9_row) == 2, "The 9-year GSC query row must appear
 assert years_html.count(_year_15_row) == 2, "The 15-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_19_row) == 2, "The 19-year GSC query row must appear in both reference tables"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
+years_faq_html = years_html.split("Common questions", 1)[1]
+assert "How many days in 10 years?" in years_faq_html and "3,652.425 days" in years_faq_html and "1 Jan 2020 to 1 Jan 2030 is 3,653 days" in years_faq_html, "The 10-year GSC query must be answered in the visible FAQ, not only guide prose"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
 assert "For this calculator’s date-only anniversary method" not in years_html, "Obsolete date-only anniversary wording must be removed"
 assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 63 GSC-informed years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
@@ -327,7 +329,7 @@ assert "How many years and months are in 1,188 days?" in years_html and "3 years
 assert "29,200" in years_html and "29,220" in years_html and "29,219.4" in years_html, "The 80-year row must show all verified conversion methods"
 assert "36,500" in years_html and "36,525" in years_html and "36,524.25" in years_html, "The 100-year row must show all verified conversion methods"
 assert all(value in years_html for value in ("1,460", "1,461", "1,460.97", "4,015", "4,017.75", "4,017.6675", "4,745", "4,748.25", "4,748.1525")), "Quick reference table should include the 11- and 13-year conversions for all methods"
-assert years_html.count("<summary") == 10, "The page must have eight concise FAQs plus two collapsible reference tables"
+assert years_html.count("<summary") == 11, "The page must have nine concise FAQs plus two collapsible reference tables"
 for question in ("Which year-length methods can I use?", "Does exact calendar mode include leap days?", "Can I convert days to years?", "Can exact calendar mode use decimal years?", "How many days are in 13 years?"):
     assert question in years_html, f"Missing behavior-accurate FAQ: {question}"
 # The latest finalized GSC query sample included additional year counts. Keep the
