@@ -498,6 +498,7 @@ function isExpectedGooglePreferredSourceReportOnlyNotice(text) {
     return document.querySelector("#t-count").textContent.trim();
    });
    if(countAfterThousand!=="1000")throw Error("Tasbih must preserve all 1,000 manual taps without target auto-reset: "+countAfterThousand);
+   if(!(await page.locator("#t-progress").innerText()).includes("1000"))throw Error("Tasbih 1,000 target milestone must announce that the selected target was reached");
    await page.reload();
    if((await page.locator("#t-count").innerText()).trim()!=="1000")throw Error("Tasbih count must persist across reload in the same browser");
    if((await page.locator("#t-target").inputValue())!=="custom"||(await page.locator("#t-custom-target").inputValue())!=="1000")throw Error("Tasbih 1,000 custom target must persist across reload");
@@ -527,6 +528,32 @@ function isExpectedGooglePreferredSourceReportOnlyNotice(text) {
    if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih must not claim persistence when browser storage is blocked");
    if(errors.length)throw Error("Tasbih blocked-storage browser errors: "+errors.join("; "));
    console.log("Tasbih blocked-storage fallback PASS: visible notice, in-memory count, reload reset");
+   await page.close();
+  }
+
+  {
+   const page=await browser.newPage({viewport:{width:390,height:844}});
+   const errors=[];page.on("pageerror",e=>errors.push(e.message));
+   page.on("console",msg=>{if(msg.type()==="error"&&!isExpectedGooglePreferredSourceReportOnlyNotice(msg.text()))errors.push(msg.text());});
+   await page.addInitScript(()=>{
+    Object.defineProperty(window,"localStorage",{configurable:true,get(){return {
+     getItem(){return null;},
+     setItem(){throw new DOMException("Storage quota exceeded","QuotaExceededError");}
+    };}});
+    Object.defineProperty(window,"sessionStorage",{configurable:true,get(){throw new DOMException("Session storage blocked","SecurityError");}});
+   });
+   const response=await page.goto(base+"/tasbih-counter/");
+   if(!response||response.status()!==200)throw Error("Tasbih full-storage page HTTP failure");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="1")throw Error("Tasbih must keep counting in memory when localStorage is full");
+   if(!(await page.locator("#t-storage-note").isVisible()))throw Error("Tasbih must disclose localStorage quota failures after a write is rejected");
+   await page.locator("#t-undo").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih undo must continue working after storage quota failure");
+   await page.locator("#t-tap").click();
+   await page.reload();
+   if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih must not imply persistence after a quota failure");
+   if(errors.length)throw Error("Tasbih quota/session-storage fallback browser errors: "+errors.join("; "));
+   console.log("Tasbih quota/session-storage fallback PASS: in-memory count, visible warning, safe undo and no false persistence claim");
    await page.close();
   }
 
