@@ -3,6 +3,8 @@ name: Query Calculator independent verification
 on:
   push:
     branches:
+      - main
+      - 'fix/query-calculator-*'
       - seo/query-calculator-intent-and-method-fix-20261119
     paths:
       - 'build.py'

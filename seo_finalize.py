@@ -45,14 +45,15 @@ VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
     # This date records the GSC-backed question-led answers and snippet refresh; calculator methods remain unchanged.
-    "/years-to-days-calculator/": "2026-11-26",
+    "/years-to-days-calculator/": "2026-11-27",
     # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
     # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
     "/tasbih-counter/": "2026-11-25",
     # This date records the GSC-backed online profit and loss calculator explanation.
     "/profit-loss-calculator/": "2026-11-21",
-    "/query-calculator/": "2026-11-19",
+    # This date records the GSC-backed question-led examples and parser coverage refresh.
+    "/query-calculator/": "2026-11-27",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
 

@@ -255,8 +255,14 @@ for path in ("/ur/age-calculator/", "/ur/bmi-calculator/", "/ur/discount-calcula
 urdu_age_html = output_for_url(SITE + "/ur/age-calculator/").read_text(encoding="utf-8")
 urdu_age_title = re.search(r"<title>([^<]+)</title>", urdu_age_html)
 assert urdu_age_title and len(html_lib.unescape(urdu_age_title.group(1))) >= 30, "Urdu age calculator title should describe its result"
+query_html = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
+assert 'value="How many days are in 5 years?"' in query_html, "Query Calculator should start with a complete natural-language question, not a number-only prompt"
+assert "5 years is how many days?" in query_html, "Query Calculator must show the full forward natural-language variant"
+assert "How many years are in 2,555 days?" in query_html, "Query Calculator must show the full reverse natural-language variant"
+assert "How many hours are in 3 weeks?" in query_html, "Query Calculator should demonstrate a full sentence outside the years-to-days topic"
+assert query_html.index('id="qt-question"') < query_html.index("Calculate Answer") < query_html.index("Examples:"), "Query Calculator must keep the primary action before the expanded example copy"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
-assert "Last updated: 2026-11-26" in years_html, "Years-to-days visible update date must match the 26 November 2026 GSC-backed question-answer refresh"
+assert "Last updated: 2026-11-27" in years_html, "Years-to-days visible update date must match the 27 November 2026 GSC-backed question-answer refresh"
 assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
 _years_snippet = "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date."
 assert f'<meta name="description" content="{_years_snippet}">' in years_html, "Years-to-Days search snippet must surface the GSC-backed 5-, 10- and 30-year answers"
@@ -264,11 +270,24 @@ assert f'<meta property="og:description" content="{_years_snippet}">' in years_h
 assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_html, "Years-to-Days Twitter description must match the search snippet"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
 assert "Quick reference: years to days" in years_html, "Years-to-Days page should include a scannable reference table"
+for phrase in (
+    "How many days are in 13 years?",
+    "How many days in 19 years?",
+    "How many days is 30 years?",
+    "How many years are in 2,555 days?",
+    "14 thousand days to years",
+    "21k days in years",
+    "1.3k days in years",
+    "10,000",
+):
+    assert phrase in years_html, "Years-to-Days page is missing a GSC-backed query family: " + phrase
+assert years_html.count('scope="row" class="border-b p-3"') == 137, "All 16 quick, 63 year and 58 reverse-day reference rows must be present"
+assert 'id="days-years-full-reference"' in years_html, "Reverse day-to-years reference must be collapsible rather than exposing all 58 rows by default"
+assert "Show 45 additional GSC-informed day-to-years examples" in years_html, "Expanded reverse reference should disclose the 45 additional examples"
 
-assert "Show all 37 years-to-days reference examples" in years_html, "The expanded reference must advertise all 36 examples"
+assert "Show all 63 GSC-informed years-to-days reference examples" in years_html, "The expanded reference must advertise all 63 GSC-informed year examples"
 assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
-# Recent finalized GSC data (2026-11-19 through 2026-11-21) supports 4- and 15-year examples.
-# Keep those alongside established 7- and 9-year answers in both tables; 19 and 25 years remain in the expanded table.
+# The 2026-11-26 three-month GSC export supports the expanded year-value set; the quick table prioritizes repeated query amounts.
 _year_4_row = '<tr><th scope="row" class="border-b p-3">4</th><td class="border-b p-3">1,460</td><td class="border-b p-3">1,461</td><td class="border-b p-3">1,460.97</td></tr>'
 _year_7_row = '<tr><th scope="row" class="border-b p-3">7</th><td class="border-b p-3">2,555</td><td class="border-b p-3">2,556.75</td><td class="border-b p-3">2,556.6975</td></tr>'
 _year_9_row = '<tr><th scope="row" class="border-b p-3">9</th><td class="border-b p-3">3,285</td><td class="border-b p-3">3,287.25</td><td class="border-b p-3">3,287.1825</td></tr>'
@@ -278,11 +297,11 @@ assert years_html.count(_year_4_row) == 2, "The 4-year GSC query row must appear
 assert years_html.count(_year_7_row) == 2, "The 7-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_9_row) == 2, "The 9-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_15_row) == 2, "The 15-year GSC query row must appear in both reference tables"
-assert years_html.count(_year_19_row) == 1, "The 19-year row must remain in the expanded reference without taking a quick-reference slot"
+assert years_html.count(_year_19_row) == 2, "The 19-year GSC query row must appear in both reference tables"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
 assert "For this calculator’s date-only anniversary method" not in years_html, "Obsolete date-only anniversary wording must be removed"
-assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 37 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
+assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 63 GSC-informed years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
 for phrase in (
     "Choose a conversion method",
     "Days = Years × Selected days per year.",
@@ -308,7 +327,7 @@ assert "How many years and months are in 1,188 days?" in years_html and "3 years
 assert "29,200" in years_html and "29,220" in years_html and "29,219.4" in years_html, "The 80-year row must show all verified conversion methods"
 assert "36,500" in years_html and "36,525" in years_html and "36,524.25" in years_html, "The 100-year row must show all verified conversion methods"
 assert all(value in years_html for value in ("1,460", "1,461", "1,460.97", "4,015", "4,017.75", "4,017.6675", "4,745", "4,748.25", "4,748.1525")), "Quick reference table should include the 11- and 13-year conversions for all methods"
-assert years_html.count("<summary") == 9, "The page must have eight concise FAQs plus one collapsible reference table"
+assert years_html.count("<summary") == 10, "The page must have eight concise FAQs plus two collapsible reference tables"
 for question in ("Which year-length methods can I use?", "Does exact calendar mode include leap days?", "Can I convert days to years?", "Can exact calendar mode use decimal years?", "How many days are in 13 years?"):
     assert question in years_html, f"Missing behavior-accurate FAQ: {question}"
 # The latest finalized GSC query sample included additional year counts. Keep the
@@ -459,7 +478,7 @@ for attr, name in (("property", "og:description"), ("name", "twitter:description
     assert social and html_lib.unescape(social.group(1)) == expected_date_description, f"Stale {name} on date calculator"
 
 query_page = output_for_url(SITE + "/query-calculator/").read_text(encoding="utf-8")
-assert "115 months in years and days" in query_page, "Query Calculator should show the month conversion example"
+assert "How many years and days are in 115 months?" in query_page, "Query Calculator should show a complete month-conversion question"
 assert "Pakistan independence date query" in query_page and "14 August 1947" in query_page, "Query Calculator should explain the supported Pakistan date lookup"
 assert "exact calendar days require a start date" in query_page, "Month-to-day estimates must disclose the calendar limitation"
 
@@ -810,7 +829,7 @@ for url in urls:
                     "Urdu BMI dateModified must match the GSC-backed search-intent explanation."
                 )
             elif url == SITE + "/years-to-days-calculator/":
-                assert item.get("dateModified") == "2026-11-26", (
+                assert item.get("dateModified") == "2026-11-27", (
                     "Years-to-Days dateModified must match the GSC-backed question-answer refresh."
                 )
             elif url == SITE + "/unit-converter/":
@@ -830,8 +849,8 @@ for url in urls:
                     "Profit and Loss dateModified must match the GSC-backed online calculator explanation."
                 )
             elif url == SITE + "/query-calculator/":
-                assert item.get("dateModified") == "2026-11-19", (
-                    "Query Calculator dateModified must match the verified Gregorian conversion method, supported-query scope and source update."
+                assert item.get("dateModified") == "2026-11-27", (
+                    "Query Calculator dateModified must match the GSC-backed question-led examples and parser coverage refresh."
                 )
             elif url == SITE + "/percentage-calculator/":
                 assert item.get("dateModified") == "2026-11-26", (
