@@ -388,7 +388,7 @@ def check_years_quick_reference():
         "65": ["23,725", "23,741.25", "23,740.7625"],
     }
     full_row_map = dict(full_rows)
-    for year, values in gsc_missing_year_rows.items():
+    for year, values in expected_additional_year_rows.items():
         assert full_row_map.get(year) == values, f"Expanded reference is missing the expected calculated row for {year} years"
 
     visible = visible_text("years-to-days-calculator")
@@ -402,7 +402,7 @@ def check_years_quick_reference():
         ("How many days in 19 years?", "6,939.6075 days"),
         ("How many days in 30 years?", "10,957.275 days"),
     )
-    for question, answer in gsc_query_answers:
+    for question, answer in common_query_answers:
         assert question in visible and answer in visible, (
             "Years-to-Days content must directly answer common question examples with verified values: " + question
         )
