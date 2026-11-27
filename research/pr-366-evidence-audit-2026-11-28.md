@@ -304,3 +304,40 @@ Remaining external/account gates are not code defects:
 - Google has not re-crawled the three priority calculators since 7 November.
 
 These constraints prevent a truthful statement that only Production deployment remains. Keep the PR open and draft until the external/account gates are resolved or explicitly accepted by the project owner. No first-page ranking guarantee is possible.
+
+
+## Superseding site-index and internal-link audit — 28 November 2026
+
+A final read-only site-index audit on the verified Search Console property returned:
+- 44 known URLs and 44 previously inspected records.
+- 8 last-known URLs flagged as `Discovered - currently not indexed`.
+- Sitemap `https://calculateallinone.vercel.app/sitemap.xml`: HTTP 200, zero errors, zero warnings; last downloaded by Google on 21 November 2026.
+- The audit attempted five immediate rechecks, but Google did not return answers before timeout. Those five rows retain their last-known state and are not fresh confirmations.
+
+Eight last-known discovered/not-indexed URLs:
+1. `/percentage-calculator/` — one Google-listed incoming page; one impression in the 90-day snapshot.
+2. `/compound-interest-calculator/` — no Google-listed incoming page; zero impressions.
+3. `/date-calculator/` — no Google-listed incoming page; zero impressions.
+4. `/math/` — two Google-listed incoming pages; zero impressions.
+5. `/money/` — one Google-listed incoming page; zero impressions.
+6. `/percentage-difference-calculator/` — one Google-listed incoming page; zero impressions.
+7. `/ratio-calculator/` — one Google-listed incoming page; zero impressions.
+8. `/worship/` — one Google-listed incoming page; zero impressions.
+
+Four additional addresses were last-known as unknown to Google: `/calorie-calculator/`, `/contact/`, `/fraction-calculator/`, and `/health/`. No 404 was reported in this audit. Do not treat these last-known states as fresh URL Inspection results.
+
+Direct URL Inspection on 28 November independently confirmed:
+- `/tasbih-counter/`, `/years-to-days-calculator/` and `/emi-calculator/` are submitted and indexed, with successful mobile fetches and matching Google/user canonicals. Their last recorded crawl remains 7 November.
+- `/worship/` and `/money/` remain `Discovered - currently not indexed`, with no crawl/fetch result yet.
+
+The current READY preview HTML was also checked for internal-link coverage:
+- Homepage links to the percentage, compound-interest, date, math, money, worship, calorie, contact, fraction and health destinations.
+- Tasbih links to Worship.
+- Years-to-Days links to Date Calculator.
+- EMI links to Money and Compound Interest.
+- Profit/Loss and Discount link to relevant percentage/money tools.
+- Math, Fraction, Percentage and Ratio pages cross-link to their related math tools.
+
+Therefore, no duplicate or keyword-stuffed internal links were added. The current source already has contextual links; the remaining issue is that Google has not yet crawled or selected several known URLs. The sitemap is healthy, but Google last downloaded it on 21 November. Recheck after Production deployment and use normal Search Console URL Inspection for the affected pages. Request indexing is a Search Console UI action; the Indexing API is not for ordinary calculator pages.
+
+The Search Console connector's daily operation limit was reached during this audit, so no further live URL inspections can be run until its stated reset. This is an access/quota limitation, not evidence that the remaining URLs are fixed.
