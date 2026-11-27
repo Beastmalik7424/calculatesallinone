@@ -264,7 +264,7 @@ assert query_html.index('id="qt-question"') < query_html.index("Calculate Answer
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
 assert "Last updated: 2026-11-27" in years_html, "Years-to-days visible update date must match the 27 November 2026 GSC-backed question-answer refresh"
 assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
-_years_snippet = "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date."
+_years_snippet = "How many days in 5, 10, 13, 19 or 30 years? Compare 365, 365.25 and 365.2425-day methods, or count exact Gregorian days from a start date."
 assert f'<meta name="description" content="{_years_snippet}">' in years_html, "Years-to-Days search snippet must surface the GSC-backed 5-, 10- and 30-year answers"
 assert f'<meta property="og:description" content="{_years_snippet}">' in years_html, "Years-to-Days Open Graph description must match the search snippet"
 assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_html, "Years-to-Days Twitter description must match the search snippet"
