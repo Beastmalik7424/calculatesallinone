@@ -1765,6 +1765,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
         + '<link rel="stylesheet" href="/assets/site.css?v=' + CSS_ASSET_VERSION + '">\n'
+        + '<script async src="https://news.google.com/swg/js/v1/publisher.js"></script>\n'
         + ld + ads + "</head>\n"
     )
 
@@ -1847,6 +1848,7 @@ def shell(main_html, lang="en", current_path=None):
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">' + s["affiliate"] + '</a>'
         '</nav></div>'
         + lang_links(lang, s, current_path) +
+        '<div class="mt-4 w-full max-w-sm"><div google-add-preferred-source-btn></div></div>\n' +
         '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
         '</div></footer>\n'
         + '<script src="/assets/zakat-calculator.js?v=' + ZAKAT_JS_ASSET_VERSION + '" defer></script>\n'
