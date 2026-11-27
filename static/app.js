@@ -2131,7 +2131,7 @@
       // A quantity plus its unit is meaningful input, but a conversion target
       // is still required. Never infer the requested target unit.
       if (partialNumbers.length === 1 && partialUnits.length === 1 &&
-          !/(?:\\bin\\b|\\bto\\b|\\binto\\b|\\bconvert\\b|\\bhow many\\b|\\bkitne\\b|\\bkitna\\b)/.test(question)) {
+          !/(?:\bin\b|\bto\b|\binto\b|\bconvert\b|\bhow many\b|\bkitne\b|\bkitna\b)/.test(question)) {
         var quantityValue = timeConversionNumber(partialNumbers[0])
         if (quantityValue === null) {
           say("qt-result", "Enter a nonnegative number up to 1,000,000.")
