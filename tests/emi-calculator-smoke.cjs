@@ -28,6 +28,7 @@ const schemaBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+jso
 const schemas = schemaBlocks.flatMap(schema => Array.isArray(schema) ? schema : [schema]);
 const byType = type => schemas.filter(schema => schema["@type"] === type);
 assert.equal(byType("FAQPage").length, 1, "EMI page must contain exactly one FAQPage schema block");
+assert.ok(byType("FAQPage")[0].mainEntity.some(item => item.name === "How do I estimate the EMI for a 5 lakh loan?" && item.acceptedAnswer.text.includes("The loan amount alone is not enough")), "EMI FAQ schema must match the visible 5-lakh answer");
 assert.equal(byType("WebApplication").length, 0, "EMI page must not publish ineligible SoftwareApplication rich-result markup");
 assert.equal(byType("WebSite").length, 1, "EMI page must link to the canonical WebSite entity");
 assert.equal(byType("Organization").length, 1, "EMI page must link to the canonical Organization entity");
