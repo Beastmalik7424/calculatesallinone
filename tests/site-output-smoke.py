@@ -1548,3 +1548,38 @@ assert health_text.count("Those are reference estimates, not personal prescripti
 assert "unrounded BMI" in health_html and "rounds only the displayed number to one decimal place" in health_html, "Health hub must preserve the calculator's exact-threshold and display-rounding behavior"
 assert health_html.count("<h1") == 1, "Health hub must retain exactly one H1"
 assert 'href="/bmi-calculator/"' in health_html and 'href="/calorie-calculator/"' in health_html, "Health hub must retain direct links to both health calculators"
+
+
+# The publisher library is a third-party script, so the production CSP must permit its documented origin.
+csp_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
+csp_header = next(
+    header["value"] for header in csp_config["headers"][0]["headers"]
+    if header["key"] == "Content-Security-Policy"
+)
+script_policy = re.search(r"(?:^|;)\s*script-src\s+([^;]+)", csp_header)
+assert script_policy and "https://news.google.com" in script_policy.group(1).split(), (
+    "Content Security Policy must allow Google's Preferred Sources publisher script"
+)
+
+# Google Preferred Sources must be available once in the shared document head
+# and once in the visible footer on every generated HTML page, including the
+# standalone EMI calculator. The standard Google script scans the declarative
+# button container, so keep the exact attribute contract intact.
+for preferred_source_page in ROOT.rglob("*.html"):
+    preferred_source_html = preferred_source_page.read_text(encoding="utf-8")
+    if "<html" not in preferred_source_html.lower():
+        continue
+    preferred_source_scripts = re.findall(
+        r'<script\b(?=[^>]*\bsrc="https://news\.google\.com/swg/js/v1/publisher\.js")[^>]*>',
+        preferred_source_html,
+        re.I,
+    )
+    assert len(preferred_source_scripts) == 1, (
+        f"{preferred_source_page} must load Google's Preferred Sources publisher script exactly once"
+    )
+    assert re.search(r"<head>[\s\S]*?" + re.escape(preferred_source_scripts[0]), preferred_source_html, re.I), (
+        f"{preferred_source_page} must load the Preferred Sources script in the document head"
+    )
+    assert preferred_source_html.count("google-add-preferred-source-btn") == 1, (
+        f"{preferred_source_page} must render exactly one Google Preferred Sources button container"
+    )

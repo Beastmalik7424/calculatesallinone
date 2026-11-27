@@ -1,5 +1,10 @@
 "use strict";
 const {chromium}=require("playwright");
+function isExpectedGooglePreferredSourceReportOnlyNotice(text) {
+ return text.startsWith('Framing \'https://news.google.com/\' violates the following report-only Content Security Policy directive: "frame-ancestors \'self\'".') &&
+  text.includes("The violation has been logged, but no further action has been taken.");
+}
+
 (async()=>{
  const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
  const base="http://127.0.0.1:4174";
@@ -9,7 +14,7 @@ const {chromium}=require("playwright");
    const page=await browser.newPage({viewport});
    const errors=[];
    page.on("pageerror",e=>errors.push(e.message));
-   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   page.on("console",msg=>{if(msg.type()==="error"&&!isExpectedGooglePreferredSourceReportOnlyNotice(msg.text()))errors.push(msg.text());});
    for(const [path,fields,expected] of [
     ["/fraction-calculator/",[["a","1"],["b","2"],["c","1"],["d","3"]],"5/6"],
     ["/compound-interest-calculator/",[["principal","1000"],["rate","10"],["years","1"],["frequency","2"]],"1,102.50"],
@@ -179,7 +184,7 @@ const {chromium}=require("playwright");
   for(const width of [390,1366]){
    const page=await browser.newPage({viewport:{width,height:width===390?844:768}});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
-   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   page.on("console",msg=>{if(msg.type()==="error"&&!isExpectedGooglePreferredSourceReportOnlyNotice(msg.text()))errors.push(msg.text());});
    const response=await page.goto(base+"/bmi-calculator/");
    if(!response||response.status()!==200)throw Error("BMI page HTTP failure at "+width+"px");
    const form=page.locator("#bmi-form");
@@ -212,7 +217,7 @@ const {chromium}=require("playwright");
   for(const width of [390,1366]){
    const page=await browser.newPage({viewport:{width,height:width===390?844:768}});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
-   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   page.on("console",msg=>{if(msg.type()==="error"&&!isExpectedGooglePreferredSourceReportOnlyNotice(msg.text()))errors.push(msg.text());});
    const response=await page.goto(base+"/unit-converter/");
    if(!response||response.status()!==200)throw Error("Unit converter HTTP failure at "+width+"px");
    const unitResult=page.locator("#conv-result");
@@ -319,7 +324,7 @@ const {chromium}=require("playwright");
    const urduPage=await browser.newPage({viewport:{width,height:width===1366?768:844}});
    const urduErrors=[];
    urduPage.on("pageerror",e=>urduErrors.push(e.message));
-   urduPage.on("console",msg=>{if(msg.type()==="error")urduErrors.push(msg.text());});
+   urduPage.on("console",msg=>{if(msg.type()==="error"&&!isExpectedGooglePreferredSourceReportOnlyNotice(msg.text()))urduErrors.push(msg.text());});
    const urduResponse=await urduPage.goto(base+"/ur/unit-converter/");
    if(!urduResponse||urduResponse.status()!==200)throw Error("Urdu Unit Converter HTTP failure at "+width+"px");
    const urduValue=urduPage.locator("#u-val");
@@ -411,7 +416,7 @@ const {chromium}=require("playwright");
    const viewport={width,height:width===390?844:width===320?568:768};
    const page=await browser.newPage({viewport});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
-   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   page.on("console",msg=>{if(msg.type()==="error"&&!isExpectedGooglePreferredSourceReportOnlyNotice(msg.text()))errors.push(msg.text());});
    page.on("dialog",dialog=>dialog.accept());
    const response=await page.goto(base+"/tasbih-counter/");
    if(!response||response.status()!==200)throw Error("Tasbih page HTTP failure at "+width+"px");
@@ -473,7 +478,7 @@ const {chromium}=require("playwright");
   {
    const page=await browser.newPage({viewport:{width:390,height:844}});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
-   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   page.on("console",msg=>{if(msg.type()==="error"&&!isExpectedGooglePreferredSourceReportOnlyNotice(msg.text()))errors.push(msg.text());});
    await page.addInitScript(()=>Object.defineProperty(window,"localStorage",{configurable:true,get(){throw new DOMException("Storage blocked","SecurityError");}}));
    const response=await page.goto(base+"/tasbih-counter/");
    if(!response||response.status()!==200)throw Error("Tasbih blocked-storage page HTTP failure");
@@ -514,7 +519,7 @@ const {chromium}=require("playwright");
   for(const width of [320,360,390,1366]){
    const page=await browser.newPage({viewport:{width,height:width===320?568:width===360?740:width===390?844:768}});
    const errors=[];page.on("pageerror",e=>errors.push(e.message));
-   page.on("console",msg=>{if(msg.type()==="error")errors.push(msg.text());});
+   page.on("console",msg=>{if(msg.type()==="error"&&!isExpectedGooglePreferredSourceReportOnlyNotice(msg.text()))errors.push(msg.text());});
    const response=await page.goto("http://127.0.0.1:4174/emi-calculator/");
    if(!response||response.status()!==200)throw Error("EMI page HTTP failure");
    await page.locator("#amount").fill("895842100");

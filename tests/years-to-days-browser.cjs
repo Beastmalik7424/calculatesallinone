@@ -2,6 +2,11 @@
 
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
+function isExpectedGooglePreferredSourceReportOnlyNotice(text) {
+  return text.startsWith('Framing \'https://news.google.com/\' violates the following report-only Content Security Policy directive: "frame-ancestors \'self\'".') &&
+    text.includes("The violation has been logged, but no further action has been taken.");
+}
+
 
 const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, "");
 const viewports = [
@@ -17,7 +22,7 @@ const viewports = [
       const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
       const errors = [];
       page.on("console", msg => {
-        if (msg.type() === "error") errors.push("console: " + msg.text());
+        if (msg.type() === "error" && !isExpectedGooglePreferredSourceReportOnlyNotice(msg.text())) errors.push("console: " + msg.text());
       });
       page.on("pageerror", error => errors.push("pageerror: " + error.message));
 
