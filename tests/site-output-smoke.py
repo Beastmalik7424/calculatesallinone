@@ -1570,3 +1570,7 @@ for generated_page in ROOT.rglob("*.html"):
 worship_html = output_for_url(SITE + "/worship/").read_text(encoding="utf-8")
 assert "Choose a preset target of 33, 99 or 100, or enter a custom target from 1 to 10,000" in worship_html, "Worship hub Tasbih instructions must match the live preset and custom target controls"
 assert "Choose a target of 33, 100 or 1000, or choose unlimited" not in worship_html, "Worship hub must not advertise unsupported Tasbih targets"
+
+# Pakistan EMI guidance must distinguish the SBP policy rate from a lender's quoted rate.
+assert "The SBP policy rate is not the same as a lender's quoted loan markup or a KIBOR-linked rate" in emi_html, "EMI guidance must distinguish the central-bank policy rate from the lender's actual borrowing rate"
+assert 'href="https://www.sbp.org.pk/our-operations/monetary-policy"' in emi_html, "EMI guidance must link to the official State Bank of Pakistan monetary-policy source"
