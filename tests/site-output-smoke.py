@@ -643,6 +643,9 @@ for required in ("/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
 vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert vercel_config.get("cleanUrls") is False, "Vercel cleanUrls must stay disabled so the Google ownership HTML file is served at its exact URL"
 csp_header = next(item["value"] for item in vercel_config["headers"][0]["headers"] if item["key"] == "Content-Security-Policy")
+assert "https://news.google.com" not in csp_header.split(), (
+    "CSP must not allow the unused Google Preferred Sources origin after its publisher integration was removed."
+)
 connect_src = re.search(r"(?:^|;)\s*connect-src\s+([^;]+)", csp_header)
 assert connect_src and all(host in connect_src.group(1).split() for host in ("https://ep1.adtrafficquality.google", "https://ep2.adtrafficquality.google")), (
     "CSP connect-src must allow only the exact Google Ad Traffic Quality endpoints observed in production."
