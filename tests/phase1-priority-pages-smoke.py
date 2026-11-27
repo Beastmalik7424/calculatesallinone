@@ -307,7 +307,7 @@ def check_tasbih_content_structure():
     assert len(questions) == 7, f"Tasbih page should have seven distinct FAQs, got {len(questions)}"
     assert len({question.casefold() for question in questions}) == len(questions), "Tasbih FAQ questions must not be duplicated"
     content = visible_text("tasbih-counter")
-    assert "Choose 33, 99, 100 or any custom target from 1 to 10,000" in content, "Tasbih introduction must foreground preset and custom targets"
+    assert "Set 33, 99, 100 or a custom target (1–10,000)" in content, "Tasbih introduction must foreground preset and custom targets"
     assert "Space or Enter" in content and "Undo" in content, "Tasbih introduction must foreground keyboard counting and Undo"
     assert content.casefold().count("three groups of 33 presses") == 1, "The 99-count worked example must appear once"
     assert content.count("99 - 67 = 32") == 1, "The remaining-count arithmetic must appear once"
