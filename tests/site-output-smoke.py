@@ -329,7 +329,7 @@ assert "How many years and months are in 1,188 days?" in years_html and "3 years
 assert "29,200" in years_html and "29,220" in years_html and "29,219.4" in years_html, "The 80-year row must show all verified conversion methods"
 assert "36,500" in years_html and "36,525" in years_html and "36,524.25" in years_html, "The 100-year row must show all verified conversion methods"
 assert all(value in years_html for value in ("1,460", "1,461", "1,460.97", "4,015", "4,017.75", "4,017.6675", "4,745", "4,748.25", "4,748.1525")), "Quick reference table should include the 11- and 13-year conversions for all methods"
-assert years_html.count("<summary") == 10, "The page must have eight concise FAQs plus two collapsible reference tables"
+assert years_html.count("<summary") == 11, "The page must have nine concise FAQs plus two collapsible reference tables"
 for question in ("Which year-length methods can I use?", "Does exact calendar mode include leap days?", "Can I convert days to years?", "Can exact calendar mode use decimal years?", "How many days are in 13 years?"):
     assert question in years_html, f"Missing behavior-accurate FAQ: {question}"
 # The latest finalized GSC query sample included additional year counts. Keep the
