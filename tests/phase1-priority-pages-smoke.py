@@ -15,8 +15,8 @@ SITE = "https://calculateallinone.vercel.app"
 
 CASES = {
     "tasbih-counter": {
-        "title": "Tasbih Calculator Online | Dhikr Counter | CalculatesAll",
-        "description": "Free online Tasbih calculator and digital Tasbih counter. Set 33, 99 or custom targets, undo taps and save on this device when supported.",
+        "title": "Tasbih Calculator Online | Tasbeeh Counter | CalculatesAll",
+        "description": "Free online Tasbih calculator and Tasbeeh counter. Track dhikr, set 33, 99, 100 or custom targets, undo taps and save on this device.",
         "form": 'id="tasbih-app"',
         "category": "/worship/",
         "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
@@ -326,7 +326,7 @@ def check_years_quick_reference():
             parsed.append((html.unescape(re.sub(r"<[^>]+>", "", year)).strip(), cells))
         return parsed
 
-    expected_years = ["2", "3", "4", "5", "7", "9", "10", "11", "12", "13", "14", "15", "16", "19", "20", "30"]
+    expected_years = ["2", "3", "4", "5", "7", "9", "10", "11", "12", "13", "14", "15", "16", "18", "19", "20", "21", "23", "28", "30", "60", "80"]
     quick_rows = table_rows(quick_match.group(1))
     actual_years = [year for year, _ in quick_rows]
     assert actual_years == expected_years, (
@@ -348,9 +348,15 @@ def check_years_quick_reference():
         "14": ["5,110", "5,113.5", "5,113.395"],
         "15": ["5,475", "5,478.75", "5,478.6375"],
         "16": ["5,840", "5,844", "5,843.88"],
+        "18": ["6,570", "6,574.5", "6,574.365"],
         "19": ["6,935", "6,939.75", "6,939.6075"],
         "20": ["7,300", "7,305", "7,304.85"],
+        "21": ["7,665", "7,670.25", "7,670.0925"],
+        "23": ["8,395", "8,400.75", "8,400.5775"],
+        "28": ["10,220", "10,227", "10,226.79"],
         "30": ["10,950", "10,957.5", "10,957.275"],
+        "60": ["21,900", "21,915", "21,914.55"],
+        "80": ["29,200", "29,220", "29,219.4"],
     }
     assert dict(quick_rows) == expected_values, "Quick-reference arithmetic changed"
 
