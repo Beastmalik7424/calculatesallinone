@@ -385,7 +385,7 @@ def check_years_quick_reference():
     assert "Last updated: 2026-11-27" in visible, "Visible update date must match the GSC-backed question-led answer and snippet refresh"
     schemas = jsonld_documents(source, "years-to-days-calculator")
     webpage = next((item for item in schemas if item.get("@type") == "WebPage"), None)
-    assert webpage and webpage.get("dateModified") == "2026-11-26", "Structured dateModified must match the visible update date"
+    assert webpage and webpage.get("dateModified") == "2026-11-27", "Structured dateModified must match the visible update date"
 
 
 
