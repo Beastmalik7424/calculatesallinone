@@ -1232,7 +1232,7 @@ for slug, phrases in {
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
     "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days", "Choosing a year-length method", "3,653 days", "3,652.425 days"],
 }.items():
-    if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator"}:
+    if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator", "years-to-days-calculator"}:
         guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     else:
         guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
