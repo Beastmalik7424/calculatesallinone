@@ -28,7 +28,7 @@ LASTMOD = {
     "/zakat-calculator/": "2026-11-25",
     "/years-to-days-calculator/": "2026-11-27",
     "/unit-converter/": "2026-11-21",
-    "/tasbih-counter/": "2026-11-25",
+    "/tasbih-counter/": "2026-11-27",
     "/profit-loss-calculator/": "2026-11-21",
     "/ur/bmi-calculator/": "2026-11-21",
     "/query-calculator/": "2026-11-27",
