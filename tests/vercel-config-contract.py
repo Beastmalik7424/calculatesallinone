@@ -55,7 +55,7 @@ assert generic_values == ["public, max-age=3600"]
 
 build_source = (ROOT / "build.py").read_text(encoding="utf-8")
 for marker in (
-    'CSS_ASSET_VERSION = static_asset_version("site.css")',
+    'CSS_ASSET_VERSION = css_asset_version()',
     'APP_JS_ASSET_VERSION = static_asset_version("app.js")',
     'ZAKAT_JS_ASSET_VERSION = static_asset_version("zakat-calculator.js")',
     'href="/assets/site.css?v=',
