@@ -412,11 +412,11 @@ def check_years_ten_year_faq():
         "1 Jan 2021 to 1 Jan 2031",
     ):
         assert phrase in answer, "10-year FAQ must distinguish average methods from exact calendar intervals: " + phrase
-    main_match = re.search(r"<main\\b[^>]*>(.*?)</main>", source, re.S | re.I)
+    main_match = re.search(r"<main\b[^>]*>(.*?)</main>", source, re.S | re.I)
     assert main_match, "Years-to-Days page main content is missing"
     summaries = [
         html.unescape(re.sub(r"<[^>]+>", " ", value)).strip()
-        for value in re.findall(r"<summary\\b[^>]*>(.*?)</summary>", main_match.group(1), re.S | re.I)
+        for value in re.findall(r"<summary\b[^>]*>(.*?)</summary>", main_match.group(1), re.S | re.I)
     ]
     assert "How many days in 10 years?" in summaries, "10-year answer must be visible as a user-facing FAQ, not only mentioned in guide prose"
 
