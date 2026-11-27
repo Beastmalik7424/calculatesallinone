@@ -34,7 +34,7 @@ CASES = {
     },
     "years-to-days-calculator": {
         "title": "Years to Days Calculator | How Many Days in X Years?",
-        "description": "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date.",
+        "description": "How many days in 5, 10, 13, 19 or 30 years? Compare 365, 365.25 and 365.2425-day methods, or count exact Gregorian days from a start date.",
         "form": 'id="years-days-form"',
         "category": "/time/",
         "related": ["/date-calculator/", "/age-calculator/", "/query-calculator/", "/unit-converter/"],
