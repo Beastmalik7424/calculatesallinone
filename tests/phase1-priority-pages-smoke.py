@@ -445,6 +445,8 @@ def check_years_ten_year_faq():
     content = visible_text("years-to-days-calculator").lower()
     for phrase in (
         "fixed 365-day convention",
+        "common year has 365 days and a leap year has 366 days",
+        "29 February is added",
         "divisible by 4",
         "divisible by 400",
         "1900 was not a leap year",
