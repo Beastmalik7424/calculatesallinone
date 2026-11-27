@@ -6,6 +6,11 @@ const { chromium } = require('playwright');
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
   const errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.goto('http://127.0.0.1:8123/emi-calculator/',{waitUntil:'load'});
+  if(size.width===390&&size.height===844){
+   const firstScreen=await page.locator('#loan-form button[type=submit]').evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,viewport:innerHeight,visible:r.top>=0&&r.bottom<=innerHeight}});
+   console.log('EMI initial Calculate button visibility',JSON.stringify(firstScreen));
+   if(!firstScreen.visible)failures.push('390x844 Calculate EMI button is below the initial viewport');
+  }
   await page.locator('#amount').fill('895842100');
   await page.locator('#rate').fill('12');
   await page.locator('#tenure').fill('5');
