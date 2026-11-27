@@ -6,7 +6,7 @@ const js = fs.readFileSync("static/app.js", "utf8");
 const html = fs.readFileSync("public/query-calculator/index.html", "utf8");
 assert.match(html, /id="query-time-form"/);
 assert.match(html, /id="qt-result"/);
-assert.match(html, /id="qt-question"[^>]*value="How many days old is someone born on 29-02-1984\?"/, "Query Calculator should load a complete natural-language question, not a numeric fragment");
+assert.match(html, /id="qt-question"[^>]*value="How many days are in 5 years\?"/, "Query Calculator should load a complete natural-language question, not a numeric fragment");
 assert.ok(html.includes("/assets/app.js?v="), "versioned JS asset missing");
 const listeners = {};
 const form = {addEventListener: (name, fn) => {listeners["form:" + name] = fn;}};
