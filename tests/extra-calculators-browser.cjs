@@ -487,6 +487,9 @@ function isExpectedGooglePreferredSourceReportOnlyNotice(text) {
    await page.locator("#t-custom-target").fill("33 times");
    await page.locator("#t-tap").click();
    if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih custom target must reject question text rather than silently parsing a number");
+   await page.locator("#t-custom-target").fill("1.5");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih custom target must reject decimal values rather than rounding them");
    await page.locator("#t-custom-target").fill("1000");
    if(!(await page.locator("#t-custom-target-wrap").isVisible()))throw Error("Tasbih custom target field should become visible");
    const countAfterThousand=await page.evaluate(()=>{
