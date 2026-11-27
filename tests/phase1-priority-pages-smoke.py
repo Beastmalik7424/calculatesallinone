@@ -16,7 +16,7 @@ SITE = "https://calculateallinone.vercel.app"
 CASES = {
     "tasbih-counter": {
         "title": "Tasbih Calculator Online | Dhikr Counter | CalculatesAll",
-        "description": "Free online Tasbih calculator and digital Tasbih counter for dhikr. Set 33, 99 or custom targets, undo taps and save your count on-device.",
+        "description": "Free online Tasbih calculator and digital Tasbih counter. Set 33, 99 or custom targets, undo taps and save on this device when supported.",
         "form": 'id="tasbih-app"',
         "category": "/worship/",
         "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
@@ -78,7 +78,7 @@ def check_english_page(slug, spec):
     description = re.search(r'<meta name="description" content="([^"]*)"', source)
     assert description and description.group(1) == spec["description"], f"Meta description mismatch: {slug}: got {description.group(1) if description else None!r}, expected {spec['description']!r}"
     if slug == "tasbih-counter":
-        assert len(description.group(1)) <= 140, "Tasbih meta description must stay concise enough to reduce snippet truncation"
+        assert len(description.group(1)) <= 140 and "when supported" in description.group(1), "Tasbih meta description must qualify local saving because browser storage may be unavailable"
     assert f'<link rel="canonical" href="{SITE}/{slug}/">' in source, f"Canonical changed: {slug}"
     assert '<meta name="robots" content="index, follow">' in source, f"Unexpected robots directive: {slug}"
     assert source.count("<h1") == 1 and spec["h1"] in source, f"Expected one clear H1: {slug}"
