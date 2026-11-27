@@ -217,3 +217,90 @@ The topic-specific five-page scans already recorded above remain the stronger di
 - The Vercel Production environment lacks the AdSense slot and consent-ready configuration; ads remain safely disabled.
 - Exact Google first-page/top-five position, independent full-document originality score, interactive deployed-preview browser verification, and AdSense approval remain unverified.
 - PR #366 must remain OPEN / DRAFT / UNMERGED. Do not merge or deploy production until exact-head checks and remaining external/account gates are resolved.
+
+
+## Final exact-head verification — 28 November 2026
+
+### Exact source commit and automated verification
+
+Application/content/test source commit: `e5b5254e6ff5ca71f46a1022a39a55076080275c`.
+
+All **7/7 GitHub Actions workflows completed successfully** on this exact commit:
+1. Workflow security contract — PASS.
+2. Query Calculator independent verification — PASS.
+3. Site build and monetization checks — PASS.
+4. Zakat focused verification — PASS.
+5. Zakat calculator QA — PASS.
+6. First-screen calculator browser audit — PASS.
+7. Build and smoke test — PASS.
+
+Evidence from the successful build:
+- 47 generated pages checked and 260 JSON-LD blocks retained.
+- 42 unique sitemap URLs, canonical URLs, internal links, language metadata and indexability checks passed.
+- AdSense ID/slot gating, `ads.txt` line format and disabled-by-default behaviour passed.
+- 17,000 deterministic calculator simulations passed with 51,694 independently counted assertions and 3 generated-page integration contracts.
+- EMI engine: 24 tests, including 2,000 seeded schedule checks.
+- Query Calculator DOM, multilingual, date and arithmetic regression passed.
+- Headless browser audit: 10 scoped URLs plus calculator end-to-end, zero console/page errors.
+- Calculator layout audit: 28 English/Urdu routes across 4 viewports, 112 scenarios, 112 screenshots, 0 failures.
+- Contrast audit: 3 routes across 2 themes, 834 text nodes, 0 failures.
+- Lighthouse SEO: homepage, BMI, Zakat and calorie pages scored 100/100. Seven of the ten additional scoped pages scored 100/100. The three intentionally noindex language pages scored 69/100 solely for the expected `is-crawlable` finding; the workflow explicitly permits that expected result. The ten-page audit passed.
+
+### Preview deployment and HTTP checks
+
+Vercel automatically created a **Preview**, not a Production deployment, for exact commit `e5b5254...`:
+- Deployment: `dpl_3b4L5v83NKx71MX6qCTjdD6v7GGE`
+- State: READY
+- Preview: https://calculatesall-9brindh8b-malikadeelbhatti-1187.vercel.app
+
+HTTP fetch returned 200 for:
+- `/emi-calculator/`
+- `/worship/`
+- `/tasbih-counter/`
+- `/years-to-days-calculator/`
+
+The preview sitemap contains 42 URLs. The preview sends `X-Robots-Tag: noindex` and uses production canonicals, as expected for a protected preview. This is not evidence that the preview itself should be indexed and is not a Production deployment.
+
+### Google Search Console URL Inspection
+
+On the verified URL-prefix property `https://calculateallinone.vercel.app/`, direct URL Inspection returned:
+- `/tasbih-counter/`: Submitted and indexed; robots allowed; successful mobile crawl; Google canonical equals user canonical; last crawl 2026-11-07.
+- `/years-to-days-calculator/`: Submitted and indexed; robots allowed; successful mobile crawl; Google canonical equals user canonical; last crawl 2026-11-07.
+- `/emi-calculator/`: Submitted and indexed; robots allowed; successful mobile crawl; Google canonical equals user canonical; last crawl 2026-11-07.
+- `/worship/`: Discovered - currently not indexed; sitemap found; no fetch/crawl result yet.
+- `/money/`: Discovered - currently not indexed; sitemap found; no fetch/crawl result yet.
+
+The current homepage category navigation links to both `/worship/` and `/money/`. The three priority calculator pages are already indexed, but Google last crawled them on 7 November, before the latest 27–28 November copy changes. Re-inspect after the Production release and request indexing through the normal Search Console URL Inspection interface if appropriate. Do not use the Indexing API for ordinary calculator pages.
+
+The account-level site-index summary reported nine URLs not indexed or returning 404. Only the five URLs above were individually inspected in this pass; the remaining seven have not been individually diagnosed and must not be described as fixed.
+
+### Current market context, not keyword-volume evidence
+
+A 20 November 2026 Dawn report says Pakistan's outstanding auto loans reached PKR 416.5 billion in October, marking a 23rd consecutive monthly increase, while October car sales rose 41% year over year. This is a current auto-finance market signal, not proof of a Google query trend or search volume: https://www.dawn.com/news/1956705
+
+The State Bank of Pakistan's official monetary-policy page showed the policy rate at 12.00% per annum following the October 2026 decision. The EMI page now links to the official SBP page and explicitly distinguishes the policy rate from a lender's quoted markup or KIBOR-linked rate: https://www.sbp.org.pk/our-operations/monetary-policy
+
+A local EMI competitor, EMI Calculator Pakistan, exposes KIBOR-based car-finance context and bank-offer comparisons. Its third-party displayed rate values are not treated as verified official rates. The current page deliberately links to SBP context rather than copying volatile third-party rates: https://emicalculator.pk/
+
+### Originality recheck
+
+The full, unmodified preview HTML was submitted again to the originality provider:
+- Tasbih: 502 Bad Gateway.
+- Years-to-Days: 502 Bad Gateway.
+- EMI: provider busy response.
+
+No originality percentage or certification is available. Earlier exact-phrase web checks did not return a direct copied-page match for the sampled passages, but this is not a full-document originality certificate.
+
+### Final gate interpretation
+
+The application changes and automated quality checks are green on `e5b5254...`. The preview is READY and its four scoped pages return HTTP 200. Production was not deployed, and PR #366 remains OPEN / DRAFT / UNMERGED.
+
+Remaining external/account gates are not code defects:
+- Production AdSense environment has no `ADSENSE_SLOT` or `ADSENSE_CONSENT_READY`; do not enable ads until the real slot ID and confirmed consent-management setup are supplied.
+- AdSense account approval has not been verified.
+- Google Trends research is denied on the connected HYPD plan, so no search-trend claim is made.
+- Full-document originality scoring remains unavailable because the checker repeatedly returned 502/busy.
+- The two category hubs are discovered but not indexed, and seven additional URLs from the site-index summary remain individually uninspected.
+- Google has not re-crawled the three priority calculators since 7 November.
+
+These constraints prevent a truthful statement that only Production deployment remains. Keep the PR open and draft until the external/account gates are resolved or explicitly accepted by the project owner. No first-page ranking guarantee is possible.
