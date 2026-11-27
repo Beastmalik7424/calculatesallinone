@@ -1564,3 +1564,9 @@ for generated_page in ROOT.rglob("*.html"):
     assert "google-add-preferred-source-btn" not in generated_html, (
         f"{generated_page} must not render Google's Preferred Sources button"
     )
+
+
+# The worship hub must describe the Tasbih controls that actually exist on the counter.
+worship_html = output_for_url(SITE + "/worship/").read_text(encoding="utf-8")
+assert "Choose a preset target of 33, 99 or 100, or enter a custom target from 1 to 10,000" in worship_html, "Worship hub Tasbih instructions must match the live preset and custom target controls"
+assert "Choose a target of 33, 100 or 1000, or choose unlimited" not in worship_html, "Worship hub must not advertise unsupported Tasbih targets"
