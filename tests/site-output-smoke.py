@@ -323,9 +323,9 @@ _reverse_day_examples = (
 )
 _years_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", years_html))
 _years_text = re.sub(r"\s+", " ", _years_text).strip()
-_missing_reverse_days = [value for value in _gsc_day_examples if value not in _years_text]
+_missing_reverse_days = [value for value in _reverse_day_examples if value not in _years_text]
 _table_pos = _years_text.find("Worked reference: days to years")
-assert not _missing_gsc_days, f"Missing reverse day-count examples {_missing_gsc_days}; actual table text: {_years_text[_table_pos:_table_pos + 800]}"
+assert not _missing_reverse_days, f"Missing reverse day-count examples {_missing_reverse_days}; actual table text: {_years_text[_table_pos:_table_pos + 800]}"
 assert "How many years and months are in 1,188 days?" in years_html and "3 years, 3 average months and 0.96 days" in years_html, "The 1,188-day reverse estimate must remain as a worked example"
 assert "29,200" in years_html and "29,220" in years_html and "29,219.4" in years_html, "The 80-year row must show all verified conversion methods"
 assert "36,500" in years_html and "36,525" in years_html and "36,524.25" in years_html, "The 100-year row must show all verified conversion methods"
