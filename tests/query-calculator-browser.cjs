@@ -67,6 +67,16 @@ const { chromium } = require("playwright");
       assert.match(actual, expected, question + " => " + actual);
     }
 
+    // Bare numeric input is valid but must not guess a unit or operation.
+    await input.fill("5");
+    await input.press("Enter");
+    assert.match(await result.innerText(), /You entered 5\\. Please add a unit or operation/i);
+
+    // Full questions containing numeric digits must return deterministic arithmetic.
+    await input.fill("What is 125 plus 75?");
+    await input.press("Enter");
+    assert.match(await result.innerText(), /125 \\+ 75 = 200/);
+
     const localeCases = [
       ["en", /years = .*days.*months.*weeks/i],
       ["ur", /سال کے برابر .*دن.*مہینے.*ہفتے/],
