@@ -1288,8 +1288,8 @@ TOOLS.extend([
         "guide": [
             ("Quick answers to common years-to-days questions", [
                 "How many days in 5 years? Using the 365.2425-day Gregorian mean, 5 years = 1,826.2125 days using the Gregorian average. The 365-day method gives 1,825 days, while the 365.25-day Julian average gives 1,826.25 days.",
-                "Search Console queries such as “5 years how many days”, “5 years is how many days”, “how many days are in 5 years”, and “5 years to days” express the same conversion intent. The 5-year row in the reference table answers all of these wordings. The same is true of “10 years in days”, “10 years is how many days”, and “how many days are in 10 years”. Other visible GSC quantities include 2, 13, 19 and 30 years, with wording such as “How many days are in 13 years?”, “How many days in 19 years?” and “How many days is 30 years?”. Use the matching year row rather than treating each wording as a different calculation.",
-                "Reverse questions such as “How many years are in 2,555 days?”, “2,555 days in years”, “14 thousand days to years”, “21k days in years” and “1.3k days in years” use the same day-to-year conversion. The reverse reference table includes the distinct day quantities visible in the supplied Search Console export. These query rows are site-level data, so they are not evidence that every wording was individually assigned to this page by Google.",
+                "Common question wordings such as “5 years how many days”, “5 years is how many days”, “how many days are in 5 years”, and “5 years to days” express the same conversion intent. The 5-year row in the reference table answers all of these wordings. The same is true of “10 years in days”, “10 years is how many days”, and “how many days are in 10 years”. Other useful examples include 2, 13, 19 and 30 years, with wording such as “How many days are in 13 years?”, “How many days in 19 years?” and “How many days is 30 years?”. Use the matching year row rather than treating each wording as a different calculation.",
+                "Reverse questions such as “How many years are in 2,555 days?”, “2,555 days in years”, “14 thousand days to years”, “21k days in years” and “1.3k days in years” use the same day-to-year conversion. The reverse reference table provides additional worked day-count examples using the same conversion methods. Each row is an illustrative calculation, not a claim about search volume or ranking.",
                 "How many days are in 5 and a half years? For a fixed 5.5-year duration, the 365-day method gives 2,007.5 days, the 365.25-day Julian average gives 2,008.875 days, and the 365.2425-day Gregorian average gives 2,008.83375 days. These are average-duration conversions, not exact counts between two calendar dates.",
                 "How many days are in 5 years and 4 months? Five years and four months equals 5 + 4/12 = 5.333333... average years. The 365-day method gives about 1,946.6667 days, the 365.25-day Julian average gives 1,948 days, and the 365.2425-day Gregorian average gives 1,947.96 days. This is an average-duration estimate because calendar months vary from 28 to 31 days. For an exact count, enter the actual start and end dates in the Date Difference Calculator.",
                 "How many days in 10 years? Using the 365.2425-day Gregorian mean, 10 years = 3,652.425 days. The 365-day method gives 3,650 days, while the 365.25-day Julian average gives 3,652.5 days. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory</a> explains the Gregorian leap-year rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST</a> defines the mean Gregorian year. This is an average conversion, not an exact count between two calendar dates.",
@@ -1921,8 +1921,7 @@ def write(path, content):
 
 def years_to_days_reference_html():
     years_values = [0.2, 1, 1.5, 2, 2.6, 3, 3.5, 3.75, 4, 4.16667, 5, 5.5, 6, 6.66667, 6.83333, 7, 7.83333, 8, 8.5, 8.83333, 9, 9.25, 10, 11, 11.16667, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 29.4, 30, 31, 32, 34, 36, 40, 41, 43, 47, 48, 50, 59, 60, 65, 74, 75, 78, 80, 83, 90, 100, 10000]
-    # 2026-11-26 GSC export: 312 visible year/day/month-intent query rows.
-    # Include the distinct numeric year quantities in the expandable reference table.
+    # Include common numeric year quantities in the expandable reference table.
     quick_values = [2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 23, 28, 30, 60, 80]
     def formatted(value):
         return format(value, ",.5f").rstrip("0").rstrip(".")
@@ -1942,7 +1941,7 @@ def years_to_days_reference_html():
            '<p class="' + P + '">A short comparison for common examples. Fixed-year methods are estimates; exact calendar totals depend on the start date.</p>'
            + table_start + table_rows(quick_values) + table_end
            + '<details id="years-days-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
-           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 63 GSC-informed years-to-days reference examples</summary>'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 63 years-to-days reference examples</summary>'
            + table_start + table_rows(years_values) + table_end
            + '</details><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. The expanded table is a duration reference, not a substitute for a date-specific count.</p></section>')
     return out
@@ -1971,7 +1970,7 @@ def days_to_years_reference_html():
            '<p class="' + P + '">Convert days to decimal years by dividing by 365, 365.25 or 365.2425. Values are rounded to four decimal places; these are duration estimates, not calendar ages.</p>'
            + table_start + table_rows(quick_day_counts) + table_end
            + '<details id="days-years-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
-           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show 45 additional GSC-informed day-to-years examples</summary>'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show 45 additional day-to-years examples</summary>'
            + table_start + table_rows(additional_day_counts) + table_end
            + '</details><p class="' + P + '">A decimal-year result does not identify the exact calendar age or elapsed years. For an exact interval, enter the actual start and end dates in the Date Difference Calculator.</p></section>')
     return out
