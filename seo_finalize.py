@@ -35,7 +35,7 @@ URDU_DESCRIPTION_FALLBACKS = {
     "/ur/tasbih-counter/": "ڈیجیٹل تسبیح کاؤنٹر میں گنتی، منتخب عبارت اور ہدف اسی براؤزر میں محفوظ رکھیں، جب مقامی اسٹوریج دستیاب ہو۔ گنتی واپس لینے اور ری سیٹ کرنے کا طریقہ دیکھیں۔",
 }
 VERIFIED_PAGE_UPDATE_DATES = {
-    # This date records the GSC-backed Urdu BMI search-intent explanation and source check.
+    # This date records the Urdu BMI search-intent explanation and source check.
     "/ur/bmi-calculator/": "2026-11-21",
     # This date records the new global Nisab, currency, asset and Urdu guidance update.
     "/zakat-calculator/": "2026-11-25",
@@ -44,15 +44,15 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/ur/zakat-calculator/": "2026-11-25",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
-    # This date records the GSC-backed question-led answers and snippet refresh; calculator methods remain unchanged.
+    # This date records the question-led answers and snippet refresh; calculator methods remain unchanged.
     "/years-to-days-calculator/": "2026-11-27",
-    # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
+    # This date records the explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
-    # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
+    # This date records the Tasbih calculator and Tasbeeh-counter wording update.
     "/tasbih-counter/": "2026-11-27",
-    # This date records the GSC-backed online profit and loss calculator explanation.
+    # This date records the online profit and loss calculator explanation.
     "/profit-loss-calculator/": "2026-11-21",
-    # This date records the GSC-backed question-led examples and parser coverage refresh.
+    # This date records the question-led examples and parser coverage refresh.
     "/query-calculator/": "2026-11-27",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
