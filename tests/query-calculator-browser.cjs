@@ -72,6 +72,10 @@ const { chromium } = require("playwright");
     await input.press("Enter");
     assert.match(await result.innerText(), /You entered 5\\. Please add a unit or operation/i);
 
+    await input.fill("5 years");
+    await input.press("Enter");
+    assert.match(await result.innerText(), /You entered 5 years\\. Which unit should I convert it into\\?/i);
+
     // Full questions containing numeric digits must return deterministic arithmetic.
     await input.fill("What is 125 plus 75?");
     await input.press("Enter");
