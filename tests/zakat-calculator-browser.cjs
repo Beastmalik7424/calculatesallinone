@@ -63,7 +63,15 @@ let browser;
   const consoleErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
   page.on("console", message => {
-    if (message.type() === "error") consoleErrors.push(message.text());
+    if (message.type() !== "error") return;
+    const text = message.text();
+    // Google's Preferred Sources library may trigger this exact report-only
+    // frame-ancestors notice. Report-only means the browser does not block it.
+    // Keep every other console error fatal, including enforced CSP violations.
+    const expectedGoogleReportOnlyNotice =
+      text.startsWith('Framing \'https://news.google.com/\' violates the following report-only Content Security Policy directive: "frame-ancestors \'self\'".') &&
+      text.includes("The violation has been logged, but no further action has been taken.");
+    if (!expectedGoogleReportOnlyNotice) consoleErrors.push(text);
   });
 
   const response = await page.goto(BASE_URL + "/zakat-calculator/", { waitUntil: "networkidle" });
