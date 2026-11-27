@@ -18,19 +18,23 @@ assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "E
 assert.ok(html.includes("For a 5 lakh loan EMI estimate, enter 500,000 as the loan amount"), "EMI page must answer the observed 5 lakh loan EMI query without assuming a rate or term");
 assert.ok(html.includes("Pakistan loan EMI calculator") && html.includes("monthly instalment"), "EMI guide must use relevant Pakistan loan and monthly instalment search language");
 assert.ok(html.includes("reducing-balance") && html.includes("flat-rate markup"), "EMI guide must distinguish reducing-balance EMI from flat-rate markup");
-const shareLinkFunction = html.match(/function shareLink\(\)\{([\s\S]*?)\nfunction readParams\(\)/);
-assert.ok(shareLinkFunction, "EMI page must keep a testable share-link handler");
-assert.match(shareLinkFunction[1], /location\.pathname\+'#'\+params\.toString\(\)/, "Share links must put loan values in the URL fragment, not the request query");
-assert.doesNotMatch(shareLinkFunction[1], /location\.pathname\+'\?'/, "New share links must not expose loan values in the HTTP query string");
-const readParamsFunction = html.match(/function readParams\(\)\{([\s\S]*?)\nfunction selectTab/);
-assert.ok(readParamsFunction, "EMI page must keep a testable shared-link reader");
-assert.match(readParamsFunction[1], /location\.hash\?location\.hash\.slice\(1\):location\.search/, "EMI page must read fragment links and preserve legacy query links");
-assert.match(html, /Share links include your loan amount, annual rate, term, currency and first installment month in the URL fragment\. Anyone with the link can view those settings\./, "EMI page must disclose which values a shared link exposes to its recipient");
-const relatedFooter = html.match(/<nav aria-label="Related calculators">([\s\S]*?)<\/nav>/);
-assert.ok(relatedFooter, "EMI page must retain its related-calculator footer navigation");
-assert.match(relatedFooter[1], /href="\/compound-interest-calculator\/"/, "EMI footer must link to the existing related compound-interest calculator");
-assert.doesNotMatch(relatedFooter[1], /href="\/(?:bmi|zakat)-calculator\/"/, "EMI footer must not recommend unrelated BMI or Zakat calculators");
-assert.match(html, /<a href="\/compound-interest-calculator\/">Compound Interest Calculator<\/a>/, "EMI main navigation must offer a related finance tool");
+const shareLinkStart = html.indexOf("function shareLink(){");
+const readParamsStart = html.indexOf("function readParams(){");
+const selectTabStart = html.indexOf("function selectTab(");
+assert.ok(shareLinkStart >= 0 && readParamsStart > shareLinkStart, "EMI page must keep a testable share-link handler");
+const shareLinkSource = html.slice(shareLinkStart, readParamsStart);
+assert.ok(shareLinkSource.includes("location.pathname+'#'+params.toString()"), "Share links must put loan values in the URL fragment, not the request query");
+assert.ok(!shareLinkSource.includes("location.pathname+'?'+params.toString()"), "New share links must not expose loan values in the HTTP query string");
+assert.ok(selectTabStart > readParamsStart, "EMI page must keep a testable shared-link reader");
+const readParamsSource = html.slice(readParamsStart, selectTabStart);
+assert.ok(readParamsSource.includes("location.hash?location.hash.slice(1):location.search"), "EMI page must read fragment links and preserve legacy query links");
+assert.ok(html.includes("Share links include your loan amount, annual rate, term, currency and first installment month in the URL fragment. Anyone with the link can view those settings."), "EMI page must disclose which values a shared link exposes to its recipient");
+const relatedFooterStart = html.indexOf('<nav aria-label="Related calculators">');
+assert.ok(relatedFooterStart >= 0, "EMI page must retain its related-calculator footer navigation");
+const relatedFooter = html.slice(relatedFooterStart, html.indexOf("</nav>", relatedFooterStart));
+assert.ok(relatedFooter.includes('href="/compound-interest-calculator/"'), "EMI footer must link to the existing related compound-interest calculator");
+assert.ok(!relatedFooter.includes('href="/bmi-calculator/"') && !relatedFooter.includes('href="/zakat-calculator/"'), "EMI footer must not recommend unrelated BMI or Zakat calculators");
+assert.ok(html.includes('<a href="/compound-interest-calculator/">Compound Interest Calculator</a>'), "EMI main navigation must offer a related finance tool");
 
 const schemaBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
   .map(([, raw]) => JSON.parse(raw));
