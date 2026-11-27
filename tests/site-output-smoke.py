@@ -1559,14 +1559,14 @@ for preferred_source_page in ROOT.rglob("*.html"):
     if "<html" not in preferred_source_html.lower():
         continue
     preferred_source_scripts = re.findall(
-        r'<script\\b(?=[^>]*\\bsrc="https://news\\.google\\.com/swg/js/v1/publisher\\.js")[^>]*>',
+        r'<script\b(?=[^>]*\bsrc="https://news\.google\.com/swg/js/v1/publisher\.js")[^>]*>',
         preferred_source_html,
         re.I,
     )
     assert len(preferred_source_scripts) == 1, (
         f"{preferred_source_page} must load Google's Preferred Sources publisher script exactly once"
     )
-    assert re.search(r"<head>[\\s\\S]*?" + re.escape(preferred_source_scripts[0]), preferred_source_html, re.I), (
+    assert re.search(r"<head>[\s\S]*?" + re.escape(preferred_source_scripts[0]), preferred_source_html, re.I), (
         f"{preferred_source_page} must load the Preferred Sources script in the document head"
     )
     assert preferred_source_html.count("google-add-preferred-source-btn") == 1, (
