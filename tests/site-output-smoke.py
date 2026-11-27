@@ -299,6 +299,8 @@ assert years_html.count(_year_9_row) == 2, "The 9-year GSC query row must appear
 assert years_html.count(_year_15_row) == 2, "The 15-year GSC query row must appear in both reference tables"
 assert years_html.count(_year_19_row) == 2, "The 19-year GSC query row must appear in both reference tables"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
+years_faq_html = years_html.split("Common questions", 1)[1]
+assert "How many days in 10 years?" in years_faq_html and "3,652.425 days" in years_faq_html and "1 Jan 2020 to 1 Jan 2030 is 3,653 days" in years_faq_html, "The 10-year GSC query must be answered in the visible FAQ, not only guide prose"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
 assert "For this calculator’s date-only anniversary method" not in years_html, "Obsolete date-only anniversary wording must be removed"
 assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 63 GSC-informed years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
