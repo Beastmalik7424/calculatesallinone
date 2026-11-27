@@ -49,7 +49,7 @@ VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
     # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
-    "/tasbih-counter/": "2026-11-25",
+    "/tasbih-counter/": "2026-11-27",
     # This date records the GSC-backed online profit and loss calculator explanation.
     "/profit-loss-calculator/": "2026-11-21",
     # This date records the GSC-backed question-led examples and parser coverage refresh.
