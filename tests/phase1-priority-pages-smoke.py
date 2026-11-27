@@ -391,6 +391,36 @@ def check_years_quick_reference():
 
 
 
+def check_years_ten_year_faq():
+    source = read_page("years-to-days-calculator")
+    schemas = jsonld_documents(source, "years-to-days-calculator")
+    faq_schema = next((item for item in schemas if item.get("@type") == "FAQPage"), None)
+    assert faq_schema, "Years-to-Days page must retain its FAQPage structured data"
+    question = next(
+        (item for item in faq_schema.get("mainEntity", []) if item.get("name") == "How many days in 10 years?"),
+        None,
+    )
+    assert question, "The GSC-observed 10-year query must have its own visible FAQ and FAQPage entry"
+    answer = question.get("acceptedAnswer", {}).get("text", "")
+    for phrase in (
+        "3,650 days",
+        "3,652.425 days",
+        "3,652.5 days",
+        "3,653 days",
+        "3,652 days",
+        "1 Jan 2020 to 1 Jan 2030",
+        "1 Jan 2021 to 1 Jan 2031",
+    ):
+        assert phrase in answer, "10-year FAQ must distinguish average methods from exact calendar intervals: " + phrase
+    main_match = re.search(r"<main\\b[^>]*>(.*?)</main>", source, re.S | re.I)
+    assert main_match, "Years-to-Days page main content is missing"
+    summaries = [
+        html.unescape(re.sub(r"<[^>]+>", " ", value)).strip()
+        for value in re.findall(r"<summary\\b[^>]*>(.*?)</summary>", main_match.group(1), re.S | re.I)
+    ]
+    assert "How many days in 10 years?" in summaries, "10-year answer must be visible as a user-facing FAQ, not only mentioned in guide prose"
+
+
 def check_bmi_content():
     """Guard BMI guidance, source transparency and unchanged calculator controls."""
     bmi_source = read_page("bmi-calculator")
@@ -450,6 +480,7 @@ def main():
     check_targeted_content()
     check_bmi_content()
     check_years_quick_reference()
+    check_years_ten_year_faq()
     check_tasbih_content_structure()
     print("PASS: priority pages have targeted metadata, first-screen order, relevant links, FAQs, valid JSON-LD, preserved canonicals, and research-backed content")
     return 0
