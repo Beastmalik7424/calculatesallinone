@@ -80,21 +80,24 @@ def test_non_retryable_http_error_fails_without_fallback():
     assert attempts == [MODULE.ENDPOINT], attempts
 
 
-
-
-def test_only_google_preferred_source_marker_is_allowlisted():
+def test_removed_preferred_source_marker_is_reported_as_an_html_error():
     google_marker = {
+        "type": "error",
         "message": "Attribute “google-add-preferred-source-btn” not allowed on element “div” at this point."
     }
-    unrelated_marker = {
+    unrelated_error = {
+        "type": "error",
         "message": "Attribute “unexpected-custom-attribute” not allowed on element “div” at this point."
     }
-    assert MODULE.is_approved_vendor_attribute_diagnostic(google_marker)
-    assert not MODULE.is_approved_vendor_attribute_diagnostic(unrelated_marker)
+    warning = {"type": "info", "subType": "warning", "message": "A warning"}
+    assert MODULE.html_errors([google_marker, unrelated_error, warning]) == [
+        google_marker, unrelated_error
+    ]
+
 
 if __name__ == "__main__":
     test_primary_rate_limit_falls_back_to_alternate()
     test_primary_and_alternate_outage_falls_back_to_third_checker()
     test_non_retryable_http_error_fails_without_fallback()
-    test_only_google_preferred_source_marker_is_allowlisted()
+    test_removed_preferred_source_marker_is_reported_as_an_html_error()
     print("Nu HTML Checker online failover regression: PASS")
