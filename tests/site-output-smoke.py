@@ -1230,7 +1230,7 @@ for slug, phrases in {
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
     "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice", "Physical beads provide a tactile count", "33 - 21 = 12", "does not synchronize the count"],
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
-    "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days", "Which years-to-days method should I choose?", "3,653 days", "3,652.425 days"],
+    "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days", "Choosing a year-length method", "3,653 days", "3,652.425 days"],
 }.items():
     if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator"}:
         guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
