@@ -671,9 +671,9 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Free Tasbih calculator and digital Tasbih counter. Tasbeeh counter with 33, 99, 100 or custom targets, undo and local saving when supported.",
+        "description": "Free Tasbih calculator and digital Tasbih counter. Set 33, 99 or custom targets, undo taps, use Space or Enter, and save locally when supported.",
         "h1": "Free Online Tasbih Counter",
-        "lead": "Count dhikr on this device. Choose a phrase and target, then undo a tap if needed.",
+        "lead": "Count dhikr on this device. Choose 33, 99 or a custom target. Count with Space or Enter, or tap Count one. Use Undo to correct a tap.",
         "ui": (
             '<div class="ca-tasbih-shell max-w-lg mx-auto space-y-5" id="tasbih-app">'
             '<div class="ca-tasbih-settings">'
@@ -2152,7 +2152,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
-        desc = "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count."
+        desc = "Free online Tasbih calculator for dhikr. Set 33, 99 or custom targets, undo taps, and count with Space or Enter."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
