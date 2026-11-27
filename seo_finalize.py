@@ -52,8 +52,6 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/tasbih-counter/": "2026-11-27",
     # This date records the online profit and loss calculator explanation.
     "/profit-loss-calculator/": "2026-11-21",
-    # This date records the corrected worship-hub Tasbih controls and storage guidance.
-    "/worship/": "2026-11-28",
     # This date records the question-led examples and parser coverage refresh.
     "/query-calculator/": "2026-11-27",
 }
