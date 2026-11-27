@@ -96,7 +96,7 @@ assert lastmod_entries == expected_lastmod, (
     f"Expected {expected_lastmod!r}, got {lastmod_entries!r}"
 )
 assert lastmod_entries.get(SITE + "/zakat-calculator/") == "2026-11-25"
-assert lastmod_entries.get(SITE + "/tasbih-counter/") == "2026-11-25"
+assert lastmod_entries.get(SITE + "/tasbih-counter/") == "2026-11-27"
 def output_for_url(url):
     parsed = urlparse(url)
     assert parsed.scheme == "https" and parsed.netloc == urlparse(SITE).netloc, f"Unexpected sitemap host: {url}"
