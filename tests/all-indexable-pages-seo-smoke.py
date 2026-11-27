@@ -34,13 +34,13 @@ def output_path(route):
 def tag_attributes(tag):
     return {
         key.lower(): html.unescape(value)
-        for key, value in re.findall(r'''([:\\w-]+)\\s*=\\s*["']([^"']*)["']''', tag)
+        for key, value in re.findall(r'''([:\w-]+)\s*=\s*["']([^"']*)["']''', tag)
     }
 
 
 def meta_values(raw, attribute, key):
     values = []
-    for tag in re.findall(r"<meta\\b[^>]*>", raw, re.I):
+    for tag in re.findall(r"<meta\b[^>]*>", raw, re.I):
         attrs = tag_attributes(tag)
         if attrs.get(attribute) == key and "content" in attrs:
             values.append(attrs["content"])
@@ -133,7 +133,7 @@ for route in indexable:
             check(values == [expected], route + ": " + key + " must match the normalized page title/description")
 
     page_url = SITE + route
-    for link_tag in re.findall(r"<link\\b[^>]*>", raw, re.I):
+    for link_tag in re.findall(r"<link\b[^>]*>", raw, re.I):
         attrs = tag_attributes(link_tag)
         if "alternate" not in attrs.get("rel", "").lower().split() or "hreflang" not in attrs:
             continue
