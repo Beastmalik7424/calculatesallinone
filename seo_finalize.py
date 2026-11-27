@@ -202,7 +202,7 @@ def normalize_meta(raw, path, lang):
     if path == "/profit-loss-calculator/":
         title = "Profit and Loss Calculator | Markup and Margin"
     if path == "/tasbih-counter/":
-        title = "Tasbih Calculator Online | Tasbeeh Counter | CalculatesAll"
+        title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
     if path == "/age-calculator/":
