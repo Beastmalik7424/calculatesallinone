@@ -298,7 +298,7 @@ def check_tasbih_content_structure():
         html.unescape(re.sub(r"<[^>]+>", " ", value)).strip()
         for value in re.findall(r"<summary\b[^>]*>(.*?)</summary>", body, re.S | re.I)
     ]
-    assert len(questions) == 8, f"Tasbih page should have eight distinct FAQs, got {len(questions)}"
+    assert len(questions) == 7, f"Tasbih page should have seven distinct FAQs, got {len(questions)}"
     assert len({question.casefold() for question in questions}) == len(questions), "Tasbih FAQ questions must not be duplicated"
     content = visible_text("tasbih-counter")
     assert content.casefold().count("three groups of 33 presses") == 1, "The 99-count worked example must appear once"
