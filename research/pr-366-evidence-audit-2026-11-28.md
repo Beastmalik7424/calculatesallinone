@@ -143,3 +143,77 @@ Five exact-phrase web searches were also attempted against representative senten
 - AdSense approval and account-side consent: **NOT VERIFIED**; only Google can approve the account and automated CI cannot inspect account settings.
 
 Keep PR #366 **OPEN / DRAFT / UNMERGED** until the current documentation-head workflow completes and the independent originality/live-preview browser gates are resolved. Do not claim first-page or top-five rankings as guaranteed. Product gaps requiring new controls (Tasbih tracking/history and EMI fees/down-payment/flat-rate/floating-rate features) are documented but deliberately not implemented because the fixed zero-layout-change constraint forbids those UI changes.
+
+
+---
+
+## Follow-up verification and policy research — 28 November 2026
+
+This section supersedes earlier status statements above where the branch head or evidence window has changed.
+
+### Source correction found and implemented
+
+A source review found a factual mismatch on the Worship hub: its Tasbih instructions advertised targets of 33, 100 and 1,000 plus unlimited, while the actual counter supports 33, 99, 100 and a custom target from 1 to 10,000.
+
+The source copy in `content_v13.py` now accurately explains:
+- Preset targets 33, 99 and 100, or a custom target from 1 to 10,000.
+- Undo for the last tap and Space/Enter keyboard counting.
+- Reset confirmation.
+- Same-device persistence only when browser storage is available, with no cross-device sync and possible loss after clearing browser data or using private browsing.
+
+A generated-output regression assertion was added to `tests/site-output-smoke.py`. Test-first evidence:
+- Test commit `e7fd8a4bd7f42be10e685a2c0f2ab99bb04d88a9` failed at the new assertion with: `AssertionError: Worship hub Tasbih instructions must match the live preset and custom target controls`.
+- The content correction was committed as `706cab0fe5dc01459880d6aba465f1776364dfb3`.
+- An attempted `dateModified`/sitemap lastmod addition for `/worship/` failed the existing freshness contract because that page must not publish an unverified `dateModified`. The unsupported date entries were removed in commits `f69d334a412f38db9df0935fde0d5ff493dfaae0` and `833b2e48e84e53b44e6d10412744b9abd47cdbcb`. No visible update date or structured date is being invented.
+- The latest source head at this point is `833b2e48e84e53b44e6d10412744b9abd47cdbcb`. A fresh all-workflow pass on this exact head is still required before calling the correction verified.
+
+No CSS, layout, calculator controls, calculator formulas, URLs, canonicals, or hand-edited `public/` output were changed.
+
+### Current Google Search guidance
+
+Official Google Search Central documentation was checked on 28 November 2026:
+- The documentation update dated 24 November 2026 introduced a consolidated ranking principles section. Google says results are ranked for helpfulness and query relevance, not to favour a particular site: https://developers.google.com/search/updates and https://developers.google.com/search/docs/ranking/principles-for-ranking-results
+- The people-first content self-assessment emphasizes original information, substantial value beyond competing pages, accurate claims, sourcing, expertise, and a satisfying user experience: https://developers.google.com/search/docs/fundamentals/creating-helpful-content
+- Google's generative-AI search guide explicitly says `llms.txt` does not help or harm Google Search visibility, there is no preferred page length, and no special AI schema or keyword-chunking tactic is required. Keep `llms.txt` only as an optional resource for other systems, not as a Google ranking tactic: https://developers.google.com/search/docs/fundamentals/ai-optimization-guide
+- FAQ rich results stopped appearing in Google Search on 7 May 2026. Visible FAQs remain useful for readers. Google says there is no need to proactively remove FAQ structured data, but it should not be presented as a Google rich-result or ranking advantage: https://developers.google.com/search/updates
+- Google spam policy identifies large volumes of unoriginal, low-value pages and near-copy keyword variants as scaled content abuse. Do not create separate pages for every numeric query variant: https://developers.google.com/search/docs/essentials/spam-policies
+
+### AdSense policy and live configuration audit
+
+Official AdSense guidance was checked:
+- Pages should have unique, original, relevant content, clear navigation and a good user experience: https://support.google.com/adsense/answer/7299563
+- AdSense eligibility requires original, high-quality content that attracts an audience: https://support.google.com/adsense/answer/9724
+- Google reviews the whole site, and the site must be connected and approved before ads can show: https://support.google.com/adsense/answer/7584263
+- Publisher policies apply to all page content and can disable ad serving: https://support.google.com/adsense/answer/10008391
+
+The Vercel project environment was checked without decrypting secrets. The visible Production environment list contained only `GEMINI_API_KEY`; no `ADSENSE_SLOT` or `ADSENSE_CONSENT_READY` variables were present, and the API reported zero hidden Production variables. The build therefore correctly fails closed: the publisher client has a code default, but no ad-unit slot is configured and consent readiness is false. Do not set a fabricated slot ID or turn consent readiness on without the publisher's confirmed CMP/account-side setup. AdSense account approval and consent configuration remain unverified and require the actual publisher account details.
+
+### Search Console and trend evidence
+
+The SMEPost Search Console connection exposes the verified URL-prefix property `https://calculateallinone.vercel.app/` as `siteOwner`, but the account is on `free_recent_three_days` access. The latest finalized range returned was **22–24 November 2026**. It does not provide prior-period comparison.
+
+Page insights for that exact range:
+- Tasbih: 14 impressions, 0 clicks, 0% CTR, average position 6.93. `tasbih calculator`: 10 impressions at position 6.2. `calculator tasbih`: 2 impressions at position 8.5.
+- Years-to-Days: 174 impressions, 0 clicks, average position 59.14. Queries include `how many days in 13 years` (3 impressions, position 50.33), `how many days are in 14 years` (2 impressions, position 79), `how many days are in 15 years` (3 impressions, position 77.33), `how many days are in 20 years` (2 impressions, position 76.5), `how many days are in 21 years` (1 impression, position 37), `how many days are in 60 years` (1 impression, position 37), and `800000/365` (1 impression, position 3).
+- EMI: 4 impressions, 0 clicks, 0% CTR, average position 7.5; no query rows were returned.
+
+These are small, finalized Search Console observations, not monthly search volumes or evidence of a rising trend. HYPD's selected domain property `sc-domain:calculateallinone.vercel.app` is marked `siteUnverifiedUser`, and Google refused that connector's request for insufficient property role. HYPD's Google Trends research tool also returned `plan_denied` on the current plan. Google Trends data therefore remains unavailable in this audit. No trending or growth claim is made. The HYPD plan/access details are shown here if the account owner chooses to review them: https://app.hypd.ai/plans?utm_source=mcp&utm_content=tool_access_plan&utm_term=seo_google_trends
+
+### Five named competitor benchmark
+
+The following cross-site benchmark covers the five competitor brands named in the project goals. It is a product/content feature comparison, not proof of their exact Google positions in Pakistan:
+- Calculator.net Payment Calculator: monthly payment, fixed-term and fixed-payment solving, totals and amortization schedule: https://www.calculator.net/payment-calculator.html
+- Omni Calculator EMI: EMI, total payable and interest, with the ability to solve one of the input variables and explanatory floating-rate/prepayment content: https://www.omnicalculator.com/finance/emi
+- CalculatorSoup Loan Calculator: can solve loan amount, interest rate, number of months or monthly payment, with a printable amortization schedule and advanced compounding options: https://www.calculatorsoup.com/calculators/financial/loan-calculator.php
+- GigaCalculator Loan Calculator: exposes APR, compounding frequency and payback amount, and explicitly notes it does not currently provide a full amortization schedule: https://www.gigacalculator.com/calculators/loan-calculator.php
+- Math.tools Year-to-Day table: broad year-to-day lookup table covering whole-year rows and larger milestones: https://math.tools/table/unit/time/yr-to-d
+
+The topic-specific five-page scans already recorded above remain the stronger direct benchmarks for Tasbih, Years-to-Days and Pakistan EMI. Our current differentiators remain the supported Tasbih keyboard/Undo/local persistence behaviour, Years-to-Days fixed-year conventions plus exact Gregorian anniversary mode, and EMI prepayment/comparison/CSV schedule tools. Known product gaps remain explicitly disclosed and are not silently claimed as existing features. Adding them would require UI or calculation-scope changes outside this PR's fixed no-layout-change requirement.
+
+### Current gate status
+
+- The Tasbih Worship hub factual mismatch has a source fix and a regression test, but the latest head still needs a fresh passing workflow run.
+- Google Trends and extended GSC history are unavailable on the connected plan/permissions; no fabricated trend data has been substituted.
+- The Vercel Production environment lacks the AdSense slot and consent-ready configuration; ads remain safely disabled.
+- Exact Google first-page/top-five position, independent full-document originality score, interactive deployed-preview browser verification, and AdSense approval remain unverified.
+- PR #366 must remain OPEN / DRAFT / UNMERGED. Do not merge or deploy production until exact-head checks and remaining external/account gates are resolved.
