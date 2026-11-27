@@ -417,7 +417,7 @@ for url in urls:
         )
     if url == SITE + "/tasbih-counter/":
         assert html_lib.unescape(title_match.group(1)) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
-            "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
+            "Tasbih title must reflect relevant user search intent without keyword stuffing."
         )
         assert desc_match.group(1) == "Free Tasbih calculator and digital Tasbih counter. Tasbeeh counter with 33, 99, 100 or custom targets, undo and local saving when supported.", (
             "Tasbih description must be specific, useful and aligned with the page."
