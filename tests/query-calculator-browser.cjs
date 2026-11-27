@@ -18,7 +18,7 @@ const { chromium } = require("playwright");
     assert.equal(await result.count(), 1);
 
     const inputCases = [
-      // Full Search Console-style questions must bind the unit after the
+      // Full natural-language questions must bind the unit after the
       // quantity as the source, even when the target unit appears earlier.
       ["How many days are in 5 years?", /5 years ≈ 1,826\.21 days/i],
       ["How many days in 5 years?", /5 years ≈ 1,826\.21 days/i],

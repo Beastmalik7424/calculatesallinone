@@ -340,7 +340,7 @@ def check_years_quick_reference():
     quick_rows = table_rows(quick_match.group(1))
     actual_years = [year for year, _ in quick_rows]
     assert actual_years == expected_years, (
-        "Quick reference must prioritize observed three-month GSC year queries without changing its table structure; "
+        "Quick reference must prioritize common year values without changing its table structure; "
         f"expected={expected_years!r}, actual={actual_years!r}"
     )
 
@@ -374,10 +374,10 @@ def check_years_quick_reference():
     full_match = re.search(r"<table\b[^>]*>(.*?)</table>", full_reference, re.S | re.I)
     assert full_match, "Expanded years-to-days reference table is missing"
     full_rows = table_rows(full_match.group(1))
-    assert len(full_rows) == 63, f"Expanded reference must contain 63 GSC-informed examples, got {len(full_rows)}"
+    assert len(full_rows) == 63, f"Expanded reference must contain 63 calculated examples, got {len(full_rows)}"
     assert set(expected_years).issubset({year for year, _ in full_rows}), "Quick-reference rows must remain in the expanded table"
-    assert "19" in {year for year, _ in full_rows}, "The 19-year GSC row must remain in the expanded reference"
-    gsc_missing_year_rows = {
+    assert "19" in {year for year, _ in full_rows}, "The 19-year conversion row must remain in the expanded reference"
+    expected_additional_year_rows = {
         "8": ["2,920", "2,922", "2,921.94"],
         "17": ["6,205", "6,209.25", "6,209.1225"],
         "18": ["6,570", "6,574.5", "6,574.365"],
@@ -389,10 +389,10 @@ def check_years_quick_reference():
     }
     full_row_map = dict(full_rows)
     for year, values in gsc_missing_year_rows.items():
-        assert full_row_map.get(year) == values, f"Expanded reference is missing the verified GSC row for {year} years"
+        assert full_row_map.get(year) == values, f"Expanded reference is missing the expected calculated row for {year} years"
 
     visible = visible_text("years-to-days-calculator")
-    gsc_query_answers = (
+    common_query_answers = (
         ("How many days in 2 years?", "730.485 days"),
         ("How many days in 3 years?", "1,095.7275 days"),
         ("How many days in 4 years?", "1,460.97 days"),
@@ -404,9 +404,9 @@ def check_years_quick_reference():
     )
     for question, answer in gsc_query_answers:
         assert question in visible and answer in visible, (
-            "Years-to-Days content must directly answer observed GSC queries with verified values: " + question
+            "Years-to-Days content must directly answer common question examples with verified values: " + question
         )
-    assert "Last updated: 2026-11-27" in visible, "Visible update date must match the GSC-backed question-led answer and snippet refresh"
+    assert "Last updated: 2026-11-27" in visible, "Visible update date must match the question-led answer and snippet refresh"
     schemas = jsonld_documents(source, "years-to-days-calculator")
     webpage = next((item for item in schemas if item.get("@type") == "WebPage"), None)
     assert webpage and webpage.get("dateModified") == "2026-11-27", "Structured dateModified must match the visible update date"
@@ -423,7 +423,7 @@ def check_years_ten_year_faq():
         (item for item in faq_schema.get("mainEntity", []) if item.get("name") == "How many days in 10 years?"),
         None,
     )
-    assert question, "The GSC-observed 10-year query must have its own visible FAQ and FAQPage entry"
+    assert question, "The 10-year question must have its own visible FAQ and FAQPage entry"
     answer = question.get("acceptedAnswer", {}).get("text", "")
     for phrase in (
         "3,650 days",
