@@ -2113,6 +2113,36 @@
       var partialNumbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
       var partialTokens = question.match(/[a-z]+/g) || []
       var partialUnits = partialTokens.filter(function (word) { return !!aliases[word] })
+      // A bare numeric value is valid input, but it does not identify an
+      // operation or unit. Acknowledge it and ask for the missing context
+      // rather than returning the generic unsupported-question message or
+      // guessing what the user intended.
+      if (partialNumbers.length === 1 && partialUnits.length === 0 &&
+          /^[0-9]+(?:[.][0-9]+)?$/.test(question)) {
+        var bareValue = timeConversionNumber(partialNumbers[0])
+        if (bareValue === null) {
+          say("qt-result", "Enter a nonnegative number up to 1,000,000.")
+        } else {
+          say("qt-result", "You entered " + timeConversionFormat(bareValue) +
+            ". Please add a time unit or an operation so I can calculate an answer.")
+        }
+        return
+      }
+      // A quantity plus its unit is meaningful input, but a conversion target
+      // is still required. Never infer the requested target unit.
+      if (partialNumbers.length === 1 && partialUnits.length === 1 &&
+          !/(?:\\bin\\b|\\bto\\b|\\binto\\b|\\bconvert\\b|\\bhow many\\b|\\bkitne\\b|\\bkitna\\b)/.test(question)) {
+        var quantityValue = timeConversionNumber(partialNumbers[0])
+        if (quantityValue === null) {
+          say("qt-result", "Enter a nonnegative number up to 1,000,000.")
+        } else {
+          var quantityUnit = aliases[partialUnits[0]]
+          say("qt-result", "You entered " + timeConversionFormat(quantityValue) + " " +
+            quantityUnit + (quantityValue === 1 ? "" : "s") +
+            ". Which unit should I convert it into?")
+        }
+        return
+      }
       if (partialNumbers.length === 1 && partialUnits.length === 1 &&
           /(?:\bin\b|\bto\b|\binto\b|\bconvert\b|\bhow many\b|\bkitne\b|\bkitna\b)/.test(question)) {
         var partialValue = timeConversionNumber(partialNumbers[0])
