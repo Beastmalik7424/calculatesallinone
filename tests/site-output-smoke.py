@@ -1556,7 +1556,7 @@ csp_header = next(
     header["value"] for header in csp_config["headers"][0]["headers"]
     if header["key"] == "Content-Security-Policy"
 )
-script_policy = re.search(r"(?:^|;)\\s*script-src\\s+([^;]+)", csp_header)
+script_policy = re.search(r"(?:^|;)\s*script-src\s+([^;]+)", csp_header)
 assert script_policy and "https://news.google.com" in script_policy.group(1).split(), (
     "Content Security Policy must allow Google's Preferred Sources publisher script"
 )
