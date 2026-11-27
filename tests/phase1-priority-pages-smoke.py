@@ -305,6 +305,16 @@ def check_tasbih_content_structure():
     assert content.count("99 - 67 = 32") == 1, "The remaining-count arithmetic must appear once"
     assert "When browser storage is available, the current count, selected phrase and selected target" in content, "The page must accurately explain which settings persist"
     assert "does not sync across devices" in content.lower(), "The page must explain device-local storage"
+    for phrase in (
+        "Practical counting workflows and milestones",
+        "choose Custom target and enter 1,000",
+        "three groups of 33",
+        "ten sets of 100",
+        "polite live output",
+        "does not intercept your typing",
+        "when local storage is available",
+    ):
+        assert phrase.lower() in content.lower(), "Tasbih practical workflow or accessibility guidance is missing: " + phrase
 
 
 
@@ -432,6 +442,21 @@ def check_years_ten_year_faq():
         for value in re.findall(r"<summary\b[^>]*>(.*?)</summary>", main_match.group(1), re.S | re.I)
     ]
     assert "How many days in 10 years?" in summaries, "10-year answer must be visible as a user-facing FAQ, not only mentioned in guide prose"
+    content = visible_text("years-to-days-calculator").lower()
+    for phrase in (
+        "fixed 365-day convention",
+        "divisible by 4",
+        "divisible by 400",
+        "1900 was not a leap year",
+        "2000 was",
+        "97 leap days",
+        "mean year is exactly 365.2425 days",
+        "age example",
+        "contract example",
+        "project timeline example",
+        "do not subtract weekends, public holidays",
+    ):
+        assert phrase.lower() in content, "Years-to-Days practical method guidance is missing: " + phrase
 
 
 def check_bmi_content():
