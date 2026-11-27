@@ -837,8 +837,8 @@ for url in urls:
                     "Unit Converter dateModified must match the GSC-backed dimensional-conversion explanation."
                 )
             elif url == SITE + "/tasbih-counter/":
-                assert item.get("dateModified") == "2026-11-25", (
-                    "Tasbih Counter dateModified must match the GSC-backed snippet and search-intent update."
+                assert item.get("dateModified") == "2026-11-27", (
+                    "Tasbih Counter dateModified must match the verified metadata correction."
                 )
             elif url in (SITE + "/zakat-calculator/", SITE + "/ur/zakat-calculator/"):
                 assert item.get("dateModified") == "2026-11-25", (
