@@ -39,50 +39,61 @@ Recorded page-level values in the PR evidence:
 
 The 26 November export was not independently available in the connected source. OpenRush keyword research quota was exhausted and Google Trends comparisons were unavailable. Therefore this report makes no monthly volume, growth, rising-query, or trending-keyword claim. These limits must remain visible rather than being filled with estimates.
 
-## Public competitor scan
+## Public competitor scan and feature benchmark
 
-Searches on 28 November 2026 surfaced the following public pages. This is a content/feature comparison sample from web search, **not proof of exact Google country-specific SERP positions or a verified top-five ranking order**.
+Searches on 28 November 2026 surfaced the following pages for the relevant intents. The sample deliberately includes strong topical competitors, not an asserted Google rank order. **These search results do not establish that any listed site occupies positions 1–5 in Pakistan or another fixed market.** Exact Google SERP positions require a country/device-specific live SERP data source; the connected OpenSEO account currently has no project, and the earlier OpenRush keyword quota was exhausted.
 
 ### Tasbih / Tasbeeh counter
 
-Pages reviewed:
-- [Ihsabha digital Tasbih counter](https://ihsabha.com/islamic/digital-tasbih-counter)
-- [Nakhtu digital Tasbih counter](https://nakhtu.com/en/tools/tasbih)
-- [ToolNova online Tasbeeh counter](https://www.toolnova.org/islamic-tools/tasbeeh-counter)
-- [Hasibatak digital Tasbih counter](https://www.hasibatak.com/en/tasbih-counter/)
-- [Sibha online Tasbih counter](https://sibha.app/)
-- [Sunnah Tools Tasbih counter](https://sunnah.tools/tools/tasbih-counter/)
+Five substantive comparison pages:
+- [Ihsabha Digital Tasbih Counter](https://ihsabha.com/islamic/digital-tasbih-counter) — custom dhikr, round targets, daily/all-time rounds, sound/vibration, local privacy and religious references.
+- [Nakhtu Digital Tasbih Counter](https://nakhtu.com/en/tools/tasbih) — 33/100/free targets, automatic round reset, daily total, vibration, Undo and local persistence.
+- [ToolNova Online Tasbeeh Counter](https://www.toolnova.org/islamic-tools/tasbeeh-counter) — 33/99/100/500/1,000/custom targets, guided after-salah flow, haptics, streaks, 14/35-day stats, per-dhikr totals, custom dhikr and backup/restore.
+- [Sunnah Tools Tasbih Counter](https://sunnah.tools/tools/tasbih-counter/) — focused Islamic tool positioning and religious context.
+- [Tasbih.info changelog](https://tasbih.info/changelog) — dhikr libraries, count routines, history and nuanced target handling.
 
-Common competitor capabilities include 33/99/100 presets, custom targets, Undo/Reset, local persistence, and keyboard counting. Differentiating features found across the sample include vibration, offline/PWA operation, daily totals, streaks, history/backup, multiple dhikr libraries, and linked religious sources.
+**Our verified page capability:** five preset phrases plus custom phrase, 33/99/100/custom target up to 10,000, tap and Space/Enter counting, Undo, confirmed Reset, lifetime total, local same-device saving when storage is available, explicit storage-failure notice and a clear statement that the counter does not verify recitation or issue religious rulings.
 
-PR #366's page explains the digital-vs-physical distinction, custom phrase/target, deliberate tap counting, keyboard controls, Undo/confirmed Reset, device-local persistence and storage limitations, and explicitly avoids presenting targets as religious rulings. This is a useful scope and trust distinction. Feature gaps versus the sample remain offline/PWA support, vibration, history/backup, streaks and cross-device continuity. These are separate product decisions and are not silently added to this content PR.
+**Competitive gap:** no daily goal, streak, session history, per-dhikr totals, export/restore, automatic round progression, selectable haptic/sound controls or verified offline/PWA caching. ToolNova and Ihsabha currently show a broader tracking feature set. These are product features, not copy gaps. Adding them would alter the existing counter UI/behaviour and therefore is intentionally outside this PR's zero-layout-change constraint. Do not describe our counter as offering those features.
 
 ### Years-to-Days calculator
 
-Pages reviewed:
-- [Calculator Junction Years to Days](https://calculatorjunction.com/time-unit-converter/years-to-days)
-- [Calculorium Years to Days](https://calculorium.com/calculator/years-to-days-calculator/)
-- [DQYDJ Years to Days](https://dqydj.com/years-to-days-calculator/)
-- [UnitFlip Years to Days](https://unitflip.org/time/years-to-days)
-- [Qvert Year to Day](https://qvert.ai/time/year-to-day/)
+Five substantive comparison pages:
+- [Calculator Academy Years to Days](https://calculator.academy/years-to-days-calculator/) — 365, 365.25 and Gregorian average methods, plus exact anniversary spans and leap-year-aware dates.
+- [Calculator Junction Years to Days](https://calculatorjunction.com/time-unit-converter/years-to-days) — bidirectional live converter, precision selector, formula, multi-unit equivalents and reference table.
+- [DQYDJ Years to Days](https://dqydj.com/years-to-days-calculator/) — live reverse conversion, 365/365.25 toggle and milestone table.
+- [UnitFlip Years to Days](https://unitflip.org/time/years-to-days) — 365.2425 mean Gregorian factor, precision controls, unit definitions and source notes.
+- [Qvert Years to Days](https://qvert.ai/time/year-to-day/) — fast converter, formula, table and FAQ.
 
-The sample commonly uses one primary convention (365, 365.25 or 365.2425 days), with some reverse conversion and reference tables. PR #366 differentiates by clearly separating the fixed 365-day convention, Julian 365.25-day average, mean Gregorian 365.2425-day average, and exact date-based calendar counting. It also explains the Gregorian 400-year rule and supplies worked examples and reverse-conversion references.
+**Our verified page capability:** bidirectional conversion; 365-day, Julian 365.25-day and mean Gregorian 365.2425-day methods; exact Gregorian anniversary mode; leap-year rule explanation; worked 5, 10, 13, 19 and 30-year examples; reverse day-to-year examples; and explicit warnings that average conversions are not exact date intervals. Browser regression coverage includes 1,000 seeded property simulations at 320, 390 and 1366-pixel viewports.
 
-The remaining competitive opportunity is a more interactive conversion experience with selectable precision and broader unit/date workflows. No unsupported claim is made that every competitor uses the same year definition.
+**Competitive gap:** Calculator Junction/UnitFlip have broader generic time-unit conversion tables and precision selection. Calculator Academy has an author expertise profile. Our differentiation is the explicit exact-anniversary workflow and clear separation of fixed-year conventions from real calendar intervals. A broader unit converter or additional precision UI would be a separate feature change.
 
 ### EMI calculator
 
-Pages reviewed:
-- [Educativz Loan EMI Calculator](https://www.educativz.com/tools/loan-emi-calculator/)
-- [LoanCalculators.pk](https://loancalculators.pk/)
-- [Software Craft Loan EMI Calculator](https://software-craft.com/free-tools/loan-emi-calculator/)
-- [Investify Loan Calculator](https://www.investify.pk/tools/loan-calculator)
-- [HisabCenter EMI Calculator](https://www.hisabcenter.pk/tools/emi-loan)
-- [EMICalculator.pk](https://emicalculator.pk/)
+Five substantive comparison pages:
+- [Educativz Pakistan Loan EMI Calculator](https://www.educativz.com/tools/loan-emi-calculator/) — reducing/flat rate modes, down payment, fees, recurring/one-time prepayment, later rate reset, affordability solved backwards, monthly/yearly schedules and Pakistan-specific scheme/KIBOR examples.
+- [Investify Pakistan Loan Calculator](https://www.investify.pk/tools/loan-calculator) — reducing-balance calculation, 0% rate handling, flat-versus-reducing explanation and KIBOR context.
+- [HisabCenter EMI Calculator](https://www.hisabcenter.pk/tools/emi-loan) — PKR personal/car/bike positioning, total interest and affordability guidance.
+- [Gem Pakistan Loan EMI Calculator](https://www.gem.net.pk/loan-emi-calculator/) — reducing-balance formula, flat-rate comparison and total-cost framing.
+- [SignTest Car Installment Calculator](https://signtest.pk/car-installment-calculator/) — side-by-side comparison of 22 banks/products and KIBOR-linked assumptions (its rates are date-sensitive and must not be copied without re-verifying official bank sources).
 
-The sample frequently provides repayment schedules, principal/markup splits, Pakistan-specific PKR context and fee/rate caveats. Some competitors additionally publish bank-specific pricing, KIBOR-linked presets, loan-product comparisons, or richer schedule/prepayment models. PR #366's page provides formula/method explanation, reducing-balance versus flat-markup context, worked examples, prepayment scenarios, affordability, comparisons and explicit estimate limitations.
+**Our verified page capability:** amortization schedule, total principal/interest/payment, one-time or recurring prepayment with tenure/EMI choices, affordability estimate, two-loan comparison, CSV export, shareable calculation parameters, currency formatting, formula explanation and lender-quote limitations. The EMI engine has 26 deterministic checks plus 2,000 seeded schedule-reconciliation scenarios.
 
-Remaining gaps include verified bank-specific rate feeds, full APR/fee modelling, variable-rate reset modelling, and solving for additional unknowns such as principal or tenure. These require separate data/product work; this PR does not claim those features exist.
+**Competitive gap:** no direct down-payment input, processing-fee/APR model, flat-rate calculation mode, variable-rate reset, inverse principal/tenure solver or verified live bank rate feed. Educativz currently offers the broadest directly comparable Pakistan feature set in this sample. These features require new calculator controls and calculation behaviour; they cannot be added while preserving the explicit zero-layout-change gate. Do not invent live bank data or imply the existing EMI engine supports these options.
+
+## Google ranking and AdSense evidence standard
+
+Google states that Search prioritizes helpful, reliable information created for people, evaluates usefulness and does not design ranking systems to favour a particular site. A competitor benchmark or Lighthouse score is not a ranking guarantee:
+- [Google ranking principles](https://developers.google.com/search/docs/appearance/ranking-systems-guide)
+- [Google helpful, reliable, people-first content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)
+- [Google page experience guidance](https://developers.google.com/search/docs/appearance/page-experience)
+
+AdSense requires unique, relevant content and a good user experience. The automated monetization CI test does not certify account approval or consent configuration:
+- [Google AdSense page readiness](https://support.google.com/adsense/answer/7299563)
+- [Google AdSense eligibility](https://support.google.com/adsense/answer/9724)
+
+
 
 ## AdSense and originality evidence
 
@@ -96,20 +107,36 @@ Independent plagiarism verification remains unresolved. The AISEO plagiarism-che
 
 ## Deployment and live-browser boundary
 
-Vercel's deployment status check for `9b5d764774d65c2cc5321c6cf220d6f9ec2992b0` returned no deployment. The Vercel Git status for that SHA was failure with the deployment-rate-limit target URL, and the previous create-deployment attempt returned HTTP 402 with a 24-hour limit message. Do not infer that the quota has reset.
+The original code/test SHA `9b5d764774d65c2cc5321c6cf220d6f9ec2992b0` did not have its own Vercel deployment. A documentation-only commit `89ea871b8202bc5574c542f13a7708211cb96940` was subsequently deployed by Vercel and verified READY:
+- Deployment ID: `dpl_6vFt3hKjkzQZwHZie39kgEKswVtY`
+- Preview URL: https://calculatesall-cxyjtvkqd-malikadeelbhatti-1187.vercel.app
+- Exact deployed SHA: `89ea871b8202bc5574c542f13a7708211cb96940`
+- The application code in this preview is unchanged from the code-tested SHA `9b5d764...`; the intervening commit added only this evidence report.
+- HTTP 200 and canonical page content were checked for homepage, EMI, Tasbih, Years-to-Days, Query Calculator, sitemap.xml, robots.txt and llms.txt. Sitemap contains 42 URLs.
 
-A separate HYPD browser SEO audit request was not run because the connected plan denied access to that feature. The passing CI browser audits are valid CI evidence but must not be represented as interactive verification of the deployed Vercel preview.
+The browser automation provider available through the connected HYPD plan denied access. The Skyvern browser session creation interface returned a schema mismatch, and the TinyFish browser wallet had a negative balance. No paid browser automation or account top-up was initiated. Therefore an interactive live-preview session is still **not verified**. GitHub Actions' Playwright browser checks are the reliable alternative for the tested built artifact, but they are not a live deployed-browser check.
 
-## Gate decision
+## Originality spot-check and remaining evidence gates
 
-- Exact-head GitHub Actions: **PASS (7/7)**.
-- Build, generated-page smoke, headless browser and monetization checks: **PASS in GitHub Actions**.
-- CSS stylesheet files changed: **NONE in the PR changed-file list**.
-- Calculator first-screen and EMI viewport checks: **PASS in CI**.
-- GSC: **verified only for 22–24 November 2026**; 26 November and trend data unavailable.
-- Competitor content scan: **completed as a surfaced public-page feature comparison**; exact Google top-five rank order is not verified.
-- Independent originality score: **NOT VERIFIED**.
-- Vercel preview for audited SHA: **NOT DEPLOYED / NOT FOUND**.
-- Interactive browser verification of that preview: **NOT VERIFIED**.
+The independent AISEO full-document plagiarism API was called with the complete, unmodified HTML of each of the three deployed page documents:
+- Tasbih Counter: 33,420 characters — HTTP 502 Bad Gateway.
+- Years-to-Days: 67,372 characters — HTTP 502 Bad Gateway.
+- EMI Calculator: 67,444 characters — provider returned “busy” before analysis.
 
-Keep PR #366 open and draft. Do not merge or deploy production until the remaining evidence gates are closed. Once Vercel quota permits a preview deployment, verify that exact deployed SHA in a real browser at mobile and desktop widths before considering merge.
+Five exact-phrase web searches were also attempted against representative sentences from the pages. No direct copied-page match was returned for the sampled wording, but search-engine phrase checks cannot certify originality or replace a full-document plagiarism report. **No originality percentage is claimed.**
+
+- Exact code-head GitHub Actions: **7 workflows were associated with `9b5d764...`; the latest documentation-head run must be polled to completion before it can be reported as final.**
+- Build, generated-page smoke, Lighthouse, and headless Playwright checks: **in progress on `89ea871...` at the last poll; steps 1–31 passed, step 32 was running, step 33 pending.**
+- CSS stylesheet files changed: **NONE**. The standalone EMI HTML diff changes metadata, structured data and content only; no inline style or CSS rules changed.
+- Calculator first-screen and EMI viewport checks: **PASS in the existing GitHub Actions browser audits**.
+- EMI engine regression: **26 deterministic checks plus 2,000 seeded schedule-reconciliation scenarios**.
+- Years-to-Days regression: **1,000 deterministic browser property simulations per viewport**.
+- Query Calculator: browser regression cases include plain digits, complete natural-language questions with digits, grouped thousands, unit clarification and multiple locales.
+- GSC: **verified only for 22–24 November 2026**; 26 November export and keyword trend data remain unavailable.
+- Competitor comparison: **five substantive comparison pages reviewed per topic**. This is a content/feature benchmark, not proof of exact Google top-five ranking positions.
+- Independent originality score: **NOT VERIFIED** because the provider failed before returning results.
+- Vercel preview: **READY for documentation SHA `89ea871...`**, with HTTP 200 verified on the eight listed routes.
+- Interactive browser verification of the deployed preview: **NOT VERIFIED**. GitHub Actions Playwright checks against the generated build remain the reliable available alternative.
+- AdSense approval and account-side consent: **NOT VERIFIED**; only Google can approve the account and automated CI cannot inspect account settings.
+
+Keep PR #366 **OPEN / DRAFT / UNMERGED** until the current documentation-head workflow completes and the independent originality/live-preview browser gates are resolved. Do not claim first-page or top-five rankings as guaranteed. Product gaps requiring new controls (Tasbih tracking/history and EMI fees/down-payment/flat-rate/floating-rate features) are documented but deliberately not implemented because the fixed zero-layout-change constraint forbids those UI changes.
