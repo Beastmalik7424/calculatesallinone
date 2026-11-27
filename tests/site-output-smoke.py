@@ -262,7 +262,7 @@ assert "How many years are in 2,555 days?" in query_html, "Query Calculator must
 assert "How many hours are in 3 weeks?" in query_html, "Query Calculator should demonstrate a full sentence outside the years-to-days topic"
 assert query_html.index('id="qt-question"') < query_html.index("Calculate Answer") < query_html.index("Examples:"), "Query Calculator must keep the primary action before the expanded example copy"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
-assert "Last updated: 2026-11-27" in years_html, "Years-to-days visible update date must match the 26 November 2026 GSC-backed question-answer refresh"
+assert "Last updated: 2026-11-27" in years_html, "Years-to-days visible update date must match the 27 November 2026 GSC-backed question-answer refresh"
 assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
 _years_snippet = "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date."
 assert f'<meta name="description" content="{_years_snippet}">' in years_html, "Years-to-Days search snippet must surface the GSC-backed 5-, 10- and 30-year answers"
