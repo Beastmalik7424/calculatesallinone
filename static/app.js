@@ -1898,7 +1898,7 @@
       ]
 
       multilingualTerms.forEach(function (item) { question = question.replace(item[0], item[1]) })
-      // Normalize explicit thousands notation found in Search Console queries:
+      // Normalize explicit thousands notation in natural-language numeric input:
       // "14 thousand", "21k" and "1.3k" all represent numeric quantities.
       question = question.replace(/\b(\d+(?:\.\d+)?)\s*(?:thousand|k)\b/gi, function (match, amount) {
         return String(Number(amount) * 1000)
@@ -1970,7 +1970,7 @@
         return before + (value === null ? phrase : String(value))
       })
       // Normalize comma- and space-grouped thousands before extracting quantities.
-      // This supports GSC wording such as "1 125 days to years" and "36 500 days".
+      // This supports grouped numeric input such as "1 125 days to years" and "36 500 days".
       question = question.replace(/(?<=\d),(?=\d{3}(?:\D|$))/g, "")
         .replace(/(?<=\d)\s+(?=\d{3}(?:\D|$))/g, "")
 
