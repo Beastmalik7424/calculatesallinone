@@ -281,7 +281,7 @@ for phrase in (
     "10,000",
 ):
     assert phrase in years_html, "Years-to-Days page is missing a GSC-backed query family: " + phrase
-assert years_html.count('scope="row" class="border-b p-3"') == 137, "All 16 quick, 63 year and 58 reverse-day reference rows must be present"
+assert years_html.count('scope="row" class="border-b p-3"') == 143, "All 22 quick, 63 year and 58 reverse-day reference rows must be present"
 assert 'id="days-years-full-reference"' in years_html, "Reverse day-to-years reference must be collapsible rather than exposing all 58 rows by default"
 assert "Show 45 additional GSC-informed day-to-years examples" in years_html, "Expanded reverse reference should disclose the 45 additional examples"
 
