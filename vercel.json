@@ -1,6 +1,6 @@
 {
   "framework": null,
-  "buildCommand": "npm ci && npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "public",
   "cleanUrls": false,
   "headers": [
@@ -34,10 +34,54 @@
         {
           "key": "Cross-Origin-Opener-Policy",
           "value": "same-origin"
-        },
+        }
+      ]
+    },
+    {
+      "source": "/assets/site.css",
+      "has": [
         {
-          "key": "Access-Control-Allow-Origin",
-          "value": "https://calculateallinone.vercel.app"
+          "type": "query",
+          "key": "v",
+          "value": "[a-f0-9]{16}"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/app.js",
+      "has": [
+        {
+          "type": "query",
+          "key": "v",
+          "value": "[a-f0-9]{16}"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/zakat-calculator.js",
+      "has": [
+        {
+          "type": "query",
+          "key": "v",
+          "value": "[a-f0-9]{16}"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
@@ -47,6 +91,12 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=3600"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "v"
         }
       ]
     }
@@ -122,5 +172,7 @@
       },
       "status": 308
     }
-  ]
+  ],
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm ci"
 }
