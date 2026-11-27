@@ -16,7 +16,7 @@ SITE = "https://calculateallinone.vercel.app"
 CASES = {
     "tasbih-counter": {
         "title": "Tasbih Calculator Online | Dhikr Counter | CalculatesAll",
-        "description": "Free online Tasbih calculator and digital Tasbih counter. A Tasbeeh counter for dhikr with 33, 99, 100 or custom targets, undo and local saving.",
+        "description": "Free online Tasbih calculator and digital Tasbih counter. A Tasbeeh counter for dhikr with 33, 99, 100 or custom targets, undo and local saving when supported.",
         "form": 'id="tasbih-app"',
         "category": "/worship/",
         "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
