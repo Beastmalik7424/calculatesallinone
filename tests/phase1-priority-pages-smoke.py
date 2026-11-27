@@ -88,6 +88,12 @@ def check_english_page(slug, spec):
     main = re.search(r"<main\b[^>]*>(.*?)</main>", source, re.S | re.I)
     assert main, f"Missing main landmark: {slug}"
     body = main.group(1)
+    if slug == "tasbih-counter":
+        lead_start = body.find('ca-tool-lead')
+        lead_end = body.find("</p>", lead_start)
+        intro = body[lead_start:lead_end] if lead_start >= 0 and lead_end >= 0 else ""
+        for required in ("33, 99, 100", "custom target", "Undo", "Space or Enter"):
+            assert required.lower() in intro.lower(), f"Tasbih first-screen intro must highlight {required}"
     h1_pos = body.find("<h1")
     form_pos = body.find(spec["form"])
     lead_match = re.search(r'<p class="[^"]*\bca-tool-lead\b[^"]*">', body)
