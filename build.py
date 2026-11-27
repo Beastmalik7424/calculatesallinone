@@ -731,7 +731,7 @@ TOOLS = [
                 "The counter keeps its current count in this browser on this device when local storage is available. It does not synchronize the count to another phone or browser. If you need a count that travels with you, use a separate written record or a service whose backup and privacy terms you have checked.",
             ]),
             ("Choosing a target without confusing it with a ruling", [
-                "A target of 33 with a current count of 21 leaves 33 - 21 = 12 presses. A target of 99 with a current count of 67 leaves 99 - 67 = 32 presses. A custom target such as 250 is simply a personal tracking value. The preset numbers are counter shortcuts, not a religious instruction or a claim that every phrase has a prescribed repetition count.",
+                "A target of 33 with a current count of 21 leaves 33 - 21 = 12 presses. A target of 99 with a current count of 67 leaves 32 presses. A custom target such as 250 is simply a personal tracking value. The preset numbers are counter shortcuts, not a religious instruction or a claim that every phrase has a prescribed repetition count.",
             ]),
         ],
         "faq": [
