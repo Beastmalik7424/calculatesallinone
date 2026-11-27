@@ -236,6 +236,13 @@ def check_targeted_content():
         content = visible_text(slug)
         for phrase in phrases:
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
+    tasbih_faq = re.findall(r"<summary\\b[^>]*>(.*?)</summary>", read_page("tasbih-counter"), re.S | re.I)
+    assert "What is a Tasbih calculator?" in [html.unescape(item).strip() for item in tasbih_faq], "Tasbih page must answer the exact calculator-intent question"
+    years_faq = re.findall(r"<summary\\b[^>]*>(.*?)</summary>", read_page("years-to-days-calculator"), re.S | re.I)
+    years_faq = [html.unescape(item).strip() for item in years_faq]
+    assert "How many days in 19 years?" in years_faq, "Years-to-Days FAQ must answer the observed 19-year query"
+    assert "How many days in 30 years?" in years_faq, "Years-to-Days FAQ must answer the observed 30-year query"
+
     expected_dates = {
         "tasbih-counter": "2026-11-27",
         "years-to-days-calculator": "2026-11-27",
