@@ -1550,6 +1550,17 @@ assert health_html.count("<h1") == 1, "Health hub must retain exactly one H1"
 assert 'href="/bmi-calculator/"' in health_html and 'href="/calorie-calculator/"' in health_html, "Health hub must retain direct links to both health calculators"
 
 
+# The publisher library is a third-party script, so the production CSP must permit its documented origin.
+csp_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
+csp_header = next(
+    header["value"] for header in csp_config["headers"][0]["headers"]
+    if header["key"] == "Content-Security-Policy"
+)
+script_policy = re.search(r"(?:^|;)\\s*script-src\\s+([^;]+)", csp_header)
+assert script_policy and "https://news.google.com" in script_policy.group(1).split(), (
+    "Content Security Policy must allow Google's Preferred Sources publisher script"
+)
+
 # Google Preferred Sources must be available once in the shared document head
 # and once in the visible footer on every generated HTML page, including the
 # standalone EMI calculator. The standard Google script scans the declarative
