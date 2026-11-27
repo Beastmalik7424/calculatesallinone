@@ -453,12 +453,24 @@ function isExpectedGooglePreferredSourceReportOnlyNotice(text) {
    if((await page.locator("#t-target").inputValue())!=="99")throw Error("Tasbih preset target must persist across reload");
    if((await page.locator("#t-phrase").inputValue())!=="custom"||(await page.locator("#t-custom-phrase").inputValue())!=="Test dhikr")throw Error("Tasbih custom phrase must persist across reload");
    await page.locator("#t-target").selectOption("custom");
+   await page.locator("#t-custom-target").fill("1");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="1")throw Error("Tasbih must accept the minimum custom target of 1");
+   await page.locator("#t-reset").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0")throw Error("Tasbih must reset after the minimum-target boundary test");
+   await page.locator("#t-custom-target").fill("10000");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="1")throw Error("Tasbih must accept the maximum custom target of 10,000");
+   await page.locator("#t-reset").click();
    await page.locator("#t-custom-target").fill("0");
    await page.locator("#t-tap").click();
    if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih must reject a custom target below 1");
    await page.locator("#t-custom-target").fill("10001");
    await page.locator("#t-tap").click();
    if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih must reject a custom target above 10,000");
+   await page.locator("#t-custom-target").fill("33 times");
+   await page.locator("#t-tap").click();
+   if((await page.locator("#t-count").innerText()).trim()!=="0"||!(await page.locator("#t-target-error").innerText()).includes("1 to 10,000"))throw Error("Tasbih custom target must reject question text rather than silently parsing a number");
    await page.locator("#t-custom-target").fill("123");
    if(!(await page.locator("#t-custom-target-wrap").isVisible()))throw Error("Tasbih custom target field should become visible");
    const countAfterThousand=await page.evaluate(()=>{

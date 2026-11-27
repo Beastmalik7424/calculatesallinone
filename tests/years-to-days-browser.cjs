@@ -68,6 +68,16 @@ const viewports = [
       // Forward conversion: Gregorian average and fixed Julian year.
       await direction.selectOption("years-to-days");
       await method.selectOption("365.2425");
+      // Plain numeric inputs remain supported for the common query quantities.
+      for (const [years, expected] of [
+        ["5", /5 years = 1,826\.2125 days/],
+        ["10", /10 years = 3,652\.425 days/],
+        ["13", /13 years = 4,748\.1525 days/]
+      ]) {
+        await value.fill(years);
+        await submit();
+        assert.match(await result.innerText(), expected, years + " years must use the Gregorian mean");
+      }
       await value.fill("80");
       await submit();
       assert.match(await result.innerText(), /80 years = 29,219\.4 days/);

@@ -726,6 +726,13 @@ TOOLS = [
             ("Worked example: target and remaining count", [
                 "For a personal target of 99 presses and a current count of 67, the remaining amount is 99 - 67 = 32. Three groups of 33 presses make 3 x 33 = 99. This is an arithmetic example only; it does not prescribe a religious practice.",
             ]),
+            ("Online Tasbih counter or physical beads?", [
+                "Physical beads provide a tactile count and work without a phone, battery or browser. An online Tasbih counter is useful when a physical set is not nearby or when you want an Undo control and keyboard input. This page records deliberate button taps or supported key presses; it does not detect, listen to or verify recitation. Choose the method that suits your setting.",
+                "The counter keeps its current count in this browser on this device when local storage is available. It does not synchronize the count to another phone or browser. If you need a count that travels with you, use a separate written record or a service whose backup and privacy terms you have checked.",
+            ]),
+            ("Choosing a target without confusing it with a ruling", [
+                "A target of 33 with a current count of 21 leaves 33 - 21 = 12 presses. A target of 99 with a current count of 67 leaves 99 - 67 = 32 presses. A custom target such as 250 is simply a personal tracking value. The preset numbers are counter shortcuts, not a religious instruction or a claim that every phrase has a prescribed repetition count.",
+            ]),
         ],
         "faq": [
             ("Is my count sent to a server?", "No. The count, phrase and target are stored in this browser on this device when storage is available. They are not uploaded to an account."),
@@ -735,6 +742,7 @@ TOOLS = [
             ("What happens when I reach the target?", "The page shows a target-reached message and does not reset automatically. Press Reset and confirm if you want to clear the current count."),
             ("Can I count with a keyboard?", "Yes. Press Space or Enter when focus is not inside a form field or another control."),
             ("What is a Tasbih calculator?", "A Tasbih calculator is a digital counter for recording deliberate taps for a selected or custom dhikr phrase. It tracks the count and optional personal target; it does not listen to, verify or assess recitation."),
+            ("Does an online Tasbih counter replace physical beads?", "No. Physical beads work without a phone or browser and provide a tactile count. An online counter can offer Undo and keyboard input, but this page stores the count only in the current browser when storage is available and does not sync it to another device."),
         ],
         "sources": "This page documents the counter's functionality only. It does not provide religious rulings or establish a required phrase or repetition count. For religious guidance, consult a qualified scholar or trusted teacher.",
     },
@@ -1285,6 +1293,10 @@ TOOLS.extend([
                 "How many days in 30 years? Using the 365.2425-day Gregorian mean, 30 years = 10,957.275 days. The 365-day method gives 10,950 days, while the 365.25-day Julian average gives 10,957.5 days.",
                 "For the reverse question, 70,000 days ÷ 365.2425 = 191.6535 years using the Gregorian mean. This is a decimal-year estimate, not an exact calendar age.",
                 "Exact calendar days depend on the start date because the actual Gregorian interval may include leap days. Enter the start date and a whole number of years in Exact calendar years when you need the elapsed day count for a specific anniversary.",
+            ("Which years-to-days method should I choose?", [
+                "Use 365 days when a rule or agreement explicitly defines a year as 365 days. Use 365.25 days for the Julian-year average. Use 365.2425 days for a mean Gregorian calendar-year conversion. These are different conventions, so a calculator should state which one it uses rather than presenting one as the exact answer for every date range.",
+                "For an exact interval, enter the start date and whole number of years in Exact calendar years. For example, 1 January 2020 to 1 January 2030 spans 3,653 days, while 1 January 2021 to 1 January 2031 spans 3,652 days. The Gregorian-average estimate for ten years is 3,652.425 days; it is an average, not a promise that every ten-year date interval contains that many whole days."
+            ]),
                 "The Gregorian rule adds 97 leap days in each 400-year cycle, which produces the 365.2425-day average. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory leap-year explanation</a> describes the rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST's year definition</a> identifies the average Gregorian year as 365.2425 days."
             ])
         ],
