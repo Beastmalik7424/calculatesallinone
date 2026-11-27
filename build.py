@@ -671,7 +671,7 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Free Tasbih calculator and digital Tasbih counter. Set 33, 99 or custom targets, undo taps, use Space or Enter, and save locally when supported.",
+        "description": "Free Tasbih calculator with 33, 99 or custom targets, Undo, Space/Enter counting and local saving when supported.",
         "h1": "Free Online Tasbih Counter",
         "lead": "Count dhikr on this device. Choose 33, 99 or a custom target. Count with Space or Enter, or tap Count one. Use Undo to correct a tap.",
         "ui": (
