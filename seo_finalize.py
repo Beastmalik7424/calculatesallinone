@@ -45,7 +45,7 @@ VERIFIED_PAGE_UPDATE_DATES = {
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
     # This date records the GSC-backed question-led answers and snippet refresh; calculator methods remain unchanged.
-    "/years-to-days-calculator/": "2026-11-26",
+    "/years-to-days-calculator/": "2026-11-27",
     # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
     # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
