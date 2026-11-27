@@ -11,7 +11,14 @@ const { chromium } = require("playwright");
       page.on("pageerror", error => errors.push(error.message));
       page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
       page.on("request", request => {
-        if (request.method() !== "GET") nonGetRequests.push(request.method() + " " + request.url());
+        // Google's Preferred Sources publisher library emits this fixed
+        // telemetry request. It is not a calculator API call. The sensitive
+        // measurement-payload assertion below still checks every request.
+        const googlePublisherTelemetry = request.method() === "POST" &&
+          request.url() === "https://play.google.com/log?format=json&hasfast=true";
+        if (request.method() !== "GET" && !googlePublisherTelemetry) {
+          nonGetRequests.push(request.method() + " " + request.url());
+        }
         const queryKeys = Array.from(new URL(request.url()).searchParams.keys());
         const postData = request.postData() || "";
         const sensitiveKeys = /(?:^|[?&,"'])(?:age|weight|height|coefficient|activity(?:Id|Level)?|pregnancyStatus|bodyFatPercent|bodyFat|leanMassKg|restingKcalPerDay|maintenanceKcalPerDay|calorieResult)["']?\s*[:=]/i;
