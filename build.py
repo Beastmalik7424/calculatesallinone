@@ -19,6 +19,8 @@ ADSENSE_SLOT = os.environ.get("ADSENSE_SLOT", "").strip()
 # Explicitly fail closed until the publisher confirms account-side consent setup.
 # This flag is a safeguard, not an automated check of AdSense/CMP account settings.
 ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lower() == "true"
+# Set only after a Google-certified CMP/TCF integration has been independently verified.
+ADSENSE_CMP_VERIFIED = os.environ.get("ADSENSE_CMP_VERIFIED", "").strip().lower() == "true"
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
@@ -1509,7 +1511,7 @@ def write_review_sheet():
 def ad_slot():
     # Fail closed until valid IDs and account-side consent setup are confirmed.
     # ADSENSE_CONSENT_READY is a manual deployment safeguard, not CMP verification.
-    if not ADSENSE_CLIENT or not ADSENSE_SLOT or not ADSENSE_CONSENT_READY:
+    if not ADSENSE_CLIENT or not ADSENSE_SLOT or not ADSENSE_CONSENT_READY or not ADSENSE_CMP_VERIFIED:
         return ""
     return ('<div class="my-10 min-h-[100px]" aria-label="Advertisement">'
             '<ins class="adsbygoogle" style="display:block" data-ad-client="' + ADSENSE_CLIENT + '" '
@@ -1735,14 +1737,19 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         for code, href in alternates:
             alt += '<link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '">\n'
     ads = ""
-    # Use AdSense's lightweight ownership meta tag while ads are disabled.
-    # Download the ad library only when a real slot and the consent gate are enabled.
+    ads_config = ""
+    # Ownership verification is safe while ads are disabled. Never emit the
+    # ad-serving script in the initial HTML; the consent component loads it only
+    # after an accepted choice and the independently verified CMP gate.
     verification = ""
     if ADSENSE_CLIENT:
         verification = '<meta name="google-adsense-account" content="' + html.escape(ADSENSE_CLIENT, quote=True) + '">\n'
-    if ADSENSE_CLIENT and ADSENSE_SLOT and ADSENSE_CONSENT_READY:
-        ads = ('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
-               + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>\n')
+    if ADSENSE_CLIENT and ADSENSE_SLOT and ADSENSE_CONSENT_READY and ADSENSE_CMP_VERIFIED:
+        ads_config = (
+            '<meta name="ca-adsense-client" content="' + html.escape(ADSENSE_CLIENT, quote=True) + '">\n'
+            '<meta name="ca-adsense-slot" content="' + html.escape(ADSENSE_SLOT, quote=True) + '">\n'
+            '<meta name="ca-adsense-consent-ready" content="true">\n'
+        )
     ld = ""
     for s in schema:
         # Add page language only to schema types that support inLanguage.
@@ -1786,7 +1793,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
         + '<link rel="stylesheet" href="/assets/site.css?v=' + CSS_ASSET_VERSION + '">\n'
-        + ld + ads + "</head>\n"
+        + ld + ads_config + ads + "</head>\n"
     )
 
 
@@ -1872,6 +1879,7 @@ def shell(main_html, lang="en", current_path=None):
         '</div></footer>\n'
         + '<script src="/assets/zakat-calculator.js?v=' + ZAKAT_JS_ASSET_VERSION + '" defer></script>\n'
         + '<script src="/assets/app.js?v=' + APP_JS_ASSET_VERSION + '" defer></script>\n'
+        + '<script src="/assets/cookie-consent.js?v=20261128" defer></script>\n'
         + '</body>\n</html>\n'
     )
 
@@ -2178,6 +2186,14 @@ def tool_page(t):
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
+    if t["slug"] == "tasbih-counter":
+        guide = guide + [("Convenience note", [
+            "This digital counter is a convenience tool for recording deliberate taps only. It is not religious guidance, a religious ruling, or a recommendation about any phrase or repetition count. Consult a qualified Islamic scholar or trusted teacher for religious questions."
+        ])]
+    elif t["slug"] == "years-to-days-calculator":
+        guide = guide + [("Convenience note", [
+            "This duration conversion is for general planning and convenience only. It is not a legal deadline, exact age determination or professional advice. For contracts, official records, birthdays and deadlines, count the actual start and end dates using the exact calendar method."
+        ])]
     ui = attach_notice_badge(ui, t["slug"], "en")
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": t["name"], "url": url,
@@ -2310,8 +2326,8 @@ def tool_page(t):
         + profit_reference_table
         + (years_to_days_reference_html() + guide_html(guide[:2]) + guide_html(guide[2:]) + days_to_years_reference_html()
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
-        + (('<p class="' + P + '"><strong>Disclaimer:</strong> Results are mathematical estimates for informational purposes only and do not constitute professional financial, tax, or medical advice.</p>') if t["category"] == "health" or t["slug"] == "calorie-calculator" else "")
-        + (('<p class="' + P + '"><strong>Disclaimer:</strong> Calculations follow standard Nisab rules for estimation only; consult a qualified Islamic scholar for personal Zakat rulings.</p>') if t["slug"] == "zakat-calculator" else "")
+        + (('<p class="' + P + '"><strong>Disclaimer:</strong> This calculator provides mathematical estimates for informational and planning purposes only and does not constitute financial, tax, or medical advice.</p>') if t["category"] == "health" or t["slug"] == "calorie-calculator" else "")
+        + (('<p class="' + P + '"><strong>Disclaimer:</strong> This calculator provides an estimate for planning purposes only and is not a religious ruling (fatwa). Confirm your Zakat obligation with a qualified Islamic scholar.</p>') if t["slug"] == "zakat-calculator" else "")
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">' + ("Scope and religious guidance" if t["slug"] == "tasbih-counter" else "Sources") + '</h2><p class="' + P + '">' + sources + '</p>'
         + '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p>'
@@ -3049,12 +3065,16 @@ def main():
         ("/about/", "About CalculatesAll | Project, Methods & Privacy", "Meet the CalculatesAll maintainer, explore free browser calculators, and review methods, privacy and contact information.", "About CalculatesAll", ABOUT_EXTRA),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "This policy explains what information CalculatesAll handles when you use the website. It applies to every page on calculateallinone.vercel.app.",
+            "<strong>Site operator:</strong> Muhammad Fayyaz Adeel, operating CalculateAllInOne (also presented as CalculatesAll). Contact: " + '<a class=\'underline text-sky-800 dark:text-sky-300\' href=\'mailto:' + CONTACT_EMAIL + '\'>' + CONTACT_EMAIL + '</a>' + ". Jurisdiction: Punjab, Pakistan.",
             "<strong>Calculator entries.</strong> The numbers and dates you type into a calculator are processed by JavaScript in your own browser. They are not sent to our server and we do not keep a copy of them.",
-            "<strong>Data stored on your device.</strong> The tasbih counter saves your current count, chosen phrase and target in your browser's local storage, and the dark-mode setting is saved the same way. This information stays on your device. You can remove it at any time by clearing this site's data in your browser settings.",
-            "<strong>No accounts or analytics.</strong> CalculatesAll does not offer user accounts, does not run its own analytics and does not sell personal information. Like most websites, our hosting provider (Vercel) may process technical request data such as IP address, browser type and the page requested in order to deliver and secure the site.",
-            "<strong>Advertising and cookies.</strong> No Google AdSense ad units are currently displayed on CalculatesAll, and the site does not currently load the AdSense ad-serving script. The publisher ID and ads.txt seller record are present, but neither is an active ad unit. If advertising is enabled, the following applies: Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet. Google and its partners may also use web beacons, IP addresses and device identifiers to measure and protect advertising. Read <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>how Google uses information from sites that use its services</a> and the <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/ads' target='_blank' rel='noopener noreferrer'>Google advertising technologies page</a>.",
-            "<strong>Your choices.</strong> You can opt out of personalised advertising by visiting <a class='underline text-sky-800 dark:text-sky-300' href='https://adssettings.google.com/' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>. You can also opt out of some third-party vendors' use of cookies for personalised advertising at <a class='underline text-sky-800 dark:text-sky-300' href='https://www.aboutads.info/choices/' target='_blank' rel='noopener noreferrer'>www.aboutads.info</a>. Opting out stops personalised ads; you may still see non-personalised ads. You can also block or delete cookies in your browser settings.",
-            "<strong>Visitors in the EEA, UK and Switzerland.</strong> No consent management platform is currently active on this website because AdSense ad units and the ad-serving script are disabled. Before personalised advertising is enabled for visitors in the EEA, UK or Switzerland, the site will use a Google-certified CMP integrated with the IAB Transparency and Consent Framework (TCF) and provide the required consent choices.",
+            "<strong>Data stored on your device.</strong> The Tasbih counter saves your current count, chosen phrase and target in this browser's localStorage, and the dark-mode setting is saved the same way. This information stays on your device. You can remove it at any time by clearing this site's data in your browser settings.",
+            "<strong>No accounts or first-party analytics.</strong> CalculatesAll does not offer user accounts, does not currently run its own analytics and does not sell personal information. Like most websites, our hosting provider (Vercel) may process standard server request logs, including IP address, browser type, requested page and request time, to deliver and secure the site.",
+            "<strong>Advertising and cookies.</strong> No Google AdSense ad units are currently displayed on CalculatesAll, and the site does not currently load the AdSense ad-serving script. Ads may be introduced after Google approval and configuration. This policy governs Google AdSense and DoubleClick advertising if and when ads are enabled. Google and other third-party vendors use advertising cookies to serve and measure ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve personalized or non-personalized ads, manage frequency and protect advertising. DoubleClick and other Google advertising services may set or read cookies on your browser. Google and its partners may also use web beacons, IP addresses and device identifiers for advertising measurement and security. Read <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>how Google uses information from sites that use its services</a> and the <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/ads' target='_blank' rel='noopener noreferrer'>Google advertising technologies page</a>.",
+            "<strong>Your choices.</strong> You can opt out of personalised advertising by visiting <a class='underline text-sky-800 dark:text-sky-300' href='https://www.google.com/settings/ads' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>. You can also opt out of some third-party vendors' use of cookies for personalised advertising at <a class='underline text-sky-800 dark:text-sky-300' href='https://www.aboutads.info' target='_blank' rel='noopener noreferrer'>www.aboutads.info</a>. Opting out stops personalised ads; you may still see non-personalised ads. You can also block or delete cookies in your browser settings.",
+            "<strong>Cookie preference.</strong> The Accept/Reject banner stores your optional advertising choice in this browser's localStorage under the key cookie_consent, with the value accepted or rejected. This is a browser-specific preference, not an account record. You can clear it by deleting this site's local data in your browser settings.",
+            "<strong>Visitors in the EEA, UK and Switzerland.</strong> No consent management platform is currently active on this website. The first-party Accept/Reject banner records a local preference but is not a Google-certified CMP or an IAB Transparency and Consent Framework (TCF) integration. Before personalised advertising is enabled for visitors in the EEA, UK or Switzerland, the site will use a Google-certified CMP integrated with the IAB Transparency and Consent Framework (TCF) and provide the required consent choices.",
+            "<strong>Children.</strong> CalculatesAll is a general-audience website. It is not directed at children under 13 and we do not knowingly collect personal information from children.",
+            "<strong>Effective date.</strong> November 28, 2026.",
             "<strong>Children.</strong> CalculatesAll is a general-audience website. It is not directed at children under 13 and we do not knowingly collect personal information from children.",
             "<strong>External links.</strong> Some pages link to official sources such as the World Health Organization or NIST. Those websites have their own privacy policies.",
             "<strong>Changes and contact.</strong> If this policy changes, the updated version will be published on this page. For privacy questions, email <a class='underline text-sky-800 dark:text-sky-300' href='mailto:" + CONTACT_EMAIL + "'>" + CONTACT_EMAIL + "</a>.",
