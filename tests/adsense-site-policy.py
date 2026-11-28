@@ -79,10 +79,15 @@ for phrase in (
 ):
     check(phrase.casefold() in privacy_text.casefold(), "/privacy/ is missing required disclosure: " + phrase)
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
-check('href="https://www.google.com/settings/ads"' in privacy_html,
+check(re.search(r"""href=["']https://www.google.com/settings/ads["']""", privacy_html) is not None,
       "/privacy/ must link to Google's Ads Settings opt-out.")
-check('href="https://www.aboutads.info"' in privacy_html,
+check(re.search(r"""href=["']https://www.aboutads.info["']""", privacy_html) is not None,
       "/privacy/ must link to the aboutads.info opt-out.")
+check(re.search(r"""<script\b[^>]*src=["']https://pagead2\.googlesyndication\.com/pagead/js/adsbygoogle\.js""", all_html, re.I) is None,
+      "AdSense must not be loaded in the initial HTML before explicit consent.")
+build_source = (Path("build.py")).read_text(encoding="utf-8")
+check("ADSENSE_CMP_VERIFIED" in build_source,
+      "AdSense must remain disabled until a verified CMP gate is configured.")
 cookie_script_path = ROOT / "assets" / "cookie-consent.js"
 check(cookie_script_path.exists(), "generated cookie-consent.js asset is missing.")
 if cookie_script_path.exists():
