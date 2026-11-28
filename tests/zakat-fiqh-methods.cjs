@@ -39,6 +39,10 @@ assert.equal(r.zakatBeforePaid, 0);
 r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 10000 }, liabilities: 20000 });
 assert.equal(r.netAssets, 0);
 assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 1000000000000 } });
+assert.ok(Number.isFinite(r.totalAssets) && Number.isFinite(r.netAssets) && Number.isFinite(r.zakatBeforePaid),
+  "1e12 eligible wealth must remain finite");
+assert.equal(r.zakatBeforePaid, 25000000000);
 
 // Metal rates are supplied by the user; no market-rate constant is assumed.
 r = calculate({ ...base, schoolOfThought: "sunni-hanafi", silverPricePerGram: 123.45, assets: { cash: 100000 } });
