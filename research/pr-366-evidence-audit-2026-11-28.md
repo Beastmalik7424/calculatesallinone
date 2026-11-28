@@ -397,3 +397,34 @@ A fresh complete-page originality retry submitted the full unmodified preview HT
 ### Updated release interpretation
 
 The exact current PR head has successful CI, a READY Preview, HTTP 200 live-preview fetches, matching Production/Preview calculator markup, and byte-identical CSS. The earlier authenticated-preview page-fetch blocker is resolved for read-only HTML/assets. A full interactive live-browser session and full-document originality scoring remain unverified. The remaining AdSense account review and CMP/slot configuration cannot be completed from repository evidence alone. Keep PR #366 OPEN / DRAFT / UNMERGED and do not deploy Production without the account owner's explicit release decision.
+
+
+## Standing quality requirements and refreshed external evidence — 28 November 2026
+
+The user's fixed acceptance requirements for this work are: non-generic, professionally researched changes; AdSense policy readiness; meaningful comparison with Calculator.net, Omni Calculator, CalculatorSoup, GIGA Calculator and Math Tools; search visibility improvement; no calculator positioning/layout/structure/URL/functionality regressions; thorough tests; reliable alternative verification if an original test environment is unavailable; and commit/push all verified in-scope work. No result may be described as guaranteed AdSense approval or guaranteed first-page ranking. PR #366 remains OPEN / DRAFT / UNMERGED.
+
+### Current primary-source policy checks
+
+- Google AdSense says pages should have unique, relevant content, clear navigation, a good user experience, and original value. It does not prescribe a minimum word count. Source: https://support.google.com/adsense/answer/7299563
+- Google eligibility requires the publisher's own high-quality, original content and compliance with AdSense programme policies. Source: https://support.google.com/adsense/answer/9724
+- Google Search's people-first guidance asks whether content contributes original information, is substantial and complete, adds value beyond existing search results, and leaves visitors satisfied. It explicitly rejects publishing to an arbitrary word count. Source: https://developers.google.com/search/docs/fundamentals/creating-helpful-content
+- Google's current spam policies include scaled content abuse, scraping and misleading functionality. Search pages must not claim functionality that a calculator does not actually provide. Source: https://developers.google.com/search/docs/essentials/spam-policies
+- TCF v2.3 is mandatory for TC strings generated on or after 1 March 2026. The CMP must correctly disclose Google in the disclosed-vendors segment. Sources: https://support.google.com/adsense/answer/9804260 and https://support.google.com/adsense/answer/9999955
+
+### Competitor capability evidence, not ranking claims
+
+- Calculator.net's Age Calculator reports age in years, months, weeks, days, hours, minutes and seconds and explains month-end ambiguity. Its health category shows a broad related calculator inventory. Sources: https://www.calculator.net/age-calculator.html and https://www.calculator.net/fitness-and-health-calculator.html
+- Omni Calculator's loan calculator exposes payment frequency, compounding, prepaid/loaned/origination fees, APR and effective APR; its BMI page includes author credentials, medical references, limitations and FAQs. Sources: https://www.omnicalculator.com/finance/loan and https://www.omnicalculator.com/health/bmi
+- CalculatorSoup provides formula derivations, worked examples and step-by-step solutions; its statistics formula reference links formulas to the calculators that use them. Sources: https://www.calculatorsoup.com/calculators/algebra/quadratic-formula-calculator.php and https://www.calculatorsoup.com/calculators/statistics/statistics-formulas.php
+- GIGA Calculator explicitly documents contextual field help, formulas, assumptions, limitations and output explanations across category-based calculators. Source: https://www.gigacalculator.com/
+- Math Tools provides scientific, matrix, interest and trigonometric calculators plus formula references and interactive tools. Sources: https://math.tools/ and https://math.tools/calculator/interest/compound
+
+These observations support the existing strategic gaps already recorded: stronger worked examples and calculation methodology, richer calculator-specific assumptions and limitations, clearer evidence/source attribution, and financial-tool scope transparency. They do not justify copying competitor interfaces or changing calculator form layouts. The existing Pakistan-specific PKR/EMI, Urdu, South Asian BMI and carefully scoped Zakat differentiators remain the defensible differentiation.
+
+### Google Trends limitation
+
+A Pakistan-scoped Google Trends Explore request for the priority niche calculator terms returned an insufficient-data message, and the direct Trends Explore endpoint could not be fetched through the current research client. No Trends index, rising-query claim or demand trend is asserted. Trends' own methodology is relative, sampled interest (not absolute search volume), and low-volume terms may show zero. Validate with the owner's GSC exports and Pakistan-filtered Keyword Planner ranges before prioritising new pages. Public Trends entry point: https://trends.google.com/trends/explore?geo=PK
+
+### Exact-head CI note
+
+The documentation-only commits after application commit `7b1566ef92bca39473e0072d268ca0d57b8a1770` trigger a fresh GitHub workflow run. The latest documentation head is `25dad3fd38cc19c1e4b86ef6fe6bb4e987b0e864`; at the last poll, six workflows/check groups had completed successfully and the Build and smoke test workflow remained in progress at the headless browser console check. Prior 7/7 success belongs to the earlier application SHA, not this later documentation SHA. Do not conflate them.
