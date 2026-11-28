@@ -23,6 +23,31 @@ assert.equal(r.zakatBeforePaid, 2500);
 assert.equal(r.personalJewelleryIncluded, true);
 assert.equal(r.nisabGrams, 612.36);
 
+// User-requested worked example: 500,000 cash + 100,000 eligible gold
+// - 50,000 eligible liabilities = 550,000 net wealth; at 2.5% this is 13,750.
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 500000, gold: 100000 }, liabilities: 50000 });
+assert.equal(r.totalAssets, 600000);
+assert.equal(r.netAssets, 550000);
+assert.equal(r.zakatBeforePaid, 13750);
+assert.equal(r.status, "payable");
+
+// Below-Nisab wealth is not payable, and liabilities larger than eligible assets
+// must floor net wealth and Zakat at zero rather than creating a negative result.
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 50000 } });
+assert.equal(r.status, "below_nisab");
+assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 10000 }, liabilities: 20000 });
+assert.equal(r.netAssets, 0);
+assert.equal(r.zakatBeforePaid, 0);
+
+// Metal rates are supplied by the user; no market-rate constant is assumed.
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", silverPricePerGram: 123.45, assets: { cash: 100000 } });
+assert.equal(r.metalPricePerGram, 123.45);
+assert.equal(r.nisabThreshold, 612.36 * 123.45);
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", nisabMethod: "gold-87", goldPricePerGram: 2345.67, assets: { cash: 300000 } });
+assert.equal(r.metalPricePerGram, 2345.67);
+assert.equal(r.nisabThreshold, 87.48 * 2345.67);
+
 r = calculate({ ...base, schoolOfThought: "sunni-hanafi", nisabMethod: "gold-87", goldPricePerGram: 100, assets: { cash: 8748 } });
 assert.equal(r.nisabThreshold, 8748);
 assert.equal(r.nisabGrams, 87.48);
