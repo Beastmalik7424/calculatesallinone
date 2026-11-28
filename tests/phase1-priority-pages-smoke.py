@@ -180,7 +180,7 @@ def check_targeted_content():
             "70,000 days ÷ 365.2425 = 191.6535 years",
             "Exact calendar days depend on the start date",
             "U.S. Naval Observatory leap-year explanation",
-            "NIST's year definition",
+            "97 leap days in each 400-year cycle",
         ],
         "unit-converter": [
             "Maintained by Muhammad Fayyaz Adeel",
