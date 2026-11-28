@@ -74,10 +74,58 @@ for phrase in (
     "DoubleClick",
     "cookie_consent",
     "November 28, 2026",
+    "Effective date: 28 November 2026",
     "under 13",
     "This policy governs Google AdSense and DoubleClick advertising if and when ads are enabled",
 ):
     check(phrase.casefold() in privacy_text.casefold(), "/privacy/ is missing required disclosure: " + phrase)
+# The four priority calculators must publish a truthful WebApplication entity,
+# one visible FAQPage, canonical metadata and the existing footer policy links.
+for slug in ("emi-calculator", "tasbih-counter", "years-to-days-calculator", "zakat-calculator"):
+    page_path = ROOT / slug / "index.html"
+    raw = page_path.read_text(encoding="utf-8")
+    check(len(re.findall(r"<h1\\b", raw, re.I)) == 1,
+          f"/{slug}/ must contain exactly one H1.")
+    canonical = re.search(r'<link\\b[^>]*rel=["\\']canonical["\\'][^>]*href=["\\']([^"\\']+)', raw, re.I)
+    check(canonical is not None and canonical.group(1) == "https://calculateallinone.vercel.app/" + slug + "/",
+          f"/{slug}/ must have its exact self-referencing canonical.")
+    footer_match = re.search(r"<footer\\b[^>]*>([\\s\\S]*?)</footer>", raw, re.I)
+    footer_html = footer_match.group(1) if footer_match else ""
+    for required_path in ("/privacy/", "/terms/", "/about/", "/contact/"):
+        check(f'href="{required_path}"' in footer_html,
+              f"/{slug}/ footer must link to {required_path}.")
+    parsed = []
+    for match in re.finditer(r'<script\\b(?=[^>]*type=["\\']application/ld\\+json["\\'])[^>]*>([\\s\\S]*?)</script>', raw, re.I):
+        try:
+            value = json.loads(match.group(1))
+            parsed.extend(value if isinstance(value, list) else [value])
+        except json.JSONDecodeError:
+            check(False, f"/{slug}/ contains invalid JSON-LD.")
+    applications = [node for node in parsed if isinstance(node, dict) and node.get("@type") == "WebApplication"]
+    faqs = [node for node in parsed if isinstance(node, dict) and node.get("@type") == "FAQPage"]
+    check(len(applications) == 1, f"/{slug}/ must contain exactly one WebApplication entity.")
+    check(len(faqs) == 1, f"/{slug}/ must contain exactly one FAQPage entity.")
+    if applications:
+        app = applications[0]
+        check(app.get("url") == "https://calculateallinone.vercel.app/" + slug + "/",
+              f"/{slug}/ WebApplication URL must match the canonical.")
+        check(bool(app.get("name")) and bool(app.get("applicationCategory")) and app.get("operatingSystem") == "Any",
+              f"/{slug}/ WebApplication must describe the actual browser calculator.")
+        check(app.get("offers", {}).get("price") == "0",
+              f"/{slug}/ WebApplication must describe the free calculator accurately.")
+        check(not any(key in app for key in ("aggregateRating", "review", "reviews")),
+              f"/{slug}/ must not invent ratings or reviews.")
+    if faqs:
+        visible = page_text(slug)
+        questions = faqs[0].get("mainEntity", [])
+        check(bool(questions), f"/{slug}/ FAQPage must contain visible questions.")
+        for question in questions:
+            check(question.get("name", "") in visible,
+                  f"/{slug}/ FAQPage question must match visible content: {question.get('name', '')}")
+            answer = question.get("acceptedAnswer", {}).get("text", "")
+            check(bool(answer) and answer in visible,
+                  f"/{slug}/ FAQPage answer must match visible content: {question.get('name', '')}")
+
 privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 check(re.search(r"""href=["']https://www.google.com/settings/ads["']""", privacy_html) is not None,
       "/privacy/ must link to Google's Ads Settings opt-out.")
