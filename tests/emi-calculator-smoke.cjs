@@ -139,6 +139,12 @@ test("zero-interest loan has no interest and equal principal installments", () =
   Engine.emiCents(12000000, 0, 12) === 1000000 &&
   zeroRate.totalInterestCents === 0 &&
   zeroRate.totalPaymentCents === 12000000);
+const fiveYear = Engine.buildSchedule(100000000, 12, 60);
+test("five-year 1,000,000 loan at 12 percent has the exact reducing-balance EMI and reconciled totals", () =>
+  Engine.emiCents(100000000, 12, 60) === 2224445 &&
+  fiveYear.totalInterestCents === 33466680 &&
+  fiveYear.totalPaymentCents === 133466680 &&
+  fiveYear.totalPaymentCents - 100000000 === fiveYear.totalInterestCents);
 const oneMonth = Engine.buildSchedule(10000000, 12, 1);
 test("one-month loan pays principal plus one month's interest", () =>
   Engine.emiCents(10000000, 12, 1) === 10100000 &&

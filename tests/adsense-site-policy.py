@@ -68,6 +68,31 @@ check("you will be asked for consent through a Google-certified consent message"
       "/privacy/ must not promise a consent flow that is not currently deployed.")
 check("CalculatesAll may show advertising served by Google AdSense" not in privacy_text,
       "/privacy/ must not imply that AdSense is currently active.")
+for phrase in (
+    "Site operator: Muhammad Fayyaz Adeel, operating CalculateAllInOne",
+    "Jurisdiction: Punjab, Pakistan",
+    "DoubleClick",
+    "cookie_consent",
+    "November 28, 2026",
+    "under 13",
+    "This policy governs Google AdSense and DoubleClick advertising if and when ads are enabled",
+):
+    check(phrase.casefold() in privacy_text.casefold(), "/privacy/ is missing required disclosure: " + phrase)
+privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
+check('href="https://www.google.com/settings/ads"' in privacy_html,
+      "/privacy/ must link to Google's Ads Settings opt-out.")
+check('href="https://www.aboutads.info"' in privacy_html,
+      "/privacy/ must link to the aboutads.info opt-out.")
+cookie_script_path = ROOT / "assets" / "cookie-consent.js"
+check(cookie_script_path.exists(), "generated cookie-consent.js asset is missing.")
+if cookie_script_path.exists():
+    cookie_script = cookie_script_path.read_text(encoding="utf-8")
+    check("cookie_consent" in cookie_script and '"accepted"' in cookie_script and '"rejected"' in cookie_script,
+          "cookie-consent.js must persist accepted/rejected choices under cookie_consent.")
+    check("pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" in cookie_script,
+          "AdSense script must be loaded dynamically by the consent component only.")
+check('src="/assets/cookie-consent.js' in all_html,
+      "the consent component must be loaded on every generated page.")
 check("No AdSense ad units are currently displayed" in affiliate_text,
       "/affiliate-disclosure/ must accurately state that no ad units are active.")
 check("does not currently load the AdSense ad-serving script" in affiliate_text,
@@ -221,8 +246,8 @@ for phrase in (
     check(phrase in ur_unit, "/ur/unit-converter/ is missing supported-unit detail or an exact conversion: " + phrase)
 
 # Exact, visible professional-advice disclaimers are required on finance and health tools.
-finance_health_disclaimer = "Disclaimer: Results are mathematical estimates for informational purposes only and do not constitute professional financial, tax, or medical advice."
-zakat_disclaimer = "Disclaimer: Calculations follow standard Nisab rules for estimation only; consult a qualified Islamic scholar for personal Zakat rulings."
+finance_health_disclaimer = "Disclaimer: This calculator provides mathematical estimates for informational and planning purposes only and does not constitute financial, tax, or medical advice."
+zakat_disclaimer = "Disclaimer: This calculator provides an estimate for planning purposes only and is not a religious ruling (fatwa). Confirm your Zakat obligation with a qualified Islamic scholar."
 for slug in ("emi-calculator", "bmi-calculator", "calorie-calculator"):
     check(finance_health_disclaimer in page_text(slug),
           f"/{slug}/ must show the exact finance/health informational disclaimer.")

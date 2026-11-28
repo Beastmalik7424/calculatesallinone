@@ -78,6 +78,14 @@ const viewports = [
         await submit();
         assert.match(await result.innerText(), expected, years + " years must use the Gregorian mean");
       }
+      await value.fill("2.5");
+      await submit();
+      assert.match(await result.innerText(), /2\.5 years = 913\.10625 days/, "fractional years must preserve the Gregorian mean");
+      await method.selectOption("365");
+      await value.fill("10");
+      await submit();
+      assert.match(await result.innerText(), /10 years = 3,650 days/, "fixed 365-day years must remain available");
+      await method.selectOption("365.2425");
       await value.fill("0");
       await submit();
       assert.match(await result.innerText(), /0 years = 0 days/, "zero years must convert to zero days");
