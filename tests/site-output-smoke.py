@@ -686,11 +686,14 @@ privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 assert not (ROOT / "marketplaces").exists(), "Internal marketplace setup guide must not be published"
 assert SITE + "/marketplaces/" not in sitemap_urls, "Removed marketplace guide must not be in the sitemap"
 for required_text in (
-    "Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites",
-    "Google's use of advertising cookies enables it and its partners to serve ads",
+    "Google and other third-party vendors use advertising cookies to serve and measure ads based on a user's prior visits to this website or other websites",
+    "Google's use of advertising cookies enables it and its partners to serve personalized or non-personalized ads",
+    "DoubleClick",
+    "cookie_consent",
+    "November 28, 2026",
     "https://policies.google.com/technologies/partner-sites",
-    "https://adssettings.google.com/",
-    "https://www.aboutads.info/choices/",
+    "https://www.google.com/settings/ads",
+    "https://www.aboutads.info",
     "No consent management platform is currently active",
     "web beacons", "IP addresses",
 ):
