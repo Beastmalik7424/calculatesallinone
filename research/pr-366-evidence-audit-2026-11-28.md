@@ -4,7 +4,8 @@
 
 Repository: `Beastmalik7424/calculatesallinone`  
 PR: [#366 — Improve SEO regression coverage for Tasbih, Years to Days and EMI](https://github.com/Beastmalik7424/calculatesallinone/pull/366)  
-Audited source head: `9b5d764774d65c2cc5321c6cf220d6f9ec2992b0`  
+Audited application/content/test commit: `e5b5254e6ff5ca71f46a1022a39a55076080275c`  
+PR head at the audit snapshot: `2e5cd76aa6b40fbf3870f62f4546721f6bd64a17` (documentation-only commit)  
 Branch: `seo-tests-tasbih-years-emi-2026-11-27`
 
 This audit does not authorize merging, production deployment, ranking claims, or changes to calculator layout. No CSS stylesheet is among the PR's changed files. The changed-file list includes content, calculator logic/tests, workflow configuration, `emi-calculator.html`, and `vercel.json`. The source diff was reviewed for the calculator-first constraint. The content additions are explanatory copy/FAQ material; the browser first-screen and EMI viewport CI gates pass on the audited head.
@@ -341,3 +342,39 @@ The current READY preview HTML was also checked for internal-link coverage:
 Therefore, no duplicate or keyword-stuffed internal links were added. The current source already has contextual links; the remaining issue is that Google has not yet crawled or selected several known URLs. The sitemap is healthy, but Google last downloaded it on 21 November. Recheck after Production deployment and use normal Search Console URL Inspection for the affected pages. Request indexing is a Search Console UI action; the Indexing API is not for ordinary calculator pages.
 
 The Search Console connector's daily operation limit was reached during this audit, so no further live URL inspections can be run until its stated reset. This is an access/quota limitation, not evidence that the remaining URLs are fixed.
+
+
+## Subsequent verification refresh — 28 November 2026
+
+### Main-branch URL preservation check
+
+The live `main` branch advanced to `e3f548ad4670fbfae8372b12319d887c088b0ace` after the PR's merge base `4b0ceb175a71443192644b6fe05828bd629e0254`. That main-only commit adds a permanent 301 redirect from the historical `/ur/zakat` and `/ur/zakat/` paths to `/ur/zakat-calculator/`, plus regression assertions in `tests/site-output-smoke.py`. The PR branch did not contain that redirect. This integration update carries the main commit as a merge parent and adds the exact redirect and its regression assertions to the PR tree, preventing the open PR from removing the legacy route when it is eventually merged.
+
+No calculator formula, control, page URL, CSS file, or calculator layout is changed by this integration update.
+
+### Latest finalized Search Console refresh
+
+The connected SMEPost Search Console property `https://calculateallinone.vercel.app/` returned finalized data for **2026-11-23 through 2026-11-25**. Access remains `free_recent_three_days`, with no prior-period comparison.
+
+- Tasbih page: 18 impressions, 0 clicks, 0% CTR, average position 6.50. `tasbih calculator`: 13 impressions at 6.23; `calculator tasbih`: 3 impressions at 8.67.
+- Years-to-Days page: 170 impressions, 0 clicks, 0% CTR, average position 56.54. `how many days in 19 years` appeared once at position 13; individual long-tail rows are small samples.
+- EMI page: 3 impressions, 0 clicks, 0% CTR, average position 7.00; no query rows were returned.
+- Pakistan-only filter: Urdu BMI received 1 impression at position 64. This is not enough to support a country-level snippet change.
+- Mobile-only filter: Tasbih received 16 impressions at average position 6.69; the two Tasbih query rows above were also mobile-visible.
+
+These are Search Console impressions, not monthly search volumes or total visits. The separate OpenRush account has no connected website, SEOcrawl returned `billing_context_missing`, and Ahrefs reports a workspace unit limit of zero. No third-party monthly volume or trend figure is available from those sources. The latest finalized GSC boundary is 25 November; 26 November data remains unavailable.
+
+### Exact preview and visible-content originality checks
+
+The Vercel preview for the pre-integration PR head `2e5cd76aa6b40fbf3870f62f4546721f6bd64a17` was READY. Authenticated preview fetches returned HTTP 200 for EMI, Tasbih, Years-to-Days, `sitemap.xml`, `robots.txt` and `llms.txt`. The three calculator pages retained their production canonical URLs and `index, follow` directives. A fresh preview is required for the integration commit.
+
+The AISEO checker returned the following scores on the full visible main-content text extracted from the preview:
+- EMI: 89% unique, 11% matched, 1,471 words.
+- Tasbih: 92% unique, 8% matched, 1,390 words.
+- Years-to-Days: repeated 502 responses from the checker; no score or originality result is available.
+
+EMI matches were mainly formula fragments and common amortization wording; Tasbih matches were mainly common dhikr translations and standard counter/storage/keyboard phrases. These checker scores are evidence for review, not a guarantee of originality or a substitute for editorial review. The Years-to-Days originality gate remains unverified.
+
+### Release gate
+
+Keep PR #366 OPEN and DRAFT. Do not merge or deploy Production until the updated branch has a READY exact-head preview, all required checks pass on that exact head, the Years-to-Days originality service is available or the content is independently reviewed, and remaining external account gates are explicitly resolved or accepted.

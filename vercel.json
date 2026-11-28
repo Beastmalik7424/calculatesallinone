@@ -116,6 +116,13 @@
       "status": 301
     },
     {
+      "src": "^/ur/zakat/?$",
+      "headers": {
+        "Location": "/ur/zakat-calculator/"
+      },
+      "status": 301
+    },
+    {
       "src": "^/(?!.*\\.[^/]+$)(.*[^/])$",
       "headers": {
         "Location": "/$1/"
