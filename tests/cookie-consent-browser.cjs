@@ -10,20 +10,16 @@ const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, ""
   try {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
     let adRequests = 0;
-    await page.addInitScript(() => {
-      const values = {
-        "ca-adsense-client": "ca-pub-0000000000000000",
-        "ca-adsense-slot": "1234567890",
-        "ca-adsense-consent-ready": "true"
-      };
-      for (const [name, content] of Object.entries(values)) {
-        const meta = document.createElement("meta");
-        meta.name = name;
-        meta.content = content;
-        document.head.appendChild(meta);
-      }
+    await page.route(base + "/years-to-days-calculator/**", async route => {
+      const response = await route.fetch();
+      const html = await response.text();
+      const consentMeta =
+        '<meta name="ca-adsense-client" content="ca-pub-0000000000000000">' +
+        '<meta name="ca-adsense-slot" content="1234567890">' +
+        '<meta name="ca-adsense-consent-ready" content="true">';
+      await route.fulfill({ response, body: html.replace(/<head>/i, "<head>" + consentMeta) });
     });
-    await page.route("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js**", async route => {
+    await page.route("**/adsbygoogle.js*", async route => {
       adRequests += 1;
       await route.fulfill({
         status: 200,
@@ -58,7 +54,12 @@ const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, ""
     await page.locator("#ca-cookie-consent").waitFor({ state: "visible" });
     await page.locator("#ca-cookie-accept").click();
     assert.equal(await page.evaluate(() => localStorage.getItem("cookie_consent")), "accepted");
-    await page.waitForFunction(() => window.__testAdsScriptLoaded === true, { timeout: 5000 });
+    await page.waitForFunction(
+      () => document.querySelector('script[data-ca-adsense-loaded="true"]') !== null,
+      null,
+      { timeout: 5000 }
+    );
+    await page.waitForFunction(() => window.__testAdsScriptLoaded === true, null, { timeout: 5000 });
     assert.equal(adRequests, 1, "accept must load the advertising script exactly once");
     assert.equal(await page.locator("#ca-cookie-consent").count(), 0,
       "a saved acceptance must hide the banner");
