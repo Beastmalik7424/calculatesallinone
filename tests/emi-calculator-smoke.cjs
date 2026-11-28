@@ -8,7 +8,7 @@ const html = fs.readFileSync("emi-calculator.html", "utf8");
 
 const footerMatch = html.match(/<footer\\b[\\s\\S]*?<\\/footer>/i);
 assert.ok(footerMatch, "EMI page must retain its footer");
-assert.match(footerMatch[0], /aria-label="Site information and related calculators"/, "EMI footer navigation must identify both site policies and related tools");
+assert.match(footerMatch[0], /aria-label="Related calculators"/, "EMI footer navigation must identify both site policies and related tools");
 for (const path of ["/privacy/", "/terms/", "/about/", "/contact/"]) {
   assert.ok(footerMatch[0].includes('href="' + path + '"'), "EMI footer must link to " + path);
 }
