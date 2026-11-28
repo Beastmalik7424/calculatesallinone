@@ -18,6 +18,24 @@ assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "E
 assert.ok(html.includes("For a 5 lakh loan EMI estimate, enter 500,000 as the loan amount"), "EMI page must answer the observed 5 lakh loan EMI query without assuming a rate or term");
 assert.ok(html.includes("Pakistan loan EMI calculator") && html.includes("monthly instalment"), "EMI guide must use relevant Pakistan loan and monthly instalment search language");
 assert.ok(html.includes("reducing-balance") && html.includes("flat-rate markup"), "EMI guide must distinguish reducing-balance EMI from flat-rate markup");
+const shareLinkStart = html.indexOf("function shareLink(){");
+const readParamsStart = html.indexOf("function readParams(){");
+const selectTabStart = html.indexOf("function selectTab(");
+assert.ok(shareLinkStart >= 0 && readParamsStart > shareLinkStart, "EMI page must keep a testable share-link handler");
+const shareLinkSource = html.slice(shareLinkStart, readParamsStart);
+assert.ok(shareLinkSource.includes("location.pathname+'#'+params.toString()"), "Share links must put loan values in the URL fragment, not the request query");
+assert.ok(!shareLinkSource.includes("location.pathname+'?'+params.toString()"), "New share links must not expose loan values in the HTTP query string");
+assert.ok(selectTabStart > readParamsStart, "EMI page must keep a testable shared-link reader");
+const readParamsSource = html.slice(readParamsStart, selectTabStart);
+assert.ok(readParamsSource.includes("location.hash?location.hash.slice(1):location.search"), "EMI page must read fragment links and preserve legacy query links");
+assert.ok(shareLinkSource.includes("Anyone with the link can view those settings."), "Share action must disclose which loan settings are exposed to link recipients without adding first-screen content");
+const relatedFooterStart = html.indexOf('<nav aria-label="Related calculators">');
+assert.ok(relatedFooterStart >= 0, "EMI page must retain its related-calculator footer navigation");
+const relatedFooter = html.slice(relatedFooterStart, html.indexOf("</nav>", relatedFooterStart));
+assert.ok(relatedFooter.includes('href="/compound-interest-calculator/"'), "EMI footer must link to the existing related compound-interest calculator");
+assert.ok(!relatedFooter.includes('href="/bmi-calculator/"') && !relatedFooter.includes('href="/zakat-calculator/"'), "EMI footer must not recommend unrelated BMI or Zakat calculators");
+assert.ok(html.includes('<a href="/compound-interest-calculator/">Compound Interest Calculator</a>'), "EMI main navigation must offer a related finance tool");
+
 const schemaBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
   .map(([, raw]) => JSON.parse(raw));
 const schemas = schemaBlocks.flatMap(schema => Array.isArray(schema) ? schema : [schema]);
@@ -72,7 +90,7 @@ if (fs.existsSync(generatedEmiPath)) {
 // Regression guard: the standalone EMI page must retain global site navigation and a centered, responsive calculator column.
 assert.match(html, /<nav aria-label="Main" class="site-nav">[\s\S]*?class="ca-calculator-carousel"[\s\S]*?data-tool-shortcut="emi-calculator"[\s\S]*?aria-current="page"[\s\S]*?<\/nav>/, "EMI page must expose the active calculator carousel in its existing navigation row");
 assert.match(html, /<a href="\/money\/">Money and Business<\/a>/, "EMI page must retain its Money and Business navigation link");
-assert.match(html, /<a href="\/standard-calculator\/">Standard Calculator<\/a>/, "EMI page must retain its Standard Calculator navigation link");
+assert.ok(html.includes('<a href="/compound-interest-calculator/">Compound Interest Calculator</a>'), "EMI page must link to the related Compound Interest Calculator from the main navigation");
 assert.match(html, /<main id="main" class="emi-page-main">/, "EMI calculator must use the shared-width main content wrapper and stable main landmark ID");
 assert.match(html, /\.emi-page-main\s*\{[^}]*max-width:\s*960px/s, "EMI main content must be capped to the intended centered tool width");
 

@@ -6,10 +6,20 @@ const { chromium } = require('playwright');
   const page=await browser.newPage({viewport:size,deviceScaleFactor:1});
   const errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.goto('http://127.0.0.1:8123/emi-calculator/',{waitUntil:'load'});
+  if((size.width===360&&size.height===740)||(size.width===390&&size.height===844)){
+   const firstScreen=await page.locator('#loan-form button[type=submit]').evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,viewport:innerHeight,visible:r.top>=0&&r.bottom<=innerHeight}});
+   console.log('EMI initial Calculate button visibility',JSON.stringify(firstScreen));
+   if(!firstScreen.visible)failures.push('mobile Calculate EMI button is below the initial viewport');
+  }
   await page.locator('#amount').fill('895842100');
   await page.locator('#rate').fill('12');
   await page.locator('#tenure').fill('5');
   await page.locator('#loan-form button[type=submit]').click();
+  if((size.width===360&&size.height===740)||(size.width===390&&size.height===844)){
+   const firstScreenResult=await page.locator('#metrics').evaluate(el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,viewport:innerHeight,visible:r.top>=0&&r.bottom<=innerHeight}});
+   console.log('EMI initial result visibility after calculate',JSON.stringify(firstScreenResult));
+   if(!firstScreenResult.visible)failures.push('mobile EMI result metrics are below the initial viewport after calculation');
+  }
   const d=await page.evaluate(()=>{
    const q=s=>document.querySelector(s).getBoundingClientRect();
    const cards=[...document.querySelectorAll('.metric')].map(el=>{const r=el.getBoundingClientRect();const value=el.querySelector('strong').getBoundingClientRect();return {label:el.querySelector('span').textContent,cardWidth:r.width,valueWidth:value.width,valueScroll:el.querySelector('strong').scrollWidth,cardRight:r.right,valueRight:value.right,cardBottom:r.bottom}});
@@ -24,6 +34,45 @@ const { chromium } = require('playwright');
   await page.screenshot({path:'/tmp/emi-'+size.width+'.png',fullPage:true});
   await page.close();
  }
+ const sharePage=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
+ const shareErrors=[];sharePage.on('pageerror',e=>shareErrors.push(String(e)));
+ const pageUrl='http://127.0.0.1:8123/emi-calculator/';
+ await sharePage.goto(pageUrl,{waitUntil:'load'});
+ const canonical=await sharePage.locator('link[rel="canonical"]').getAttribute('href');
+ const robots=await sharePage.locator('meta[name="robots"]').getAttribute('content');
+ if(canonical!=='https://calculateallinone.vercel.app/emi-calculator/')failures.push('share-link page canonical mismatch');
+ if(robots!=='index, follow')failures.push('share-link page robots directive mismatch');
+ await sharePage.locator('#amount').fill('2500000');
+ await sharePage.locator('#rate').fill('14.5');
+ await sharePage.locator('#tenure').fill('4');
+ await sharePage.locator('#tenure-unit').selectOption('years');
+ await sharePage.locator('#currency').selectOption('INR');
+ await sharePage.locator('#start').fill('2026-12');
+ await sharePage.locator('#share').click();
+ const sharedUrl=new URL(sharePage.url());
+ const fragment=new URLSearchParams(sharedUrl.hash.slice(1));
+ const expectedShare={amount:'2500000',rate:'14.5',tenure:'4',unit:'years',currency:'INR',start:'2026-12'};
+ if(sharedUrl.search)failures.push('share link exposes loan values in the HTTP query string');
+ for(const [key,value] of Object.entries(expectedShare))if(fragment.get(key)!==value)failures.push('share link fragment missing '+key);
+ await sharePage.reload({waitUntil:'load'});
+ const restored=await sharePage.evaluate(()=>Object.fromEntries(['amount','rate','tenure','tenure-unit','currency','start'].map(id=>[id,document.getElementById(id).value])));
+ const expectedRestored={amount:'2500000',rate:'14.5',tenure:'4','tenure-unit':'years',currency:'INR',start:'2026-12'};
+ for(const [key,value] of Object.entries(expectedRestored))if(restored[key]!==value)failures.push('fragment reload did not restore '+key);
+ await sharePage.locator('#loan-form button[type=submit]').click();
+ const emiText=(await sharePage.locator('#emi-out').textContent())||'';
+ if(!emiText||/NaN|Infinity|0\.00/.test(emiText))failures.push('fragment-restored EMI result is invalid: '+emiText);
+ const footerLinks=await sharePage.locator('footer nav[aria-label="Related calculators"] a').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
+ const mainLinks=await sharePage.locator('nav[aria-label="Main"] a').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
+ if(!footerLinks.includes('/compound-interest-calculator/'))failures.push('EMI footer missing compound-interest link');
+ if(footerLinks.includes('/bmi-calculator/')||footerLinks.includes('/zakat-calculator/'))failures.push('EMI footer contains unrelated BMI or Zakat link');
+ if(!mainLinks.includes('/compound-interest-calculator/'))failures.push('EMI main navigation missing compound-interest link');
+ await sharePage.goto(pageUrl+'?amount=300000&rate=18&tenure=3&unit=years&currency=PKR&start=2026-12',{waitUntil:'load'});
+ const legacy=await sharePage.evaluate(()=>Object.fromEntries(['amount','rate','tenure','tenure-unit','currency','start'].map(id=>[id,document.getElementById(id).value])));
+ const expectedLegacy={amount:'300000',rate:'18',tenure:'3','tenure-unit':'years',currency:'PKR',start:'2026-12'};
+ for(const [key,value] of Object.entries(expectedLegacy))if(legacy[key]!==value)failures.push('legacy query link did not restore '+key);
+ if(shareErrors.length)failures.push('share-link browser JS errors '+shareErrors.join('; '));
+ console.log('EMI share-link browser audit',JSON.stringify({canonical,robots,shareUrl:sharedUrl.href,restored,emiText,legacy,footerLinks,mainLinks,errors:shareErrors}));
+ await sharePage.close();
  await browser.close();
  if(failures.length){console.error('EMI VIEWPORT FAILURES:',failures.join('; '));process.exitCode=1;}
  else console.log('EMI viewport/browser checks PASS (does not claim entire page fits one screen)');
