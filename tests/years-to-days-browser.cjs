@@ -110,7 +110,7 @@ const viewports = [
         "non-numeric year input must be rejected without NaN or Infinity");
       await value.evaluate(element => { element.type = "number"; element.value = "10"; });
       await submit();
-      assert.match(await result.innerText(), /10 years = 3,652\\.425 days/,
+      assert.match(await result.innerText(), /10 years = 3,652\.425 days/,
         "calculator must recover cleanly after invalid input");
       await value.fill("80");
       await submit();
