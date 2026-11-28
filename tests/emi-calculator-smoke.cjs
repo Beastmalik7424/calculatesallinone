@@ -119,7 +119,7 @@ function throws(fn) {
 test("amount parser accepts grouped decimals exactly", () =>
   Engine.parseAmount("1,000,000.50", { min: 1, max: 1000000000 }).value === 100000050);
 test("amount parser rejects negative, blank, exponent, malformed commas, excess decimals and injection", () =>
-  ["-5", "", "abc", "1e5", "1,00", "12.345", "<img onerror=alert(1)>"].every(
+  ["-5", "", "abc", "1e5", "1e12", "1000000000000", "1,00", "12.345", "<img onerror=alert(1)>"].every(
     value => !Engine.parseAmount(value, { min: 1, max: 1000000000 }).ok
   ));
 test("amount parser enforces configured bounds", () =>
