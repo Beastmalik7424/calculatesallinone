@@ -834,7 +834,11 @@ for url in urls:
     if url.endswith("/emi-calculator/"):
         assert len(faq_schemas) == 1, "EMI page must have exactly one FAQPage schema generated from visible FAQ content"
         app_schemas = [item for item in parsed_schemas if item.get("@type") == "WebApplication"]
-        assert not app_schemas, "EMI page must omit SoftwareApplication rich-result markup without genuine public ratings or reviews"
+        assert len(app_schemas) == 1, "EMI page must publish one truthful WebApplication description"
+        emi_app = app_schemas[0]
+        assert emi_app.get("url") == SITE + "/emi-calculator/", "EMI WebApplication URL must match its canonical"
+        assert emi_app.get("offers", {}).get("price") == "0", "EMI WebApplication must describe the free calculator"
+        assert not any(key in emi_app for key in ("aggregateRating", "review", "reviews")), "EMI schema must not invent ratings or reviews"
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
             if url == SITE + "/age-calculator/":
