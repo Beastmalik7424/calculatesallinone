@@ -84,18 +84,18 @@ for phrase in (
 for slug in ("emi-calculator", "tasbih-counter", "years-to-days-calculator", "zakat-calculator"):
     page_path = ROOT / slug / "index.html"
     raw = page_path.read_text(encoding="utf-8")
-    check(len(re.findall(r"<h1\\b", raw, re.I)) == 1,
+    check(len(re.findall(r"<h1\b", raw, re.I)) == 1,
           f"/{slug}/ must contain exactly one H1.")
-    canonical = re.search(r'<link\\b[^>]*rel=["\\']canonical["\\'][^>]*href=["\\']([^"\\']+)', raw, re.I)
+    canonical = re.search(r"<link\b[^>]*rel=['\"]canonical['\"][^>]*href=['\"]([^'\"]+)", raw, re.I)
     check(canonical is not None and canonical.group(1) == "https://calculateallinone.vercel.app/" + slug + "/",
           f"/{slug}/ must have its exact self-referencing canonical.")
-    footer_match = re.search(r"<footer\\b[^>]*>([\\s\\S]*?)</footer>", raw, re.I)
+    footer_match = re.search(r"<footer\b[^>]*>([\s\S]*?)</footer>", raw, re.I)
     footer_html = footer_match.group(1) if footer_match else ""
     for required_path in ("/privacy/", "/terms/", "/about/", "/contact/"):
         check(f'href="{required_path}"' in footer_html,
               f"/{slug}/ footer must link to {required_path}.")
     parsed = []
-    for match in re.finditer(r'<script\\b(?=[^>]*type=["\\']application/ld\\+json["\\'])[^>]*>([\\s\\S]*?)</script>', raw, re.I):
+    for match in re.finditer(r"<script\b(?=[^>]*type=['\"]application/ld\+json['\"])[^>]*>([\s\S]*?)</script>", raw, re.I):
         try:
             value = json.loads(match.group(1))
             parsed.extend(value if isinstance(value, list) else [value])
