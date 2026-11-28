@@ -5,6 +5,13 @@ const vm = require("node:vm");
 // Exercise the exact calculation engine shipped in the standalone EMI page,
 // without a DOM, network, or third-party runtime.
 const html = fs.readFileSync("emi-calculator.html", "utf8");
+
+const footerMatch = html.match(/<footer\\b[\\s\\S]*?<\\/footer>/i);
+assert.ok(footerMatch, "EMI page must retain its footer");
+assert.match(footerMatch[0], /aria-label="Site information and related calculators"/, "EMI footer navigation must identify both site policies and related tools");
+for (const path of ["/privacy/", "/terms/", "/about/", "/contact/"]) {
+  assert.ok(footerMatch[0].includes('href="' + path + '"'), "EMI footer must link to " + path);
+}
 // Guard the standalone page metadata because it bypasses the shared page-head builder.
 assert.match(html, /<html lang="en" dir="ltr">/, "EMI page must declare its language and text direction");
 assert.match(html, /name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/, "EMI viewport must match the site safe-area behavior");
