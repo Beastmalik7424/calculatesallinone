@@ -220,6 +220,15 @@ for phrase in (
 ):
     check(phrase in ur_unit, "/ur/unit-converter/ is missing supported-unit detail or an exact conversion: " + phrase)
 
+# Exact, visible professional-advice disclaimers are required on finance and health tools.
+finance_health_disclaimer = "Disclaimer: Results are mathematical estimates for informational purposes only and do not constitute professional financial, tax, or medical advice."
+zakat_disclaimer = "Disclaimer: Calculations follow standard Nisab rules for estimation only; consult a qualified Islamic scholar for personal Zakat rulings."
+for slug in ("emi-calculator", "bmi-calculator", "calorie-calculator"):
+    check(finance_health_disclaimer in page_text(slug),
+          f"/{slug}/ must show the exact finance/health informational disclaimer.")
+check(zakat_disclaimer in page_text("zakat-calculator"),
+      "/zakat-calculator/ must show the exact religious-guidance disclaimer.")
+
 for e in ERRORS:
     print("FAIL:", e)
 print(f"{len(ERRORS)} failing checks")
