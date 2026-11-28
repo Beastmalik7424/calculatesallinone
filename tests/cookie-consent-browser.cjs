@@ -99,12 +99,18 @@ const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, ""
     assert.equal(await count.innerText(), "0", "Undo must floor at zero");
 
     await target.selectOption("custom");
-    for (const invalid of ["0", "-1", "1.5", "10001", ""]) {
+    for (const invalid of ["0", "-1", "1.5", "10001", "1e12", ""]) {
       await custom.fill(invalid);
       await tap.click();
       assert.equal(await count.innerText(), "0", "invalid custom target must not increment: " + invalid);
       assert.match(await tasbih.locator("#t-target-error").innerText(), /whole number from 1 to 10,000/);
     }
+    await custom.evaluate(element => { element.type = "text"; });
+    await custom.fill("abc");
+    await tap.click();
+    assert.equal(await count.innerText(), "0", "non-numeric custom target must not increment");
+    assert.match(await tasbih.locator("#t-target-error").innerText(), /whole number from 1 to 10,000/);
+    await custom.evaluate(element => { element.type = "number"; });
     await custom.fill("10000");
     await tap.click();
     assert.equal(await count.innerText(), "1", "custom target 10,000 must be accepted");
