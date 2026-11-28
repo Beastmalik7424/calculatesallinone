@@ -3074,7 +3074,7 @@ def main():
             "<strong>Cookie preference.</strong> The Accept/Reject banner stores your optional advertising choice in this browser's localStorage under the key cookie_consent, with the value accepted or rejected. This is a browser-specific preference, not an account record. You can clear it by deleting this site's local data in your browser settings.",
             "<strong>Visitors in the EEA, UK and Switzerland.</strong> No consent management platform is currently active on this website. The first-party Accept/Reject banner records a local preference but is not a Google-certified CMP or an IAB Transparency and Consent Framework (TCF) integration. Before personalised advertising is enabled for visitors in the EEA, UK or Switzerland, the site will use a Google-certified CMP integrated with the IAB Transparency and Consent Framework (TCF) and provide the required consent choices.",
             "<strong>Children.</strong> CalculatesAll is a general-audience website. It is not directed at children under 13 and we do not knowingly collect personal information from children.",
-            "<strong>Effective date.</strong> November 28, 2026.",
+            "<strong>Effective date.</strong> 28 November 2026 (November 28, 2026).",
             "<strong>External links.</strong> Some pages link to official sources such as the World Health Organization or NIST. Those websites have their own privacy policies.",
             "<strong>Changes and contact.</strong> If this policy changes, the updated version will be published on this page. For privacy questions, email <a class='underline text-sky-800 dark:text-sky-300' href='mailto:" + CONTACT_EMAIL + "'>" + CONTACT_EMAIL + "</a>.",
         ]),
