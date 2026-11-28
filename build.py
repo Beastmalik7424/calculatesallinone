@@ -2310,6 +2310,8 @@ def tool_page(t):
         + profit_reference_table
         + (years_to_days_reference_html() + guide_html(guide[:2]) + guide_html(guide[2:]) + days_to_years_reference_html()
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
+        + (('<p class="' + P + '"><strong>Disclaimer:</strong> Results are mathematical estimates for informational purposes only and do not constitute professional financial, tax, or medical advice.</p>') if t["category"] == "health" else "")
+        + (('<p class="' + P + '"><strong>Disclaimer:</strong> Calculations follow standard Nisab rules for estimation only; consult a qualified Islamic scholar for personal Zakat rulings.</p>') if t["slug"] == "zakat-calculator" else "")
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">' + ("Scope and religious guidance" if t["slug"] == "tasbih-counter" else "Sources") + '</h2><p class="' + P + '">' + sources + '</p>'
         + '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p>'
