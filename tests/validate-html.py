@@ -63,11 +63,9 @@ def fetch_validator_result(path, opener=None):
     )
 
 
-def is_approved_vendor_attribute_diagnostic(message):
-    """Allow only Google's documented Preferred Sources marker attribute."""
-    return message.get("message") == (
-        "Attribute “google-add-preferred-source-btn” not allowed on element “div” at this point."
-    )
+def html_errors(messages):
+    """Return every Nu Checker error or fatal diagnostic without vendor-specific exceptions."""
+    return [message for message in messages if message.get("type") in ("error", "fatal")]
 
 
 def main():
@@ -87,7 +85,7 @@ def main():
                 failed = True
             else:
                 messages = result.get("messages", [])
-                errors = [m for m in messages if m.get("type") in ("error", "fatal") and not is_approved_vendor_attribute_diagnostic(m)]
+                errors = html_errors(messages)
                 warnings = [
                     m for m in messages
                     if m.get("type") == "info" and m.get("subType") == "warning"
