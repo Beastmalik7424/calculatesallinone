@@ -74,6 +74,7 @@ class RepositoryBaselineIntegrationTests(unittest.TestCase):
         self.assertTrue(BASELINE.is_file(), "approved build baseline is missing")
         snapshot = json.loads(BASELINE.read_text(encoding="utf-8"))
         vercel = json.loads((ROOT / "vercel.json").read_text(encoding="utf-8"))
+        self.assertEqual(vercel.get("installCommand"), snapshot["vercel"]["installCommand"])
         self.assertEqual(vercel.get("buildCommand"), snapshot["vercel"]["buildCommand"])
         self.assertEqual(vercel.get("outputDirectory"), snapshot["vercel"]["outputDirectory"])
 

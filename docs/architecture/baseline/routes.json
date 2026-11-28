@@ -17,7 +17,8 @@
   "noindex": ["/ar/", "/es/", "/fr/", "/hi/", "/ur/"],
   "no_slash": ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"],
   "vercel": {
-    "buildCommand": "npm ci && npm run build",
+    "installCommand": "npm ci",
+    "buildCommand": "npm run build",
     "outputDirectory": "public"
   }
 }
