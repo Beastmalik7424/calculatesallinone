@@ -77,6 +77,29 @@ let browser;
   const response = await page.goto(BASE_URL + "/zakat-calculator/", { waitUntil: "networkidle" });
   assert.equal(response && response.status(), 200, "English Zakat page must return HTTP 200");
   assert.equal(await page.locator("#zakat-form").count(), 1, "Single Zakat form must be present");
+  const readContrastSurfaces = () => page.evaluate(() => {
+    const main = document.querySelector("#main");
+    const card = document.querySelector("#tool-calculator");
+    return {
+      mainBackground: getComputedStyle(main).backgroundColor,
+      mainBackgroundImage: getComputedStyle(main).backgroundImage,
+      cardBackground: getComputedStyle(card).backgroundColor,
+      cardBackgroundImage: getComputedStyle(card).backgroundImage
+    };
+  });
+  await page.evaluate(() => document.documentElement.classList.remove("dark"));
+  const lightSurfaces = await readContrastSurfaces();
+  assert.equal(lightSurfaces.mainBackground, "rgb(255, 255, 255)", "Zakat main surface must resolve to opaque white in light theme: " + JSON.stringify(lightSurfaces));
+  assert.equal(lightSurfaces.mainBackgroundImage, "none", "Zakat main surface must not overlay text with a gradient");
+  assert.equal(lightSurfaces.cardBackground, "rgb(255, 255, 255)", "Zakat calculator card must resolve to opaque white, not alpha over the body gradient: " + JSON.stringify(lightSurfaces));
+  assert.equal(lightSurfaces.cardBackgroundImage, "none", "Zakat calculator card must not use a gradient behind text");
+  await page.evaluate(() => document.documentElement.classList.add("dark"));
+  const darkSurfaces = await readContrastSurfaces();
+  assert.equal(darkSurfaces.mainBackground, "rgb(28, 25, 23)", "Zakat main surface must resolve to opaque stone-900 in dark theme: " + JSON.stringify(darkSurfaces));
+  assert.equal(darkSurfaces.mainBackgroundImage, "none", "Dark Zakat main surface must not overlay text with a gradient");
+  assert.equal(darkSurfaces.cardBackground, "rgb(28, 25, 23)", "Dark Zakat calculator card must resolve to opaque stone-900: " + JSON.stringify(darkSurfaces));
+  assert.equal(darkSurfaces.cardBackgroundImage, "none", "Dark Zakat calculator card must not use a gradient behind text");
+  await page.evaluate(() => document.documentElement.classList.remove("dark"));
   assert.equal(await page.locator("#zakat-next, #zakat-back, #zakat-step-progress").count(), 0,
     "Single-page calculator must not expose Next/Back wizard controls or step progress");
   assert.equal(await page.locator("#zakat-submit").isVisible(), true, "Calculate action must be visible in the form");

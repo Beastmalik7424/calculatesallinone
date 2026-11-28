@@ -2442,11 +2442,13 @@ html[dir="rtl"] body:has(#zakat-form) #zakat-form select {
 
 /* Zakat calculator: use the Standard Calculator's full-width soft-teal visual system. */
 body:has(#main .ca-tool-zakat-calculator) #main {
-  background: transparent !important;
+  background: #ffffff !important;
+  background-image: none !important;
   color: #164e48 !important;
 }
 html.dark body:has(#main .ca-tool-zakat-calculator) #main {
-  background: transparent !important;
+  background: #1c1917 !important;
+  background-image: none !important;
   color: #e3f4f0 !important;
 }
 body:has(#main .ca-tool-zakat-calculator) #main > h1 {
@@ -2460,6 +2462,12 @@ html.dark body:has(#main .ca-tool-zakat-calculator) #main > h1 {
 #main .ca-tool-zakat-calculator {
   width: 100%;
   max-width: none;
+  background: #ffffff !important;
+  background-image: none !important;
+}
+html.dark #main .ca-tool-zakat-calculator {
+  background: #1c1917 !important;
+  background-image: none !important;
 }
 #main .ca-tool-zakat-calculator #zakat-form {
   width: 100% !important;
