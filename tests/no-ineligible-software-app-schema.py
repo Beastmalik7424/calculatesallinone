@@ -23,7 +23,7 @@ for path in pages:
     relative = path.relative_to(ROOT).as_posix()
     raw = path.read_text(encoding="utf-8")
     applications = []
-    for match in re.finditer(r'<script\\b(?=[^>]*\\btype=["\\']application/ld\\+json["\\'])(.*?)>(.*?)</script>', raw, re.S | re.I):
+    for match in re.finditer(r'<script\b(?=[^>]*\btype=["\']application/ld\+json["\'])(.*?)>(.*?)</script>', raw, re.S | re.I):
         parsed = json.loads(match.group(2))
         nodes = parsed if isinstance(parsed, list) else parsed.get("@graph", [parsed]) if isinstance(parsed, dict) else []
         applications.extend(node for node in nodes if isinstance(node, dict) and node.get("@type") == "WebApplication")
