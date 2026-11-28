@@ -36,7 +36,12 @@ const schemas = schemaBlocks.flatMap(schema => Array.isArray(schema) ? schema : 
 const byType = type => schemas.filter(schema => schema["@type"] === type);
 assert.equal(byType("FAQPage").length, 1, "EMI page must contain exactly one FAQPage schema block");
 assert.ok(byType("FAQPage")[0].mainEntity.some(item => item.name === "How do I estimate the EMI for a 5 lakh loan?" && item.acceptedAnswer.text.includes("The loan amount alone is not enough")), "EMI FAQ schema must match the visible 5-lakh answer");
-assert.equal(byType("WebApplication").length, 0, "EMI page must not publish ineligible SoftwareApplication rich-result markup");
+assert.equal(byType("WebApplication").length, 1, "EMI page must describe the real web calculator without claiming ratings");
+const emiApplication = byType("WebApplication")[0];
+assert.equal(emiApplication.url, "https://calculateallinone.vercel.app/emi-calculator/");
+assert.equal(emiApplication.offers.price, "0");
+assert.equal("aggregateRating" in emiApplication, false);
+assert.equal("review" in emiApplication, false);
 assert.equal(byType("WebSite").length, 1, "EMI page must link to the canonical WebSite entity");
 assert.equal(byType("Organization").length, 1, "EMI page must link to the canonical Organization entity");
 assert.equal(byType("Person").length, 1, "EMI page must link to the named maintainer entity");
@@ -79,7 +84,8 @@ if (fs.existsSync(generatedEmiPath)) {
   for (const type of ["WebSite", "Organization", "Person", "WebPage", "BreadcrumbList", "FAQPage"]) {
     assert.equal(generatedTypes(type).length, 1, "Generated EMI page must retain exactly one " + type + " entity");
   }
-  assert.equal(generatedTypes("WebApplication").length, 0, "Generated EMI page must not reintroduce WebApplication markup");
+  assert.equal(generatedTypes("WebApplication").length, 1, "Generated EMI page must retain its truthful WebApplication entity");
+  assert.equal(generatedTypes("WebApplication")[0].url, "https://calculateallinone.vercel.app/emi-calculator/");
 }
 
 // Regression guard: the standalone EMI page must retain global site navigation and a centered, responsive calculator column.
