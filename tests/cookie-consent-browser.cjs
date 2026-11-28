@@ -92,6 +92,8 @@ const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, ""
     assert.equal(await count.innerText(), "33", "33 taps must produce a count of 33");
     assert.match(await tasbih.locator("#t-progress").innerText(), /reached/i,
       "the 33-count preset must report completion");
+    assert.match(await tasbih.locator("#t-progress").innerText(), /33 of 33/,
+      "the 33-count completion state must explicitly show 33 of 33");
 
     await undo.click();
     assert.equal(await count.innerText(), "32", "Undo must reverse one tap");
