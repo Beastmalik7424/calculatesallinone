@@ -1,15 +1,14 @@
 # AdSense readiness audit â€” 28 November 2026
 
-## Scope and evidence
+- Production `ads.txt` returns HTTP 200 and the public AdSense ownership meta tag is present.
+- `privacy`, `about`, `contact`, `terms`, `editorial-policy`, `methodology` and `affiliate-disclosure` pages return HTTP 200.
+- Generated site has 42 indexable pages and 42 sitemap URLs. AdSense content-policy and monetization smoke tests pass.
+- Production does not load `adsbygoogle.js`. The real `ADSENSE_SLOT` and `ADSENSE_CONSENT_READY` settings are absent. Ads remain disabled. A missing slot blocks ad activation, but is not by itself proof that site review is blocked because ownership meta and `ads.txt` are present.
+- No CMP is currently active. Before personalized ads are served to EEA, UK or Switzerland visitors, use a Google-certified CMP integrated with IAB TCF. Verify current TCF v2.4 web disclosure support. The privacy-policy wording in this branch now states the actual status instead of promising an undeployed consent flow.
+- The private AdSense Sites page, Policy Center, account checks and review controls are not accessible through GitHub/Vercel. **No AdSense review was submitted.** Do not enable ads or mark consent ready until a real slot and required CMP are configured and tested.
+- No fixed page-count or word-count threshold guarantees approval. Local content checks are evidence, not approval.
+- No CSS/layout files were changed. Generated CSS from this build matches the live production asset byte-for-byte.
 
-This is a repository, generated-output and live-production audit. It is not an AdSense account review and does not predict approval.
+Official guidance: [AdSense page readiness](https://support.google.com/adsense/answer/7299563), [site ownership](https://support.google.com/adsense/answer/12131223), [program policies](https://support.google.com/adsense/answer/48182), [EEA/UK/Switzerland CMP requirements](https://support.google.com/adsense/answer/13554116), [IAB TCF v2.4 timeline](https://iabeurope.eu/wp-content/uploads/TCF_V-CMP_comms_TCFpoliciesV5.0.bAndSpecificationsV2.4ConfirmationOf-theTimeline_160726_IABEurope.pdf).
 
-- Current production deployment: READY, `main` commit `e3f548ad4670fbfae8372b12319d887c088b0ace`.
-- Production `ads.txt`: HTTP 200; one correctly formatted Google seller record. The publisher identifier in `ads.txt` matches the public `google-adsense-account` meta tag. The identifier is intentionally not repeated in this report.
-- Live `privacy`, `about`, `contact`, `terms`, `editorial-policy`, `methodology`, and `affiliate-disclosure` pages: HTTP 200.
-- Generated site: 47 routes, 42 indexable pages, 5 noindex pages, 42 sitemap URLs.
-- `tests/adsense-site-policy.py`: PASS, 0 failing checks.
-- `tests/monetization-smoke.py`: PASS. AdSense ID/slot gating, `ads.txt` format, and disabled-by-default behaviour verified.
-- Production HTML does not load `adsbygoogle.js`; the privacy page accurately states that no AdSense ad units are currently displayed. The corrected CMP-status wording in this branch is source-only until PR #366 is deployed; production still serves the previous wording until then.
-- No CSS source file or layout rule is changed in this work. The locally generated `public/assets/site.css` is byte-for-byte identical to the current production CSS asset (113,024 bytes; SHA-256 `89c1a6d87001d7df717eb4b497178cfc6592feb8e090dc5b19c478479b9b4c5d`).
-- Vercel project environme¶»§q«^
+**Status: partially ready.** Ownership and content checks pass. Slot, consent implementation where required, and account-side review remain pending.

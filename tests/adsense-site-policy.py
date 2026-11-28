@@ -38,4 +38,148 @@ check(AFFILIATE_PHRASE in page_text("affiliate-disclosure"),
 
 
 privacy_text = page_text("privacy")
-af���q�^
+affiliate_text = page_text("affiliate-disclosure")
+terms_text = page_text("terms")
+check("No Google AdSense ad units are currently displayed" in privacy_text,
+      "/privacy/ must distinguish the current no-ad state from future advertising.")
+check("does not currently load the AdSense ad-serving script" in privacy_text,
+      "/privacy/ must accurately describe the current inactive ad-code state.")
+check("No consent management platform is currently active" in privacy_text,
+      "/privacy/ must not imply a CMP is already operating when no CMP is configured.")
+check("Google-certified CMP integrated with the IAB Transparency and Consent Framework (TCF)" in privacy_text,
+      "/privacy/ must state the certified-CMP/TCF prerequisite before regional personalized ads are enabled.")
+check("you will be asked for consent through a Google-certified consent message" not in privacy_text,
+      "/privacy/ must not promise a consent flow that is not currently deployed.")
+check("CalculatesAll may show advertising served by Google AdSense" not in privacy_text,
+      "/privacy/ must not imply that AdSense is currently active.")
+check("No AdSense ad units are currently displayed" in affiliate_text,
+      "/affiliate-disclosure/ must accurately state that no ad units are active.")
+check("does not currently load the AdSense ad-serving script" in affiliate_text,
+      "/affiliate-disclosure/ must distinguish publisher verification from active ad serving.")
+check("Advertising is not currently displayed" in terms_text,
+      "/terms/ must not imply that advertising is already being displayed.")
+check("Advertising may appear on some pages" not in terms_text,
+      "/terms/ must not use ambiguous present/future advertising language.")
+
+for slug in TOOLS_WITH_EXAMPLE:
+    for name in ("Worked example", "Method", "Limits"):
+        check(has_heading(slug, name), f"/{slug}/ has no heading exactly '{name}'")
+
+check(has_heading("tasbih-counter", "Worked example: target and remaining count"),
+      "/tasbih-counter/ must contain one checkable target/remaining-count example.")
+
+tasbih_html = (ROOT / "tasbih-counter" / "index.html").read_text(encoding="utf-8")
+tasbih_description = re.search(r'<meta name="description" content="([^"]+)"', tasbih_html)
+check(tasbih_description is not None and "Tasbih calculator" in tasbih_description.group(1) and "digital Tasbih counter" in tasbih_description.group(1),
+      "/tasbih-counter/ search snippet must retain the primary GSC query and include the Google Trends rising phrase digital Tasbih counter.")
+check(not has_heading("tasbih-counter", "Method"),
+      "/tasbih-counter/ should not repeat a separate generic method section.")
+check(not has_heading("tasbih-counter", "Limits"),
+      "/tasbih-counter/ should integrate its limits into the relevant privacy and scope sections.")
+
+for p in ROOT.rglob("index.html"):
+    m = re.search(r"Last updated:\s*(\d{4}-\d{2}-\d{2})(?=\s|<)", p.read_text(encoding="utf-8"))
+    if m:
+        check(re.fullmatch(r"\d{4}-\d{2}-\d{2}", m.group(1)) is not None,
+              f"{p}: 'Last updated' is not YYYY-MM-DD")
+
+# Regression gates for the two pages where the live preview exposed repeated
+# explanations. These checks target duplicate sections, not arbitrary word counts.
+discount_html = (ROOT / "discount-calculator" / "index.html").read_text(encoding="utf-8")
+for repeated_heading in (
+    "Single discount worked example",
+    "Stacked discounts",
+    "Successive discounts worked example",
+):
+    check(not has_heading("discount-calculator", repeated_heading),
+          f"/discount-calculator/ repeats the concept in '{repeated_heading}'")
+
+savings_formula_count = discount_html.count("Amount saved equals original price multiplied by the discount percentage, divided by 100.")
+check(savings_formula_count == 1,
+      f"/discount-calculator/ must show its primary savings formula exactly once (found {savings_formula_count})")
+final_price_formula_count = discount_html.count("Final price equals original price minus the amount saved.")
+check(final_price_formula_count == 1,
+      f"/discount-calculator/ must show its final-price formula exactly once (found {final_price_formula_count})")
+
+bmi_html = (ROOT / "bmi-calculator" / "index.html").read_text(encoding="utf-8")
+for repeated_heading in (
+    "Why BMI is used",
+    "Groups where BMI needs care",
+    "BMI formula and worked example",
+    "BMI questions and mistakes",
+    "What a BMI result is useful for and what it is not",
+):
+    check(not has_heading("bmi-calculator", repeated_heading),
+          f"/bmi-calculator/ repeats material already covered in '{repeated_heading}'")
+check(has_heading("bmi-calculator", "How to use this BMI calculator"),
+      "/bmi-calculator/ must retain clear practical measurement instructions")
+check(has_heading("bmi-calculator", "BMI interpretation for South Asian adults"),
+      "/bmi-calculator/ must retain its source-backed South Asian thresholds")
+check(not has_heading("bmi-calculator", "How to measure consistently"),
+      "/bmi-calculator/ must not reintroduce superseded duplicate measurement guidance")
+check(not has_heading("bmi-calculator", "Pakistan and South Asia context"),
+      "/bmi-calculator/ must not reintroduce the superseded duplicate South Asia section")
+
+check(has_heading("profit-loss-calculator", "When product profit differs from operating profit"),
+      "/profit-loss-calculator/ must distinguish product profit from business operating profit with a worked example")
+
+def faq_questions(slug):
+    raw = (ROOT / slug / "index.html").read_text(encoding="utf-8")
+    main = re.search(r"<main\b[^>]*>(.*?)</main>", raw, re.S | re.I)
+    if not main:
+        return []
+    return [
+        re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", item))).strip()
+        for item in re.findall(r"<summary\b[^>]*>(.*?)</summary>", main.group(1), re.S | re.I)
+    ]
+
+zakat_questions = faq_questions("zakat-calculator")
+check(len(zakat_questions) == len(set(question.casefold() for question in zakat_questions)),
+      "/zakat-calculator/ must not repeat FAQ questions")
+check("Is Zakat due on my home?" not in zakat_questions and "Do I subtract debts?" not in zakat_questions,
+      "/zakat-calculator/ must not repeat the home and debt topics already answered in its main FAQs")
+
+profit_html = (ROOT / "profit-loss-calculator" / "index.html").read_text(encoding="utf-8")
+for repeated_heading in (
+    "Profit and loss in a business",
+    "Example with a loss",
+    "More common mistakes",
+    "Profit loss calculator: cost versus selling price",
+    "Profit margin versus markup: practical comparison",
+):
+    check(not has_heading("profit-loss-calculator", repeated_heading),
+          f"/profit-loss-calculator/ repeats material already explained in '{repeated_heading}'")
+check(has_heading("profit-loss-calculator", "Pakistan shop example: include direct selling costs"),
+      "/profit-loss-calculator/ must retain its distinctive local-cost example")
+
+# Urdu content must accurately describe the calculator modes exposed in the UI.
+ur_profit = page_text("ur/profit-loss-calculator")
+check("یہ کیلکولیٹر قیمت خرید پر فیصد دکھاتا ہے۔" not in ur_profit,
+      "/ur/profit-loss-calculator/ must not claim that every percentage uses cost as its base")
+for phrase in ("کاروباری موڈ", "آپریٹنگ منافع", "آپریٹنگ مارجن", "مارک اپ", "مجموعی مارجن", "PKR 880", "PKR 1,100", "PKR 220"):
+    check(phrase in ur_profit, "/ur/profit-loss-calculator/ is missing mode-specific explanation or the verified PKR example: " + phrase)
+
+ur_standard = page_text("ur/standard-calculator")
+check("نہیں۔ یہ روزمرہ کے بنیادی حساب کے لیے ہے۔" not in ur_standard,
+      "/ur/standard-calculator/ must not deny the Scientific Mode that the UI provides")
+for phrase in ("سائنسی موڈ", "قوت", "جذر", "لوگارتھم", "فیکٹوریل", "DEG", "RAD"):
+    check(phrase in ur_standard, "/ur/standard-calculator/ is missing a supported Scientific Mode explanation: " + phrase)
+
+ur_discount = page_text("ur/discount-calculator")
+check("ٹیکس آخری قیمت کے بعد شامل کریں۔" not in ur_discount,
+      "/ur/discount-calculator/ must not present one universal tax order")
+check("PKR 3,240" in ur_discount,
+      "/ur/discount-calculator/ must retain one concrete successive-discount example")
+check("ٹیکس کی بنیاد دکان اور مقامی قواعد کے مطابق مختلف ہو سکتی ہے" in ur_discount,
+      "/ur/discount-calculator/ must state that tax treatment varies and is excluded")
+
+ur_stopwatch = page_text("ur/stopwatch")
+check("ٹیب بدلنے پر بھی وقت درست رہتا ہے" not in ur_stopwatch,
+      "/ur/stopwatch/ must not guarantee accuracy when background-tab scheduling is variable")
+check("پس منظر میں ٹیب کی تازہ کاری میں تاخیر ہو سکتی ہے" in ur_stopwatch,
+      "/ur/stopwatch/ must explain the background-tab display limitation")
+
+for e in ERRORS:
+    print("FAIL:", e)
+print(f"{len(ERRORS)} failing checks")
+sys.exit(1 if ERRORS else 0)

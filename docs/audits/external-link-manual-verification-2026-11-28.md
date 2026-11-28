@@ -1,22 +1,23 @@
-# External-link manual verification â€” 28 November 2026
+# External link audit â€” 28 November 2026
 
-## Automated scan
+The automated scan inspected generated `public/` output across 49 HTML files plus CSS, JavaScript, JSON/JSON-LD, SVG, XML and text assets. It checked 77 unique external URLs using HEAD first, GET fallback, redirect following, bounded retries and separate blocked/network/TLS classifications.
 
-The auditor scanned the generated `public/` output after `build.py` and `seo_finalize.py`, not the source templates. It inspected 49 generated HTML files plus generated CSS, JavaScript, JSON/JSON-LD, SVG, XML and text assets. It discovered 77 unique external HTTP(S) URLs.
+| Result | Count |
+|---|---:|
+| Reachable | 59 |
+| 403 restricted | 13 |
+| Network/DNS unverified | 1 |
+| TLS/certificate unverified | 3 |
+| 429/transient | 1 |
+| Confirmed 404/410 | **0** |
 
-| Automated result | Count | Interpretation |
-|---|---:|---|
-| Reachable | 59 | HTTP success or successful redirect |
-| 403 blocked/restricted | 13 | Not labelled broken; bot protection or access restrictions are possible |
-| Network/DNS unverified | 1 | No conclusive HTTP response |
-| TLS/certificate unverified | 3 | Automated client could not complete TLS validation/handshake |
-| Transient server error unverified | 1 | HTTP 429; retry/manual verification required |
-| Confirmed 404/410 | 0 | No confirmed dead link remained in the final run |
+Ten of the 13 HTTP 403 pages opened in a normal browser/web reader (six CDC pages, two Islamic Relief pages, Mayo Clinic, and one IslamQA page). Three remain individually unverified:
+- `https://darulifta-deoband.com/home/en/qa/47525` â€” 403; Urdu and English Zakat pages.
+- `https://doi.org/10.2337/doci26-0003` â€” 403; English and Urdu BMI pages. The ADA publisher article is indexed, but the DOI resolver blocked automated readers.
+- `https://islamqa.org/hanafi/darulfiqh/156652/` â€” 403; Urdu and English Zakat pages.
 
-The run used HEAD first, GET fallback for ambiguous/unsupported responses, redirect following, a bounded redirect cap, two exponential-backoff retries, an 8-worker pool and a 12-second request timeout. The test suite uses a local HTTP server to prove 403 handling, 404/410 confirmation, HEAD fallback, redirects, retry behaviour, loop handling and URL discovery.
+The Canada.ca, USNO, National Assembly of Pakistan, Sindh Government PDF and AboutAds destinations were cross-checked through browser/search evidence. Their automated timeout/TLS/429 responses are not proof of dead links.
 
-Machine-readable evidence: `external-links-2026-11-28.json` and `external-links-2026-11-28.csv`. Human summary: `external-links-report-2026-11-28.md`.
+An earlier confirmed 404 NIST citation on Years-to-Days was removed. The Gregorian rule and 365.2425-day mean are now attributed to the official U.S. Naval Observatory leap-year guide. The correction is in this branch-generated output only; production remains unchanged until deployment.
 
-## Verified source correction
-
-A previous Years-to-Days citation to an obsolete NIS¶»§q«^
+The JSON and CSV files in this folder preserve the aggregate counts and the three individually unverified links. No link was replaced merely because of bot protection or a temporary transport error.
