@@ -642,7 +642,7 @@ for required in ("/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"
 vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert vercel_config.get("cleanUrls") is False, "Vercel cleanUrls must stay disabled so the Google ownership HTML file is served at its exact URL"
-legacy_urdu_zakat_routes = [route for route in vercel_config.get("routes", []) if route.get("src") == r"^/ur/zakat/?$"
+legacy_urdu_zakat_routes = [route for route in vercel_config.get("routes", []) if route.get("src") == r"^/ur/zakat/?$"]
 assert len(legacy_urdu_zakat_routes) == 1, "Historical /ur/zakat URL must redirect to the current Urdu Zakat calculator"
 legacy_urdu_zakat_route = legacy_urdu_zakat_routes[0]
 assert legacy_urdu_zakat_route.get("status") == 301 and legacy_urdu_zakat_route.get("headers", {}).get("Location") == "/ur/zakat-calculator/", "Legacy Urdu Zakat URL must permanently redirect to its current canonical page"
