@@ -32,6 +32,21 @@ all_html = "".join(p.read_text(encoding="utf-8") for p in ROOT.rglob("index.html
 check("Marketplace guide" not in all_html, "built pages still mention 'Marketplace guide'")
 check('href="/marketplaces/"' not in all_html, "a link to /marketplaces/ still exists")
 
+fazier_anchors = re.findall(
+    r'<a\\b(?=[^>]*\\bhref=["\\']https://fazier\\.com(?:/[^"\\']*)?["\\'])[^>]*>',
+    all_html,
+    flags=re.I,
+)
+for anchor in fazier_anchors:
+    rel_match = re.search(r'\\brel=["\\']([^"\\']*)["\\']', anchor, flags=re.I)
+    rel_tokens = set(rel_match.group(1).lower().split()) if rel_match else set()
+    check(bool(rel_tokens & {"nofollow", "sponsored"}),
+          "sitewide Fazier badge links must be qualified with rel=nofollow or rel=sponsored")
+    target_match = re.search(r'\\btarget=["\\']([^"\\']*)["\\']', anchor, flags=re.I)
+    if target_match and target_match.group(1).lower() == "_blank":
+        check(bool(rel_tokens & {"noopener", "noreferrer"}),
+              "sitewide Fazier badge opening a new tab must retain noopener or noreferrer")
+
 check("malikadeelbhatti@gmail.com" in page_text("contact"), "/contact/ does not show the contact email")
 check(AFFILIATE_PHRASE in page_text("affiliate-disclosure"),
       "/affiliate-disclosure/ must contain the exact phrase: " + AFFILIATE_PHRASE)
