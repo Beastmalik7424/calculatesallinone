@@ -642,6 +642,15 @@ for required in ("/affiliate-disclosure/", "/about/", "/privacy/", "/contact/"):
     assert SITE + required in sitemap_urls, f"Required public page missing from sitemap: {required}"
 vercel_config = json.loads(Path("vercel.json").read_text(encoding="utf-8"))
 assert vercel_config.get("cleanUrls") is False, "Vercel cleanUrls must stay disabled so the Google ownership HTML file is served at its exact URL"
+legacy_urdu_zakat_routes = [route for route in vercel_config.get("routes", []) if route.get("src") == r"^/ur/zakat/?$"]
+assert len(legacy_urdu_zakat_routes) == 1, "Historical /ur/zakat URL must redirect to the current Urdu Zakat calculator"
+legacy_urdu_zakat_route = legacy_urdu_zakat_routes[0]
+assert legacy_urdu_zakat_route.get("status") == 301 and legacy_urdu_zakat_route.get("headers", {}).get("Location") == "/ur/zakat-calculator/", "Legacy Urdu Zakat URL must permanently redirect to its current canonical page"
+route_list = vercel_config.get("routes", [])
+legacy_route_index = route_list.index(legacy_urdu_zakat_route)
+generic_slash_index = next(i for i, route in enumerate(route_list) if route.get("src") == r"^/(?!.*\.[^/]+$)(.*[^/])$")
+assert legacy_route_index < generic_slash_index, "Legacy Urdu Zakat redirect must precede the generic trailing-slash rule"
+assert SITE + "/ur/zakat-calculator/" in sitemap_urls, "Legacy Urdu Zakat redirect target must remain in the canonical sitemap"
 csp_header = next(item["value"] for item in vercel_config["headers"][0]["headers"] if item["key"] == "Content-Security-Policy")
 connect_src = re.search(r"(?:^|;)\s*connect-src\s+([^;]+)", csp_header)
 assert connect_src and all(host in connect_src.group(1).split() for host in ("https://ep1.adtrafficquality.google", "https://ep2.adtrafficquality.google")), (
