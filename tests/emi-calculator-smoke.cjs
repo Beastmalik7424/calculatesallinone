@@ -6,7 +6,7 @@ const vm = require("node:vm");
 // without a DOM, network, or third-party runtime.
 const html = fs.readFileSync("emi-calculator.html", "utf8");
 
-const footerMatch = html.match(/<footer\\b[\\s\\S]*?<\\/footer>/i);
+const footerMatch = html.match(/<footer\b[\s\S]*?<\/footer>/i);
 assert.ok(footerMatch, "EMI page must retain its footer");
 assert.match(footerMatch[0], /aria-label="Related calculators"/, "EMI footer navigation must identify both site policies and related tools");
 for (const path of ["/privacy/", "/terms/", "/about/", "/contact/"]) {
