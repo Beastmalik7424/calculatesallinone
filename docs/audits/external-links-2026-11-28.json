@@ -1,0 +1,53 @@
+{
+  "site": "https://calculateallinone.vercel.app",
+  "generated_at_utc": "2026-11-28T11:42:12Z",
+  "unique_external_urls": 77,
+  "category_counts": {
+    "blocked_or_restricted_unverified": 13,
+    "network_or_dns_unverified": 1,
+    "reachable": 59,
+    "tls_or_certificate_unverified": 3,
+    "transient_server_error_unverified": 1
+  },
+  "results": [
+    {
+      "url": "https://darulifta-deoband.com/home/en/qa/47525",
+      "status": 403,
+      "category": "blocked_or_restricted_unverified",
+      "method": "GET",
+      "final_url": "https://darulifta-deoband.com/home/en/qa/47525",
+      "redirect_count": 0,
+      "redirects": [],
+      "error": "Forbidden",
+      "attempts": [
+        {
+          "method": "HEAD",
+          "status": 403,
+          "error": "Forbidden"
+        },
+        {
+          "method": "GET",
+          "status": 403,
+          "error": "Forbidden"
+        }
+      ],
+      "pages": [
+        "ur/zakat-calculator/index.html",
+        "zakat-calculator/index.html"
+      ],
+      "sources": [
+        "html:text"
+      ]
+    },
+    {
+      "url": "https://doi.org/10.2337/doci26-0003",
+      "status": 403,
+      "category": "blocked_or_restricted_unverified",
+      "method": "GET",
+      "final_url": "https://diabetesjournals.org/docm-care/article/1/4/536/170058/Screening-Diagnosis-Evaluation-and-Staging-of",
+      "redirect_count": 1,
+      "redirects": [
+        {
+          "status": 302,
+          "from": "https://doi.org/10.2337/doci26-0003",
+        ¶»§q«^

@@ -1,0 +1,7 @@
+url,category,status,method,final_url,redirect_count,pages,sources,error
+https://darulifta-deoband.com/home/en/qa/47525,blocked_or_restricted_unverified,403,GET,https://darulifta-deoband.com/home/en/qa/47525,0,ur/zakat-calculator/index.html; zakat-calculator/index.html,html:text,Forbidden
+https://doi.org/10.2337/doci26-0003,blocked_or_restricted_unverified,403,GET,https://diabetesjournals.org/docm-care/article/1/4/536/170058/Screening-Diagnosis-Evaluation-and-Staging-of,1,bmi-calculator/index.html; ur/bmi-calculator/index.html,html:a:href,Forbidden
+https://islamqa.org/hanafi/answerstofatawa/118729/who-is-liable-to-pay-zakat/,blocked_or_restricted_unverified,403,GET,https://islamqa.org/hanafi/answerstofatawa/118729/who-is-liable-to-pay-zakat/,0,ur/zakat-calculator/index.html; zakat-calculator/index.html,html:a:href,Forbidden
+https://islamqa.org/hanafi/darulfiqh/156652/,blocked_or_restricted_unverified,403,GET,https://islamqa.org/hanafi/darulfiqh/156652/,0,ur/zakat-calculator/index.html; zakat-calculator/index.html,html:a:href; html:json-ld,Forbidden
+https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html,blocked_or_restricted_unverified,403,GET,https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html,0,bmi-calculator/index.html; health/index.html; ur/bmi-calculator/index.html,html:a:href; html:json-ld,Forbidden
+https://www.cdc.gov/bmi/adult-calculator/index.html,blocked_or_restricted_unverified,403,GET,https://www.cdc.gov/bmi/adult-calculator/index.html,0,health/¶»§q«^
