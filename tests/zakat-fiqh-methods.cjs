@@ -36,6 +36,13 @@ assert.equal(r.status, "payable");
 r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 50000 } });
 assert.equal(r.status, "below_nisab");
 assert.equal(r.zakatBeforePaid, 0);
+r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: "" } });
+assert.equal(r.totalAssets, 0, "empty asset fields must be treated as zero, not NaN");
+assert.equal(r.netAssets, 0);
+assert.equal(r.zakatBeforePaid, 0);
+assert.equal(r.status, "below_nisab");
+assert.throws(() => calculate({ ...base, silverPricePerGram: "" }), /current metal price/i,
+  "empty user-entered metal prices must be rejected with a clear validation error");
 r = calculate({ ...base, schoolOfThought: "sunni-hanafi", assets: { cash: 10000 }, liabilities: 20000 });
 assert.equal(r.netAssets, 0);
 assert.equal(r.zakatBeforePaid, 0);
