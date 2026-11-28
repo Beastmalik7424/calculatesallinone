@@ -81,6 +81,12 @@ const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, ""
     const tap = tasbih.locator("#t-tap");
     const undo = tasbih.locator("#t-undo");
     const reset = tasbih.locator("#t-reset");
+    const presetValues = await target.locator("option").evaluateAll(options => options.map(option => option.value));
+    for (const preset of ["33", "99", "100"]) {
+      assert.ok(presetValues.includes(preset), "preset target must be available: " + preset);
+      await target.selectOption(preset);
+      assert.equal(await target.inputValue(), preset, "preset target must be selectable: " + preset);
+    }
     await target.selectOption("33");
     for (let i = 0; i < 33; i++) await tap.click();
     assert.equal(await count.innerText(), "33", "33 taps must produce a count of 33");
