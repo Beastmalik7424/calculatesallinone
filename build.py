@@ -1868,7 +1868,7 @@ def shell(main_html, lang="en", current_path=None):
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">' + s["affiliate"] + '</a>'
         '</nav></div>'
         + lang_links(lang, s, current_path) +
-        '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
+        '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener nofollow"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
         '</div></footer>\n'
         + '<script src="/assets/zakat-calculator.js?v=' + ZAKAT_JS_ASSET_VERSION + '" defer></script>\n'
         + '<script src="/assets/app.js?v=' + APP_JS_ASSET_VERSION + '" defer></script>\n'
