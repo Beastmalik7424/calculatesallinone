@@ -98,6 +98,20 @@ const viewports = [
       await value.fill("1000001");
       await submit();
       assert.match(await result.innerText(), /Enter a number from 0 to 1,000,000/, "values above the supported maximum must be rejected");
+      for (const invalid of ["-1", "1000000000000", ""]) {
+        await value.fill(invalid);
+        await submit();
+        assert.match(await result.innerText(), /Enter a number from 0 to 1,000,000/,
+          "invalid, negative, empty and 1e12 year inputs must be rejected: " + invalid);
+      }
+      await value.evaluate(element => { element.type = "text"; element.value = "not-a-number"; });
+      await submit();
+      assert.match(await result.innerText(), /Enter a number from 0 to 1,000,000/,
+        "non-numeric year input must be rejected without NaN or Infinity");
+      await value.evaluate(element => { element.type = "number"; element.value = "10"; });
+      await submit();
+      assert.match(await result.innerText(), /10 years = 3,652\\.425 days/,
+        "calculator must recover cleanly after invalid input");
       await value.fill("80");
       await submit();
       assert.match(await result.innerText(), /80 years = 29,219\.4 days/);
