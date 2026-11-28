@@ -3,6 +3,7 @@
 phrases and date format. Does not check word counts (see tests/content-gates.py)."""
 import re
 import html
+import json
 import sys
 from pathlib import Path
 
