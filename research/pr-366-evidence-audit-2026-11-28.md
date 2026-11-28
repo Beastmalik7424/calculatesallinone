@@ -378,3 +378,22 @@ EMI matches were mainly formula fragments and common amortization wording; Tasbi
 ### Release gate
 
 Keep PR #366 OPEN and DRAFT. Do not merge or deploy Production until the updated branch has a READY exact-head preview, all required checks pass on that exact head, the Years-to-Days originality service is available or the content is independently reviewed, and remaining external account gates are explicitly resolved or accepted.
+
+## Exact current-head live preview verification — 28 November 2026
+
+Current PR head at verification: `7b1566ef92bca39473e0072d268ca0d57b8a1770`. The Vercel deployment lookup returned **READY** for this exact SHA:
+- Deployment: `dpl_DDzngmCcS1F1G4sgbdpL4RhqEpsX`
+- Preview: https://calculatesall-bsjeeaj02-malikadeelbhatti-1187.vercel.app
+- Environment: Preview only. No Production deployment was triggered.
+
+The authenticated Vercel deployment fetch returned HTTP 200 for the three priority calculator pages, homepage, `ads.txt`, `robots.txt`, `sitemap.xml`, and Privacy, About, Contact, Terms, Editorial Policy, Methodology and Advertising Disclosure pages. The three priority pages expose the expected production canonical URLs and `index, follow` robots directives. The Preview response's `X-Robots-Tag: noindex` is an expected preview-only safeguard, not the page's production robots directive. The sitemap contains 42 URLs and robots.txt includes a sitemap declaration.
+
+A direct HTML comparison against the current Production pages found the complete `#tool-calculator` section byte-identical for Tasbih, Years-to-Days and EMI. The shared CSS asset was HTTP 200 in both environments and byte-identical at 113,013 bytes. This independently verifies that the current preview has not shifted or restyled the three calculator interfaces. The CI viewport audit also remains green on this exact PR head (112 route/viewport scenarios, zero failures, as recorded in the PR check output). The authenticated fetch verifies deployed HTML and assets; it is not represented as a manual interactive live-browser session.
+
+The live `ads.txt` body is exactly `google.com, pub-9453966537556063, DIRECT, f08c47fec0942fa0`; it matches the public `google-adsense-account` meta publisher ID `ca-pub-9453966537556063`. The priority preview pages do not load `adsbygoogle.js`, consistent with the current disabled-ad state. A non-decrypting Production environment-variable inventory returned only `GEMINI_API_KEY`; neither `ADSENSE_SLOT` nor `ADSENSE_CONSENT_READY` is configured. No secret values were requested or read.
+
+A fresh complete-page originality retry submitted the full unmodified preview HTML (Tasbih 33,429 characters; Years-to-Days 66,935; EMI 67,821) to the connected checker. Tasbih and Years-to-Days returned HTTP 502; EMI returned provider-busy. This remains an unavailable external verification, not a failed originality score. No originality percentage or certificate is claimed.
+
+### Updated release interpretation
+
+The exact current PR head has successful CI, a READY Preview, HTTP 200 live-preview fetches, matching Production/Preview calculator markup, and byte-identical CSS. The earlier authenticated-preview page-fetch blocker is resolved for read-only HTML/assets. A full interactive live-browser session and full-document originality scoring remain unverified. The remaining AdSense account review and CMP/slot configuration cannot be completed from repository evidence alone. Keep PR #366 OPEN / DRAFT / UNMERGED and do not deploy Production without the account owner's explicit release decision.
