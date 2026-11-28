@@ -145,8 +145,8 @@ def remove_ineligible_software_app_from_html(raw, path):
     return re.sub(pattern, clean_script, raw, flags=re.S | re.I)
 
 
-def remove_ineligible_software_app(node):
-    """Remove ineligible app rich-result nodes while preserving their page-level entity links."""
+def remove_ineligible_software_app(node, keep_web_application=False):
+    """Remove unverified app rich-result nodes, retaining explicitly approved WebApplication entities."""
     if isinstance(node, list):
         apps = [item for item in node if isinstance(item, dict) and item.get("@type") == "WebApplication"]
         pages = [item for item in node if isinstance(item, dict) and item.get("@type") in ("WebPage", "AboutPage", "ProfilePage") ]
@@ -158,10 +158,10 @@ def remove_ineligible_software_app(node):
                 for key in ("author", "publisher", "citation"):
                     if key in app and key not in page:
                         page[key] = app[key]
-        return [cleaned for item in node if (cleaned := remove_ineligible_software_app(item)) is not None]
+        return [cleaned for item in node if (cleaned := remove_ineligible_software_app(item, keep_web_application=keep_web_application)) is not None]
     if isinstance(node, dict):
         if node.get("@type") == "WebApplication":
-            return None
+            return node if keep_web_application else None
         cleaned = {}
         for key, value in node.items():
             cleaned_value = remove_ineligible_software_app(value)
@@ -365,7 +365,16 @@ def main():
         # The site has no verified public app reviews, so remove this optional rich-result type
         # while transferring truthful author/publisher/citation links to the page entity.
         # Preserve the original page object because the sanitizer transfers those links to it.
-        schemas = remove_ineligible_software_app(schemas)
+        # Keep truthful application entities only on the four priority calculator
+        # pages requested for explicit WebApplication description. Do not add
+        # aggregate ratings or reviews that the site cannot substantiate.
+        keep_web_application = path in {
+            "/emi-calculator/", "/tasbih-counter/",
+            "/years-to-days-calculator/", "/zakat-calculator/"
+        }
+        schemas = remove_ineligible_software_app(
+            schemas, keep_web_application=keep_web_application
+        )
         page_schema_types = ("WebPage", "AboutPage", "ProfilePage")
         matching_page_index = next((i for i, item in enumerate(schemas)
                                     if isinstance(item, dict)
