@@ -150,7 +150,9 @@ jobs:
           node tests/years-to-days-browser.cjs
           node tests/homepage-responsive-browser.cjs
           node tests/all-calculator-layout-browser.cjs
+          BASE_URL=http://127.0.0.1:4174 node tests/emi-viewport-audit.cjs
           node tests/tool-pages-contrast-browser.cjs
+          node tests/cookie-consent-browser.cjs
       # Protected Vercel previews are verified separately through the authenticated Vercel connector.
       - name: Test safe monetization configuration
         run: python tests/monetization-smoke.py

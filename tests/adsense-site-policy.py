@@ -3,6 +3,7 @@
 phrases and date format. Does not check word counts (see tests/content-gates.py)."""
 import re
 import html
+import json
 import sys
 from pathlib import Path
 
@@ -32,6 +33,22 @@ all_html = "".join(p.read_text(encoding="utf-8") for p in ROOT.rglob("index.html
 check("Marketplace guide" not in all_html, "built pages still mention 'Marketplace guide'")
 check('href="/marketplaces/"' not in all_html, "a link to /marketplaces/ still exists")
 
+fazier_anchors = re.findall(
+    r"""<a\b(?=[^>]*\bhref=["']https://fazier\.com(?:/[^"']*)?["'])[^>]*>""",
+    all_html,
+    flags=re.I,
+)
+for anchor in fazier_anchors:
+    rel_match = re.search(r"""\brel=["']([^"']*)["']""", anchor, flags=re.I)
+    rel_tokens = set(rel_match.group(1).lower().split()) if rel_match else set()
+    check(bool(rel_tokens & {"nofollow", "sponsored"}),
+          "sitewide Fazier badge links must be qualified with rel=nofollow or rel=sponsored")
+    target_match = re.search(r"""\btarget=["']([^"']*)["']""", anchor, flags=re.I)
+    if target_match and target_match.group(1).lower() == "_blank":
+        check(bool(rel_tokens & {"noopener", "noreferrer"}),
+              "sitewide Fazier badge opening a new tab must retain noopener or noreferrer")
+
+
 check("malikadeelbhatti@gmail.com" in page_text("contact"), "/contact/ does not show the contact email")
 check(AFFILIATE_PHRASE in page_text("affiliate-disclosure"),
       "/affiliate-disclosure/ must contain the exact phrase: " + AFFILIATE_PHRASE)
@@ -44,8 +61,92 @@ check("No Google AdSense ad units are currently displayed" in privacy_text,
       "/privacy/ must distinguish the current no-ad state from future advertising.")
 check("does not currently load the AdSense ad-serving script" in privacy_text,
       "/privacy/ must accurately describe the current inactive ad-code state.")
+check("No consent management platform is currently active" in privacy_text,
+      "/privacy/ must not imply a CMP is already operating when no CMP is configured.")
+check("Google-certified CMP integrated with the IAB Transparency and Consent Framework (TCF)" in privacy_text,
+      "/privacy/ must state the certified-CMP/TCF prerequisite before regional personalized ads are enabled.")
+check("you will be asked for consent through a Google-certified consent message" not in privacy_text,
+      "/privacy/ must not promise a consent flow that is not currently deployed.")
 check("CalculatesAll may show advertising served by Google AdSense" not in privacy_text,
       "/privacy/ must not imply that AdSense is currently active.")
+for phrase in (
+    "Site operator: Muhammad Fayyaz Adeel, operating CalculateAllInOne",
+    "Jurisdiction: Punjab, Pakistan",
+    "DoubleClick",
+    "cookie_consent",
+    "November 28, 2026",
+    "Effective date: 28 November 2026",
+    "under 13",
+    "This policy governs Google AdSense and DoubleClick advertising if and when ads are enabled",
+):
+    check(phrase.casefold() in privacy_text.casefold(), "/privacy/ is missing required disclosure: " + phrase)
+# The four priority calculators must publish a truthful WebApplication entity,
+# one visible FAQPage, canonical metadata and the existing footer policy links.
+for slug in ("emi-calculator", "tasbih-counter", "years-to-days-calculator", "zakat-calculator"):
+    page_path = ROOT / slug / "index.html"
+    raw = page_path.read_text(encoding="utf-8")
+    check(len(re.findall(r"<h1\b", raw, re.I)) == 1,
+          f"/{slug}/ must contain exactly one H1.")
+    canonical = re.search(r"<link\b[^>]*rel=['\"]canonical['\"][^>]*href=['\"]([^'\"]+)", raw, re.I)
+    check(canonical is not None and canonical.group(1) == "https://calculateallinone.vercel.app/" + slug + "/",
+          f"/{slug}/ must have its exact self-referencing canonical.")
+    footer_match = re.search(r"<footer\b[^>]*>([\s\S]*?)</footer>", raw, re.I)
+    footer_html = footer_match.group(1) if footer_match else ""
+    for required_path in ("/privacy/", "/terms/", "/about/", "/contact/"):
+        check(f'href="{required_path}"' in footer_html,
+              f"/{slug}/ footer must link to {required_path}.")
+    parsed = []
+    for match in re.finditer(r"<script\b(?=[^>]*type=['\"]application/ld\+json['\"])[^>]*>([\s\S]*?)</script>", raw, re.I):
+        try:
+            value = json.loads(match.group(1))
+            parsed.extend(value if isinstance(value, list) else [value])
+        except json.JSONDecodeError:
+            check(False, f"/{slug}/ contains invalid JSON-LD.")
+    applications = [node for node in parsed if isinstance(node, dict) and node.get("@type") == "WebApplication"]
+    faqs = [node for node in parsed if isinstance(node, dict) and node.get("@type") == "FAQPage"]
+    check(len(applications) == 1, f"/{slug}/ must contain exactly one WebApplication entity.")
+    check(len(faqs) == 1, f"/{slug}/ must contain exactly one FAQPage entity.")
+    if applications:
+        app = applications[0]
+        check(app.get("url") == "https://calculateallinone.vercel.app/" + slug + "/",
+              f"/{slug}/ WebApplication URL must match the canonical.")
+        check(bool(app.get("name")) and bool(app.get("applicationCategory")) and app.get("operatingSystem") == "Any",
+              f"/{slug}/ WebApplication must describe the actual browser calculator.")
+        check(app.get("offers", {}).get("price") == "0",
+              f"/{slug}/ WebApplication must describe the free calculator accurately.")
+        check(not any(key in app for key in ("aggregateRating", "review", "reviews")),
+              f"/{slug}/ must not invent ratings or reviews.")
+    if faqs:
+        visible = page_text(slug)
+        questions = faqs[0].get("mainEntity", [])
+        check(bool(questions), f"/{slug}/ FAQPage must contain visible questions.")
+        for question in questions:
+            check(question.get("name", "") in visible,
+                  f"/{slug}/ FAQPage question must match visible content: {question.get('name', '')}")
+            answer = question.get("acceptedAnswer", {}).get("text", "")
+            check(bool(answer) and answer in visible,
+                  f"/{slug}/ FAQPage answer must match visible content: {question.get('name', '')}")
+
+privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
+check(re.search(r"""href=["']https://www.google.com/settings/ads["']""", privacy_html) is not None,
+      "/privacy/ must link to Google's Ads Settings opt-out.")
+check(re.search(r"""href=["']https://www.aboutads.info["']""", privacy_html) is not None,
+      "/privacy/ must link to the aboutads.info opt-out.")
+check(re.search(r"""<script\b[^>]*src=["']https://pagead2\.googlesyndication\.com/pagead/js/adsbygoogle\.js""", all_html, re.I) is None,
+      "AdSense must not be loaded in the initial HTML before explicit consent.")
+build_source = (Path("build.py")).read_text(encoding="utf-8")
+check("ADSENSE_CMP_VERIFIED" in build_source,
+      "AdSense must remain disabled until a verified CMP gate is configured.")
+cookie_script_path = ROOT / "assets" / "cookie-consent.js"
+check(cookie_script_path.exists(), "generated cookie-consent.js asset is missing.")
+if cookie_script_path.exists():
+    cookie_script = cookie_script_path.read_text(encoding="utf-8")
+    check("cookie_consent" in cookie_script and '"accepted"' in cookie_script and '"rejected"' in cookie_script,
+          "cookie-consent.js must persist accepted/rejected choices under cookie_consent.")
+    check("pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" in cookie_script,
+          "AdSense script must be loaded dynamically by the consent component only.")
+check('src="/assets/cookie-consent.js' in all_html,
+      "the consent component must be loaded on every generated page.")
 check("No AdSense ad units are currently displayed" in affiliate_text,
       "/affiliate-disclosure/ must accurately state that no ad units are active.")
 check("does not currently load the AdSense ad-serving script" in affiliate_text,
@@ -172,6 +273,40 @@ check("ٹیب بدلنے پر بھی وقت درست رہتا ہے" not in ur_st
       "/ur/stopwatch/ must not guarantee accuracy when background-tab scheduling is variable")
 check("پس منظر میں ٹیب کی تازہ کاری میں تاخیر ہو سکتی ہے" in ur_stopwatch,
       "/ur/stopwatch/ must explain the background-tab display limitation")
+
+ur_age = page_text("ur/age-calculator")
+check("28 فروری 2000" in ur_age and "1 مارچ 2024" in ur_age and "24 سال، 0 مہینے اور 2 دن" in ur_age,
+      "/ur/age-calculator/ must include a worked leap-day example with the verified calendar-age result")
+
+ur_discount = page_text("ur/discount-calculator")
+check("اصل قیمت = رعایت کے بعد قیمت ÷ (1 − ڈسکاؤنٹ فیصد ÷ 100)" in ur_discount and
+      "3,600 ÷ 0.80 = PKR 4,500" in ur_discount,
+      "/ur/discount-calculator/ must explain how to recover the original price from a discounted price")
+
+ur_unit = page_text("ur/unit-converter")
+for phrase in (
+    "وزن کے زمرے میں kg، g، lb اور oz دستیاب ہیں",
+    "لمبائی کے زمرے میں m، cm، km، ft، in اور mi",
+    "درجہ حرارت کے لیے °C، °F اور K موجود ہیں",
+    "1 lb = 0.45359237 kg",
+    "1 oz = 28.349523125 g",
+    "1 km = 1,000 m",
+    "1 ft = 30.48 cm",
+    "1 in = 2.54 cm",
+    "1 mi = 1,609.344 m",
+    "°F = (°C × 9 ÷ 5) + 32",
+    "K = °C + 273.15",
+):
+    check(phrase in ur_unit, "/ur/unit-converter/ is missing supported-unit detail or an exact conversion: " + phrase)
+
+# Exact, visible professional-advice disclaimers are required on finance and health tools.
+finance_health_disclaimer = "Disclaimer: This calculator provides mathematical estimates for informational and planning purposes only and does not constitute financial, tax, or medical advice."
+zakat_disclaimer = "Disclaimer: This calculator provides an estimate for planning purposes only and is not a religious ruling (fatwa). Confirm your Zakat obligation with a qualified Islamic scholar."
+for slug in ("emi-calculator", "bmi-calculator", "calorie-calculator"):
+    check(finance_health_disclaimer in page_text(slug),
+          f"/{slug}/ must show the exact finance/health informational disclaimer.")
+check(zakat_disclaimer in page_text("zakat-calculator"),
+      "/zakat-calculator/ must show the exact religious-guidance disclaimer.")
 
 for e in ERRORS:
     print("FAIL:", e)

@@ -87,7 +87,7 @@ years_to_days = (Path("public") / "years-to-days-calculator" / "index.html").rea
 title_line = next((line for line in years_to_days.splitlines() if "<title>" in line), "")
 assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in title_line, "Years-to-days title should name both supported conversion directions"
 description_line = next((line for line in years_to_days.splitlines() if '<meta name="description"' in line), "")
-assert 'How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date.' in description_line, "Years-to-days metadata must surface the GSC-backed 5-, 10- and 30-year answers and exact start-date option"
+assert 'How many days in 5, 10, 13, 19 or 30 years? Compare 365, 365.25 and 365.2425-day methods, or count exact Gregorian days from a start date.' in description_line, "Years-to-days metadata must surface useful 5-, 10-, 13-, 19- and 30-year examples and the exact start-date option"
 assert "Exact calendar years (years to days only)" in years_to_days, "Years-to-days UI must keep the exact-mode direction limitation visible"
 
 print("Money, Math and Time hub content, canonical/indexability and contextual links verified")

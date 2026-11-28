@@ -58,7 +58,7 @@
       calcStandardMode: "Standard Mode",
       calcDomainError: "Math domain error",
       tasbihNone: "No target set.",
-      tasbihReached: "Target of {goal} reached. Press Reset to start again.",
+      tasbihReached: "{count} of {goal} complete. Target reached. Press Reset to start again.",
       tasbihLeft: "{left} to go for a target of {goal}.",
       themeDark: "Dark mode",
       themeLight: "Light mode",
@@ -126,7 +126,7 @@
       calcStandardMode: "معیاری کیلکولیٹر",
       calcDomainError: "ریاضی کی حد سے باہر قدر",
       tasbihNone: "کوئی ہدف مقرر نہیں۔",
-      tasbihReached: "ہدف {goal} پورا ہو گیا۔ دوبارہ شروع کرنے کے لیے ری سیٹ دبائیں۔",
+      tasbihReached: "{count} میں سے {goal} مکمل۔ ہدف پورا ہو گیا۔ دوبارہ شروع کرنے کے لیے ری سیٹ دبائیں۔",
       tasbihLeft: "ہدف {goal} کے لیے {left} باقی۔",
       themeDark: "ڈارک موڈ",
       themeLight: "لائٹ موڈ",
@@ -174,7 +174,7 @@
       calcSqrtNegative: "الجذر التربيعي لعدد سالب ليس عددًا حقيقيًا.",
       calcNeedValue: "أدخل عددًا أو تعبيرًا أولًا.",
       tasbihNone: "لم يتم تحديد هدف.",
-      tasbihReached: "تم بلوغ الهدف {goal}. اضغط إعادة الضبط للبدء من جديد.",
+      tasbihReached: "اكتمل {count} من {goal}. تم بلوغ الهدف. اضغط إعادة الضبط للبدء من جديد.",
       tasbihLeft: "تبقّى {left} للوصول إلى الهدف {goal}.",
       themeDark: "الوضع الداكن",
       themeLight: "الوضع الفاتح",
@@ -218,7 +218,7 @@
       calcSqrtNegative: "ऋणात्मक संख्या का वर्गमूल वास्तविक संख्या नहीं है।",
       calcNeedValue: "पहले कोई संख्या या गणितीय अभिव्यक्ति दर्ज करें।",
       tasbihNone: "कोई लक्ष्य निर्धारित नहीं है।",
-      tasbihReached: "लक्ष्य {goal} पूरा हुआ। फिर से शुरू करने के लिए रीसेट दबाएँ।",
+      tasbihReached: "{count} में से {goal} पूरे। लक्ष्य पूरा हुआ। फिर से शुरू करने के लिए रीसेट दबाएँ।",
       tasbihLeft: "लक्ष्य {goal} तक {left} बाकी हैं।",
       themeDark: "डार्क मोड",
       themeLight: "लाइट मोड",
@@ -262,7 +262,7 @@
       calcSqrtNegative: "La raíz cuadrada de un número negativo no es un número real.",
       calcNeedValue: "Introduce primero un número o una expresión.",
       tasbihNone: "No se ha establecido ningún objetivo.",
-      tasbihReached: "Objetivo de {goal} alcanzado. Pulsa Reiniciar para empezar de nuevo.",
+      tasbihReached: "{count} de {goal} completados. Objetivo alcanzado. Pulsa Reiniciar para empezar de nuevo.",
       tasbihLeft: "Quedan {left} para alcanzar el objetivo de {goal}.",
       themeDark: "Modo oscuro",
       themeLight: "Modo claro",
@@ -306,7 +306,7 @@
       calcSqrtNegative: "La racine carrée d’un nombre négatif n’est pas un nombre réel.",
       calcNeedValue: "Saisissez d’abord un nombre ou une expression.",
       tasbihNone: "Aucun objectif défini.",
-      tasbihReached: "Objectif de {goal} atteint. Appuyez sur Réinitialiser pour recommencer.",
+      tasbihReached: "{count} sur {goal} terminés. Objectif atteint. Appuyez sur Réinitialiser pour recommencer.",
       tasbihLeft: "Encore {left} pour atteindre l’objectif de {goal}.",
       themeDark: "Mode sombre",
       themeLight: "Mode clair",
@@ -1541,7 +1541,7 @@
       }
       targetError.textContent = ""
       if (goal !== null && count >= goal) {
-        progress.textContent = t("tasbihReached", { goal: goal })
+        progress.textContent = t("tasbihReached", { goal: goal, count: Math.min(count, goal) })
         if (allowVibration && !lastTargetReached && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
           try { navigator.vibrate(80) } catch (err) { /* vibration is optional */ }
         }
@@ -1898,7 +1898,7 @@
       ]
 
       multilingualTerms.forEach(function (item) { question = question.replace(item[0], item[1]) })
-      // Normalize explicit thousands notation found in Search Console queries:
+      // Normalize explicit thousands notation in natural-language numeric input:
       // "14 thousand", "21k" and "1.3k" all represent numeric quantities.
       question = question.replace(/\b(\d+(?:\.\d+)?)\s*(?:thousand|k)\b/gi, function (match, amount) {
         return String(Number(amount) * 1000)
@@ -1970,7 +1970,7 @@
         return before + (value === null ? phrase : String(value))
       })
       // Normalize comma- and space-grouped thousands before extracting quantities.
-      // This supports GSC wording such as "1 125 days to years" and "36 500 days".
+      // This supports grouped numeric input such as "1 125 days to years" and "36 500 days".
       question = question.replace(/(?<=\d),(?=\d{3}(?:\D|$))/g, "")
         .replace(/(?<=\d)\s+(?=\d{3}(?:\D|$))/g, "")
 
@@ -2113,6 +2113,36 @@
       var partialNumbers = question.match(/(?:[0-9]+(?:[.][0-9]+)?|[.][0-9]+)/g) || []
       var partialTokens = question.match(/[a-z]+/g) || []
       var partialUnits = partialTokens.filter(function (word) { return !!aliases[word] })
+      // A bare numeric value is valid input, but it does not identify an
+      // operation or unit. Acknowledge it and ask for the missing context
+      // rather than returning the generic unsupported-question message or
+      // guessing what the user intended.
+      if (partialNumbers.length === 1 && partialUnits.length === 0 &&
+          /^[0-9]+(?:[.][0-9]+)?$/.test(question)) {
+        var bareValue = timeConversionNumber(partialNumbers[0])
+        if (bareValue === null) {
+          say("qt-result", "Enter a nonnegative number up to 1,000,000.")
+        } else {
+          say("qt-result", "You entered " + timeConversionFormat(bareValue) +
+            ". Please add a time unit or an operation so I can calculate an answer.")
+        }
+        return
+      }
+      // A quantity plus its unit is meaningful input, but a conversion target
+      // is still required. Never infer the requested target unit.
+      if (partialNumbers.length === 1 && partialUnits.length === 1 &&
+          !/(?:\bin\b|\bto\b|\binto\b|\bconvert\b|\bhow many\b|\bkitne\b|\bkitna\b)/.test(question)) {
+        var quantityValue = timeConversionNumber(partialNumbers[0])
+        if (quantityValue === null) {
+          say("qt-result", "Enter a nonnegative number up to 1,000,000.")
+        } else {
+          var quantityUnit = aliases[partialUnits[0]]
+          say("qt-result", "You entered " + timeConversionFormat(quantityValue) + " " +
+            quantityUnit + (quantityValue === 1 ? "" : "s") +
+            ". Which unit should I convert it into?")
+        }
+        return
+      }
       if (partialNumbers.length === 1 && partialUnits.length === 1 &&
           /(?:\bin\b|\bto\b|\binto\b|\bconvert\b|\bhow many\b|\bkitne\b|\bkitna\b)/.test(question)) {
         var partialValue = timeConversionNumber(partialNumbers[0])

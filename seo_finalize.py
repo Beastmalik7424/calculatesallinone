@@ -21,7 +21,7 @@ DESCRIPTION_FALLBACKS = {
     "/terms/": "Read the terms for using CalculatesAll's free calculators, including accuracy limits, professional-advice disclaimers and permitted use.",
     "/marketplaces/": "Review official marketplace resources and the setup requirements for digital products, affiliate links and compliant website monetization.",
     "/affiliate-disclosure/": "Read when CalculatesAll may earn affiliate commissions and how any future affiliate links will be identified to visitors.",
-    "/tasbih-counter/": "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count.",
+    "/tasbih-counter/": "Free Tasbih calculator and digital Tasbih counter. Tasbeeh counter with 33, 99, 100 or custom targets, undo and local saving when supported.",
     "/query-calculator/": "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits.",
 }
 URDU_DESCRIPTION_FALLBACKS = {
@@ -35,7 +35,7 @@ URDU_DESCRIPTION_FALLBACKS = {
     "/ur/tasbih-counter/": "ڈیجیٹل تسبیح کاؤنٹر میں گنتی، منتخب عبارت اور ہدف اسی براؤزر میں محفوظ رکھیں، جب مقامی اسٹوریج دستیاب ہو۔ گنتی واپس لینے اور ری سیٹ کرنے کا طریقہ دیکھیں۔",
 }
 VERIFIED_PAGE_UPDATE_DATES = {
-    # This date records the GSC-backed Urdu BMI search-intent explanation and source check.
+    # This date records the Urdu BMI search-intent explanation and source check.
     "/ur/bmi-calculator/": "2026-11-21",
     # This date records the new global Nisab, currency, asset and Urdu guidance update.
     "/zakat-calculator/": "2026-11-25",
@@ -44,15 +44,15 @@ VERIFIED_PAGE_UPDATE_DATES = {
     "/ur/zakat-calculator/": "2026-11-25",
     # This date records the age-page leap-day anniversary disclosure and boundary-test update.
     "/age-calculator/": "2026-11-11",
-    # This date records the GSC-backed question-led answers and snippet refresh; calculator methods remain unchanged.
+    # This date records the question-led answers and snippet refresh; calculator methods remain unchanged.
     "/years-to-days-calculator/": "2026-11-27",
-    # This date records the GSC-backed explanation of invalid cross-dimension conversion searches.
+    # This date records the explanation of invalid cross-dimension conversion searches.
     "/unit-converter/": "2026-11-21",
-    # This date records the GSC-backed Tasbih calculator and Tasbeeh-counter wording.
+    # This date records the Tasbih calculator and Tasbeeh-counter wording update.
     "/tasbih-counter/": "2026-11-27",
-    # This date records the GSC-backed online profit and loss calculator explanation.
+    # This date records the online profit and loss calculator explanation.
     "/profit-loss-calculator/": "2026-11-21",
-    # This date records the GSC-backed question-led examples and parser coverage refresh.
+    # This date records the question-led examples and parser coverage refresh.
     "/query-calculator/": "2026-11-27",
 }
 NO_SLASH_PATHS = ["/contact", "/editorial-policy", "/methodology", "/privacy", "/terms"]
@@ -145,8 +145,8 @@ def remove_ineligible_software_app_from_html(raw, path):
     return re.sub(pattern, clean_script, raw, flags=re.S | re.I)
 
 
-def remove_ineligible_software_app(node):
-    """Remove ineligible app rich-result nodes while preserving their page-level entity links."""
+def remove_ineligible_software_app(node, keep_web_application=False):
+    """Remove unverified app rich-result nodes, retaining explicitly approved WebApplication entities."""
     if isinstance(node, list):
         apps = [item for item in node if isinstance(item, dict) and item.get("@type") == "WebApplication"]
         pages = [item for item in node if isinstance(item, dict) and item.get("@type") in ("WebPage", "AboutPage", "ProfilePage") ]
@@ -158,10 +158,10 @@ def remove_ineligible_software_app(node):
                 for key in ("author", "publisher", "citation"):
                     if key in app and key not in page:
                         page[key] = app[key]
-        return [cleaned for item in node if (cleaned := remove_ineligible_software_app(item)) is not None]
+        return [cleaned for item in node if (cleaned := remove_ineligible_software_app(item, keep_web_application=keep_web_application)) is not None]
     if isinstance(node, dict):
         if node.get("@type") == "WebApplication":
-            return None
+            return node if keep_web_application else None
         cleaned = {}
         for key, value in node.items():
             cleaned_value = remove_ineligible_software_app(value)
@@ -206,7 +206,7 @@ def normalize_meta(raw, path, lang):
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
     if path == "/age-calculator/":
-        title = "Age Calculator | Years, Months & Days | CalculatesAll"
+        title = "Age Calculator by Date of Birth | CalculatesAll"
     if path == "/unit-converter/":
         title = "Unit Converter | Weight, Length & Temperature"
     desc = html.unescape(desc_match.group(1).strip())
@@ -220,7 +220,7 @@ def normalize_meta(raw, path, lang):
     "/query-calculator/": "Convert years, months, weeks and hours, calculate Gregorian age, and solve simple arithmetic in plain language. See supported methods and limits.",
     "/fraction-calculator/": "Add, subtract, multiply or divide two fractions and get a simplified result. The calculator keeps a positive denominator and explains the arithmetic steps.",
     "/stopwatch/": "Use a free online stopwatch in your browser with start, stop and reset controls. Measure elapsed time to hundredths of a second without installing an app.",
-    "/years-to-days-calculator/": "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date.",
+    "/years-to-days-calculator/": "How many days in 5, 10, 13, 19 or 30 years? Compare 365, 365.25 and 365.2425-day methods, or count exact Gregorian days from a start date.",
     "/profit-loss-calculator/": "Calculate product profit, business operating profit, loss, markup and margin from revenue, costs and expenses. Includes clear formulas and PKR examples.",
     "/worship/": "Use a browser-based tasbih counter for dhikr, set a target and keep your count on this device. The page explains local storage and reset behaviour.",
     "/zakat-calculator/": "Estimate Zakat in PKR or other currencies with Hanafi or Sayyid Sistani's limited Ja'fari method. Add cash, wallets, gold, silver and eligible debts."
@@ -238,9 +238,9 @@ def normalize_meta(raw, path, lang):
 }
     desc = description_overrides.get(path, urdu_description_overrides.get(path, desc))
     if path == "/tasbih-counter/":
-        desc = "Free online Tasbih calculator and digital Tasbih counter. Set 33, 99 or custom targets, undo taps and save on this device when supported."
+        desc = "Free Tasbih calculator and digital Tasbih counter. Tasbeeh counter with 33, 99, 100 or custom targets, undo and local saving when supported."
     if path == "/age-calculator/":
-        desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
+        desc = "Age calculator by date of birth: calculate exact years, months and days, plus total days lived as of today, with leap-year rules explained."
     if path == "/unit-converter/":
         desc = "Convert kilograms, grams, pounds, ounces, metric and imperial lengths, and Celsius, Fahrenheit or Kelvin. See formulas, examples and input limits."
     # This exact-intent date title is 63 characters and has a dedicated regression gate.
@@ -365,7 +365,16 @@ def main():
         # The site has no verified public app reviews, so remove this optional rich-result type
         # while transferring truthful author/publisher/citation links to the page entity.
         # Preserve the original page object because the sanitizer transfers those links to it.
-        schemas = remove_ineligible_software_app(schemas)
+        # Keep truthful application entities only on the four priority calculator
+        # pages requested for explicit WebApplication description. Do not add
+        # aggregate ratings or reviews that the site cannot substantiate.
+        keep_web_application = path in {
+            "/emi-calculator/", "/tasbih-counter/",
+            "/years-to-days-calculator/", "/zakat-calculator/"
+        }
+        schemas = remove_ineligible_software_app(
+            schemas, keep_web_application=keep_web_application
+        )
         page_schema_types = ("WebPage", "AboutPage", "ProfilePage")
         matching_page_index = next((i for i, item in enumerate(schemas)
                                     if isinstance(item, dict)

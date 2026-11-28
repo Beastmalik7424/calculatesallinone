@@ -102,8 +102,8 @@ HUB_EXTRA = {
     ],
     "worship": [
         ("How to use the tasbih counter", [
-            "Press the large button once for each dhikr. Choose a target of 33, 100 or 1000, or choose unlimited. The line under the count shows how many are left to reach the target.",
-            "Press reset to start again from zero. The count stays on the same device and browser, so you can continue after closing the page.",
+            "Press the large button once for each dhikr. Choose a preset target of 33, 99 or 100, or enter a custom target from 1 to 10,000. Use Undo to correct the last tap; Space or Enter can count from the keyboard. The line under the count shows how many remain.",
+            "Press Reset to start again from zero; the counter asks you to confirm first. When browser storage is available, the count, selected phrase and target stay on this device and browser. They do not sync across devices, and clearing browser data or using private browsing may remove them.",
         ]),
         ("Privacy of your count", [
             "The tasbih counter does not send your count to a server and does not create an account. Clearing your browser data removes the saved count, so press reset or keep a note if you want to keep a long record.",

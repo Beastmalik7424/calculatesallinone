@@ -16,7 +16,7 @@ SITE = "https://calculateallinone.vercel.app"
 CASES = {
     "tasbih-counter": {
         "title": "Tasbih Calculator Online | Dhikr Counter | CalculatesAll",
-        "description": "Free online Tasbih calculator and digital Tasbih counter. Set 33, 99 or custom targets, undo taps and save on this device when supported.",
+        "description": "Free Tasbih calculator and digital Tasbih counter. Tasbeeh counter with 33, 99, 100 or custom targets, undo and local saving when supported.",
         "form": 'id="tasbih-app"',
         "category": "/worship/",
         "related": ["/stopwatch/", "/zakat-calculator/", "/ur/tasbih-counter/"],
@@ -34,7 +34,7 @@ CASES = {
     },
     "years-to-days-calculator": {
         "title": "Years to Days Calculator | How Many Days in X Years?",
-        "description": "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date.",
+        "description": "How many days in 5, 10, 13, 19 or 30 years? Compare 365, 365.25 and 365.2425-day methods, or count exact Gregorian days from a start date.",
         "form": 'id="years-days-form"',
         "category": "/time/",
         "related": ["/date-calculator/", "/age-calculator/", "/query-calculator/", "/unit-converter/"],
@@ -88,6 +88,12 @@ def check_english_page(slug, spec):
     main = re.search(r"<main\b[^>]*>(.*?)</main>", source, re.S | re.I)
     assert main, f"Missing main landmark: {slug}"
     body = main.group(1)
+    if slug == "tasbih-counter":
+        lead_start = body.find('ca-tool-lead')
+        lead_end = body.find("</p>", lead_start)
+        intro = body[lead_start:lead_end] if lead_start >= 0 and lead_end >= 0 else ""
+        for required in ("33, 99, 100", "custom target", "Undo", "Space or Enter"):
+            assert required.lower() in intro.lower(), f"Tasbih first-screen intro must highlight {required}"
     h1_pos = body.find("<h1")
     form_pos = body.find(spec["form"])
     lead_match = re.search(r'<p class="[^"]*\bca-tool-lead\b[^"]*">', body)
@@ -174,7 +180,7 @@ def check_targeted_content():
             "70,000 days ÷ 365.2425 = 191.6535 years",
             "Exact calendar days depend on the start date",
             "U.S. Naval Observatory leap-year explanation",
-            "NIST's year definition",
+            "97 leap days in each 400-year cycle",
         ],
         "unit-converter": [
             "Maintained by Muhammad Fayyaz Adeel",
@@ -236,6 +242,13 @@ def check_targeted_content():
         content = visible_text(slug)
         for phrase in phrases:
             assert phrase.lower() in content.lower(), f"/{slug}/ is missing researched, user-facing content: {phrase}"
+    tasbih_faq = re.findall(r"<summary\b[^>]*>(.*?)</summary>", read_page("tasbih-counter"), re.S | re.I)
+    assert "What is a Tasbih calculator?" in [html.unescape(item).strip() for item in tasbih_faq], "Tasbih page must answer the exact calculator-intent question"
+    years_faq = re.findall(r"<summary\b[^>]*>(.*?)</summary>", read_page("years-to-days-calculator"), re.S | re.I)
+    years_faq = [html.unescape(item).strip() for item in years_faq]
+    assert "How many days in 19 years?" in years_faq, "Years-to-Days FAQ must answer the observed 19-year query"
+    assert "How many days in 30 years?" in years_faq, "Years-to-Days FAQ must answer the observed 30-year query"
+
     expected_dates = {
         "tasbih-counter": "2026-11-27",
         "years-to-days-calculator": "2026-11-27",
@@ -247,7 +260,8 @@ def check_targeted_content():
         assert f"Last updated: {expected_date}" in visible_text(slug), f"/{slug}/ must display its verified update date"
     years_html = read_page("years-to-days-calculator")
     assert "https://aa.usno.navy.mil/faq/leap_years" in years_html
-    assert "https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z" in years_html
+    assert "https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z" not in years_html, "The removed NIST URL must not be reintroduced after its live 404"
+    assert "97 leap days in each 400-year cycle" in years_html and "365.2425 days" in years_html, "The official USNO source must support the 400-year mean Gregorian calculation"
     unit_html = read_page("unit-converter")
     assert "https://nvlpubs.nist.gov/nistpubs/hb/2026/NIST.HB.44-2026.pdf" in unit_html
     assert "https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b9" in unit_html
@@ -291,13 +305,25 @@ def check_tasbih_content_structure():
         html.unescape(re.sub(r"<[^>]+>", " ", value)).strip()
         for value in re.findall(r"<summary\b[^>]*>(.*?)</summary>", body, re.S | re.I)
     ]
-    assert len(questions) == 6, f"Tasbih page should have six distinct FAQs, got {len(questions)}"
+    assert len(questions) == 7, f"Tasbih page should have seven distinct FAQs, got {len(questions)}"
     assert len({question.casefold() for question in questions}) == len(questions), "Tasbih FAQ questions must not be duplicated"
     content = visible_text("tasbih-counter")
+    assert "Set 33, 99, 100 or a custom target (1–10,000)" in content, "Tasbih introduction must foreground preset and custom targets"
+    assert "Space or Enter" in content and "Undo" in content, "Tasbih introduction must foreground keyboard counting and Undo"
     assert content.casefold().count("three groups of 33 presses") == 1, "The 99-count worked example must appear once"
     assert content.count("99 - 67 = 32") == 1, "The remaining-count arithmetic must appear once"
     assert "When browser storage is available, the current count, selected phrase and selected target" in content, "The page must accurately explain which settings persist"
     assert "does not sync across devices" in content.lower(), "The page must explain device-local storage"
+    for phrase in (
+        "Practical counting workflows and milestones",
+        "choose Custom target and enter 1,000",
+        "three groups of 33",
+        "ten sets of 100",
+        "polite live output",
+        "does not intercept your typing",
+        "when local storage is available",
+    ):
+        assert phrase.lower() in content.lower(), "Tasbih practical workflow or accessibility guidance is missing: " + phrase
 
 
 
@@ -319,11 +345,11 @@ def check_years_quick_reference():
             parsed.append((html.unescape(re.sub(r"<[^>]+>", "", year)).strip(), cells))
         return parsed
 
-    expected_years = ["2", "3", "4", "5", "7", "9", "10", "11", "12", "13", "14", "15", "16", "19", "20", "30"]
+    expected_years = ["2", "3", "4", "5", "7", "9", "10", "11", "12", "13", "14", "15", "16", "18", "19", "20", "21", "23", "28", "30", "60", "80"]
     quick_rows = table_rows(quick_match.group(1))
     actual_years = [year for year, _ in quick_rows]
     assert actual_years == expected_years, (
-        "Quick reference must prioritize observed three-month GSC year queries without changing its table structure; "
+        "Quick reference must prioritize common year values without changing its table structure; "
         f"expected={expected_years!r}, actual={actual_years!r}"
     )
 
@@ -341,9 +367,15 @@ def check_years_quick_reference():
         "14": ["5,110", "5,113.5", "5,113.395"],
         "15": ["5,475", "5,478.75", "5,478.6375"],
         "16": ["5,840", "5,844", "5,843.88"],
+        "18": ["6,570", "6,574.5", "6,574.365"],
         "19": ["6,935", "6,939.75", "6,939.6075"],
         "20": ["7,300", "7,305", "7,304.85"],
+        "21": ["7,665", "7,670.25", "7,670.0925"],
+        "23": ["8,395", "8,400.75", "8,400.5775"],
+        "28": ["10,220", "10,227", "10,226.79"],
         "30": ["10,950", "10,957.5", "10,957.275"],
+        "60": ["21,900", "21,915", "21,914.55"],
+        "80": ["29,200", "29,220", "29,219.4"],
     }
     assert dict(quick_rows) == expected_values, "Quick-reference arithmetic changed"
 
@@ -351,10 +383,10 @@ def check_years_quick_reference():
     full_match = re.search(r"<table\b[^>]*>(.*?)</table>", full_reference, re.S | re.I)
     assert full_match, "Expanded years-to-days reference table is missing"
     full_rows = table_rows(full_match.group(1))
-    assert len(full_rows) == 63, f"Expanded reference must contain 63 GSC-informed examples, got {len(full_rows)}"
+    assert len(full_rows) == 63, f"Expanded reference must contain 63 calculated examples, got {len(full_rows)}"
     assert set(expected_years).issubset({year for year, _ in full_rows}), "Quick-reference rows must remain in the expanded table"
-    assert "19" in {year for year, _ in full_rows}, "The 19-year GSC row must remain in the expanded reference"
-    gsc_missing_year_rows = {
+    assert "19" in {year for year, _ in full_rows}, "The 19-year conversion row must remain in the expanded reference"
+    expected_additional_year_rows = {
         "8": ["2,920", "2,922", "2,921.94"],
         "17": ["6,205", "6,209.25", "6,209.1225"],
         "18": ["6,570", "6,574.5", "6,574.365"],
@@ -365,11 +397,11 @@ def check_years_quick_reference():
         "65": ["23,725", "23,741.25", "23,740.7625"],
     }
     full_row_map = dict(full_rows)
-    for year, values in gsc_missing_year_rows.items():
-        assert full_row_map.get(year) == values, f"Expanded reference is missing the verified GSC row for {year} years"
+    for year, values in expected_additional_year_rows.items():
+        assert full_row_map.get(year) == values, f"Expanded reference is missing the expected calculated row for {year} years"
 
     visible = visible_text("years-to-days-calculator")
-    gsc_query_answers = (
+    common_query_answers = (
         ("How many days in 2 years?", "730.485 days"),
         ("How many days in 3 years?", "1,095.7275 days"),
         ("How many days in 4 years?", "1,460.97 days"),
@@ -379,11 +411,11 @@ def check_years_quick_reference():
         ("How many days in 19 years?", "6,939.6075 days"),
         ("How many days in 30 years?", "10,957.275 days"),
     )
-    for question, answer in gsc_query_answers:
+    for question, answer in common_query_answers:
         assert question in visible and answer in visible, (
-            "Years-to-Days content must directly answer observed GSC queries with verified values: " + question
+            "Years-to-Days content must directly answer common question examples with verified values: " + question
         )
-    assert "Last updated: 2026-11-27" in visible, "Visible update date must match the GSC-backed question-led answer and snippet refresh"
+    assert "Last updated: 2026-11-27" in visible, "Visible update date must match the question-led answer and snippet refresh"
     schemas = jsonld_documents(source, "years-to-days-calculator")
     webpage = next((item for item in schemas if item.get("@type") == "WebPage"), None)
     assert webpage and webpage.get("dateModified") == "2026-11-27", "Structured dateModified must match the visible update date"
@@ -400,7 +432,7 @@ def check_years_ten_year_faq():
         (item for item in faq_schema.get("mainEntity", []) if item.get("name") == "How many days in 10 years?"),
         None,
     )
-    assert question, "The GSC-observed 10-year query must have its own visible FAQ and FAQPage entry"
+    assert question, "The 10-year question must have its own visible FAQ and FAQPage entry"
     answer = question.get("acceptedAnswer", {}).get("text", "")
     for phrase in (
         "3,650 days",
@@ -419,6 +451,23 @@ def check_years_ten_year_faq():
         for value in re.findall(r"<summary\b[^>]*>(.*?)</summary>", main_match.group(1), re.S | re.I)
     ]
     assert "How many days in 10 years?" in summaries, "10-year answer must be visible as a user-facing FAQ, not only mentioned in guide prose"
+    content = visible_text("years-to-days-calculator").lower()
+    for phrase in (
+        "fixed 365-day convention",
+        "common year has 365 days and a leap year has 366 days",
+        "29 February is added",
+        "divisible by 4",
+        "divisible by 400",
+        "1900 was not a leap year",
+        "2000 was",
+        "97 leap days",
+        "mean year is exactly 365.2425 days",
+        "age example",
+        "contract example",
+        "project timeline example",
+        "do not subtract weekends, public holidays",
+    ):
+        assert phrase.lower() in content, "Years-to-Days practical method guidance is missing: " + phrase
 
 
 def check_bmi_content():

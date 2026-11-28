@@ -9,6 +9,7 @@ original_out = build.OUT
 original_client = build.ADSENSE_CLIENT
 original_slot = build.ADSENSE_SLOT
 original_consent_ready = build.ADSENSE_CONSENT_READY
+original_cmp_verified = build.ADSENSE_CMP_VERIFIED
 old_env_client = os.environ.get("ADSENSE_CLIENT")
 try:
     with tempfile.TemporaryDirectory() as temp:
@@ -24,11 +25,15 @@ try:
         build.ADSENSE_CLIENT = "ca-pub-1234567890123456"
         build.ADSENSE_SLOT = "1234567890"
         build.ADSENSE_CONSENT_READY = True
+        build.ADSENSE_CMP_VERIFIED = True
         slot = build.ad_slot()
         assert 'data-ad-client="ca-pub-1234567890123456"' in slot
         assert 'data-ad-slot="1234567890"' in slot
         page_head = build.head("Test", "Description", "/", [], lang="en")
-        assert "adsbygoogle.js?client=ca-pub-1234567890123456" in page_head
+        assert "adsbygoogle.js" not in page_head, "The ad library must never be emitted before browser consent."
+        assert '<meta name="ca-adsense-client" content="ca-pub-1234567890123456">' in page_head
+        assert '<meta name="ca-adsense-slot" content="1234567890">' in page_head
+        assert '<meta name="ca-adsense-consent-ready" content="true">' in page_head
 
         build.ADSENSE_SLOT = ""
         assert build.ad_slot() == "", "Ads must stay disabled when no real ad-unit slot is configured"
@@ -41,9 +46,15 @@ try:
         build.ADSENSE_CONSENT_READY = False
         assert build.ad_slot() == "", "Ad slots must stay disabled until consent readiness is confirmed"
         page_head_without_consent = build.head("Test", "Description", "/", [], lang="en")
-        assert "adsbygoogle.js" not in page_head_without_consent, "Do not download AdSense JavaScript before consent readiness is confirmed"
+        assert "adsbygoogle.js" not in page_head_without_consent, "Do not emit AdSense JavaScript before consent readiness is confirmed"
         assert '<meta name="google-adsense-account" content="ca-pub-1234567890123456">' in page_head_without_consent, "Ownership verification must remain available without the ad library"
         assert build.ad_slot() == "", "Ad slots must stay disabled until consent readiness is confirmed"
+
+        build.ADSENSE_CONSENT_READY = True
+        build.ADSENSE_CMP_VERIFIED = False
+        assert build.ad_slot() == "", "Ad slots must stay disabled until a certified CMP is verified"
+        page_head_without_cmp = build.head("Test", "Description", "/", [], lang="en")
+        assert "ca-adsense-client" not in page_head_without_cmp, "Ad configuration must remain absent until CMP verification"
 
         # Reject malformed, shortened, overlong, or incorrectly prefixed publisher IDs.
         for invalid_client in ("ca-pub-123", "ca-pub-" + "1" * 17, "pub-" + "1" * 16):
@@ -66,6 +77,7 @@ finally:
     build.ADSENSE_CLIENT = original_client
     build.ADSENSE_SLOT = original_slot
     build.ADSENSE_CONSENT_READY = original_consent_ready
+    build.ADSENSE_CMP_VERIFIED = original_cmp_verified
     if old_env_client is None:
         os.environ.pop("ADSENSE_CLIENT", None)
     else:

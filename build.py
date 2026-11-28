@@ -19,6 +19,8 @@ ADSENSE_SLOT = os.environ.get("ADSENSE_SLOT", "").strip()
 # Explicitly fail closed until the publisher confirms account-side consent setup.
 # This flag is a safeguard, not an automated check of AdSense/CMP account settings.
 ADSENSE_CONSENT_READY = os.environ.get("ADSENSE_CONSENT_READY", "").strip().lower() == "true"
+# Set only after a Google-certified CMP/TCF integration has been independently verified.
+ADSENSE_CMP_VERIFIED = os.environ.get("ADSENSE_CMP_VERIFIED", "").strip().lower() == "true"
 if ADSENSE_SLOT and not ADSENSE_SLOT.isdigit():
     raise SystemExit("ADSENSE_SLOT must contain digits only, using the slot ID from your AdSense ad unit")
 CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "malikadeelbhatti@gmail.com").strip()
@@ -671,9 +673,9 @@ TOOLS = [
         "category": "worship",
         "name": "Tasbih Counter",
         "app": "UtilitiesApplication",
-        "description": "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count.",
+        "description": "Free Tasbih calculator with 33, 99 or custom targets, Undo, Space/Enter counting and local saving when supported.",
         "h1": "Free Online Tasbih Counter",
-        "lead": "Count dhikr on this device. Choose a phrase and target, then undo a tap if needed.",
+        "lead": "Count dhikr on-device. Set 33, 99, 100 or a custom target (1–10,000). Undo taps. Press Space or Enter to count outside fields and controls.",
         "ui": (
             '<div class="ca-tasbih-shell max-w-lg mx-auto space-y-5" id="tasbih-app">'
             '<div class="ca-tasbih-settings">'
@@ -726,6 +728,18 @@ TOOLS = [
             ("Worked example: target and remaining count", [
                 "For a personal target of 99 presses and a current count of 67, the remaining amount is 99 - 67 = 32. Three groups of 33 presses make 3 x 33 = 99. This is an arithmetic example only; it does not prescribe a religious practice.",
             ]),
+            ("Online Tasbih counter or physical beads?", [
+                "Physical beads provide a tactile count and work without a phone, battery or browser. An online Tasbih counter is useful when a physical set is not nearby or when you want an Undo control and keyboard input. This page records deliberate button taps or supported key presses; it does not detect, listen to or verify recitation. Choose the method that suits your setting.",
+                "The counter keeps its current count in this browser on this device when local storage is available. It does not synchronize the count to another phone or browser. If you need a count that travels with you, use a separate written record or a service whose backup and privacy terms you have checked.",
+            ]),
+            ("Choosing a target without confusing it with a ruling", [
+                "A target of 33 with a current count of 21 leaves 33 - 21 = 12 presses. A target of 99 with a current count of 67 leaves 32 presses. A custom target such as 250 is simply a personal tracking value. The preset numbers are counter shortcuts, not a religious instruction or a claim that every phrase has a prescribed repetition count.",
+            ]),
+            ("Practical counting workflows and milestones", [
+                "A simple workflow is to select the phrase you intend to track, choose a personal target, and press Count one once for each count. You can use 33 as one short tracking session, 99 as three groups of 33, or 100 as a round-number personal target. These are counter milestones only; the page does not say that any number is obligatory or appropriate for every dhikr.",
+                "For a longer session, choose Custom target and enter 1,000. You can pause and return to the same browser on the same device when local storage is available. If you prefer smaller checkpoints, count in groups such as ten sets of 100 and use the displayed total to track progress. Undo removes one from the current count if you tap twice by mistake; Reset clears the current count only after confirmation.",
+                "Accessibility tips: the Count one button has a descriptive accessible name and the count is announced through a polite live output. With the page itself focused, Space or Enter can add one count. When focus is in a text field, select, button, link or other control, the page-level keyboard shortcut does not intercept your typing or control activation. The visible keyboard focus outline helps identify the active control.",
+            ]),
         ],
         "faq": [
             ("Is my count sent to a server?", "No. The count, phrase and target are stored in this browser on this device when storage is available. They are not uploaded to an account."),
@@ -734,6 +748,7 @@ TOOLS = [
             ("Can I use a custom phrase and target?", "Yes. Enter a custom phrase up to 40 characters and a whole-number target from 1 to 10,000. The counter records taps, not recitation."),
             ("What happens when I reach the target?", "The page shows a target-reached message and does not reset automatically. Press Reset and confirm if you want to clear the current count."),
             ("Can I count with a keyboard?", "Yes. Press Space or Enter when focus is not inside a form field or another control."),
+            ("What is a Tasbih calculator?", "A Tasbih calculator is a digital counter for recording deliberate taps for a selected or custom dhikr phrase. It tracks the count and optional personal target; it does not listen to, verify or assess recitation. It does not replace physical beads, which work without a phone or browser and provide a tactile count. An online counter can offer Undo and keyboard input, but this page stores the count only in the current browser when storage is available and does not sync it to another device."),
         ],
         "sources": "This page documents the counter's functionality only. It does not provide religious rulings or establish a required phrase or repetition count. For religious guidance, consult a qualified scholar or trusted teacher.",
     },
@@ -1253,7 +1268,7 @@ TOOLS.extend([
     {
         "slug": "years-to-days-calculator", "category": "time",
         "name": "Years to Days Calculator", "app": "UtilitiesApplication",
-        "description": "Convert years to days or days to years using 365, 365.25 or 365.2425-day methods. Use a start date for exact Gregorian calendar days.",
+        "description": "How many days in 5, 10, 13, 19 or 30 years? Compare 365, 365.25 and 365.2425-day methods, or count exact Gregorian days from a start date.",
         "h1": "Years to Days Calculator",
         "lead": "Convert years and days with 365, 365.25 or 365.2425-day methods. Use a start date to count exact calendar days.",
         "ui": (
@@ -1275,16 +1290,22 @@ TOOLS.extend([
         "guide": [
             ("Quick answers to common years-to-days questions", [
                 "How many days in 5 years? Using the 365.2425-day Gregorian mean, 5 years = 1,826.2125 days using the Gregorian average. The 365-day method gives 1,825 days, while the 365.25-day Julian average gives 1,826.25 days.",
-                "Search Console queries such as “5 years how many days”, “5 years is how many days”, “how many days are in 5 years”, and “5 years to days” express the same conversion intent. The 5-year row in the reference table answers all of these wordings. The same is true of “10 years in days”, “10 years is how many days”, and “how many days are in 10 years”. Other visible GSC quantities include 2, 13, 19 and 30 years, with wording such as “How many days are in 13 years?”, “How many days in 19 years?” and “How many days is 30 years?”. Use the matching year row rather than treating each wording as a different calculation.",
-                "Reverse questions such as “How many years are in 2,555 days?”, “2,555 days in years”, “14 thousand days to years”, “21k days in years” and “1.3k days in years” use the same day-to-year conversion. The reverse reference table includes the distinct day quantities visible in the supplied Search Console export. These query rows are site-level data, so they are not evidence that every wording was individually assigned to this page by Google.",
+                "Common question wordings such as “5 years how many days”, “5 years is how many days”, “how many days are in 5 years”, and “5 years to days” express the same conversion intent. The 5-year row in the reference table answers all of these wordings. The same is true of “10 years in days”, “10 years is how many days”, and “how many days are in 10 years”. Other useful examples include 2, 13, 19 and 30 years, with wording such as “How many days are in 13 years?”, “How many days in 19 years?” and “How many days is 30 years?”. Use the matching year row rather than treating each wording as a different calculation.",
+                "Reverse questions such as “How many years are in 2,555 days?”, “2,555 days in years”, “14 thousand days to years”, “21k days in years” and “1.3k days in years” use the same day-to-year conversion. The reverse reference table provides additional worked day-count examples using the same conversion methods. Each row is an illustrative calculation, not a claim about search volume or ranking.",
                 "How many days are in 5 and a half years? For a fixed 5.5-year duration, the 365-day method gives 2,007.5 days, the 365.25-day Julian average gives 2,008.875 days, and the 365.2425-day Gregorian average gives 2,008.83375 days. These are average-duration conversions, not exact counts between two calendar dates.",
                 "How many days are in 5 years and 4 months? Five years and four months equals 5 + 4/12 = 5.333333... average years. The 365-day method gives about 1,946.6667 days, the 365.25-day Julian average gives 1,948 days, and the 365.2425-day Gregorian average gives 1,947.96 days. This is an average-duration estimate because calendar months vary from 28 to 31 days. For an exact count, enter the actual start and end dates in the Date Difference Calculator.",
-                "How many days in 10 years? Using the 365.2425-day Gregorian mean, 10 years = 3,652.425 days. The 365-day method gives 3,650 days, while the 365.25-day Julian average gives 3,652.5 days. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory</a> explains the Gregorian leap-year rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST</a> defines the mean Gregorian year. This is an average conversion, not an exact count between two calendar dates.",
+                "How many days in 10 years? Using the 365.2425-day Gregorian mean, 10 years = 3,652.425 days. The 365-day method gives 3,650 days, while the 365.25-day Julian average gives 3,652.5 days. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory</a> explains the Gregorian leap-year rule and gives the mean Gregorian year. This is an average conversion, not an exact count between two calendar dates.",
                 "How many days in 19 years? Using the 365.2425-day Gregorian mean, 19 years = 6,939.6075 days. The 365-day method gives 6,935 days, while the 365.25-day Julian average gives 6,939.75 days. This is an average conversion, not an exact count between two calendar dates.",
                 "How many days in 30 years? Using the 365.2425-day Gregorian mean, 30 years = 10,957.275 days. The 365-day method gives 10,950 days, while the 365.25-day Julian average gives 10,957.5 days.",
                 "For the reverse question, 70,000 days ÷ 365.2425 = 191.6535 years using the Gregorian mean. This is a decimal-year estimate, not an exact calendar age.",
                 "Exact calendar days depend on the start date because the actual Gregorian interval may include leap days. Enter the start date and a whole number of years in Exact calendar years when you need the elapsed day count for a specific anniversary.",
-                "The Gregorian rule adds 97 leap days in each 400-year cycle, which produces the 365.2425-day average. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory leap-year explanation</a> describes the rule, and <a class='" + LINK + "' href='https://www.nist.gov/pml/time-and-frequency-division/popular-links/time-frequency-z/time-frequency-z-x-z' target='_blank' rel='noopener noreferrer'>NIST's year definition</a> identifies the average Gregorian year as 365.2425 days."
+                "Choosing a year-length method: use 365 days when a rule or agreement explicitly defines a year as 365 days, 365.25 days for the Julian-year average, and 365.2425 days for a mean Gregorian calendar-year conversion. These are different conventions, so none should be presented as the exact answer for every date range.",
+                "Standard-year and leap-year rules: a fixed 365-day convention treats every year as 365 days. In the Gregorian calendar, a common year has 365 days and a leap year has 366 days because 29 February is added. A year is a leap year when it is divisible by 4, except century years must also be divisible by 400. Therefore 1900 was not a leap year, while 2000 was. Across a complete 400-year Gregorian cycle there are 97 leap days, so the mean year is exactly 365.2425 days. This mean is an average, not the length of each individual calendar year.",
+                "Age example: someone born on 1 January 2020 reaches the tenth anniversary on 1 January 2030 after 3,653 elapsed calendar days. A 10 × 365.2425 estimate is 3,652.425 days, which is useful for an average duration but is not an exact birthday calculation. Use a birth-date age calculator or exact calendar dates for age.",
+                "Contract example: check the wording before converting a contract term. If it explicitly defines a year as 365 days, use the 365-day method. If it says calendar year or anniversary, count from the effective date and apply the contract's date and end-of-month clauses; the 365.2425 mean alone cannot determine a legal deadline.",
+                "Project timeline example: a five-year planning estimate is 1,825 days under a fixed 365-day convention and 1,826.2125 days using the Gregorian mean. For a committed start and end date, use exact calendar years. These figures are calendar-day estimates and do not subtract weekends, public holidays or business shutdowns.",
+                "For an exact interval, enter the start date and whole number of years in Exact calendar years. For example, 1 January 2020 to 1 January 2030 spans 3,653 days, while 1 January 2021 to 1 January 2031 spans 3,652 days. The Gregorian-average estimate for ten years is 3,652.425 days; it is an average, not a promise that every ten-year date interval contains that many whole days.",
+                "The Gregorian rule adds 97 leap days in each 400-year cycle, which produces the 365.2425-day average. The <a class='" + LINK + "' href='https://aa.usno.navy.mil/faq/leap_years' target='_blank' rel='noopener noreferrer'>U.S. Naval Observatory leap-year explanation</a> describes the rule and states that 97 leap days in each 400-year cycle produce an average Gregorian year of 365.2425 days."
             ])
         ],
         "faq": [
@@ -1297,6 +1318,8 @@ TOOLS.extend([
             ("How many days in 4 years?", "Using the 365.2425-day Gregorian average, 4 years = 1,460.97 days. The 365-day method gives 1,460 days, while the 365.25-day Julian average gives 1,461 days. Exact calendar days depend on the start date."),
             ("How many days in 10 years?", "Ten years is 3,650 days using a fixed 365-day year, or 3,652.425 days using the Gregorian average. The 365.25-day Julian average gives 3,652.5 days. An exact calendar interval depends on its start date: 1 Jan 2020 to 1 Jan 2030 is 3,653 days; 1 Jan 2021 to 1 Jan 2031 is 3,652 days. Use Exact calendar years with your start date for the actual count."),
             ("How many days are in 13 years?", "Using the 365.2425-day Gregorian average, 13 years is 4,748.1525 days (about 4,748.15 days). The exact count in a calendar interval can differ because leap days depend on the start date. Use Exact calendar years to count an actual 13-year anniversary interval."),
+            ("How many days in 19 years?", "Using the 365.2425-day Gregorian average, 19 years = 6,939.6075 days. A fixed 365-day method gives 6,935 days, and the 365.25-day Julian average gives 6,939.75 days. Exact calendar days depend on the start date."),
+            ("How many days in 30 years?", "Using the 365.2425-day Gregorian average, 30 years = 10,957.275 days. A fixed 365-day method gives 10,950 days, and the 365.25-day Julian average gives 10,957.5 days. Exact calendar days depend on the start date."),
         ],
         "sources": 'Julian year: exactly 365.25 days (<a class="' + LINK + '" href="https://ssd.jpl.nasa.gov/astro_par.html" target="_blank" rel="noopener noreferrer">NASA/JPL astrodynamic parameters</a>). Gregorian mean year: 365.2425 days over the 400-year cycle (<a class="' + LINK + '" href="https://aa.usno.navy.mil/faq/leap_years" target="_blank" rel="noopener noreferrer">U.S. Naval Observatory leap-year guidance</a>).'
     },
@@ -1488,7 +1511,7 @@ def write_review_sheet():
 def ad_slot():
     # Fail closed until valid IDs and account-side consent setup are confirmed.
     # ADSENSE_CONSENT_READY is a manual deployment safeguard, not CMP verification.
-    if not ADSENSE_CLIENT or not ADSENSE_SLOT or not ADSENSE_CONSENT_READY:
+    if not ADSENSE_CLIENT or not ADSENSE_SLOT or not ADSENSE_CONSENT_READY or not ADSENSE_CMP_VERIFIED:
         return ""
     return ('<div class="my-10 min-h-[100px]" aria-label="Advertisement">'
             '<ins class="adsbygoogle" style="display:block" data-ad-client="' + ADSENSE_CLIENT + '" '
@@ -1714,14 +1737,19 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         for code, href in alternates:
             alt += '<link rel="alternate" hreflang="' + code + '" href="' + SITE_URL + href + '">\n'
     ads = ""
-    # Use AdSense's lightweight ownership meta tag while ads are disabled.
-    # Download the ad library only when a real slot and the consent gate are enabled.
+    ads_config = ""
+    # Ownership verification is safe while ads are disabled. Never emit the
+    # ad-serving script in the initial HTML; the consent component loads it only
+    # after an accepted choice and the independently verified CMP gate.
     verification = ""
     if ADSENSE_CLIENT:
         verification = '<meta name="google-adsense-account" content="' + html.escape(ADSENSE_CLIENT, quote=True) + '">\n'
-    if ADSENSE_CLIENT and ADSENSE_SLOT and ADSENSE_CONSENT_READY:
-        ads = ('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
-               + ADSENSE_CLIENT + '" crossorigin="anonymous"></script>\n')
+    if ADSENSE_CLIENT and ADSENSE_SLOT and ADSENSE_CONSENT_READY and ADSENSE_CMP_VERIFIED:
+        ads_config = (
+            '<meta name="ca-adsense-client" content="' + html.escape(ADSENSE_CLIENT, quote=True) + '">\n'
+            '<meta name="ca-adsense-slot" content="' + html.escape(ADSENSE_SLOT, quote=True) + '">\n'
+            '<meta name="ca-adsense-consent-ready" content="true">\n'
+        )
     ld = ""
     for s in schema:
         # Add page language only to schema types that support inLanguage.
@@ -1765,7 +1793,7 @@ def head(title, desc, path, schema, lang="en", noindex=False, alternates=None):
         + '<meta name="theme-color" content="#f0f9ff">\n'
         + theme_script
         + '<link rel="stylesheet" href="/assets/site.css?v=' + CSS_ASSET_VERSION + '">\n'
-        + ld + ads + "</head>\n"
+        + ld + ads_config + ads + "</head>\n"
     )
 
 
@@ -1847,10 +1875,11 @@ def shell(main_html, lang="en", current_path=None):
         '<a class="' + LINK + ' min-h-[44px] inline-flex items-center" href="/affiliate-disclosure/">' + s["affiliate"] + '</a>'
         '</nav></div>'
         + lang_links(lang, s, current_path) +
-        '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
+        '<div class="mt-4"><a href="https://fazier.com" target="_blank" rel="noopener nofollow"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light" width="120" alt="Fazier badge" loading="lazy"></a></div>\n' +
         '</div></footer>\n'
         + '<script src="/assets/zakat-calculator.js?v=' + ZAKAT_JS_ASSET_VERSION + '" defer></script>\n'
         + '<script src="/assets/app.js?v=' + APP_JS_ASSET_VERSION + '" defer></script>\n'
+        + '<script src="/assets/cookie-consent.js?v=20261128" defer></script>\n'
         + '</body>\n</html>\n'
     )
 
@@ -1900,9 +1929,8 @@ def write(path, content):
 
 def years_to_days_reference_html():
     years_values = [0.2, 1, 1.5, 2, 2.6, 3, 3.5, 3.75, 4, 4.16667, 5, 5.5, 6, 6.66667, 6.83333, 7, 7.83333, 8, 8.5, 8.83333, 9, 9.25, 10, 11, 11.16667, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 28, 29, 29.4, 30, 31, 32, 34, 36, 40, 41, 43, 47, 48, 50, 59, 60, 65, 74, 75, 78, 80, 83, 90, 100, 10000]
-    # 2026-11-26 GSC export: 312 visible year/day/month-intent query rows.
-    # Include the distinct numeric year quantities in the expandable reference table.
-    quick_values = [2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 30]
+    # Include common numeric year quantities in the expandable reference table.
+    quick_values = [2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 23, 28, 30, 60, 80]
     def formatted(value):
         return format(value, ",.5f").rstrip("0").rstrip(".")
     def table_rows(values):
@@ -1921,7 +1949,7 @@ def years_to_days_reference_html():
            '<p class="' + P + '">A short comparison for common examples. Fixed-year methods are estimates; exact calendar totals depend on the start date.</p>'
            + table_start + table_rows(quick_values) + table_end
            + '<details id="years-days-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
-           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 63 GSC-informed years-to-days reference examples</summary>'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show all 63 years-to-days reference examples</summary>'
            + table_start + table_rows(years_values) + table_end
            + '</details><p class="' + P + '">For exact elapsed days between calendar dates, use Exact calendar years in the calculator above. The expanded table is a duration reference, not a substitute for a date-specific count.</p></section>')
     return out
@@ -1950,7 +1978,7 @@ def days_to_years_reference_html():
            '<p class="' + P + '">Convert days to decimal years by dividing by 365, 365.25 or 365.2425. Values are rounded to four decimal places; these are duration estimates, not calendar ages.</p>'
            + table_start + table_rows(quick_day_counts) + table_end
            + '<details id="days-years-full-reference" class="mt-4 rounded-lg border border-stone-300 dark:border-stone-700 p-4">'
-           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show 45 additional GSC-informed day-to-years examples</summary>'
+           '<summary class="cursor-pointer font-medium min-h-[44px] flex items-center">Show 45 additional day-to-years examples</summary>'
            + table_start + table_rows(additional_day_counts) + table_end
            + '</details><p class="' + P + '">A decimal-year result does not identify the exact calendar age or elapsed years. For an exact interval, enter the actual start and end dates in the Date Difference Calculator.</p></section>')
     return out
@@ -2132,7 +2160,7 @@ def tool_page(t):
         sources = t["sources"]
     elif t["slug"] == "tasbih-counter":
         title = "Tasbih Calculator Online | Dhikr Counter | CalculatesAll"
-        desc = "Free online Tasbih calculator for dhikr. Set 33, 99, 100 or custom targets, undo taps and track your count."
+        desc = "Free online Tasbih calculator for dhikr. Set 33, 99 or custom targets, undo taps, and count with Space or Enter."
         ui = t["ui"]
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
@@ -2158,6 +2186,14 @@ def tool_page(t):
         guide = t["guide"]
         faqs = t["faq"] + EXTRA[t["slug"]]["faq"]
         sources = t["sources"]
+    if t["slug"] == "tasbih-counter":
+        guide = guide + [("Convenience note", [
+            "This digital counter is a convenience tool for recording deliberate taps only. It is not religious guidance, a religious ruling, or a recommendation about any phrase or repetition count. Consult a qualified Islamic scholar or trusted teacher for religious questions."
+        ])]
+    elif t["slug"] == "years-to-days-calculator":
+        guide = guide + [("Convenience note", [
+            "This duration conversion is for general planning and convenience only. It is not a legal deadline, exact age determination or professional advice. For contracts, official records, birthdays and deadlines, count the actual start and end dates using the exact calendar method."
+        ])]
     ui = attach_notice_badge(ui, t["slug"], "en")
     schema = [
         {"@context": "https://schema.org", "@type": "WebApplication", "name": t["name"], "url": url,
@@ -2290,6 +2326,8 @@ def tool_page(t):
         + profit_reference_table
         + (years_to_days_reference_html() + guide_html(guide[:2]) + guide_html(guide[2:]) + days_to_years_reference_html()
            if t["slug"] == "years-to-days-calculator" else guide_html(guide))
+        + (('<p class="' + P + '"><strong>Disclaimer:</strong> This calculator provides mathematical estimates for informational and planning purposes only and does not constitute financial, tax, or medical advice.</p>') if t["category"] == "health" or t["slug"] == "calorie-calculator" else "")
+        + (('<p class="' + P + '"><strong>Disclaimer:</strong> This calculator provides an estimate for planning purposes only and is not a religious ruling (fatwa). Confirm your Zakat obligation with a qualified Islamic scholar.</p>') if t["slug"] == "zakat-calculator" else "")
         + '<h2 class="' + H2 + '">Common questions</h2><div class="mt-3">' + faq_html(faqs) + "</div>"
         + '<h2 class="' + H2 + '">' + ("Scope and religious guidance" if t["slug"] == "tasbih-counter" else "Sources") + '</h2><p class="' + P + '">' + sources + '</p>'
         + '<p class="mt-6 text-sm text-stone-700 dark:text-stone-300">Maintained by <a class="' + LINK + '" href="/about/">Muhammad Fayyaz Adeel</a>.</p>'
@@ -3027,13 +3065,16 @@ def main():
         ("/about/", "About CalculatesAll | Project, Methods & Privacy", "Meet the CalculatesAll maintainer, explore free browser calculators, and review methods, privacy and contact information.", "About CalculatesAll", ABOUT_EXTRA),
         ("/privacy/", "Privacy Policy | CalculatesAll", "Read how CalculatesAll handles calculator inputs, local browser storage, advertising technologies, cookies and privacy choices.", "Privacy Policy", [
             "This policy explains what information CalculatesAll handles when you use the website. It applies to every page on calculateallinone.vercel.app.",
+            "<strong>Site operator:</strong> Muhammad Fayyaz Adeel, operating CalculateAllInOne (also presented as CalculatesAll). Contact: " + '<a class=\'underline text-sky-800 dark:text-sky-300\' href=\'mailto:' + CONTACT_EMAIL + '\'>' + CONTACT_EMAIL + '</a>' + ". Jurisdiction: Punjab, Pakistan.",
             "<strong>Calculator entries.</strong> The numbers and dates you type into a calculator are processed by JavaScript in your own browser. They are not sent to our server and we do not keep a copy of them.",
-            "<strong>Data stored on your device.</strong> The tasbih counter saves your current count, chosen phrase and target in your browser's local storage, and the dark-mode setting is saved the same way. This information stays on your device. You can remove it at any time by clearing this site's data in your browser settings.",
-            "<strong>No accounts or analytics.</strong> CalculatesAll does not offer user accounts, does not run its own analytics and does not sell personal information. Like most websites, our hosting provider (Vercel) may process technical request data such as IP address, browser type and the page requested in order to deliver and secure the site.",
-            "<strong>Advertising and cookies.</strong> No Google AdSense ad units are currently displayed on CalculatesAll, and the site does not currently load the AdSense ad-serving script. The publisher ID and ads.txt seller record are present, but neither is an active ad unit. If advertising is enabled, the following applies: Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet. Google and its partners may also use web beacons, IP addresses and device identifiers to measure and protect advertising. Read <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>how Google uses information from sites that use its services</a> and the <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/ads' target='_blank' rel='noopener noreferrer'>Google advertising technologies page</a>.",
-            "<strong>Your choices.</strong> You can opt out of personalised advertising by visiting <a class='underline text-sky-800 dark:text-sky-300' href='https://adssettings.google.com/' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>. You can also opt out of some third-party vendors' use of cookies for personalised advertising at <a class='underline text-sky-800 dark:text-sky-300' href='https://www.aboutads.info/choices/' target='_blank' rel='noopener noreferrer'>www.aboutads.info</a>. Opting out stops personalised ads; you may still see non-personalised ads. You can also block or delete cookies in your browser settings.",
-            "<strong>Visitors in the EEA, UK and Switzerland.</strong> Where the law requires it, you will be asked for consent through a Google-certified consent message before personalised advertising cookies are used, and you can change your choice later.",
+            "<strong>Data stored on your device.</strong> The Tasbih counter saves your current count, chosen phrase and target in this browser's localStorage, and the dark-mode setting is saved the same way. This information stays on your device. You can remove it at any time by clearing this site's data in your browser settings.",
+            "<strong>No accounts or first-party analytics.</strong> CalculatesAll does not offer user accounts, does not currently run its own analytics and does not sell personal information. Like most websites, our hosting provider (Vercel) may process standard server request logs, including IP address, browser type, requested page and request time, to deliver and secure the site.",
+            "<strong>Advertising and cookies.</strong> No Google AdSense ad units are currently displayed on CalculatesAll, and the site does not currently load the AdSense ad-serving script. Ads may be introduced after Google approval and configuration. This policy governs Google AdSense and DoubleClick advertising if and when ads are enabled. Google and other third-party vendors use advertising cookies to serve and measure ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve personalized or non-personalized ads, manage frequency and protect advertising. DoubleClick and other Google advertising services may set or read cookies on your browser. Google and its partners may also use web beacons, IP addresses and device identifiers for advertising measurement and security. Read <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/partner-sites' target='_blank' rel='noopener noreferrer'>how Google uses information from sites that use its services</a> and the <a class='underline text-sky-800 dark:text-sky-300' href='https://policies.google.com/technologies/ads' target='_blank' rel='noopener noreferrer'>Google advertising technologies page</a>.",
+            "<strong>Your choices.</strong> You can opt out of personalised advertising by visiting <a class='underline text-sky-800 dark:text-sky-300' href='https://www.google.com/settings/ads' target='_blank' rel='noopener noreferrer'>Google Ads Settings</a>. You can also opt out of some third-party vendors' use of cookies for personalised advertising at <a class='underline text-sky-800 dark:text-sky-300' href='https://www.aboutads.info' target='_blank' rel='noopener noreferrer'>www.aboutads.info</a>. Opting out stops personalised ads; you may still see non-personalised ads. You can also block or delete cookies in your browser settings.",
+            "<strong>Cookie preference.</strong> The Accept/Reject banner stores your optional advertising choice in this browser's localStorage under the key cookie_consent, with the value accepted or rejected. This is a browser-specific preference, not an account record. You can clear it by deleting this site's local data in your browser settings.",
+            "<strong>Visitors in the EEA, UK and Switzerland.</strong> No consent management platform is currently active on this website. The first-party Accept/Reject banner records a local preference but is not a Google-certified CMP or an IAB Transparency and Consent Framework (TCF) integration. Before personalised advertising is enabled for visitors in the EEA, UK or Switzerland, the site will use a Google-certified CMP integrated with the IAB Transparency and Consent Framework (TCF) and provide the required consent choices.",
             "<strong>Children.</strong> CalculatesAll is a general-audience website. It is not directed at children under 13 and we do not knowingly collect personal information from children.",
+            "<strong>Effective date:</strong> 28 November 2026 (November 28, 2026).",
             "<strong>External links.</strong> Some pages link to official sources such as the World Health Organization or NIST. Those websites have their own privacy policies.",
             "<strong>Changes and contact.</strong> If this policy changes, the updated version will be published on this page. For privacy questions, email <a class='underline text-sky-800 dark:text-sky-300' href='mailto:" + CONTACT_EMAIL + "'>" + CONTACT_EMAIL + "</a>.",
         ]),

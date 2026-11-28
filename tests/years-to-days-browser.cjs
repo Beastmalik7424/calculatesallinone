@@ -68,10 +68,61 @@ const viewports = [
       // Forward conversion: Gregorian average and fixed Julian year.
       await direction.selectOption("years-to-days");
       await method.selectOption("365.2425");
+      // Plain numeric inputs remain supported for the common query quantities.
+      for (const [years, expected] of [
+        ["5", /5 years = 1,826\.2125 days/],
+        ["10", /10 years = 3,652\.425 days/],
+        ["13", /13 years = 4,748\.1525 days/]
+      ]) {
+        await value.fill(years);
+        await submit();
+        assert.match(await result.innerText(), expected, years + " years must use the Gregorian mean");
+      }
+      await value.fill("2.5");
+      await submit();
+      assert.match(await result.innerText(), /2\.5 years = 913\.10625 days/, "fractional years must preserve the Gregorian mean");
+      await method.selectOption("365");
+      await value.fill("10");
+      await submit();
+      assert.match(await result.innerText(), /10 years = 3,650 days/, "fixed 365-day years must remain available");
+      await method.selectOption("365.2425");
+      await value.fill("0");
+      await submit();
+      assert.match(await result.innerText(), /0 years = 0 days/, "zero years must convert to zero days");
+      await value.fill("0.5");
+      await submit();
+      assert.match(await result.innerText(), /0.5 years = 182\.62125 days/, "decimal years must retain the selected Gregorian mean");
+      await value.fill("1000000");
+      await submit();
+      assert.match(await result.innerText(), /1,000,000 years = 365,242,500 days/, "maximum supported year input must remain finite and accurate");
+      await value.fill("1000001");
+      await submit();
+      assert.match(await result.innerText(), /Enter a number from 0 to 1,000,000/, "values above the supported maximum must be rejected");
+      for (const invalid of ["-1", "1000000000000", ""]) {
+        await value.fill(invalid);
+        await submit();
+        assert.match(await result.innerText(), /Enter a number from 0 to 1,000,000/,
+          "invalid, negative, empty and 1e12 year inputs must be rejected: " + invalid);
+      }
+      await value.evaluate(element => { element.type = "text"; element.value = "not-a-number"; });
+      await submit();
+      assert.match(await result.innerText(), /Enter a number from 0 to 1,000,000/,
+        "non-numeric year input must be rejected without NaN or Infinity");
+      await value.evaluate(element => { element.type = "number"; element.value = "10"; });
+      await submit();
+      assert.match(await result.innerText(), /10 years = 3,652\.425 days/,
+        "calculator must recover cleanly after invalid input");
       await value.fill("80");
       await submit();
       assert.match(await result.innerText(), /80 years = 29,219\.4 days/);
+      await value.fill("19");
+      await submit();
+      assert.match(await result.innerText(), /19 years = 6,939\.6075 days/);
+      await value.fill("30");
+      await submit();
+      assert.match(await result.innerText(), /30 years = 10,957\.275 days/);
 
+      await value.fill("80");
       await method.selectOption("365.25");
       await submit();
       assert.match(await result.innerText(), /80 years = 29,220 days/);
@@ -79,6 +130,12 @@ const viewports = [
       // Reverse conversion: average months are explicitly estimates, not calendar months.
       await direction.selectOption("days-to-years");
       await method.selectOption("365.2425");
+      await value.fill("0");
+      await submit();
+      assert.match(await result.innerText(), /0 days = 0 years/);
+      await value.fill("1000000");
+      await submit();
+      assert.match(await result.innerText(), /1,000,000 days = 2,737\.907/);
       await value.fill("1188");
       await submit();
       assert.match(await result.innerText(), /Approximate breakdown: 3 years, 3 months and 0\.96 days/);
@@ -97,6 +154,12 @@ const viewports = [
       await method.selectOption("calendar");
       const startDate = page.locator("#yd-start-date");
       await startDate.fill("2024-01-01");
+      await value.fill("0");
+      await submit();
+      assert.match(await result.innerText(), /0 calendar years = 0 days/);
+      await value.fill("1.5");
+      await submit();
+      assert.match(await result.innerText(), /Enter a whole number of years/, "exact calendar mode must reject decimal years");
       await value.fill("4");
       await submit();
       assert.match(await result.innerText(), /1,461 days/);

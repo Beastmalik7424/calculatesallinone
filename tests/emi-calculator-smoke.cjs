@@ -5,6 +5,13 @@ const vm = require("node:vm");
 // Exercise the exact calculation engine shipped in the standalone EMI page,
 // without a DOM, network, or third-party runtime.
 const html = fs.readFileSync("emi-calculator.html", "utf8");
+
+const footerMatch = html.match(/<footer\b[\s\S]*?<\/footer>/i);
+assert.ok(footerMatch, "EMI page must retain its footer");
+assert.match(footerMatch[0], /aria-label="Related calculators"/, "EMI footer navigation must identify both site policies and related tools");
+for (const path of ["/privacy/", "/terms/", "/about/", "/contact/"]) {
+  assert.ok(footerMatch[0].includes('href="' + path + '"'), "EMI footer must link to " + path);
+}
 // Guard the standalone page metadata because it bypasses the shared page-head builder.
 assert.match(html, /<html lang="en" dir="ltr">/, "EMI page must declare its language and text direction");
 assert.match(html, /name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/, "EMI viewport must match the site safe-area behavior");
@@ -16,6 +23,11 @@ assert.match(scheduleRegion[1], /\baria-label="Repayment schedule"/, "Scrollable
 assert.ok(html.includes('property="og:image" content="https://calculateallinone.vercel.app/assets/og-image.png"'), "EMI page must use the generated canonical social preview image");
 assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), "EMI page must expose a large social preview");
 assert.ok(html.includes("For a 5 lakh loan EMI estimate, enter 500,000 as the loan amount"), "EMI page must answer the observed 5 lakh loan EMI query without assuming a rate or term");
+assert.match(html, /<summary>How do I estimate the EMI for a 5 lakh loan\?<\/summary>/, "EMI FAQ must answer the observed 5 lakh loan query");
+assert.ok(html.includes('name="description" content="Calculate monthly EMI, total interest and repayment schedule. Compare two loans, model prepayments and estimate affordability before reviewing a lender offer."'), "EMI meta description should describe the calculator outputs without promotional filler");
+assert.ok(html.includes('property="og:description" content="Calculate monthly EMI, total interest and repayment schedule. Compare two loans, model prepayments and estimate affordability before reviewing a lender offer."'), "EMI Open Graph description must match the search snippet");
+assert.ok(html.includes('name="twitter:description" content="Calculate monthly EMI, total interest and repayment schedule. Compare two loans, model prepayments and estimate affordability before reviewing a lender offer."'), "EMI Twitter description must match the search snippet");
+assert.match(html, /The loan amount alone is not enough to calculate EMI; enter the annual rate and repayment term too\./, "EMI 5-lakh FAQ must not invent an installment without a rate and term");
 assert.ok(html.includes("Pakistan loan EMI calculator") && html.includes("monthly instalment"), "EMI guide must use relevant Pakistan loan and monthly instalment search language");
 assert.ok(html.includes("reducing-balance") && html.includes("flat-rate markup"), "EMI guide must distinguish reducing-balance EMI from flat-rate markup");
 const schemaBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
@@ -23,7 +35,13 @@ const schemaBlocks = [...html.matchAll(/<script\b[^>]*type="application\/ld\+jso
 const schemas = schemaBlocks.flatMap(schema => Array.isArray(schema) ? schema : [schema]);
 const byType = type => schemas.filter(schema => schema["@type"] === type);
 assert.equal(byType("FAQPage").length, 1, "EMI page must contain exactly one FAQPage schema block");
-assert.equal(byType("WebApplication").length, 0, "EMI page must not publish ineligible SoftwareApplication rich-result markup");
+assert.ok(byType("FAQPage")[0].mainEntity.some(item => item.name === "How do I estimate the EMI for a 5 lakh loan?" && item.acceptedAnswer.text.includes("The loan amount alone is not enough")), "EMI FAQ schema must match the visible 5-lakh answer");
+assert.equal(byType("WebApplication").length, 1, "EMI page must describe the real web calculator without claiming ratings");
+const emiApplication = byType("WebApplication")[0];
+assert.equal(emiApplication.url, "https://calculateallinone.vercel.app/emi-calculator/");
+assert.equal(emiApplication.offers.price, "0");
+assert.equal("aggregateRating" in emiApplication, false);
+assert.equal("review" in emiApplication, false);
 assert.equal(byType("WebSite").length, 1, "EMI page must link to the canonical WebSite entity");
 assert.equal(byType("Organization").length, 1, "EMI page must link to the canonical Organization entity");
 assert.equal(byType("Person").length, 1, "EMI page must link to the named maintainer entity");
@@ -66,7 +84,8 @@ if (fs.existsSync(generatedEmiPath)) {
   for (const type of ["WebSite", "Organization", "Person", "WebPage", "BreadcrumbList", "FAQPage"]) {
     assert.equal(generatedTypes(type).length, 1, "Generated EMI page must retain exactly one " + type + " entity");
   }
-  assert.equal(generatedTypes("WebApplication").length, 0, "Generated EMI page must not reintroduce WebApplication markup");
+  assert.equal(generatedTypes("WebApplication").length, 1, "Generated EMI page must retain its truthful WebApplication entity");
+  assert.equal(generatedTypes("WebApplication")[0].url, "https://calculateallinone.vercel.app/emi-calculator/");
 }
 
 // Regression guard: the standalone EMI page must retain global site navigation and a centered, responsive calculator column.
@@ -100,7 +119,7 @@ function throws(fn) {
 test("amount parser accepts grouped decimals exactly", () =>
   Engine.parseAmount("1,000,000.50", { min: 1, max: 1000000000 }).value === 100000050);
 test("amount parser rejects negative, blank, exponent, malformed commas, excess decimals and injection", () =>
-  ["-5", "", "abc", "1e5", "1,00", "12.345", "<img onerror=alert(1)>"].every(
+  ["-5", "", "abc", "1e5", "1e12", "1000000000000", "1,00", "12.345", "<img onerror=alert(1)>"].every(
     value => !Engine.parseAmount(value, { min: 1, max: 1000000000 }).ok
   ));
 test("amount parser enforces configured bounds", () =>
@@ -126,6 +145,12 @@ test("zero-interest loan has no interest and equal principal installments", () =
   Engine.emiCents(12000000, 0, 12) === 1000000 &&
   zeroRate.totalInterestCents === 0 &&
   zeroRate.totalPaymentCents === 12000000);
+const fiveYear = Engine.buildSchedule(100000000, 12, 60);
+test("five-year 1,000,000 loan at 12 percent has the exact reducing-balance EMI and reconciled totals", () =>
+  Engine.emiCents(100000000, 12, 60) === 2224445 &&
+  fiveYear.totalInterestCents === 33466680 &&
+  fiveYear.totalPaymentCents === 133466680 &&
+  fiveYear.totalPaymentCents - 100000000 === fiveYear.totalInterestCents);
 const oneMonth = Engine.buildSchedule(10000000, 12, 1);
 test("one-month loan pays principal plus one month's interest", () =>
   Engine.emiCents(10000000, 12, 1) === 10100000 &&

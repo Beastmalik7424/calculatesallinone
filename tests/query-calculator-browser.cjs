@@ -18,7 +18,7 @@ const { chromium } = require("playwright");
     assert.equal(await result.count(), 1);
 
     const inputCases = [
-      // Full Search Console-style questions must bind the unit after the
+      // Full natural-language questions must bind the unit after the
       // quantity as the source, even when the target unit appears earlier.
       ["How many days are in 5 years?", /5 years ≈ 1,826\.21 days/i],
       ["How many days in 5 years?", /5 years ≈ 1,826\.21 days/i],
@@ -27,6 +27,9 @@ const { chromium } = require("playwright");
       ["Convert 5 years into days.", /5 years ≈ 1,826\.21 days/i],
       ["How many days are in ten years?", /10 years ≈ 3,652\.43 days/i],
       ["How many days are in thirteen years?", /13 years ≈ 4,748\.15 days/i],
+      ["How many days in 19 years?", /19 years ≈ 6,939\.61 days/i],
+      ["How many days is 30 years?", /30 years ≈ 10,957\.28 days/i],
+      ["How many days are in 1,000 years?", /1,000 years ≈ 365,242\.5 days/i],
       ["How many days is five years?", /5 years ≈ 1,826\.21 days/i],
       ["How many days are in 5 and a half years?", /5\.5 years ≈ 2,008\.83 days/i],
       ["How many days are in five and a half years?", /5\.5 years ≈ 2,008\.83 days/i],
@@ -66,6 +69,20 @@ const { chromium } = require("playwright");
       const actual = await result.innerText();
       assert.match(actual, expected, question + " => " + actual);
     }
+
+    // Bare numeric input is valid but must not guess a unit or operation.
+    await input.fill("5");
+    await input.press("Enter");
+    assert.match(await result.innerText(), /You entered 5\. Please add (?:a time )?unit or (?:an )?operation/i);
+
+    await input.fill("5 years");
+    await input.press("Enter");
+    assert.match(await result.innerText(), /You entered 5 years\. Which unit should I convert it into\?/i);
+
+    // Full questions containing numeric digits must return deterministic arithmetic.
+    await input.fill("What is 125 plus 75?");
+    await input.press("Enter");
+    assert.match(await result.innerText(), /125 \+ 75 = 200/);
 
     const localeCases = [
       ["en", /years = .*days.*months.*weeks/i],

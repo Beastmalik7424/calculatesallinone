@@ -11,7 +11,7 @@ const elements = {
 };
 const document = {
   documentElement: { lang: "en", classList: { contains: () => false } },
-  addEventListener(type, fn) { if (type === "DOMContentLoaded") handlers.ready = fn; },
+  addEventListener(type, fn) { if (type === "DOMContentLoaded") handlers.ready = fn; else if (type === "keydown") handlers.keydown = fn; },
   getElementById(id) { return elements[id] || null; },
   querySelectorAll() { return []; }
 };
@@ -44,6 +44,18 @@ function enter(keys) {
 
 assert.equal(enter([".", "5"]), "0.5", "leading decimal must be parsed as a fraction");
 assert.equal(enter(["2", "+", "3", "*", "4"]), "14", "multiplication must precede addition");
+
+// Plain digits and operators typed on a physical/mobile keyboard must work.
+press("C");
+for (const key of ["1", "2", "5", "+", "7", "5"]) {
+  handlers.keydown({ key, target: { tagName: "BODY" }, preventDefault() {} });
+}
+handlers.keydown({ key: "Enter", target: { tagName: "BODY" }, preventDefault() {} });
+assert.equal(elements["calc-display"].textContent, "200", "keyboard digits and operators must calculate accurately");
+// Typing into a text input (such as the natural-language Query Calculator) must not be hijacked.
+press("C");
+handlers.keydown({ key: "7", target: { tagName: "INPUT" }, preventDefault() {} });
+assert.equal(elements["calc-display"].textContent, "0", "calculator keyboard handler must ignore text inputs");
 assert.equal(enter(["2", "*", "(", "3", "+", "4", ")"]), "14", "parentheses must group expressions");
 assert.equal(enter(["1", "/", "0"]), "Cannot divide by zero", "division by zero must show a safe error");
 assert.equal(enter(["9", "sqrt"]), "3", "square root of a perfect square must calculate correctly");

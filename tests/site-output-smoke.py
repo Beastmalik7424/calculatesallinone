@@ -262,10 +262,11 @@ assert "How many years are in 2,555 days?" in query_html, "Query Calculator must
 assert "How many hours are in 3 weeks?" in query_html, "Query Calculator should demonstrate a full sentence outside the years-to-days topic"
 assert query_html.index('id="qt-question"') < query_html.index("Calculate Answer") < query_html.index("Examples:"), "Query Calculator must keep the primary action before the expanded example copy"
 years_html = output_for_url(SITE + "/years-to-days-calculator/").read_text(encoding="utf-8")
-assert "Last updated: 2026-11-27" in years_html, "Years-to-days visible update date must match the 27 November 2026 GSC-backed question-answer refresh"
+assert "GSC-informed" not in years_html and "Search Console queries" not in years_html, "Years-to-Days visible content must not claim an unverified Search Console source"
+assert "Last updated: 2026-11-27" in years_html, "Years-to-days visible update date must match the 27 November 2026 question-answer refresh"
 assert "<title>Years to Days Calculator | How Many Days in X Years?</title>" in years_html, "Years-to-Days title should match the observed how-many-days-in-years search intent"
-_years_snippet = "How many days in 5, 10 or 30 years? See 1,826.2125, 3,652.425 and 10,957.275 days. Compare fixed-year methods or count exact days from a start date."
-assert f'<meta name="description" content="{_years_snippet}">' in years_html, "Years-to-Days search snippet must surface the GSC-backed 5-, 10- and 30-year answers"
+_years_snippet = "How many days in 5, 10, 13, 19 or 30 years? Compare 365, 365.25 and 365.2425-day methods, or count exact Gregorian days from a start date."
+assert f'<meta name="description" content="{_years_snippet}">' in years_html, "Years-to-Days search snippet must surface useful 5-, 10-, 13-, 19- and 30-year examples"
 assert f'<meta property="og:description" content="{_years_snippet}">' in years_html, "Years-to-Days Open Graph description must match the search snippet"
 assert f'<meta name="twitter:description" content="{_years_snippet}">' in years_html, "Years-to-Days Twitter description must match the search snippet"
 assert "Days to years" in years_html and "1,009 days" in years_html and "2 years, 9 months and 4.58 days" in years_html, "Years-to-Days page should explain the reverse conversion example and month estimate"
@@ -280,30 +281,30 @@ for phrase in (
     "1.3k days in years",
     "10,000",
 ):
-    assert phrase in years_html, "Years-to-Days page is missing a GSC-backed query family: " + phrase
-assert years_html.count('scope="row" class="border-b p-3"') == 137, "All 16 quick, 63 year and 58 reverse-day reference rows must be present"
+    assert phrase in years_html, "Years-to-Days page is missing a common question example: " + phrase
+assert years_html.count('scope="row" class="border-b p-3"') == 143, "All 22 quick, 63 year and 58 reverse-day reference rows must be present"
 assert 'id="days-years-full-reference"' in years_html, "Reverse day-to-years reference must be collapsible rather than exposing all 58 rows by default"
-assert "Show 45 additional GSC-informed day-to-years examples" in years_html, "Expanded reverse reference should disclose the 45 additional examples"
+assert "Show 45 additional day-to-years examples" in years_html, "Expanded reverse reference should disclose the 45 additional examples"
 
-assert "Show all 63 GSC-informed years-to-days reference examples" in years_html, "The expanded reference must advertise all 63 GSC-informed year examples"
-assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must answer the observed Search Console query using all three year conventions"
-# The 2026-11-26 three-month GSC export supports the expanded year-value set; the quick table prioritizes repeated query amounts.
+assert "Show all 63 years-to-days reference examples" in years_html, "The expanded reference must advertise all 63 calculated year examples"
+assert '<tr><th scope="row" class="border-b p-3">12</th><td class="border-b p-3">4,380</td><td class="border-b p-3">4,383</td><td class="border-b p-3">4,382.91</td></tr>' in years_html, "The 12-year row must show all three year conventions"
+# Keep the expanded reference values independently reproducible from the three conversion formulas.
 _year_4_row = '<tr><th scope="row" class="border-b p-3">4</th><td class="border-b p-3">1,460</td><td class="border-b p-3">1,461</td><td class="border-b p-3">1,460.97</td></tr>'
 _year_7_row = '<tr><th scope="row" class="border-b p-3">7</th><td class="border-b p-3">2,555</td><td class="border-b p-3">2,556.75</td><td class="border-b p-3">2,556.6975</td></tr>'
 _year_9_row = '<tr><th scope="row" class="border-b p-3">9</th><td class="border-b p-3">3,285</td><td class="border-b p-3">3,287.25</td><td class="border-b p-3">3,287.1825</td></tr>'
 _year_15_row = '<tr><th scope="row" class="border-b p-3">15</th><td class="border-b p-3">5,475</td><td class="border-b p-3">5,478.75</td><td class="border-b p-3">5,478.6375</td></tr>'
 _year_19_row = '<tr><th scope="row" class="border-b p-3">19</th><td class="border-b p-3">6,935</td><td class="border-b p-3">6,939.75</td><td class="border-b p-3">6,939.6075</td></tr>'
-assert years_html.count(_year_4_row) == 2, "The 4-year GSC query row must appear in both reference tables"
-assert years_html.count(_year_7_row) == 2, "The 7-year GSC query row must appear in both reference tables"
-assert years_html.count(_year_9_row) == 2, "The 9-year GSC query row must appear in both reference tables"
-assert years_html.count(_year_15_row) == 2, "The 15-year GSC query row must appear in both reference tables"
-assert years_html.count(_year_19_row) == 2, "The 19-year GSC query row must appear in both reference tables"
+assert years_html.count(_year_4_row) == 2, "The 4-year row must appear in both reference tables"
+assert years_html.count(_year_7_row) == 2, "The 7-year row must appear in both reference tables"
+assert years_html.count(_year_9_row) == 2, "The 9-year row must appear in both reference tables"
+assert years_html.count(_year_15_row) == 2, "The 15-year row must appear in both reference tables"
+assert years_html.count(_year_19_row) == 2, "The 19-year row must appear in both reference tables"
 assert years_html.count("<summary") >= 4, "Years-to-Days FAQs must remain visible as concise collapsible questions"
 years_faq_html = years_html.split("Common questions", 1)[1]
-assert "How many days in 10 years?" in years_faq_html and "3,652.425 days" in years_faq_html and "1 Jan 2020 to 1 Jan 2030 is 3,653 days" in years_faq_html, "The 10-year GSC query must be answered in the visible FAQ, not only guide prose"
+assert "How many days in 10 years?" in years_faq_html and "3,652.425 days" in years_faq_html and "1 Jan 2020 to 1 Jan 2030 is 3,653 days" in years_faq_html, "The 10-year question must be answered in the visible FAQ, not only guide prose"
 assert "For exact calendar dates, this calculator counts whole calendar days between anniversaries." in years_html, "Exact calendar explanation must use the approved wording"
 assert "For this calculator’s date-only anniversary method" not in years_html, "Obsolete date-only anniversary wording must be removed"
-assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 63 GSC-informed years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
+assert years_html.index('id="years-days-form"') < years_html.index("Quick reference: years to days") < years_html.index("Show all 63 years-to-days reference examples"), "Calculator and short reference must precede the expanded table"
 for phrase in (
     "Choose a conversion method",
     "Days = Years × Selected days per year.",
@@ -313,7 +314,7 @@ for phrase in (
     "Inputs range from 0 to 1,000,000.",
 ):
     assert phrase in years_html, f"Years-to-Days guide must preserve verified method, precision and input-limit detail: {phrase}"
-_gsc_day_examples = (
+_reverse_day_examples = (
     "1,068 2.9260 2.9240 2.9241",
     "1,188 3.2548 3.2526 3.2526",
     "1,297 3.5534 3.5510 3.5511",
@@ -322,18 +323,17 @@ _gsc_day_examples = (
 )
 _years_text = html_lib.unescape(re.sub(r"<[^>]+>", " ", years_html))
 _years_text = re.sub(r"\s+", " ", _years_text).strip()
-_missing_gsc_days = [value for value in _gsc_day_examples if value not in _years_text]
+_missing_reverse_days = [value for value in _reverse_day_examples if value not in _years_text]
 _table_pos = _years_text.find("Worked reference: days to years")
-assert not _missing_gsc_days, f"Missing GSC day-count rows {_missing_gsc_days}; actual table text: {_years_text[_table_pos:_table_pos + 800]}"
+assert not _missing_reverse_days, f"Missing reverse day-count examples {_missing_reverse_days}; actual table text: {_years_text[_table_pos:_table_pos + 800]}"
 assert "How many years and months are in 1,188 days?" in years_html and "3 years, 3 average months and 0.96 days" in years_html, "The 1,188-day reverse estimate must remain as a worked example"
 assert "29,200" in years_html and "29,220" in years_html and "29,219.4" in years_html, "The 80-year row must show all verified conversion methods"
 assert "36,500" in years_html and "36,525" in years_html and "36,524.25" in years_html, "The 100-year row must show all verified conversion methods"
 assert all(value in years_html for value in ("1,460", "1,461", "1,460.97", "4,015", "4,017.75", "4,017.6675", "4,745", "4,748.25", "4,748.1525")), "Quick reference table should include the 11- and 13-year conversions for all methods"
-assert years_html.count("<summary") == 11, "The page must have nine concise FAQs plus two collapsible reference tables"
+assert years_html.count("<summary") == 13, "The page must have eleven concise FAQs plus two collapsible reference tables"
 for question in ("Which year-length methods can I use?", "Does exact calendar mode include leap days?", "Can I convert days to years?", "Can exact calendar mode use decimal years?", "How many days are in 13 years?"):
     assert question in years_html, f"Missing behavior-accurate FAQ: {question}"
-# The latest finalized GSC query sample included additional year counts. Keep the
-# reference table useful for those exact intents, and verify each value with Decimal.
+# Keep the reference table useful for common year counts, and verify each value with Decimal.
 _year_reference_expected = {
     "1.5": ("547.5", "547.875", "547.86375"),
     "4": ("1,460", "1,461", "1,460.97"),
@@ -417,16 +417,16 @@ for url in urls:
         )
     if url == SITE + "/tasbih-counter/":
         assert html_lib.unescape(title_match.group(1)) == "Tasbih Calculator Online | Dhikr Counter | CalculatesAll", (
-            "Tasbih title must reflect relevant Search Console query intent without keyword stuffing."
+            "Tasbih title must reflect relevant user search intent without keyword stuffing."
         )
-        assert desc_match.group(1) == "Free online Tasbih calculator and digital Tasbih counter. Set 33, 99 or custom targets, undo taps and save on this device when supported.", (
+        assert desc_match.group(1) == "Free Tasbih calculator and digital Tasbih counter. Tasbeeh counter with 33, 99, 100 or custom targets, undo and local saving when supported.", (
             "Tasbih description must be specific, useful and aligned with the page."
         )
     if url == SITE + "/age-calculator/":
-        assert html_lib.unescape(title_match.group(1)) == "Age Calculator | Years, Months & Days | CalculatesAll", (
+        assert html_lib.unescape(title_match.group(1)) == "Age Calculator by Date of Birth | CalculatesAll", (
             "Age calculator title must communicate its exact-age use case."
         )
-        assert desc_match.group(1) == "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation.", (
+        assert desc_match.group(1) == "Age calculator by date of birth: calculate exact years, months and days, plus total days lived as of today, with leap-year rules explained.", (
             "Age calculator description must be useful and page-specific."
         )
     if url == SITE + "/unit-converter/":
@@ -652,6 +652,9 @@ generic_slash_index = next(i for i, route in enumerate(route_list) if route.get(
 assert legacy_route_index < generic_slash_index, "Legacy Urdu Zakat redirect must precede the generic trailing-slash rule"
 assert SITE + "/ur/zakat-calculator/" in sitemap_urls, "Legacy Urdu Zakat redirect target must remain in the canonical sitemap"
 csp_header = next(item["value"] for item in vercel_config["headers"][0]["headers"] if item["key"] == "Content-Security-Policy")
+assert "https://news.google.com" not in csp_header.split(), (
+    "CSP must not allow the unused Google Preferred Sources origin after its publisher integration was removed."
+)
 connect_src = re.search(r"(?:^|;)\s*connect-src\s+([^;]+)", csp_header)
 assert connect_src and all(host in connect_src.group(1).split() for host in ("https://ep1.adtrafficquality.google", "https://ep2.adtrafficquality.google")), (
     "CSP connect-src must allow only the exact Google Ad Traffic Quality endpoints observed in production."
@@ -683,12 +686,15 @@ privacy_html = (ROOT / "privacy" / "index.html").read_text(encoding="utf-8")
 assert not (ROOT / "marketplaces").exists(), "Internal marketplace setup guide must not be published"
 assert SITE + "/marketplaces/" not in sitemap_urls, "Removed marketplace guide must not be in the sitemap"
 for required_text in (
-    "Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites",
-    "Google's use of advertising cookies enables it and its partners to serve ads",
+    "Google and other third-party vendors use advertising cookies to serve and measure ads based on a user's prior visits to this website or other websites",
+    "Google's use of advertising cookies enables it and its partners to serve personalized or non-personalized ads",
+    "DoubleClick",
+    "cookie_consent",
+    "November 28, 2026",
     "https://policies.google.com/technologies/partner-sites",
-    "https://adssettings.google.com/",
-    "https://www.aboutads.info/choices/",
-    "Google-certified consent message",
+    "https://www.google.com/settings/ads",
+    "https://www.aboutads.info",
+    "No consent management platform is currently active",
     "web beacons", "IP addresses",
 ):
     assert required_text in privacy_html, "Privacy page missing required AdSense disclosure: " + required_text
@@ -828,7 +834,11 @@ for url in urls:
     if url.endswith("/emi-calculator/"):
         assert len(faq_schemas) == 1, "EMI page must have exactly one FAQPage schema generated from visible FAQ content"
         app_schemas = [item for item in parsed_schemas if item.get("@type") == "WebApplication"]
-        assert not app_schemas, "EMI page must omit SoftwareApplication rich-result markup without genuine public ratings or reviews"
+        assert len(app_schemas) == 1, "EMI page must publish one truthful WebApplication description"
+        emi_app = app_schemas[0]
+        assert emi_app.get("url") == SITE + "/emi-calculator/", "EMI WebApplication URL must match its canonical"
+        assert emi_app.get("offers", {}).get("price") == "0", "EMI WebApplication must describe the free calculator"
+        assert not any(key in emi_app for key in ("aggregateRating", "review", "reviews")), "EMI schema must not invent ratings or reviews"
     for item in parsed_schemas:
         if item.get("@type") == "WebPage":
             if url == SITE + "/age-calculator/":
@@ -837,15 +847,15 @@ for url in urls:
                 )
             elif url.endswith("/ur/bmi-calculator/"):
                 assert item.get("dateModified") == "2026-11-21", (
-                    "Urdu BMI dateModified must match the GSC-backed search-intent explanation."
+                    "Urdu BMI dateModified must match the search-intent explanation."
                 )
             elif url == SITE + "/years-to-days-calculator/":
                 assert item.get("dateModified") == "2026-11-27", (
-                    "Years-to-Days dateModified must match the GSC-backed question-answer refresh."
+                    "Years-to-Days dateModified must match the question-answer refresh."
                 )
             elif url == SITE + "/unit-converter/":
                 assert item.get("dateModified") == "2026-11-21", (
-                    "Unit Converter dateModified must match the GSC-backed dimensional-conversion explanation."
+                    "Unit Converter dateModified must match the dimensional-conversion explanation."
                 )
             elif url == SITE + "/tasbih-counter/":
                 assert item.get("dateModified") == "2026-11-27", (
@@ -857,11 +867,11 @@ for url in urls:
                 )
             elif url == SITE + "/profit-loss-calculator/":
                 assert item.get("dateModified") == "2026-11-21", (
-                    "Profit and Loss dateModified must match the GSC-backed online calculator explanation."
+                    "Profit and Loss dateModified must match the online calculator explanation."
                 )
             elif url == SITE + "/query-calculator/":
                 assert item.get("dateModified") == "2026-11-27", (
-                    "Query Calculator dateModified must match the GSC-backed question-led examples and parser coverage refresh."
+                    "Query Calculator dateModified must match the question-led examples and parser coverage refresh."
                 )
             elif url == SITE + "/percentage-calculator/":
                 assert item.get("dateModified") == "2026-11-26", (
@@ -1237,11 +1247,11 @@ for slug, phrases in {
     "bmi-calculator": ["22.8571", "18.5 to below 25", "not a diagnosis"],
     "zakat-calculator": ["PKR 612,360", "PKR 27,500", "PKR 22,500", "not a religious ruling"],
     "discount-calculator": ["PKR 3,600", "PKR 4,500", "PKR 3,240", "28%"],
-    "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice"],
+    "tasbih-counter": ["three groups of 33 presses", "browser storage", "does not prescribe a religious practice", "Physical beads provide a tactile count", "33 - 21 = 12", "does not synchronize the count"],
     "profit-loss-calculator": ["PKR 800", "PKR 880", "PKR 1,100", "25%", "20%"],
-    "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days"],
+    "years-to-days-calculator": ["3,650 days", "3,652.5 days", "28, 29, 30 or 31 days", "Choosing a year-length method", "3,653 days", "3,652.425 days"],
 }.items():
-    if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator"}:
+    if slug in {"tasbih-counter", "zakat-calculator", "bmi-calculator", "years-to-days-calculator"}:
         guide = (ROOT / slug / "index.html").read_text(encoding="utf-8")
     else:
         guide = " ".join(paragraph for _, paragraphs in GUIDE_EXTRA.get(slug, []) for paragraph in paragraphs)
@@ -1570,3 +1580,13 @@ for generated_page in ROOT.rglob("*.html"):
     assert "google-add-preferred-source-btn" not in generated_html, (
         f"{generated_page} must not render Google's Preferred Sources button"
     )
+
+
+# The worship hub must describe the Tasbih controls that actually exist on the counter.
+worship_html = output_for_url(SITE + "/worship/").read_text(encoding="utf-8")
+assert "Choose a preset target of 33, 99 or 100, or enter a custom target from 1 to 10,000" in worship_html, "Worship hub Tasbih instructions must match the live preset and custom target controls"
+assert "Choose a target of 33, 100 or 1000, or choose unlimited" not in worship_html, "Worship hub must not advertise unsupported Tasbih targets"
+
+# Pakistan EMI guidance must distinguish the SBP policy rate from a lender's quoted rate.
+assert "The SBP policy rate is not the same as a lender's quoted loan markup or a KIBOR-linked rate" in emi_html, "EMI guidance must distinguish the central-bank policy rate from the lender's actual borrowing rate"
+assert 'href="https://www.sbp.org.pk/our-operations/monetary-policy"' in emi_html, "EMI guidance must link to the official State Bank of Pakistan monetary-policy source"
