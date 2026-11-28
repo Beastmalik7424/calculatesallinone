@@ -206,7 +206,7 @@ def normalize_meta(raw, path, lang):
     if path == "/standard-calculator/":
         title = "Standard and Scientific Calculator | CalculatesAll"
     if path == "/age-calculator/":
-        title = "Age Calculator | Years, Months & Days | CalculatesAll"
+        title = "Age Calculator by Date of Birth | CalculatesAll"
     if path == "/unit-converter/":
         title = "Unit Converter | Weight, Length & Temperature"
     desc = html.unescape(desc_match.group(1).strip())
@@ -240,7 +240,7 @@ def normalize_meta(raw, path, lang):
     if path == "/tasbih-counter/":
         desc = "Free Tasbih calculator and digital Tasbih counter. Tasbeeh counter with 33, 99, 100 or custom targets, undo and local saving when supported."
     if path == "/age-calculator/":
-        desc = "Calculate your exact age in years, months and days, plus total days lived. Enter a birth date for a clear, free online age calculation."
+        desc = "Age calculator by date of birth: calculate exact years, months and days, plus total days lived as of today, with leap-year rules explained."
     if path == "/unit-converter/":
         desc = "Convert kilograms, grams, pounds, ounces, metric and imperial lengths, and Celsius, Fahrenheit or Kelvin. See formulas, examples and input limits."
     # This exact-intent date title is 63 characters and has a dedicated regression gate.
