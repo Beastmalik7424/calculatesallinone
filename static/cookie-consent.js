@@ -53,14 +53,15 @@
     var style = document.createElement("style");
     style.setAttribute("data-ca-cookie-consent-style", "true");
     style.textContent =
-      "#ca-cookie-consent{position:fixed;z-index:2147483000;left:12px;right:12px;bottom:12px;max-width:720px;margin:0 auto;padding:10px;border:1px solid #94a3b8;border-radius:12px;background:#fff;color:#172033;box-shadow:0 8px 28px rgba(15,23,42,.22);font:14px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif}" +
+      "#ca-cookie-consent{position:fixed;z-index:2147483000;left:12px;right:12px;max-width:720px;margin:0 auto;padding:8px;border:1px solid #94a3b8;border-radius:10px;background:rgba(255,255,255,.96);color:#172033;box-shadow:0 6px 20px rgba(15,23,42,.18);font:11px/1.25 system-ui,-apple-system,'Segoe UI',sans-serif}" +
       "#ca-cookie-consent *{box-sizing:border-box}" +
-      "#ca-cookie-consent p{margin:0 0 8px}" +
+      "#ca-cookie-consent .ca-cookie-layout{display:flex;align-items:center;gap:8px}" +
+      "#ca-cookie-consent p{flex:1;min-width:0;margin:0}" +
       "#ca-cookie-consent a{color:#0759a5;text-decoration:underline;text-underline-offset:2px}" +
-      "#ca-cookie-consent .ca-cookie-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}" +
-      "#ca-cookie-consent button{min-width:0;min-height:42px;width:100%;padding:8px 12px;border:1px solid #475569;border-radius:8px;background:#f8fafc;color:#172033;font:inherit;font-weight:650;cursor:pointer}" +
+      "#ca-cookie-consent .ca-cookie-actions{display:grid;grid-template-columns:1fr 1fr;flex:0 0 114px;gap:4px}" +
+      "#ca-cookie-consent button{min-width:0;min-height:34px;width:100%;padding:5px 4px;border:1px solid #475569;border-radius:7px;background:#f8fafc;color:#172033;font:inherit;font-weight:650;cursor:pointer}" +
       "#ca-cookie-consent button:focus-visible{outline:3px solid #0759a5;outline-offset:2px}" +
-      "@media(prefers-color-scheme:dark){#ca-cookie-consent{background:#192433;color:#f1f5fb;border-color:#64748b}#ca-cookie-consent a{color:#93c5fd}#ca-cookie-consent button{background:#263548;color:#f1f5fb;border-color:#94a3b8}}";
+      "@media(prefers-color-scheme:dark){#ca-cookie-consent{background:rgba(25,36,51,.97);color:#f1f5fb;border-color:#64748b}#ca-cookie-consent a{color:#93c5fd}#ca-cookie-consent button{background:#263548;color:#f1f5fb;border-color:#94a3b8}}";
     document.head.appendChild(style);
 
     var previousPadding = document.body.style.paddingBottom;
@@ -70,26 +71,47 @@
     banner.setAttribute("role", "region");
     banner.setAttribute("aria-label", "Cookie and advertising preferences");
     banner.innerHTML =
-      '<p>Allow optional advertising cookies? Your choice is saved in this browser. Read the <a href="/privacy/">Privacy Policy</a>.</p>' +
+      '<div class="ca-cookie-layout">' +
+      '<p>Optional ad cookies? Read the <a href="/privacy/">Privacy Policy</a>.</p>' +
       '<div class="ca-cookie-actions">' +
       '<button type="button" id="ca-cookie-accept">Accept</button>' +
       '<button type="button" id="ca-cookie-reject">Reject</button>' +
+      '</div>' +
       '</div>';
     document.body.appendChild(banner);
 
     function reserveBottomSpace() {
       if (!banner.isConnected) return;
-      // Zakat uses a fixed first-screen Calculate action. Keep the preference
-      // banner below the header instead of covering that action or its hit area.
-      if (document.getElementById("zakat-submit")) {
-        banner.style.top = window.innerWidth >= 768 ? "124px" : "108px";
-        banner.style.bottom = "auto";
-      } else {
-        banner.style.top = "auto";
-        banner.style.bottom = "12px";
+      var main = document.querySelector("main") || document.body;
+      var heading = main.querySelector("h1");
+      var controls = Array.prototype.slice.call(
+        main.querySelectorAll('input:not([type="hidden"]), select, textarea')
+      );
+      function isVisible(element) {
+        var rect = element.getBoundingClientRect();
+        var computed = window.getComputedStyle(element);
+        return rect.width > 0 && rect.height > 0 &&
+          computed.display !== "none" && computed.visibility !== "hidden";
       }
-      var height = Math.ceil(banner.getBoundingClientRect().height) + 24;
-      document.body.style.paddingBottom = Math.max(originalComputedPadding, height) + "px";
+      var firstControl = controls.find(isVisible);
+      if (!firstControl) {
+        firstControl = Array.prototype.slice.call(main.querySelectorAll("button")).find(isVisible);
+      }
+      var height = Math.ceil(banner.getBoundingClientRect().height);
+      var top = 8;
+      if (heading && firstControl) {
+        var headingBottom = heading.getBoundingClientRect().bottom;
+        var controlTop = firstControl.getBoundingClientRect().top;
+        var gap = controlTop - headingBottom;
+        top = gap >= height + 8
+          ? headingBottom + (gap - height) / 2
+          : controlTop - height - 4;
+      } else if (heading) {
+        top = heading.getBoundingClientRect().bottom + 8;
+      }
+      banner.style.top = Math.max(8, Math.round(top)) + "px";
+      banner.style.bottom = "auto";
+      document.body.style.paddingBottom = Math.max(originalComputedPadding, height + 24) + "px";
     }
 
     function hide() {
