@@ -79,6 +79,15 @@
 
     function reserveBottomSpace() {
       if (!banner.isConnected) return;
+      // Zakat uses a fixed first-screen Calculate action. Keep the preference
+      // banner below the header instead of covering that action or its hit area.
+      if (document.getElementById("zakat-submit")) {
+        banner.style.top = window.innerWidth >= 768 ? "128px" : "112px";
+        banner.style.bottom = "auto";
+      } else {
+        banner.style.top = "auto";
+        banner.style.bottom = "12px";
+      }
       var height = Math.ceil(banner.getBoundingClientRect().height) + 24;
       document.body.style.paddingBottom = Math.max(originalComputedPadding, height) + "px";
     }
