@@ -58,7 +58,7 @@
       calcStandardMode: "Standard Mode",
       calcDomainError: "Math domain error",
       tasbihNone: "No target set.",
-      tasbihReached: "Target of {goal} reached. Press Reset to start again.",
+      tasbihReached: "{count} of {goal} complete. Target reached. Press Reset to start again.",
       tasbihLeft: "{left} to go for a target of {goal}.",
       themeDark: "Dark mode",
       themeLight: "Light mode",
@@ -126,7 +126,7 @@
       calcStandardMode: "معیاری کیلکولیٹر",
       calcDomainError: "ریاضی کی حد سے باہر قدر",
       tasbihNone: "کوئی ہدف مقرر نہیں۔",
-      tasbihReached: "ہدف {goal} پورا ہو گیا۔ دوبارہ شروع کرنے کے لیے ری سیٹ دبائیں۔",
+      tasbihReached: "{count} میں سے {goal} مکمل۔ ہدف پورا ہو گیا۔ دوبارہ شروع کرنے کے لیے ری سیٹ دبائیں۔",
       tasbihLeft: "ہدف {goal} کے لیے {left} باقی۔",
       themeDark: "ڈارک موڈ",
       themeLight: "لائٹ موڈ",
@@ -174,7 +174,7 @@
       calcSqrtNegative: "الجذر التربيعي لعدد سالب ليس عددًا حقيقيًا.",
       calcNeedValue: "أدخل عددًا أو تعبيرًا أولًا.",
       tasbihNone: "لم يتم تحديد هدف.",
-      tasbihReached: "تم بلوغ الهدف {goal}. اضغط إعادة الضبط للبدء من جديد.",
+      tasbihReached: "اكتمل {count} من {goal}. تم بلوغ الهدف. اضغط إعادة الضبط للبدء من جديد.",
       tasbihLeft: "تبقّى {left} للوصول إلى الهدف {goal}.",
       themeDark: "الوضع الداكن",
       themeLight: "الوضع الفاتح",
@@ -218,7 +218,7 @@
       calcSqrtNegative: "ऋणात्मक संख्या का वर्गमूल वास्तविक संख्या नहीं है।",
       calcNeedValue: "पहले कोई संख्या या गणितीय अभिव्यक्ति दर्ज करें।",
       tasbihNone: "कोई लक्ष्य निर्धारित नहीं है।",
-      tasbihReached: "लक्ष्य {goal} पूरा हुआ। फिर से शुरू करने के लिए रीसेट दबाएँ।",
+      tasbihReached: "{count} में से {goal} पूरे। लक्ष्य पूरा हुआ। फिर से शुरू करने के लिए रीसेट दबाएँ।",
       tasbihLeft: "लक्ष्य {goal} तक {left} बाकी हैं।",
       themeDark: "डार्क मोड",
       themeLight: "लाइट मोड",
@@ -262,7 +262,7 @@
       calcSqrtNegative: "La raíz cuadrada de un número negativo no es un número real.",
       calcNeedValue: "Introduce primero un número o una expresión.",
       tasbihNone: "No se ha establecido ningún objetivo.",
-      tasbihReached: "Objetivo de {goal} alcanzado. Pulsa Reiniciar para empezar de nuevo.",
+      tasbihReached: "{count} de {goal} completados. Objetivo alcanzado. Pulsa Reiniciar para empezar de nuevo.",
       tasbihLeft: "Quedan {left} para alcanzar el objetivo de {goal}.",
       themeDark: "Modo oscuro",
       themeLight: "Modo claro",
@@ -306,7 +306,7 @@
       calcSqrtNegative: "La racine carrée d’un nombre négatif n’est pas un nombre réel.",
       calcNeedValue: "Saisissez d’abord un nombre ou une expression.",
       tasbihNone: "Aucun objectif défini.",
-      tasbihReached: "Objectif de {goal} atteint. Appuyez sur Réinitialiser pour recommencer.",
+      tasbihReached: "{count} sur {goal} terminés. Objectif atteint. Appuyez sur Réinitialiser pour recommencer.",
       tasbihLeft: "Encore {left} pour atteindre l’objectif de {goal}.",
       themeDark: "Mode sombre",
       themeLight: "Mode clair",
@@ -1541,7 +1541,7 @@
       }
       targetError.textContent = ""
       if (goal !== null && count >= goal) {
-        progress.textContent = t("tasbihReached", { goal: goal })
+        progress.textContent = t("tasbihReached", { goal: goal, count: Math.min(count, goal) })
         if (allowVibration && !lastTargetReached && typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
           try { navigator.vibrate(80) } catch (err) { /* vibration is optional */ }
         }
