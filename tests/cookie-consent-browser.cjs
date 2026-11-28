@@ -8,7 +8,7 @@ const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, ""
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
   try {
-    const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    const page = await browser.newPage({ viewport: { width: 320, height: 568 } });
     let adRequests = 0;
     await page.route(base + "/years-to-days-calculator/**", async route => {
       const response = await route.fetch();
@@ -31,6 +31,13 @@ const base = (process.env.BASE_URL || "http://127.0.0.1:4174").replace(/\/$/, ""
     await page.goto(base + "/years-to-days-calculator/", { waitUntil: "load", timeout: 30000 });
     const banner = page.locator("#ca-cookie-consent");
     await banner.waitFor({ state: "visible" });
+    const calculatorActionReachable = await page.locator("#yd-submit").evaluate(action => {
+      const rect = action.getBoundingClientRect();
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      return action === hit || action.contains(hit);
+    });
+    assert.equal(calculatorActionReachable, true,
+      "the consent banner must not cover or intercept the Years-to-Days primary calculator action on a 320px viewport");
     assert.equal(await page.evaluate(() => localStorage.getItem("cookie_consent")), null,
       "unset consent must show the banner");
     assert.ok(await page.evaluate(() => parseFloat(document.body.style.paddingBottom) > 0),
