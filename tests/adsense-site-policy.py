@@ -179,6 +179,31 @@ check("ٹیب بدلنے پر بھی وقت درست رہتا ہے" not in ur_st
 check("پس منظر میں ٹیب کی تازہ کاری میں تاخیر ہو سکتی ہے" in ur_stopwatch,
       "/ur/stopwatch/ must explain the background-tab display limitation")
 
+ur_age = page_text("ur/age-calculator")
+check("28 فروری 2000" in ur_age and "1 مارچ 2024" in ur_age and "24 سال، 0 مہینے اور 2 دن" in ur_age,
+      "/ur/age-calculator/ must include a worked leap-day example with the verified calendar-age result")
+
+ur_discount = page_text("ur/discount-calculator")
+check("اصل قیمت = رعایت کے بعد قیمت ÷ (1 − ڈسکاؤنٹ فیصد ÷ 100)" in ur_discount and
+      "3,600 ÷ 0.80 = PKR 4,500" in ur_discount,
+      "/ur/discount-calculator/ must explain how to recover the original price from a discounted price")
+
+ur_unit = page_text("ur/unit-converter")
+for phrase in (
+    "وزن کے زمرے میں kg، g، lb اور oz دستیاب ہیں",
+    "لمبائی کے زمرے میں m، cm، km، ft، in اور mi",
+    "درجہ حرارت کے لیے °C، °F اور K موجود ہیں",
+    "1 lb = 0.45359237 kg",
+    "1 oz = 28.349523125 g",
+    "1 km = 1,000 m",
+    "1 ft = 30.48 cm",
+    "1 in = 2.54 cm",
+    "1 mi = 1,609.344 m",
+    "°F = (°C × 9 ÷ 5) + 32",
+    "K = °C + 273.15",
+):
+    check(phrase in ur_unit, "/ur/unit-converter/ is missing supported-unit detail or an exact conversion: " + phrase)
+
 for e in ERRORS:
     print("FAIL:", e)
 print(f"{len(ERRORS)} failing checks")
